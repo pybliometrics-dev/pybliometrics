@@ -1,9 +1,4 @@
 import os
-# from .scopus_api import ScopusAbstract
-# from .scopus_search import ScopusSearch
-# from .scopus_reports import report
-
-print('initializing scopus')
 
 SCOPUS_API_FILE = os.path.expanduser("~/.scopus/my_scopus.py")
 if os.path.exists(SCOPUS_API_FILE):

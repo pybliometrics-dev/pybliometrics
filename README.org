@@ -22,6 +22,7 @@ print(ab)
 #+END_SRC
 
 #+RESULTS:
+: initializing scopus
 : [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 0 times (Scopus).
 : Affiliations:
 :    id:60027950 Carnegie Mellon University
