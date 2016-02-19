@@ -3,6 +3,14 @@ import os
 # from .scopus_search import ScopusSearch
 # from .scopus_reports import report
 
+print('initializing scopus')
+
+SCOPUS_API_FILE = os.path.expanduser("~/.scopus/my_scopus.py")
+if os.path.exists(SCOPUS_API_FILE):
+    with open(SCOPUS_API_FILE) as f:
+        exec(f.read())
+else:
+    raise Exception('{} not found. Please create it and put your API key in it.'.format(SCOPUS_API_FILE))
 
 
 # Namespaces for Scopus XML

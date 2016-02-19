@@ -1,9 +1,9 @@
 #+TITLE: A Python API for accessing Scopus data
 
 * Get a Scopus API key
-Using Scopus is not free. You need to have a license or institutional access to use it. Got to http://dev.elsevier.com/myapikey.html to register and get a key. =scopus= expects this key to be in a variable called MY_API_KEY. I recommend you create a module to define that key, something like this.
+Using Scopus is not free. You need to have a license or institutional access to use it. Got to http://dev.elsevier.com/myapikey.html to register and get a key. =scopus= expects this key to be in a variable called MY_API_KEY defined in ~/.scopus/my_scopus.py. I recommend you create it like this.
 
-#+BEGIN_SRC python :tangle my_scopus.py
+#+BEGIN_SRC python :tangle ~/.scopus/my_scopus.py
 MY_API_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 #+END_SRC
 
@@ -639,7 +639,7 @@ Affiliations:
 
 #+end_example
 * scopus_report
-This module provides a function to generate a report on a scopus search. It outputs text in org-format.
+This module provides a function to generate a report on a scopus search. It outputs text in org-format. It summarizes the results in a variety of ways, such as the number of hits, which journals they are published in, who the coauthors are, how many times the articles have been published, etc...
 
 #+BEGIN_SRC python :results raw
 from scopus.scopus_search import ScopusSearch
@@ -757,3 +757,17 @@ Affiliations:
 10. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=0037368024&origin=inward][2-s2.0-0037368024]]  J.R. Kitchin, M.A. Barteau and J.G. Chen, A comparison of gold and molybdenum nanoparticles on TiO2(1 1 0) 1 × 2 reconstructed single crystal surfaces, Surface Science, 526(3), p. 323-331, (2003). http://dx.doi.org/10.1016/S0039-6028(02)02679-1, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=0037368024&origin=inward, cited 28 times (Scopus).
 Affiliations:
    id:60023004 University of Delaware
+
+
+#+BEGIN_SRC python
+import scopus
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC python
+from scopus.scopus_api import ScopusAbstract
+#+END_SRC
+
+#+RESULTS:
+: initializing scopus
+: 5cd06d8a7df3de986bf3d0cd9971a47c

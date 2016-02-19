@@ -5,13 +5,11 @@ import textwrap
 import time
 from operator import itemgetter
 
-from .my_scopus import MY_API_KEY
 from .scopus_api import ScopusAbstract
 from .scopus_search import ScopusSearch
 from .scopus_affiliation import ScopusAffiliation
 
-
-from . import ns, get_encoded_text
+from . import ns, get_encoded_text, MY_API_KEY
 
 SCOPUS_AUTHOR_DIR = os.path.expanduser('~/.scopus/author')
 

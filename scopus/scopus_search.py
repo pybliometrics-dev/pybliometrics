@@ -4,7 +4,7 @@ import requests
 import os
 import xml.etree.ElementTree as ET
 
-from .my_scopus import MY_API_KEY
+from . import MY_API_KEY
 
 ns = {'opensearch': 'http://a9.com/-/spec/opensearch/1.1/'}
 

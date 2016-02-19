@@ -1,9 +1,7 @@
 import requests
 import os
 import xml.etree.ElementTree as ET
-from .my_scopus import MY_API_KEY
-
-from . import ns, get_encoded_text
+from . import ns, get_encoded_text, MY_API_KEY
 
 SCOPUS_AFFILIATION_DIR = os.path.expanduser('~/.scopus/affiliation')
 

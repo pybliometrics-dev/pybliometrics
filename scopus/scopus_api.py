@@ -1,5 +1,4 @@
-from .my_scopus import MY_API_KEY
-from . import ns, get_encoded_text
+from . import ns, get_encoded_text, MY_API_KEY
 import requests
 import xml.etree.ElementTree as ET
 import os
