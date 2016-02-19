@@ -22,23 +22,23 @@ print(ab)
 #+END_SRC
 
 #+RESULTS:
-: initializing scopus
 : [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 0 times (Scopus).
 : Affiliations:
 :    id:60027950 Carnegie Mellon University
 
-You can print the abstract in a variety of formats, including LaTeX, bibtex, HTML, and RIS. Here is an example.
+You can print the abstract in a variety of formats, including LaTeX, bibtex, HTML, and RIS. Here is an example. For bibtex entries, you get a uuid for the key.
 
 #+BEGIN_SRC python
 from scopus.scopus_api import ScopusAbstract
 
 ab = ScopusAbstract("2-s2.0-84930616647")
 print(ab.bibtex)
+print(ab.ris)
 #+END_SRC
 
 #+RESULTS:
 #+begin_example
-@article{ffffb1be-d712-11e5-98a7-48d705e201bd,
+@article{12b3dd94-d740-11e5-a03b-48d705e201bd,
   author = {John R. Kitchin},
   title = {Examples of effective data sharing in scientific publishing},
   journal = {ACS Catalysis},
@@ -48,6 +48,20 @@ print(ab.bibtex)
   pages = {3894-3899},
   doi = {10.1021/acscatal.5b00538}
 }
+
+
+TY  - JOUR
+AU  - Kitchin J.R.
+TI  - Examples of effective data sharing in scientific publishing
+JO  - ACS Catalysis
+VL  - 5
+IS  - 6
+DA  - 2015-06-05
+SP  - 3894-3899
+PY  - 2015
+DO  - 10.1021/acscatal.5b00538
+UR  - http://dx.doi.org/10.1021/acscatal.5b00538
+ER  -
 
 
 #+end_example
