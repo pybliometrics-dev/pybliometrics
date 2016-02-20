@@ -13,3 +13,8 @@ setup(name = 'scopus',
       long_description='''Provides Python functions to retrieve data from the Scopus APIs.''',
       install_requires=[
           'nose'],)
+
+
+# to setup user on pypi
+# python setup.py register
+# to push to pypi - python setup.py sdist upload
