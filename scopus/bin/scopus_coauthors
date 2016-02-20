@@ -10,7 +10,7 @@ from scopus.scopus_author import ScopusAuthor
 parser = argparse.ArgumentParser()
 parser.add_argument("auid", help='The Scopus author id')
 parser.add_argument("year", help='Starting year')
-
+parser.add_argument("--exclude-affiliation", help="affiliations to exclude")
 args = parser.parse_args()
 
 s = ScopusSearch('AU-ID({args.auid}) AND PUBYEAR > {args.year}'.format(args=args))
@@ -26,5 +26,6 @@ data = sorted([[auid, name] for auid,name in coauthors.items()], key=lambda x:x[
 
 coauthors = [ScopusAuthor(auid) for auid, name in data]
 
-print(', '.join(['{0} ({1})'.format(au.name, au.current_affiliation)
-                for au in coauthors]))
+print(', '.join(['{0} ({1})'.format(au.name, au.current_affiliation.split(',')[0])
+                 for au in coauthors
+                 if au.current_affiliation.split(',')[0] != args.exclude_affiliation]))
