@@ -148,23 +148,27 @@ class ScopusAuthor(object):
         categories.sort(reverse=True, key=itemgetter(1))
         self.categories = categories
 
-        self.name = (get_encoded_text(self.results,
-                                      'author-profile/'
-                                      'preferred-name/'
-                                      'given-name')
-                     + ' '
-                     + get_encoded_text(self.results,
-                                        'author-profile/'
-                                        'preferred-name/'
-                                        'surname'))
+        self.name = ((get_encoded_text(self.results,
+                                       'author-profile/'
+                                       'preferred-name/'
+                                       'given-name') or '') +
+                     ' ' +
+                     (get_encoded_text(self.results,
+                                       'author-profile/'
+                                       'preferred-name/'
+                                       'surname') or ''))
 
         # Real website for the author
-        self.scopus_url = self.results.find('coredata/'
-                                            'link[@rel="scopus-author"]').get('href')
+        self.scopus_url = self.results.find('coredata/' +
+                                            'link[@rel="scopus-author"]')
+        if self.scopus_url is not None:
+            self.scopus_url = self.scopus_url.get('href')
 
         # API url for who cites them.
         self.citedby_url = self.results.find('coredata/'
-                                             'link[@rel="scopus-citedby"]').get('href')
+                                             'link[@rel="scopus-citedby"]')
+        if self.citedby_url is not None:
+            self.citedby_url = self.citedby_url.get('href')
 
         # API url for coauthors
         self.coauthor_url = self.results.find('coredata/'
@@ -264,15 +268,22 @@ class ScopusAuthor(object):
     def __str__(self):
         '''Return a summary string.'''
         s = ['*' * self.level + ' ' +
-             get_encoded_text(self.results,
-                                'author-profile/preferred-name/given-name') +
+             (get_encoded_text(self.results,
+                                'author-profile/preferred-name/given-name') or '') +
              ' ' +
-             get_encoded_text(self.results,
-                              'author-profile/preferred-name/surname') +
+             (get_encoded_text(self.results,
+                              'author-profile/preferred-name/surname') or '') +
              ' (updated on ' + time.asctime() + ')']
-        s += [self.results.find('coredata/'
-                                'link[@rel="scopus-author"]').get('href',
-                                                                  'None')]
+
+        url = self.results.find('coredata/'
+                                'link[@rel="scopus-author"]')
+        if url is not None:
+            url = url.get('href',
+                          'None')
+        else:
+            url = ''
+
+        s += ['']
 
         orcid = get_encoded_text(self.results, 'coredata/orcid')
         if orcid is not None:
@@ -303,9 +314,9 @@ class ScopusAuthor(object):
         # Current Affiliation. Note this is what Scopus thinks is current.
         s += ['\nCurrent affiliation according to Scopus:']
         s += ['  ' +
-              get_encoded_text(self.results,
-                               ('author-profile/affiliation-current/'
-                                'affiliation/ip-doc/afdispname'))]
+              (get_encoded_text(self.results,
+                                ('author-profile/affiliation-current/'
+                                 'affiliation/ip-doc/afdispname')) or '')]
 
         # subject areas
         s += ['\nSubject areas']
@@ -335,10 +346,10 @@ class ScopusAuthor(object):
                   for el in
                   self.results.findall('author-profile/journal-history/'
                                        'journal/sourcetitle-abbrev')]
-        s += ['\nPublishes in:\n'
-              + textwrap.fill(', '.join(temp_s),
-                              initial_indent='  ',
-                              subsequent_indent='  ')]
+        s += ['\nPublishes in:\n' +
+              textwrap.fill(', '.join(temp_s),
+                            initial_indent='  ',
+                            subsequent_indent='  ')]
 
         # affiliation history
         s += ['\nAffiliation history:']
