@@ -354,6 +354,7 @@ class ScopusAbstract(object):
 
             return s
 
+
 class ScopusAffiliation(object):
     '''Class to represent the affiliations in an Abstract.'''
     def __init__(self, affiliation):
@@ -460,14 +461,25 @@ class ScopusJournal(object):
         # Impact factors
         SNIP = get_encoded_text(self.results,
                                 'entry/SNIPList/SNIP')
-        SNIP_year = self.results.find('entry/SNIPList/SNIP', ns).get('year')
+        SNIP_year = self.results.find('entry/SNIPList/SNIP', ns)
+        if SNIP_year:
+            SNIP_year = SNIP_year.get('year')
+        else:
+            SNIP_year = -1
 
         IPP = get_encoded_text(self.results, 'entry/IPPList/IPP')
-        IPP_year = self.results.find('entry/IPPList/IPP', ns).get('year')
+        IPP_year = self.results.find('entry/IPPList/IPP', ns)
+        if IPP_year is not None:
+            IPP_year = IPP_year.get('year')
+        else:
+            IPP_year = -1
 
         SJR = get_encoded_text(self.results, 'entry/SJRList/SJR')
-        SJR_year = self.results.find('entry/SJRList/SJR', ns).get('year')
-
+        SJR_year = self.results.find('entry/SJRList/SJR', ns)
+        if SJR_year is not None:
+            SJR_year = SJR_year.get('year')
+        else:
+            SJR_year = -1
         if SNIP:
             self.SNIP = float(SNIP)
             self.SNIP_year = int(SNIP_year)
