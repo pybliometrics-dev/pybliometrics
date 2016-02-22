@@ -100,7 +100,7 @@ def report(scopus_search, label):
               k[2],  # issn
               v)  # count
              for k, v in journals.items()]
-    jview.sort(reverse=True, key=itemgetter(2))
+    jview.sort(reverse=True, key=itemgetter(3))
 
     print('\n\n')
     print('#+attr_latex: :placement [H] :center nil')
@@ -126,7 +126,7 @@ def report(scopus_search, label):
     print('\n\n')
     print('#+attr_latex: :placement [H] :center nil')
     print('#+caption: Journal publication counts'
-          'for {0} sorted by IPP.'.format(label))
+          ' for {0} sorted by IPP.'.format(label))
     print('| Journal | count | IPP |')
     print('|-')
     for journal, count, IPP in JVIEW[0:12]:
