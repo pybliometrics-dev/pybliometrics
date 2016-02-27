@@ -22,7 +22,7 @@ class ScopusSearch(object):
                  count=200,
                  start=0,
                  refresh=False,
-                 max_entries=500):
+                 max_entries=1000):
         '''
         query is a string of the query.
         fields is the list of fields you want returned.
