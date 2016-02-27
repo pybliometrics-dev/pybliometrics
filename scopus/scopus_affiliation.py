@@ -1,7 +1,7 @@
 import requests
 import os
 import xml.etree.ElementTree as ET
-from . import ns, get_encoded_text, MY_API_KEY
+from . import get_encoded_text, MY_API_KEY
 
 SCOPUS_AFFILIATION_DIR = os.path.expanduser('~/.scopus/affiliation')
 
@@ -22,7 +22,8 @@ class ScopusAffiliation:
     def __init__(self, affiliation_id, refresh=False):
         '''affiliation_id is a number like 60030926'''
         self.affiliation_id = affiliation_id
-        self.href = ('http://api.elsevier.com/content/affiliation/affiliation_id/' +
+        self.href = ('http://api.elsevier.com/content/'
+                     'affiliation/affiliation_id/' +
                      str(affiliation_id))
 
         qfile = os.path.join(SCOPUS_AFFILIATION_DIR, str(affiliation_id))
