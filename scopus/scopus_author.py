@@ -246,7 +246,7 @@ class ScopusAuthor(object):
 
         N = maximum number to return. if None, return all documents.
         cite_sort is a boolean to sort results by number of citations,
-            in decreasing order.
+        in decreasing order.
         '''
         abstracts = [ScopusAbstract(eid) for eid in self.get_document_eids()]
 
@@ -362,7 +362,8 @@ class ScopusAuthor(object):
         return '\n'.join(s)
 
     def author_impact_factor(self, year=2014):
-        '''get author_impact_factor'''
+        '''Get author_impact_factor.
+        Returns (ncites, npapers, aif)'''
         scopus_abstracts = [ScopusAbstract(eid, refresh=True)
                             for eid in self.get_document_eids()
                             if ScopusAbstract(eid).aggregationType == 'Journal']
