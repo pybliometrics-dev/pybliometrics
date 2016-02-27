@@ -43,18 +43,18 @@ class ScopusAffiliation:
                 f.write(resp.text)
 
         # public url
-        self.url = self.results.find('coredata/'
+        self._url = self.results.find('coredata/'
                                      'link[@rel="scopus-affiliation"]')
-        if self.url is not None:
-            self.url = self.url.get('href')
+        if self._url is not None:
+            self._url = self.url.get('href')
         self.api_url = get_encoded_text(self.results, 'coredata/prism:url')
-        self.nauthors = get_encoded_text(self.results, 'coredata/author-count')
-        self.ndocuments = get_encoded_text(self.results,
+        self._nauthors = get_encoded_text(self.results, 'coredata/author-count')
+        self._ndocuments = get_encoded_text(self.results,
                                            'coredata/document-count')
-        self.name = get_encoded_text(self.results, 'affiliation-name')
-        self.address = get_encoded_text(self.results, 'address')
-        self.city = get_encoded_text(self.results, 'city')
-        self.country = get_encoded_text(self.results, 'country')
+        self._name = get_encoded_text(self.results, 'affiliation-name')
+        self._address = get_encoded_text(self.results, 'address')
+        self._city = get_encoded_text(self.results, 'city')
+        self._country = get_encoded_text(self.results, 'country')
 
     def __str__(self):
         s = '''{self.name}
@@ -62,3 +62,28 @@ class ScopusAffiliation:
     {self.city}, {self.country}
     {self.url}'''.format(self=self)
         return s
+
+    @property
+    def url(self):
+        'The URL for this affiliation'
+        return self._url
+
+    @property
+    def name(self):
+        'The NAME of the affiliation'
+        return self._name
+
+    @property
+    def address(self):
+        'The address of the affiliation'
+        return self._address
+
+    @property
+    def city(self):
+        'The city of the affiliation'
+        return self._city
+
+    @property
+    def country(self):
+        'The country of the affiliation'
+        return self._country
