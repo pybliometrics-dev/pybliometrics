@@ -30,13 +30,12 @@ scopus_api
 .. automodule:: scopus.scopus_api
    :members:
 
-.. autoclass:: ScopusAbstract
-   :members:
 
 scopus_search
 =============
 .. automodule:: scopus.scopus_search
    :members:
+
 
 scopus_author
 =============
