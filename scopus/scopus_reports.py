@@ -139,6 +139,7 @@ def report(scopus_search, label):
     pview.sort(reverse=True, key=itemgetter(1))
 
     # Compute department j-index
+    hindex = 0
     for i, entry in enumerate(pview):
         # entry is url, source_id, count
         u, count = entry
