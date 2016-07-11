@@ -14,17 +14,114 @@ if not os.path.exists(SCOPUS_ISSN_DIR):
 
 
 class ScopusAbstract(object):
-    '''Class to represent the results from a Scopus abstract.
+    """Class to represent the results from a Scopus abstract.
 
     The results are retrieved by the EID from a query. The results
     are cached in a folder ~/.scopus/xml/{eid}.
-    '''
-    def __init__(self, EID, refresh=False):
-        '''EID is the electronic scopus id for an abstract and should be a string.
+    """
 
-        refresh is a boolean that determines if the result should be downloaded
-        again.
-        '''
+    @property
+    def url(self):
+        """URL to the abstract."""
+        return self._url
+
+    @property
+    def doi(self):
+        """Abstract DOI."""
+        return self._doi
+
+    @property
+    def title(self):
+        """Abstract title."""
+        return self._title
+
+    @property
+    def aggregationType(self):
+        """Type of abstract."""
+        return self._aggregationType
+
+    @property
+    def publicationName(self):
+        """Name of source the abstract is published in."""
+        return self._publicationName
+
+    @property
+    def citedby_count(self):
+        """Number of times the abstract has been cited."""
+        return self._citedby_count
+
+    @property
+    def publisher(self):
+        """Name of the publisher of the abstract."""
+        return self._publisher
+
+    @property
+    def source_id(self):
+        """Scopus source_id of the abstract."""
+
+    @property
+    def issn(self):
+        """ISSN of the publisher."""
+        return self._issn
+
+    @property
+    def volume(self):
+        """Volume for the abstract."""
+        return self._volume
+
+    @property
+    def issueIdentifier(self):
+        """Issue number for abstract."""
+        return self._issueIdentifier
+
+    @property
+    def article_number(self):
+        """Article number."""
+        return self._article_number
+
+    @property
+    def startingPage(self):
+        """Starting page."""
+        return self._startingPage
+
+    @property
+    def endingPage(self):
+        """Ending page."""
+        return self._endingPage
+
+    @property
+    def pageRange(self):
+        """Page range."""
+        return self._pageRange
+
+    @property
+    def coverDate(self):
+        """The date of the cover the abstract is in."""
+        return self._coverDate
+
+    @property
+    def authors(self):
+        """A list of scopus_api.ScopusAuthor objects."""
+        return self._authors
+
+    @property
+    def affiliations(self):
+        """A list of scopus_api.ScopusAffiliation objects."""
+        return self._affiliations
+
+    @property
+    def nauthors(self):
+        """Return number of authors listed in the abstract."""
+        return len(self.authors)
+
+    def __init__(self, EID, refresh=False):
+        """Initialize a Scopus abstract
+
+        EID -- The scopus id for an abstract and should be a string.
+
+        refresh -- (default=False) A boolean that determines if the result
+        should be downloaded again.
+        """
 
         fEID = os.path.join(SCOPUS_XML_DIR, EID)
         self.file = fEID
@@ -55,30 +152,30 @@ class ScopusAbstract(object):
 
         self.coredata = coredata
         self.authors_xml = authors
-        self.url = get_encoded_text(coredata, 'prism:url')
+        self._url = get_encoded_text(coredata, 'prism:url')
 
         self.identifier = get_encoded_text(coredata, 'dc:identifier')
         self.eid = get_encoded_text(coredata, 'dtd:eid')
-        self.doi = get_encoded_text(coredata, 'prism:doi')
-        self.title = get_encoded_text(coredata, 'dc:title')
+        self._doi = get_encoded_text(coredata, 'prism:doi')
+        self._title = get_encoded_text(coredata, 'dc:title')
 
-        self.aggregationType = get_encoded_text(coredata,
-                                                'prism:aggregationType')
-        self.publicationName = get_encoded_text(coredata,
-                                                'prism:publicationName')
+        self._aggregationType = get_encoded_text(coredata,
+                                                 'prism:aggregationType')
+        self._publicationName = get_encoded_text(coredata,
+                                                 'prism:publicationName')
         self.srctype = get_encoded_text(coredata, 'dtd:srctype')
-        self.citedby_count = get_encoded_text(coredata, 'dtd:citedby-count')
-        self.publisher = get_encoded_text(coredata, 'dc:publisher')
-        self.source_id = get_encoded_text(coredata, 'dtd:source-id')
-        self.issn = get_encoded_text(coredata, 'prism:issn')
-        self.volume = get_encoded_text(coredata, 'prism:volume')
-        self.issueIdentifier = get_encoded_text(coredata,
-                                                'prism:issueIdentifier')
-        self.article_number = get_encoded_text(coredata, 'dtd:article-number')
-        self.startingPage = get_encoded_text(coredata, 'prism:startingPage')
-        self.endingPage = get_encoded_text(coredata, 'prism:endingPage')
-        self.pageRange = get_encoded_text(coredata, 'prism:pageRange')
-        self.coverDate = get_encoded_text(coredata, 'prism:coverDate')
+        self._citedby_count = get_encoded_text(coredata, 'dtd:citedby-count')
+        self._publisher = get_encoded_text(coredata, 'dc:publisher')
+        self._source_id = get_encoded_text(coredata, 'dtd:source-id')
+        self._issn = get_encoded_text(coredata, 'prism:issn')
+        self._volume = get_encoded_text(coredata, 'prism:volume')
+        self._issueIdentifier = get_encoded_text(coredata,
+                                                 'prism:issueIdentifier')
+        self._article_number = get_encoded_text(coredata, 'dtd:article-number')
+        self._startingPage = get_encoded_text(coredata, 'prism:startingPage')
+        self._endingPage = get_encoded_text(coredata, 'prism:endingPage')
+        self._pageRange = get_encoded_text(coredata, 'prism:pageRange')
+        self._coverDate = get_encoded_text(coredata, 'prism:coverDate')
         self.creator = get_encoded_text(coredata, 'dc:creator')
         self.description = get_encoded_text(coredata, 'dc:description')
 
@@ -93,17 +190,12 @@ class ScopusAbstract(object):
         self.self_link = self_link
         self.cite_link = cite_link
 
-        self.authors = [ScopusAuthor(author) for author in authors]
-        self.affiliations = [ScopusAffiliation(aff) for aff
-                             in results.findall('dtd:affiliation', ns)]
-
-    @property
-    def nauthors(self):
-        'Return number of authors listed in the abstract'
-        return len(self.authors)
+        self._authors = [ScopusAuthor(author) for author in authors]
+        self._affiliations = [ScopusAffiliation(aff) for aff
+                              in results.findall('dtd:affiliation', ns)]
 
     # def get_corresponding_author_info(self):
-    #     '''Try to get corresponding author information.
+    #     """Try to get corresponding author information.
     #     Returns (scopus-id, name, email).
 
     #     This may not work anymore. Scopus may be hiding the email address now
@@ -111,7 +203,7 @@ class ScopusAbstract(object):
 
     #     <a href="http://www.scopus.com/authid/detail.url?authorId=56273017000&amp;amp;eid=2-s2.0-84927602604" title="Show Author Details">Zhang, Z.-J.</a><a role="presentation" href="#" aria-labelledby="superscript_c"><sup>c</sup></a><img src="http://www.scopus.com/static/images/s.gif" class="" border="0" height="0" width="4" alt="" title=""><a href="/cdn-cgi/l/email-protection#1c66747d727b6674757669725c6f746932797869327f72" OnClick="authorEmailEvent(this,'abstract')" title="Email to this author" class="correspondenceEmail">&nbsp;</a><font>,&nbsp;</font>
 
-    #     '''
+    #     """
     #     resp = requests.get(self.scopus_link)
     #     import re
     #     m = re.search('<a href="http://www.scopus.com/authid/detail.url'
@@ -128,9 +220,10 @@ class ScopusAbstract(object):
     #         return (None, None, None)
 
     def get_corresponding_author_info(self):
-        '''Try to get corresponding author information.
+        """Try to get corresponding author information.
+
         Returns (scopus-id, name, email).
-        '''
+        """
         resp = requests.get(self.scopus_link)
         from lxml import html
 
@@ -151,8 +244,10 @@ class ScopusAbstract(object):
                         return (scopus_url, name, email)
 
     def __str__(self):
-        '''return pretty text version of the abstract.
-        Assumes the abstract is a journal article.'''
+        """Return pretty text version of the abstract.
+
+        Assumes the abstract is a journal article.
+        """
 
         if len(self.authors) > 1:
             authors = ', '.join([str(a.initials) +
@@ -197,6 +292,7 @@ class ScopusAbstract(object):
 
     @property
     def latex(self):
+        """Return LaTeX representation of the abstract."""
         s = ('{authors}, \\textit{{{title}}}, {journal}, {volissue}, '
              '{pages}, ({date}). {doi}, {scopus_url}.')
         if len(self.authors) > 1:
@@ -237,7 +333,7 @@ class ScopusAbstract(object):
 
     @property
     def html(self):
-        'Returns an HTML citation.'
+        """Returns an HTML citation."""
         s = ('{authors}, {title}, {journal}, {volissue}, {pages}, '
              '({date}). {doi}.')
 
@@ -293,11 +389,12 @@ class ScopusAbstract(object):
 
     @property
     def bibtex(self):
-        '''Returns a string representing a bibtex entry for the article.
+        """Returns a string representing a bibtex entry for the article.
+
         Only Journal types currently supported. A uuid is used for a key.
         Required fields: author, title, journal, year, volume
-        Optional fields: number, pages, month, note, key
-        '''
+        Optional fields: number, pages, month, note, key.
+        """
         if self.aggregationType == 'Journal':
             template = '''@article{{{uuid},
   author = {{{author}}},
@@ -335,7 +432,10 @@ class ScopusAbstract(object):
 
     @property
     def ris(self):
-        "Return an RIS string representing an entry."
+        """Return an RIS string representing a ScopusAbstract.
+
+        Only Journal aggregationTypes are supported.
+        """
         if self.aggregationType == 'Journal':
             s = '''TY  - JOUR\n'''
             for i, au in enumerate(self.authors):
@@ -356,9 +456,9 @@ class ScopusAbstract(object):
 
 
 class ScopusAffiliation(object):
-    '''Class to represent the affiliations in an Abstract.'''
+    """Class to represent the affiliations in an Abstract."""
     def __init__(self, affiliation):
-        '''affiliation should be an xml element from the main abstract'''
+        """affiliation should be an xml element from the main abstract"""
         self.affiliation = affiliation
         self.affilname = get_encoded_text(affiliation, 'dtd:affilname')
         self.href = affiliation.attrib.get('href', None)
@@ -369,9 +469,9 @@ class ScopusAffiliation(object):
 
 
 class ScopusAuthorAffiliation(object):
-    '''Class to represent the affiliation in an Author element'''
+    """Class to represent the affiliation in an Author element"""
     def __init__(self, affiliation):
-        '''affiliation should be an xml element from an Author element.'''
+        """affiliation should be an xml element from an Author element."""
         self.affiliation = affiliation
         self.id = affiliation.get('id', None)
         self.href = affiliation.get('href', None)
@@ -381,9 +481,9 @@ class ScopusAuthorAffiliation(object):
 
 
 class ScopusAuthor(object):
-    '''A class for a author in a ScopusAbstract.'''
+    """A class for a author in a ScopusAbstract."""
     def __init__(self, author):
-        '''author should be an xml element.
+        """author should be an xml element.
         The following attributes are supported:
 
         author
@@ -400,7 +500,7 @@ class ScopusAuthor(object):
         This class is not the same as the one in scopus.scopus_author, which
         uses the scopus author api.
 
-        '''
+        """
         self.author = author
         self.indexed_name = get_encoded_text(author, 'ce:indexed-name')
         self.given_name = get_encoded_text(author, 'ce:given-name')
@@ -410,19 +510,18 @@ class ScopusAuthor(object):
         self.auid = author.attrib.get('auid', None)
         self.scopusid = self.auid
         self.seq = author.attrib.get('seq', None)
-
         self.affiliations = [ScopusAuthorAffiliation(aff)
                              for aff in author.findall('dtd:affiliation', ns)]
 
     def __str__(self):
-        s = '''{0.seq}. {0.given_name} {0.surname} scopusid:{0.auid} '''
+        s = """{0.seq}. {0.given_name} {0.surname} scopusid:{0.auid} """
         s += ' '.join([str(aff) for aff in self.affiliations])
         return s.format(self)
 
 
 class ScopusJournal(object):
-    '''Class to represent a journal from the Scopus API.
-    '''
+    """Class to represent a journal from the Scopus API."""
+
     def __init__(self, ISSN, refresh=False):
         ISSN = str(ISSN)
         self.issn = ISSN
@@ -514,18 +613,18 @@ class ScopusJournal(object):
             self.homepage = None
 
     def __str__(self):
-        s = '''{self.title} {self.scopus_url}
+        s = """{self.title} {self.scopus_url}
     Homepage: {self.homepage}
     SJR:  {self.SJR} ({self.SJR_year})
     SNIP: {self.SNIP} ({self.SNIP_year})
     IPP:  {self.IPP} ({self.IPP_year})
-'''.format(self=self)
+""".format(self=self)
         return s
 
     @property
     def org(self):
-        "return org-representation of a Journal"
-        s = '''[[{self.scopus_url}][{self.title}]] [[{self.homepage}][homepage]]
+        """Return an org-formatted string for a Journal."""
+        s = """[[{self.scopus_url}][{self.title}]] [[{self.homepage}][homepage]]
 | SJR | SNIP | IPP |
-| {self.SJR} | {self.SNIP} | {self.IPP} |'''.format(self=self)
+| {self.SJR} | {self.SNIP} | {self.IPP} |""".format(self=self)
         return s
