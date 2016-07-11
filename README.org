@@ -19,7 +19,8 @@ Using Scopus is not free. You need to have a license or institutional access to 
 MY_API_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 #+END_SRC
 
-* scopus_api
+* Examples of usage
+** scopus_api
   :PROPERTIES:
   :ID:       673FA81A-84FF-4453-9712-83904E755DB5
   :END:
@@ -29,14 +30,15 @@ This module implements the http://dev.elsevier.com/retrieval.html API. The main 
 #+BEGIN_SRC python
 from scopus.scopus_api import ScopusAbstract
 
-ab = ScopusAbstract("2-s2.0-84930616647")
+ab = ScopusAbstract("2-s2.0-84930616647", refresh=True)
 print(ab)
 #+END_SRC
 
-#+RESULTS:
+#+RESULTS: 
 : [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 0 times (Scopus).
 : Affiliations:
 :    id:60027950 Carnegie Mellon University
+
 
 You can print the abstract in a variety of formats, including LaTeX, bibtex, HTML, and RIS. Here is an example. For bibtex entries, you get a uuid for the key.
 
@@ -78,7 +80,7 @@ ER  -
 
 #+end_example
 
-** Interacting with the abstract
+*** Interacting with the abstract
 The abstract has a number of properties on it.
 #+BEGIN_SRC python
 from scopus.scopus_api import ScopusAbstract
@@ -129,17 +131,17 @@ print(ScopusJournal(ab.issn))
 :     IPP:  8.458 (2014)
 :
 
-* scopus_search
+** scopus_search
 This is a class to enable you to perform a query and then retrieve the records of the query for analysis. The EIDs for the search are cached so subsequent analysis is quicker. This class mostly just provides a list of EIDs which you can use for the ScopusAbstract class.
 
 #+BEGIN_SRC python
 from scopus.scopus_search import ScopusSearch
 
-s = ScopusSearch('FIRSTAUTH ( kitchin  j.r. )')
+s = ScopusSearch('FIRSTAUTH ( kitchin  j.r. )', refresh=True)
 print(s.org_summary)
 #+END_SRC
 
-#+RESULTS:
+#+RESULTS: 
 #+begin_example
 1. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 0 times (Scopus).
 Affiliations:
@@ -177,7 +179,7 @@ Affiliations:
 #+end_example
 
 
-* scopus_author
+** scopus_author
 This class differs from the author class described in [[id:673FA81A-84FF-4453-9712-83904E755DB5][scopus_api]]. This class is to interact with the entire author record in Scopus, using the author's scopus id. The ScopusAuthor object can access many bits of data about an author, including the number of papers, h-index, author impact factor, etc...
 
 #+BEGIN_SRC python
@@ -665,7 +667,7 @@ Affiliations:
 
 
 #+end_example
-* scopus_report
+** scopus_report
 This module provides a function to generate a report on a scopus search. It outputs text in org-format. It summarizes the results in a variety of ways, such as the number of hits, which journals they are published in, who the coauthors are, how many times the articles have been published, etc...
 
 #+BEGIN_SRC python :results raw
@@ -677,7 +679,7 @@ report(s, 'Kitchin - first author')
 #+END_SRC
 
 #+RESULTS:
-*** Report for Kitchin - first author
+**** Report for Kitchin - first author
 
 #+attr_latex: :placement [H] :center nil
 #+caption: Types of documents found for Kitchin - first author.
@@ -748,7 +750,7 @@ report(s, 'Kitchin - first author')
 
 #+caption: Number of authors on each publication for Kitchin - first author.
 [[./Kitchin - first author-nauthors-per-publication.png]]
-**** Bibliography  :noexport:
+***** Bibliography			:noexport:
      :PROPERTIES:
      :VISIBILITY: folded
      :END:
