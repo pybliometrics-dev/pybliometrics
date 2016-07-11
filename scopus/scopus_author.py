@@ -18,48 +18,99 @@ if not os.path.exists(SCOPUS_AUTHOR_DIR):
 
 
 class ScopusAuthor(object):
-    '''Class to represent a Scopus Author query by the scopus-id.
+    """Class to represent a Scopus Author query by the scopus-id."""
 
-    Attributes:
-    orcid
-    hindex
-    ndocuments
-    ncitations
-    ncited_by
-    ncoauthors
-    current_affiliation
-    affiliation_history
-    date_created
-    categories - list of scopus categories
-    name - Constructed first last name
-    scopus_url - Public website to author in Scopus
-    citedby_url - api link to who is citing
-    coauthor_url - api link to coauthors
+    @property
+    def author_id(self):
+        """The scopus id for the author."""
+        return self._author_id
 
-    Functions:
-    get_coauthors
-    get_document_eids
-    get_document_summary
-    get_abstracts
-    '''
+    @property
+    def orcid(self):
+        """The author orcid."""
+        return self._orcid
+
+    @property
+    def hindex(self):
+        """The author hindex"""
+        return self._hindex
+
+    @property
+    def ndocuments(self):
+        """Number of documents for the author."""
+        return self._ndocuments
+
+    @property
+    def ncited_by(self):
+        """Total number of citations."""
+        return self._ncited_by
+
+    @property
+    def ncoauthors(self):
+        """Total number of coauthors."""
+        return self._ncoauthors
+
+    @property
+    def current_affiliation(self):
+        """Current affiliation according to scopus."""
+        return self._current_affiliation
+
+    @property
+    def affliation_history(self):
+        """List of ScopusAffiliation objects."""
+        return self.affiliation_history
+
+    @property
+    def date_created(self):
+        """Date the Scopus record was created."""
+        return self._date_created
+
+    @property
+    def firstname(self):
+        """Author first name."""
+        return self._firstname
+
+    @property
+    def lastname(self):
+        """Author last name."""
+        return self._lastname
+
+    @property
+    def name(self):
+        """Author name."""
+        return self._name
+
+    @property
+    def scopus_url(self):
+        """url to the author scopus page."""
+        return self._scopus_url
+
+    @property
+    def citedby_url(self):
+        """URL to Scopus page of citing papers."""
+        return self._citedby_url
+
+    @property
+    def coauthor_url(self):
+        """URL to Scopus coauthor page."""
+        return self._coauthor_url
 
     def __init__(self,
                  author_id,
                  refresh=False,
                  level=1):
-        '''author_id is the scopus id
+        """author_id is the scopus id
 
         if refresh download new results, otherwise read from cache
         scopus-authors/{author_id} if possible.
 
         level = number of * to print in __str__.
-
-        '''
+        """
 
         if isinstance(author_id, int):
             author_id = str(author_id)
 
-        self.author_id = author_id
+        self._author_id = author_id
         self.level = level
 
         qfile = os.path.join(SCOPUS_AUTHOR_DIR, author_id)
@@ -84,14 +135,14 @@ class ScopusAuthor(object):
             with open(qfile, 'w') as f:
                 f.write(resp.text)
 
-        self.orcid = get_encoded_text(self.results, 'coredata/orcid')
+        self._orcid = get_encoded_text(self.results, 'coredata/orcid')
         hindex = get_encoded_text(self.results,
                                   'h-index')
-        self.hindex = int(hindex) if hindex is not None else 0
+        self._hindex = int(hindex) if hindex is not None else 0
 
         ndocuments = get_encoded_text(self.results,
                                       'coredata/document-count')
-        self.ndocuments = int(ndocuments) if ndocuments is not None else 0
+        self._ndocuments = int(ndocuments) if ndocuments is not None else 0
 
         ncitations = get_encoded_text(self.results,
                                       'coredata/citation-count')
@@ -99,18 +150,18 @@ class ScopusAuthor(object):
 
         ncited_by = get_encoded_text(self.results,
                                      'coredata/cited-by-count')
-        self.ncited_by = int(ncited_by) if ncited_by is not None else 0
+        self._ncited_by = int(ncited_by) if ncited_by is not None else 0
 
         ncoauthors = get_encoded_text(self.results,
                                       'coauthor-count')
-        self.ncoauthors = int(ncoauthors) if ncoauthors is not None else 0
+        self._ncoauthors = int(ncoauthors) if ncoauthors is not None else 0
 
-        self.current_affiliation = get_encoded_text(self.results,
-                                                    'author-profile/'
-                                                    'affiliation-current/'
-                                                    'affiliation/'
-                                                    'ip-doc/'
-                                                    'afdispname')
+        self._current_affiliation = get_encoded_text(self.results,
+                                                     'author-profile/'
+                                                     'affiliation-current/'
+                                                     'affiliation/'
+                                                     'ip-doc/'
+                                                     'afdispname')
 
         # affiliation history
         affiliations = [ScopusAffiliation(aff_id, refresh=refresh)
@@ -121,16 +172,16 @@ class ScopusAuthor(object):
                          self.results.findall('affiliation-history/'
                                               'affiliation')
                          if el is not None]]
-        self.affiliation_history = affiliations
+        self._affiliation_history = affiliations
 
         date_created = self.results.find('author-profile/'
                                          'date-created', ns)
         if date_created is not None:
-            self.date_created = (int(date_created.attrib['year']),
-                                 int(date_created.attrib['month']),
-                                 int(date_created.attrib['day']))
+            self._date_created = (int(date_created.attrib['year']),
+                                  int(date_created.attrib['month']),
+                                  int(date_created.attrib['day']))
         else:
-            self.date_created = (None, None, None)
+            self._date_created = (None, None, None)
         # Research areas
         area_elements = self.results.findall('subject-areas/subject-area')
         # {code: name}
@@ -148,36 +199,46 @@ class ScopusAuthor(object):
         categories.sort(reverse=True, key=itemgetter(1))
         self.categories = categories
 
-        self.name = ((get_encoded_text(self.results,
-                                       'author-profile/'
-                                       'preferred-name/'
-                                       'given-name') or '') +
-                     ' ' +
-                     (get_encoded_text(self.results,
-                                       'author-profile/'
-                                       'preferred-name/'
-                                       'surname') or ''))
+        self._firstname = (get_encoded_text(self.results,
+                                        'author-profile/'
+                                        'preferred-name/'
+                                        'given-name') or '')
+
+        self._lastname = (get_encoded_text(self.results,
+                                        'author-profile/'
+                                        'preferred-name/'
+                                        'surname') or '')
+        
+        self._name = ((get_encoded_text(self.results,
+                                        'author-profile/'
+                                        'preferred-name/'
+                                        'given-name') or '') +
+                      ' ' +
+                      (get_encoded_text(self.results,
+                                        'author-profile/'
+                                        'preferred-name/'
+                                        'surname') or ''))
 
         # Real website for the author
-        self.scopus_url = self.results.find('coredata/' +
-                                            'link[@rel="scopus-author"]')
-        if self.scopus_url is not None:
-            self.scopus_url = self.scopus_url.get('href')
+        self._scopus_url = self.results.find('coredata/' +
+                                             'link[@rel="scopus-author"]')
+        if self._scopus_url is not None:
+            self._scopus_url = self.scopus_url.get('href')
 
         # API url for who cites them.
-        self.citedby_url = self.results.find('coredata/'
-                                             'link[@rel="scopus-citedby"]')
-        if self.citedby_url is not None:
-            self.citedby_url = self.citedby_url.get('href')
+        self._citedby_url = self.results.find('coredata/'
+                                              'link[@rel="scopus-citedby"]')
+        if self._citedby_url is not None:
+            self._citedby_url = self.citedby_url.get('href')
 
         # API url for coauthors
-        self.coauthor_url = self.results.find('coredata/'
-                                              'link[@rel="coauthor-search"]')
-        if self.coauthor_url is not None:
-            self.coauthor_url = self.coauthor_url.get('href')
+        self._coauthor_url = self.results.find('coredata/'
+                                               'link[@rel="coauthor-search"]')
+        if self._coauthor_url is not None:
+            self._coauthor_url = self.coauthor_url.get('href')
 
     def get_coauthors(self):
-        '''Return list of coauthors, their scopus-id and research areas.'''
+        """Return list of coauthors, their scopus-id and research areas."""
         url = self.results.find('coredata/'
                                 'link[@rel="coauthor-search"]').get('href')
         resp = requests.get(url,
@@ -232,22 +293,21 @@ class ScopusAuthor(object):
         return coauthors
 
     def get_document_eids(self):
-        '''Return list of EIDs for the author.'''
+        """Return list of EIDs for the author."""
         search = ScopusSearch('au-id({0})'.format(self.author_id))
         return search.EIDS
 
     def get_abstracts(self):
-        '''Return a list of ScopusAbstract objects'''
+        """Return a list of ScopusAbstract objects."""
         return [ScopusAbstract(eid) for eid in self.get_document_eids()]
 
     def get_document_summary(self, N=None, cite_sort=True):
-        '''
-        Return a summary string of documents.
+        """Return a summary string of documents.
 
         N = maximum number to return. if None, return all documents.
         cite_sort is a boolean to sort results by number of citations,
         in decreasing order.
-        '''
+        """
         abstracts = [ScopusAbstract(eid) for eid in self.get_document_eids()]
 
         if cite_sort:
@@ -266,13 +326,15 @@ class ScopusAuthor(object):
         return '\n'.join(s)
 
     def __str__(self):
-        '''Return a summary string.'''
+        """Return a summary string."""
         s = ['*' * self.level + ' ' +
              (get_encoded_text(self.results,
-                                'author-profile/preferred-name/given-name') or '') +
+                               'author-profile/preferred-name/given-name') or
+              '') +
              ' ' +
              (get_encoded_text(self.results,
-                              'author-profile/preferred-name/surname') or '') +
+                               'author-profile/preferred-name/surname') or
+              '') +
              ' (updated on ' + time.asctime() + ')']
 
         url = self.results.find('coredata/'
@@ -362,8 +424,9 @@ class ScopusAuthor(object):
         return '\n'.join(s)
 
     def author_impact_factor(self, year=2014):
-        '''Get author_impact_factor.
-        Returns (ncites, npapers, aif)'''
+        """Get author_impact_factor.
+        Returns (ncites, npapers, aif)
+        """
         scopus_abstracts = [ScopusAbstract(eid, refresh=True)
                             for eid in self.get_document_eids()
                             if ScopusAbstract(eid).aggregationType == 'Journal']
@@ -384,7 +447,7 @@ class ScopusAuthor(object):
             return (Ncites, len(aif_data), 0)
 
     def n_first_author_papers(self):
-        'Return number of papers with author as the first author.'
+        """Return number of papers with author as the first author."""
         scopus_abstracts = [ScopusAbstract(eid)
                             for eid in self.get_document_eids()
                             if ScopusAbstract(eid).aggregationType == 'Journal']
@@ -394,7 +457,7 @@ class ScopusAuthor(object):
         return sum(first_authors)
 
     def n_last_author_papers(self):
-        'Return number of papers with author as the last author.'
+        """Return number of papers with author as the last author."""
         scopus_abstracts = [ScopusAbstract(eid)
                             for eid in self.get_document_eids()
                             if ScopusAbstract(eid).aggregationType == 'Journal']
@@ -403,7 +466,7 @@ class ScopusAuthor(object):
         return sum(first_authors)
 
     def n_journal_articles(self):
-        'Return the number of journal articles.'
+        """Return the number of journal articles."""
         return len([ScopusAbstract(eid)
                     for eid in self.get_document_eids()
                     if ScopusAbstract(eid).aggregationType == 'Journal'])
