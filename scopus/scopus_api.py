@@ -48,7 +48,7 @@ class ScopusAbstract(object):
     @property
     def citedby_count(self):
         """Number of times the abstract has been cited."""
-        return self._citedby_count
+        return int(self._citedby_count)
 
     @property
     def publisher(self):
