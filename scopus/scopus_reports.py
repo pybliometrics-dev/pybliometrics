@@ -86,7 +86,7 @@ def report(scopus_search, label):
     print('#+caption: Author publication counts for {0}.'.format(label))
     print('| name | count | categories |')
     print('|-')
-    for name, count, scopus_id in view[0:10]:
+    for name, count, scopus_id in view[0:20]:
         cats = ', '.join(['{0} ({1})'.format(cat[0], cat[1])
                           for cat in ScopusAuthor(scopus_id).categories[0:3]])
         print('| {0} | {1} | {2} |'.format(name,
