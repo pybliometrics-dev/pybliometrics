@@ -2,6 +2,7 @@ from . import ns, get_encoded_text, MY_API_KEY
 import requests
 import xml.etree.ElementTree as ET
 import os
+import sys
 
 SCOPUS_XML_DIR = os.path.expanduser('~/.scopus/xml')
 SCOPUS_ISSN_DIR = os.path.expanduser('~/.scopus/issn')
@@ -140,7 +141,10 @@ class ScopusAbstract(object):
                                          'X-ELS-APIKey': MY_API_KEY})
             self.xml = resp.text
             with open(fEID, 'w') as f:
-                f.write(self.xml.encode('utf-8'))
+                if sys.version_info[0] == 3:
+                    f.write(self.xml)
+                else:
+                    f.write(self.xml.encode('utf-8'))
 
             results = ET.fromstring(resp.text.encode('utf-8'))
 
