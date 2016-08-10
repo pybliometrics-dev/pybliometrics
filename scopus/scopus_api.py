@@ -126,7 +126,7 @@ class ScopusAbstract(object):
         fEID = os.path.join(SCOPUS_XML_DIR, EID)
         self.file = fEID
 
-        if os.path.exists(fEID):
+        if os.path.exists(fEID) and not refresh:
             with open(fEID) as f:
                 text = f.read()
                 self.xml = text
@@ -140,7 +140,7 @@ class ScopusAbstract(object):
                                          'X-ELS-APIKey': MY_API_KEY})
             self.xml = resp.text
             with open(fEID, 'w') as f:
-                f.write(self.xml)
+                f.write(self.xml.encode('utf-8'))
 
             results = ET.fromstring(resp.text.encode('utf-8'))
 
