@@ -288,7 +288,7 @@ class ScopusAbstract(object):
         s += ' http://dx.doi.org/{self.doi},'
         s += ' {self.scopus_link},'
         s += ' cited {self.citedby_count} times (Scopus).\n'
-        s += 'Affiliations:\n   '
+        s += '  Affiliations:\n   '
         s += '\n   '.join([str(aff) for aff in self.affiliations])
 
         return s.format(authors=authors,
