@@ -1,4 +1,5 @@
 import os
+import sys
 
 SCOPUS_API_FILE = os.path.expanduser("~/.scopus/my_scopus.py")
 if os.path.exists(SCOPUS_API_FILE):
@@ -32,6 +33,9 @@ unnecessary.
         return None
     result = container.find(xpath, ns)
     if hasattr(result, 'text') and result.text:
-        return result.text
+        if sys.version_info[0] == 3:
+            return result.text
+        else:
+            return result.text.encode('utf-8')
     else:
         return None

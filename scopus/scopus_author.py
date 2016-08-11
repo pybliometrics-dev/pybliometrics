@@ -59,7 +59,7 @@ class ScopusAuthor(object):
     @property
     def affiliation_history(self):
         """List of ScopusAffiliation objects."""
-        return self.affiliation_history
+        return self._affiliation_history
 
     @property
     def date_created(self):
