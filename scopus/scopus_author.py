@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 import textwrap
 import time
 from operator import itemgetter
+import sys
 
 from .scopus_api import ScopusAbstract
 from .scopus_search import ScopusSearch
@@ -56,7 +57,7 @@ class ScopusAuthor(object):
         return self._current_affiliation
 
     @property
-    def affliation_history(self):
+    def affiliation_history(self):
         """List of ScopusAffiliation objects."""
         return self.affiliation_history
 
@@ -133,7 +134,10 @@ class ScopusAuthor(object):
 
             self.results = results
             with open(qfile, 'w') as f:
-                f.write(resp.text)
+                if sys.version_info[0] == 3:
+                    f.write(resp.text)
+                else:
+                    f.write(resp.text.encode('utf-8'))
 
         self._orcid = get_encoded_text(self.results, 'coredata/orcid')
         hindex = get_encoded_text(self.results,

@@ -3,6 +3,7 @@
 import requests
 import os
 import xml.etree.ElementTree as ET
+import sys
 
 from . import MY_API_KEY
 
@@ -94,7 +95,10 @@ class ScopusSearch(object):
 
             with open(qfile, 'w') as f:
                 for eid in self.EIDS:
-                    f.write('{}\n'.format(eid))
+                    if sys.version_info[0] == 3:
+                        f.write('{}\n'.format(eid))
+                    else:
+                        f.write('{}\n'.format(eid.encode('utf-8')))
 
     def __str__(self):
         s = """{self.query}
