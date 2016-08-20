@@ -59,6 +59,7 @@ class ScopusAbstract(object):
     @property
     def source_id(self):
         """Scopus source_id of the abstract."""
+        return self._source_id
 
     @property
     def issn(self):
