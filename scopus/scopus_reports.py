@@ -151,7 +151,7 @@ def report(scopus_search, label):
 
     print('\n\n#+attr_latex: :placement [H] :center nil')
     print('#+caption: Top cited publication'
-          'counts for {0}. j-index = {1}.'.format(label, hindex))
+          ' counts for {0}. j-index = {1}.'.format(label, hindex))
     print('| title | cite count |\n|-')
     for title, count in pview[0:10]:
         print('| {0} | {1} |'.format(title, count))
