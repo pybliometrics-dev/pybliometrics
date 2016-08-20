@@ -87,7 +87,7 @@ class ScopusSearch(object):
 
                 results = resp.json()
 
-                if 'entry' in results['search-results']:
+                if 'entry' in results.get('search-results', []):
                     self._EIDS += [str(r['eid']) for
                                   r in results['search-results']['entry']]
                 start += count
