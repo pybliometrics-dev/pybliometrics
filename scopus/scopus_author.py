@@ -450,9 +450,9 @@ class ScopusAuthor(object):
         else:
             return (Ncites, len(aif_data), 0)
 
-    def n_first_author_papers(self):
+    def n_first_author_papers(self, refresh=True):
         """Return number of papers with author as the first author."""
-        scopus_abstracts = [ScopusAbstract(eid)
+        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
                             for eid in self.get_document_eids()
                             if ScopusAbstract(eid).aggregationType == 'Journal']
         first_authors = [1 for ab in scopus_abstracts
@@ -460,17 +460,17 @@ class ScopusAuthor(object):
 
         return sum(first_authors)
 
-    def n_last_author_papers(self):
+    def n_last_author_papers(self, refresh=True):
         """Return number of papers with author as the last author."""
-        scopus_abstracts = [ScopusAbstract(eid)
+        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
                             for eid in self.get_document_eids()
                             if ScopusAbstract(eid).aggregationType == 'Journal']
         first_authors = [1 for ab in scopus_abstracts
                          if ab.authors[-1].scopusid == self.author_id]
         return sum(first_authors)
 
-    def n_journal_articles(self):
+    def n_journal_articles(self, refresh=True):
         """Return the number of journal articles."""
-        return len([ScopusAbstract(eid)
+        return len([ScopusAbstract(eid, refresh=refresh)
                     for eid in self.get_document_eids()
                     if ScopusAbstract(eid).aggregationType == 'Journal'])
