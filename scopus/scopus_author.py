@@ -3,6 +3,7 @@ import os
 import xml.etree.ElementTree as ET
 import textwrap
 import time
+from collections import Counter
 from operator import itemgetter
 import sys
 
@@ -474,3 +475,11 @@ class ScopusAuthor(object):
         return len([ScopusAbstract(eid, refresh=refresh)
                     for eid in self.get_document_eids()
                     if ScopusAbstract(eid).aggregationType == 'Journal'])
+
+    def n_yearly_publications(self, refresh=True):
+        """Number of journal publications in a given year."""
+        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
+                            for eid in self.get_document_eids()
+                            if ScopusAbstract(eid).aggregationType == 'Journal']
+        pub_years = [int(ab.coverDate.split('-')[0]) for ab in scopus_abstracts]
+        return Counter(pub_years)
