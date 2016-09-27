@@ -3,6 +3,7 @@ import os
 import xml.etree.ElementTree as ET
 import textwrap
 import time
+from collections import Counter
 from operator import itemgetter
 import sys
 
@@ -427,11 +428,12 @@ class ScopusAuthor(object):
 
         return '\n'.join(s)
 
-    def author_impact_factor(self, year=2014):
+    def author_impact_factor(self, year=2014, refresh=True):
         """Get author_impact_factor.
+
         Returns (ncites, npapers, aif)
         """
-        scopus_abstracts = [ScopusAbstract(eid, refresh=True)
+        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
                             for eid in self.get_document_eids()
                             if ScopusAbstract(eid).aggregationType == 'Journal']
 
@@ -439,7 +441,6 @@ class ScopusAuthor(object):
         years = [int(ab.coverDate.split('-')[0]) for ab in scopus_abstracts]
 
         data = zip(years, cites, scopus_abstracts)
-        from operator import itemgetter
         data = sorted(data, key=itemgetter(1), reverse=True)
 
         # now get aif papers for year-1 and year-2
@@ -450,9 +451,9 @@ class ScopusAuthor(object):
         else:
             return (Ncites, len(aif_data), 0)
 
-    def n_first_author_papers(self):
+    def n_first_author_papers(self, refresh=True):
         """Return number of papers with author as the first author."""
-        scopus_abstracts = [ScopusAbstract(eid)
+        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
                             for eid in self.get_document_eids()
                             if ScopusAbstract(eid).aggregationType == 'Journal']
         first_authors = [1 for ab in scopus_abstracts
@@ -460,17 +461,25 @@ class ScopusAuthor(object):
 
         return sum(first_authors)
 
-    def n_last_author_papers(self):
+    def n_last_author_papers(self, refresh=True):
         """Return number of papers with author as the last author."""
-        scopus_abstracts = [ScopusAbstract(eid)
+        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
                             for eid in self.get_document_eids()
                             if ScopusAbstract(eid).aggregationType == 'Journal']
         first_authors = [1 for ab in scopus_abstracts
                          if ab.authors[-1].scopusid == self.author_id]
         return sum(first_authors)
 
-    def n_journal_articles(self):
+    def n_journal_articles(self, refresh=True):
         """Return the number of journal articles."""
-        return len([ScopusAbstract(eid)
+        return len([ScopusAbstract(eid, refresh=refresh)
                     for eid in self.get_document_eids()
                     if ScopusAbstract(eid).aggregationType == 'Journal'])
+
+    def n_yearly_publications(self, refresh=True):
+        """Number of journal publications in a given year."""
+        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
+                            for eid in self.get_document_eids()
+                            if ScopusAbstract(eid).aggregationType == 'Journal']
+        pub_years = [int(ab.coverDate.split('-')[0]) for ab in scopus_abstracts]
+        return Counter(pub_years)
