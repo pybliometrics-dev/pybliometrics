@@ -1,5 +1,6 @@
 import requests
 import os
+import sys
 import xml.etree.ElementTree as ET
 from . import get_encoded_text, MY_API_KEY
 
@@ -78,7 +79,10 @@ class ScopusAffiliation:
 
             self.results = results
             with open(qfile, 'w') as f:
-                f.write(resp.text)
+                if sys.version_info[0] == 3:
+                    f.write(resp.text)
+                else:
+                    f.write(resp.text.encode('utf-8'))
 
         # public url
         self._url = self.results.find('coredata/'
