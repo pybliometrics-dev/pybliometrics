@@ -73,7 +73,7 @@ class ScopusSearch(object):
             if N > max_entries:
                 raise Exception(('N = {}. '
                                  'Set max_entries to a higher number or '
-                                 'change your query').format(N))
+                                 'change your query ({})').format(N, query))
 
             self._EIDS = []
             while N > 0:
