@@ -297,23 +297,26 @@ class ScopusAuthor(object):
 
         return coauthors
 
-    def get_document_eids(self):
+    def get_document_eids(self, refresh=True):
         """Return list of EIDs for the author."""
-        search = ScopusSearch('au-id({0})'.format(self.author_id))
+        search = ScopusSearch('au-id({0})'.format(self.author_id),
+                              refresh=refresh)
         return search.EIDS
 
-    def get_abstracts(self):
+    def get_abstracts(self, refresh=True):
         """Return a list of ScopusAbstract objects."""
-        return [ScopusAbstract(eid) for eid in self.get_document_eids()]
+        return [ScopusAbstract(eid, refresh=refresh)
+                for eid in self.get_document_eids(refresh=refresh)]
 
-    def get_document_summary(self, N=None, cite_sort=True):
+    def get_document_summary(self, N=None, cite_sort=True, refresh=True):
         """Return a summary string of documents.
 
         N = maximum number to return. if None, return all documents.
         cite_sort is a boolean to sort results by number of citations,
         in decreasing order.
         """
-        abstracts = [ScopusAbstract(eid) for eid in self.get_document_eids()]
+        abstracts = [ScopusAbstract(eid, refresh=refresh)
+                     for eid in self.get_document_eids(refresh=refresh)]
 
         if cite_sort:
             counts = [(a, int(a.citedby_count)) for a in abstracts]
