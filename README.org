@@ -87,12 +87,12 @@ The abstract has a number of properties on it.
 #+BEGIN_SRC python :exports both
 from scopus.scopus_api import ScopusAbstract
 
-ab = ScopusAbstract("2-s2.0-84930616647")
-print([x for x in dir(ab) if '__' not in x])
+ab = ScopusAbstract("2-s2.0-84930616647", view="FULL")
+print([x for x in dir(ab) if not x.startswith('_')])
 #+END_SRC
 
 #+RESULTS:
-: ['affiliations', 'aggregationType', 'article_number', 'authors', 'authors_xml', 'bibtex', 'cite_link', 'citedby_count', 'coredata', 'coverDate', 'creator', 'description', 'doi', 'eid', 'endingPage', 'file', 'get_corresponding_author_info', 'html', 'identifier', 'issn', 'issueIdentifier', 'latex', 'nauthors', 'pageRange', 'publicationName', 'publisher', 'results', 'ris', 'scopus_link', 'self_link', 'source_id', 'srctype', 'startingPage', 'title', 'url', 'volume', 'xml']
+: ['affiliations', 'aggregationType', 'article_number', 'authors', 'authors_xml', 'bibtex', 'cite_link', 'citedby_count', 'coredata', 'coverDate', 'creator', 'description', 'doi', 'eid', 'endingPage', 'file', 'get_corresponding_author_info', 'html', 'identifier', 'issn', 'issueIdentifier', 'latex', 'nauthors', 'pageRange', 'publicationName', 'publisher', 'refcount', 'references', 'results', 'ris', 'scopus_link', 'self_link', 'source_id', 'srctype', 'startingPage', 'title', 'url', 'volume', 'xml']
 
 Some of these are objects themselves. Here we consider the authors, which is a list of scopus.scopus_api.ScopusAuthor objects. These objects have quite a bit of information on them.
 
