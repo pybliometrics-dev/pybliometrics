@@ -116,14 +116,41 @@ class ScopusAbstract(object):
         """Return number of authors listed in the abstract."""
         return len(self.authors)
 
-    def __init__(self, EID, refresh=False):
+    @property
+    def refcount(self):
+        """Return number of references of an article, if possible."""
+        if self._references is not None:
+            return self._references.attrib['refcount']
+        else:
+            raise TypeError("Could not load article references. "
+                            "Did you load with view=FULL?")
+
+    @property
+    def references(self):
+        """Return EIDs of references of an article."""
+        if self._references is not None:
+            eids = [r.find("ref-info/refd-itemidlist/itemid", ns).text for r
+                    in self._references.findall("reference", ns)]
+            return ["2-s2.0-" + eid for eid in eids]
+        else:
+            raise TypeError("Could not load article references. "
+                            "Did you load with view=FULL?")
+
+    def __init__(self, EID, view='META_ABS', refresh=False):
         """Initialize a Scopus abstract
 
         EID -- The scopus id for an abstract and should be a string.
 
+        view -- (default=META_ABS) The view of the file that should be
+        downloaded.  Currently supported values: META, META_ABS, FULL.
+
         refresh -- (default=False) A boolean that determines if the result
         should be downloaded again.
         """
+        allowed_views = ('META', 'META_ABS', 'FULL')
+        if view not in allowed_views:
+            raise ValueError('view parameter must be one of ' +\
+                             ', '.join(allowed_views))
 
         fEID = os.path.join(SCOPUS_XML_DIR, EID)
         self.file = fEID
@@ -134,12 +161,12 @@ class ScopusAbstract(object):
                 self.xml = text
                 results = ET.fromstring(text)
         else:
-            url = ("http://api.elsevier.com/content/abstract/eid/" +
-                   EID + '?view=META_ABS')
+            url = "http://api.elsevier.com/content/abstract/eid/{}".format(EID)
 
             resp = requests.get(url,
                                 headers={'Accept': 'application/xml',
-                                         'X-ELS-APIKey': MY_API_KEY})
+                                         'X-ELS-APIKey': MY_API_KEY},
+                                params={'view': view})
             self.xml = resp.text
             with open(fEID, 'w') as f:
                 if sys.version_info[0] == 3:
@@ -151,6 +178,7 @@ class ScopusAbstract(object):
 
         coredata = results.find('dtd:coredata', ns)
         authors = results.find('dtd:authors', ns)
+        items = results.find('item', ns)
         self.results = results
         if results.tag == 'service-error':
             raise Exception('\n{0}\n{1}'.format(EID, self.xml))
@@ -198,6 +226,11 @@ class ScopusAbstract(object):
         self._authors = [ScopusAuthor(author) for author in authors]
         self._affiliations = [ScopusAffiliation(aff) for aff
                               in results.findall('dtd:affiliation', ns)]
+
+        if items is not None:
+            self._references = items.find('bibrecord/tail/bibliography', ns)
+        else:
+            self._references = None
 
     # def get_corresponding_author_info(self):
     #     """Try to get corresponding author information.
