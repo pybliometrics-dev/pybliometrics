@@ -278,8 +278,10 @@ class ScopusAbstract(object):
                         if 'http://www.scopus.com/authid/detail.url' in aa.get('href', ''):
                             scopus_url = aa.attrib['href']
                             name = aa.text
+                        else:
+                            scopus_url, name = None, None
 
-                        return (scopus_url, name, email)
+        return (scopus_url, name, email)
 
     def __str__(self):
         """Return pretty text version of the abstract.
