@@ -599,7 +599,7 @@ class ScopusJournal(object):
         SNIP = get_encoded_text(self.results,
                                 'entry/SNIPList/SNIP')
         SNIP_year = self.results.find('entry/SNIPList/SNIP', ns)
-        if SNIP_year:
+        if SNIP_year is not None:
             SNIP_year = SNIP_year.get('year')
         else:
             SNIP_year = -1
