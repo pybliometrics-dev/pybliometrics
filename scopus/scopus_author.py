@@ -109,8 +109,7 @@ class ScopusAuthor(object):
         level = number of * to print in __str__.
         """
 
-        if isinstance(author_id, int):
-            author_id = str(author_id)
+        author_id = str(author_id)
 
         self._author_id = author_id
         self.level = level
