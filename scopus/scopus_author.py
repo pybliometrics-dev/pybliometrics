@@ -21,6 +21,7 @@ if not os.path.exists(SCOPUS_AUTHOR_DIR):
 
 class ScopusAuthor(object):
     """Class to represent a Scopus Author query by the scopus-id."""
+
     @property
     def author_id(self):
         """The scopus id for the author."""
@@ -110,6 +111,7 @@ class ScopusAuthor(object):
 
         author_id = str(author_id)
 
+        self._author_id = author_id
         self.level = level
 
         qfile = os.path.join(SCOPUS_AUTHOR_DIR, author_id)
@@ -145,10 +147,6 @@ class ScopusAuthor(object):
         ndocuments = get_encoded_text(self.results,
                                       'coredata/document-count')
         self._ndocuments = int(ndocuments) if ndocuments is not None else 0
-
-        _author_id = get_encoded_text(self.results, 'coredata/dc:identifier')
-        _author_id = _author_id.split(":")[-1]
-        self._author_id = _author_id
 
         ncitations = get_encoded_text(self.results,
                                       'coredata/citation-count')
@@ -195,7 +193,7 @@ class ScopusAuthor(object):
 
         classifications = self.results.findall('author-profile/'
                                                'classificationgroup/'
-                                               'classifications/'
+                                               'classifications[@type="ASJC"]/'
                                                'classification')
         # {code: frequency}
         c = {int(cls.text): int(cls.attrib['frequency'])
