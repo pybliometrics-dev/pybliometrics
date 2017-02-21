@@ -1,5 +1,4 @@
-from . import ns, get_encoded_text, MY_API_KEY
-import requests
+from . import ns, get_content, get_encoded_text, MY_API_KEY
 import xml.etree.ElementTree as ET
 import os
 import sys
@@ -152,29 +151,11 @@ class ScopusAbstract(object):
             raise ValueError('view parameter must be one of ' +\
                              ', '.join(allowed_views))
 
-        fEID = os.path.join(SCOPUS_XML_DIR, EID)
-        self.file = fEID
-
-        if os.path.exists(fEID) and not refresh:
-            with open(fEID) as f:
-                text = f.read()
-                self.xml = text
-                results = ET.fromstring(text)
-        else:
-            url = "http://api.elsevier.com/content/abstract/eid/{}".format(EID)
-
-            resp = requests.get(url,
-                                headers={'Accept': 'application/xml',
-                                         'X-ELS-APIKey': MY_API_KEY},
-                                params={'view': view})
-            self.xml = resp.text
-            with open(fEID, 'w') as f:
-                if sys.version_info[0] == 3:
-                    f.write(self.xml)
-                else:
-                    f.write(self.xml.encode('utf-8'))
-
-            results = ET.fromstring(resp.text.encode('utf-8'))
+        qfile = os.path.join(SCOPUS_XML_DIR, EID)
+        url = "http://api.elsevier.com/content/abstract/eid/{}".format(EID)
+        header = {'Accept': 'application/xml', 'X-ELS-APIKey': MY_API_KEY}
+        params = {'view': view}
+        results = ET.fromstring(get_content(qfile, url, refresh, header, params))
 
         coredata = results.find('dtd:coredata', ns)
         authors = results.find('dtd:authors', ns)
