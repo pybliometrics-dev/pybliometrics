@@ -1,7 +1,8 @@
-from . import ns, get_content, get_encoded_text, MY_API_KEY
-import xml.etree.ElementTree as ET
 import os
 import sys
+import xml.etree.ElementTree as ET
+
+from . import ns, get_content, get_encoded_text, MY_API_KEY
 
 SCOPUS_XML_DIR = os.path.expanduser('~/.scopus/xml')
 SCOPUS_ISSN_DIR = os.path.expanduser('~/.scopus/issn')
@@ -16,7 +17,7 @@ if not os.path.exists(SCOPUS_ISSN_DIR):
 class ScopusAbstract(object):
     """Class to represent the results from a Scopus abstract.
 
-    The results are retrieved by the EID from a query. The results
+    The xml are retrieved by the EID from a query. The xml
     are cached in a folder ~/.scopus/xml/{eid}.
     """
 
@@ -148,20 +149,20 @@ class ScopusAbstract(object):
         """
         allowed_views = ('META', 'META_ABS', 'FULL')
         if view not in allowed_views:
-            raise ValueError('view parameter must be one of ' +\
+            raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
 
         qfile = os.path.join(SCOPUS_XML_DIR, EID)
         url = "http://api.elsevier.com/content/abstract/eid/{}".format(EID)
         header = {'Accept': 'application/xml', 'X-ELS-APIKey': MY_API_KEY}
         params = {'view': view}
-        results = ET.fromstring(get_content(qfile, url, refresh, header, params))
+        xml = ET.fromstring(get_content(qfile, url, refresh, header, params))
 
-        coredata = results.find('dtd:coredata', ns)
-        authors = results.find('dtd:authors', ns)
-        items = results.find('item', ns)
-        self.results = results
-        if results.tag == 'service-error':
+        coredata = xml.find('dtd:coredata', ns)
+        authors = xml.find('dtd:authors', ns)
+        items = xml.find('item', ns)
+        self.xml = xml
+        if xml.tag == 'service-error':
             raise Exception('\n{0}\n{1}'.format(EID, self.xml))
 
         self.coredata = coredata
@@ -194,10 +195,8 @@ class ScopusAbstract(object):
         self.description = get_encoded_text(coredata, 'dc:description')
 
         sl = coredata.find('dtd:link[@rel="scopus"]', ns).get('href', None)
-        self_link = coredata.find('dtd:link[@rel="self"]',
-                                  ns).get('href', None)
-        cite_link = coredata.find('dtd:link[@rel="cited-by"]',
-                                  ns)
+        self_link = coredata.find('dtd:link[@rel="self"]', ns).get('href', None)
+        cite_link = coredata.find('dtd:link[@rel="cited-by"]', ns)
         if cite_link:
             cite_link = cite_link.get('href', None)
         self.scopus_link = sl
@@ -206,7 +205,7 @@ class ScopusAbstract(object):
 
         self._authors = [ScopusAuthor(author) for author in authors]
         self._affiliations = [ScopusAffiliation(aff) for aff
-                              in results.findall('dtd:affiliation', ns)]
+                              in xml.findall('dtd:affiliation', ns)]
 
         if items is not None:
             self._references = items.find('bibrecord/tail/bibliography', ns)
@@ -547,55 +546,49 @@ class ScopusJournal(object):
         ISSN = str(ISSN)
         self.issn = ISSN
 
-        fISSN = os.path.join(SCOPUS_ISSN_DIR, ISSN)
-        self.file = fISSN
-
-        if os.path.exists(fISSN) and not refresh:
-            self.url = fISSN
-            with open(fISSN) as f:
+        qfile = os.path.join(SCOPUS_ISSN_DIR, ISSN)
+        if os.path.exists(qfile) and not refresh:
+            self.url = qfile
+            with open(qfile) as f:
                 text = f.read()
-                self.xml = text
-                results = ET.fromstring(text)
-                self.results = results
+                xml = ET.fromstring(text)
         else:
             url = ("http://api.elsevier.com/content/serial/title/issn:" +
                    ISSN)
             self.url = url
-            resp = requests.get(url,
-                                headers={'Accept': 'application/xml',
-                                         'X-ELS-APIKey': MY_API_KEY})
+            resp = requests.get(url, headers={'Accept': 'application/xml',
+                                              'X-ELS-APIKey': MY_API_KEY})
             self.xml = resp.text.encode('utf-8')
-            with open(fISSN, 'w') as f:
+            with open(qfile, 'w') as f:
                 f.write(resp.text)
 
-            results = ET.fromstring(resp.text.encode('utf-8'))
+            xml = ET.fromstring(resp.text.encode('utf-8'))
 
-        self.results = results
+        self.xml = xml
 
-        self.publisher = get_encoded_text(self.results, 'entry/dc:publisher')
-        self.title = get_encoded_text(self.results, 'entry/dc:title')
-        self.aggregationType = get_encoded_text(self.results,
+        self.publisher = get_encoded_text(self.xml, 'entry/dc:publisher')
+        self.title = get_encoded_text(self.xml, 'entry/dc:title')
+        self.aggregationType = get_encoded_text(self.xml,
                                                 'entry/prism:aggregationType')
-        self.prism_url = get_encoded_text(self.results, 'entry/prism:url')
+        self.prism_url = get_encoded_text(self.xml, 'entry/prism:url')
 
         # Impact factors
-        SNIP = get_encoded_text(self.results,
-                                'entry/SNIPList/SNIP')
-        SNIP_year = self.results.find('entry/SNIPList/SNIP', ns)
+        SNIP = get_encoded_text(self.xml, 'entry/SNIPList/SNIP')
+        SNIP_year = self.xml.find('entry/SNIPList/SNIP', ns)
         if SNIP_year is not None:
             SNIP_year = SNIP_year.get('year')
         else:
             SNIP_year = -1
 
-        IPP = get_encoded_text(self.results, 'entry/IPPList/IPP')
-        IPP_year = self.results.find('entry/IPPList/IPP', ns)
+        IPP = get_encoded_text(self.xml, 'entry/IPPList/IPP')
+        IPP_year = self.xml.find('entry/IPPList/IPP', ns)
         if IPP_year is not None:
             IPP_year = IPP_year.get('year')
         else:
             IPP_year = -1
 
-        SJR = get_encoded_text(self.results, 'entry/SJRList/SJR')
-        SJR_year = self.results.find('entry/SJRList/SJR', ns)
+        SJR = get_encoded_text(self.xml, 'entry/SJRList/SJR')
+        SJR_year = self.xml.find('entry/SJRList/SJR', ns)
         if SJR_year is not None:
             SJR_year = SJR_year.get('year')
         else:
@@ -621,13 +614,13 @@ class ScopusJournal(object):
             self.SJR = None
             self.SJR_year = None
 
-        scopus_url = self.results.find('entry/link[@ref="scopus-source"]')
+        scopus_url = self.xml.find('entry/link[@ref="scopus-source"]')
         if scopus_url is not None:
             self.scopus_url = scopus_url.attrib['href']
         else:
             self.scopus_url = None
 
-        homepage = self.results.find('entry/link[@ref="homepage"]')
+        homepage = self.xml.find('entry/link[@ref="homepage"]')
         if homepage is not None:
             self.homepage = homepage.attrib['href']
         else:
