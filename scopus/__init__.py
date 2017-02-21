@@ -47,6 +47,11 @@ def get_content(qfile, url, refresh, header, params=None, ):
         and accepted values see e.g.
         https://api.elsevier.com/documentation/AuthorRetrievalAPI.wadl
 
+    Raises
+    ------
+    HTTPError
+        If the status of the response is not ok.
+
     Returns
     -------
     content : str
@@ -57,6 +62,7 @@ def get_content(qfile, url, refresh, header, params=None, ):
             content = f.read()
     else:
         resp = requests.get(url, headers=header, params=params)
+        resp.raise_for_status()  # Raise status code if necessary
         content = resp.text.encode('utf-8')
         with open(qfile, 'wb') as f:
             f.write(content)
