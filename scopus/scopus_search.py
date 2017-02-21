@@ -1,13 +1,12 @@
 '''Module to retrieve xml data from the Scopus API.'''
 
-import requests
 import os
-import xml.etree.ElementTree as ET
 import sys
+import xml.etree.ElementTree as ET
 
-from . import MY_API_KEY
+import requests
 
-ns = {'opensearch': 'http://a9.com/-/spec/opensearch/1.1/'}
+from . import MY_API_KEY, ns
 
 SCOPUS_SEARCH_DIR = os.path.expanduser('~/.scopus/search')
 
@@ -22,14 +21,8 @@ class ScopusSearch(object):
         """Return list of EIDs retrieved."""
         return self._EIDS
 
-
-    def __init__(self,
-                 query,
-                 fields='eid',
-                 count=200,
-                 start=0,
-                 refresh=False,
-                 max_entries=1000):
+    def __init__(self, query, fields='eid', count=200, start=0,
+                 refresh=False, max_entries=1000):
         """A Scopus Search query.
 
         query is a string of the query.
@@ -58,10 +51,8 @@ class ScopusSearch(object):
             resp = requests.get(url,
                                 headers={'Accept': 'application/xml',
                                          'X-ELS-APIKey': MY_API_KEY},
-                                params={'query': query,
-                                        'field': fields,
-                                        'count': 0,
-                                        'start': 0})
+                                params={'query': query, 'field': fields,
+                                        'count': 0, 'start': 0})
             results = ET.fromstring(resp.text.encode('utf-8'))
 
             N = results.find('opensearch:totalResults', ns)
@@ -69,7 +60,7 @@ class ScopusSearch(object):
                 N = int(N.text)
             except:
                 N = 0
-                
+
             if N > max_entries:
                 raise Exception(('N = {}. '
                                  'Set max_entries to a higher number or '
@@ -89,16 +80,13 @@ class ScopusSearch(object):
 
                 if 'entry' in results.get('search-results', []):
                     self._EIDS += [str(r['eid']) for
-                                  r in results['search-results']['entry']]
+                                   r in results['search-results']['entry']]
                 start += count
                 N -= count
 
-            with open(qfile, 'w') as f:
+            with open(qfile, 'wb') as f:
                 for eid in self.EIDS:
-                    if sys.version_info[0] == 3:
-                        f.write('{}\n'.format(eid))
-                    else:
-                        f.write('{}\n'.format(eid.encode('utf-8')))
+                    f.write('{}\n'.format(eid).encode('utf-8'))
 
     def __str__(self):
         s = """{self.query}
