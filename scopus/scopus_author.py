@@ -1,16 +1,16 @@
-import requests
 import os
-import xml.etree.ElementTree as ET
+import sys
 import textwrap
 import time
-from collections import Counter
+import xml.etree.ElementTree as ET
+from collections import Counter, namedtuple
 from operator import itemgetter
-import sys
+
+import requests
 
 from .scopus_api import ScopusAbstract
 from .scopus_search import ScopusSearch
 from .scopus_affiliation import ScopusAffiliation
-
 from . import ns, get_content, get_encoded_text, MY_API_KEY
 
 SCOPUS_AUTHOR_DIR = os.path.expanduser('~/.scopus/author')
@@ -119,49 +119,37 @@ class ScopusAuthor(object):
                'author_id/{}').format(author_id)
         header = {'Accept': 'application/xml', 'X-ELS-APIKey': MY_API_KEY}
         params = {'author_id': author_id, 'view': 'ENHANCED'}
-        results = ET.fromstring(get_content(qfile, url, refresh, header, params))
+        xml = ET.fromstring(get_content(qfile, url, refresh, header, params))
 
-        self._orcid = get_encoded_text(results, 'coredata/orcid')
-        hindex = get_encoded_text(results,
-                                  'h-index')
+        self._orcid = get_encoded_text(xml, 'coredata/orcid')
+        hindex = get_encoded_text(xml, 'h-index')
         self._hindex = int(hindex) if hindex is not None else 0
 
-        ndocuments = get_encoded_text(results,
-                                      'coredata/document-count')
+        ndocuments = get_encoded_text(xml, 'coredata/document-count')
         self._ndocuments = int(ndocuments) if ndocuments is not None else 0
 
-        ncitations = get_encoded_text(results,
-                                      'coredata/citation-count')
+        ncitations = get_encoded_text(xml, 'coredata/citation-count')
         self.ncitations = int(ncitations) if ncitations is not None else 0
 
-        ncited_by = get_encoded_text(results,
-                                     'coredata/cited-by-count')
+        ncited_by = get_encoded_text(xml, 'coredata/cited-by-count')
         self._ncited_by = int(ncited_by) if ncited_by is not None else 0
 
-        ncoauthors = get_encoded_text(results,
-                                      'coauthor-count')
+        ncoauthors = get_encoded_text(xml, 'coauthor-count')
         self._ncoauthors = int(ncoauthors) if ncoauthors is not None else 0
 
-        self._current_affiliation = get_encoded_text(results,
-                                                     'author-profile/'
-                                                     'affiliation-current/'
-                                                     'affiliation/'
-                                                     'ip-doc/'
-                                                     'afdispname')
+        self._current_affiliation = get_encoded_text(xml,
+            'author-profile/affiliation-current/affiliation/ip-doc/afdispname')
 
         # affiliation history
         affiliations = [ScopusAffiliation(aff_id, refresh=refresh)
-                        for aff_id
-                        in
+                        for aff_id in
                         [el.attrib.get('id')
                          for el in
-                         results.findall('affiliation-history/'
-                                              'affiliation')
+                         xml.findall('affiliation-history/affiliation')
                          if el is not None]]
         self._affiliation_history = affiliations
 
-        date_created = results.find('author-profile/'
-                                         'date-created', ns)
+        date_created = xml.find('author-profile/date-created', ns)
         if date_created is not None:
             self._date_created = (int(date_created.attrib['year']),
                                   int(date_created.attrib['month']),
@@ -169,14 +157,13 @@ class ScopusAuthor(object):
         else:
             self._date_created = (None, None, None)
         # Research areas
-        area_elements = results.findall('subject-areas/subject-area')
+        area_elements = xml.findall('subject-areas/subject-area')
         # {code: name}
         d = {int(ae.attrib['code']): ae.text for ae in area_elements}
 
-        classifications = results.findall('author-profile/'
-                                               'classificationgroup/'
-                                               'classifications[@type="ASJC"]/'
-                                               'classification')
+        classifications = xml.findall('author-profile/classificationgroup/'
+                                      'classifications[@type="ASJC"]/'
+                                      'classification')
         # {code: frequency}
         c = {int(cls.text): int(cls.attrib['frequency'])
              for cls in classifications}
@@ -185,87 +172,70 @@ class ScopusAuthor(object):
         categories.sort(reverse=True, key=itemgetter(1))
         self.categories = categories
 
-        self._firstname = (get_encoded_text(results,
-                                        'author-profile/'
-                                        'preferred-name/'
-                                        'given-name') or '')
+        self._firstname = (get_encoded_text(xml,
+            'author-profile/preferred-name/given-name') or '')
 
-        self._lastname = (get_encoded_text(results,
-                                        'author-profile/'
-                                        'preferred-name/'
-                                        'surname') or '')
-        
-        self._name = ((get_encoded_text(results,
-                                        'author-profile/'
-                                        'preferred-name/'
-                                        'given-name') or '') +
+        self._lastname = (get_encoded_text(xml,
+           'author-profile/preferred-name/surname') or '')
+
+        self._name = ((get_encoded_text(xml,
+                       'author-profile/preferred-name/given-name') or '') +
                       ' ' +
-                      (get_encoded_text(results,
-                                        'author-profile/'
-                                        'preferred-name/'
-                                        'surname') or ''))
+                      (get_encoded_text(xml,
+                       'author-profile/preferred-name/surname') or ''))
 
         # Real website for the author
-        self._scopus_url = results.find('coredata/' +
-                                             'link[@rel="scopus-author"]')
+        self._scopus_url = xml.find('coredata/link[@rel="scopus-author"]')
         if self._scopus_url is not None:
             self._scopus_url = self.scopus_url.get('href')
 
         # API url for who cites them.
-        self._citedby_url = results.find('coredata/'
-                                              'link[@rel="scopus-citedby"]')
+        self._citedby_url = xml.find('coredata/link[@rel="scopus-citedby"]')
         if self._citedby_url is not None:
             self._citedby_url = self.citedby_url.get('href')
 
         # API url for coauthors
-        self._coauthor_url = results.find('coredata/'
-                                               'link[@rel="coauthor-search"]')
+        self._coauthor_url = xml.find('coredata/link[@rel="coauthor-search"]')
         if self._coauthor_url is not None:
             self._coauthor_url = self.coauthor_url.get('href')
 
     def get_coauthors(self):
         """Return list of coauthors, their scopus-id and research areas."""
-        url = results.find('coredata/'
-                                'link[@rel="coauthor-search"]').get('href')
-        resp = requests.get(url,
-                            headers={'Accept': 'application/xml',
-                                     'X-ELS-APIKey': MY_API_KEY})
+        url = xml.find('coredata/link[@rel="coauthor-search"]').get('href')
+        resp = requests.get(url, headers={'Accept': 'application/xml',
+                                          'X-ELS-APIKey': MY_API_KEY})
         xml = resp.text.encode('utf-8')
-        results = ET.fromstring(xml)
+        xml = ET.fromstring(xml)
         coauthors = []
 
-        N = int(get_encoded_text(results, 'opensearch:totalResults'))
-        from collections import namedtuple
-        AUTHOR = namedtuple('Author', ['name', 'scopus_id',
-                                       'affiliation', 'categories'])
+        N = int(get_encoded_text(xml, 'opensearch:totalxml'))
+
+        AUTHOR = namedtuple('Author',
+                            ['name', 'scopus_id', 'affiliation', 'categories'])
 
         count = 0
         while count < N:
             resp = requests.get(url,
                                 headers={'Accept': 'application/xml',
                                          'X-ELS-APIKey': MY_API_KEY},
-                                params={'start': count,
-                                        'count': 25})
+                                params={'start': count, 'count': 25})
             xml = resp.text.encode('utf-8')
-            results = ET.fromstring(xml)
+            xml = ET.fromstring(xml)
 
-            for entry in results.findall('atom:entry', ns):
+            for entry in xml.findall('atom:entry', ns):
 
                 given_name = get_encoded_text(entry,
-                                              'atom:preferred-name/'
-                                              'atom:given-name')
+                    'atom:preferred-name/atom:given-name')
                 surname = get_encoded_text(entry,
-                                           'atom:preferred-name/atom:surname')
+                    'atom:preferred-name/atom:surname')
 
                 coauthor_name = '{0} {1}'.format(given_name, surname)
 
                 scopus_id = get_encoded_text(entry,
-                                             'dc:identifier').replace('AUTHOR_ID:',
-                                                                      '')
+                    'dc:identifier').replace('AUTHOR_ID:', '')
 
                 affiliation = get_encoded_text(entry,
-                                               'atom:affiliation-current/'
-                                               'atom:affiliation-name')
+                    'atom:affiliation-current/atom:affiliation-name')
 
                 # get categories for this author
                 s = ', '.join(['{0} ({1})'.format(subject.text,
@@ -280,7 +250,7 @@ class ScopusAuthor(object):
 
     def get_document_eids(self, refresh=True):
         """Return list of EIDs for the author."""
-        search = ScopusSearch('au-id({0})'.format(self.author_id),
+        search = ScopusSearch('au-id({})'.format(self.author_id),
                               refresh=refresh)
         return search.EIDS
 
@@ -293,7 +263,7 @@ class ScopusAuthor(object):
         """Return a summary string of documents.
 
         N = maximum number to return. if None, return all documents.
-        cite_sort is a boolean to sort results by number of citations,
+        cite_sort is a boolean to sort xml by number of citations,
         in decreasing order.
         """
         abstracts = [ScopusAbstract(eid, refresh=refresh)
@@ -317,46 +287,39 @@ class ScopusAuthor(object):
     def __str__(self):
         """Return a summary string."""
         s = ['*' * self.level + ' ' +
-             (get_encoded_text(results,
+             (get_encoded_text(xml,
                                'author-profile/preferred-name/given-name') or
               '') +
              ' ' +
-             (get_encoded_text(results,
+             (get_encoded_text(xml,
                                'author-profile/preferred-name/surname') or
               '') +
              ' (updated on ' + time.asctime() + ')']
 
-        url = results.find('coredata/'
-                                'link[@rel="scopus-author"]')
+        url = xml.find('coredata/link[@rel="scopus-author"]')
         if url is not None:
-            url = url.get('href',
-                          'None')
+            url = url.get('href', 'None')
         else:
             url = ''
 
         s += ['']
 
-        orcid = get_encoded_text(results, 'coredata/orcid')
+        orcid = get_encoded_text(xml, 'coredata/orcid')
         if orcid is not None:
             s += ['http://orcid.org/' + orcid]
 
-        s += [str(get_encoded_text(results,
-                                   'coredata/document-count')) +
+        s += [str(get_encoded_text(xml, 'coredata/document-count')) +
               ' documents cited ' +
-              str(get_encoded_text(results,
-                                   'coredata/citation-count')) +
+              str(get_encoded_text(xml, 'coredata/citation-count')) +
               ' times by ' +
-              str(get_encoded_text(results,
-                                   'coredata/cited-by-count')) +
+              str(get_encoded_text(xml, 'coredata/cited-by-count')) +
               ' people (' +
-              str(get_encoded_text(results,
-                                   'coauthor-count')) +
+              str(get_encoded_text(xml, 'coauthor-count')) +
               ' coauthors)']
         s += ['#first author papers {0}'.format(self.n_first_author_papers())]
         s += ['#last author papers {0}'.format(self.n_last_author_papers())]
         s += ['h-index: ' +
-              str(get_encoded_text(results,
-                                   'h-index')) +
+              str(get_encoded_text(xml, 'h-index')) +
               '        AIF(2014) = ' +
               '{0:1.2f}'.format(self.author_impact_factor(2015)[2])]
 
@@ -365,21 +328,19 @@ class ScopusAuthor(object):
         # Current Affiliation. Note this is what Scopus thinks is current.
         s += ['\nCurrent affiliation according to Scopus:']
         s += ['  ' +
-              (get_encoded_text(results,
+              (get_encoded_text(xml,
                                 ('author-profile/affiliation-current/'
                                  'affiliation/ip-doc/afdispname')) or '')]
 
         # subject areas
         s += ['\nSubject areas']
 
-        area_elements = results.findall('subject-areas/subject-area')
+        area_elements = xml.findall('subject-areas/subject-area')
         # {code: name}
         d = {int(ae.attrib['code']): ae.text for ae in area_elements}
 
-        classifications = results.findall('author-profile'
-                                               '/classificationgroup/'
-                                               'classifications/'
-                                               'classification')
+        classifications = xml.findall(
+            'author-profile/classificationgroup/classifications/classification')
         # {code: frequency}
         c = {int(cls.text): int(cls.attrib['frequency'])
              for cls in classifications}
@@ -395,11 +356,10 @@ class ScopusAuthor(object):
         # journals published in
         temp_s = [el.text
                   for el in
-                  results.findall('author-profile/journal-history/'
-                                       'journal/sourcetitle-abbrev')]
+                  xml.findall('author-profile/journal-history/'
+                              'journal/sourcetitle-abbrev')]
         s += ['\nPublishes in:\n' +
-              textwrap.fill(', '.join(temp_s),
-                            initial_indent='  ',
+              textwrap.fill(', '.join(temp_s), initial_indent='  ',
                             subsequent_indent='  ')]
 
         # affiliation history
