@@ -47,6 +47,11 @@ class ScopusAbstract(object):
         return self._publicationName
 
     @property
+    def srctype(self):
+        """Type of source the abstract is published in."""
+        return self._srctype
+
+    @property
     def citedby_count(self):
         """Number of times the abstract has been cited."""
         return int(self._citedby_count)
@@ -178,7 +183,7 @@ class ScopusAbstract(object):
                                                  'prism:aggregationType')
         self._publicationName = get_encoded_text(coredata,
                                                  'prism:publicationName')
-        self.srctype = get_encoded_text(coredata, 'dtd:srctype')
+        self._srctype = get_encoded_text(coredata, 'dtd:srctype')
         self._citedby_count = get_encoded_text(coredata, 'dtd:citedby-count')
         self._publisher = get_encoded_text(coredata, 'dc:publisher')
         self._source_id = get_encoded_text(coredata, 'dtd:source-id')
