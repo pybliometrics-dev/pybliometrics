@@ -1,8 +1,6 @@
-import requests
 import os
-import sys
 import xml.etree.ElementTree as ET
-from . import get_encoded_text, MY_API_KEY
+from . import get_content, get_encoded_text, MY_API_KEY
 
 SCOPUS_AFFILIATION_DIR = os.path.expanduser('~/.scopus/affiliation')
 
@@ -61,43 +59,27 @@ class ScopusAffiliation:
         """
 
         self._affiliation_id = affiliation_id
-        self.href = ('http://api.elsevier.com/content/'
-                     'affiliation/affiliation_id/' +
-                     str(affiliation_id))
 
         qfile = os.path.join(SCOPUS_AFFILIATION_DIR, str(affiliation_id))
-        if os.path.exists(qfile) and not refresh:
-            with open(qfile) as f:
-                self.xml = f.read()
-                self.results = ET.fromstring(self.xml)
-        else:
-            resp = requests.get(self.href,
-                                headers={'Accept': 'application/xml',
-                                         'X-ELS-APIKey': MY_API_KEY})
-            self.xml = resp.text.encode('utf-8')
-            results = ET.fromstring(resp.text.encode('utf-8'))
-
-            self.results = results
-            with open(qfile, 'w') as f:
-                if sys.version_info[0] == 3:
-                    f.write(resp.text)
-                else:
-                    f.write(resp.text.encode('utf-8'))
+        url = ('http://api.elsevier.com/content/affiliation/'
+               'affiliation_id/{}'.format(affiliation_id))
+        header = {'Accept': 'application/xml', 'X-ELS-APIKey': MY_API_KEY}
+        results = ET.fromstring(get_content(qfile, url, refresh, header))
 
         # public url
-        self._url = self.results.find('coredata/'
+        self._url = results.find('coredata/'
                                      'link[@rel="scopus-affiliation"]')
         if self._url is not None:
             self._url = self.url.get('href')
-        self.api_url = get_encoded_text(self.results, 'coredata/prism:url')
-        self._nauthors = get_encoded_text(self.results,
+        self.api_url = get_encoded_text(results, 'coredata/prism:url')
+        self._nauthors = get_encoded_text(results,
                                           'coredata/author-count')
-        self._ndocuments = get_encoded_text(self.results,
+        self._ndocuments = get_encoded_text(results,
                                            'coredata/document-count')
-        self._name = get_encoded_text(self.results, 'affiliation-name')
-        self._address = get_encoded_text(self.results, 'address')
-        self._city = get_encoded_text(self.results, 'city')
-        self._country = get_encoded_text(self.results, 'country')
+        self._name = get_encoded_text(results, 'affiliation-name')
+        self._address = get_encoded_text(results, 'address')
+        self._city = get_encoded_text(results, 'city')
+        self._country = get_encoded_text(results, 'country')
 
     def __str__(self):
         s = '''{self.name} ({self.nauthors} authors, {self.ndocuments} documents)
