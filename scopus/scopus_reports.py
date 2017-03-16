@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+from operator import itemgetter
+
 from .scopus_api import ScopusAbstract, ScopusJournal
 from .scopus_author import ScopusAuthor
 
@@ -9,16 +12,10 @@ def report(scopus_search, label):
 
     counts = {}  # to count papers per author
     journals = {}  # to count publications per journal
-    author_count = []  # to count number of authors for each paper for a
-                       # histogram
+    author_count = []  # to count a paper's number of authors for a histogram
     paper_cites = {}
     Ncites = 0
     document_types = {}
-
-    # import json
-    # with open('/Users/jkitchin/Dropbox/CMU/department/2015/'
-    #            'scopus/2013-journal-impact-factors.json') as f:
-    #      impact_factors = json.loads(f.read())
 
     N = 0  # to count number of publications
 
@@ -69,11 +66,7 @@ def report(scopus_search, label):
 
     print('\n\n')
     print('{0} articles ({2} citations) '
-          'found by {1} authors'.format(N,
-                                        len(counts),
-                                        Ncites))
-
-    from operator import itemgetter
+          'found by {1} authors'.format(N, len(counts), Ncites))
 
     # Author counts  {(name, scopus-id): count}
     view = [('[[scopusid:{0}][{1}]]'.format(k[1], k[0]),  # org-mode link
@@ -89,9 +82,7 @@ def report(scopus_search, label):
     for name, count, scopus_id in view[0:20]:
         cats = ', '.join(['{0} ({1})'.format(cat[0], cat[1])
                           for cat in ScopusAuthor(scopus_id).categories[0:3]])
-        print('| {0} | {1} | {2} |'.format(name,
-                                           count,
-                                           cats))
+        print('| {0} | {1} | {2} |'.format(name, count, cats))
 
     # journal view
     s = '[[http://www.scopus.com/source/sourceInfo.url?sourceId={0}][{1}]]'
@@ -111,9 +102,7 @@ def report(scopus_search, label):
     for journal, sid, issn, count in jview[0:12]:
         JOURNAL = ScopusJournal(issn)
         IPP = JOURNAL.IPP or 0
-        print('| {0} | {1} | {2} |'.format(journal,
-                                           count,
-                                           IPP))
+        print('| {0} | {1} | {2} |'.format(journal, count, IPP))
 
     # view of journals sorted by `IPP
     JVIEW = []
@@ -156,7 +145,6 @@ def report(scopus_search, label):
     for title, count in pview[0:10]:
         print('| {0} | {1} |'.format(title, count))
 
-    import matplotlib.pyplot as plt
     plt.figure()
     plt.hist(author_count, 20)
     plt.xlabel('# authors')

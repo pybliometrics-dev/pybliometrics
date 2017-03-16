@@ -1,13 +1,13 @@
 import os
 import requests
-import sys
 
 SCOPUS_API_FILE = os.path.expanduser("~/.scopus/my_scopus.py")
 if os.path.exists(SCOPUS_API_FILE):
     with open(SCOPUS_API_FILE) as f:
         exec(f.read())
 else:
-    raise Exception('{} not found. Please create it and put your API key in it.'.format(SCOPUS_API_FILE))
+    raise Exception('{} not found. Please create it and create variable'
+                    'MY_API_KEY in it.'.format(SCOPUS_API_FILE))
 
 
 # Namespaces for Scopus XML
@@ -72,17 +72,20 @@ def get_content(qfile, url, refresh, header, params=None, ):
 def get_encoded_text(container, xpath):
     """Return text for element at xpath in the container xml if it is there.
 
-    Note: in Python2, I had to encode this. In Python3, this seems to be
-unnecessary.
+    Parameters
+    ----------
+    container : xml.etree.ElementTree.Element
+        The element to be searched in.
+
+    xpath : str
+        The path to be looked for.
+
+    Returns
+    -------
+    result : str
 
     """
-    if container is None:
-        return None
-    result = container.find(xpath, ns)
-    if hasattr(result, 'text') and result.text:
-        if sys.version_info[0] == 3:
-            return result.text
-        else:
-            return result.text.encode('utf-8')
-    else:
+    try:
+        return container.find(xpath, ns).text
+    except AttributeError:
         return None
