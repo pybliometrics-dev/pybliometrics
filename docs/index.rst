@@ -1,16 +1,32 @@
-.. scopus documentation master file, created by
-   sphinx-quickstart on Sat Feb 27 07:39:40 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+scopus: A Python API for accessing Scopus data
+==============================================
 
-Welcome to scopus's documentation!
-==================================
+.. include:: installation.rst
 
-Contents:
+
+=======
+Modules
+=======
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
+   reference/scopus_api
+   reference/scopus_author
+   reference/scopus_search
+   reference/scopus_affiliation
+   reference/scopus_reports
+
+
+=====
+Other
+=====
+
+.. toctree::
+   :maxdepth: 1
+
+   contributing
+   authors
 
 
 Indices and tables
@@ -19,27 +35,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
-
-
-scopus
-======
-.. automodule:: scopus
-   :members:
-
-scopus_api
-==========
-.. automodule:: scopus.scopus_api
-   :members:
-
-
-scopus_search
-=============
-.. automodule:: scopus.scopus_search
-   :members:
-
-
-scopus_author
-=============
-.. automodule:: scopus.scopus_author
-   :members:
