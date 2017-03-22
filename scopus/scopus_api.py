@@ -15,12 +15,6 @@ if not os.path.exists(SCOPUS_ISSN_DIR):
 
 
 class ScopusAbstract(object):
-    """Class to represent the results from a Scopus abstract.
-
-    The xml are retrieved by the EID from a query. The xml
-    are cached in a folder ~/.scopus/xml/{eid}.
-    """
-
     @property
     def url(self):
         """URL to the abstract."""
@@ -142,16 +136,25 @@ class ScopusAbstract(object):
                             "Did you load with view=FULL?")
 
     def __init__(self, EID, view='META_ABS', refresh=False):
-        """Initialize a Scopus abstract
+        """Class to represent the results from a Scopus abstract.
 
-        EID -- The scopus id for an abstract and should be a string.
+        Parameters
+        ----------
+        EID : str
+            The scopus ID of an abstract.
 
-        view -- (default=META_ABS) The view of the file that should be
-        downloaded.  Currently supported values: META, META_ABS, FULL.
+        view : str (optional, default=META_ABS)
+            The view of the file that should be downloaded.  Currently
+            supported values: META, META_ABS, FULL.
 
-        refresh -- (default=False) A boolean that determines if the result
-        should be downloaded again.
+        refresh : bool (optional, default=False)
+            Whether to refresh the cached file if it exists or not.
+
+        Notes
+        -----
+        The files are cached in ~/.scopus/xml/{eid}.
         """
+
         allowed_views = ('META', 'META_ABS', 'FULL')
         if view not in allowed_views:
             raise ValueError('view parameter must be one of ' +

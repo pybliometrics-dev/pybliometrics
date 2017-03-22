@@ -55,8 +55,10 @@ class ScopusAffiliation:
     def __init__(self, aff_id, refresh=False):
         """affiliation_id is a number like 60030926, can be an int or string.
 
-        refresh is a boolean. If True, download the Scopus xml again. If False,
-        try to use a cached result, and download only if it doesn't exist.
+        Parameters
+        ----------
+        refresh : bool (optional, default=False)
+            Whether to refresh the cached file if it exists or not.
         """
 
         self._affiliation_id = aff_id
