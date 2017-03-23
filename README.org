@@ -7,13 +7,15 @@ Feeling brave? Try:
 pip install git+git://github.com/jkitchin/scopus
 #+END_SRC
 
+*Documentation*: https://scopus.readthedocs.io.
+
 #+BEGIN_HTML
 <a href='http://scopus.readthedocs.org/en/latest/?badge=latest'>
     <img src='https://readthedocs.org/projects/scopus/badge/?version=latest' alt='Documentation Status' />
 </a>
 #+END_HTML
 * Get a Scopus API key
-Using Scopus is not free. You need to have a license or institutional access to use it. Got to http://dev.elsevier.com/myapikey.html to register and get a key. =scopus= expects this key to be in a variable called MY_API_KEY defined in ~/.scopus/my_scopus.py. I recommend you create it like this.
+Using Scopus is not free. You need to have a license or institutional access to use it. Got to http://dev.elsevier.com/myapikey.html to register and get a key. =scopus= expects this key to be in a variable called MY_API_KEY defined in =~/.scopus/my_scopus.py=:
 
 #+BEGIN_SRC python :tangle ~/.scopus/my_scopus.py
 MY_API_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
@@ -25,8 +27,6 @@ MY_API_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
   :ID:       673FA81A-84FF-4453-9712-83904E755DB5
   :END:
 
-This module implements the http://dev.elsevier.com/retrieval.html API. The main entry point is the ScopusAbstract class, which takes a [[http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/][Scopus EID]] and an optional refresh boolean value. Retrieving these results is not fast, so we cache them to speed up subsequent uses of the code. Sometimes you may want new results, e.g. to get citation counts, and then you set refresh=True.
-
 #+BEGIN_SRC python :results output org drawer :exports both
 from scopus.scopus_api import ScopusAbstract
 
@@ -34,13 +34,12 @@ ab = ScopusAbstract("2-s2.0-84930616647", refresh=True)
 print(ab)
 #+END_SRC
 
-#+RESULTS: 
-:RESULTS:
-[[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 2 times (Scopus).
-Affiliations:
+#+RESULTS:
+#+begin_example
+[[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 3 times (Scopus).
+  Affiliations:
    id:60027950 Carnegie Mellon University
-:END:
-
+#+end_example
 
 You can print the abstract in a variety of formats, including LaTeX, bibtex, HTML, and RIS. Here is an example. For bibtex entries, you get a uuid for the key.
 
@@ -65,7 +64,6 @@ print(ab.ris)
   doi = {10.1021/acscatal.5b00538}
 }
 
-
 TY  - JOUR
 AU  - Kitchin J.R.
 TI  - Examples of effective data sharing in scientific publishing
@@ -79,22 +77,9 @@ DO  - 10.1021/acscatal.5b00538
 UR  - http://dx.doi.org/10.1021/acscatal.5b00538
 ER  -
 
-
 #+end_example
 
 *** Interacting with the abstract
-The abstract has a number of properties on it.
-#+BEGIN_SRC python :exports both
-from scopus.scopus_api import ScopusAbstract
-
-ab = ScopusAbstract("2-s2.0-84930616647", view="FULL")
-print([x for x in dir(ab) if not x.startswith('_')])
-#+END_SRC
-
-#+RESULTS:
-: ['affiliations', 'aggregationType', 'article_number', 'authors', 'authors_xml', 'bibtex', 'cite_link', 'citedby_count', 'coredata', 'coverDate', 'creator', 'description', 'doi', 'eid', 'endingPage', 'file', 'get_corresponding_author_info', 'html', 'identifier', 'issn', 'issueIdentifier', 'latex', 'nauthors', 'pageRange', 'publicationName', 'publisher', 'refcount', 'references', 'results', 'ris', 'scopus_link', 'self_link', 'source_id', 'srctype', 'startingPage', 'title', 'url', 'volume', 'xml']
-
-Some of these are objects themselves. Here we consider the authors, which is a list of scopus.scopus_api.ScopusAuthor objects. These objects have quite a bit of information on them.
 
 #+BEGIN_SRC python :exports both
 from scopus.scopus_api import ScopusAbstract
@@ -102,8 +87,6 @@ from scopus.scopus_api import ScopusAbstract
 ab = ScopusAbstract("2-s2.0-84930662492")
 for au in ab.authors:
     print(au)
-
-print([x for x in dir(au) if '__' not in x])
 #+END_SRC
 
 #+RESULTS:
@@ -113,9 +96,6 @@ print([x for x in dir(au) if '__' not in x])
 : 4. Qingqi Fan scopusid:56673468200 affiliation_id:60027950
 : 5. Jacob R. Boes scopusid:56522803500 affiliation_id:60027950
 : 6. John R. Kitchin scopusid:7004212771 affiliation_id:60027950
-: ['affiliations', 'auid', 'author', 'author_url', 'given_name', 'indexed_name', 'initials', 'scopusid', 'seq', 'surname']
-
-Another item of potential interest is the journal. Here we can access information about the journal impact factors of an article.
 
 #+BEGIN_SRC python :exports both
 from scopus.scopus_api import ScopusAbstract, ScopusJournal
@@ -131,10 +111,9 @@ print(ScopusJournal(ab.issn))
 :     SJR:  3.277 (2014)
 :     SNIP: 1.997 (2014)
 :     IPP:  8.458 (2014)
-:
+:END:
 
 ** scopus_search
-This is a class to enable you to perform a query and then retrieve the records of the query for analysis. The EIDs for the search are cached so subsequent analysis is quicker. This class mostly just provides a list of EIDs which you can use for the ScopusAbstract class.
 
 #+BEGIN_SRC python :results output org drawer :exports both
 from scopus.scopus_search import ScopusSearch
@@ -143,8 +122,8 @@ s = ScopusSearch('FIRSTAUTH ( kitchin  j.r. )', refresh=True)
 print(s.org_summary)
 #+END_SRC
 
-#+RESULTS: 
-:RESULTS:
+#+RESULTS:
+#+begin_example
 1. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward][2-s2.0-0141924604]]  J.R. Kitchin, N.A. Khan, M.A. Barteau, J.G. Chen, B. Yakshinskiy and T.E. Madey, Elucidation of the active surface and origin of the weak metal-hydrogen bond on Ni/Pt(1 1 1) bimetallic surfaces: A surface science and density functional theory study, Surface Science, 544(2-3), p. 295-308, (2003). http://dx.doi.org/10.1016/j.susc.2003.09.007, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward, cited 112 times (Scopus).
   Affiliations:
    id:60023004 University of Delaware
@@ -180,12 +159,9 @@ print(s.org_summary)
 11. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward][2-s2.0-0037368024]]  J.R. Kitchin, M.A. Barteau and J.G. Chen, A comparison of gold and molybdenum nanoparticles on TiO2(1 1 0) 1 × 2 reconstructed single crystal surfaces, Surface Science, 526(3), p. 323-331, (2003). http://dx.doi.org/10.1016/S0039-6028(02)02679-1, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward, cited 29 times (Scopus).
   Affiliations:
    id:60023004 University of Delaware
-
-:END:
-
+#+end_example
 
 ** scopus_report
-This module provides a function to generate a report on a scopus search. It outputs text in org-format. It summarizes the results in a variety of ways, such as the number of hits, which journals they are published in, who the coauthors are, how many times the articles have been published, etc...
 
 #+BEGIN_SRC python :results raw
 from scopus.scopus_search import ScopusSearch
@@ -313,17 +289,6 @@ report(s, 'Kitchin - first author')
 
 
 ** scopus_author
-This class differs from the author class described in [[id:673FA81A-84FF-4453-9712-83904E755DB5][scopus_api]]. This class is to interact with the entire author record in Scopus, using the author's scopus id. The ScopusAuthor object can access many bits of data about an author, including the number of papers, h-index, author impact factor, etc...
-
-#+BEGIN_SRC python :exports both
-from scopus.scopus_author import ScopusAuthor
-
-au = ScopusAuthor(7004212771)
-print([x for x in dir(au) if '__' not in x])
-#+END_SRC
-
-#+RESULTS:
-: ['_affiliation_history', '_author_id', '_citedby_url', '_coauthor_url', '_current_affiliation', '_date_created', '_firstname', '_hindex', '_lastname', '_name', '_ncited_by', '_ncoauthors', '_ndocuments', '_orcid', '_scopus_url', 'affiliation_history', 'author_id', 'author_impact_factor', 'categories', 'citedby_url', 'coauthor_url', 'current_affiliation', 'date_created', 'firstname', 'get_abstracts', 'get_coauthors', 'get_document_eids', 'get_document_summary', 'hindex', 'lastname', 'level', 'n_first_author_papers', 'n_journal_articles', 'n_last_author_papers', 'name', 'ncitations', 'ncited_by', 'ncoauthors', 'ndocuments', 'orcid', 'results', 'scopus_url', 'xml']
 
 #+BEGIN_SRC python :exports both
 from scopus.scopus_author import ScopusAuthor
@@ -345,466 +310,12 @@ au = ScopusAuthor(7004212771)
 print(au)
 #+END_SRC
 
-#+RESULTS:
-:RESULTS:
-* John R. Kitchin (updated on Thu Aug 11 12:07:15 2016)
+(output omitted)
 
-http://orcid.org/0000-0003-2625-9232
-83 documents cited 4256 times by 3353 people (112 coauthors)
-#first author papers 10
-#last author papers 38
-h-index: 19        AIF(2014) = 11.55
-Scopus ID created on (2005, 12, 3)
+** Contributing
 
-Current affiliation according to Scopus:
-  Carnegie Mellon University, Department of Chemical Engineering
+Please see [[CONTRIBUTING.rst]]. For a list of contributors see [[AUTHORS.rst]].
 
-Subject areas
-  Chemical Engineering (all) (30), Physical and Theoretical Chemistry
-  (26), Chemistry (all) (23), Catalysis (20), Condensed Matter Physics
-  (16), Surfaces, Coatings and Films (12), Energy (all) (11), Physics
-  and Astronomy (all) (10), Industrial and Manufacturing Engineering
-  (9), Surfaces and Interfaces (9), Electronic, Optical and Magnetic
-  Materials (8), Materials Science (all) (6), Materials Chemistry (6),
-  Energy Engineering and Power Technology (6), Fuel Technology (6),
-  Organic Chemistry (4), Electrochemistry (3), Pollution (3),
-  Biotechnology (3), Management, Monitoring, Policy and Law (3),
-  Safety, Risk, Reliability and Quality (3), Information Systems (3),
-  Modeling and Simulation (3), Environmental Chemistry (2),
-  Environmental Engineering (2), Engineering (all) (2), Control and
-  Systems Engineering (2), Atomic and Molecular Physics, and Optics
-  (2), Process Chemistry and Technology (2), Safety Research (2),
-  Inorganic Chemistry (2), Analytical Chemistry (1), Spectroscopy (1),
-  Medicine (all) (1), Genetics (1), Colloid and Surface Chemistry (1),
-  Biochemistry (1), Bioengineering (1), Electrical and Electronic
-  Engineering (1), Multidisciplinary (1), Ceramics and Composites (1),
-  Renewable Energy, Sustainability and the Environment (1),
-  Environmental Science (all) (1)
+** License
 
-Publishes in:
-  Proc SPIE Int Soc Opt Eng, Top. Catal., Catal Lett, Phys. Chem.
-  Chem. Phys., Prog. Energy Combust. Sci., Energy Fuels, ChemSusChem,
-  Proc. Natl. Acad. Sci. U. S. A., J Am Ceram Soc, Proc. Air Waste
-  Manage. Assoc. Annu. Conf. Exhib. AWMA, ECS Transactions, AIChE J.,
-  Mol Simul, J Chem Phys, AIChE Annu. Meet. Conf. Proc., ACS Natl.
-  Meet. Book Abstr., AIChE - AIChE Annu. Meet., Conf. Proc., Int J
-  Quantum Chem, Ind. Eng. Chem. Res., Fuel, RSC Adv., J. Phys. Chem.
-  B, J Phys Chem B, Int. J. Greenh. Gas Control, J. Am. Chem. Soc., J.
-  Catal., Catal. Lett., J. Phys. Chem. C, ChemSusChem, Surf Sci, J.
-  Mol. Struct., Catal Today, ACS Catal., ACS Appl. Mater. Interfaces,
-  Chem. Sci., ChemCatChem, Phys Rev Lett, J Chem Phys, AIChE Ann.
-  Meet., Catal. Commun., Catal., J Electrochem Soc, Phys. Rev. B
-  Condens. Matter Mater. Phys., Conf. Proc. - AIChE Spring Natl. Meet.
-  Global Congr. Process Saf.
-
-Affiliation history:
-Carnegie Mellon University (12838 authors, 66402 documents)
-    5000 Forbes Avenue
-    Pittsburgh, United States
-    https://www.scopus.com/affil/profile.uri?afid=60027950&partnerID=HzOxMe3b&origin=inward
-National Energy Technology Laboratory, Morgantown (788 authors, 3731 documents)
-    P.O. Box 880
-    Morgantown, United States
-    https://www.scopus.com/affil/profile.uri?afid=60026531&partnerID=HzOxMe3b&origin=inward
-TECH Lab (421 authors, 892 documents)
-    None
-    Atlanta, United States
-    https://www.scopus.com/affil/profile.uri?afid=60030926&partnerID=HzOxMe3b&origin=inward
-National Energy Technology Laboratory, Pittsburgh (18 authors, 185 documents)
-    626 Cochrans Mill Road
-    Pittsburgh, United States
-    https://www.scopus.com/affil/profile.uri?afid=60090776&partnerID=HzOxMe3b&origin=inward
-United States Department of Energy (2117 authors, 5576 documents)
-    1000 Independence Ave., SW
-    Washington, United States
-    https://www.scopus.com/affil/profile.uri?afid=60027757&partnerID=HzOxMe3b&origin=inward
-Fritz Haber Institute of the Max Planck Society (1389 authors, 8691 documents)
-    Faradayweg 4 - 6
-    Berlin, Germany
-    https://www.scopus.com/affil/profile.uri?afid=60008644&partnerID=HzOxMe3b&origin=inward
-78 of 78 documents
- 1. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=9744261716&origin=inward][2-s2.0-9744261716]]  J.K. Nørskov, J. Rossmeisl, A. Logadottir, L. Lindqvist, J.R. Kitchin, T. Bligaard and H. Jónsson, Origin of the overpotential for oxygen reduction at a fuel-cell cathode, Journal of Physical Chemistry B, 108(46), p. 17886-17892, (2004). http://dx.doi.org/10.1021/jp047349j, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=9744261716&origin=inward, cited 1464 times (Scopus).
-  Affiliations:
-   id:60071113 University of Iceland
-   id:60011373 Danmarks Tekniske Universitet
-   id:60023004 University of Delaware
-   id:60071114 University Science Institute Reykjavik
-
- 2. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=2942640180&origin=inward][2-s2.0-2942640180]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Modification of the surface electronic and chemical properties of Pt(111) by subsurface 3d transition metals, Journal of Chemical Physics, 120(21), p. 10240-10246, (2004). http://dx.doi.org/10.1063/1.1737365, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=2942640180&origin=inward, cited 539 times (Scopus).
-  Affiliations:
-   id:60011373 Danmarks Tekniske Universitet
-   id:60023004 University of Delaware
-
- 3. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=13444307808&origin=inward][2-s2.0-13444307808]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Role of strain and ligand effects in the modification of the electronic and chemical Properties of bimetallic surfaces, Physical Review Letters, 93(15), (no pages found) (2004). http://dx.doi.org/10.1103/PhysRevLett.93.156801, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=13444307808&origin=inward, cited 451 times (Scopus).
-  Affiliations:
-   id:60011373 Danmarks Tekniske Universitet
-   id:60023004 University of Delaware
-
- 4. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=15744396507&origin=inward][2-s2.0-15744396507]]  J.K. Nørskov, T. Bligaard, A. Logadottir, J.R. Kitchin, J.G. Chen, S. Pandelov and U. Stimming, Trends in the exchange current for hydrogen evolution, Journal of the Electrochemical Society, 152(3), (no pages found) (2005). http://dx.doi.org/10.1149/1.1856988, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=15744396507&origin=inward, cited 434 times (Scopus).
-  Affiliations:
-   id:60011373 Danmarks Tekniske Universitet
-   id:60023004 University of Delaware
-   id:60019722 Technische Universitat Munchen
-
- 5. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=80051809046&origin=inward][2-s2.0-80051809046]]  I.C. Man, H.-Y. Su, F. Calle-Vallejo, H.A. Hansen, J.I. Martínez, N.G. Inoglu, J. Kitchin, T.F. Jaramillo, J.K. Nørskov and J. Rossmeisl, Universality in Oxygen Evolution Electrocatalysis on Oxide Surfaces, ChemCatChem, 3(7), p. 1159-1165, (2011). http://dx.doi.org/10.1002/cctc.201000397, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=80051809046&origin=inward, cited 373 times (Scopus).
-  Affiliations:
-   id:60007363 Northwestern University
-   id:60011373 Danmarks Tekniske Universitet
-   id:60026796 Universidad Autonoma de Madrid
-   id:60025590 Stanford Linear Accelerator Center
-   id:60027950 Carnegie Mellon University
-   id:60012708 Stanford University
-
- 6. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84864914806&origin=inward][2-s2.0-84864914806]]  E.S. Rubin, H. Mantripragada, A. Marks, P. Versteeg and J. Kitchin, The outlook for improved carbon capture technology, Progress in Energy and Combustion Science, 38(5), p. 630-671, (2012). http://dx.doi.org/10.1016/j.pecs.2012.03.003, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84864914806&origin=inward, cited 150 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
- 7. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward][2-s2.0-0141924604]]  J.R. Kitchin, N.A. Khan, M.A. Barteau, J.G. Chen, B. Yakshinskiy and T.E. Madey, Elucidation of the active surface and origin of the weak metal-hydrogen bond on Ni/Pt(1 1 1) bimetallic surfaces: A surface science and density functional theory study, Surface Science, 544(2-3), p. 295-308, (2003). http://dx.doi.org/10.1016/j.susc.2003.09.007, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward, cited 112 times (Scopus).
-  Affiliations:
-   id:60023004 University of Delaware
-   id:60030623 Rutgers, The State University of New Jersey
-
- 8. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84864592302&origin=inward][2-s2.0-84864592302]]  J. Landon, E. Demeter, N. Inoǧlu, C. Keturakis, I.E. Wachs, R. Vasić, A.I. Frenkel and J.R. Kitchin, Spectroscopic characterization of mixed Fe-Ni oxide electrocatalysts for the oxygen evolution reaction in alkaline electrolytes, ACS Catalysis, 2(8), p. 1793-1801, (2012). http://dx.doi.org/10.1021/cs3002644, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84864592302&origin=inward, cited 93 times (Scopus).
-  Affiliations:
-   id:112985815 Yeshiva University
-   id:60027757 United States Department of Energy
-   id:60027950 Carnegie Mellon University
-   id:60000060 Lehigh University
-
- 9. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=20544467859&origin=inward][2-s2.0-20544467859]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Trends in the chemical properties of early transition metal carbide surfaces: A density functional study, Catalysis Today, 105(1 SPEC. ISS.), p. 66-73, (2005). http://dx.doi.org/10.1016/j.cattod.2005.04.008, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=20544467859&origin=inward, cited 85 times (Scopus).
-  Affiliations:
-   id:60011373 Danmarks Tekniske Universitet
-   id:60023004 University of Delaware
-
-10. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=40949100780&origin=inward][2-s2.0-40949100780]]  J.R. Kitchin, K. Reuter and M. Scheffler, Alloy surface segregation in reactive environments: First-principles atomistic thermodynamics study of Ag3 Pd(111) in oxygen atmospheres, Physical Review B - Condensed Matter and Materials Physics, 77(7), Art. No. 075437 (2008). http://dx.doi.org/10.1103/PhysRevB.77.075437, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=40949100780&origin=inward, cited 56 times (Scopus).
-  Affiliations:
-   id:60008644 Fritz Haber Institute of the Max Planck Society
-   id:60027950 Carnegie Mellon University
-
-11. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=72049114200&origin=inward][2-s2.0-72049114200]]  H.L. Tierney, A.E. Baber, J.R. Kitchin and E.C.H. Sykes, Hydrogen dissociation and spillover on individual isolated palladium atoms, Physical Review Letters, 103(24), Art. No. 246102 (2009). http://dx.doi.org/10.1103/PhysRevLett.103.246102, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=72049114200&origin=inward, cited 53 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-   id:60023143 Tufts University
-
-12. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=60849113132&origin=inward][2-s2.0-60849113132]]  S.D. Miller and J.R. Kitchin, Relating the coverage dependence of oxygen adsorption on Au and Pt fcc(1 1 1) surfaces through adsorbate-induced surface electronic structure effects, Surface Science, 603(5), p. 794-801, (2009). http://dx.doi.org/10.1016/j.susc.2009.01.021, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=60849113132&origin=inward, cited 46 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-13. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=3042820285&origin=inward][2-s2.0-3042820285]]  A.B. Mhadeshwar, J.R. Kitchin, M.A. Barteau and D.G. Vlachos, The role of adsorbate-adsorbate interactions in the rate controlling step and the most abundant reaction intermediate of NH 3 decomposition on RU, Catalysis Letters, 96(1-2), p. 13-22, (2004). http://dx.doi.org/10.1023/B:CATL.0000029523.22277.e1, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=3042820285&origin=inward, cited 46 times (Scopus).
-  Affiliations:
-   id:60023004 University of Delaware
-
-14. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84876703352&origin=inward][2-s2.0-84876703352]]  F. Calle-Vallejo, N.G. Inoglu, H.-Y. Su, J.I. Martínez, I.C. Man, M.T.M. Koper, J.R. Kitchin and J. Rossmeisl, Number of outer electrons as descriptor for adsorption processes on transition metals and their oxides, Chemical Science, 4(3), p. 1245-1249, (2013). http://dx.doi.org/10.1039/c2sc21601a, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84876703352&origin=inward, cited 37 times (Scopus).
-  Affiliations:
-   id:60070180 Leiden Institute of Chemistry
-   id:60011373 Danmarks Tekniske Universitet
-   id:60026796 Universidad Autonoma de Madrid
-   id:60027950 Carnegie Mellon University
-
-15. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=67449106405&origin=inward][2-s2.0-67449106405]]  John R. Kitchin, Correlations in coverage-dependent atomic adsorption energies on Pd(111), Physical Review B - Condensed Matter and Materials Physics, 79(20), Art. No. 205412 (2009). http://dx.doi.org/10.1103/PhysRevB.79.205412, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=67449106405&origin=inward, cited 30 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-16. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward][2-s2.0-0037368024]]  J.R. Kitchin, M.A. Barteau and J.G. Chen, A comparison of gold and molybdenum nanoparticles on TiO2(1 1 0) 1 × 2 reconstructed single crystal surfaces, Surface Science, 526(3), p. 323-331, (2003). http://dx.doi.org/10.1016/S0039-6028(02)02679-1, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward, cited 29 times (Scopus).
-  Affiliations:
-   id:60023004 University of Delaware
-
-17. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=77949916234&origin=inward][2-s2.0-77949916234]]  H.W. Pennline, E.J. Granite, D.R. Luebke, J.R. Kitchin, J. Landon and L.M. Weiland, Separation of CO2 from flue gas using electrochemical cells, Fuel, 89(6), p. 1307-1314, (2010). http://dx.doi.org/10.1016/j.fuel.2009.11.036, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=77949916234&origin=inward, cited 26 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-   id:60015543 University of Pittsburgh
-
-18. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=58649114498&origin=inward][2-s2.0-58649114498]]  N. Inoǧlu and J.R. Kitchin, Atomistic thermodynamics study of the adsorption and the effects of water-gas shift reactants on Cu catalysts under reaction conditions, Journal of Catalysis, 261(2), p. 188-194, (2009). http://dx.doi.org/10.1016/j.jcat.2008.11.020, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=58649114498&origin=inward, cited 25 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-19. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84861127526&origin=inward][2-s2.0-84861127526]]  W.R. Alesi and J.R. Kitchin, Evaluation of a primary amine-functionalized ion-exchange resin for CO 
-                    2 capture, Industrial and Engineering Chemistry Research, 51(19), p. 6907-6915, (2012). http://dx.doi.org/10.1021/ie300452c, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84861127526&origin=inward, cited 21 times (Scopus).
-  Affiliations:
-   id:60027757 United States Department of Energy
-   id:60027950 Carnegie Mellon University
-
-20. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=77956568341&origin=inward][2-s2.0-77956568341]]  W.R. Alesi Jr., M. Gray and J.R. Kitchin, CO2 adsorption on supported molecular amidine systems on activated carbon, ChemSusChem, 3(8), p. 948-956, (2010). http://dx.doi.org/10.1002/cssc.201000056, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=77956568341&origin=inward, cited 19 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-21. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84881394200&origin=inward][2-s2.0-84881394200]]  A.P. Hallenbeck and J.R. Kitchin, Effects of O2 and SO2 on the capture capacity of a primary-amine based polymeric CO2 sorbent, Industrial and Engineering Chemistry Research, 52(31), p. 10788-10794, (2013). http://dx.doi.org/10.1021/ie400582a, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84881394200&origin=inward, cited 18 times (Scopus).
-  Affiliations:
-   id:60090776 National Energy Technology Laboratory, Pittsburgh
-   id:60027950 Carnegie Mellon University
-
-22. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=79952860396&origin=inward][2-s2.0-79952860396]]  S.D. Miller, N. Inoǧlu and J.R. Kitchin, Configurational correlations in the coverage dependent adsorption energies of oxygen atoms on late transition metal fcc(111) surfaces, Journal of Chemical Physics, 134(10), Art. No. 104709 (2011). http://dx.doi.org/10.1063/1.3561287, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=79952860396&origin=inward, cited 18 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-23. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=77955464573&origin=inward][2-s2.0-77955464573]]  N. Inoǧlu and J.R. Kitchin, New solid-state table: Estimating d-band characteristics for transition metal atoms, Molecular Simulation, 36(7-8), p. 633-638, (2010). http://dx.doi.org/10.1080/08927022.2010.481794, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=77955464573&origin=inward, cited 18 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-24. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84865730756&origin=inward][2-s2.0-84865730756]]  S.A. Akhade and J.R. Kitchin, Effects of strain, d-band filling, and oxidation state on the surface electronic structure and reactivity of 3d perovskite surfaces, Journal of Chemical Physics, 137(8), Art. No. 084703 (2012). http://dx.doi.org/10.1063/1.4746117, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84865730756&origin=inward, cited 17 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-25. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=77956693843&origin=inward][2-s2.0-77956693843]]  N. Inoǧlu and J.R. Kitchin, Simple model explaining and predicting coverage-dependent atomic adsorption energies on transition metal surfaces, Physical Review B - Condensed Matter and Materials Physics, 82(4), Art. No. 045414 (2010). http://dx.doi.org/10.1103/PhysRevB.82.045414, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=77956693843&origin=inward, cited 17 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-26. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=63649114440&origin=inward][2-s2.0-63649114440]]  J.W. Han, J.R. Kitchin and D.S. Sholl, Step decoration of chiral metal surfaces, Journal of Chemical Physics, 130(12), Art. No. 124710 (2009). http://dx.doi.org/10.1063/1.3096964, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=63649114440&origin=inward, cited 15 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-   id:60019647 Georgia Institute of Technology
-
-27. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=73149124752&origin=inward][2-s2.0-73149124752]]  S.D. Miller and J.R. Kitchin, Uncertainty and figure selection for DFT based cluster expansions for oxygen adsorption on Au and Pt (111) surfaces, Molecular Simulation, 35(10-11), p. 920-927, (2009). http://dx.doi.org/10.1080/08927020902833137, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=73149124752&origin=inward, cited 14 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-28. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037197884&origin=inward][2-s2.0-0037197884]]  I.K. Song, J.R. Kitchin and M.A. Barteau, H3PW12O40-functionalized tip for scanning tunneling microscopy, Proceedings of the National Academy of Sciences of the United States of America, 99(SUPPL. 2), p. 6471-6475, (2002). http://dx.doi.org/10.1073/pnas.072514399, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037197884&origin=inward, cited 13 times (Scopus).
-  Affiliations:
-   id:60017442 Kangnung National University
-   id:60023004 University of Delaware
-
-29. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=79953651013&origin=inward][2-s2.0-79953651013]]  N. Inoǧlu and J.R. Kitchin, Identification of sulfur-tolerant bimetallic surfaces using dft parametrized models and atomistic thermodynamics, ACS Catalysis, 1(4), p. 399-407, (2011). http://dx.doi.org/10.1021/cs200039t, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=79953651013&origin=inward, cited 12 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-30. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0142023762&origin=inward][2-s2.0-0142023762]]  J.R. McCormick, J.R. Kitchin, M.A. Barteau and J.G. Chen, A four-point probe correlation of oxygen sensitivity to changes in surface resistivity of TiO2(0 0 1) and Pd-modified TiO2(0 0 1), Surface Science, 545(1-2), (no pages found) (2003). http://dx.doi.org/10.1016/j.susc.2003.08.041, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0142023762&origin=inward, cited 12 times (Scopus).
-  Affiliations:
-   id:60023004 University of Delaware
-
-31. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84873706643&origin=inward][2-s2.0-84873706643]]  J.X. Mao, A.S. Lee, J.R. Kitchin, H.B. Nulwala, D.R. Luebke and K. Damodaran, Interactions in 1-ethyl-3-methyl imidazolium tetracyanoborate ion pair: Spectroscopic and density functional study, Journal of Molecular Structure, 1038, p. 12-18, (2013). http://dx.doi.org/10.1016/j.molstruc.2013.01.046, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84873706643&origin=inward, cited 11 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-   id:60015543 University of Pittsburgh
-
-32. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84867809683&origin=inward][2-s2.0-84867809683]]  A.S. Lee and J.R. Kitchin, Chemical and molecular descriptors for the reactivity of amines with CO 2 , Industrial and Engineering Chemistry Research, 51(42), p. 13609-13618, (2012). http://dx.doi.org/10.1021/ie301419q, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84867809683&origin=inward, cited 11 times (Scopus).
-  Affiliations:
-   id:60027757 United States Department of Energy
-   id:60027950 Carnegie Mellon University
-
-33. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84898934670&origin=inward][2-s2.0-84898934670]]  E.L. Demeter, S.L. Hilburg, N.R. Washburn, T.J. Collins and J.R. Kitchin, Electrocatalytic oxygen evolution with an immobilized TAML activator, Journal of the American Chemical Society, 136(15), p. 5603-5606, (2014). http://dx.doi.org/10.1021/ja5015986, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84898934670&origin=inward, cited 10 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-34. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84880986072&origin=inward][2-s2.0-84880986072]]  A.S. Lee, J.C. Eslick, D.C. Miller and J.R. Kitchin, Comparisons of amine solvents for post-combustion CO2 capture: A multi-objective analysis approach, International Journal of Greenhouse Gas Control, 18, p. 68-74, (2013). http://dx.doi.org/10.1016/j.ijggc.2013.06.020, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84880986072&origin=inward, cited 10 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-35. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=33750804660&origin=inward][2-s2.0-33750804660]]  J.K. Nørskov, T. Bligaard, A. Logadottir, J.R. Kitchin, J.G. Chen, S. Pandelov and U. Stimming, Response to "comment on 'trends in the exchange current for hydrogen evolution' [J. Electrochem. Soc., 152, J23 (2005)]", Journal of the Electrochemical Society, 153(12), Art. No. 054612JES (2006). http://dx.doi.org/10.1149/1.2358292, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=33750804660&origin=inward, cited 10 times (Scopus).
-  Affiliations:
-   id:60011373 Danmarks Tekniske Universitet
-   id:60023004 University of Delaware
-   id:60019722 Technische Universitat Munchen
-
-36. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84924130725&origin=inward][2-s2.0-84924130725]]  Z. Xu, J. Rossmeisl and J.R. Kitchin, A linear response DFT+U study of trends in the oxygen evolution activity of transition metal rutile dioxides, Journal of Physical Chemistry C, 119(9), p. 4827-4833, (2015). http://dx.doi.org/10.1021/jp511426q, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84924130725&origin=inward, cited 9 times (Scopus).
-  Affiliations:
-   id:60011373 Danmarks Tekniske Universitet
-   id:60027950 Carnegie Mellon University
-
-37. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84949115648&origin=inward][2-s2.0-84949115648]]  M.T. Curnan and J.R. Kitchin, Effects of concentration, crystal structure, magnetism, and electronic structure method on first-principles oxygen vacancy formation energy trends in perovskites, Journal of Physical Chemistry C, 118(49), p. 28776-28790, (2014). http://dx.doi.org/None, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84949115648&origin=inward, cited 9 times (Scopus).
-  Affiliations:
-   id:60090776 National Energy Technology Laboratory, Pittsburgh
-   id:60027950 Carnegie Mellon University
-
-38. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84908637059&origin=inward][2-s2.0-84908637059]]  Z. Xu and J.R. Kitchin, Probing the coverage dependence of site and adsorbate configurational correlations on (111) surfaces of late transition metals, Journal of Physical Chemistry C, 118(44), p. 25597-25602, (2014). http://dx.doi.org/10.1021/jp508805h, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84908637059&origin=inward, cited 8 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-39. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84896759135&origin=inward][2-s2.0-84896759135]]  R.L. Thompson, W. Shi, E. Albenze, V.A. Kusuma, D. Hopkinson, K. Damodaran, A.S. Lee, J.R. Kitchin, D.R. Luebke and H. Nulwala, Probing the effect of electron donation on CO2 absorbing 1,2,3-triazolide ionic liquids, RSC Advances, 4(25), p. 12748-12755, (2014). http://dx.doi.org/10.1039/c3ra47097k, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84896759135&origin=inward, cited 7 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60007207 URS Corporation
-   id:60027950 Carnegie Mellon University
-   id:60015543 University of Pittsburgh
-
-40. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=77954747189&origin=inward][2-s2.0-77954747189]]  J. Landon and J.R. Kitchin, Electrochemical concentration of carbon dioxide from an oxygen/carbon dioxide containing gas stream, Journal of the Electrochemical Society, 157(8), (no pages found) (2010). http://dx.doi.org/10.1149/1.3432440, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=77954747189&origin=inward, cited 7 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-41. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930662492&origin=inward][2-s2.0-84930662492]]  J.D. Michael, E.L. Demeter, S.M. Illes, Q. Fan, J.R. Boes and J.R. Kitchin, Alkaline electrolyte and fe impurity effects on the performance and active-phase structure of niooh thin films for OER catalysis applications, Journal of Physical Chemistry C, 119(21), p. 11475-11481, (2015). http://dx.doi.org/10.1021/acs.jpcc.5b02458, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930662492&origin=inward, cited 6 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-42. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84896380535&origin=inward][2-s2.0-84896380535]]  P. Mehta, P.A. Salvador and J.R. Kitchin, Identifying potential BO2 oxide polymorphs for epitaxial growth candidates, ACS Applied Materials and Interfaces, 6(5), p. 3630-3639, (2014). http://dx.doi.org/10.1021/am4059149, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84896380535&origin=inward, cited 6 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-43. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84896585411&origin=inward][2-s2.0-84896585411]]  S.D. Miller, V.V. Pushkarev, A.J. Gellman and J.R. Kitchin, Simulating temperature programmed desorption of oxygen on Pt(111) using DFT derived coverage dependent desorption barriers, Topics in Catalysis, 57(1-4), p. 106-117, (2014). http://dx.doi.org/10.1007/s11244-013-0166-3, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84896585411&origin=inward, cited 6 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-44. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84863684845&origin=inward][2-s2.0-84863684845]]  R. Chao, R. Munprom, R. Petrova, K. Gerdes, J.R. Kitchin and P.A. Salvador, Structure and relative thermal stability of mesoporous (La, Sr) MnO 3powders prepared using evaporation-induced self-assembly methods, Journal of the American Ceramic Society, 95(7), p. 2339-2346, (2012). http://dx.doi.org/10.1111/j.1551-2916.2012.05236.x, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84863684845&origin=inward, cited 6 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-   id:110078277 International Iberian Nanotechnology Laboratory
-   id:60026531 National Energy Technology Laboratory, Morgantown
-
-45. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=80052944171&origin=inward][2-s2.0-80052944171]]  S.A. Akhade and J.R. Kitchin, Effects of strain, d-band filling, and oxidation state on the bulk electronic structure of cubic 3d perovskites, Journal of Chemical Physics, 135(10), Art. No. 104702 (2011). http://dx.doi.org/10.1063/1.3631948, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=80052944171&origin=inward, cited 6 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-46. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=73149109096&origin=inward][2-s2.0-73149109096]]  N. Inolu and J.R. Kitchin, Sulphur poisoning of water-gas shift catalysts: Site blocking and electronic structure modification, Molecular Simulation, 35(10-11), p. 936-941, (2009). http://dx.doi.org/10.1080/08927020902833129, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=73149109096&origin=inward, cited 6 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-47. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84923164062&origin=inward][2-s2.0-84923164062]]  J.R. Boes, G. Gumuslu, J.B. Miller, A.J. Gellman and J.R. Kitchin, Estimating bulk-composition-dependent H2 adsorption energies on CuxPd1- x alloy (111) surfaces, ACS Catalysis, 5(2), p. 1020-1026, (2015). http://dx.doi.org/10.1021/cs501585k, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84923164062&origin=inward, cited 5 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-48. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84927589996&origin=inward][2-s2.0-84927589996]]  Z. Xu, Y.V. Joshi, S. Raman and J.R. Kitchin, Accurate electronic and chemical properties of 3d transition metal oxides using a calculated linear response U and a DFT + U (V) method, Journal of Chemical Physics, 142(14), Art. No. 144701 (2015). http://dx.doi.org/10.1063/1.4916823, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84927589996&origin=inward, cited 5 times (Scopus).
-  Affiliations:
-   id:106545449 Exxon Mobil Research and Engineering
-   id:60027950 Carnegie Mellon University
-
-49. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84901638552&origin=inward][2-s2.0-84901638552]]  Z. Xu and J.R. Kitchin, Relating the electronic structure and reactivity of the 3d transition metal monoxide surfaces, Catalysis Communications, 52, p. 60-64, (2014). http://dx.doi.org/10.1016/j.catcom.2013.10.028, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84901638552&origin=inward, cited 5 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-50. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84856818654&origin=inward][2-s2.0-84856818654]]  R. Chao, J.R. Kitchin, K. Gerdes, E.M. Sabolsky and P.A. Salvador, Preparation of Mesoporous La 
-                    0.8Sr 
-                    0.2MnO 
-                    3 infiltrated coatings in porous SOFC cathodes using evaporation-induced self-assembly methods, ECS Transactions, 35(3 PART 3), p. 2387-2399, (2011). http://dx.doi.org/10.1149/1.3570235, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84856818654&origin=inward, cited 4 times (Scopus).
-  Affiliations:
-   id:60021143 West Virginia University
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-51. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 2 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-52. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84924911828&origin=inward][2-s2.0-84924911828]]  Z. Xu and J.R. Kitchin, Relationships between the surface electronic and chemical properties of doped 4d and 5d late transition metal dioxides, Journal of Chemical Physics, 142(10), Art. No. 104703 (2015). http://dx.doi.org/10.1063/1.4914093, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84924911828&origin=inward, cited 2 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-53. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84886483703&origin=inward][2-s2.0-84886483703]]  S. Miller, C. Dsilva and J.R. Kitchin, Coverage dependent adsorption properties of atomic adsorbates on late transition metal surfaces, Catalysis, 24, p. 83-115, (2012). http://dx.doi.org/10.1039/9781849734776-00083, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84886483703&origin=inward, cited 1 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-54. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84947220242&origin=inward][2-s2.0-84947220242]]  A.P. Hallenbeck, A. Egbebi, K.P. Resnik, D. Hopkinson, S.L. Anna and J.R. Kitchin, Comparative microfluidic screening of amino acid salt solutions for post-combustion CO2 capture, International Journal of Greenhouse Gas Control, 43, p. 189-197, (2015). http://dx.doi.org/10.1016/j.ijggc.2015.10.026, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84947220242&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:115418659 AECOM
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-55. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84947716900&origin=inward][2-s2.0-84947716900]]  J.D. Watkins, N.S. Siefert, X. Zhou, C.R. Myers, J.R. Kitchin, D.P. Hopkinson and H.B. Nulwala, Redox-Mediated Separation of Carbon Dioxide from Flue Gas, Energy and Fuels, 29(11), p. 7508-7515, (2015). http://dx.doi.org/10.1021/acs.energyfuels.5b01807, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84947716900&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:115412332 Liquid Ion Solutions, LLC
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-56. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84946065058&origin=inward][2-s2.0-84946065058]]  Z. Xu and J.R. Kitchin, Tuning oxide activity through modification of the crystal and electronic structure: from strain to potential polymorphs, Physical Chemistry Chemical Physics, 17(43), p. 28943-28949, (2015). http://dx.doi.org/10.1039/c5cp04840k, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84946065058&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-57. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84941248260&origin=inward][2-s2.0-84941248260]]  M.T. Curnan and J.R. Kitchin, Investigating the Energetic Ordering of Stable and Metastable TiO<inf>2</inf> Polymorphs Using DFT+U and Hybrid Functionals, Journal of Physical Chemistry C, 119(36), p. 21060-21071, (2015). http://dx.doi.org/10.1021/acs.jpcc.5b05338, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84941248260&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-58. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84928975689&origin=inward][2-s2.0-84928975689]]  G. Gumuslu, P. Kondratyuk, J.R. Boes, B. Morreale, J.B. Miller, J.R. Kitchin and A.J. Gellman, Correlation of electronic structure with catalytic activity: H<inf>2</inf>-D<inf>2</inf> exchange across Cu<inf>x</inf>Pd<inf>1- x</inf> composition space, ACS Catalysis, 5(5), p. 3137-3147, (2015). http://dx.doi.org/10.1021/cs501586t, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84928975689&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60030926 TECH Lab
-   id:60027950 Carnegie Mellon University
-
-59. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930349644&origin=inward][2-s2.0-84930349644]]  John R. Kitchin, Data sharing in Surface Science, Surface Science, 647, p. 103-107, (2016). http://dx.doi.org/10.1016/j.susc.2015.05.007, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930349644&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-60. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84951310415&origin=inward][2-s2.0-84951310415]]  H. Thirumalai and J.R. Kitchin, The role of vdW interactions in coverage dependent adsorption energies of atomic adsorbates on Pt(111) and Pd(111), Surface Science, 650, p. 196-202, (2016). http://dx.doi.org/10.1016/j.susc.2015.10.001, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84951310415&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-61. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84946493176&origin=inward][2-s2.0-84946493176]]  J.R. Boes, P. Kondratyuk, C. Yin, J.B. Miller, A.J. Gellman and J.R. Kitchin, Core level shifts in Cu-Pd alloys as a function of bulk composition and structure, Surface Science, 640, p. 127-132, (2015). http://dx.doi.org/10.1016/j.susc.2015.02.011, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84946493176&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-62. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84866142469&origin=inward][2-s2.0-84866142469]]  John Kitchin, Preface: Trends in computational catalysis, Topics in Catalysis, 55(5-6), p. 227-228, (2012). http://dx.doi.org/10.1007/s11244-012-9808-0, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84866142469&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-63. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84857224144&origin=inward][2-s2.0-84857224144]]  W.R. Alesi and J.R. Kitchin, The effect of CO 
-                    2 partial pressure on capture with ion exchange resins, 11AIChE - 2011 AIChE Annual Meeting, Conference Proceedings, None, (no pages found) (2011). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84857224144&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-64. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84857197729&origin=inward][2-s2.0-84857197729]]  A.S. Lee and J.R. Kitchin, An electronic structure based understanding of amine-carbon dioxide interactions for CO 
-                    2 capture, 11AIChE - 2011 AIChE Annual Meeting, Conference Proceedings, None, (no pages found) (2011). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84857197729&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-65. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=80051860134&origin=inward][2-s2.0-80051860134]]  W. Richard Alesi Jr. and J. Kitchin, Determining the conditions necessary for optimal CO
-                    2 capture of solid sorbents, ACS National Meeting Book of Abstracts, None, (no pages found) (2011). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=80051860134&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-66. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=79951537083&origin=inward][2-s2.0-79951537083]]  H. Tierney, A. Baber, J. Kitchin and C. Sykes, Catalyzing the catalyst: Hydrogen dissociation and spillover on individual isolated palladium atoms, ACS National Meeting Book of Abstracts, None, (no pages found) (2010). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=79951537083&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60023143 Tufts University
-   id:60027950 Carnegie Mellon University
-
-67. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=78649528829&origin=inward][2-s2.0-78649528829]]  H.L. Tierney, A.E. Baber, J.R. Kitchin and E.C.H. Sykes, Catalyzing the catalyst: Novel pathways to hydrogen dissociation and spillover on palladium alloys, ACS National Meeting Book of Abstracts, None, (no pages found) (2009). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=78649528829&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60023143 Tufts University
-   id:60027950 Carnegie Mellon University
-
-68. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=78649504144&origin=inward][2-s2.0-78649504144]]  N.G. Inoglu and J.R. Kitchin, Adsorbate Cu interactions and catalyst morphologies under reactive water gas shift environment: A first principle study, ACS National Meeting Book of Abstracts, None, (no pages found) (2009). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=78649504144&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-69. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=77952266872&origin=inward][2-s2.0-77952266872]]  H.W. Pennline, E.J. Granite, D.R. Luebke, J.R. Kitchin, J. Landon and L. Weiland, Ancillary oxygen-fired combustion using electrochemical cells, Proceedings of the Air and Waste Management Association's Annual Conference and Exhibition, AWMA, 4, p. 2886-2901, (2009). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=77952266872&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60015543 University of Pittsburgh
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-70. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=79952292116&origin=inward][2-s2.0-79952292116]]  S.D. Miller and J.R. Kitchin, Evaluating uncertainty in Ab initio phase diagrams of oxygen on Pt and Au(111), AIChE Annual Meeting, Conference Proceedings, None, (no pages found) (2008). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=79952292116&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-71. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=78049295221&origin=inward][2-s2.0-78049295221]]  W.R. Alesi and J.R. Kitchin, A first principles evaluation of the role of substituent effects on the interaction of carbon dioxide with tertiary amines, Conference Proceedings - 2009 AIChE Spring National Meeting and 5th Global Congress on Process Safety, None, (no pages found) (2008). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=78049295221&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-72. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=79952296916&origin=inward][2-s2.0-79952296916]]  N. Inoglu and J.R. Kitchin, First principles, atomistic thermodynamics for sulfur poisoning of Cu water gas shift catalysts, AIChE Annual Meeting, Conference Proceedings, None, (no pages found) (2008). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=79952296916&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-73. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=78049231913&origin=inward][2-s2.0-78049231913]]  W.R. Alesi, J.R. Kitchin and M.L. Gray, The effect of hydration on the adsorption of carbon dioxide with tertiary amidines on activated carbon, Conference Proceedings - 2009 AIChE Spring National Meeting and 5th Global Congress on Process Safety, None, (no pages found) (2008). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=78049231913&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-74. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=79952301915&origin=inward][2-s2.0-79952301915]]  J. Kitchin and J. Landon, PEM-based electrochemical separation of gases, AIChE Annual Meeting, Conference Proceedings, None, (no pages found) (2008). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=79952301915&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-75. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=45149129361&origin=inward][2-s2.0-45149129361]]  F. Gao, L.M. Weiland and J. Kitchin, Rotational isomeric state theory applied to the stiffness prediction of an anion polymer electrolyte membrane, Proceedings of SPIE - The International Society for Optical Engineering, 6929, Art. No. 69290M (2008). http://dx.doi.org/10.1117/12.776303, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=45149129361&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60015543 University of Pittsburgh
-   id:60026531 National Energy Technology Laboratory, Morgantown
-   id:60027950 Carnegie Mellon University
-
-76. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=37349101648&origin=inward][2-s2.0-37349101648]]  John R. Kitchin, Pt nanoparticle anode electrocatalysts for direct alcohol fuel cells, ACS National Meeting Book of Abstracts, None, (no pages found) (2007). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=37349101648&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-77. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=58049109348&origin=inward][2-s2.0-58049109348]]  John Kitchin, Pt nanoparticle electrocatalyst synthesis for direct alcohol fuel cells, 2007 AIChE Annual Meeting, None, (no pages found) (2007). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=58049109348&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-
-78. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=33645645065&origin=inward][2-s2.0-33645645065]]  J. Kitchin, K. Reuter and M. Scheffler, Alloy surface segregation in reactive environments via density functional theory and atomistic thermodynamics, AIChE Annual Meeting, Conference Proceedings, None, p. 10617, (2005). http://dx.doi.org/None, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=33645645065&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   
-
-:END:
-
+MIT License, see [[LICENSE]].
