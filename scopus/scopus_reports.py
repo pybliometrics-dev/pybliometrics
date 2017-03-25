@@ -6,9 +6,9 @@ from .scopus_author import ScopusAuthor
 
 
 def report(scopus_search, label):
-    '''Prints out an org-mode report for the results from the scopus_search with
-    the label.
-    '''
+    """Print out an org-mode report for the results from the scopus_search
+    with the label.
+    """
 
     counts = {}  # to count papers per author
     journals = {}  # to count publications per journal

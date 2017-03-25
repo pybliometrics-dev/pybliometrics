@@ -15,7 +15,6 @@ if not os.path.exists(SCOPUS_SEARCH_DIR):
 
 
 class ScopusSearch(object):
-    """Class to search a query, and retrieve a list of EIDs as results."""
     @property
     def EIDS(self):
         """Return list of EIDs retrieved."""
@@ -23,12 +22,29 @@ class ScopusSearch(object):
 
     def __init__(self, query, fields='eid', count=200, start=0,
                  refresh=False, max_entries=1000):
-        """A Scopus Search query.
+        """Class to search a query, and retrieve a list of EIDs as results.
 
-        query is a string of the query.
-        fields is the list of fields you want returned.
+        Parameters
+        ----------
+        query : str
+            A string of the query.
 
-        XML results are cached in SCOPUS_SEARCH_DIR/{query}.
+        fields : str (optional, default='eid')
+            The list of fields you want returned.
+
+        count : int (optional, default=200)
+            The number of entries to be displayed.
+
+        start : int (optional, default=0)
+            The entry number of the first search item to start with.
+
+        refresh : bool (optional, default=False)
+            Whether to refresh the cached file if it exists or not.
+
+        Notes
+        -----
+        XML results are cached in ~/.scopus/search/{query}.
+
         The EIDs are stored as a property.
         """
 
@@ -98,6 +114,7 @@ class ScopusSearch(object):
 
     @property
     def org_summary(self):
+        """Summary of search results."""
         from scopus.scopus_api import ScopusAbstract
         s = ''
         for i, eid in enumerate(self.EIDS):

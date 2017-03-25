@@ -20,8 +20,6 @@ if not os.path.exists(SCOPUS_AUTHOR_DIR):
 
 
 class ScopusAuthor(object):
-    """Class to represent a Scopus Author query by the scopus-id."""
-
     @property
     def author_id(self):
         """The scopus id for the author."""
@@ -101,12 +99,22 @@ class ScopusAuthor(object):
                  author_id,
                  refresh=False,
                  level=1):
-        """author_id is the scopus id
+        """Class to represent a Scopus Author query by the scopus-id.
 
-        if refresh download new results, otherwise read from cache
-        scopus-authors/{author_id} if possible.
+        Parameters
+        ----------
+        author_id : str or int
+            The ID of the author to search for.
 
-        level = number of * to print in __str__.
+        refresh : bool (optional, default=False)
+            Whether to refresh the cached file if it exists or not.
+
+        level : int (optional, default=1)
+            Number of * to print in property __str__.
+
+        Notes
+        -----
+        The files are cached in ~/.scopus/author/{author_id}.
         """
 
         author_id = str(author_id)
