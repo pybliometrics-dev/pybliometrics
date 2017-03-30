@@ -211,9 +211,9 @@ class ScopusAbstract(object):
         self.self_link = self_link
         self.cite_link = cite_link
 
-        self._authors = [ScopusAuthor(author) for author in authors]
-        self._affiliations = [ScopusAffiliation(aff) for aff
-                              in xml.findall('dtd:affiliation', ns)]
+        self._authors = [_ScopusAuthor(author) for author in authors]
+        self._affiliations =[_ScopusAffiliation(aff) for aff
+                             in xml.findall('dtd:affiliation', ns)]
 
         if items is not None:
             self._references = items.find('bibrecord/tail/bibliography', ns)
@@ -482,6 +482,69 @@ class ScopusAbstract(object):
 
             return s
 
+
+class _ScopusAuthor(object):
+    """An internal class for a author in a ScopusAbstract."""
+    def __init__(self, author):
+        """author should be an xml element.
+        The following attributes are supported:
+
+        author
+        indexed_name
+        given_name
+        surname
+        initials
+        author_url - the scopus api url to get more information
+        auid - the scopus id for the author
+        scopusid - the scopus id for the author
+        seq - the index of the author in the author list.
+        affiliations - a list of ScopusAuthorAffiliation objects
+
+        This class is not the same as the one in scopus.scopus_author, which
+        uses the scopus author api.
+
+        """
+        self.author = author
+        self.indexed_name = get_encoded_text(author, 'ce:indexed-name')
+        self.given_name = get_encoded_text(author, 'ce:given-name')
+        self.surname = get_encoded_text(author, 'ce:surname')
+        self.initials = get_encoded_text(author, 'ce:initials')
+        self.author_url = get_encoded_text(author, 'dtd:author-url')
+        self.auid = author.attrib.get('auid', None)
+        self.scopusid = self.auid
+        self.seq = author.attrib.get('seq', None)
+        self.affiliations = [_ScopusAuthorAffiliation(aff)
+                             for aff in author.findall('dtd:affiliation', ns)]
+
+    def __str__(self):
+        s = """{0.seq}. {0.given_name} {0.surname} scopusid:{0.auid} """
+        s += ' '.join([str(aff) for aff in self.affiliations])
+        return s.format(self)
+
+
+class _ScopusAffiliation(object):
+    """Internal class to represent the affiliations in an Abstract."""
+    def __init__(self, affiliation):
+        """affiliation should be an xml element from the main abstract"""
+        self.affiliation = affiliation
+        self.affilname = get_encoded_text(affiliation, 'dtd:affilname')
+        self.href = affiliation.attrib.get('href', None)
+        self.id = affiliation.attrib.get('id', None)
+
+    def __str__(self):
+        return 'id:{0.id} {0.affilname}'.format(self)
+
+
+class _ScopusAuthorAffiliation(object):
+    """Internal class to represent the affiliation in an Author element"""
+    def __init__(self, affiliation):
+        """affiliation should be an xml element from an Author element."""
+        self.affiliation = affiliation
+        self.id = affiliation.get('id', None)
+        self.href = affiliation.get('href', None)
+
+    def __str__(self):
+        return 'affiliation_id:{0.id}'.format(self)
 
 class ScopusJournal(object):
     """Class to represent a journal from the Scopus API."""
