@@ -35,11 +35,11 @@ print(ab)
 #+END_SRC
 
 #+RESULTS:
-#+begin_example
+:RESULTS:
 [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 3 times (Scopus).
   Affiliations:
    id:60027950 Carnegie Mellon University
-#+end_example
+:END:
 
 You can print the abstract in a variety of formats, including LaTeX, bibtex, HTML, and RIS. Here is an example. For bibtex entries, you get a uuid for the key.
 
@@ -53,7 +53,7 @@ print(ab.ris)
 
 #+RESULTS:
 #+begin_example
-@article{12b3dd94-d740-11e5-a03b-48d705e201bd,
+@article{9b0ff2dc-1550-11e7-b54a-48d705e201bd,
   author = {John R. Kitchin},
   title = {Examples of effective data sharing in scientific publishing},
   journal = {ACS Catalysis},
@@ -63,6 +63,7 @@ print(ab.ris)
   pages = {3894-3899},
   doi = {10.1021/acscatal.5b00538}
 }
+
 
 TY  - JOUR
 AU  - Kitchin J.R.
@@ -76,6 +77,7 @@ PY  - 2015
 DO  - 10.1021/acscatal.5b00538
 UR  - http://dx.doi.org/10.1021/acscatal.5b00538
 ER  -
+
 
 #+end_example
 
@@ -111,6 +113,7 @@ print(ScopusJournal(ab.issn))
 :     SJR:  3.277 (2014)
 :     SNIP: 1.997 (2014)
 :     IPP:  8.458 (2014)
+:
 :END:
 
 ** scopus_search
@@ -123,43 +126,44 @@ print(s.org_summary)
 #+END_SRC
 
 #+RESULTS:
-#+begin_example
-1. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward][2-s2.0-0141924604]]  J.R. Kitchin, N.A. Khan, M.A. Barteau, J.G. Chen, B. Yakshinskiy and T.E. Madey, Elucidation of the active surface and origin of the weak metal-hydrogen bond on Ni/Pt(1 1 1) bimetallic surfaces: A surface science and density functional theory study, Surface Science, 544(2-3), p. 295-308, (2003). http://dx.doi.org/10.1016/j.susc.2003.09.007, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward, cited 112 times (Scopus).
+:RESULTS:
+1. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84971324241&origin=inward][2-s2.0-84971324241]]  J.R. Kitchin and A.J. Gellman, High-throughput methods using composition and structure spread libraries, AIChE Journal, 62(11), p. 3826-3835, (2016). http://dx.doi.org/10.1002/aic.15294, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84971324241&origin=inward, cited 0 times (Scopus).
+  Affiliations:
+   id:60027950 Carnegie Mellon University
+2. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930349644&origin=inward][2-s2.0-84930349644]]  John R. Kitchin, Data sharing in Surface Science, Surface Science, 647, p. 103-107, (2016). http://dx.doi.org/10.1016/j.susc.2015.05.007, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930349644&origin=inward, cited 0 times (Scopus).
+  Affiliations:
+   id:60027950 Carnegie Mellon University
+3. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 3 times (Scopus).
+  Affiliations:
+   id:60027950 Carnegie Mellon University
+4. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=67449106405&origin=inward][2-s2.0-67449106405]]  John R. Kitchin, Correlations in coverage-dependent atomic adsorption energies on Pd(111), Physical Review B - Condensed Matter and Materials Physics, 79(20), Art. No. 205412 (2009). http://dx.doi.org/10.1103/PhysRevB.79.205412, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=67449106405&origin=inward, cited 39 times (Scopus).
+  Affiliations:
+   id:60027950 Carnegie Mellon University
+5. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=40949100780&origin=inward][2-s2.0-40949100780]]  J.R. Kitchin, K. Reuter and M. Scheffler, Alloy surface segregation in reactive environments: First-principles atomistic thermodynamics study of Ag3 Pd(111) in oxygen atmospheres, Physical Review B - Condensed Matter and Materials Physics, 77(7), Art. No. 075437 (2008). http://dx.doi.org/10.1103/PhysRevB.77.075437, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=40949100780&origin=inward, cited 68 times (Scopus).
+  Affiliations:
+   id:60027950 Carnegie Mellon University
+   id:60008644 Fritz Haber Institute of the Max Planck Society
+7. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=20544467859&origin=inward][2-s2.0-20544467859]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Trends in the chemical properties of early transition metal carbide surfaces: A density functional study, Catalysis Today, 105(1 SPEC. ISS.), p. 66-73, (2005). http://dx.doi.org/10.1016/j.cattod.2005.04.008, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=20544467859&origin=inward, cited 91 times (Scopus).
+  Affiliations:
+   id:60011373 Danmarks Tekniske Universitet
+   id:60023004 University of Delaware
+8. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=13444307808&origin=inward][2-s2.0-13444307808]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Role of strain and ligand effects in the modification of the electronic and chemical Properties of bimetallic surfaces, Physical Review Letters, 93(15), (no pages found) (2004). http://dx.doi.org/10.1103/PhysRevLett.93.156801, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=13444307808&origin=inward, cited 495 times (Scopus).
+  Affiliations:
+   id:60011373 Danmarks Tekniske Universitet
+   id:60023004 University of Delaware
+9. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=2942640180&origin=inward][2-s2.0-2942640180]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Modification of the surface electronic and chemical properties of Pt(111) by subsurface 3d transition metals, Journal of Chemical Physics, 120(21), p. 10240-10246, (2004). http://dx.doi.org/10.1063/1.1737365, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=2942640180&origin=inward, cited 582 times (Scopus).
+  Affiliations:
+   id:60011373 Danmarks Tekniske Universitet
+   id:60023004 University of Delaware
+10. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward][2-s2.0-0141924604]]  J.R. Kitchin, N.A. Khan, M.A. Barteau, J.G. Chen, B. Yakshinskiy and T.E. Madey, Elucidation of the active surface and origin of the weak metal-hydrogen bond on Ni/Pt(1 1 1) bimetallic surfaces: A surface science and density functional theory study, Surface Science, 544(2-3), p. 295-308, (2003). http://dx.doi.org/10.1016/j.susc.2003.09.007, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward, cited 117 times (Scopus).
   Affiliations:
    id:60023004 University of Delaware
    id:60030623 Rutgers, The State University of New Jersey
-2. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=2942640180&origin=inward][2-s2.0-2942640180]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Modification of the surface electronic and chemical properties of Pt(111) by subsurface 3d transition metals, Journal of Chemical Physics, 120(21), p. 10240-10246, (2004). http://dx.doi.org/10.1063/1.1737365, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=2942640180&origin=inward, cited 539 times (Scopus).
-  Affiliations:
-   id:60011373 Danmarks Tekniske Universitet
-   id:60023004 University of Delaware
-4. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84971324241&origin=inward][2-s2.0-84971324241]]  J.R. Kitchin and A.J. Gellman, High-throughput methods using composition and structure spread libraries, AIChE Journal, None, (no pages found) (2016). http://dx.doi.org/10.1002/aic.15294, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84971324241&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-5. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=20544467859&origin=inward][2-s2.0-20544467859]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Trends in the chemical properties of early transition metal carbide surfaces: A density functional study, Catalysis Today, 105(1 SPEC. ISS.), p. 66-73, (2005). http://dx.doi.org/10.1016/j.cattod.2005.04.008, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=20544467859&origin=inward, cited 85 times (Scopus).
-  Affiliations:
-   id:60011373 Danmarks Tekniske Universitet
-   id:60023004 University of Delaware
-6. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=13444307808&origin=inward][2-s2.0-13444307808]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Role of strain and ligand effects in the modification of the electronic and chemical Properties of bimetallic surfaces, Physical Review Letters, 93(15), (no pages found) (2004). http://dx.doi.org/10.1103/PhysRevLett.93.156801, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=13444307808&origin=inward, cited 451 times (Scopus).
-  Affiliations:
-   id:60011373 Danmarks Tekniske Universitet
-   id:60023004 University of Delaware
-7. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 2 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-8. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=40949100780&origin=inward][2-s2.0-40949100780]]  J.R. Kitchin, K. Reuter and M. Scheffler, Alloy surface segregation in reactive environments: First-principles atomistic thermodynamics study of Ag3 Pd(111) in oxygen atmospheres, Physical Review B - Condensed Matter and Materials Physics, 77(7), Art. No. 075437 (2008). http://dx.doi.org/10.1103/PhysRevB.77.075437, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=40949100780&origin=inward, cited 56 times (Scopus).
-  Affiliations:
-   id:60008644 Fritz Haber Institute of the Max Planck Society
-   id:60027950 Carnegie Mellon University
-9. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=67449106405&origin=inward][2-s2.0-67449106405]]  John R. Kitchin, Correlations in coverage-dependent atomic adsorption energies on Pd(111), Physical Review B - Condensed Matter and Materials Physics, 79(20), Art. No. 205412 (2009). http://dx.doi.org/10.1103/PhysRevB.79.205412, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=67449106405&origin=inward, cited 30 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-10. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930349644&origin=inward][2-s2.0-84930349644]]  John R. Kitchin, Data sharing in Surface Science, Surface Science, 647, p. 103-107, (2016). http://dx.doi.org/10.1016/j.susc.2015.05.007, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930349644&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-11. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward][2-s2.0-0037368024]]  J.R. Kitchin, M.A. Barteau and J.G. Chen, A comparison of gold and molybdenum nanoparticles on TiO2(1 1 0) 1 × 2 reconstructed single crystal surfaces, Surface Science, 526(3), p. 323-331, (2003). http://dx.doi.org/10.1016/S0039-6028(02)02679-1, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward, cited 29 times (Scopus).
+11. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward][2-s2.0-0037368024]]  J.R. Kitchin, M.A. Barteau and J.G. Chen, A comparison of gold and molybdenum nanoparticles on TiO2(1 1 0) 1 × 2 reconstructed single crystal surfaces, Surface Science, 526(3), p. 323-331, (2003). http://dx.doi.org/10.1016/S0039-6028(02)02679-1, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward, cited 30 times (Scopus).
   Affiliations:
    id:60023004 University of Delaware
-#+end_example
+
+:END:
 
 ** scopus_report
 
@@ -178,27 +182,27 @@ report(s, 'Kitchin - first author')
 #+caption: Types of documents found for Kitchin - first author.
 | Document type         | count |
 |-----------------------+-------|
-| Journal               |    10 |
 | Conference Proceeding |     1 |
+| Journal               |    10 |
 
 
 
-10 articles (1304 citations) found by 10 authors
+10 articles (1425 citations) found by 10 authors
 
 #+attr_latex: :placement [H] :center nil
 #+caption: Author publication counts for Kitchin - first author.
 | name           | count | categories                                                                                                         |
 |----------------+-------+--------------------------------------------------------------------------------------------------------------------|
-| [[scopusid:7004212771][Kitchin J.R.]]   |    10 | Chemical Engineering (all) (30), Physical and Theoretical Chemistry (26), Chemistry (all) (23)                     |
+| [[scopusid:7004212771][Kitchin J.R.]]   |    10 | Chemical Engineering (all) (24), Physical and Theoretical Chemistry (21), Chemistry (all) (20)                     |
 | [[scopusid:7005171428][Barteau M.A.]]   |     5 | Physical and Theoretical Chemistry (166), Catalysis (109), Condensed Matter Physics (79)                           |
 | [[scopusid:7501891385][Chen J.G.]]      |     5 | Physical and Theoretical Chemistry (164), Catalysis (139), Condensed Matter Physics (78)                           |
 | [[scopusid:7007042214][Norskov J.K.]]   |     3 | Physical and Theoretical Chemistry (213), Catalysis (173), Condensed Matter Physics (154)                          |
-| [[scopusid:7102229641][Scheffler M.]]   |     1 | Condensed Matter Physics (256), Physics and Astronomy (all) (202), Physical and Theoretical Chemistry (94)         |
-| [[scopusid:35514271900][Gellman A.J.]]   |     1 | Physical and Theoretical Chemistry (118), Surfaces and Interfaces (80), Condensed Matter Physics (78)              |
 | [[scopusid:35477902900][Madey T.E.]]     |     1 | Condensed Matter Physics (248), Surfaces and Interfaces (214), Physical and Theoretical Chemistry (186)            |
 | [[scopusid:7401797491][Khan N.A.]]      |     1 | Physical and Theoretical Chemistry (14), Catalysis (9), Surfaces and Interfaces (6)                                |
 | [[scopusid:7006349643][Reuter K.]]      |     1 | Condensed Matter Physics (58), Physics and Astronomy (all) (55), Physical and Theoretical Chemistry (41)           |
 | [[scopusid:6602686751][Yakshinskiy B.]] |     1 | Condensed Matter Physics (26), Electrical and Electronic Engineering (15), Physical and Theoretical Chemistry (14) |
+| [[scopusid:35514271900][Gellman A.J.]]   |     1 | Physical and Theoretical Chemistry (92), Surfaces and Interfaces (65), Condensed Matter Physics (61)               |
+| [[scopusid:7102229641][Scheffler M.]]   |     1 | Condensed Matter Physics (256), Physics and Astronomy (all) (202), Physical and Theoretical Chemistry (94)         |
 
 
 
@@ -206,13 +210,13 @@ report(s, 'Kitchin - first author')
 #+caption: Journal publication counts for Kitchin - first author.
 | Journal                                            | count |   IPP |
 |----------------------------------------------------+-------+-------|
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][Surface Science]]                                    |     3 | 1.773 |
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][Physical Review B - Condensed Matter and Materials]] |     2 | 3.153 |
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][AIChE Journal]]                                      |     1 |   2.6 |
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][Physical Review Letters]]                            |     1 | 6.471 |
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][Journal of Chemical Physics]]                        |     1 | 2.536 |
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][ACS Catalysis]]                                      |     1 | 8.458 |
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][Catalysis Today]]                                    |     1 | 3.764 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=12284][Surface Science]]                                    |     3 | 1.773 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=11000153773][Physical Review B - Condensed Matter and Materials]] |     2 | 3.153 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=29150][Physical Review Letters]]                            |     1 | 6.471 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=16377][Catalysis Today]]                                    |     1 | 3.764 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=19700188320][ACS Catalysis]]                                      |     1 | 8.458 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=28134][Journal of Chemical Physics]]                        |     1 | 2.536 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=16275][AIChE Journal]]                                      |     1 |   2.6 |
 
 
 
@@ -220,29 +224,29 @@ report(s, 'Kitchin - first author')
 #+caption: Journal publication counts for Kitchin - first author sorted by IPP.
 | Journal                                            | count |   IPP |
 |----------------------------------------------------+-------+-------|
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][ACS Catalysis]]                                      |     1 | 8.458 |
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][Physical Review Letters]]                            |     1 | 6.471 |
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][Catalysis Today]]                                    |     1 | 3.764 |
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][Physical Review B - Condensed Matter and Materials]] |     2 | 3.153 |
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][AIChE Journal]]                                      |     1 |   2.6 |
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][Journal of Chemical Physics]]                        |     1 | 2.536 |
-| [[http://www.scopus.com/source/sourceInfo.url?sourceId=None][Surface Science]]                                    |     3 | 1.773 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=19700188320][ACS Catalysis]]                                      |     1 | 8.458 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=29150][Physical Review Letters]]                            |     1 | 6.471 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=16377][Catalysis Today]]                                    |     1 | 3.764 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=11000153773][Physical Review B - Condensed Matter and Materials]] |     2 | 3.153 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=16275][AIChE Journal]]                                      |     1 |   2.6 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=28134][Journal of Chemical Physics]]                        |     1 | 2.536 |
+| [[http://www.scopus.com/source/sourceInfo.url?sourceId=12284][Surface Science]]                                    |     3 | 1.773 |
 
 
 #+attr_latex: :placement [H] :center nil
-#+caption: Top cited publicationcounts for Kitchin - first author. j-index = 8.
+#+caption: Top cited publication counts for Kitchin - first author. j-index = 8.
 | title | cite count |
 |-
-| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=2942640180&origin=inward][Modification of the surface electronic and chemical properti]] | 539 |
-| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=13444307808&origin=inward][Role of strain and ligand effects in the modification of the]] | 451 |
-| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward][Elucidation of the active surface and origin of the weak met]] | 112 |
-| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=20544467859&origin=inward][Trends in the chemical properties of early transition metal ]] | 85 |
-| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=40949100780&origin=inward][Alloy surface segregation in reactive environments: First-pr]] | 56 |
-| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=67449106405&origin=inward][Correlations in coverage-dependent atomic adsorption energie]] | 30 |
-| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward][A comparison of gold and molybdenum nanoparticles on TiO2(1 ]] | 29 |
-| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][Examples of effective data sharing in scientific publishing]] | 2 |
+| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=2942640180&origin=inward][Modification of the surface electronic and chemical properti]] | 582 |
+| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=13444307808&origin=inward][Role of strain and ligand effects in the modification of the]] | 495 |
+| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward][Elucidation of the active surface and origin of the weak met]] | 117 |
+| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=20544467859&origin=inward][Trends in the chemical properties of early transition metal ]] | 91 |
+| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=40949100780&origin=inward][Alloy surface segregation in reactive environments: First-pr]] | 68 |
+| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=67449106405&origin=inward][Correlations in coverage-dependent atomic adsorption energie]] | 39 |
+| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward][A comparison of gold and molybdenum nanoparticles on TiO2(1 ]] | 30 |
+| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][Examples of effective data sharing in scientific publishing]] | 3 |
 | [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930349644&origin=inward][Data sharing in Surface Science]] | 0 |
-| [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84971324241&origin=inward][High-throughput methods using composition and structure spre]] | 0 |
+| [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84971324241&origin=inward][High-throughput methods using composition and structure spre]] | 0 |
 
 
 #+caption: Number of authors on each publication for Kitchin - first author.
@@ -251,39 +255,39 @@ report(s, 'Kitchin - first author')
      :PROPERTIES:
      :VISIBILITY: folded
      :END:
-1. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward][2-s2.0-0141924604]]  J.R. Kitchin, N.A. Khan, M.A. Barteau, J.G. Chen, B. Yakshinskiy and T.E. Madey, Elucidation of the active surface and origin of the weak metal-hydrogen bond on Ni/Pt(1 1 1) bimetallic surfaces: A surface science and density functional theory study, Surface Science, 544(2-3), p. 295-308, (2003). http://dx.doi.org/10.1016/j.susc.2003.09.007, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward, cited 112 times (Scopus).
+1. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84971324241&origin=inward][2-s2.0-84971324241]]  J.R. Kitchin and A.J. Gellman, High-throughput methods using composition and structure spread libraries, AIChE Journal, 62(11), p. 3826-3835, (2016). http://dx.doi.org/10.1002/aic.15294, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84971324241&origin=inward, cited 0 times (Scopus).
+  Affiliations:
+   id:60027950 Carnegie Mellon University
+2. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930349644&origin=inward][2-s2.0-84930349644]]  John R. Kitchin, Data sharing in Surface Science, Surface Science, 647, p. 103-107, (2016). http://dx.doi.org/10.1016/j.susc.2015.05.007, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930349644&origin=inward, cited 0 times (Scopus).
+  Affiliations:
+   id:60027950 Carnegie Mellon University
+3. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 3 times (Scopus).
+  Affiliations:
+   id:60027950 Carnegie Mellon University
+4. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=67449106405&origin=inward][2-s2.0-67449106405]]  John R. Kitchin, Correlations in coverage-dependent atomic adsorption energies on Pd(111), Physical Review B - Condensed Matter and Materials Physics, 79(20), Art. No. 205412 (2009). http://dx.doi.org/10.1103/PhysRevB.79.205412, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=67449106405&origin=inward, cited 39 times (Scopus).
+  Affiliations:
+   id:60027950 Carnegie Mellon University
+5. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=40949100780&origin=inward][2-s2.0-40949100780]]  J.R. Kitchin, K. Reuter and M. Scheffler, Alloy surface segregation in reactive environments: First-principles atomistic thermodynamics study of Ag3 Pd(111) in oxygen atmospheres, Physical Review B - Condensed Matter and Materials Physics, 77(7), Art. No. 075437 (2008). http://dx.doi.org/10.1103/PhysRevB.77.075437, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=40949100780&origin=inward, cited 68 times (Scopus).
+  Affiliations:
+   id:60027950 Carnegie Mellon University
+   id:60008644 Fritz Haber Institute of the Max Planck Society
+7. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=20544467859&origin=inward][2-s2.0-20544467859]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Trends in the chemical properties of early transition metal carbide surfaces: A density functional study, Catalysis Today, 105(1 SPEC. ISS.), p. 66-73, (2005). http://dx.doi.org/10.1016/j.cattod.2005.04.008, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=20544467859&origin=inward, cited 91 times (Scopus).
+  Affiliations:
+   id:60011373 Danmarks Tekniske Universitet
+   id:60023004 University of Delaware
+8. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=13444307808&origin=inward][2-s2.0-13444307808]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Role of strain and ligand effects in the modification of the electronic and chemical Properties of bimetallic surfaces, Physical Review Letters, 93(15), (no pages found) (2004). http://dx.doi.org/10.1103/PhysRevLett.93.156801, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=13444307808&origin=inward, cited 495 times (Scopus).
+  Affiliations:
+   id:60011373 Danmarks Tekniske Universitet
+   id:60023004 University of Delaware
+9. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=2942640180&origin=inward][2-s2.0-2942640180]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Modification of the surface electronic and chemical properties of Pt(111) by subsurface 3d transition metals, Journal of Chemical Physics, 120(21), p. 10240-10246, (2004). http://dx.doi.org/10.1063/1.1737365, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=2942640180&origin=inward, cited 582 times (Scopus).
+  Affiliations:
+   id:60011373 Danmarks Tekniske Universitet
+   id:60023004 University of Delaware
+10. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward][2-s2.0-0141924604]]  J.R. Kitchin, N.A. Khan, M.A. Barteau, J.G. Chen, B. Yakshinskiy and T.E. Madey, Elucidation of the active surface and origin of the weak metal-hydrogen bond on Ni/Pt(1 1 1) bimetallic surfaces: A surface science and density functional theory study, Surface Science, 544(2-3), p. 295-308, (2003). http://dx.doi.org/10.1016/j.susc.2003.09.007, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0141924604&origin=inward, cited 117 times (Scopus).
   Affiliations:
    id:60023004 University of Delaware
    id:60030623 Rutgers, The State University of New Jersey
-2. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=2942640180&origin=inward][2-s2.0-2942640180]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Modification of the surface electronic and chemical properties of Pt(111) by subsurface 3d transition metals, Journal of Chemical Physics, 120(21), p. 10240-10246, (2004). http://dx.doi.org/10.1063/1.1737365, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=2942640180&origin=inward, cited 539 times (Scopus).
-  Affiliations:
-   id:60011373 Danmarks Tekniske Universitet
-   id:60023004 University of Delaware
-4. [[http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84971324241&origin=inward][2-s2.0-84971324241]]  J.R. Kitchin and A.J. Gellman, High-throughput methods using composition and structure spread libraries, AIChE Journal, None, (no pages found) (2016). http://dx.doi.org/10.1002/aic.15294, http://www.scopus.com/inward/record.url?partnerID=HzOxMe3b&scp=84971324241&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-5. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=20544467859&origin=inward][2-s2.0-20544467859]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Trends in the chemical properties of early transition metal carbide surfaces: A density functional study, Catalysis Today, 105(1 SPEC. ISS.), p. 66-73, (2005). http://dx.doi.org/10.1016/j.cattod.2005.04.008, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=20544467859&origin=inward, cited 85 times (Scopus).
-  Affiliations:
-   id:60011373 Danmarks Tekniske Universitet
-   id:60023004 University of Delaware
-6. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=13444307808&origin=inward][2-s2.0-13444307808]]  J.R. Kitchin, J.K. Nørskov, M.A. Barteau and J.G. Chen, Role of strain and ligand effects in the modification of the electronic and chemical Properties of bimetallic surfaces, Physical Review Letters, 93(15), (no pages found) (2004). http://dx.doi.org/10.1103/PhysRevLett.93.156801, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=13444307808&origin=inward, cited 451 times (Scopus).
-  Affiliations:
-   id:60011373 Danmarks Tekniske Universitet
-   id:60023004 University of Delaware
-7. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 2 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-8. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=40949100780&origin=inward][2-s2.0-40949100780]]  J.R. Kitchin, K. Reuter and M. Scheffler, Alloy surface segregation in reactive environments: First-principles atomistic thermodynamics study of Ag3 Pd(111) in oxygen atmospheres, Physical Review B - Condensed Matter and Materials Physics, 77(7), Art. No. 075437 (2008). http://dx.doi.org/10.1103/PhysRevB.77.075437, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=40949100780&origin=inward, cited 56 times (Scopus).
-  Affiliations:
-   id:60008644 Fritz Haber Institute of the Max Planck Society
-   id:60027950 Carnegie Mellon University
-9. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=67449106405&origin=inward][2-s2.0-67449106405]]  John R. Kitchin, Correlations in coverage-dependent atomic adsorption energies on Pd(111), Physical Review B - Condensed Matter and Materials Physics, 79(20), Art. No. 205412 (2009). http://dx.doi.org/10.1103/PhysRevB.79.205412, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=67449106405&origin=inward, cited 30 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-10. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930349644&origin=inward][2-s2.0-84930349644]]  John R. Kitchin, Data sharing in Surface Science, Surface Science, 647, p. 103-107, (2016). http://dx.doi.org/10.1016/j.susc.2015.05.007, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930349644&origin=inward, cited 0 times (Scopus).
-  Affiliations:
-   id:60027950 Carnegie Mellon University
-11. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward][2-s2.0-0037368024]]  J.R. Kitchin, M.A. Barteau and J.G. Chen, A comparison of gold and molybdenum nanoparticles on TiO2(1 1 0) 1 × 2 reconstructed single crystal surfaces, Surface Science, 526(3), p. 323-331, (2003). http://dx.doi.org/10.1016/S0039-6028(02)02679-1, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward, cited 29 times (Scopus).
+11. [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward][2-s2.0-0037368024]]  J.R. Kitchin, M.A. Barteau and J.G. Chen, A comparison of gold and molybdenum nanoparticles on TiO2(1 1 0) 1 × 2 reconstructed single crystal surfaces, Surface Science, 526(3), p. 323-331, (2003). http://dx.doi.org/10.1016/S0039-6028(02)02679-1, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=0037368024&origin=inward, cited 30 times (Scopus).
   Affiliations:
    id:60023004 University of Delaware
 
@@ -298,7 +302,7 @@ print([a.name for a in au.get_coauthors()])
 #+END_SRC
 
 #+RESULTS:
-: ['Stanislav V. Pandelov', 'John D. Michael', 'Yogesh V. Joshi', 'Gamze Gumuslu', 'Xu Zhou', 'John R. McCormick', 'Carmeline J. Dsilva', 'Steven M. Illes', 'Neetha A. Khan', 'Robin Chao', 'Erik J. Albenze', 'Nilay Inolu', 'Shelley L. Anna', 'Christina R. Myers', 'Anita S. Lee', 'Ethan L. Demeter', 'Walter Richard Alesi', 'Qingqi Fan', 'John D. Watkins', 'Sumathy Raman', 'Chunrong Yin', 'Áshildur Logadóttir', 'Prateek Mehta', 'Hari Thirumalai', 'Relja Vasić', 'Isabelacostinela Man', 'W. Richard Alesi', 'Peter L. Versteeg', 'Aaron Marks', 'Rumyana V. Petrova', 'Ashleigh E. Baber', 'Petro Kondratyuk', 'Lisa Mauck Weiland', 'Jingguang Chen', 'Ashish B. Mhadeshwar', 'Shayna L. Hilburg', 'Spencer D. Miller', 'Heather L. Tierney', 'Henry W. Pennline', 'Haiyan Su', 'Peter Kondratyuk', 'Kevin P. Resnik', 'Vladimir V. Pushkarev', 'Fei Gao', 'Charles Sykes', 'Edward S. Rubin', 'Nilay G. Inoǧlu', 'Boris V. Yakshinskiy', 'Ratiporn Munprom', 'Alexander P. Hallenbeck', 'Adefemi A. Egbebi', 'Matthew T. Curnan', 'Newell R. Washburn', 'José Ignacio Martínez', 'Zhongnan Xu', 'Edward M. Sabolsky', 'Krishnan V. Damodaran', 'James X. Mao', 'Morris Morris Bullock', 'Bryan D. Morreale', 'John A. Keith', 'Jacob R. Boes', 'Mitchell C. Groenenboom', 'Charles T. Campbell', 'Christopher J. Keturakis', 'Mc Mahan L Gray', 'Mark Barteau', 'Thomas Bligaard', 'Heine Anton Hansen', 'Inkyu Song', 'Christopher W. Jones', 'Kirk R. Gerdes', 'Hari Chandan Mantripragada', 'John R. Kitchin', 'Robert Lee Thompson', 'Hunaid B. Nulwala', 'Nicholas S. Siefert', 'Wei Shi', 'David P. Hopkinson', 'John C. Eslick', 'B. A. Calfa', 'Victor A. Kusuma', 'David R. Luebke', 'Federico Calle-Vallejo', 'David C M Miller', 'Jens Kehlet Nørskov', 'Sneha A. Akhade', 'Bruce C. Gates', 'Jan Rossmeisl', 'Evan Jacob Granite', 'James Landon', 'Dionisios G. Vlachos', 'James B. Miller', 'Ulrich Stimming', 'Israel E. Wachs', 'Anatoly I. Frenkel', 'Jingguang Chen', 'William D. Jones', 'Karsten Reuter', 'Susannah Scott', 'E. Charles H Sykes', 'Andrew J. Gellman', 'David S. Sholl', 'Jeongwoo Han', 'Paul A. Salvador', 'Marc T M Koper', 'R. J. Gorte', 'Thomas Francisco Jaramillo', 'Theodore E. Madey', 'Hannes Jónsson', 'Lars Lindqvist', 'Terrence J. Collins', 'Matthias Scheffler']
+: ['Jens Kehlet Nørskov', 'Bruce C. Gates', 'Matthias Scheffler', 'Dionisios G. Vlachos', 'R. J. Gorte', 'Theodore E. Madey', 'Inkyu Song', 'Israel E. Wachs', 'David S. Sholl', 'Marc T M Koper', 'Christopher W. Jones', 'Jingguang Chen', 'Ulrich Stimming', 'Anatoly I. Frenkel', 'Mark A. Barteau', 'Andrew J. Gellman', 'William D. Jones', 'Karsten Reuter', 'Morris Morris Bullock', 'Hannes Jónsson', 'Terrence J. Collins', 'Henry W. Pennline', 'Jan Rossmeisl', 'Edward S. Rubin', 'Thomas Francisco Jaramillo', 'Susannah Scott', 'Paul A. Salvador', 'E. Charles H Sykes', 'David R. Luebke', 'David C M Miller', 'Thomas Bligaard', 'Evan Jacob Granite', 'John R. Kitchin', 'Newell R. Washburn', 'Bryan D. Morreale', 'Krishnan V. Damodaran', 'Venkatasubramanian K. Viswanathan', 'Lars Lindqvist', 'José Ignacio Martínez', 'Lisa Mauck Weiland', 'Kirk R. Gerdes', 'James B. Miller', 'Federico Calle-Vallejo', 'Mc Mahan L Gray', 'Edward M. Sabolsky', 'Heine Anton Hansen', 'Ashish B. Mhadeshwar', 'Jeongwoo Han', 'John A. Keith', 'Shelley Lynn Anna', 'Ashleigh E. Baber', 'Boris V. Yakshinskiy', 'Hunaid B. Nulwala', 'Nicholas S. Siefert', 'Wei Shi', 'James Landon', 'Victor A. Kusuma', 'Jingguang G. Chen', 'Vladimir V. Pushkarev', 'Heather L. Tierney', 'Christina R. Myers', 'Relja Vasić', 'Haiyan Su', 'Áshildur Logadóttir', 'David P. Hopkinson', 'Robert L. Thompson', 'Kevin P. Resnik', 'Adefemi A. Egbebi', 'Erik J. Albenze', 'John C. Eslick', 'Isabelacostinela Man', 'Yogesh V. Joshi', 'Neetha A. Khan', 'Hari Chandan Mantripragada', 'B. A. Calfa', 'Sneha A. Akhade', 'Nilay G. Inoǧlu', 'Stanislav V. Pandelov', 'Christopher J. Keturakis', 'Carmeline J. Dsilva', 'Jacob R. Boes', 'John R. McCormick', 'Peter L. Versteeg', 'Spencer D. Miller', 'Fei Gao', 'Petro Kondratyuk', 'Zhongnan Xu', 'Gamze Gumuslu', 'W. Richard Alesi', 'James X. Mao', 'Anita S. Lee', 'Matthew T. Curnan', 'Peter Kondratyuk', 'John D. Watkins', 'Ratiporn Munprom', 'Mitchell C. Groenenboom', 'Paul A. Salvador', 'Rumyana V. Petrova', 'Ethan L. Demeter', 'Bruno A. Calfa', 'Charles T. Campbell', 'Chunrong Yin', 'Alexander P. Hallenbeck', 'Robin Chao', 'Charles H. Sykes', 'Shayna L. Hilburg', 'Sumathy Raman', 'Prateek Mehta', 'Xu Zhou', 'Nilay Inolu', 'Walter Richard Alesi', 'Qingqi Fan', 'Hari Thirumalai', 'Steven M. Illes', 'Aaron Marks', 'John D. Michael', 'Siddharth Deshpande', 'Feiyang Geng']
 
 
 You can generate a report about an author just by printing it.
