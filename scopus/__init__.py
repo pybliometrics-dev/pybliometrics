@@ -6,8 +6,9 @@ if os.path.exists(SCOPUS_API_FILE):
     with open(SCOPUS_API_FILE) as f:
         exec(f.read())
 else:
-    raise Exception('{} not found. Please create it and create variable'
-                    'MY_API_KEY in it.'.format(SCOPUS_API_FILE))
+    print('{} not found. Please create it and create variable'
+          'MY_API_KEY in it. Many things will not work without'
+          'it'.format(SCOPUS_API_FILE))
 
 
 # Namespaces for Scopus XML
