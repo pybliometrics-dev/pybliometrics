@@ -1,12 +1,8 @@
-'''Module to retrieve xml data from the Scopus API.'''
-
 import os
 import sys
 import xml.etree.ElementTree as ET
 
-import requests
-
-from . import MY_API_KEY, ns
+from scopus.utils import download, get_content, get_encoded_text, ns
 
 SCOPUS_SEARCH_DIR = os.path.expanduser('~/.scopus/search')
 
@@ -61,15 +57,12 @@ class ScopusSearch(object):
                               f.read().strip().split('\n')
                               if eid]
         else:
-            url = 'http://api.elsevier.com/content/search/scopus'
             # No cached file exists, or we are refreshing.
             # First, we get a count of how many things to retrieve
-            resp = requests.get(url,
-                                headers={'Accept': 'application/xml',
-                                         'X-ELS-APIKey': MY_API_KEY},
-                                params={'query': query, 'field': fields,
-                                        'count': 0, 'start': 0})
-            results = ET.fromstring(resp.text.encode('utf-8'))
+            url = 'http://api.elsevier.com/content/search/scopus'
+            params = {'query': query, 'field': fields, 'count': 0, 'start': 0}
+            xml = download(url=url, params=params).text.encode('utf-8')
+            results = ET.fromstring(xml)
 
             N = results.find('opensearch:totalResults', ns)
             try:
@@ -84,14 +77,9 @@ class ScopusSearch(object):
 
             self._EIDS = []
             while N > 0:
-                resp = requests.get(url,
-                                    headers={'Accept': 'application/json',
-                                             'X-ELS-APIKey': MY_API_KEY},
-                                    params={'query': query,
-                                            'fields': fields,
-                                            'count': count,
-                                            'start': start})
-
+                params = {'query': query, 'fields': fields,
+                          'count': count, 'start': start}
+                resp = download(url=url, params=params, accept="json")
                 results = resp.json()
 
                 if 'entry' in results.get('search-results', []):
