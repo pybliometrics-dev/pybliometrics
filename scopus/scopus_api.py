@@ -2,7 +2,7 @@ import os
 import sys
 import xml.etree.ElementTree as ET
 
-from . import ns, get_content, get_encoded_text, MY_API_KEY
+from scopus.utils import get_content, get_encoded_text, ns
 
 SCOPUS_XML_DIR = os.path.expanduser('~/.scopus/xml')
 SCOPUS_ISSN_DIR = os.path.expanduser('~/.scopus/issn')
@@ -162,9 +162,9 @@ class ScopusAbstract(object):
 
         qfile = os.path.join(SCOPUS_XML_DIR, EID)
         url = "http://api.elsevier.com/content/abstract/eid/{}".format(EID)
-        header = {'Accept': 'application/xml', 'X-ELS-APIKey': MY_API_KEY}
         params = {'view': view}
-        xml = ET.fromstring(get_content(qfile, url, refresh, header, params))
+        xml = ET.fromstring(get_content(qfile, url=url, refresh=refresh,
+                                        params=params))
 
         coredata = xml.find('dtd:coredata', ns)
         authors = xml.find('dtd:authors', ns)
@@ -546,6 +546,7 @@ class _ScopusAuthorAffiliation(object):
     def __str__(self):
         return 'affiliation_id:{0.id}'.format(self)
 
+
 class ScopusJournal(object):
     """Class to represent a journal from the Scopus API."""
 
@@ -554,24 +555,8 @@ class ScopusJournal(object):
         self.issn = ISSN
 
         qfile = os.path.join(SCOPUS_ISSN_DIR, ISSN)
-        if os.path.exists(qfile) and not refresh:
-            self.url = qfile
-            with open(qfile) as f:
-                text = f.read()
-                xml = ET.fromstring(text)
-        else:
-            url = ("http://api.elsevier.com/content/serial/title/issn:" +
-                   ISSN)
-            self.url = url
-            resp = requests.get(url, headers={'Accept': 'application/xml',
-                                              'X-ELS-APIKey': MY_API_KEY})
-            self.xml = resp.text.encode('utf-8')
-            with open(qfile, 'w') as f:
-                f.write(resp.text)
-
-            xml = ET.fromstring(resp.text.encode('utf-8'))
-
-        self.xml = xml
+        url = ("http://api.elsevier.com/content/serial/title/issn:" + ISSN)
+        self.xml = get_content(qfile, refresh, url)
 
         self.publisher = get_encoded_text(self.xml, 'entry/dc:publisher')
         self.title = get_encoded_text(self.xml, 'entry/dc:title')

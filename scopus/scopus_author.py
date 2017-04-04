@@ -6,12 +6,10 @@ import xml.etree.ElementTree as ET
 from collections import Counter, namedtuple
 from operator import itemgetter
 
-import requests
-
 from .scopus_api import ScopusAbstract
 from .scopus_search import ScopusSearch
 from .scopus_affiliation import ScopusAffiliation
-from . import ns, get_content, get_encoded_text, MY_API_KEY
+from scopus.utils import download, get_content, get_encoded_text, ns
 
 SCOPUS_AUTHOR_DIR = os.path.expanduser('~/.scopus/author')
 
@@ -125,9 +123,9 @@ class ScopusAuthor(object):
         qfile = os.path.join(SCOPUS_AUTHOR_DIR, author_id)
         url = ('http://api.elsevier.com/content/author/'
                'author_id/{}').format(author_id)
-        header = {'Accept': 'application/xml', 'X-ELS-APIKey': MY_API_KEY}
         params = {'author_id': author_id, 'view': 'ENHANCED'}
-        xml = ET.fromstring(get_content(qfile, url, refresh, header, params))
+        xml = ET.fromstring(get_content(qfile, url=url, refresh=refresh,
+                                        params=params))
         self.xml = xml
         self._orcid = get_encoded_text(xml, 'coredata/orcid')
         hindex = get_encoded_text(xml, 'h-index')
@@ -210,9 +208,7 @@ class ScopusAuthor(object):
     def get_coauthors(self):
         """Return list of coauthors, their scopus-id and research areas."""
         url = self.xml.find('coredata/link[@rel="coauthor-search"]').get('href')
-        resp = requests.get(url, headers={'Accept': 'application/xml',
-                                          'X-ELS-APIKey': MY_API_KEY})
-        xml = resp.text.encode('utf-8')
+        xml = download(url=url).text.encode('utf-8')
         xml = ET.fromstring(xml)
         coauthors = []
         N = int(get_encoded_text(xml, 'opensearch:totalResults') or 0)
@@ -222,11 +218,8 @@ class ScopusAuthor(object):
 
         count = 0
         while count < N:
-            resp = requests.get(url,
-                                headers={'Accept': 'application/xml',
-                                         'X-ELS-APIKey': MY_API_KEY},
-                                params={'start': count, 'count': 25})
-            xml = resp.text.encode('utf-8')
+            params = {'start': count, 'count': 25}
+            xml = download(url=url, params=params).text.encode('utf-8')
             xml = ET.fromstring(xml)
 
             for entry in xml.findall('atom:entry', ns):

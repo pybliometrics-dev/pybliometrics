@@ -1,7 +1,7 @@
 import os
 import xml.etree.ElementTree as ET
 
-from . import get_content, get_encoded_text, MY_API_KEY
+from scopus.utils import get_content, get_encoded_text
 
 SCOPUS_AFFILIATION_DIR = os.path.expanduser('~/.scopus/affiliation')
 
@@ -66,8 +66,8 @@ class ScopusAffiliation:
         qfile = os.path.join(SCOPUS_AFFILIATION_DIR, str(aff_id))
         url = ('http://api.elsevier.com/content/affiliation/'
                'affiliation_id/{}'.format(aff_id))
-        header = {'Accept': 'application/xml', 'X-ELS-APIKey': MY_API_KEY}
-        xml = ET.fromstring(get_content(qfile, url, refresh, header))
+
+        xml = ET.fromstring(get_content(qfile, url=url, refresh=refresh))
 
         # public url
         self._url = xml.find('coredata/link[@rel="scopus-affiliation"]')
