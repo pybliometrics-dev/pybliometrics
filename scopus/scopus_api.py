@@ -117,7 +117,9 @@ class ScopusAbstract(object):
 
     @property
     def subjectAreas(self):
-        """List of subject areas of article."""
+        """List of subject areas of article.  Requires the FULL view of
+        the article.
+        """
         return self._subjectAreas
 
     @property
@@ -137,7 +139,9 @@ class ScopusAbstract(object):
 
     @property
     def refcount(self):
-        """Return number of references of an article, if possible."""
+        """Number of references of an article.  Requires the FULL view of
+        the article.
+        """
         if self._references is not None:
             return self._references.attrib['refcount']
         else:
@@ -227,7 +231,10 @@ class ScopusAbstract(object):
 
         # Parse subject-areas
         subjectAreas = xml.find('dtd:subject-areas', ns)
-        self._subjectAreas = [a.text for a in subjectAreas]
+        try:
+            self._subjectAreas = [a.text for a in subjectAreas]
+        except:
+            self._subjectAreas = None
 
         # Parse authors
         authors = xml.find('dtd:authors', ns)
