@@ -22,8 +22,13 @@ class ScopusAbstract(object):
 
     @property
     def doi(self):
-        """Abstract DOI."""
+        """DOI of article."""
         return self._doi
+
+    @property
+    def website(self):
+        """Website of article."""
+        return self._website
 
     @property
     def title(self):
@@ -31,19 +36,29 @@ class ScopusAbstract(object):
         return self._title
 
     @property
-    def aggregationType(self):
-        """Type of abstract."""
-        return self._aggregationType
-
-    @property
     def publicationName(self):
         """Name of source the abstract is published in."""
         return self._publicationName
 
     @property
-    def srctype(self):
+    def aggregationType(self):
         """Type of source the abstract is published in."""
+        return self._aggregationType
+
+    @property
+    def srctype(self):
+        """Type (short version) of source the abstract is published in."""
         return self._srctype
+
+    @property
+    def citationType(self):
+        """Type (short version) of the article (i.e. ar=article)."""
+        return self._citationType
+
+    @property
+    def citationLanguage(self):
+        """Language of the article."""
+        return self._citationLang
 
     @property
     def citedby_count(self):
@@ -101,6 +116,11 @@ class ScopusAbstract(object):
         return self._coverDate
 
     @property
+    def subjectAreas(self):
+        """List of subject areas of article."""
+        return self._subjectAreas
+
+    @property
     def authors(self):
         """A list of scopus_api.ScopusAuthor objects."""
         return self._authors
@@ -141,7 +161,7 @@ class ScopusAbstract(object):
         Parameters
         ----------
         EID : str
-            The scopus ID of an abstract.
+            The Scopus ID of an abstract.
 
         view : str (optional, default=META_ABS)
             The view of the file that should be downloaded.  Currently
@@ -154,34 +174,29 @@ class ScopusAbstract(object):
         -----
         The files are cached in ~/.scopus/xml/{eid}.
         """
-
         allowed_views = ('META', 'META_ABS', 'FULL')
         if view not in allowed_views:
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
 
+        # Get file content
         qfile = os.path.join(SCOPUS_XML_DIR, EID)
         url = "http://api.elsevier.com/content/abstract/eid/{}".format(EID)
         params = {'view': view}
         xml = ET.fromstring(get_content(qfile, url=url, refresh=refresh,
                                         params=params))
 
-        coredata = xml.find('dtd:coredata', ns)
-        authors = xml.find('dtd:authors', ns)
-        items = xml.find('item', ns)
         self.xml = xml
         if xml.tag == 'service-error':
             raise Exception('\n{0}\n{1}'.format(EID, self.xml))
 
-        self.coredata = coredata
-        self.authors_xml = authors
+        # Parse coredata
+        coredata = xml.find('dtd:coredata', ns)
         self._url = get_encoded_text(coredata, 'prism:url')
-
         self.identifier = get_encoded_text(coredata, 'dc:identifier')
         self.eid = get_encoded_text(coredata, 'dtd:eid')
         self._doi = get_encoded_text(coredata, 'prism:doi')
         self._title = get_encoded_text(coredata, 'dc:title')
-
         self._aggregationType = get_encoded_text(coredata,
                                                  'prism:aggregationType')
         self._publicationName = get_encoded_text(coredata,
@@ -201,23 +216,38 @@ class ScopusAbstract(object):
         self._coverDate = get_encoded_text(coredata, 'prism:coverDate')
         self.creator = get_encoded_text(coredata, 'dc:creator')
         self.description = get_encoded_text(coredata, 'dc:description')
-
-        sl = coredata.find('dtd:link[@rel="scopus"]', ns).get('href', None)
-        self_link = coredata.find('dtd:link[@rel="self"]', ns).get('href', None)
+        sl = coredata.find('dtd:link[@rel="scopus"]', ns).get('href')
+        self_link = coredata.find('dtd:link[@rel="self"]', ns).get('href')
         cite_link = coredata.find('dtd:link[@rel="cited-by"]', ns)
         if cite_link:
-            cite_link = cite_link.get('href', None)
+            cite_link = cite_link.get('href')
         self.scopus_link = sl
         self.self_link = self_link
         self.cite_link = cite_link
 
+        # Parse subject-areas
+        subjectAreas = xml.find('dtd:subject-areas', ns)
+        self._subjectAreas = [a.text for a in subjectAreas]
+
+        # Parse authors
+        authors = xml.find('dtd:authors', ns)
         self._authors = [_ScopusAuthor(author) for author in authors]
         self._affiliations =[_ScopusAffiliation(aff) for aff
                              in xml.findall('dtd:affiliation', ns)]
 
+        # Parse items
+        items = xml.find('item', ns)
         if items is not None:
-            self._references = items.find('bibrecord/tail/bibliography', ns)
+            head = items.find('bibrecord/head', ns)
+            self._citationType = head.find('citation-info/citation-type').get("code")
+            self._citationLang = head.find('citation-info/citation-language').get("language")
+            self._website = get_encoded_text(head, 'source/website/ce:e-address')
+            tail = items.find('bibrecord/tail', ns)
+            self._references = tail.find('bibliography', ns)
         else:
+            self._citationType = None
+            self._citationLang = None
+            self._website = None
             self._references = None
 
     # def get_corresponding_author_info(self):
