@@ -49,7 +49,7 @@ If you are proposing a feature:
 
 * Explain in detail how it would work.
 * Keep the scope as narrow as possible, to make it easier to implement.
-* Respect the [Python Code of Conduct](https://www.python.org/psf/codeofconduct/)
+* Respect the `Python Code of Conduct <https://www.python.org/psf/codeofconduct/>`_
 * Remember that this is a volunteer-driven project, and that contributions
   are welcome :)
 
@@ -89,5 +89,5 @@ Pull Request Guidelines
 
 Before you submit a pull request, check that it meets these guidelines:
 
-1. Adhere to [PEP8](https://www.python.org/dev/peps/pep-0008/)
+1. Adhere to `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_
 2. The pull request should work for Python 2.7, and 3.5.
