@@ -239,22 +239,26 @@ class ScopusAbstract(object):
         # Parse authors
         authors = xml.find('dtd:authors', ns)
         self._authors = [_ScopusAuthor(author) for author in authors]
-        self._affiliations =[_ScopusAffiliation(aff) for aff
-                             in xml.findall('dtd:affiliation', ns)]
+        self._affiliations = [_ScopusAffiliation(aff) for aff
+                              in xml.findall('dtd:affiliation', ns)]
 
         # Parse items
         items = xml.find('item', ns)
-        if items is not None:
-            head = items.find('bibrecord/head', ns)
-            self._citationType = head.find('citation-info/citation-type').get("code")
-            self._citationLang = head.find('citation-info/citation-language').get("language")
-            self._website = get_encoded_text(head, 'source/website/ce:e-address')
-            tail = items.find('bibrecord/tail', ns)
-            self._references = tail.find('bibliography', ns)
-        else:
+        self._website = get_encoded_text(
+            items, 'bibrecord/head/source/website/ce:e-address')
+        try:
+            self._citationType = items.find(
+                'bibrecord/head/citation-info/citation-type').get("code")
+        except:
             self._citationType = None
+        try:
+            self._citationLang = items.find(
+                'bibrecord/head/citation-info/citation-language').get("language")
+        except:
             self._citationLang = None
-            self._website = None
+        try:
+            self._references = tail.find('bibrecord/tail/bibliography', ns)
+        except:
             self._references = None
 
     # def get_corresponding_author_info(self):
