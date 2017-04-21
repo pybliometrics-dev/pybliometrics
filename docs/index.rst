@@ -8,29 +8,25 @@ scopus: A Python API for accessing Scopus data
 Classes
 =======
 
-Currently, scopus provides the following classes to interact with the Scopus API (see https://dev.elsevier.com/api_docs.html):
+scopus provides classes to interact with the various Scopus APIs (see https://dev.elsevier.com/api_docs.html):
 
-.. currentmodule:: scopus.scopus_api
+.. currentmodule:: scopus
+
 .. autosummary::
+   :toctree: reference/
+
    ScopusAbstract
-
-.. currentmodule:: scopus.scopus_author
-.. autosummary::
    ScopusAuthor
-
-.. currentmodule:: scopus.scopus_search
-.. autosummary::
    ScopusSearch
-
-.. currentmodule:: scopus.scopus_affiliation
-.. autosummary::
    ScopusAffiliation
 
 
 There is one class to provide reports:
 
-.. currentmodule:: scopus.scopus_reports
+
 .. autosummary::
+   :toctree: reference/
+
    report
 
 
