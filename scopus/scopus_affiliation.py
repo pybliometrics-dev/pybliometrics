@@ -10,8 +10,6 @@ if not os.path.exists(SCOPUS_AFFILIATION_DIR):
 
 
 class ScopusAffiliation:
-    """A class to represent an Affiliation in Scopus."""
-
     @property
     def affiliation_id(self):
         """The affiliation id."""
@@ -53,12 +51,19 @@ class ScopusAffiliation:
         return self._country
 
     def __init__(self, aff_id, refresh=False):
-        """affiliation_id is a number like 60030926, can be an int or string.
+        """Class to represent an Affiliation in Scopus.
 
         Parameters
         ----------
+        aff_id : str or int
+            The Scopus Affiliation ID.
+
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
+
+        Notes
+        -----
+        The files are cached in ~/.scopus/affiliation/{aff_id}.
         """
 
         self._affiliation_id = aff_id
