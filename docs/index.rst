@@ -30,6 +30,14 @@ There is one class to provide reports:
    report
 
 
+See extended description and examples below:
+
+.. toctree::
+   :maxdepth: 3
+
+   examples
+
+
 =====
 Other
 =====
