@@ -25,7 +25,7 @@ class ScopusAuthor(object):
 
     @property
     def orcid(self):
-        """The author orcid."""
+        """The author's ORCID."""
         return self._orcid
 
     @property
@@ -80,7 +80,7 @@ class ScopusAuthor(object):
 
     @property
     def scopus_url(self):
-        """url to the author scopus page."""
+        """URL to the author's profile page."""
         return self._scopus_url
 
     @property
@@ -105,7 +105,7 @@ class ScopusAuthor(object):
             The ID of the author to search for.
 
         refresh : bool (optional, default=False)
-            Whether to refresh the cached file if it exists or not.
+            Whether to refresh the cached file (if it exists) or not.
 
         level : int (optional, default=1)
             Number of * to print in property __str__.
@@ -264,9 +264,23 @@ class ScopusAuthor(object):
     def get_document_summary(self, N=None, cite_sort=True, refresh=True):
         """Return a summary string of documents.
 
-        N = maximum number to return. if None, return all documents.
-        cite_sort is a boolean to sort xml by number of citations,
-        in decreasing order.
+        Parameters
+        ----------
+        N : int or None (optional, default=None)
+            Maximum number of documents to include in the summary.
+            If None, return all documents.
+
+        cite_sort : bool (optional, default=True)
+            Whether to sort xml by number of citations, in decreasing order,
+            or not.
+
+        refresh : bool (optional, default=True)
+            Whether to refresh the cached abstract file (if it exists) or not.
+
+        Returns
+        -------
+        s : str
+            Text summarizing an author's documents.
         """
         abstracts = [ScopusAbstract(eid, refresh=refresh)
                      for eid in self.get_document_eids(refresh=refresh)]
@@ -375,9 +389,20 @@ class ScopusAuthor(object):
         return '\n'.join(s)
 
     def author_impact_factor(self, year=2014, refresh=True):
-        """Get author_impact_factor.
+        """Get author_impact_factor for the .
 
-        Returns (ncites, npapers, aif)
+        Parameters
+        ----------
+        year : int (optional, default=2014)
+            The year based for which the impact factor is to be calculated.
+
+        refresh : bool (optional, default=True)
+            Whether to refresh the cached search file (if it exists) or not.
+
+        Returns
+        -------
+        (ncites, npapers, aif) : tuple of integers
+            The citations count, publication count, and author impact factor.
         """
         scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
                             for eid in self.get_document_eids(refresh=refresh)
