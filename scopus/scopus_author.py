@@ -166,6 +166,7 @@ class ScopusAuthor(object):
             self._date_created = (None, None, None)
         # Research areas
         area_elements = xml.findall('subject-areas/subject-area')
+        self._area_elements = area_elements
         # {code: name}
         d = {int(ae.attrib['code']): ae.text for ae in area_elements}
 
@@ -302,15 +303,8 @@ class ScopusAuthor(object):
 
     def __str__(self):
         """Return a summary string."""
-        s = ['*' * self.level + ' ' +
-             (get_encoded_text(self.xml,
-                               'author-profile/preferred-name/given-name') or
-              '') +
-             ' ' +
-             (get_encoded_text(self.xml,
-                               'author-profile/preferred-name/surname') or
-              '') +
-             ' (updated on ' + time.asctime() + ')']
+        s = ['{} {} (updated on {})'.format(
+             '*' * self.level, self._name, time.asctime())]
 
         url = self.xml.find('coredata/link[@rel="scopus-author"]')
         if url is not None:
@@ -324,18 +318,12 @@ class ScopusAuthor(object):
         if orcid is not None:
             s += ['http://orcid.org/' + orcid]
 
-        s += [str(get_encoded_text(self.xml, 'coredata/document-count')) +
-              ' documents cited ' +
-              str(get_encoded_text(self.xml, 'coredata/citation-count')) +
-              ' times by ' +
-              str(get_encoded_text(self.xml, 'coredata/cited-by-count')) +
-              ' people (' +
-              str(get_encoded_text(self.xml, 'coauthor-count')) +
-              ' coauthors)']
+        s += ['{} documents cited {} times by {} people ({} coauthors)'.format(
+              self._ndocuments, self._ncitations, self._ncited_by,
+              self._ncoauthors)]
         s += ['#first author papers {0}'.format(self.n_first_author_papers())]
         s += ['#last author papers {0}'.format(self.n_last_author_papers())]
-        s += ['h-index: ' +
-              str(get_encoded_text(self.xml, 'h-index')) +
+        s += ['h-index: {}'.format(self._hindex) +
               '        AIF(2014) = ' +
               '{0:1.2f}'.format(self.author_impact_factor(2015)[2])]
 
@@ -343,37 +331,20 @@ class ScopusAuthor(object):
 
         # Current Affiliation. Note this is what Scopus thinks is current.
         s += ['\nCurrent affiliation according to Scopus:']
-        s += ['  ' +
-              (get_encoded_text(self.xml,
-                                ('author-profile/affiliation-current/'
-                                 'affiliation/ip-doc/afdispname')) or '')]
+        s += ['  ' + (self._current_affiliation or '')]
 
         # subject areas
         s += ['\nSubject areas']
 
-        area_elements = self.xml.findall('subject-areas/subject-area')
-        # {code: name}
-        d = {int(ae.attrib['code']): ae.text for ae in area_elements}
-
-        classifications = self.xml.findall(
-            'author-profile/classificationgroup/classifications/classification')
-        # {code: frequency}
-        c = {int(cls.text): int(cls.attrib['frequency'])
-             for cls in classifications}
-
-        categories = [(d[code], c[code]) for code in d]
-        categories.sort(reverse=True, key=itemgetter(1))
-
         s += [textwrap.fill(', '.join(['{0} ({1})'.format(el[0], el[1])
-                                       for el in categories]),
+                                       for el in self.categories]),
                             initial_indent='  ',
                             subsequent_indent='  ')]
 
         # journals published in
-        temp_s = [el.text
-                  for el in
+        temp_s = [el.text for el in
                   self.xml.findall('author-profile/journal-history/'
-                              'journal/sourcetitle-abbrev')]
+                                   'journal/sourcetitle-abbrev')]
         s += ['\nPublishes in:\n' +
               textwrap.fill(', '.join(temp_s), initial_indent='  ',
                             subsequent_indent='  ')]
