@@ -115,9 +115,8 @@ class ScopusAuthor(object):
         The files are cached in ~/.scopus/author/{author_id}.
         """
 
-        author_id = str(author_id)
+        author_id = str(int(author_id))
 
-        self._author_id = author_id
         self.level = level
 
         qfile = os.path.join(SCOPUS_AUTHOR_DIR, author_id)
@@ -133,6 +132,9 @@ class ScopusAuthor(object):
 
         ndocuments = get_encoded_text(xml, 'coredata/document-count')
         self._ndocuments = int(ndocuments) if ndocuments is not None else 0
+
+        _author_id = get_encoded_text(xml, 'coredata/dc:identifier')
+        self._author_id = _author_id.split(":")[-1]
 
         ncitations = get_encoded_text(xml, 'coredata/citation-count')
         self.ncitations = int(ncitations) if ncitations is not None else 0
