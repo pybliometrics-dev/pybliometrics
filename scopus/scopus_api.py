@@ -159,6 +159,18 @@ class ScopusAbstract(object):
             raise TypeError("Could not load article references. "
                             "Did you load with view=FULL?")
 
+    @property
+    def abstract(self):
+        """Return the abstract of an article."""
+        return self._abstract
+
+    @property
+    def description(self):
+        """Return the description of a record.
+        Note: This may be empty. You probably want the abstract instead.
+        """
+        return self._description
+
     def __init__(self, EID, view='META_ABS', refresh=False):
         """Class to represent the results from a Scopus abstract.
 
@@ -219,7 +231,9 @@ class ScopusAbstract(object):
         self._pageRange = get_encoded_text(coredata, 'prism:pageRange')
         self._coverDate = get_encoded_text(coredata, 'prism:coverDate')
         self.creator = get_encoded_text(coredata, 'dc:creator')
-        self.description = get_encoded_text(coredata, 'dc:description')
+        self._description = get_encoded_text(coredata, 'dc:description')
+        self._abstract = get_encoded_text(coredata, 'dc:description/dtd:abstract/ce:para')
+
         sl = coredata.find('dtd:link[@rel="scopus"]', ns).get('href')
         self_link = coredata.find('dtd:link[@rel="self"]', ns).get('href')
         cite_link = coredata.find('dtd:link[@rel="cited-by"]', ns)
