@@ -597,7 +597,7 @@ class ScopusJournal(object):
 
         qfile = os.path.join(SCOPUS_ISSN_DIR, ISSN)
         url = ("http://api.elsevier.com/content/serial/title/issn:" + ISSN)
-        self.xml = get_content(qfile, refresh, url)
+        self.xml = ET.fromstring(get_content(qfile, refresh, url))
 
         self.publisher = get_encoded_text(self.xml, 'entry/dc:publisher')
         self.title = get_encoded_text(self.xml, 'entry/dc:title')
