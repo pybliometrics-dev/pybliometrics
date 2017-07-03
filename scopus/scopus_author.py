@@ -148,14 +148,12 @@ class ScopusAuthor(object):
         self._current_affiliation = get_encoded_text(xml,
             'author-profile/affiliation-current/affiliation/ip-doc/afdispname')
 
-        # affiliation history
-        affiliations = [ScopusAffiliation(aff_id, refresh=refresh)
-                        for aff_id in
-                        [el.attrib.get('id')
-                         for el in
-                         xml.findall('affiliation-history/affiliation')
-                         if el is not None]]
-        self._affiliation_history = affiliations
+        # affiliation history (sort out faulty historic affiliations)
+        aff_ids = [el.attrib.get('affiliation-id') for el in
+                   xml.findall('author-profile/affiliation-history/affiliation')
+                   if el is not None and len(list(el.find("ip-doc").iter())) > 1]
+        affs = [ScopusAffiliation(aff_id, refresh=refresh) for aff_id in aff_ids]
+        self._affiliation_history = affs
 
         date_created = xml.find('author-profile/date-created', ns)
         if date_created is not None:
