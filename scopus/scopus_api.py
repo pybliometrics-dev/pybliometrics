@@ -257,7 +257,7 @@ class ScopusAbstract(object):
         except:
             self._citationLang = None
         try:
-            self._references = tail.find('bibrecord/tail/bibliography', ns)
+            self._references = items.find('bibrecord/tail/bibliography', ns)
         except:
             self._references = None
 
