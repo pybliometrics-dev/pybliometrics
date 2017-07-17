@@ -13,11 +13,11 @@ if not os.path.exists(SCOPUS_SEARCH_DIR):
 class ScopusSearch(object):
     @property
     def EIDS(self):
-        """Return list of EIDs retrieved."""
+        """List of EIDs retrieved."""
         return self._EIDS
 
     def __init__(self, query, fields='eid', count=200, start=0,
-                 refresh=False, max_entries=1000):
+                 max_entries=5000, refresh=False):
         """Class to search a query, and retrieve a list of EIDs as results.
 
         Parameters
@@ -29,7 +29,8 @@ class ScopusSearch(object):
             The list of fields you want returned.
 
         count : int (optional, default=200)
-            The number of entries to be displayed.
+            The number of entries to be displayed at once.  A smaller number
+            means more queries with each query having less results.
 
         start : int (optional, default=0)
             The entry number of the first search item to start with.
@@ -37,13 +38,21 @@ class ScopusSearch(object):
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
 
+        max_entries : int (optional, default=5000)
+            Raise error when the number of results is beyond this number.
+            The Scopus Search Engine does not allow more than 5000 entries.
+
+        Raises
+        ------
+        Exception
+            If the number of search results exceeds max_entries.
+
         Notes
         -----
         XML results are cached in ~/.scopus/search/{query}.
 
-        The EIDs are stored as a property.
+        The EIDs are stored as a property named EIDS.
         """
-
         self.query = query
 
         qfile = os.path.join(SCOPUS_SEARCH_DIR,

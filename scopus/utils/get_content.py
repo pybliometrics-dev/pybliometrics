@@ -35,7 +35,6 @@ def download(url, params=None, accept="xml"):
     if accept.lower() not in accepted:
         raise ValueError('accept parameter must be one of ' +
                          ', '.join(accepted))
-
     key = load_api_key()
     header = {'Accept': 'application/{}'.format(accept), 'X-ELS-APIKey': key}
     resp = requests.get(url, headers=header, params=params)
@@ -75,6 +74,7 @@ def get_content(qfile, refresh, *args, **kwds):
 
 def load_api_key():
     """Helper function to return MY_API_KEY if it is correctly specified.
+
     Returns
     -------
     MY_API_KEY : str

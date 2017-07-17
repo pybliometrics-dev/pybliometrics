@@ -12,12 +12,12 @@ if not os.path.exists(SCOPUS_AFFILIATION_DIR):
 class ScopusAffiliation:
     @property
     def affiliation_id(self):
-        """The affiliation id."""
+        """The Scopus ID of the affiliation."""
         return self._aff_id
 
     @property
     def nauthors(self):
-        """Number of authors in the affiliation"""
+        """Number of authors in the affiliation."""
         return self._nauthors
 
     @property
@@ -27,27 +27,27 @@ class ScopusAffiliation:
 
     @property
     def url(self):
-        """The URL for this affiliation"""
+        """The URL for this affiliation."""
         return self._url
 
     @property
     def name(self):
-        """The NAME of the affiliation"""
+        """The name of the affiliation."""
         return self._name
 
     @property
     def address(self):
-        """The address of the affiliation"""
+        """The address of the affiliation."""
         return self._address
 
     @property
     def city(self):
-        """The city of the affiliation"""
+        """The city of the affiliation."""
         return self._city
 
     @property
     def country(self):
-        """The country of the affiliation"""
+        """The country of the affiliation."""
         return self._country
 
     def __init__(self, aff_id, refresh=False):

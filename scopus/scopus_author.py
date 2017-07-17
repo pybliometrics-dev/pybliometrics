@@ -250,13 +250,13 @@ class ScopusAuthor(object):
         return coauthors
 
     def get_document_eids(self, refresh=True):
-        """Return list of EIDs for the author."""
+        """Return list of EIDs for the author using ScopusSearch."""
         search = ScopusSearch('au-id({})'.format(self.author_id),
                               refresh=refresh)
         return search.EIDS
 
     def get_abstracts(self, refresh=True):
-        """Return a list of ScopusAbstract objects."""
+        """Return a list of ScopusAbstract objects using ScopusSearch."""
         return [ScopusAbstract(eid, refresh=refresh)
                 for eid in self.get_document_eids(refresh=refresh)]
 
