@@ -46,6 +46,7 @@ Other
    :maxdepth: 1
 
    reference
+   changelog
    contributing
    authors
 
