@@ -1,6 +1,15 @@
 Change Log
 ----------
 
+0.2.1
+~~~~~
+
+2017-07-21
+
+* Some bugfixes.
+* Examples for all classes.
+* Fix typos in docstrings.
+* In ScopusAuthor, the `author_id` returns the Scopus Author ID from the result rather than the used author_id.
 
 0.2.0
 ~~~~~

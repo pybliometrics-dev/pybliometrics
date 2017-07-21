@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='scopus',
-      version='0.2',
+      version='0.2.1',
       description='Python API for Scopus',
       url='http://github.com/scopus-api/scopus',
       author='John Kitchin and Michael E. Rose',
@@ -11,10 +11,4 @@ setup(name='scopus',
       scripts=['scopus/bin/scopus_coauthors'],
       test_suite = 'nose.collector',
       long_description='''Provides Python functions to retrieve data from the Scopus APIs.''',
-      install_requires=[
-          'nose'],)
-
-
-# to setup user on pypi
-# python setup.py register
-# to push to pypi - (shell-command "python setup.py sdist upload")
+      install_requires=['nose'])
