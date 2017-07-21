@@ -125,7 +125,11 @@ class ScopusAbstract(object):
     @property
     def authors(self):
         """A list of scopus_api.ScopusAuthor objects."""
-        return self._authors
+        if self._authors is not None:
+            return self._authors
+        else:
+            raise TypeError("Could not load authors. "
+                            "Did you load with view=META_ABS?")
 
     @property
     def affiliations(self):
@@ -169,7 +173,9 @@ class ScopusAbstract(object):
 
         view : str (optional, default=META_ABS)
             The view of the file that should be downloaded.  Currently
-            supported values: META, META_ABS, FULL.
+            supported values: META, META_ABS, FULL.  See
+            http://api.elsevier.com/documentation/retrieval/AbstractRetrievalViews.htm
+            for details.
 
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
@@ -238,7 +244,10 @@ class ScopusAbstract(object):
 
         # Parse authors
         authors = xml.find('dtd:authors', ns)
-        self._authors = [_ScopusAuthor(author) for author in authors]
+        try:
+            self._authors = [_ScopusAuthor(author) for author in authors]
+        except TypeError:
+            self._authors = None
         self._affiliations = [_ScopusAffiliation(aff) for aff
                               in xml.findall('dtd:affiliation', ns)]
 
@@ -315,7 +324,8 @@ class ScopusAbstract(object):
     def __str__(self):
         """Return pretty text version of the abstract.
 
-        Assumes the abstract is a journal article.
+        Assumes the abstract is a journal article and was loaded with
+        view="META_ABS" or view="FULL".
         """
 
         if len(self.authors) > 1:
