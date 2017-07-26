@@ -93,10 +93,7 @@ class ScopusAuthor(object):
         """URL to Scopus coauthor page."""
         return self._coauthor_url
 
-    def __init__(self,
-                 author_id,
-                 refresh=False,
-                 level=1):
+    def __init__(self, author_id, refresh=False, level=1):
         """Class to represent a Scopus Author query by the scopus-id.
 
         Parameters
@@ -114,7 +111,6 @@ class ScopusAuthor(object):
         -----
         The files are cached in ~/.scopus/author/{author_id}.
         """
-
         author_id = str(int(author_id))
 
         self.level = level
@@ -229,8 +225,7 @@ class ScopusAuthor(object):
                     'atom:preferred-name/atom:given-name')
                 surname = get_encoded_text(entry,
                     'atom:preferred-name/atom:surname')
-
-                coauthor_name = '{0} {1}'.format(given_name, surname)
+                coauthor_name = u'{0} {1}'.format(given_name, surname)
 
                 scopus_id = get_encoded_text(entry,
                     'dc:identifier').replace('AUTHOR_ID:', '')
@@ -239,7 +234,7 @@ class ScopusAuthor(object):
                     'atom:affiliation-current/atom:affiliation-name')
 
                 # get categories for this author
-                s = ', '.join(['{0} ({1})'.format(subject.text,
+                s = u', '.join(['{0} ({1})'.format(subject.text,
                                                   subject.attrib['frequency'])
                                for subject in
                                entry.findall('atom:subject-area', ns)])
@@ -249,10 +244,10 @@ class ScopusAuthor(object):
 
         return coauthors
 
-    def get_document_eids(self, refresh=True):
+    def get_document_eids(self, *args, **kwds):
         """Return list of EIDs for the author using ScopusSearch."""
         search = ScopusSearch('au-id({})'.format(self.author_id),
-                              refresh=refresh)
+                              *args, **kwds)
         return search.EIDS
 
     def get_abstracts(self, refresh=True):
@@ -292,7 +287,7 @@ class ScopusAuthor(object):
         if N is None:
             N = len(abstracts)
 
-        s = ['{0} of {1} documents'.format(N, len(abstracts))]
+        s = [u'{0} of {1} documents'.format(N, len(abstracts))]
 
         for i in range(N):
             s += ['{0:2d}. {1}\n'.format(i + 1, str(abstracts[i]))]
