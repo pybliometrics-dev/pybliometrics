@@ -56,7 +56,7 @@ class ScopusSearch(object):
         """
         self.query = query
 
-        qfile = os.path.join(SCOPUS_SEARCH_DIR, hashlib.md5('query').hexdigest())
+        qfile = os.path.join(SCOPUS_SEARCH_DIR, hashlib.md5(query).hexdigest())
 
         if os.path.exists(qfile) and not refresh:
             with open(qfile) as f:
