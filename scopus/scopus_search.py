@@ -2,7 +2,8 @@ import os
 import sys
 import xml.etree.ElementTree as ET
 
-from scopus.utils import download, get_content, get_encoded_text, ns
+from scopus.utils import download, ns
+from scopus.scopus_api import ScopusAbstract
 
 SCOPUS_SEARCH_DIR = os.path.expanduser('~/.scopus/search')
 
@@ -53,7 +54,6 @@ class ScopusSearch(object):
 
         The EIDs are stored as a property named EIDS.
         """
-        self.query = query
 
         qfile = os.path.join(SCOPUS_SEARCH_DIR,
                              # We need to remove / in a DOI here so we can save
@@ -102,7 +102,7 @@ class ScopusSearch(object):
                     f.write('{}\n'.format(eid).encode('utf-8'))
 
     def __str__(self):
-        s = """{self.query}
+        s = """{query}
         Resulted in {N} hits.
     {entries}"""
         return s.format(self=self,
@@ -112,7 +112,6 @@ class ScopusSearch(object):
     @property
     def org_summary(self):
         """Summary of search results."""
-        from scopus.scopus_api import ScopusAbstract
         s = ''
         for i, eid in enumerate(self.EIDS):
             abstract = ScopusAbstract(eid)
