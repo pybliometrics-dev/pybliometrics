@@ -52,7 +52,7 @@ class ScopusAbstract(object):
 
     @property
     def citationType(self):
-        """Type (short version) of the article (i.e. ar=article)."""
+        """Type (short version) of the article."""
         return self._citationType
 
     @property
@@ -124,7 +124,7 @@ class ScopusAbstract(object):
 
     @property
     def authors(self):
-        """A list of scopus_api.ScopusAuthor objects."""
+        """A list of scopus_api._ScopusAuthor objects."""
         if self._authors is not None:
             return self._authors
         else:
@@ -133,7 +133,7 @@ class ScopusAbstract(object):
 
     @property
     def affiliations(self):
-        """A list of scopus_api.ScopusAffiliation objects."""
+        """A list of scopus_api._ScopusAffiliation objects."""
         return self._affiliations
 
     @property
@@ -483,11 +483,16 @@ class ScopusAbstract(object):
 
     @property
     def bibtex(self):
-        """Returns a string representing a bibtex entry for the article.
+        """Bibliographic entry in BibTeX format.
 
-        Only Journal types currently supported. A uuid is used for a key.
-        Required fields: author, title, journal, year, volume
-        Optional fields: number, pages, month, note, key.
+        Returns
+        -------
+        bibtex : str
+            A string representing a bibtex entry for the item.
+
+        Notes
+        -----
+        Only Journal articles are supported.
         """
         if self.aggregationType == 'Journal':
             template = '''@article{{{uuid},
@@ -526,9 +531,17 @@ class ScopusAbstract(object):
 
     @property
     def ris(self):
-        """Return an RIS string representing a ScopusAbstract.
+        """Bibliographic entry in RIS (Research Information System Format)
+        format.
 
-        Only Journal aggregationTypes are supported.
+        Returns
+        -------
+        ris : str
+            The RIS string representing an item.
+
+        Notes
+        -----
+        Only Journal articles are supported.
         """
         if self.aggregationType == 'Journal':
             s = '''TY  - JOUR\n'''

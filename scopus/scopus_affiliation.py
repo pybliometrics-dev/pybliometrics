@@ -27,7 +27,7 @@ class ScopusAffiliation:
 
     @property
     def url(self):
-        """The URL for this affiliation."""
+        """URL to the affiliation's profile page."""
         return self._url
 
     @property
