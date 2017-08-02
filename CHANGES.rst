@@ -1,6 +1,19 @@
 Change Log
 ----------
 
+0.3.0
+~~~~~
+
+2017-08-02
+
+* Few bugfixes.
+* New property for ScopusAbstract: `abstract`.
+* Change latex key in ScopusAbstract.bibtex to <FirstauthorYearTitlefirstwordTitlelastword>
+* Raise ValueError in ScopusAbstract if .bibtex or .ris is called on an item whose aggregationType is not Journal.
+* Improved docstrings for ScopusAbstract.
+* New properties for ScopusAffiliation: `api_url`, `date_created`, `org_type`, `org_domain`, `org_url`.
+* In ScopusAffiliation, the `affiliation_id` returns the Scopus Affiliation ID from the result rather than the used aff_id.
+
 0.2.1
 ~~~~~
 
