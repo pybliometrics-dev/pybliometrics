@@ -490,12 +490,13 @@ class ScopusAbstract(object):
         bibtex : str
             A string representing a bibtex entry for the item.
 
-        Notes
-        -----
-        Only Journal articles are supported.
+        Raises
+        ------
+        ValueError : If the item's aggregationType is not Journal.
         """
-        if self.aggregationType == 'Journal':
-            template = '''@article{{{uuid},
+        if self.aggregationType != 'Journal':
+            raise ValueError('Only Journal articles supported.')
+        template = '''@article{{{key},
   author = {{{author}}},
   title = {{{title}}},
   journal = {{{journal}}},
@@ -515,19 +516,17 @@ class ScopusAbstract(object):
             pages = self.article_number
         else:
             pages = 'no pages found'
-        import uuid
-        return template.format(uuid=uuid.uuid1(),
-                               author=' and '.join([str(a.given_name) +
-                                                    ' ' +
-                                                    str(a.surname)
-                                                    for a in self.authors]),
-                               title=self.title,
-                               journal=self.publicationName,
-                               year=self.coverDate[0:4],
-                               volume=self.volume,
-                               number=self.issueIdentifier,
-                               pages=pages,
-                               doi=self.doi)
+        year = self.coverDate[0:4]
+        first = self.title.split()[0].title()
+        last = self.title.split()[-1].title()
+        key = ''.join([self.authors[0].surname, year, first, last])
+        authors = ' and '.join(["{} {}".format(a.given_name, a.surname)
+                                for a in self.authors])
+        bibtex = template.format(
+            key=key, author=authors, title=self.title,
+            journal=self.publicationName, year=year, volume=self.volume,
+            number=self.issueIdentifier, pages=pages, doi=self.doi)
+        return bibtex
 
     @property
     def ris(self):
@@ -539,27 +538,32 @@ class ScopusAbstract(object):
         ris : str
             The RIS string representing an item.
 
-        Notes
-        -----
-        Only Journal articles are supported.
+        Raises
+        ------
+        ValueError : If the item's aggregationType is not Journal.
         """
-        if self.aggregationType == 'Journal':
-            s = '''TY  - JOUR\n'''
-            for i, au in enumerate(self.authors):
-                s += 'AU  - {0}\n'.format(str(au.indexed_name))
-            s += 'TI  - {0}\n'.format(self.title)
-            s += 'JO  - {0}\n'.format(self.publicationName)
-            s += 'VL  - {0}\n'.format(self.volume)
-            if self.issueIdentifier is not None:
-                s += 'IS  - {0}\n'.format(self.issueIdentifier)
-            s += 'DA  - {0}\n'.format(self.coverDate)
-            s += 'SP  - {0}\n'.format(self.pageRange)
-            s += 'PY  - {0}\n'.format(self.coverDate[0:4])
-            s += 'DO  - {0}\n'.format(self.doi)
-            s += 'UR  - http://dx.doi.org/{0}\n'.format(self.doi)
-            s += 'ER  - \n\n'
-
-            return s
+        if self.aggregationType != 'Journal':
+            raise ValueError('Only Journal articles supported.')
+        template = '''TY  - JOUR
+TI  - {title}
+JO  - {journal}
+VL  - {volume}
+DA  - {date}
+SP  - {pages}
+PY  - {year}
+DO  - {doi}
+UR  - http://dx.doi.org/{doi}
+'''
+        ris = template.format(
+            title=self.title, journal=self.publicationName,
+            volume=self.volume, date=self.coverDate, pages=self.pageRange,
+            year=self.coverDate[0:4], doi=self.doi)
+        for au in self.authors:
+            ris += 'AU  - {}\n'.format(au.indexed_name)
+        if self.issueIdentifier is not None:
+            ris += 'IS  - {}\n'.format(self.issueIdentifier)
+        ris += 'ER  - \n\n'
+        return ris
 
 
 class _ScopusAuthor(object):
