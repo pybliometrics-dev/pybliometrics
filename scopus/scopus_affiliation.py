@@ -66,8 +66,6 @@ class ScopusAffiliation:
         The files are cached in ~/.scopus/affiliation/{aff_id}.
         """
 
-        self._affiliation_id = aff_id
-
         qfile = os.path.join(SCOPUS_AFFILIATION_DIR, str(aff_id))
         url = ('http://api.elsevier.com/content/affiliation/'
                'affiliation_id/{}'.format(aff_id))
@@ -76,6 +74,8 @@ class ScopusAffiliation:
 
         # public url
         self._url = xml.find('coredata/link[@rel="scopus-affiliation"]')
+        _aff_id = get_encoded_text(xml, 'coredata/dc:identifier')
+        self._aff_id = _aff_id.split(":")[-1]
         if self._url is not None:
             self._url = self.url.get('href')
         self.api_url = get_encoded_text(xml, 'coredata/prism:url')
