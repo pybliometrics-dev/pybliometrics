@@ -231,7 +231,7 @@ class ScopusAbstract(object):
         self._volume = get_encoded_text(coredata, 'prism:volume')
         self._issueIdentifier = get_encoded_text(coredata,
                                                  'prism:issueIdentifier')
-        self._article_number = get_encoded_text(coredata, 'dtd:article-number')
+        self._article_number = get_encoded_text(coredata, 'article-number')
         self._startingPage = get_encoded_text(coredata, 'prism:startingPage')
         self._endingPage = get_encoded_text(coredata, 'prism:endingPage')
         self._pageRange = get_encoded_text(coredata, 'prism:pageRange')
@@ -264,7 +264,7 @@ class ScopusAbstract(object):
         except TypeError:
             self._authors = None
         self._affiliations = [_ScopusAffiliation(aff) for aff
-                              in xml.findall('dtd:affiliation', ns)]
+                              in xml.findall('affiliation', ns)]
 
         # Parse items
         items = xml.find('item', ns)

@@ -190,17 +190,12 @@ class ScopusAuthor(object):
         # Real website for the author
         self._scopus_url = xml.find('coredata/link[@rel="scopus-author"]')
         if self._scopus_url is not None:
-            self._scopus_url = self.scopus_url.get('href')
+            self._scopus_url = self._scopus_url.get('href')
 
-        # API url for who cites them.
-        self._citedby_url = xml.find('coredata/link[@rel="scopus-citedby"]')
-        if self._citedby_url is not None:
-            self._citedby_url = self.citedby_url.get('href')
-
-        # API url for coauthors
+        # API URL for coauthors
         self._coauthor_url = xml.find('coredata/link[@rel="coauthor-search"]')
         if self._coauthor_url is not None:
-            self._coauthor_url = self.coauthor_url.get('href')
+            self._coauthor_url = self._coauthor_url.get('href')
 
     def get_coauthors(self):
         """Return list of coauthors, their scopus-id and research areas."""
