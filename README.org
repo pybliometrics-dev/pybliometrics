@@ -1,10 +1,16 @@
-#+TITLE: A Python API for accessing Scopus data
+#+TITLE: Python-based API-Wrapper to access Scopus
 
 * Installation
-Feeling brave? Try:
+Install stable version from PyPI:
 
 #+BEGIN_SRC sh
-pip install git+git://github.com/jkitchin/scopus
+pip install scopus
+#+END_SRC
+
+or directly from the GitHub repository:
+
+#+BEGIN_SRC sh
+pip install git+git://github.com/scopus-api/scopus
 #+END_SRC
 
 *Documentation*: https://scopus.readthedocs.io.

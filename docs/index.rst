@@ -1,5 +1,5 @@
-scopus: A Python API for accessing Scopus data
-==============================================
+scopus: Python-based API-Wrapper to access Scopus
+=================================================
 
 .. include:: installation.rst
 
