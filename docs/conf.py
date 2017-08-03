@@ -21,6 +21,7 @@ import os
 # relative to the documentation root, use os.path.abspath to make it
 # absolute, like shown here.
 sys.path.append(os.path.join(os.path.abspath(os.pardir)))
+autodoc_mock_imports = ["_tkinter"]
 
 # Get the project root dir, which is the parent dir of this
 cwd = os.getcwd()
@@ -106,8 +107,20 @@ html_theme = 'alabaster'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#
-# html_theme_options = {}
+html_theme_options = {
+    'github_user': 'scopus-api',
+    'github_repo': 'scopus',
+    'github_banner': 'true',
+    'github_button': 'true',
+    'github_type': 'star',
+}
+html_sidebars = {
+    '**': [
+        'about.html',
+        'navigation.html',
+        'searchbox.html',
+    ]
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
