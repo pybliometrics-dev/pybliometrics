@@ -125,7 +125,7 @@ class ScopusAbstract(object):
     @property
     def authors(self):
         """A list of scopus_api._ScopusAuthor objects."""
-        if self._authors is not None:
+        if self._authors:
             return self._authors
         else:
             raise TypeError("Could not load authors. "
@@ -213,20 +213,20 @@ class ScopusAbstract(object):
             raise Exception('\n{0}\n{1}'.format(EID, self.xml))
 
         # Parse coredata
-        coredata = xml.find('dtd:coredata', ns)
+        coredata = xml.find('coredata', ns)
         self._url = get_encoded_text(coredata, 'prism:url')
         self.identifier = get_encoded_text(coredata, 'dc:identifier')
-        self.eid = get_encoded_text(coredata, 'dtd:eid')
+        self.eid = get_encoded_text(coredata, 'eid')
         self._doi = get_encoded_text(coredata, 'prism:doi')
         self._title = get_encoded_text(coredata, 'dc:title')
         self._aggregationType = get_encoded_text(coredata,
                                                  'prism:aggregationType')
         self._publicationName = get_encoded_text(coredata,
                                                  'prism:publicationName')
-        self._srctype = get_encoded_text(coredata, 'dtd:srctype')
-        self._citedby_count = get_encoded_text(coredata, 'dtd:citedby-count')
+        self._srctype = get_encoded_text(coredata, 'srctype')
+        self._citedby_count = get_encoded_text(coredata, 'citedby-count')
         self._publisher = get_encoded_text(coredata, 'dc:publisher')
-        self._source_id = get_encoded_text(coredata, 'dtd:source-id')
+        self._source_id = get_encoded_text(coredata, 'source-id')
         self._issn = get_encoded_text(coredata, 'prism:issn')
         self._volume = get_encoded_text(coredata, 'prism:volume')
         self._issueIdentifier = get_encoded_text(coredata,
@@ -241,24 +241,22 @@ class ScopusAbstract(object):
         self._abstract = get_encoded_text(coredata,
                                           'dc:description/abstract/ce:para')
 
-        sl = coredata.find('dtd:link[@rel="scopus"]', ns).get('href')
-        self_link = coredata.find('dtd:link[@rel="self"]', ns).get('href')
-        cite_link = coredata.find('dtd:link[@rel="cited-by"]', ns)
+        self.scopus_link = coredata.find('link[@rel="scopus"]', ns).get('href')
+        self.self_link = coredata.find('link[@rel="self"]', ns).get('href')
+        cite_link = coredata.find('link[@rel="cited-by"]', ns)
         if cite_link:
             cite_link = cite_link.get('href')
-        self.scopus_link = sl
-        self.self_link = self_link
         self.cite_link = cite_link
 
         # Parse subject-areas
-        subjectAreas = xml.find('dtd:subject-areas', ns)
+        subjectAreas = xml.find('subject-areas', ns)
         try:
             self._subjectAreas = [a.text for a in subjectAreas]
         except:
             self._subjectAreas = None
 
         # Parse authors
-        authors = xml.find('dtd:authors', ns)
+        authors = xml.find('authors', ns)
         try:
             self._authors = [_ScopusAuthor(author) for author in authors]
         except TypeError:
@@ -593,9 +591,9 @@ class _ScopusAuthor(object):
         self.surname = get_encoded_text(author, 'ce:surname')
         self.initials = get_encoded_text(author, 'ce:initials')
         self.author_url = get_encoded_text(author, 'dtd:author-url')
-        self.auid = author.attrib.get('auid', None)
+        self.auid = author.attrib.get('auid')
         self.scopusid = self.auid
-        self.seq = author.attrib.get('seq', None)
+        self.seq = author.attrib.get('seq')
         self.affiliations = [_ScopusAuthorAffiliation(aff)
                              for aff in author.findall('dtd:affiliation', ns)]
 
