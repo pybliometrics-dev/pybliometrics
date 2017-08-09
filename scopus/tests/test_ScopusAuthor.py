@@ -24,9 +24,9 @@ def test_author_id():
 def test_author_impact_factor():
     (ncites, npapers, aif) = au.author_impact_factor(refresh=False)
     expected = (504, 11, 45.81818181818182)
-    assert_true(expected[0] >= ncites)
-    assert_true(expected[1] >= npapers)
-    assert_true(expected[2] >= aif)
+    assert_true(expected[0] <= ncites)
+    assert_true(expected[1] <= npapers)
+    assert_true(expected[2] <= aif)
 
 
 def test_coauthor_url():
