@@ -13,7 +13,6 @@ scopus provides classes to interact with the various Scopus APIs (see https://de
 .. currentmodule:: scopus
 
 .. autosummary::
-   :toctree: reference/
 
    ScopusAbstract
    ScopusAuthor
@@ -25,7 +24,6 @@ There is one class to provide reports:
 
 
 .. autosummary::
-   :toctree: reference/
 
    report
 
