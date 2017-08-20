@@ -1,6 +1,13 @@
 Change Log
 ----------
 
+0.4.1
+~~~~~
+
+2017-08-20
+
+* Remove unwanted print() statement.
+
 0.4
 ~~~
 

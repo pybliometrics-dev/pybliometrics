@@ -157,7 +157,6 @@ class ScopusAuthor(object):
         aff_ids = [el.attrib.get('affiliation-id') for el in
                    xml.findall('author-profile/affiliation-history/affiliation')
                    if el is not None and len(list(el.find("ip-doc").iter())) > 1]
-        print(aff_ids)
         affs = [ScopusAffiliation(aff_id, refresh=refresh_aff) for aff_id in aff_ids]
         self._affiliation_history = affs
 
