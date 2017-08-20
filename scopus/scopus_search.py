@@ -1,6 +1,7 @@
 import os
 import sys
 import xml.etree.ElementTree as ET
+import hashlib
 
 from scopus.utils import download, ns
 from scopus.scopus_api import ScopusAbstract
@@ -55,10 +56,7 @@ class ScopusSearch(object):
         The EIDs are stored as a property named EIDS.
         """
 
-        qfile = os.path.join(SCOPUS_SEARCH_DIR,
-                             # We need to remove / in a DOI here so we can save
-                             # it as a file.
-                             query.replace('/', '_slash_'))
+        qfile = os.path.join(SCOPUS_SEARCH_DIR, hashlib.md5(query).hexdigest())
 
         if os.path.exists(qfile) and not refresh:
             with open(qfile) as f:
