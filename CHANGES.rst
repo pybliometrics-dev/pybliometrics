@@ -1,6 +1,16 @@
 Change Log
 ----------
 
+0.4
+~~~
+
+2017-08-20
+
+* Use refresh_affiliation parameter in ScopusAuthor.
+* Improve background service to load user's API key.
+* Ask user for API key if it can't be found.
+* New property for ScopusAbstract: `citation_count`.
+
 0.3.1
 ~~~~~
 
