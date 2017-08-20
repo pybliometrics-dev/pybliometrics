@@ -93,7 +93,7 @@ class ScopusAuthor(object):
         """URL to Scopus coauthor page."""
         return self._coauthor_url
 
-    def __init__(self, author_id, refresh=False, level=1):
+    def __init__(self, author_id, refresh=False, refresh_aff=False, level=1):
         """Class to represent a Scopus Author query by the scopus-id.
 
         Parameters
@@ -103,6 +103,10 @@ class ScopusAuthor(object):
 
         refresh : bool (optional, default=False)
             Whether to refresh the cached file (if it exists) or not.
+
+        refresh_aff : bool (optional, default=False)
+            Whether to refresh the cached corresponding affiliation views
+            (if they exist) or not.
 
         level : int (optional, default=1)
             Number of * to print in property __str__.
@@ -148,7 +152,7 @@ class ScopusAuthor(object):
         aff_ids = [el.attrib.get('affiliation-id') for el in
                    xml.findall('author-profile/affiliation-history/affiliation')
                    if el is not None and len(list(el.find("ip-doc").iter())) > 1]
-        affs = [ScopusAffiliation(aff_id, refresh=refresh) for aff_id in aff_ids]
+        affs = [ScopusAffiliation(aff_id, refresh=refresh_aff) for aff_id in aff_ids]
         self._affiliation_history = affs
 
         date_created = xml.find('author-profile/date-created', ns)
