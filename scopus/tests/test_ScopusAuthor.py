@@ -29,6 +29,11 @@ def test_author_impact_factor():
     assert_true(expected[2] <= aif)
 
 
+def test_citation_count():
+    expected = 5514
+    assert_true(au.citation_count >= expected)
+
+
 def test_coauthor_url():
     expected = 'http://api.elsevier.com/content/search/author?co-author=7004212771'
     assert_equal(au.coauthor_url, expected)

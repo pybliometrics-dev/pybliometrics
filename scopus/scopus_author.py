@@ -40,8 +40,13 @@ class ScopusAuthor(object):
 
     @property
     def ncited_by(self):
-        """Total number of citations."""
+        """Total number of citing authors."""
         return self._ncited_by
+
+    @property
+    def citation_count(self):
+        """Total number of citing items."""
+        return self._citation_count
 
     @property
     def ncoauthors(self):
@@ -136,8 +141,8 @@ class ScopusAuthor(object):
         _author_id = get_encoded_text(xml, 'coredata/dc:identifier')
         self._author_id = _author_id.split(":")[-1]
 
-        ncitations = get_encoded_text(xml, 'coredata/citation-count')
-        self.ncitations = int(ncitations) if ncitations is not None else 0
+        citation_count = get_encoded_text(xml, 'coredata/citation-count')
+        self._citation_count = int(citation_count) if citation_count is not None else 0
 
         ncited_by = get_encoded_text(xml, 'coredata/cited-by-count')
         self._ncited_by = int(ncited_by) if ncited_by is not None else 0
@@ -152,6 +157,7 @@ class ScopusAuthor(object):
         aff_ids = [el.attrib.get('affiliation-id') for el in
                    xml.findall('author-profile/affiliation-history/affiliation')
                    if el is not None and len(list(el.find("ip-doc").iter())) > 1]
+        print(aff_ids)
         affs = [ScopusAffiliation(aff_id, refresh=refresh_aff) for aff_id in aff_ids]
         self._affiliation_history = affs
 
@@ -311,7 +317,7 @@ class ScopusAuthor(object):
             s += ['http://orcid.org/' + orcid]
 
         s += ['{} documents cited {} times by {} people ({} coauthors)'.format(
-              self._ndocuments, self._ncitations, self._ncited_by,
+              self._ndocuments, self._citation_count, self._ncited_by,
               self._ncoauthors)]
         s += ['#first author papers {0}'.format(self.n_first_author_papers())]
         s += ['#last author papers {0}'.format(self.n_last_author_papers())]
