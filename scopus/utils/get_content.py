@@ -1,6 +1,8 @@
 import os
 import requests
 
+import scopus
+
 
 def download(url, params=None, accept="xml"):
     """Helper function to download a file and return its content.
@@ -35,7 +37,7 @@ def download(url, params=None, accept="xml"):
     if accept.lower() not in accepted:
         raise ValueError('accept parameter must be one of ' +
                          ', '.join(accepted))
-    key = load_api_key()
+    key = scopus.MY_API_KEY
     header = {'Accept': 'application/{}'.format(accept), 'X-ELS-APIKey': key}
     resp = requests.get(url, headers=header, params=params)
     resp.raise_for_status()  # Raise status code if necessary
@@ -70,21 +72,3 @@ def get_content(qfile, refresh, *args, **kwds):
         with open(qfile, 'wb') as f:
             f.write(content)
     return content
-
-
-def load_api_key():
-    """Helper function to return MY_API_KEY if it is correctly specified.
-
-    Returns
-    -------
-    MY_API_KEY : str
-        The user's API key for interaction with Scopus database.
-    """
-    SCOPUS_API_FILE = os.path.expanduser("~/.scopus/my_scopus.py")
-    try:
-        with open(SCOPUS_API_FILE) as f:
-            exec(f.read(), globals())
-            return globals()["MY_API_KEY"]
-    except:
-        raise Exception('No API key found. Please create {} it and define '
-                        'variable MY_API_KEY in it.'.format(SCOPUS_API_FILE))
