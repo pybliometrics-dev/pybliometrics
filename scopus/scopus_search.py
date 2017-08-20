@@ -51,7 +51,8 @@ class ScopusSearch(object):
 
         Notes
         -----
-        XML results are cached in ~/.scopus/search/{query}.
+        XML results are cached in ~/.scopus/search/{fname} where fname is the
+        hashed version of query.
 
         The EIDs are stored as a property named EIDS.
         """
