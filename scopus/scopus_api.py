@@ -125,11 +125,7 @@ class ScopusAbstract(object):
     @property
     def authors(self):
         """A list of scopus_api._ScopusAuthor objects."""
-        if self._authors:
-            return self._authors
-        else:
-            raise TypeError("Could not load authors. "
-                            "Did you load with view=META_ABS?")
+        return self._authors
 
     @property
     def affiliations(self):
@@ -149,8 +145,7 @@ class ScopusAbstract(object):
         if self._references is not None:
             return self._references.attrib['refcount']
         else:
-            raise TypeError("Could not load article references. "
-                            "Did you load with view=FULL?")
+            return None
 
     @property
     def references(self):
