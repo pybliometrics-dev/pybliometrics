@@ -1,5 +1,8 @@
 import os
 import requests
+import sys
+
+import scopus
 
 
 def download(url, params=None, accept="xml"):
@@ -30,15 +33,23 @@ def download(url, params=None, accept="xml"):
     -------
     resp : byte-like object
         The content of the file, which needs to be serialized.
+
+    Notes
+    -----
+    Loads the API Key into the scopus namespace on first run.
     """
     accepted = ("json", "xml", "atom+xml")
     if accept.lower() not in accepted:
         raise ValueError('accept parameter must be one of ' +
                          ', '.join(accepted))
-    key = load_api_key()
+    try:
+        key = scopus.MY_API_KEY
+    except AttributeError:
+        load_api_key()
+        key = scopus.MY_API_KEY
     header = {'Accept': 'application/{}'.format(accept), 'X-ELS-APIKey': key}
     resp = requests.get(url, headers=header, params=params)
-    resp.raise_for_status()  # Raise status code if necessary
+    resp.raise_for_status()
     return resp
 
 
@@ -73,18 +84,20 @@ def get_content(qfile, refresh, *args, **kwds):
 
 
 def load_api_key():
-    """Helper function to return MY_API_KEY if it is correctly specified.
-
-    Returns
-    -------
-    MY_API_KEY : str
-        The user's API key for interaction with Scopus database.
+    """Helper function to create file with API Key on the first run.
+    Function needs to be here because in __init__.py it causes problems
+    with RTFD.io.
     """
     SCOPUS_API_FILE = os.path.expanduser("~/.scopus/my_scopus.py")
-    try:
-        with open(SCOPUS_API_FILE) as f:
-            exec(f.read(), globals())
-            return globals()["MY_API_KEY"]
-    except:
-        raise Exception('No API key found. Please create {} it and define '
-                        'variable MY_API_KEY in it.'.format(SCOPUS_API_FILE))
+    with open(SCOPUS_API_FILE, "a+") as f:
+        f.seek(0)
+        exec(f.read(), globals())
+        if "MY_API_KEY" not in globals():
+            prompt = ("No API Key detected. Please enter a valid API Key "
+                      "obtained from http://dev.elsevier.com/myapikey.html: \n")
+            if sys.version_info >= (3, 0):
+                key = input(prompt)
+            else:
+                key = raw_input(prompt)
+            f.write('MY_API_KEY = "{}"'.format(key))
+            scopus.MY_API_KEY = key
