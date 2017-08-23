@@ -1,6 +1,14 @@
 Change Log
 ----------
 
+0.4.2
+~~~~~
+
+2017-08-23
+
+* Fix bug with generating `my_scopus.py` on Python 3.
+* In ScopusAbstract, do not raise TypeErrors for information not present in current view.
+
 0.4.1
 ~~~~~
 
