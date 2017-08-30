@@ -1,6 +1,13 @@
 Change Log
 ----------
 
+0.4.3
+~~~~~
+
+2017-08-30
+
+* Update ScopusAbstract to reflect change in the API.
+
 0.4.2
 ~~~~~
 

@@ -202,6 +202,12 @@ class ScopusAbstract(object):
         params = {'view': view}
         xml = ET.fromstring(get_content(qfile, url=url, refresh=refresh,
                                         params=params))
+        # Remove default namespace if present
+        remove = u'{http://www.elsevier.com/xml/svapi/abstract/dtd}'
+        nsl = len(remove)
+        for elem in xml.getiterator():
+            if elem.tag.startswith(remove):
+                elem.tag = elem.tag[nsl:]
 
         self.xml = xml
         if xml.tag == 'service-error':
