@@ -427,18 +427,18 @@ class ScopusAbstract(object):
     @property
     def html(self):
         """Returns an HTML citation."""
-        s = ('{authors}, {title}, {journal}, {volissue}, {pages}, '
+        s = (u'{authors}, {title}, {journal}, {volissue}, {pages}, '
              '({date}). {doi}.')
 
         au_link = ('<a href="http://www.scopus.com/authid/detail.url'
                    '?origin=AuthorProfile&authorId={0}">{1}</a>')
 
         if len(self.authors) > 1:
-            authors = ', '.join([au_link.format(a.auid,
+            authors = u', '.join([au_link.format(a.auid,
                                                 (str(a.given_name) +
                                                  ' ' + str(a.surname)))
                                  for a in self.authors[0:-1]])
-            authors += (' and ' +
+            authors += (u' and ' +
                         au_link.format(self.authors[-1].auid,
                                        (str(self.authors[-1].given_name) +
                                         ' ' +
@@ -448,7 +448,7 @@ class ScopusAbstract(object):
             authors = au_link.format(a.auid,
                                      str(a.given_name) + ' ' + str(a.surname))
 
-        title = '<a href="{link}">{title}</a>'.format(link=self.scopus_link,
+        title = u'<a href="{link}">{title}</a>'.format(link=self.scopus_link,
                                                       title=self.title)
 
         jname = self.publicationName
@@ -460,18 +460,18 @@ class ScopusAbstract(object):
         volume = self.volume
         issue = self.issueIdentifier
         if volume and issue:
-            volissue = '<b>{0}({1})</b>'.format(volume, issue)
+            volissue = u'<b>{0}({1})</b>'.format(volume, issue)
         elif volume:
-            volissue = '<b>{0}</b>'.format(volume)
+            volissue = u'<b>{0}</b>'.format(volume)
         else:
             volissue = 'no volume'
         date = self.coverDate
         if self.pageRange:
-            pages = 'p. {0}'.format(self.pageRange)
+            pages = u'p. {0}'.format(self.pageRange)
         elif self.startingPage:
-            pages = 'p. {self.startingPage}'.format(self=self)
+            pages = u'p. {self.startingPage}'.format(self=self)
         elif self.article_number:
-            pages = 'Art. No. {self.article_number}, '.format(self=self)
+            pages = u'Art. No. {self.article_number}, '.format(self=self)
         else:
             pages = '(no pages found)'
         doi = '<a href="http://dx.doi.org/{0}">doi:{0}</a>'.format(self.doi,
@@ -495,7 +495,7 @@ class ScopusAbstract(object):
         """
         if self.aggregationType != 'Journal':
             raise ValueError('Only Journal articles supported.')
-        template = '''@article{{{key},
+        template = u'''@article{{{key},
   author = {{{author}}},
   title = {{{title}}},
   journal = {{{journal}}},
@@ -543,7 +543,7 @@ class ScopusAbstract(object):
         """
         if self.aggregationType != 'Journal':
             raise ValueError('Only Journal articles supported.')
-        template = '''TY  - JOUR
+        template = u'''TY  - JOUR
 TI  - {title}
 JO  - {journal}
 VL  - {volume}
