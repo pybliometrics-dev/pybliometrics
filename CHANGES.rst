@@ -1,6 +1,13 @@
 Change Log
 ----------
 
+0.4.4
+~~~~~
+
+2017-09-06
+
+* Fix bugs related to unicode on Python2.7 and installation on Windows.
+
 0.4.3
 ~~~~~
 
