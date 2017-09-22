@@ -15,6 +15,7 @@ scopus.ScopusAbstract
 
    .. autosummary::
    
+      ~ScopusAbstract.abstract
       ~ScopusAbstract.affiliations
       ~ScopusAbstract.aggregationType
       ~ScopusAbstract.article_number
@@ -24,6 +25,7 @@ scopus.ScopusAbstract
       ~ScopusAbstract.citationType
       ~ScopusAbstract.citedby_count
       ~ScopusAbstract.coverDate
+      ~ScopusAbstract.description
       ~ScopusAbstract.doi
       ~ScopusAbstract.endingPage
       ~ScopusAbstract.html

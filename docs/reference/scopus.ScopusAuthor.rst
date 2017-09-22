@@ -4,7 +4,7 @@ scopus.ScopusAuthor
 .. currentmodule:: scopus
 
 .. autoclass:: ScopusAuthor
-   
+
    .. rubric:: Methods
 
    .. autosummary::
@@ -18,13 +18,14 @@ scopus.ScopusAuthor
       ~ScopusAuthor.n_journal_articles
       ~ScopusAuthor.n_last_author_papers
       ~ScopusAuthor.n_yearly_publications
-      
+
    .. rubric:: Attributes
 
    .. autosummary::
    
       ~ScopusAuthor.affiliation_history
       ~ScopusAuthor.author_id
+      ~ScopusAuthor.citation_count
       ~ScopusAuthor.citedby_url
       ~ScopusAuthor.coauthor_url
       ~ScopusAuthor.current_affiliation
