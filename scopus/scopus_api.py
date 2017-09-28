@@ -62,7 +62,7 @@ class ScopusAbstract(object):
 
     @property
     def citedby_count(self):
-        """Number of times the abstract has been cited."""
+        """Number of articles citing the abstract."""
         return int(self._citedby_count)
 
     @property
@@ -77,7 +77,10 @@ class ScopusAbstract(object):
 
     @property
     def issn(self):
-        """ISSN of the publisher."""
+        """ISSN of the publisher.
+        Note: If E-ISSN is known to Scopus, this returns both
+        ISSN and E-ISSN in random order separated by blank space.
+        """
         return self._issn
 
     @property
@@ -117,8 +120,8 @@ class ScopusAbstract(object):
 
     @property
     def subjectAreas(self):
-        """List of subject areas of article.  Requires the FULL view of
-        the article.
+        """List of subject areas of article.
+        Note: Requires the FULL view of the article.
         """
         return self._subjectAreas
 
@@ -139,8 +142,8 @@ class ScopusAbstract(object):
 
     @property
     def refcount(self):
-        """Number of references of an article.  Requires the FULL view of
-        the article.
+        """Number of references of an article.
+        Note: Requires the FULL view of the article.
         """
         if self._references is not None:
             return self._references.attrib['refcount']
@@ -149,14 +152,15 @@ class ScopusAbstract(object):
 
     @property
     def references(self):
-        """Return EIDs of references of an article."""
+        """Return EIDs of references of an article.
+        Note: Requires the FULL view of the article.
+        """
         if self._references is not None:
             eids = [r.find("ref-info/refd-itemidlist/itemid", ns).text for r
                     in self._references.findall("reference", ns)]
             return ["2-s2.0-" + eid for eid in eids]
         else:
-            raise TypeError("Could not load article references. "
-                            "Did you load with view=FULL?")
+            return None
 
     @property
     def abstract(self):
@@ -166,7 +170,7 @@ class ScopusAbstract(object):
     @property
     def description(self):
         """Return the description of a record.
-        Note: This may be empty. You probably want the abstract instead.
+        Note: This may be empty.  You probably want the abstract instead.
         """
         return self._description
 
@@ -176,7 +180,7 @@ class ScopusAbstract(object):
         Parameters
         ----------
         EID : str
-            The Scopus ID of an abstract.
+            The Scopus ID (EID) of an abstract.
 
         view : str (optional, default=META_ABS)
             The view of the file that should be downloaded.  Currently
