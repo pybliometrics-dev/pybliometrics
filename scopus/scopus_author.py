@@ -108,6 +108,23 @@ class ScopusAuthor(object):
         return [(a.text, freqs[int(a.get("code"))], a.get("abbrev"), a.get("code"))
                 for a in self._area_elements]
 
+    @property
+    def publication_history(self):
+        """List of tuples of authored publications in the form
+        (title, abbreviation, type, issn), where issn is only given
+        for journals.
+        """
+        hist = []
+        for pub in self._pub_hist:
+            try:
+                issn = pub.find("issn").text
+            except AttributeError:
+                issn = None
+            hist.append((pub.find("sourcetitle").text,
+                         pub.find("sourcetitle-abbrev").text,
+                         pub.get("type"), issn))
+        return hist
+
     def __init__(self, author_id, refresh=False, refresh_aff=False, level=1):
         """Class to represent a Scopus Author query by the scopus-id.
 
@@ -214,6 +231,10 @@ class ScopusAuthor(object):
         self._coauthor_url = xml.find('coredata/link[@rel="coauthor-search"]')
         if self._coauthor_url is not None:
             self._coauthor_url = self._coauthor_url.get('href')
+
+        # Publication history
+        pub_hist_elements = self.xml.findall('author-profile/journal-history/')
+        self._pub_hist = pub_hist_elements
 
     def get_coauthors(self):
         """Return list of coauthors, their scopus-id and research areas."""
@@ -348,9 +369,7 @@ class ScopusAuthor(object):
                             subsequent_indent='  ')]
 
         # journals published in
-        temp_s = [el.text for el in
-                  self.xml.findall('author-profile/journal-history/'
-                                   'journal/sourcetitle-abbrev')]
+        temp_s = [el.find('sourcetitle-abbrev').text for el in self._pub_hist]
         s += ['\nPublishes in:\n' +
               textwrap.fill(', '.join(temp_s), initial_indent='  ',
                             subsequent_indent='  ')]

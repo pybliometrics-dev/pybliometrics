@@ -38,5 +38,6 @@ scopus.ScopusAuthor
       ~ScopusAuthor.ncoauthors
       ~ScopusAuthor.ndocuments
       ~ScopusAuthor.orcid
+      ~ScopusAuthor.publication_history
       ~ScopusAuthor.scopus_url
       ~ScopusAuthor.subject_areas

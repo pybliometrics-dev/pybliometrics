@@ -120,6 +120,14 @@ def test_orcid():
     assert_equal(au.orcid, '0000-0003-2625-9232')
 
 
+def publication_history():
+    hist = au.publication_history
+    assert_true(isinstance(areas, list))
+    assert_true(len(areas) > 0)
+    expected = ('ACS Catalysis', 'ACS Catal.', 'j', '21555435')
+    assert_true(expected in areas)
+
+
 def test_scopus_url():
     expected = 'https://www.scopus.com/authid/detail.uri?\
 partnerID=HzOxMe3b&authorId=7004212771&origin=inward'
