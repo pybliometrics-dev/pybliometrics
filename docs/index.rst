@@ -44,6 +44,7 @@ Indices and tables
    :hidden:
 
    examples
+   tips
    reference
    changelog
    contributing
