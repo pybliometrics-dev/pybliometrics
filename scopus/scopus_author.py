@@ -98,6 +98,16 @@ class ScopusAuthor(object):
         """URL to Scopus coauthor page."""
         return self._coauthor_url
 
+    @property
+    def subject_areas(self):
+        """List of tuples of author subject areas in the form
+        (area, frequency, abbreviation, code), where frequency is the
+        number of publications in this subject area.
+        """
+        freqs = self._subject_freq
+        return [(a.text, freqs[int(a.get("code"))], a.get("abbrev"), a.get("code"))
+                for a in self._area_elements]
+
     def __init__(self, author_id, refresh=False, refresh_aff=False, level=1):
         """Class to represent a Scopus Author query by the scopus-id.
 
@@ -168,17 +178,16 @@ class ScopusAuthor(object):
         else:
             self._date_created = (None, None, None)
         # Research areas
-        area_elements = xml.findall('subject-areas/subject-area')
-        self._area_elements = area_elements
+        self._area_elements = xml.findall('subject-areas/subject-area')
         # {code: name}
-        d = {int(ae.attrib['code']): ae.text for ae in area_elements}
+        d = {int(ae.attrib['code']): ae.text for ae in self._area_elements}
 
-        classifications = xml.findall('author-profile/classificationgroup/'
-                                      'classifications[@type="ASJC"]/'
-                                      'classification')
+        freqs = xml.findall('author-profile/classificationgroup/'
+                            'classifications[@type="ASJC"]/classification')
         # {code: frequency}
         c = {int(cls.text): int(cls.attrib['frequency'])
-             for cls in classifications}
+             for cls in freqs}
+        self._subject_freq = c
 
         categories = [(d[code], c[code]) for code in d]
         categories.sort(reverse=True, key=itemgetter(1))

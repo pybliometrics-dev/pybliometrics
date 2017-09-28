@@ -39,3 +39,4 @@ scopus.ScopusAuthor
       ~ScopusAuthor.ndocuments
       ~ScopusAuthor.orcid
       ~ScopusAuthor.scopus_url
+      ~ScopusAuthor.subject_areas

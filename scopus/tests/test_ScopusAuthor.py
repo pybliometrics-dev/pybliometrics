@@ -124,3 +124,12 @@ def test_scopus_url():
     expected = 'https://www.scopus.com/authid/detail.uri?\
 partnerID=HzOxMe3b&authorId=7004212771&origin=inward'
     assert_equal(au.scopus_url, expected)
+
+
+def test_subject_areas():
+    areas = au.subject_areas
+    assert_true(isinstance(areas, list))
+    assert_true(len(areas) > 0)
+    expected = ('Analytical Chemistry', 1, 'CHEM', '1602')
+    # Frequency might differ
+    assert_true(expected in areas)
