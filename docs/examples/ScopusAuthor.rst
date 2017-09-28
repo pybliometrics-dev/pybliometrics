@@ -33,16 +33,22 @@ You can access the affiliation history as a list of `ScopusAffiliation <../refer
 
 .. code-block:: python
 
-    >>> au.affiliation_history
-    [<scopus.scopus_affiliation.ScopusAffiliation object at 0x7ff0ed28fda0>, <scopus.scopus_affiliation.ScopusAffiliation object at 0x7ff0ed29d128>, <scopus.scopus_affiliation.ScopusAffiliation object at 0x7ff0ed2a9cf8>, <scopus.scopus_affiliation.ScopusAffiliation object at 0x7ff0ed2a9ef0>, <scopus.scopus_affiliation.ScopusAffiliation object at 0x7ff0ed2a9fd0>]
+    >>> au.affiliation_history[:3]
+    [<scopus.scopus_affiliation.ScopusAffiliation object at 0x7ff0ed28fda0>, <scopus.scopus_affiliation.ScopusAffiliation object at 0x7ff0ed29d128>, <scopus.scopus_affiliation.ScopusAffiliation object at 0x7ff0ed2a9cf8>]
     >>> for aff in au.affiliation_history:
     ...     print(aff.name)
+    ...     print(aff.affiliation_id)
+    ...     print(aff.city, aff.country)
     ... 
+    Department of Chemical Engineering
+    110785688
+    Pittsburgh United States
+    Department of Mechanical Engineering
+    113587821
+    Pittsburgh United States
     National Energy Technology Laboratory, Morgantown
-    TECH Lab
-    National Energy Technology Laboratory, Pittsburgh
-    United States Department of Energy
-    Fritz Haber Institute of the Max Planck Society
+    60026531
+    Morgantown United States
 
 
 There are a number of getter methods to obtain the co-authors (as ScopusAuthor objects), the written documents (as `ScopusAbstract <../reference/scopus.ScopusAbstract>`_ objects) and the number of publications per year (using `ScopusSearch <../reference/scopus.ScopusSearch>`_ and returning a `collections.Counter <https://docs.python.org/2/library/collections.html#collections.Counter>`_ object):

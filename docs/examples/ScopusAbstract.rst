@@ -3,7 +3,7 @@ Scopus Abstract
 
 :doc:`ScopusAbstract <../reference/scopus.ScopusAbstract>` implements the `Abstract Retrieval API <https://api.elsevier.com/documentation/AbstractRetrievalAPI.wadl>`_.
 
-It takes a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_ and an optional refresh boolean value.  Retrieving these results is not fast, so we cache them to speed up subsequent uses of the code.  Sometimes you may want new results, e.g. to get citation counts, and then you set `refresh=True`.
+It takes a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_.  Retrieving these results is not fast, so we cache them to speed up subsequent uses of the code.  Sometimes you may want new results, e.g. to update citation counts, and then you set `refresh=True`.
 
 You initalize the class with Scopus' Electronic Identifier (EID):
 
@@ -86,5 +86,21 @@ You get the authors as a list:
 
     >>> for au in ab.authors:
     ...     print(au)
+    ...     print(au.auid)
     ... 
     1. John R. Kitchin scopusid:7004212771 affiliation_id:60027950
+    7004212771
+
+
+Finally to obtain information of all listed affiliations:
+
+.. code-block:: python
+
+    >>> for aff in ab.affiliations:
+    ...     print(aff.affilname)
+    ...     print(aff.id)
+    ...     print(aff.city, aff.country)
+    ...
+    Carnegie Mellon University
+    60027950
+    Pittsburgh United States
