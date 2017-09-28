@@ -60,7 +60,7 @@ def test_get_abstracts():
 
 def test_get_coauthors():
     coauthors = au.get_coauthors()
-    assert_true(len(coauthors) >= 159)
+    assert_true(len(coauthors) >= 158)
 
 
 def test_get_document_summary():
