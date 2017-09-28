@@ -4,6 +4,15 @@ Change Log
 .. toctree::
 
 
+0.5
+~~~
+
+2017-09-28
+
+* New properties for ScopusAuthor: publication_history and subject_areas.
+* Update namespace in ScopusAbstract to retrieve affiliation information.
+* Complete affiliation information in ScopusAbstract.
+
 0.4.4
 ~~~~~
 
