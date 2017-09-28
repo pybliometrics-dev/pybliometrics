@@ -609,7 +609,9 @@ class _ScopusAffiliation(object):
     def __init__(self, affiliation):
         """affiliation should be an xml element from the main abstract"""
         self.affiliation = affiliation
-        self.affilname = get_encoded_text(affiliation, 'dtd:affilname')
+        self.affilname = get_encoded_text(affiliation, 'affilname')
+        self.city = get_encoded_text(affiliation, 'affiliation-city')
+        self.country = get_encoded_text(affiliation, 'affiliation-country')
         self.href = affiliation.attrib.get('href', None)
         self.id = affiliation.attrib.get('id', None)
 

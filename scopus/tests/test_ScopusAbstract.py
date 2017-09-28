@@ -13,7 +13,14 @@ ab = scopus.ScopusAbstract("2-s2.0-84930616647", view="FULL", refresh=True)
 def test_affiliations():
     affs = ab.affiliations
     assert_true(len(affs) == 1)
-    assert_true(isinstance(affs[0], scopus.scopus_api._ScopusAffiliation))
+    aff = affs[0]
+    assert_true(isinstance(aff, scopus.scopus_api._ScopusAffiliation))
+    assert_equal(aff.id, '60027950')
+    assert_equal(aff.affilname, 'Carnegie Mellon University')
+    assert_equal(aff.city, 'Pittsburgh')
+    assert_equal(aff.country, 'United States')
+    link = 'http://api.elsevier.com/content/affiliation/affiliation_id/60027950'
+    assert_equal(aff.href, link)
 
 
 def test_aggregationType():
