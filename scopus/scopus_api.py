@@ -595,12 +595,12 @@ class _ScopusAuthor(object):
         self.given_name = get_encoded_text(author, 'ce:given-name')
         self.surname = get_encoded_text(author, 'ce:surname')
         self.initials = get_encoded_text(author, 'ce:initials')
-        self.author_url = get_encoded_text(author, 'dtd:author-url')
+        self.author_url = get_encoded_text(author, 'author-url')
         self.auid = author.attrib.get('auid')
         self.scopusid = self.auid
         self.seq = author.attrib.get('seq')
         self.affiliations = [_ScopusAuthorAffiliation(aff)
-                             for aff in author.findall('dtd:affiliation', ns)]
+                             for aff in author.findall('affiliation', ns)]
 
     def __str__(self):
         s = """{0.seq}. {0.given_name} {0.surname} scopusid:{0.auid} """
