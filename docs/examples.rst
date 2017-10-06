@@ -29,4 +29,7 @@ Retrieval APIs
 report
 ~~~~~~
 
-.. include:: examples/report.rst
+.. toctree::
+    :maxdepth: 1
+
+    examples/report.rst

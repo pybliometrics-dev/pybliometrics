@@ -11,4 +11,4 @@ Development Lead
 Contributors
 ------------
 
-None yet.
+See `contributors <https://github.com/scopus-api/scopus/graphs/contributors>`_

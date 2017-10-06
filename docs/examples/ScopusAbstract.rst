@@ -87,6 +87,8 @@ You get the authors as a list:
     >>> for au in ab.authors:
     ...     print(au)
     ...     print(au.auid)
+    ...     for aff in au.affiliations:
+    ...         print(aff.id)
     ... 
     1. John R. Kitchin scopusid:7004212771 affiliation_id:60027950
     7004212771
