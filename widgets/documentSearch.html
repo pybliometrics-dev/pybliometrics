@@ -1,0 +1,103 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <style>
+      .searchWidget {
+        width:400;
+        border: 1px solid #DCDCDC;
+        font-family: Arial;
+      }
+
+      .scopusLogoSection {
+        padding: 17px
+      }
+
+      .scopusLogoSection img {
+        height: 25px
+      }
+
+      .searchSection {
+        padding-left: 17px;
+        padding-right: 17px
+      }
+
+      .searchSection table {
+        width:100%
+      }
+
+      .searchSection input {
+      	height: 38px;
+      	width: 100%;
+      	border: 1px solid #EBEBEB;
+      	background-color: #FFFFFF;
+      	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.05);
+        padding-left:7px;
+      }
+
+      .searchButtonDiv {
+        float: right;
+        display: block;
+      }
+
+      .searchButtonDiv button {
+        height: 32px;
+        width: 68px;
+        background-color: #007398;
+        border:0px;
+        color: #FFFFFF;
+        margin-top: 10px;
+        margin-bottom: 10px
+      }
+
+      .horizontalFooterSeperator {
+        height: 1px;
+        width: 100%;
+        background-color: #DCDCDC;
+      }
+
+      .footerSection {
+        height: 34px;
+        background-color: #F5F5F5;
+        color: #606060;
+        font-size: 12px;
+        padding-left: 17px;
+        padding-top: 10px;
+      }
+    </style>
+
+    <script type="text/javascript">
+      function searchDocument() {
+        var baseUrl = "https://www.scopus.com/search/submit/xbasic.url?dgcid=widget_search_documents&field1=TITLE_ABS_KEY&searchterm1="
+        var query = document.getElementById('scopusQueryInput').value
+        window.open(baseUrl + encodeURIComponent(query), "_blank" )
+      }
+    </script>
+    <div class="searchWidget">
+
+      <div class="scopusLogoSection">
+        <img src="https://www.scopus.com/static/images/scopusLogoOrange.svg"/>
+      </div>
+
+      <div class="searchSection">
+          <table>
+            <tr><td>
+              <input id="scopusQueryInput" placeholder="Search for documents*" onkeydown="if (event.keyCode == 13) searchDocument()"/>
+            </td></tr>
+            <tr><td>
+              <div class="searchButtonDiv">
+                <button type="submit" title="Search" onclick="searchDocument();" value="">
+                  <span>Search</span>
+                </button>
+              </div>
+          </td></tr>
+        </table>
+      </div>
+
+      <div class="horizontalFooterSeperator"></div>
+
+      <div class="footerSection">*Searching on document titles, abstracts and keywords</div>
+    </div>
+
+  </body>
+</html>
