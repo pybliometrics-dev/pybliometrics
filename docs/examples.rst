@@ -26,6 +26,15 @@ Retrieval APIs
     examples/ScopusAuthor.rst
 
 
+Metadata APIs
+~~~~~~~~~~~~~
+
+.. toctree::
+    examples/CitationOverview.rst
+
+Three other Metadata APIs, Citations Count Metadata, Serial Title Metadata and Subject Classifications, are not implemented yet.
+
+
 report
 ~~~~~~
 
