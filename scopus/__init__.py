@@ -6,6 +6,7 @@ version_info = _v.version_tuple()
 
 from scopus.utils import *
 
+from scopus.abstract_citations import *
 from scopus.scopus_affiliation import *
 from scopus.scopus_affiliation import *
 from scopus.scopus_author import *
