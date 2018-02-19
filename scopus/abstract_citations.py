@@ -38,7 +38,10 @@ class CitationOverview(object):
         """List of tuples of yearly number of citations
         for specified years."""
         _years = range(self.start, self.end+1)
-        return list(zip(_years, [d.get('$') for d in self.citeInfoMatrix['cc']]))
+        try:
+            return list(zip(_years, [d.get('$') for d in self.citeInfoMatrix['cc']]))
+        except AttributeError:  # No citations
+            list(zip(_years, [0]*len(_years)))
 
     @property
     def citationType_long(self):
