@@ -3,7 +3,7 @@ Scopus Search
 
 :doc:`ScopusSearch <../reference/scopus.ScopusSearch>` implements the `Scopus Search API <https://api.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_. It performs a query and then retrieves the records of the query for analysis.
 
-The class is initialized with a search query on which you read about in `Scopus Author Search Tips <https://api.elsevier.com/documentation/search/AUTHORSearchTips.htm>`_ (an invalid search query will result in an error).
+The class is initialized with a search query on which you can read about in `Scopus Author Search Tips <https://dev.elsevier.com/tips/AuthorSearchTips.htm>`_ (an invalid search query will result in an error).
 
 .. code-block:: python
    

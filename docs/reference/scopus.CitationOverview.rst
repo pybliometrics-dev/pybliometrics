@@ -14,7 +14,6 @@ scopus.CitationOverview
       ~CitationOverview.citationType_long
       ~CitationOverview.citationType_short
       ~CitationOverview.doi
-      ~CitationOverview.eid
       ~CitationOverview.endingPage
       ~CitationOverview.h_index
       ~CitationOverview.issn
@@ -23,9 +22,10 @@ scopus.CitationOverview
       ~CitationOverview.pcc
       ~CitationOverview.pii
       ~CitationOverview.publicationName
+      ~CitationOverview.scopus_id
+      ~CitationOverview.startingPage
       ~CitationOverview.rangeCount
       ~CitationOverview.rowTotal
-      ~CitationOverview.startingPage
       ~CitationOverview.title
       ~CitationOverview.url
       ~CitationOverview.volume

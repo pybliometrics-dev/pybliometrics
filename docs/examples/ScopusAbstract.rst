@@ -73,12 +73,14 @@ For example, to obtain bibliographic information:
     >>> ab.doi
     '10.1021/acscatal.5b00538'
 
+
 To obtain the total citation count (at the time the abstract was retrieved and cached):
 
 .. code-block:: python
 
     >>> ab.citedby_count
     4
+
 
 You get the authors as a list:
 
@@ -106,3 +108,21 @@ Finally to obtain information of all listed affiliations:
     Carnegie Mellon University
     60027950
     Pittsburgh United States
+
+
+The references of an article (useful to build citation networks) are only
+available if you downloaded the article with 'FULL' as `view` parameter.
+The standard view is 'META_ABS' which is the highest free view.
+
+.. code-block:: python
+
+    >>> ab = ScopusAbstract("2-s2.0-84930616647", view="FULL")
+    >>> ab.references
+    ['2-s2.0-84881394200', '2-s2.0-84896585411', '2-s2.0-84949115648',
+    '2-s2.0-84908637059', '2-s2.0-84901638552', '2-s2.0-84896380535',
+    '2-s2.0-84923164062', '2-s2.0-84923164062', '2-s2.0-84930667693',
+    '2-s2.0-79952591087', '2-s2.0-84923165709', '2-s2.0-0036572216',
+    '2-s2.0-84924117832', '2-s2.0-84930624433', '2-s2.0-79955561198',
+    '2-s2.0-84930642229', '2-s2.0-0010630518', '2-s2.0-84861337169',
+    '2-s2.0-34247481878', '2-s2.0-79958260504', '2-s2.0-58149108944',
+    '2-s2.0-84917679308']

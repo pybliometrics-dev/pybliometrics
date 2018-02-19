@@ -81,14 +81,26 @@ class CitationOverview(object):
     @property
     def lcc(self):
         """Number of citations the abstract received
-        before the specified end year.
+        after the specified end year.
         """
         return self.citeInfoMatrix.get('lcc')
+
+    @property
+    def pcc(self):
+        """Number of citations the abstract received
+        before the specified start year.
+        """
+        return self.citeInfoMatrix.get('pcc')
 
     @property
     def pii(self):
         """The Publication Item Identifier (PII) of the abstract."""
         return self.identifierlegend.get('pii')
+
+    @property
+    def publicationName(self):
+        """Name of source the abstract is published in (e.g. the Journal)."""
+        return self.citeInfoMatrix.get('publicationName')
 
     @property
     def scopus_id(self):
@@ -110,18 +122,6 @@ class CitationOverview(object):
     def rowTotal(self):
         """Number of citations (specified and omitted years)."""
         return self.citeInfoMatrix.get('rowTotal')
-
-    @property
-    def pcc(self):
-        """Number of citations the abstract received
-        before the specified start year.
-        """
-        return self.citeInfoMatrix.get('pcc')
-
-    @property
-    def publicationName(self):
-        """Name of source the abstract is published in (e.g. the Journal)."""
-        return self.citeInfoMatrix.get('publicationName')
 
     @property
     def title(self):
@@ -150,11 +150,11 @@ class CitationOverview(object):
         start : str or int
             The first year for which the citation count should be loaded
 
-        start : str or int (optional, default=)
+        end : str or int (optional, default=datetime.now().year)
             The last year for which the citation count should be loaded.
             Default is the current year.
 
-        refresh : bool (optional, default=datetime.now().year)
+        refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
 
         Notes

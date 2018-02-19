@@ -27,7 +27,10 @@ class ScopusSearch(object):
             A string of the query.
 
         fields : str (optional, default='eid')
-            The list of fields you want returned.
+            The fields you want returned.  Allowed fields are specified in
+            https://dev.elsevier.com/guides/ScopusSearchViews.htm.  Since
+            currently only EIDs are stored, this parameter is being kept
+            for later use only.
 
         count : int (optional, default=200)
             The number of entries to be displayed at once.  A smaller number

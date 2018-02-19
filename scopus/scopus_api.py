@@ -185,7 +185,7 @@ class ScopusAbstract(object):
         view : str (optional, default=META_ABS)
             The view of the file that should be downloaded.  Currently
             supported values: META, META_ABS, FULL.  See
-            http://api.elsevier.com/documentation/retrieval/AbstractRetrievalViews.htm
+            https://dev.elsevier.com/guides/AbstractRetrievalViews.htm
             for details.
 
         refresh : bool (optional, default=False)
