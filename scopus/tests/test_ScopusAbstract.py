@@ -76,7 +76,7 @@ scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&\
 origin=inward">Examples of effective data sharing in scientific \
 publishing</a>, <a href="http://www.scopus.com/source/sourceInfo.url?\
 sourceId=19700188320">ACS Catalysis</a>, <b>5(6)</b>, p. 3894-3899, \
-(2015-06-05). <a href="http://dx.doi.org/10.1021/acscatal.5b00538">\
+(2015-06-05). <a href="https://doi.org/10.1021/acscatal.5b00538">\
 doi:10.1021/acscatal.5b00538</a>.'
     assert_equal(ab.html, expected)
 
@@ -92,7 +92,7 @@ def test_issueIdentifier():
 def test_latex():
     expected = 'John R. Kitchin, \\textit{Examples of effective data sharing \
 in scientific publishing}, ACS Catalysis, \\textbf{5(6)}, p. 3894-3899, \
-(2015-06-05). \\href{http://dx.doi.org/10.1021/acscatal.5b00538}{doi:10.1021/\
+(2015-06-05). \\href{https://doi.org/10.1021/acscatal.5b00538}{doi:10.1021/\
 acscatal.5b00538}, \\href{https://www.scopus.com/inward/record.uri?partnerID=\
 HzOxMe3b&scp=84930616647&origin=inward}{scopus:2-s2.0-84930616647}.'
     assert_equal(ab.latex, expected)
@@ -135,7 +135,7 @@ def test_ris():
     expected = 'TY  - JOUR\n\
 TI  - Examples of effective data sharing in scientific publishing\n\
 JO  - ACS Catalysis\nVL  - 5\nDA  - 2015-06-05\nSP  - 3894-3899\n\
-PY  - 2015\nDO  - 10.1021/acscatal.5b00538\nUR  - http://dx.doi.org/10.1021/\
+PY  - 2015\nDO  - 10.1021/acscatal.5b00538\nUR  - https://doi.org/10.1021/\
 acscatal.5b00538\nAU  - Kitchin J.R.\nIS  - 6\nER  - \n\n'
     assert_equal(ab.ris, expected)
 

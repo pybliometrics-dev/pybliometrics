@@ -18,7 +18,7 @@ def test_org_summary():
     expected = '1. [[https://www.scopus.com/inward/record.uri?partnerID=\
 HzOxMe3b&scp=26444452434&origin=inward][2-s2.0-26444452434]]  Mario Draghi, \
 Economists as policymakers: A round-table discussion. Introduction, European \
-Economic Review, 36(2-3), p. 307-309, (1992). http://dx.doi.org/None, \
+Economic Review, 36(2-3), p. 307-309, (1992). https://doi.org/None, \
 https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=26444452434&\
 origin=inward, cited 1 times (Scopus).\n  Affiliations:\n   \n'
     assert_equal(s.org_summary, expected)
