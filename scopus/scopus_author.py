@@ -152,7 +152,7 @@ class ScopusAuthor(object):
         self.level = level
 
         qfile = os.path.join(SCOPUS_AUTHOR_DIR, author_id)
-        url = ('http://api.elsevier.com/content/author/'
+        url = ('https://api.elsevier.com/content/author/'
                'author_id/{}').format(author_id)
         params = {'author_id': author_id, 'view': 'ENHANCED'}
         xml = ET.fromstring(get_content(qfile, url=url, refresh=refresh,

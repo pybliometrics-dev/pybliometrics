@@ -91,7 +91,7 @@ def report(scopus_search, label):
         print('| {0} | {1} | {2} |'.format(name, count, cats))
 
     # journal view
-    s = '[[http://www.scopus.com/source/sourceInfo.url?sourceId={0}][{1}]]'
+    s = '[[https://www.scopus.com/source/sourceInfo.url?sourceId={0}][{1}]]'
     jview = [(s.format(k[1], k[0][0:50]),  # url
               k[1],  # source_id
               k[2],  # issn

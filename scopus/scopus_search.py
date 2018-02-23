@@ -71,7 +71,7 @@ class ScopusSearch(object):
         else:
             # No cached file exists, or we are refreshing.
             # First, we get a count of how many things to retrieve
-            url = 'http://api.elsevier.com/content/search/scopus'
+            url = 'https://api.elsevier.com/content/search/scopus'
             params = {'query': query, 'field': fields, 'count': 0, 'start': 0}
             xml = download(url=url, params=params).text.encode('utf-8')
             results = ET.fromstring(xml)

@@ -19,7 +19,7 @@ def test_affiliations():
     assert_equal(aff.affilname, 'Carnegie Mellon University')
     assert_equal(aff.city, 'Pittsburgh')
     assert_equal(aff.country, 'United States')
-    link = 'http://api.elsevier.com/content/affiliation/affiliation_id/60027950'
+    link = 'https://api.elsevier.com/content/affiliation/affiliation_id/60027950'
     assert_equal(aff.href, link)
 
 
@@ -70,11 +70,11 @@ def test_endingPage():
 
 
 def test_html():
-    expected = '<a href="http://www.scopus.com/authid/detail.url?origin=\
+    expected = '<a href="https://www.scopus.com/authid/detail.url?origin=\
 AuthorProfile&authorId=7004212771">John R. Kitchin</a>, <a href="https://www.\
 scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&\
 origin=inward">Examples of effective data sharing in scientific \
-publishing</a>, <a href="http://www.scopus.com/source/sourceInfo.url?\
+publishing</a>, <a href="https://www.scopus.com/source/sourceInfo.url?\
 sourceId=19700188320">ACS Catalysis</a>, <b>5(6)</b>, p. 3894-3899, \
 (2015-06-05). <a href="http://dx.doi.org/10.1021/acscatal.5b00538">\
 doi:10.1021/acscatal.5b00538</a>.'
@@ -162,7 +162,7 @@ def test_title():
 
 
 def test_url():
-    expected = 'http://api.elsevier.com/content/abstract/scopus_id/84930616647'
+    expected = 'https://api.elsevier.com/content/abstract/scopus_id/84930616647'
     assert_equal(ab.url, expected)
 
 

@@ -15,7 +15,7 @@ co = scopus.CitationOverview("2-s2.0-84930616647", refresh=True,
 
 def test_authors():
     Author = namedtuple('Author', 'name surname initials id url')
-    url = 'http://api.elsevier.com/content/author/author_id/7004212771'
+    url = 'https://api.elsevier.com/content/author/author_id/7004212771'
     expected = [Author(name='Kitchin J.R.', surname='Kitchin',
                 initials='J.R.', id='7004212771',
                 url=url)]
@@ -92,7 +92,7 @@ def test_title():
 
 
 def test_url():
-    expected = 'http://api.elsevier.com/content/abstract/scopus_id/84930616647'
+    expected = 'https://api.elsevier.com/content/abstract/scopus_id/84930616647'
     assert_equal(co.url, expected)
 
 

@@ -168,7 +168,7 @@ class CitationOverview(object):
         # Get file content
         scopus_id = eid.split('0-')[-1]
         qfile = os.path.join(CITATION_OVERVIEW_DIR, eid)
-        url = "http://api.elsevier.com/content/abstract/citations/{}".format(scopus_id)
+        url = "https://api.elsevier.com/content/abstract/citations/{}".format(scopus_id)
         params = {'scopus_id': scopus_id, 'date': '{}-{}'.format(start, end)}
         res = get_content(qfile, url=url, refresh=refresh, params=params,
                           accept='json')

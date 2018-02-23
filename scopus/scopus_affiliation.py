@@ -92,7 +92,7 @@ class ScopusAffiliation:
         """
 
         qfile = os.path.join(SCOPUS_AFFILIATION_DIR, str(aff_id))
-        url = ('http://api.elsevier.com/content/affiliation/'
+        url = ('https://api.elsevier.com/content/affiliation/'
                'affiliation_id/{}'.format(aff_id))
 
         xml = ET.fromstring(get_content(qfile, url=url, refresh=refresh))
