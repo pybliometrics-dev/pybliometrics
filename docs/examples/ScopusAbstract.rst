@@ -17,7 +17,7 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(ab)
-    [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). http://dx.doi.org/10.1021/acscatal.5b00538, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 4 times (Scopus).
+    [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]  John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis, 5(6), p. 3894-3899, (2015). https://doi.org/10.1021/acscatal.5b00538, https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward, cited 4 times (Scopus).
       Affiliations:
        id:60027950 Carnegie Mellon University
 
@@ -48,7 +48,7 @@ You can print the abstract in a variety of formats, including LaTeX, bibtex, HTM
     SP  - 3894-3899
     PY  - 2015
     DO  - 10.1021/acscatal.5b00538
-    UR  - http://dx.doi.org/10.1021/acscatal.5b00538
+    UR  - https://doi.org/10.1021/acscatal.5b00538
     ER  - 
 
 
