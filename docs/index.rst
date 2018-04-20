@@ -47,6 +47,7 @@ Indices and tables
    examples
    tips
    reference
+   configuration
    changelog
    contributing
    authors
