@@ -202,7 +202,7 @@ class ScopusAbstract(object):
 
         # Get file content
         qfile = os.path.join(SCOPUS_XML_DIR, EID)
-        url = "http://api.elsevier.com/content/abstract/eid/{}".format(EID)
+        url = "https://api.elsevier.com/content/abstract/eid/{}".format(EID)
         params = {'view': view}
         xml = ET.fromstring(get_content(qfile, url=url, refresh=refresh,
                                         params=params))
@@ -434,7 +434,7 @@ class ScopusAbstract(object):
         s = (u'{authors}, {title}, {journal}, {volissue}, {pages}, '
              '({date}). {doi}.')
 
-        au_link = ('<a href="http://www.scopus.com/authid/detail.url'
+        au_link = ('<a href="https://www.scopus.com/authid/detail.url'
                    '?origin=AuthorProfile&authorId={0}">{1}</a>')
 
         if len(self.authors) > 1:
@@ -457,7 +457,7 @@ class ScopusAbstract(object):
 
         jname = self.publicationName
         sid = self.source_id
-        jlink = ('<a href="http://www.scopus.com/source/sourceInfo.url'
+        jlink = ('<a href="https://www.scopus.com/source/sourceInfo.url'
                  '?sourceId={sid}">{journal}</a>')
         journal = jlink.format(sid=sid, journal=jname)
 
@@ -643,7 +643,7 @@ class ScopusJournal(object):
         self.issn = ISSN
 
         qfile = os.path.join(SCOPUS_ISSN_DIR, ISSN)
-        url = ("http://api.elsevier.com/content/serial/title/issn:" + ISSN)
+        url = ("https://api.elsevier.com/content/serial/title/issn:" + ISSN)
         self.xml = ET.fromstring(get_content(qfile, refresh, url))
 
         self.publisher = get_encoded_text(self.xml, 'entry/dc:publisher')
