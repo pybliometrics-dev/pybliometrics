@@ -3,6 +3,22 @@ Change Log
 
 .. toctree::
 
+0.7
+~~~
+
+2018-04-27
+
+* Use https instead of http wherever possible.
+* Add support for InstToken Authentication via config file.
+* Redirect DOI links to preferred resolver.
+
+0.6
+~~~
+
+2017-12-12
+
+* CitationOverview class to access the Abstract Citation View.
+
 
 0.5
 ~~~
