@@ -35,7 +35,7 @@ class ScopusAuthor(object):
 
     @property
     def ndocuments(self):
-        """Number of documents for the author."""
+        """Number of documents authored (excludes book chapters and notes)."""
         return self._ndocuments
 
     @property
