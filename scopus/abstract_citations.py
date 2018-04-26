@@ -41,7 +41,7 @@ class CitationOverview(object):
         try:
             return list(zip(_years, [d.get('$') for d in self.citeInfoMatrix['cc']]))
         except AttributeError:  # No citations
-            list(zip(_years, [0]*len(_years)))
+            return list(zip(_years, [0]*len(_years)))
 
     @property
     def citationType_long(self):

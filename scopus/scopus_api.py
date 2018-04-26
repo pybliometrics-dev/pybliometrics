@@ -421,8 +421,7 @@ class ScopusAbstract(object):
             pages = 'Art. No. {self.article_number}, '.format(self)
         else:
             pages = '(no pages found)'
-        doi = '\\href{{https://doi.org/{0}}}{{doi:{1}}}'.format(self.doi,
-                                                                  self.doi)
+        doi = '\\href{{https://doi.org/{0}}}{{doi:{0}}}'.format(self.doi)
         scopus_url = '\href{{{0}}}{{scopus:{1}}}'.format(self.scopus_link,
                                                          self.eid)
 
@@ -478,8 +477,7 @@ class ScopusAbstract(object):
             pages = u'Art. No. {self.article_number}, '.format(self=self)
         else:
             pages = '(no pages found)'
-        doi = '<a href="https://doi.org/{0}">doi:{0}</a>'.format(self.doi,
-                                                                   self.doi)
+        doi = '<a href="https://doi.org/{0}">doi:{0}</a>'.format(self.doi)
 
         html = s.format(**locals())
         return html.replace('None', '')
