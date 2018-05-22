@@ -69,7 +69,7 @@ class ScopusAuthorSearch(object):
             self._AUTHORS = []
             with open(qfile) as f:
                 for r in f.readlines():
-                    self._AUTHORS += json.loads(r)
+                    self._AUTHORS.append(json.loads(r))
         else:
             # No cached file exists, or we are refreshing.
             # First, we get a count of how many things to retrieve
