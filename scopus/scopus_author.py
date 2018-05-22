@@ -131,7 +131,8 @@ class ScopusAuthor(object):
         Parameters
         ----------
         author_id : str or int
-            The ID of the author to search for.
+            The ID of the author to search for. Optionally expressed
+            as an Elsevier eid (i.e., in the form 9-s2.0-nnnnnnnn).
 
         refresh : bool (optional, default=False)
             Whether to refresh the cached file (if it exists) or not.
@@ -147,6 +148,8 @@ class ScopusAuthor(object):
         -----
         The files are cached in ~/.scopus/author/{author_id}.
         """
+        # author id might be expressed as eid i.e, 9-s2.0-nnnnnnnnnn
+        author_id = str(author_id).split('0-')[-1]
         author_id = str(int(author_id))
 
         self.level = level

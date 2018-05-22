@@ -12,3 +12,4 @@ from scopus.scopus_affiliation import *
 from scopus.scopus_author import *
 from scopus.scopus_reports import *
 from scopus.scopus_search import *
+from scopus.scopus_author_search import *
