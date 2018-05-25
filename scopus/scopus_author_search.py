@@ -111,6 +111,6 @@ class ScopusAuthorSearch(object):
         Resulted in {N} hits.
     {entries}"""
         return s.format(self=self,
-                        N=len(self.EIDS),
+                        N=len(self._AUTHORS),
                         entries='\n    '.join(self._AUTHORS))
    
