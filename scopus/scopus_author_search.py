@@ -60,6 +60,7 @@ class ScopusAuthorSearch(object):
         The Authors are stored as a property named Authors.
         """
 
+        self.query = query
         qfile = os.path.join(SCOPUS_AUTHOR_SEARCH_DIR,
                              # We need to remove / in a DOI here so we can save
                              # it as a file.
@@ -110,7 +111,7 @@ class ScopusAuthorSearch(object):
         s = """{query}
         Resulted in {N} hits.
     {entries}"""
-        return s.format(self=self,
+        return s.format(query=self.query,
                         N=len(self._AUTHORS),
                         entries='\n    '.join(self._AUTHORS))
    
