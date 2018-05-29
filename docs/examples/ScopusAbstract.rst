@@ -5,12 +5,21 @@ Scopus Abstract
 
 It takes a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_.  Retrieving these results is not fast, so we cache them to speed up subsequent uses of the code.  Sometimes you may want new results, e.g. to update citation counts, and then you set `refresh=True`.
 
+The Scopus API allows a differing information depth via
+`views <https://dev.elsevier.com/guides/AbstractRetrievalViews.htm>`_, some of which
+are restricted.  The view 'META_ABS' is the highest unrestricted view and contains all information from other unrestricted views.  It is therefore the default view.  The view
+with the most information content is 'FULL', which includes all information available with
+'META_ABS', but is restricted.  In generally you should always try to use `view='FULL'`
+when downloading an abstract and fall back to the default otherwise.  Note that
+the view parameter does not take effect for cached files, i.e. to switch to another
+view set `refresh=True` as well.
+
 You initalize the class with Scopus' Electronic Identifier (EID):
 
 .. code-block:: python
    
     >>> from scopus import ScopusAbstract
-    >>> ab = ScopusAbstract("2-s2.0-84930616647")
+    >>> ab = ScopusAbstract("2-s2.0-84930616647", view='FULL')
 
 You can obtain basic information just by printing the object:
 
@@ -111,12 +120,10 @@ Finally to obtain information of all listed affiliations:
 
 
 The references of an article (useful to build citation networks) are only
-available if you downloaded the article with 'FULL' as `view` parameter.
-The standard view is 'META_ABS' which is the highest free view.
+available if you downloaded the article with 'FULL' as `view` parameter:
 
 .. code-block:: python
 
-    >>> ab = ScopusAbstract("2-s2.0-84930616647", view="FULL")
     >>> ab.references
     ['2-s2.0-84881394200', '2-s2.0-84896585411', '2-s2.0-84949115648',
     '2-s2.0-84908637059', '2-s2.0-84901638552', '2-s2.0-84896380535',

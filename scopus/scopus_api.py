@@ -183,8 +183,10 @@ class ScopusAbstract(object):
             The Scopus ID (EID) of an abstract.
 
         view : str (optional, default=META_ABS)
-            The view of the file that should be downloaded.  Currently
-            supported values: META, META_ABS, FULL.  See
+            The view of the file that should be downloaded.  Will not take
+            effect for already cached files. Supported values: META, META_ABS,
+            FULL, where FULL includes all information of META_ABS view and
+            META_ABS includes all information of the META view .  See
             https://dev.elsevier.com/guides/AbstractRetrievalViews.htm
             for details.
 
