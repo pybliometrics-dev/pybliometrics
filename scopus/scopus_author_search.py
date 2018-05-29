@@ -113,5 +113,5 @@ class ScopusAuthorSearch(object):
     {entries}"""
         return s.format(query=self.query,
                         N=len(self._AUTHORS),
-                        entries='\n    '.join(self._AUTHORS))
+                        entries='\n    '.join([str(a) for a in self._AUTHORS]))
    

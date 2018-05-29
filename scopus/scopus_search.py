@@ -58,6 +58,7 @@ class ScopusSearch(object):
         The EIDs are stored as a property named EIDS.
         """
 
+        self.query = query
         qfile = os.path.join(SCOPUS_SEARCH_DIR,
                              # We need to remove / in a DOI here so we can save
                              # it as a file.
@@ -108,7 +109,7 @@ class ScopusSearch(object):
         s = """{query}
         Resulted in {N} hits.
     {entries}"""
-        return s.format(self=self,
+        return s.format(query=self.query,
                         N=len(self.EIDS),
                         entries='\n    '.join(self.EIDS))
 
