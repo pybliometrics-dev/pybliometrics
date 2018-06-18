@@ -32,6 +32,8 @@ class AuthorSearch(object):
             aff = item.get('affiliation-current', {})
             fields = item.get('subject-area',
                               [{'@abbrev': '', '@frequency': ''}])
+            if isinstance(fields, dict):
+                fields = [fields]
             areas = ["{} ({})".format(d.get('@abbrev', ''), d.get('@frequency', ''))
                      for d in fields]
             new = auth(eid=item['eid'],
