@@ -5,7 +5,6 @@ import sys
 import xml.etree.ElementTree as ET
 
 from scopus.utils import download, ns
-from scopus.scopus_api import ScopusAbstract
 
 AUTHOR_SEARCH_DIR = os.path.expanduser('~/.scopus/author_search')
 
@@ -15,26 +14,28 @@ if not os.path.exists(AUTHOR_SEARCH_DIR):
 
 FIELDS = ['eid', 'preferred-name', 'affiliation-current']
 
+
 class AuthorSearch(object):
     @property
     def authors(self):
         """List of Authors retrieved."""
         return self._AUTHORS
 
-    def __init__(self, query, fields=FIELDS, count=200, start=0, max_entries=5000, 
-                 refresh=False):
+    def __init__(self, query, fields=FIELDS, count=200, start=0,
+                 max_entries=5000, refresh=False):
         """Class to search a query, and retrieve a list of author IDs as results.
 
         Parameters
         ----------
         query : str
-            A string of the query. E.g. "authlast(Einstein) and authfirst(Albert)"
-        
-        fields : str (optional, default=['eid', 'preferred-name', 
+            A string of the query, e.g. "authlast(Einstein) and
+            authfirst(Albert)".
+
+        fields : str (optional, default=['eid', 'preferred-name',
             'affiliation-current'])
             The fields you want returned.  Allowed fields are specified in
-            https://dev.elsevier.com/guides/AuthorSearchViews.htm.  
-        
+            https://dev.elsevier.com/guides/AuthorSearchViews.htm.
+
         count : int (optional, default=200)
             The number of entries to be displayed at once.  A smaller number
             means more queries with each query having less results.
@@ -44,11 +45,11 @@ class AuthorSearch(object):
 
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
-            
+
         max_entries : int (optional, default=5000)
             Raise error when the number of results is beyond this number.
             The Scopus Search Engine does not allow more than 5000 entries.
-        
+
         Raises
         ------
         Exception
@@ -75,7 +76,7 @@ class AuthorSearch(object):
             # No cached file exists, or we are refreshing.
             # First, we get a count of how many things to retrieve
             url = 'https://api.elsevier.com/content/search/author'
-            params = { 'query': query, 'count': 0, 'start': 0 }
+            params = {'query': query, 'count': 0, 'start': 0}
             xml = download(url=url, params=params).text.encode('utf-8')
             results = ET.fromstring(xml)
 
@@ -92,8 +93,7 @@ class AuthorSearch(object):
 
             self._AUTHORS = []
             while N > 0:
-                params = {'query': query, 
-                          'count': count, 'start': start}
+                params = {'query': query, 'count': count, 'start': start}
                 resp = download(url=url, params=params, accept="json")
                 results = resp.json()
 
@@ -114,4 +114,3 @@ class AuthorSearch(object):
         return s.format(query=self.query,
                         N=len(self._AUTHORS),
                         entries='\n    '.join([str(a) for a in self._AUTHORS]))
-   
