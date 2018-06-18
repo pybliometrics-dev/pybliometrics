@@ -3,6 +3,16 @@ Change Log
 
 .. toctree::
 
+0.8
+~~~
+
+2018-06-18
+
+* ScopusAuthor now accepts EID as well.
+* Fix bug occuring with non-existent journal abbreviations.
+* SearchAuthor class to access the Author Search API.
+* Fix links in examples.
+
 0.7
 ~~~
 
@@ -18,7 +28,6 @@ Change Log
 2017-12-12
 
 * CitationOverview class to access the Abstract Citation View.
-
 
 0.5
 ~~~
