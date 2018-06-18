@@ -124,8 +124,7 @@ class ScopusAuthor(object):
                 abbr = pub.find("sourcetitle-abbrev").text
             except AttributeError:
                 abbr = None
-            hist.append((pub.find("sourcetitle").text, abbr,
-                         pub.get("type"), issn))
+            hist.append((pub.find("sourcetitle").text, abbr, pub.get("type"), issn))
         return hist
 
     def __init__(self, author_id, refresh=False, refresh_aff=False, level=1):
@@ -134,7 +133,8 @@ class ScopusAuthor(object):
         Parameters
         ----------
         author_id : str or int
-            The ID of the author to search for.
+            The ID of the author to search for. Optionally expressed
+            as an Elsevier EID (i.e., in the form 9-s2.0-nnnnnnnn).
 
         refresh : bool (optional, default=False)
             Whether to refresh the cached file (if it exists) or not.
@@ -150,6 +150,7 @@ class ScopusAuthor(object):
         -----
         The files are cached in ~/.scopus/author/{author_id}.
         """
+        author_id = str(author_id).split('0-')[-1]
         author_id = str(int(author_id))
 
         self.level = level
