@@ -1,9 +1,9 @@
 Scopus Search
 -------------
 
-:doc:`ScopusSearch <../reference/scopus.ScopusSearch>` implements the `Scopus Search API <https://api.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_. It performs a query and then retrieves the records of the query for analysis.
+:doc:`ScopusSearch <../reference/scopus.ScopusSearch>` implements the `Scopus Search API <https://api.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_.  It performs a query to search for articles and then retrieves the records of the query.
 
-The class is initialized with a search query on which you can read about in `Scopus Author Search Tips <https://dev.elsevier.com/tips/AuthorSearchTips.htm>`_ (an invalid search query will result in an error).
+The class is initialized with a search query on which you can read about in `Scopus Search Guide <https://dev.elsevier.com/tips/ScopusSearchTips.htm>`_.  Keep in mind that an invalid search query will result in an error.
 
 .. code-block:: python
    
@@ -11,7 +11,7 @@ The class is initialized with a search query on which you can read about in `Sco
     >>> s = ScopusSearch('FIRSTAUTH ( kitchin  j.r. )', refresh=True)
 
 
-Currently class mostly serves to provide a list of EIDs which you can use for the `ScopusAbstract <../reference/scopus.ScopusAbstract>`_ class:
+Currently, the class mostly serves to provide a list of EIDs which you can use for the `ScopusAbstract <../reference/scopus.ScopusAbstract.html>`_ class:
 
 .. code-block:: python
 
