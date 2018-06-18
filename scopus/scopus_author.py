@@ -133,7 +133,7 @@ class ScopusAuthor(object):
         Parameters
         ----------
         author_id : str or int
-            The ID of the author to search for. Optionally expressed
+            The ID of the author to search for.  Optionally expressed
             as an Elsevier EID (i.e., in the form 9-s2.0-nnnnnnnn).
 
         refresh : bool (optional, default=False)
@@ -148,11 +148,10 @@ class ScopusAuthor(object):
 
         Notes
         -----
-        The files are cached in ~/.scopus/author/{author_id}.
+        The files are cached in ~/.scopus/author/{author_id} (without
+        eventually leading '9-s2.0-').
         """
-        author_id = str(author_id).split('0-')[-1]
-        author_id = str(int(author_id))
-
+        author_id = str(int(str(author_id).split('-')[-1]))
         self.level = level
 
         qfile = os.path.join(SCOPUS_AUTHOR_DIR, author_id)
