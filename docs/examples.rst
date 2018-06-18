@@ -12,9 +12,10 @@ Search APIs
 ~~~~~~~~~~~
 
 .. toctree::
+    examples/AuthorSearch.rst
     examples/ScopusSearch.rst
 
-Two other Search APIs, Author Search and Affiliation Search, are not implemented yet.
+One other Search API, Affiliation Search, is not implemented yet.
 
 
 Retrieval APIs
@@ -32,7 +33,7 @@ Metadata APIs
 .. toctree::
     examples/CitationOverview.rst
 
-Three other Metadata APIs, Citations Count Metadata, Serial Title Metadata and Subject Classifications, are not implemented yet.
+Two other Metadata APIs, Serial Title Metadata and Subject Classifications, are not implemented yet.
 
 
 report

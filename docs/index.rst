@@ -19,6 +19,7 @@ scopus provides classes to interact with the various Scopus APIs (see https://de
    ScopusAbstract
    ScopusAuthor
    CitationOverview
+   AuthorSearch
    ScopusSearch
    ScopusAffiliation
 
