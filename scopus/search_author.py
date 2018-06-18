@@ -6,15 +6,15 @@ import json
 from scopus.utils import download, ns
 from scopus.scopus_api import ScopusAbstract
 
-SCOPUS_AUTHOR_SEARCH_DIR = os.path.expanduser('~/.scopus/author_search')
+AUTHOR_SEARCH_DIR = os.path.expanduser('~/.scopus/author_search')
 
-if not os.path.exists(SCOPUS_AUTHOR_SEARCH_DIR):
-    os.makedirs(SCOPUS_AUTHOR_SEARCH_DIR)
+if not os.path.exists(AUTHOR_SEARCH_DIR):
+    os.makedirs(AUTHOR_SEARCH_DIR)
 
 
 FIELDS = ['eid', 'preferred-name', 'affiliation-current']
 
-class ScopusAuthorSearch(object):
+class AuthorSearch(object):
     @property
     def authors(self):
         """List of Authors retrieved."""
