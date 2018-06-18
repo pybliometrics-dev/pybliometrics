@@ -1,7 +1,8 @@
+import hashlib
+import json
 import os
 import sys
 import xml.etree.ElementTree as ET
-import json
 
 from scopus.utils import download, ns
 from scopus.scopus_api import ScopusAbstract
@@ -55,16 +56,15 @@ class AuthorSearch(object):
 
         Notes
         -----
-        XML results are cached in ~/.scopus/author_search/{query}.
+        XML results are cached in ~/.scopus/author_search/{fname}, where
+        fname is the hashed version of query.
 
         The Authors are stored as a property named Authors.
         """
 
         self.query = query
         qfile = os.path.join(SCOPUS_AUTHOR_SEARCH_DIR,
-                             # We need to remove / in a DOI here so we can save
-                             # it as a file.
-                             query.replace('/', '_slash_'))
+                             hashlib.md5(query).hexdigest())
 
         if os.path.exists(qfile) and not refresh:
             self._AUTHORS = []
