@@ -112,7 +112,7 @@ class ScopusAuthor(object):
     def publication_history(self):
         """List of tuples of authored publications in the form
         (title, abbreviation, type, issn), where issn is only given
-        for journals.
+        for journals.  abbreviation and issn may be None.
         """
         hist = []
         for pub in self._pub_hist:
@@ -120,9 +120,11 @@ class ScopusAuthor(object):
                 issn = pub.find("issn").text
             except AttributeError:
                 issn = None
-            hist.append((pub.find("sourcetitle").text,
-                         pub.find("sourcetitle-abbrev").text if pub.find("sourcetitle-abbrev") else None,
-                         pub.get("type"), issn))
+            try:
+                abbr = pub.find("sourcetitle-abbrev").text
+            except AttributeError:
+                abbr = None
+            hist.append((pub.find("sourcetitle").text, abbr, pub.get("type"), issn))
         return hist
 
     def __init__(self, author_id, refresh=False, refresh_aff=False, level=1):
