@@ -1,10 +1,10 @@
 import hashlib
-import json
 import os
 import sys
-import xml.etree.ElementTree as ET
+from collections import namedtuple
+from json import dumps, loads
 
-from scopus.utils import download, ns
+from scopus.utils import download, get_content
 
 AUTHOR_SEARCH_DIR = os.path.expanduser('~/.scopus/author_search')
 
@@ -18,8 +18,29 @@ FIELDS = ['eid', 'preferred-name', 'affiliation-current']
 class AuthorSearch(object):
     @property
     def authors(self):
-        """List of Authors retrieved."""
-        return self._AUTHORS
+        """A list of namedtuples storing author information,
+        where each namedtuple corresponds to one author.
+        The information in each namedtuple is (eid surname initials givenname
+        affiliation affiliation_id city country).
+        All entries are strings or None.
+        """
+        out = []
+        order = 'eid surname initials givenname affiliation '\
+                'affiliation_id city country'
+        auth = namedtuple('Author', order)
+        for item in self._json:
+            name = item.get('preferred-name', {})
+            aff = item.get('affiliation-current', {})
+            new = auth(eid=item['eid'],
+                       surname=name.get('surname'),
+                       initials=name.get('initials'),
+                       givenname=name.get('given-name'),
+                       affiliation=aff.get('affiliation-name'),
+                       affiliation_id=aff.get('affiliation-id'),
+                       city=aff.get('affiliation-city'),
+                       country=aff.get('affiliation-country'))
+            out.append(new)
+        return self._json
 
     def __init__(self, query, fields=FIELDS, count=200, start=0,
                  max_entries=5000, refresh=False):
@@ -57,41 +78,38 @@ class AuthorSearch(object):
 
         Notes
         -----
-        XML results are cached in ~/.scopus/author_search/{fname}, where
+        Json results are cached in ~/.scopus/author_search/{fname}, where
         fname is the hashed version of query.
 
         The Authors are stored as a property named Authors.
         """
 
         self.query = query
-        qfile = os.path.join(SCOPUS_AUTHOR_SEARCH_DIR,
-                             hashlib.md5(query).hexdigest())
+        qfile = os.path.join(AUTHOR_SEARCH_DIR,
+                             hashlib.md5(query.encode('utf8')).hexdigest())
 
         if os.path.exists(qfile) and not refresh:
-            self._AUTHORS = []
+            self._json = []
             with open(qfile) as f:
                 for r in f.readlines():
-                    self._AUTHORS.append(json.loads(r))
+                    self._json.append(loads(r))
         else:
             # No cached file exists, or we are refreshing.
             # First, we get a count of how many things to retrieve
             url = 'https://api.elsevier.com/content/search/author'
             params = {'query': query, 'count': 0, 'start': 0}
-            xml = download(url=url, params=params).text.encode('utf-8')
-            results = ET.fromstring(xml)
+            res = get_content(qfile, url=url, refresh=refresh, params=params,
+                              accept='json')
+            data = loads(res.decode('utf-8'))['search-results']
 
-            N = results.find('opensearch:totalResults', ns)
-            try:
-                N = int(N.text)
-            except:
-                N = 0
+            N = int(data.get('opensearch:totalResults', 0))
 
             if N > max_entries:
                 raise Exception(('N = {}. '
                                  'Set max_entries to a higher number or '
                                  'change your query ({})').format(N, query))
 
-            self._AUTHORS = []
+            self._json = []
             while N > 0:
                 params = {'query': query, 'count': count, 'start': start}
                 resp = download(url=url, params=params, accept="json")
@@ -99,18 +117,17 @@ class AuthorSearch(object):
 
                 if 'entry' in results.get('search-results', []):
                     for r in results['search-results']['entry']:
-                        self._AUTHORS.append({f: r[f] for f in fields if f in r})
+                        self._json.append({f: r[f] for f in fields if f in r})
                 start += count
                 N -= count
 
             with open(qfile, 'wb') as f:
-                for author in self._AUTHORS:
-                    f.write('{}\n'.format(json.dumps(author)).encode('utf-8'))
+                for author in self._json:
+                    f.write('{}\n'.format(dumps(author)).encode('utf-8'))
 
     def __str__(self):
         s = """{query}
         Resulted in {N} hits.
     {entries}"""
-        return s.format(query=self.query,
-                        N=len(self._AUTHORS),
-                        entries='\n    '.join([str(a) for a in self._AUTHORS]))
+        return s.format(query=self.query, N=len(self._json),
+                        entries='\n    '.join([str(a) for a in self._json]))
