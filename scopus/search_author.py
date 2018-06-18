@@ -12,37 +12,42 @@ if not os.path.exists(AUTHOR_SEARCH_DIR):
     os.makedirs(AUTHOR_SEARCH_DIR)
 
 
-FIELDS = ['eid', 'preferred-name', 'affiliation-current']
-
-
 class AuthorSearch(object):
     @property
     def authors(self):
         """A list of namedtuples storing author information,
         where each namedtuple corresponds to one author.
         The information in each namedtuple is (eid surname initials givenname
-        affiliation affiliation_id city country).
-        All entries are strings or None.
+        documents affiliation affiliation_id city country areas).
+
+        All entries are strings or None.  Areas combines abbreviated subject
+        areas followed by the number of documents in this subject.
         """
         out = []
-        order = 'eid surname initials givenname affiliation '\
-                'affiliation_id city country'
+        order = 'eid surname initials givenname affiliation documents '\
+                'affiliation_id city country areas'
         auth = namedtuple('Author', order)
         for item in self._json:
             name = item.get('preferred-name', {})
             aff = item.get('affiliation-current', {})
+            fields = item.get('subject-area',
+                              [{'@abbrev': '', '@frequency': ''}])
+            areas = ["{} ({})".format(d.get('@abbrev', ''), d.get('@frequency', ''))
+                     for d in fields]
             new = auth(eid=item['eid'],
                        surname=name.get('surname'),
                        initials=name.get('initials'),
                        givenname=name.get('given-name'),
+                       documents=item.get('document-count', '0'),
                        affiliation=aff.get('affiliation-name'),
                        affiliation_id=aff.get('affiliation-id'),
                        city=aff.get('affiliation-city'),
-                       country=aff.get('affiliation-country'))
+                       country=aff.get('affiliation-country'),
+                       areas="; ".join(areas))
             out.append(new)
-        return self._json
+        return out
 
-    def __init__(self, query, fields=FIELDS, count=200, start=0,
+    def __init__(self, query, count=200, start=0,
                  max_entries=5000, refresh=False):
         """Class to search a query, and retrieve a list of author IDs as results.
 
@@ -51,11 +56,6 @@ class AuthorSearch(object):
         query : str
             A string of the query, e.g. "authlast(Einstein) and
             authfirst(Albert)".
-
-        fields : str (optional, default=['eid', 'preferred-name',
-            'affiliation-current'])
-            The fields you want returned.  Allowed fields are specified in
-            https://dev.elsevier.com/guides/AuthorSearchViews.htm.
 
         count : int (optional, default=200)
             The number of entries to be displayed at once.  A smaller number
@@ -81,7 +81,7 @@ class AuthorSearch(object):
         Json results are cached in ~/.scopus/author_search/{fname}, where
         fname is the hashed version of query.
 
-        The Authors are stored as a property named Authors.
+        The results are stored as a property named authors.
         """
 
         self.query = query
@@ -117,7 +117,7 @@ class AuthorSearch(object):
 
                 if 'entry' in results.get('search-results', []):
                     for r in results['search-results']['entry']:
-                        self._json.append({f: r[f] for f in fields if f in r})
+                        self._json.append({f: r[f] for f in r.keys()})
                 start += count
                 N -= count
 
