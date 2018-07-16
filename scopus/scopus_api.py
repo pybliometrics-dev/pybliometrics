@@ -174,6 +174,13 @@ class ScopusAbstract(object):
         """
         return self._description
 
+    @property
+    def authkeywords(self):
+        """Return the keywords of the abstract.
+        Note: This may be empty.
+        """
+        return self._authkeywords
+
     def __init__(self, EID, view='META_ABS', refresh=False):
         """Class to represent the results from a Scopus abstract.
 
@@ -254,6 +261,13 @@ class ScopusAbstract(object):
         if cite_link:
             cite_link = cite_link.get('href')
         self.cite_link = cite_link
+
+        # Parse authkeywords
+        author_keywords = xml.find('authkeywords', ns)
+        try:
+            self._authkeywords = [a.text for a in author_keywords]
+        except:
+            self._authkeywords = None
 
         # Parse subject-areas
         subjectAreas = xml.find('subject-areas', ns)
