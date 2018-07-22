@@ -172,3 +172,14 @@ def test_volume():
 
 def test_website():
     assert_equal(ab.website, 'http://pubs.acs.org/page/accacs/about.html')
+
+
+def test_authkeywords():
+    ab2 = scopus.ScopusAbstract("2-s2.0-0000212165", view="FULL", refresh=True)
+    
+    authkeywords = ab2.authkeywords
+    assert_true(len(authkeywords) == 3)
+
+    assert_equal(authkeywords[0], 'Fuzzy clustering')
+    assert_equal(authkeywords[1], 'Fuzzy modelling')
+    assert_equal(authkeywords[2], 'Unsupervised learning')
