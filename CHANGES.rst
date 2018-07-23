@@ -3,6 +3,17 @@ Change Log
 
 .. toctree::
 
+0.9
+~~~
+
+2018-07-23
+
+* SearchAffiliation to access the Affiliation Search API.
+* Fix bug occuring with fields of length one in Author search.
+* ScopusAbstract returns abstract keywords if present.
+* Refactor search classes to inherit from common auxiliary class.
+* ScopusAffiliation now accepts EID as well.
+
 0.8
 ~~~
 
