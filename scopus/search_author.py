@@ -1,10 +1,8 @@
 import hashlib
 import os
-import sys
 from collections import namedtuple
-from json import dumps, loads
 
-from scopus.utils import download, get_content
+from scopus.classes import Search
 
 AUTHOR_SEARCH_DIR = os.path.expanduser('~/.scopus/author_search')
 
@@ -12,7 +10,7 @@ if not os.path.exists(AUTHOR_SEARCH_DIR):
     os.makedirs(AUTHOR_SEARCH_DIR)
 
 
-class AuthorSearch(object):
+class AuthorSearch(Search):
     @property
     def authors(self):
         """A list of namedtuples storing author information,
@@ -89,43 +87,9 @@ class AuthorSearch(object):
         self.query = query
         qfile = os.path.join(AUTHOR_SEARCH_DIR,
                              hashlib.md5(query.encode('utf8')).hexdigest())
-
-        if os.path.exists(qfile) and not refresh:
-            self._json = []
-            with open(qfile) as f:
-                for r in f.readlines():
-                    self._json.append(loads(r))
-        else:
-            # No cached file exists, or we are refreshing.
-            # First, we get a count of how many things to retrieve
-            url = 'https://api.elsevier.com/content/search/author'
-            params = {'query': query, 'count': 0, 'start': 0}
-            res = get_content(qfile, url=url, refresh=refresh, params=params,
-                              accept='json')
-            data = loads(res.decode('utf-8'))['search-results']
-
-            N = int(data.get('opensearch:totalResults', 0))
-
-            if N > max_entries:
-                raise Exception(('N = {}. '
-                                 'Set max_entries to a higher number or '
-                                 'change your query ({})').format(N, query))
-
-            self._json = []
-            while N > 0:
-                params = {'query': query, 'count': count, 'start': start}
-                resp = download(url=url, params=params, accept="json")
-                results = resp.json()
-
-                if 'entry' in results.get('search-results', []):
-                    for r in results['search-results']['entry']:
-                        self._json.append({f: r[f] for f in r.keys()})
-                start += count
-                N -= count
-
-            with open(qfile, 'wb') as f:
-                for author in self._json:
-                    f.write('{}\n'.format(dumps(author)).encode('utf-8'))
+        url = 'https://api.elsevier.com/content/search/author'
+        Search.__init__(self, query, qfile, url, refresh, count, start,
+                        max_entries)
 
     def __str__(self):
         s = """{query}
