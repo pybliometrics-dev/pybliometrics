@@ -12,10 +12,9 @@ Search APIs
 ~~~~~~~~~~~
 
 .. toctree::
+    examples/AffiliationSearch.rst
     examples/AuthorSearch.rst
     examples/ScopusSearch.rst
-
-One other Search API, Affiliation Search, is not implemented yet.
 
 
 Retrieval APIs
