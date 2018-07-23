@@ -10,7 +10,7 @@ import scopus
 
 
 co = scopus.CitationOverview("2-s2.0-84930616647", refresh=True,
-                             start=2015, end=2017)
+                             start=2015, end=2018)
 
 
 def test_authors():
@@ -23,7 +23,7 @@ def test_authors():
 
 
 def test_cc():
-    assert_equal(co.cc, [(2015, '0'), (2016, '4'), (2017, '2')])
+    assert_equal(co.cc, [(2015, '0'), (2016, '4'), (2017, '2'), (2018, '1')])
 
 
 def test_citationType_long():
@@ -71,11 +71,11 @@ def test_publicationName():
 
 
 def test_rangeCount():
-    assert_equal(co.rangeCount, '6')
+    assert_equal(co.rangeCount, '7')
 
 
 def test_rowTotal():
-    assert_equal(co.rowTotal, '6')
+    assert_equal(co.rowTotal, '7')
 
 
 def test_scopus_id():
