@@ -81,7 +81,8 @@ class ScopusAffiliation:
         Parameters
         ----------
         aff_id : str or int
-            The Scopus Affiliation ID.
+            The Scopus Affiliation ID.  Optionally expressed
+            as an Elsevier EID (i.e., in the form 10-s2.0-nnnnnnnn).
 
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
@@ -90,8 +91,9 @@ class ScopusAffiliation:
         -----
         The files are cached in ~/.scopus/affiliation/{aff_id}.
         """
+        aff_id = str(int(str(aff_id).split('-')[-1]))
 
-        qfile = os.path.join(SCOPUS_AFFILIATION_DIR, str(aff_id))
+        qfile = os.path.join(SCOPUS_AFFILIATION_DIR, aff_id)
         url = ('https://api.elsevier.com/content/affiliation/'
                'affiliation_id/{}'.format(aff_id))
 
