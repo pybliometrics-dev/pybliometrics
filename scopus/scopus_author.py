@@ -292,6 +292,12 @@ class ScopusAuthor(object):
         return [ScopusAbstract(eid, refresh=refresh)
                 for eid in self.get_document_eids(refresh=refresh)]
 
+    def get_journal_abstracts(self, refresh=True):
+        """Return a list of ScopusAbstract objects using ScopusSearch,
+           but only if belonging to a Journal."""
+        return [abstract for abstract in self.get_abstracts(refresh=refresh) if
+                abstract.aggregationType == 'Journal']
+
     def get_document_summary(self, N=None, cite_sort=True, refresh=True):
         """Return a summary string of documents.
 
@@ -313,8 +319,7 @@ class ScopusAuthor(object):
         s : str
             Text summarizing an author's documents.
         """
-        abstracts = [ScopusAbstract(eid, refresh=refresh)
-                     for eid in self.get_document_eids(refresh=refresh)]
+        abstracts = self.get_abstracts(refresh=refresh)
 
         if cite_sort:
             counts = [(a, int(a.citedby_count)) for a in abstracts]
@@ -403,9 +408,7 @@ class ScopusAuthor(object):
         (ncites, npapers, aif) : tuple of integers
             The citations count, publication count, and author impact factor.
         """
-        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
-                            for eid in self.get_document_eids(refresh=refresh)
-                            if ScopusAbstract(eid, refresh=refresh).aggregationType == 'Journal']
+        scopus_abstracts = self.get_journal_abstracts(refresh=refresh)
 
         cites = [int(ab.citedby_count) for ab in scopus_abstracts]
         years = [int(ab.coverDate.split('-')[0]) for ab in scopus_abstracts]
@@ -423,33 +426,22 @@ class ScopusAuthor(object):
 
     def n_first_author_papers(self, refresh=True):
         """Return number of papers with author as the first author."""
-        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
-                            for eid in self.get_document_eids(refresh=refresh)
-                            if ScopusAbstract(eid, refresh=refresh).aggregationType == 'Journal']
-        first_authors = [1 for ab in scopus_abstracts
+        first_authors = [1 for ab in self.get_journal_abstracts(refresh=refresh)
                          if ab.authors[0].scopusid == self.author_id]
-
         return sum(first_authors)
 
     def n_last_author_papers(self, refresh=True):
         """Return number of papers with author as the last author."""
-        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
-                            for eid in self.get_document_eids(refresh=refresh)
-                            if ScopusAbstract(eid, refresh=refresh).aggregationType == 'Journal']
-        first_authors = [1 for ab in scopus_abstracts
+        first_authors = [1 for ab in self.get_journal_abstracts(refresh=refresh)
                          if ab.authors[-1].scopusid == self.author_id]
         return sum(first_authors)
 
     def n_journal_articles(self, refresh=True):
         """Return the number of journal articles."""
-        return len([ScopusAbstract(eid, refresh=refresh)
-                    for eid in self.get_document_eids(refresh=refresh)
-                    if ScopusAbstract(eid, refresh=refresh).aggregationType == 'Journal'])
+        return len(self.get_journal_abstracts(refresh=refresh))
 
     def n_yearly_publications(self, refresh=True):
         """Number of journal publications in a given year."""
-        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
-                            for eid in self.get_document_eids(refresh=refresh)
-                            if ScopusAbstract(eid, refresh=refresh).aggregationType == 'Journal']
-        pub_years = [int(ab.coverDate.split('-')[0]) for ab in scopus_abstracts]
+        pub_years = [int(ab.coverDate.split('-')[0])
+                     for ab in self.get_journal_abstracts(refresh=refresh)]
         return Counter(pub_years)
