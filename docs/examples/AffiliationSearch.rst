@@ -37,3 +37,5 @@ It's easy to work with `namedtuples <https://docs.python.org/2/library/collectio
 Often you receive more search results than Scopus allows.  Currently the cap is
 at 5000 results.  In this case it helps to narrow down the research, i.e. instead
 of "affil('Harvard Medical School')" you search for "affil('Harvard Medical School Boston')".
+
+More on different types of affiliations in section `tips <../tips.html#affiliations>`_.

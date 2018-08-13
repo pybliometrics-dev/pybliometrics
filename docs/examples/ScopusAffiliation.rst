@@ -34,3 +34,5 @@ The object has a number of attributes but no methods:
     '10200'
     >>> aff.ndocuments
     '42003'
+
+More on different types of affiliations in section `tips <../tips.html#affiliations>`_.
