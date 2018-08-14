@@ -57,6 +57,11 @@ def test_citedby_count():
     assert_true(ab.citedby_count >= expected)
 
 
+def test_citedby_url():
+    expected = 'https://www.scopus.com/inward/citedby.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward'
+    assert_equal(ab.citedby_url, expected)
+
+
 def test_coverDate():
     assert_equal(ab.coverDate, '2015-06-05')
 
@@ -138,6 +143,11 @@ JO  - ACS Catalysis\nVL  - 5\nDA  - 2015-06-05\nSP  - 3894-3899\n\
 PY  - 2015\nDO  - 10.1021/acscatal.5b00538\nUR  - https://doi.org/10.1021/\
 acscatal.5b00538\nAU  - Kitchin J.R.\nIS  - 6\nER  - \n\n'
     assert_equal(ab.ris, expected)
+
+
+def test_scopus_url():
+    expected = 'https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward'
+    assert_equal(ab.scopus_url, expected)
 
 
 def test_source_id():
