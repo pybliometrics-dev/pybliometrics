@@ -3,6 +3,17 @@ Change Log
 
 .. toctree::
 
+0.10
+~~~~
+
+2018-08-14
+
+* In ScopusAuthor, refactor generating abstracts lists into `get_journal_abstract()`.
+* New properties for ScopusAbstract: `citedby_url` and `scopus_url`
+* New property for ScopusAffiliation: `state`
+* Correct property citedby_url from ScopusAuthor.
+* In all retrieval classes, remove underscore properties.
+
 0.9
 ~~~
 
@@ -45,7 +56,7 @@ Change Log
 
 2017-09-28
 
-* New properties for ScopusAuthor: publication_history and subject_areas.
+* New properties for ScopusAuthor: `publication_history` and `subject_areas`.
 * Update namespace in ScopusAbstract to retrieve affiliation information.
 * Complete affiliation information in ScopusAbstract.
 
