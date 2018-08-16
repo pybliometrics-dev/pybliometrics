@@ -28,6 +28,6 @@ def get_encoded_text(container, xpath):
     result : str
     """
     try:
-        return container.find(xpath, ns).text
+        return "".join(container.find(xpath, ns).itertext())
     except AttributeError:
         return None
