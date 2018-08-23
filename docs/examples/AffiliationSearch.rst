@@ -1,14 +1,15 @@
 Affiliation Search
 ------------------
 
-:doc:`AffiliationSearch <../reference/scopus.AffiliationSearch>` implements the `Affiliation Search API <https://dev.elsevier.com/documentation/AffiliationSearchAPI.wadl>`_.  It performs a query to search for authors and then retrieves the records of the query.
+:doc:`AffiliationSearch <../reference/scopus.AffiliationSearch>` implements the `Affiliation Search API <https://dev.elsevier.com/documentation/AffiliationSearchAPI.wadl>`_.  It performs a query to search for affiliations and then retrieves the records of the query.
 
 The class is initialized with a search query which you can read about in `Affiliation Search Guide <https://dev.elsevier.com/tips/AffiliationSearchTips.htm>`_.  Keep in mind that an invalid search query will result in an error.
 
 .. code-block:: python
    
     >>> from scopus import AffiliationSearch
-    >>> s = AuthorSearch('AF-ID(60021784)', refresh=True)
+    >>> query = "AFFIL(Max Planck Institute for Innovation and Competition Munich)"
+    >>> s = AffiliationSearch(query, refresh=True)
 
 
 The class mostly serves to provide a list of namedtuples storing information about the affiliation. One of them is the affiliation ID which you can use for the `ScopusAffiliation <../reference/scopus.ScopusAffiliation.html>`_ class:
@@ -16,9 +17,8 @@ The class mostly serves to provide a list of namedtuples storing information abo
 .. code-block:: python
 
     >>> s.affiliations
-    [Affiliation(eid='10-s2.0-60021784', name='New York University',
-                 variant='', documents='97860', city='New York',
-                 country='United States', parent='0')]
+    [Affiliation(eid='10-s2.0-60105007', name='Max Planck Institute for Innovation and Competition',
+                variant='Max Planck Institute For Innovation And Competition', documents='376', city='Munich', country='Germany', parent='0')]
 
 
 It's easy to work with `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_, for example using `pandas <https://pandas.pydata.org/>`_ you can quickly turn the results into a DataFrame:
@@ -26,12 +26,15 @@ It's easy to work with `namedtuples <https://docs.python.org/2/library/collectio
 .. code-block:: python
 
     >>> import pandas as pd
-    >>> print(pd.DataFrame(s.affiliations)
-                    eid                 name variant documents      city  \
-    0  10-s2.0-60021784  New York University             97860  New York   
-
-            country parent  
-    0  United States      0
+    >>> print(pd.DataFrame(s.affiliations).T)
+                                                                 0
+    eid                                           10-s2.0-60105007
+    name       Max Planck Institute for Innovation and Competition
+    variant    Max Planck Institute for Innovation and Competition
+    documents                                                  376
+    city                                                    Munich
+    country                                                Germany
+    parent                                                       0
 
 
 Often you receive more search results than Scopus allows.  Currently the cap is
