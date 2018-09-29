@@ -1,4 +1,5 @@
 from scopus.tests.test_AffiliationSearch import *
+from scopus.tests.test_AuthorRetrieval import *
 from scopus.tests.test_AuthorSearch import *
 from scopus.tests.test_CitationOverview import *
 from scopus.tests.test_ContentAffiliationRetrieval import *
