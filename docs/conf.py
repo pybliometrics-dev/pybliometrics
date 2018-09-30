@@ -66,7 +66,10 @@ html_show_sourcelink = True
 htmlhelp_basename = 'scopusdoc'
 autoclass_content = 'both'
 
-# Options for LaTeX output
+# Option to group members of classes
+autodoc_member_order = 'groupwise'
+
+# -- Options for LaTeX output ---------------------------------------------
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #

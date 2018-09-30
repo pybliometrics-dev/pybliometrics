@@ -13,11 +13,16 @@ Types of Contributions
 Report Bugs
 ~~~~~~~~~~~
 
+Before are reporting a bug, please
+
+* Upgrade to the newest version if necessary: `pip install scopus --upgrade`
+* Make sure your error message is not one of `these <https://scopus.readthedocs.io/en/latest/tips.html#error-messages>`_.
+
 Report bugs at https://github.com/scopus-api/scopus/issues.
 
 If you are reporting a bug, please include:
 
-* Your operating system name and version.
+* Your operating system name and version (after `import scopus` in Python, type `print(scopus.__version__)`.
 * Any details about your local setup that might be helpful in troubleshooting.
 * Detailed steps to reproduce the bug.
 

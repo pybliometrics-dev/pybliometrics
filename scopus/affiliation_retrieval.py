@@ -1,0 +1,155 @@
+import os
+from collections import namedtuple
+from json import loads
+
+from scopus.utils import get_content
+
+CONTENT_AFFILIATION_DIR = os.path.expanduser('~/.scopus/affiliation_retrieval')
+
+if not os.path.exists(CONTENT_AFFILIATION_DIR):
+    os.makedirs(CONTENT_AFFILIATION_DIR)
+
+
+class ContentAffiliationRetrieval:
+    @property
+    def address(self):
+        """The address of the affiliation."""
+        return self.data['address']
+
+    @property
+    def affiliation_name(self):
+        """The name of the affiliation."""
+        return self.data.get('affiliation-name')
+
+    @property
+    def author_count(self):
+        """Number of authors associated with the affiliation."""
+        return self.data['coredata']['author-count']
+
+    @property
+    def city(self):
+        """The city of the affiliation."""
+        return self.data['city']
+
+    @property
+    def country(self):
+        """The country of the affiliation."""
+        return self.data['country']
+
+    @property
+    def date_created(self):
+        """Date the Scopus record was created."""
+        date = self.data['institution-profile']['date-created']
+        if date is not None:
+            return (int(date['@year']), int(date['@month']), int(date['@day']))
+        else:
+            return (None, None, None)
+
+    @property
+    def document_count(self):
+        """Number of documents for the affiliation."""
+        return self.data['coredata']['document-count']
+
+    @property
+    def eid(self):
+        """The EID of the affiliation."""
+        return self.data['coredata']['eid']
+
+    @property
+    def identifier(self):
+        """The Scopus ID of the affiliation."""
+        return self.data['coredata']['dc:identifier'].split(':')[1]
+
+    @property
+    def name_variants(self):
+        """Variants of the affiliation name with number of documents
+        referring to this variant.
+        """
+        out = []
+        variant = namedtuple('Variant', 'name doc_count')
+        for var in self.data['name-variants'].get('name-variant', []):
+            new = variant(name=var['$'], doc_count=var['@doc-count'])
+            out.append(new)
+        return out
+
+    @property
+    def org_domain(self):
+        """Internet domain of the affiliation."""
+        return self.data['institution-profile'].get('org-domain')
+
+    @property
+    def org_type(self):
+        """Type of the affiliation (only present if profile is org profile)."""
+        return self.data['institution-profile'].get('org-type')
+
+    @property
+    def org_URL(self):
+        """Website of the affiliation."""
+        return self.data['institution-profile'].get('org-URL')
+
+    @property
+    def postal_code(self):
+        """The postal code of the affiliation."""
+        return self.data['institution-profile']['address'].get('postal-code')
+
+    @property
+    def scopus_affiliation_link(self):
+        """Link to the Scopus web view of the affiliation."""
+        return self.data['coredata'].get('link', [])[2].get('@href')
+
+    @property
+    def self_link(self):
+        """Link to the affiliation's API page."""
+        return self.data['coredata'].get('link', [])[0].get('@href')
+
+    @property
+    def search_link(self):
+        """URL to the API page listing documents of the affiliation."""
+        return self.data['coredata'].get('link', [])[1].get('@href')
+
+    @property
+    def state(self):
+        """The state (country's administrative sububunit) of the affiliation."""
+        return self.data['institution-profile']['address'].get('state')
+
+    @property
+    def sort_name(self):
+        """The name of the affiliation used for sorting."""
+        return self.data['institution-profile'].get('sort-name')
+
+    @property
+    def url(self):
+        """URL to the affiliation's API page."""
+        return self.data['coredata'].get('prism:url')
+
+    def __init__(self, aff_id, refresh=False):
+        """Class to represent an Affiliation in Scopus.
+
+        Parameters
+        ----------
+        aff_id : str or int
+            The Scopus Affiliation ID.  Optionally expressed
+            as an Elsevier EID (i.e., in the form 10-s2.0-nnnnnnnn).
+
+        refresh : bool (optional, default=False)
+            Whether to refresh the cached file if it exists or not.
+
+        Notes
+        -----
+        The files are cached in ~/.scopus/affiliation/{aff_id}.
+        """
+        aff_id = str(int(str(aff_id).split('-')[-1]))
+
+        qfile = os.path.join(CONTENT_AFFILIATION_DIR, aff_id)
+        url = ('https://api.elsevier.com/content/affiliation/'
+               'affiliation_id/{}'.format(aff_id))
+
+        res = get_content(qfile, url=url, refresh=refresh, accept='json')
+        self.data = loads(res.decode('utf-8'))['affiliation-retrieval-response']
+
+    def __str__(self):
+        s = '''{self.name} ({self.author_count} authors, {self.document_count} documents)
+    {self.address}
+    {self.city}, {self.country}
+    {self.url}'''.format(self=self)
+        return s

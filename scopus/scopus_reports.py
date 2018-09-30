@@ -6,8 +6,15 @@ from .scopus_author import ScopusAuthor
 
 
 def report(scopus_search, label):
-    """Print out an org-mode report for the results from the scopus_search
-    with the label.
+    """Print out an org-mode report for search results.
+
+    Parameters
+    ----------
+    scopus_search : scopus.scopus_search.ScopusSearch
+        An object resulting from a ScopusSearch.
+
+    label : str
+        The label used in the document title ("Report for ...").
     """
 
     counts = {}  # to count papers per author
@@ -17,26 +24,26 @@ def report(scopus_search, label):
     Ncites = 0
     document_types = {}
 
-    N = 0  # to count number of publications
+    papers = 0  # to count number of publications
 
     for eid in scopus_search.EIDS:
         a = ScopusAbstract(eid)
 
         # Get types of documents
-        if a.aggregationType in document_types:
+        try:
             document_types[a.aggregationType] += 1
-        else:
+        except KeyError:
             document_types[a.aggregationType] = 1
 
         if a.aggregationType == 'Journal':
             Ncites += int(a.citedby_count)  # get total cites
-            N += 1  # count all the papers
+            papers += 1
 
             # get count for journals
             jkey = (a.publicationName, a.source_id, a.issn)
-            if jkey in journals:
+            try:
                 journals[jkey] += 1
-            else:
+            except KeyError:
                 journals[jkey] = 1
 
             # get authors per paper
@@ -45,16 +52,16 @@ def report(scopus_search, label):
             # now count papers per author
             for author in a.authors:
                 key = (author.indexed_name, author.auid)
-                if key in counts:
+                try:
                     counts[key] += 1
-                else:
+                except KeyError:
                     counts[key] = 1
 
             # counting cites per paper
             key = (a.title, a.scopus_link)
-            if key in paper_cites:
+            try:
                 paper_cites[key] += a.citedby_count
-            else:
+            except KeyError:
                 paper_cites[key] = a.citedby_count
 
     print('*** Report for {}\n'.format(label))
@@ -66,13 +73,12 @@ def report(scopus_search, label):
 
     print('\n\n')
     print('{0} articles ({2} citations) '
-          'found by {1} authors'.format(N, len(counts), Ncites))
+          'found by {1} authors'.format(papers, len(counts), Ncites))
 
-    # Author counts  {(name, scopus-id): count}
-    view = [('[[scopusid:{0}][{1}]]'.format(k[1], k[0]),  # org-mode link
-             v,  # counts
-             k[1])  # scopus-id
-            for k, v in counts.items()]
+    # Author counts {(name, scopus-id): count}
+    view = [('[[https://www.scopus.com/authid/detail.uri?authorId={0}][{1}]]'.format(
+             k[1], k[0]),  # org-mode link
+            v, k[1]) for k, v in counts.items()] # counts, scopus-id
     view.sort(reverse=True, key=itemgetter(1))
 
     print('\n#+attr_latex: :placement [H] :center nil')
@@ -85,7 +91,7 @@ def report(scopus_search, label):
         print('| {0} | {1} | {2} |'.format(name, count, cats))
 
     # journal view
-    s = '[[http://www.scopus.com/source/sourceInfo.url?sourceId={0}][{1}]]'
+    s = '[[https://www.scopus.com/source/sourceInfo.url?sourceId={0}][{1}]]'
     jview = [(s.format(k[1], k[0][0:50]),  # url
               k[1],  # source_id
               k[2],  # issn
@@ -100,14 +106,23 @@ def report(scopus_search, label):
     print('|-')
 
     for journal, sid, issn, count in jview[0:12]:
-        JOURNAL = ScopusJournal(issn)
+        # issn may contain E-ISSN
+        issn_tokens = issn.split()
+        try:
+            JOURNAL = ScopusJournal(issn_tokens[0])
+        except:
+            JOURNAL = ScopusJournal(issn_tokens[1])
         IPP = JOURNAL.IPP or 0
         print('| {0} | {1} | {2} |'.format(journal, count, IPP))
 
     # view of journals sorted by `IPP
     JVIEW = []
     for journal, sid, issn, count in jview:
-        JOURNAL = ScopusJournal(issn)
+        issn_tokens = issn.split()
+        try:
+            JOURNAL = ScopusJournal(issn_tokens[0])
+        except:
+            JOURNAL = ScopusJournal(issn_tokens[1])
         IPP = JOURNAL.IPP or 0
         JVIEW.append([journal, count, IPP])
     JVIEW.sort(reverse=True, key=itemgetter(2))
@@ -154,10 +169,8 @@ def report(scopus_search, label):
     print('\n\n#+caption: Number of authors '
           'on each publication for {}.'.format(label))
     print('[[./{0}-nauthors-per-publication.png]]'.format(label))
-
     print('''**** Bibliography  :noexport:
      :PROPERTIES:
      :VISIBILITY: folded
      :END:''')
-
     print(scopus_search.org_summary)

@@ -1,6 +1,87 @@
 Change Log
 ----------
 
+.. toctree::
+
+0.10
+~~~~
+
+2018-08-14
+
+* In ScopusAuthor, refactor generating abstracts lists into `get_journal_abstract()`.
+* New properties for ScopusAbstract: `citedby_url` and `scopus_url`
+* New property for ScopusAffiliation: `state`
+* Correct property citedby_url from ScopusAuthor.
+* In all retrieval classes, remove underscore properties.
+
+0.9
+~~~
+
+2018-07-23
+
+* SearchAffiliation to access the Affiliation Search API.
+* Fix bug occuring with fields of length one in Author search.
+* ScopusAbstract returns abstract keywords if present.
+* Refactor search classes to inherit from common auxiliary class.
+* ScopusAffiliation now accepts EID as well.
+
+0.8
+~~~
+
+2018-06-18
+
+* ScopusAuthor now accepts EID as well.
+* Fix bug occuring with non-existent journal abbreviations.
+* SearchAuthor class to access the Author Search API.
+* Fix links in examples.
+
+0.7
+~~~
+
+2018-04-27
+
+* Use https instead of http wherever possible.
+* Add support for InstToken Authentication via config file.
+* Redirect DOI links to preferred resolver.
+
+0.6
+~~~
+
+2017-12-12
+
+* CitationOverview class to access the Abstract Citation View.
+
+0.5
+~~~
+
+2017-09-28
+
+* New properties for ScopusAuthor: `publication_history` and `subject_areas`.
+* Update namespace in ScopusAbstract to retrieve affiliation information.
+* Complete affiliation information in ScopusAbstract.
+
+0.4.4
+~~~~~
+
+2017-09-06
+
+* Fix bugs related to unicode on Python2.7 and installation on Windows.
+
+0.4.3
+~~~~~
+
+2017-08-30
+
+* Update ScopusAbstract to reflect change in the API.
+
+0.4.2
+~~~~~
+
+2017-08-23
+
+* Fix bug with generating `my_scopus.py` on Python 3.
+* In ScopusAbstract, do not raise TypeErrors for information not present in current view.
+
 0.4.1
 ~~~~~
 

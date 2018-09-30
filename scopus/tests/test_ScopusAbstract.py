@@ -13,7 +13,14 @@ ab = scopus.ScopusAbstract("2-s2.0-84930616647", view="FULL", refresh=True)
 def test_affiliations():
     affs = ab.affiliations
     assert_true(len(affs) == 1)
-    assert_true(isinstance(affs[0], scopus.scopus_api._ScopusAffiliation))
+    aff = affs[0]
+    assert_true(isinstance(aff, scopus.scopus_api._ScopusAffiliation))
+    assert_equal(aff.id, '60027950')
+    assert_equal(aff.affilname, 'Carnegie Mellon University')
+    assert_equal(aff.city, 'Pittsburgh')
+    assert_equal(aff.country, 'United States')
+    link = 'https://api.elsevier.com/content/affiliation/affiliation_id/60027950'
+    assert_equal(aff.href, link)
 
 
 def test_aggregationType():
@@ -50,6 +57,11 @@ def test_citedby_count():
     assert_true(ab.citedby_count >= expected)
 
 
+def test_citedby_url():
+    expected = 'https://www.scopus.com/inward/citedby.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward'
+    assert_equal(ab.citedby_url, expected)
+
+
 def test_coverDate():
     assert_equal(ab.coverDate, '2015-06-05')
 
@@ -63,13 +75,13 @@ def test_endingPage():
 
 
 def test_html():
-    expected = '<a href="http://www.scopus.com/authid/detail.url?origin=\
+    expected = '<a href="https://www.scopus.com/authid/detail.url?origin=\
 AuthorProfile&authorId=7004212771">John R. Kitchin</a>, <a href="https://www.\
 scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&\
 origin=inward">Examples of effective data sharing in scientific \
-publishing</a>, <a href="http://www.scopus.com/source/sourceInfo.url?\
+publishing</a>, <a href="https://www.scopus.com/source/sourceInfo.url?\
 sourceId=19700188320">ACS Catalysis</a>, <b>5(6)</b>, p. 3894-3899, \
-(2015-06-05). <a href="http://dx.doi.org/10.1021/acscatal.5b00538">\
+(2015-06-05). <a href="https://doi.org/10.1021/acscatal.5b00538">\
 doi:10.1021/acscatal.5b00538</a>.'
     assert_equal(ab.html, expected)
 
@@ -85,7 +97,7 @@ def test_issueIdentifier():
 def test_latex():
     expected = 'John R. Kitchin, \\textit{Examples of effective data sharing \
 in scientific publishing}, ACS Catalysis, \\textbf{5(6)}, p. 3894-3899, \
-(2015-06-05). \\href{http://dx.doi.org/10.1021/acscatal.5b00538}{doi:10.1021/\
+(2015-06-05). \\href{https://doi.org/10.1021/acscatal.5b00538}{doi:10.1021/\
 acscatal.5b00538}, \\href{https://www.scopus.com/inward/record.uri?partnerID=\
 HzOxMe3b&scp=84930616647&origin=inward}{scopus:2-s2.0-84930616647}.'
     assert_equal(ab.latex, expected)
@@ -128,9 +140,14 @@ def test_ris():
     expected = 'TY  - JOUR\n\
 TI  - Examples of effective data sharing in scientific publishing\n\
 JO  - ACS Catalysis\nVL  - 5\nDA  - 2015-06-05\nSP  - 3894-3899\n\
-PY  - 2015\nDO  - 10.1021/acscatal.5b00538\nUR  - http://dx.doi.org/10.1021/\
+PY  - 2015\nDO  - 10.1021/acscatal.5b00538\nUR  - https://doi.org/10.1021/\
 acscatal.5b00538\nAU  - Kitchin J.R.\nIS  - 6\nER  - \n\n'
     assert_equal(ab.ris, expected)
+
+
+def test_scopus_url():
+    expected = 'https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward'
+    assert_equal(ab.scopus_url, expected)
 
 
 def test_source_id():
@@ -155,7 +172,7 @@ def test_title():
 
 
 def test_url():
-    expected = 'http://api.elsevier.com/content/abstract/scopus_id/84930616647'
+    expected = 'https://api.elsevier.com/content/abstract/scopus_id/84930616647'
     assert_equal(ab.url, expected)
 
 
@@ -165,3 +182,14 @@ def test_volume():
 
 def test_website():
     assert_equal(ab.website, 'http://pubs.acs.org/page/accacs/about.html')
+
+
+def test_authkeywords():
+    ab2 = scopus.ScopusAbstract("2-s2.0-0000212165", view="FULL", refresh=True)
+    
+    authkeywords = ab2.authkeywords
+    assert_true(len(authkeywords) == 3)
+
+    assert_equal(authkeywords[0], 'Fuzzy clustering')
+    assert_equal(authkeywords[1], 'Fuzzy modelling')
+    assert_equal(authkeywords[2], 'Unsupervised learning')

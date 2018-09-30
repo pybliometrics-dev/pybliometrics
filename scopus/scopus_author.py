@@ -21,82 +21,155 @@ class ScopusAuthor(object):
     @property
     def author_id(self):
         """The scopus id for the author."""
-        return self._author_id
+        author_id = get_encoded_text(self.xml, 'coredata/dc:identifier')
+        return author_id.split(":")[-1]
 
     @property
     def orcid(self):
         """The author's ORCID."""
-        return self._orcid
+        return get_encoded_text(self.xml, 'coredata/orcid')
 
     @property
     def hindex(self):
         """The author hindex"""
-        return self._hindex
+        hindex = get_encoded_text(self.xml, 'h-index')
+        return int(hindex) if hindex is not None else 0
 
     @property
     def ndocuments(self):
-        """Number of documents for the author."""
-        return self._ndocuments
+        """Number of documents authored (excludes book chapters and notes)."""
+        ndocuments = get_encoded_text(self.xml, 'coredata/document-count')
+        return int(ndocuments) if ndocuments is not None else 0
 
     @property
     def ncited_by(self):
         """Total number of citing authors."""
-        return self._ncited_by
+        ncited_by = get_encoded_text(self.xml, 'coredata/cited-by-count')
+        return int(ncited_by) if ncited_by is not None else 0
 
     @property
     def citation_count(self):
         """Total number of citing items."""
-        return self._citation_count
+        citation_count = get_encoded_text(self.xml, 'coredata/citation-count')
+        return int(citation_count) if citation_count is not None else 0
 
     @property
     def ncoauthors(self):
         """Total number of coauthors."""
-        return self._ncoauthors
+        ncoauthors = get_encoded_text(self.xml, 'coauthor-count')
+        return int(ncoauthors) if ncoauthors is not None else 0
 
     @property
     def current_affiliation(self):
         """Current affiliation according to scopus."""
-        return self._current_affiliation
+        return get_encoded_text(self.xml, 'author-profile/affiliation-current/'
+                                          'affiliation/ip-doc/afdispname')
 
     @property
     def affiliation_history(self):
-        """List of ScopusAffiliation objects."""
-        return self._affiliation_history
+        """List of ScopusAffiliation objects representing former
+        affiliations of the author.  Only affiliations with more than one
+        publication are considered.
+        """
+        aff_ids = [e.attrib.get('affiliation-id') for e in
+                   self.xml.findall('author-profile/affiliation-history/affiliation')
+                   if e is not None and len(list(e.find("ip-doc").iter())) > 1]
+        return [ScopusAffiliation(aff_id) for aff_id in aff_ids]
 
     @property
     def date_created(self):
         """Date the Scopus record was created."""
-        return self._date_created
+        date_created = self.xml.find('author-profile/date-created', ns)
+        try:
+            return (int(date_created.attrib['year']),
+                    int(date_created.attrib['month']),
+                    int(date_created.attrib['day']))
+        except AttributeError:  # date_created is None
+            return (None, None, None)
 
     @property
     def firstname(self):
         """Author first name."""
-        return self._firstname
+        return (get_encoded_text(self.xml,
+            'author-profile/preferred-name/given-name') or '')
 
     @property
     def lastname(self):
         """Author last name."""
-        return self._lastname
+        return (get_encoded_text(self.xml,
+           'author-profile/preferred-name/surname') or '')
 
     @property
     def name(self):
         """Author name."""
-        return self._name
+        return ((get_encoded_text(self.xml,
+                 'author-profile/preferred-name/given-name') or '') +
+                 ' ' +
+                (get_encoded_text(self.xml,
+                 'author-profile/preferred-name/surname') or ''))
 
     @property
     def scopus_url(self):
         """URL to the author's profile page."""
-        return self._scopus_url
+        scopus_url = self.xml.find('coredata/link[@rel="scopus-author"]')
+        try:
+            return scopus_url.get('href')
+        except AttributeError:  # scopus_url is None
+            return None
+
 
     @property
     def citedby_url(self):
         """URL to Scopus page of citing papers."""
-        return self._citedby_url
+        citedby_url = self.xml.find('coredata/link[@rel="search"]')
+        try:
+            return citedby_url.get('href')
+        except AttributeError:  # citedby_url is None
+            return None
 
     @property
     def coauthor_url(self):
         """URL to Scopus coauthor page."""
-        return self._coauthor_url
+        coauthor_url = self.xml.find('coredata/link[@rel="coauthor-search"]')
+        try:
+            return coauthor_url.get('href')
+        except AttributeError:  # coauthor_url is None
+            return None
+
+    @property
+    def subject_areas(self):
+        """List of tuples of author subject areas in the form
+        (area, frequency, abbreviation, code), where frequency is the
+        number of publications in this subject area.
+        """
+        areas = self.xml.findall('subject-areas/subject-area')
+        freqs = self.xml.findall('author-profile/classificationgroup/'
+                                 'classifications[@type="ASJC"]/classification')
+        c = {int(cls.text): int(cls.attrib['frequency']) for cls in freqs}
+        cats = [(a.text, c[int(a.get("code"))], a.get("abbrev"), a.get("code"))
+                for a in areas]
+        cats.sort(reverse=True, key=itemgetter(1))
+        return cats
+
+    @property
+    def publication_history(self):
+        """List of tuples of authored publications in the form
+        (title, abbreviation, type, issn), where issn is only given
+        for journals.  abbreviation and issn may be None.
+        """
+        pub_hist = self.xml.findall('author-profile/journal-history/')
+        hist = []
+        for pub in pub_hist:
+            try:
+                issn = pub.find("issn").text
+            except AttributeError:
+                issn = None
+            try:
+                abbr = pub.find("sourcetitle-abbrev").text
+            except AttributeError:
+                abbr = None
+            hist.append((pub.find("sourcetitle").text, abbr, pub.get("type"), issn))
+        return hist
 
     def __init__(self, author_id, refresh=False, refresh_aff=False, level=1):
         """Class to represent a Scopus Author query by the scopus-id.
@@ -104,7 +177,8 @@ class ScopusAuthor(object):
         Parameters
         ----------
         author_id : str or int
-            The ID of the author to search for.
+            The ID of the author to search for.  Optionally expressed
+            as an Elsevier EID (i.e., in the form 9-s2.0-nnnnnnnn).
 
         refresh : bool (optional, default=False)
             Whether to refresh the cached file (if it exists) or not.
@@ -118,93 +192,18 @@ class ScopusAuthor(object):
 
         Notes
         -----
-        The files are cached in ~/.scopus/author/{author_id}.
+        The files are cached in ~/.scopus/author/{author_id} (without
+        eventually leading '9-s2.0-').
         """
-        author_id = str(int(author_id))
-
+        author_id = str(int(str(author_id).split('-')[-1]))
         self.level = level
 
         qfile = os.path.join(SCOPUS_AUTHOR_DIR, author_id)
-        url = ('http://api.elsevier.com/content/author/'
+        url = ('https://api.elsevier.com/content/author/'
                'author_id/{}').format(author_id)
         params = {'author_id': author_id, 'view': 'ENHANCED'}
-        xml = ET.fromstring(get_content(qfile, url=url, refresh=refresh,
-                                        params=params))
-        self.xml = xml
-        self._orcid = get_encoded_text(xml, 'coredata/orcid')
-        hindex = get_encoded_text(xml, 'h-index')
-        self._hindex = int(hindex) if hindex is not None else 0
-
-        ndocuments = get_encoded_text(xml, 'coredata/document-count')
-        self._ndocuments = int(ndocuments) if ndocuments is not None else 0
-
-        _author_id = get_encoded_text(xml, 'coredata/dc:identifier')
-        self._author_id = _author_id.split(":")[-1]
-
-        citation_count = get_encoded_text(xml, 'coredata/citation-count')
-        self._citation_count = int(citation_count) if citation_count is not None else 0
-
-        ncited_by = get_encoded_text(xml, 'coredata/cited-by-count')
-        self._ncited_by = int(ncited_by) if ncited_by is not None else 0
-
-        ncoauthors = get_encoded_text(xml, 'coauthor-count')
-        self._ncoauthors = int(ncoauthors) if ncoauthors is not None else 0
-
-        self._current_affiliation = get_encoded_text(xml,
-            'author-profile/affiliation-current/affiliation/ip-doc/afdispname')
-
-        # affiliation history (sort out faulty historic affiliations)
-        aff_ids = [el.attrib.get('affiliation-id') for el in
-                   xml.findall('author-profile/affiliation-history/affiliation')
-                   if el is not None and len(list(el.find("ip-doc").iter())) > 1]
-        affs = [ScopusAffiliation(aff_id, refresh=refresh_aff) for aff_id in aff_ids]
-        self._affiliation_history = affs
-
-        date_created = xml.find('author-profile/date-created', ns)
-        if date_created is not None:
-            self._date_created = (int(date_created.attrib['year']),
-                                  int(date_created.attrib['month']),
-                                  int(date_created.attrib['day']))
-        else:
-            self._date_created = (None, None, None)
-        # Research areas
-        area_elements = xml.findall('subject-areas/subject-area')
-        self._area_elements = area_elements
-        # {code: name}
-        d = {int(ae.attrib['code']): ae.text for ae in area_elements}
-
-        classifications = xml.findall('author-profile/classificationgroup/'
-                                      'classifications[@type="ASJC"]/'
-                                      'classification')
-        # {code: frequency}
-        c = {int(cls.text): int(cls.attrib['frequency'])
-             for cls in classifications}
-
-        categories = [(d[code], c[code]) for code in d]
-        categories.sort(reverse=True, key=itemgetter(1))
-        self.categories = categories
-
-        self._firstname = (get_encoded_text(xml,
-            'author-profile/preferred-name/given-name') or '')
-
-        self._lastname = (get_encoded_text(xml,
-           'author-profile/preferred-name/surname') or '')
-
-        self._name = ((get_encoded_text(xml,
-                       'author-profile/preferred-name/given-name') or '') +
-                      ' ' +
-                      (get_encoded_text(xml,
-                       'author-profile/preferred-name/surname') or ''))
-
-        # Real website for the author
-        self._scopus_url = xml.find('coredata/link[@rel="scopus-author"]')
-        if self._scopus_url is not None:
-            self._scopus_url = self._scopus_url.get('href')
-
-        # API URL for coauthors
-        self._coauthor_url = xml.find('coredata/link[@rel="coauthor-search"]')
-        if self._coauthor_url is not None:
-            self._coauthor_url = self._coauthor_url.get('href')
+        self.xml =  ET.fromstring(get_content(qfile, url=url, refresh=refresh,
+                                              params=params))
 
     def get_coauthors(self):
         """Return list of coauthors, their scopus-id and research areas."""
@@ -239,7 +238,7 @@ class ScopusAuthor(object):
 
                 # get categories for this author
                 s = u', '.join(['{0} ({1})'.format(subject.text,
-                                                  subject.attrib['frequency'])
+                                                   subject.attrib['frequency'])
                                for subject in
                                entry.findall('atom:subject-area', ns)])
 
@@ -258,6 +257,12 @@ class ScopusAuthor(object):
         """Return a list of ScopusAbstract objects using ScopusSearch."""
         return [ScopusAbstract(eid, refresh=refresh)
                 for eid in self.get_document_eids(refresh=refresh)]
+
+    def get_journal_abstracts(self, refresh=True):
+        """Return a list of ScopusAbstract objects using ScopusSearch,
+           but only if belonging to a Journal."""
+        return [abstract for abstract in self.get_abstracts(refresh=refresh) if
+                abstract.aggregationType == 'Journal']
 
     def get_document_summary(self, N=None, cite_sort=True, refresh=True):
         """Return a summary string of documents.
@@ -280,8 +285,7 @@ class ScopusAuthor(object):
         s : str
             Text summarizing an author's documents.
         """
-        abstracts = [ScopusAbstract(eid, refresh=refresh)
-                     for eid in self.get_document_eids(refresh=refresh)]
+        abstracts = self.get_abstracts(refresh=refresh)
 
         if cite_sort:
             counts = [(a, int(a.citedby_count)) for a in abstracts]
@@ -301,59 +305,40 @@ class ScopusAuthor(object):
     def __str__(self):
         """Return a summary string."""
         s = ['{} {} (updated on {})'.format(
-             '*' * self.level, self._name, time.asctime())]
-
-        url = self.xml.find('coredata/link[@rel="scopus-author"]')
-        if url is not None:
-            url = url.get('href', 'None')
-        else:
-            url = ''
-
-        s += ['']
-
-        orcid = get_encoded_text(self.xml, 'coredata/orcid')
-        if orcid is not None:
-            s += ['http://orcid.org/' + orcid]
-
+             '*' * self.level, self.name, time.asctime())]
+        # Links
+        s += ['', self.scopus_url]
+        if self.orcid is not None:
+            s += ['http://orcid.org/' + self.orcid]
+        # Publication stats
         s += ['{} documents cited {} times by {} people ({} coauthors)'.format(
-              self._ndocuments, self._citation_count, self._ncited_by,
-              self._ncoauthors)]
-        s += ['#first author papers {0}'.format(self.n_first_author_papers())]
-        s += ['#last author papers {0}'.format(self.n_last_author_papers())]
-        s += ['h-index: {}'.format(self._hindex) +
-              '        AIF(2014) = ' +
-              '{0:1.2f}'.format(self.author_impact_factor(2015)[2])]
-
+              self.ndocuments, self.citation_count, self.ncited_by,
+              self.ncoauthors)]
+        s += ['#first author papers {}'.format(self.n_first_author_papers())]
+        s += ['#last author papers {}'.format(self.n_last_author_papers())]
+        s += ['h-index: {}'.format(self.hindex) +
+              '        AIF(2017) = ' +
+              '{0:1.2f}'.format(self.author_impact_factor(2017)[2])]
+        # Profile information
         s += ['Scopus ID created on {}'.format(self.date_created)]
-
         # Current Affiliation. Note this is what Scopus thinks is current.
-        s += ['\nCurrent affiliation according to Scopus:']
-        s += ['  ' + (self._current_affiliation or '')]
-
-        # subject areas
+        s += ['\nCurrent affiliation( according to Scopus):']
+        s += ['  ' + (self.current_affiliation or '-')]
+        # Subject Areas
         s += ['\nSubject areas']
-
-        s += [textwrap.fill(', '.join(['{0} ({1})'.format(el[0], el[1])
-                                       for el in self.categories]),
-                            initial_indent='  ',
+        areas = ['{} ({})'.format(el[0], el[1]) for el in self.subject_areas]
+        s += [textwrap.fill(', '.join(areas), initial_indent='  ',
                             subsequent_indent='  ')]
-
-        # journals published in
-        temp_s = [el.text for el in
-                  self.xml.findall('author-profile/journal-history/'
-                                   'journal/sourcetitle-abbrev')]
+        # Journals published in
+        temp_s = [el[1] for el in self.publication_history]
         s += ['\nPublishes in:\n' +
               textwrap.fill(', '.join(temp_s), initial_indent='  ',
                             subsequent_indent='  ')]
-
-        # affiliation history
+        # Affiliation history
         s += ['\nAffiliation history:']
-        for aff in self.affiliation_history:
-            s += [str(aff)]
-
-        # print a bibliography
+        s.extend([str(aff) for aff in self.affiliation_history])
+        # Bibliography
         s += [self.get_document_summary()]
-
         return '\n'.join(s)
 
     def author_impact_factor(self, year=2014, refresh=True):
@@ -372,9 +357,7 @@ class ScopusAuthor(object):
         (ncites, npapers, aif) : tuple of integers
             The citations count, publication count, and author impact factor.
         """
-        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
-                            for eid in self.get_document_eids(refresh=refresh)
-                            if ScopusAbstract(eid, refresh=refresh).aggregationType == 'Journal']
+        scopus_abstracts = self.get_journal_abstracts(refresh=refresh)
 
         cites = [int(ab.citedby_count) for ab in scopus_abstracts]
         years = [int(ab.coverDate.split('-')[0]) for ab in scopus_abstracts]
@@ -392,33 +375,22 @@ class ScopusAuthor(object):
 
     def n_first_author_papers(self, refresh=True):
         """Return number of papers with author as the first author."""
-        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
-                            for eid in self.get_document_eids(refresh=refresh)
-                            if ScopusAbstract(eid, refresh=refresh).aggregationType == 'Journal']
-        first_authors = [1 for ab in scopus_abstracts
+        first_authors = [1 for ab in self.get_journal_abstracts(refresh=refresh)
                          if ab.authors[0].scopusid == self.author_id]
-
         return sum(first_authors)
 
     def n_last_author_papers(self, refresh=True):
         """Return number of papers with author as the last author."""
-        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
-                            for eid in self.get_document_eids(refresh=refresh)
-                            if ScopusAbstract(eid, refresh=refresh).aggregationType == 'Journal']
-        first_authors = [1 for ab in scopus_abstracts
+        first_authors = [1 for ab in self.get_journal_abstracts(refresh=refresh)
                          if ab.authors[-1].scopusid == self.author_id]
         return sum(first_authors)
 
     def n_journal_articles(self, refresh=True):
         """Return the number of journal articles."""
-        return len([ScopusAbstract(eid, refresh=refresh)
-                    for eid in self.get_document_eids(refresh=refresh)
-                    if ScopusAbstract(eid, refresh=refresh).aggregationType == 'Journal'])
+        return len(self.get_journal_abstracts(refresh=refresh))
 
     def n_yearly_publications(self, refresh=True):
         """Number of journal publications in a given year."""
-        scopus_abstracts = [ScopusAbstract(eid, refresh=refresh)
-                            for eid in self.get_document_eids(refresh=refresh)
-                            if ScopusAbstract(eid, refresh=refresh).aggregationType == 'Journal']
-        pub_years = [int(ab.coverDate.split('-')[0]) for ab in scopus_abstracts]
+        pub_years = [int(ab.coverDate.split('-')[0])
+                     for ab in self.get_journal_abstracts(refresh=refresh)]
         return Counter(pub_years)

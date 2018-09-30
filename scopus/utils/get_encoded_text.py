@@ -1,5 +1,6 @@
 # Namespaces for Scopus XML
 ns = {'dtd': 'http://www.elsevier.com/xml/svapi/abstract/dtd',
+      'dn': 'http://www.elsevier.com/xml/svapi/abstract/dtd',
       'ait': "http://www.elsevier.com/xml/ani/ait",
       'cto': "http://www.elsevier.com/xml/cto/dtd",
       'xocs': "http://www.elsevier.com/xml/xocs/dtd",
@@ -27,6 +28,6 @@ def get_encoded_text(container, xpath):
     result : str
     """
     try:
-        return container.find(xpath, ns).text
+        return "".join(container.find(xpath, ns).itertext())
     except AttributeError:
         return None

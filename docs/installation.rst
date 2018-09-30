@@ -2,7 +2,7 @@
 Installation
 ============
 
-Install scopus with:
+Install scopus from PyPI:
 
 .. code-block:: console
 
@@ -14,4 +14,6 @@ or directly from the GitHub repository (may be unstable):
 
     $ pip install git+git://github.com/scopus-api/scopus
 
-Using Scopus is not free. You need to have a license or institutional access to use it.  Additionally, you need a key.  Go to http://dev.elsevier.com/myapikey.html to register and get a key.  On first usage, `scopus` asks you to enter to key which will be stored in `~/.scopus/my_scopus.py`.
+To access the Scopus database using `scopus`, you need an API key which you can get from http://dev.elsevier.com/myapikey.html after registration.  Additionally, you need to be in your institution's network or you need to have an InstToken.  If you use InstToken please follow the steps explained in :doc:`Configuration </configuration>`, otherwise simply use `scopus` which will prompt you for your API Key when necessary.
+
+See extended description and examples in the :doc:`Examples </examples>` section.

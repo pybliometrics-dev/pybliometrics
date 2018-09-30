@@ -28,7 +28,10 @@ class ScopusSearch(object):
             A string of the query.
 
         fields : str (optional, default='eid')
-            The list of fields you want returned.
+            The fields you want returned.  Allowed fields are specified in
+            https://dev.elsevier.com/guides/ScopusSearchViews.htm.  Since
+            currently only EIDs are stored, this parameter is being kept
+            for later use only.
 
         count : int (optional, default=200)
             The number of entries to be displayed at once.  A smaller number
@@ -67,7 +70,7 @@ class ScopusSearch(object):
         else:
             # No cached file exists, or we are refreshing.
             # First, we get a count of how many things to retrieve
-            url = 'http://api.elsevier.com/content/search/scopus'
+            url = 'https://api.elsevier.com/content/search/scopus'
             params = {'query': query, 'field': fields, 'count': 0, 'start': 0}
             xml = download(url=url, params=params).text.encode('utf-8')
             results = ET.fromstring(xml)
@@ -104,7 +107,7 @@ class ScopusSearch(object):
         s = """{query}
         Resulted in {N} hits.
     {entries}"""
-        return s.format(self=self,
+        return s.format(query=self.query,
                         N=len(self.EIDS),
                         entries='\n    '.join(self.EIDS))
 

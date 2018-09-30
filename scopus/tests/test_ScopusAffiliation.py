@@ -56,6 +56,10 @@ def test_org_url():
     assert_equal(aff.org_url, 'http://www.uct.ac.za')
 
 
+def test_state():
+    assert_equal(aff.state, None)
+
+
 def test_url():
     expected = 'https://www.scopus.com/affil/profile.uri?afid=\
 60000356&partnerID=HzOxMe3b&origin=inward'

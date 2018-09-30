@@ -1,8 +1,16 @@
 import os
 import requests
 import sys
+try:
+    from configparser import ConfigParser
+except ImportError:
+    from ConfigParser import ConfigParser
 
 import scopus
+
+config = ConfigParser()
+config.optionxform = str
+config.read(os.path.expanduser("~/.scopus/config"))
 
 
 def download(url, params=None, accept="xml"):
@@ -36,18 +44,31 @@ def download(url, params=None, accept="xml"):
 
     Notes
     -----
-    Loads the API Key into the scopus namespace on first run.
+    Loads the Authentication creditation into scopus namespace on first run.
+    If there is a config file, which must contain InstToken, it is given
+    preference.  Alternatively it loads the API key from my_scopus.py file.
     """
     accepted = ("json", "xml", "atom+xml")
     if accept.lower() not in accepted:
         raise ValueError('accept parameter must be one of ' +
                          ', '.join(accepted))
-    try:
-        key = scopus.MY_API_KEY
-    except AttributeError:
-        load_api_key()
-        key = scopus.MY_API_KEY
-    header = {'Accept': 'application/{}'.format(accept), 'X-ELS-APIKey': key}
+    if config.has_section('Authentication'):
+        # Authentication with InstToken and Key from config file
+        if not valid_config(config):
+            msg = ("config file misspecified. It must contain an "
+                   "Authentication section with two entries: APIKey "
+                   "and InstToken. Please correct.")
+            raise ValueError(msg)
+        header = {'X-ELS-APIKey': config.get('Authentication', 'APIKey'),
+                  'X-ELS-Insttoken': config.get('Authentication', 'InstToken')}
+    else:
+        # Authentication with Key from my_scopus.py file
+        try:
+            key = scopus.MY_API_KEY
+        except AttributeError:
+            load_api_key()  # loads MY_API_KEY in scopus namespace
+        header = {'X-ELS-APIKey': scopus.MY_API_KEY}
+    header.update({'Accept': 'application/{}'.format(accept)})
     resp = requests.get(url, headers=header, params=params)
     resp.raise_for_status()
     return resp
@@ -92,7 +113,9 @@ def load_api_key():
     with open(SCOPUS_API_FILE, "a+") as f:
         f.seek(0)
         exec(f.read(), globals())
-        if "MY_API_KEY" not in globals():
+        try:
+            scopus.MY_API_KEY = MY_API_KEY
+        except NameError:
             prompt = ("No API Key detected. Please enter a valid API Key "
                       "obtained from http://dev.elsevier.com/myapikey.html: \n")
             if sys.version_info >= (3, 0):
@@ -101,3 +124,8 @@ def load_api_key():
                 key = raw_input(prompt)
             f.write('MY_API_KEY = "{}"'.format(key))
             scopus.MY_API_KEY = key
+
+
+def valid_config(conf):
+    """Test if config contains necessary sections."""
+    return conf.has_option('Authentication', 'APIKey') and conf.has_option('Authentication', 'InstToken')
