@@ -2,6 +2,7 @@ import os
 from collections import namedtuple
 from json import loads
 
+from .scopus_search import ScopusSearch
 from scopus.utils import download, get_content
 
 AUTHOR_RETRIEVAL_DIR = os.path.expanduser('~/.scopus/author_retrieval')
@@ -253,7 +254,7 @@ class AuthorRetrieval(object):
         """Return list of EIDs of author's publications using ScopusSearch."""
         search = ScopusSearch('au-id({})'.format(self.author_id),
                               *args, **kwds)
-        return search.EIDS
+        return search.get_eids()
 
     def __str__(self):
         """Return a summary string."""
