@@ -15,7 +15,7 @@ class AuthorRetrieval(object):
     @property
     def affiliation_current(self):
         """The ID of the current affiliation according to Scopus."""
-        return self.data['affiliation-current']['@id']
+        return self._json['affiliation-current']['@id']
 
     @property
     def affiliation_history(self):
@@ -23,27 +23,27 @@ class AuthorRetrieval(object):
         affiliated with acccording to Scopus.
         """
         return [d['@id'] for d in
-                self.data['affiliation-history']['affiliation']]
+                self._json['affiliation-history']['affiliation']]
 
     @property
     def citation_count(self):
         """Total number of citing items."""
-        return self.data['coredata'].get('citation-count', '0')
+        return self._json['coredata'].get('citation-count', '0')
 
     @property
     def cited_by_count(self):
         """Total number of citing authors."""
-        return self.data['coredata'].get('cited-by-count', '0')
+        return self._json['coredata'].get('cited-by-count', '0')
 
     @property
     def coauthor_count(self):
         """Total number of coauthors."""
-        return self.data.get('coauthor-count', '0')
+        return self._json.get('coauthor-count', '0')
 
     @property
     def classificationgroup(self):
         """List with (subject group ID, number of documents)-tuples."""
-        clg = self.data['author-profile']['classificationgroup'].get('classifications', {})
+        clg = self._json['author-profile']['classificationgroup'].get('classifications', {})
         out = []
         for item in clg.get('classification', []):
             out.append((item['$'], item['@frequency']))
@@ -52,12 +52,12 @@ class AuthorRetrieval(object):
     @property
     def coauthor_link(self):
         """URL to Scopus API search page for coauthors."""
-        return self.data['coredata'].get('link', [])[3].get('@href')
+        return self._json['coredata'].get('link', [])[3].get('@href')
 
     @property
     def date_created(self):
         """Date the Scopus record was created."""
-        date = self.data['author-profile']['date-created']
+        date = self._json['author-profile']['date-created']
         if date is not None:
             return (int(date['@year']), int(date['@month']), int(date['@day']))
         else:
@@ -66,37 +66,37 @@ class AuthorRetrieval(object):
     @property
     def document_count(self):
         """Number of documents authored (excludes book chapters and notes)."""
-        return self.data['coredata'].get('document-count', '0')
+        return self._json['coredata'].get('document-count', '0')
 
     @property
     def eid(self):
         """The EID of the author."""
-        return self.data['coredata']['eid']
+        return self._json['coredata']['eid']
 
     @property
     def given_name(self):
         """Author's preferred given name."""
-        return self.data['author-profile'].get('preferred-name', {}).get('given-name')
+        return self._json['author-profile'].get('preferred-name', {}).get('given-name')
 
     @property
     def h_index(self):
         """The author's h-index"""
-        return self.data.get('h-index', '0')
+        return self._json.get('h-index', '0')
 
     @property
     def identifier(self):
         """The author's ID."""
-        return self.data['coredata']['dc:identifier'].split(":")[-1]
+        return self._json['coredata']['dc:identifier'].split(":")[-1]
 
     @property
     def indexed_name(self):
         """Author's name as indexed by Scopus."""
-        return self.data['author-profile'].get('preferred-name', {}).get('indexed-name')
+        return self._json['author-profile'].get('preferred-name', {}).get('indexed-name')
 
     @property
     def initials(self):
         """Author's preferred initials."""
-        return self.data['author-profile'].get('preferred-name', {}).get('initials')
+        return self._json['author-profile'].get('preferred-name', {}).get('initials')
 
     @property
     def journal_history(self):
@@ -104,7 +104,7 @@ class AuthorRetrieval(object):
         (sourcetitle, abbreviation, type, issn).  issn is only given
         for journals.  abbreviation and issn may be None.
         """
-        pub_hist = self.data['author-profile']['journal-history'].get('journal', [])
+        pub_hist = self._json['author-profile']['journal-history'].get('journal', [])
         hist = []
         jour = namedtuple('Journal', 'sourcetitle abbreviation type issn')
         for pub in pub_hist:
@@ -117,7 +117,7 @@ class AuthorRetrieval(object):
     @property
     def orcid(self):
         """The author's ORCID."""
-        return self.data['coredata'].get('orcid')
+        return self._json['coredata'].get('orcid')
 
     @property
     def name_variants(self):
@@ -127,7 +127,7 @@ class AuthorRetrieval(object):
         out = []
         fields = 'indexed_name initials surname given_name doc_count'
         variant = namedtuple('Variant', fields)
-        for var in self.data['author-profile'].get('name-variant', []):
+        for var in self._json['author-profile'].get('name-variant', []):
             new = variant(indexed_name=var['indexed-name'],
                           initials=var['initials'], surname=var['surname'],
                           given_name=var['given-name'],
@@ -138,27 +138,27 @@ class AuthorRetrieval(object):
     @property
     def surname(self):
         """Author's preferred surname."""
-        return self.data['author-profile'].get('preferred-name', {}).get('surname')
+        return self._json['author-profile'].get('preferred-name', {}).get('surname')
 
     @property
     def scopus_author_link(self):
         """Link to the Scopus web view of the author."""
-        return self.data['coredata'].get('link', [])[1].get('@href')
+        return self._json['coredata'].get('link', [])[1].get('@href')
 
     @property
     def self_link(self):
         """Link to the author's API page."""
-        return self.data['coredata'].get('link', [])[0].get('@href')
+        return self._json['coredata'].get('link', [])[0].get('@href')
 
     @property
     def search_link(self):
         """URL to the API page listing documents of the author."""
-        return self.data['coredata'].get('link', [])[2].get('@href')
+        return self._json['coredata'].get('link', [])[2].get('@href')
 
     @property
     def publication_range(self):
         """Tuple containing years of first and last publication."""
-        r = self.data['author-profile']['publication-range']
+        r = self._json['author-profile']['publication-range']
         return (r['@start'], r['@end'])
 
     @property
@@ -168,7 +168,7 @@ class AuthorRetrieval(object):
         """
         areas = []
         area = namedtuple('Subjectarea', 'area abbreviation code')
-        for item in self.data['subject-areas'].get('subject-area', []):
+        for item in self._json['subject-areas'].get('subject-area', []):
             new = area(area=item['$'], code=item['@code'],
                        abbreviation=item['@abbrev'])
             areas.append(new)
@@ -177,9 +177,9 @@ class AuthorRetrieval(object):
     @property
     def url(self):
         """URL to the author's API page."""
-        return self.data['coredata']['prism:url']
+        return self._json['coredata']['prism:url']
 
-    def __init__(self, author_id, refresh=False, refresh_aff=False, level=1):
+    def __init__(self, author_id, refresh=False):
         """Class to represent a Scopus Author query by the scopus-id.
 
         Parameters
@@ -191,20 +191,12 @@ class AuthorRetrieval(object):
         refresh : bool (optional, default=False)
             Whether to refresh the cached file (if it exists) or not.
 
-        refresh_aff : bool (optional, default=False)
-            Whether to refresh the cached corresponding affiliation views
-            (if they exist) or not.
-
-        level : int (optional, default=1)
-            Number of * to print in property __str__.
-
         Notes
         -----
         The files are cached in ~/.scopus/author/{author_id} (without
         eventually leading '9-s2.0-').
         """
         author_id = str(int(str(author_id).split('-')[-1]))
-        self.level = level
 
         qfile = os.path.join(AUTHOR_RETRIEVAL_DIR, author_id)
         url = ('https://api.elsevier.com/content/author/'
@@ -212,7 +204,17 @@ class AuthorRetrieval(object):
         params = {'author_id': author_id, 'view': 'ENHANCED'}
         res = get_content(qfile, url=url, refresh=refresh, accept='json',
                           params=params)
-        self.data = loads(res.decode('utf-8'))['author-retrieval-response'][0]
+        self._json = loads(res.decode('utf-8'))['author-retrieval-response'][0]
+
+    def __str__(self):
+        """Return a summary string."""
+        s = '''{self.indexed_name} from {self.affiliation_current},
+    published {self.document_count} documents since {since}
+    in {journals} distinct journals
+    which were cited by {self.cited_by_count} authors in {self.citation_count} documents
+    '''.format(self=self, since=self.publication_range[0],
+               journals=len(self.journal_history))
+        return s
 
     def get_coauthors(self):
         """Retrieves basic information about co-authors as a list of
@@ -255,13 +257,3 @@ class AuthorRetrieval(object):
         search = ScopusSearch('au-id({})'.format(self.author_id),
                               *args, **kwds)
         return search.get_eids()
-
-    def __str__(self):
-        """Return a summary string."""
-        s = '''{self.indexed_name} from {self.affiliation_current},
-    published {self.document_count} documents since {since}
-    in {journals} distinct journals
-    which were cited by {self.cited_by_count} authors in {self.citation_count} documents
-    '''.format(self=self, since=self.publication_range[0],
-               journals=len(self.journal_history))
-        return s
