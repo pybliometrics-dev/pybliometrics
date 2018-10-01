@@ -3,7 +3,6 @@
 """Tests for `CitationOverview` module."""
 
 from collections import namedtuple
-
 from nose.tools import assert_equal, assert_true
 
 import scopus

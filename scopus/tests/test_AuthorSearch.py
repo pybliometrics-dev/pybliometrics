@@ -3,7 +3,6 @@
 """Tests for `AuthorSearch` module."""
 
 from collections import namedtuple
-
 from nose.tools import assert_equal
 
 import scopus

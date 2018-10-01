@@ -19,7 +19,7 @@ def test_affiliation_name():
 
 
 def test_author_count():
-    expected = '10975'
+    expected = '10951'
     assert_true(aff.author_count >= expected)
 
 

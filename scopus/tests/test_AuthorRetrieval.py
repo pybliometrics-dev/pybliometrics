@@ -29,7 +29,7 @@ def test_cited_by_count():
     assert_true(au.cited_by_count >= '6066')
 
 
-def test_coauthor_count:
+def test_coauthor_count():
     assert_true(au.coauthor_count >= '164')
 
 
@@ -55,11 +55,6 @@ def test_document_count():
 
 def test_eid():
     assert_equal(au.eid, '9-s2.0-7004212771')
-
-
-# def test_get_coauthors():
-#     coauthors = au.get_coauthors()
-#     assert_true(len(coauthors) >= 164)
 
 
 def test_given_name():
@@ -113,13 +108,13 @@ def test_scopus_author_link():
 
 def test_self_link():
     expected = 'https://www.scopus.com/authid/detail.uri?partnerID=HzOxMe3b&'\
-    'authorId=7004212771&origin=inward'
+               'authorId=7004212771&origin=inward'
     assert_equal(au.self_link, expected)
 
 
 def test_search_link():
     expected = 'http://api.elsevier.com/content/search/scopus?query='\
-    'au-id%287004212771%29'
+               'au-id%287004212771%29'
     assert_equal(au.search_link, expected)
 
 
