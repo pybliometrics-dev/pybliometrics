@@ -1,3 +1,4 @@
+from scopus.tests.test_AbstractRetrieval import *
 from scopus.tests.test_AffiliationSearch import *
 from scopus.tests.test_AuthorRetrieval import *
 from scopus.tests.test_AuthorSearch import *
