@@ -136,7 +136,7 @@ class ContentAffiliationRetrieval:
 
         Notes
         -----
-        The files are cached in ~/.scopus/affiliation/{aff_id}.
+        The files are cached in ~/.scopus/affiliation_retrieval/{aff_id}.
         """
         aff_id = str(int(str(aff_id).split('-')[-1]))
 

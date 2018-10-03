@@ -15,11 +15,11 @@ if not os.path.exists(SCOPUS_SEARCH_DIR):
 class ScopusSearch(Search):
     @property
     def EIDS(self):
-        """Outdated property, will be remove in a future release.  Please use
+        """Outdated property, will be removed in a future release.  Please use
         get_eids() instead.  For details see
         https://scopus.readthedocs.io/en/latest/tips.html#migration-guide-to-0-x-to-1-x.
         """
-        text = "Outdated property, will be remove in a future release.  "\
+        text = "Outdated property, will be removed in a future release.  "\
             "Please use get_eids() instead.  For details see "\
             "https://scopus.readthedocs.io/en/latest/tips.html#"\
             "migration-guide-to-0-x-to-1-x."

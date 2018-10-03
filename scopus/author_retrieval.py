@@ -70,7 +70,7 @@ class AuthorRetrieval(object):
 
     @property
     def eid(self):
-        """The EID of the author."""
+        """The EID of the author.  Might differ from the one provided."""
         return self._json['coredata']['eid']
 
     @property
@@ -85,7 +85,7 @@ class AuthorRetrieval(object):
 
     @property
     def identifier(self):
-        """The author's ID."""
+        """The author's ID.  Might differ from the one provided."""
         return self._json['coredata']['dc:identifier'].split(":")[-1]
 
     @property
@@ -193,7 +193,7 @@ class AuthorRetrieval(object):
 
         Notes
         -----
-        The files are cached in ~/.scopus/author/{author_id} (without
+        The files are cached in ~/.scopus/author_retrieval/{author_id} (without
         eventually leading '9-s2.0-').
         """
         author_id = str(int(str(author_id).split('-')[-1]))
@@ -259,6 +259,6 @@ class AuthorRetrieval(object):
 
     def get_document_eids(self, *args, **kwds):
         """Return list of EIDs of author's publications using ScopusSearch."""
-        search = ScopusSearch('au-id({})'.format(self.author_id),
+        search = ScopusSearch('au-id({})'.format(self.identifier),
                               *args, **kwds)
         return search.get_eids()
