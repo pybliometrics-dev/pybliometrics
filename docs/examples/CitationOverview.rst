@@ -50,7 +50,7 @@ There are also author information stored as list of `namedtuples <https://docs.p
     >>> auth_id
     '7004212771'
 
-Object `auth_id` can for example be used with :doc:`ScopusAuthor <../reference/scopus.ScopusAuthor>`.
+Object `auth_id` can for example be used with :doc:`AuthorRetrieval <../reference/scopus.AuthorRetrieval>`.
 
 
 Apart from that, there are bibliographic information, too:

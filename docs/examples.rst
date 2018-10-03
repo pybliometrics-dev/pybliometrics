@@ -21,9 +21,9 @@ Retrieval APIs
 ~~~~~~~~~~~~~~
 
 .. toctree::
-    examples/ScopusAbstract.rst
-    examples/ScopusAffiliation.rst
-    examples/ScopusAuthor.rst
+    examples/AbstractRetrieval.rst
+    examples/AuthorRetrieval.rst
+    examples/ContentAffiliationRetrieval.rst
 
 
 Metadata APIs

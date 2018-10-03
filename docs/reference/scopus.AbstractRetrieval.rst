@@ -1,7 +1,7 @@
-scopus.ScopusAffiliation
+scopus.AbstractRetrieval
 ========================
 
 .. currentmodule:: scopus
 
-.. autoclass:: ScopusAffiliation
+.. autoclass:: AbstractRetrieval
    :members:
