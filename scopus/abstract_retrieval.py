@@ -1,13 +1,9 @@
-import os
 from collections import namedtuple
 from json import loads
+from os.path import expanduser, join
 
+from scopus import config
 from scopus.utils import get_content
-
-ABSTRACT_RETRIEVAL_DIR = os.path.expanduser('~/.scopus/abstract_retrieval')
-
-if not os.path.exists(ABSTRACT_RETRIEVAL_DIR):
-    os.makedirs(ABSTRACT_RETRIEVAL_DIR)
 
 
 class AbstractRetrieval(object):
@@ -445,7 +441,7 @@ class AbstractRetrieval(object):
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
 
-        qfile = os.path.join(ABSTRACT_RETRIEVAL_DIR, EID)
+        qfile = join(expanduser(config.get('Directories', 'AbstractRetrieval')), EID)
         url = "https://api.elsevier.com/content/abstract/eid/{}".format(EID)
         res = get_content(qfile, url=url, refresh=refresh, accept='json',
                           params={'view': view})

@@ -1,14 +1,10 @@
-import os
 from collections import namedtuple
 from json import loads
+from os.path import expanduser, join
 
+from scopus import config
 from .scopus_search import ScopusSearch
 from scopus.utils import download, get_content
-
-AUTHOR_RETRIEVAL_DIR = os.path.expanduser('~/.scopus/author_retrieval')
-
-if not os.path.exists(AUTHOR_RETRIEVAL_DIR):
-    os.makedirs(AUTHOR_RETRIEVAL_DIR)
 
 
 class AuthorRetrieval(object):
@@ -198,7 +194,8 @@ class AuthorRetrieval(object):
         """
         author_id = str(int(str(author_id).split('-')[-1]))
 
-        qfile = os.path.join(AUTHOR_RETRIEVAL_DIR, author_id)
+        qfile = join(expanduser(config.get('Directories', 'AuthorRetrieval')),
+                     author_id)
         url = ('https://api.elsevier.com/content/author/'
                'author_id/{}').format(author_id)
         params = {'author_id': author_id, 'view': 'ENHANCED'}

@@ -5,16 +5,23 @@ try:
 except ImportError:
     import ConfigParser as configparser
 
-from scopus.utils import set_authentication
+from scopus.utils import set_authentication, set_directories
 
 # Configuration setup
 CONFIG_FILE = os.path.expanduser("~/.scopus/config.ini")
 config = configparser.ConfigParser()
 config.optionxform = str
 config.read(CONFIG_FILE)
-
 if 'Authentication' not in config.sections():
     set_authentication(config, CONFIG_FILE)
+if 'Directories' not in config.sections():
+    set_directories(config, CONFIG_FILE)
+
+# Create folders if necessary
+for _, directory in config.items('Directories'):
+    path = os.path.expanduser(directory)
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 
 def download(url, params=None, accept="xml"):
@@ -58,13 +65,13 @@ def download(url, params=None, accept="xml"):
         raise ValueError('accept parameter must be one of ' +
                          ', '.join(accepted))
     # Get credentials
-    key = config['Authentication'].get('APIKey')
+    key = config.get('Authentication', 'APIKey')
     while key is None:
         set_authentication(config, CONFIG_FILE)
         key = config.get('Authentication', 'APIKey')
     header = {'X-ELS-APIKey': key}
-    token = config['Authentication'].get('InstToken')
-    if token is not None:
+    if config.has_option('Authentication', 'InstToken'):
+        token = config.get('Authentication', 'InstToken')
         header.update({'X-ELS-APIKey': key, 'X-ELS-Insttoken': token})
     header.update({'Accept': 'application/{}'.format(accept)})
     # Perform request
@@ -85,7 +92,7 @@ def get_content(qfile, refresh, *args, **kwds):
     refresh : bool
         Whether the file content should be refreshed if it exists.
 
-    *args, **kwds : 
+    *args, **kwds :
         Arguments and keywords to be passed on to download().
 
     Returns

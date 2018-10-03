@@ -1,14 +1,10 @@
-import os
 from collections import namedtuple
 from datetime import datetime
 from json import loads
+from os.path import expanduser, join
 
+from scopus import config
 from scopus.utils import get_content
-
-CITATION_OVERVIEW_DIR = os.path.expanduser('~/.scopus/citation_overview')
-
-if not os.path.exists(CITATION_OVERVIEW_DIR):
-    os.makedirs(CITATION_OVERVIEW_DIR)
 
 
 class CitationOverview(object):
@@ -167,7 +163,7 @@ class CitationOverview(object):
         """
         # Get file content
         scopus_id = eid.split('0-')[-1]
-        qfile = os.path.join(CITATION_OVERVIEW_DIR, eid)
+        qfile = join(expanduser(config.get('Directories', 'CitationOverview')), eid)
         url = "https://api.elsevier.com/content/abstract/citations/{}".format(scopus_id)
         params = {'scopus_id': scopus_id, 'date': '{}-{}'.format(start, end)}
         res = get_content(qfile, url=url, refresh=refresh, params=params,

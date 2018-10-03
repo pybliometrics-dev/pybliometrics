@@ -3,6 +3,22 @@ from sys import version_info
 py3 = version_info >= (3, 0)
 
 
+def set_directories(config, fname):
+    """Create section Directories in config file and add API Key to it."""
+    config.add_section('Directories')
+    defaults = [('AbstractRetrieval', '~/.scopus/abstract_retrieval'),
+                ('AffiliationSearch', '~/.scopus/affiliation_search'),
+                ('AuthorRetrieval', '~/.scopus/author_retrieval'),
+                ('AuthorSearch', '~/.scopus/author_search'),
+                ('CitationOverview', '~/.scopus/citation_overview'),
+                ('ContentAffiliationRetrieval', '~/.scopus/affiliation_retrieval'),
+                ('ScopusSearch', '~/.scopus/scopus_search')]
+    for key, value in defaults:
+        config.set('Directories', key, value)
+    with open(fname, 'w') as f:
+        config.write(f)
+
+
 def set_authentication(config, fname):
     """Create section Authentication in config file and add API Key to it."""
     try:

@@ -1,15 +1,11 @@
 import hashlib
-import os
 from collections import namedtuple
 from json import loads
+from os.path import expanduser, join
 
+from scopus import config
 from scopus.utils import download
 from scopus.classes import Search
-
-SCOPUS_SEARCH_DIR = os.path.expanduser('~/.scopus/scopus_search')
-
-if not os.path.exists(SCOPUS_SEARCH_DIR):
-    os.makedirs(SCOPUS_SEARCH_DIR)
 
 
 class ScopusSearch(Search):
@@ -88,8 +84,8 @@ class ScopusSearch(Search):
         """
 
         self.query = query
-        qfile = os.path.join(SCOPUS_SEARCH_DIR,
-                             hashlib.md5(query.encode('utf8')).hexdigest())
+        qfile = join(expanduser(config.get('Directories', 'ScopusSearch')),
+                     hashlib.md5(query.encode('utf8')).hexdigest())
         url = 'https://api.elsevier.com/content/search/scopus'
         Search.__init__(self, query, qfile, url, refresh,
                         max_entries=5000, count=25, start=0, view='COMPLETE')

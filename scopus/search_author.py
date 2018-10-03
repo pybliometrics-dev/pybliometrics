@@ -1,13 +1,9 @@
 import hashlib
-import os
 from collections import namedtuple
+from os.path import expanduser, join
 
+from scopus import config
 from scopus.classes import Search
-
-AUTHOR_SEARCH_DIR = os.path.expanduser('~/.scopus/author_search')
-
-if not os.path.exists(AUTHOR_SEARCH_DIR):
-    os.makedirs(AUTHOR_SEARCH_DIR)
 
 
 class AuthorSearch(Search):
@@ -85,8 +81,8 @@ class AuthorSearch(Search):
         """
 
         self.query = query
-        qfile = os.path.join(AUTHOR_SEARCH_DIR,
-                             hashlib.md5(query.encode('utf8')).hexdigest())
+        qfile = join(expanduser(config.get('Directories', 'AuthorSearch')),
+                     hashlib.md5(query.encode('utf8')).hexdigest())
         url = 'https://api.elsevier.com/content/search/author'
         Search.__init__(self, query, qfile, url, refresh, count, start,
                         max_entries)

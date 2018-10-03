@@ -1,13 +1,9 @@
-import os
 from collections import namedtuple
 from json import loads
+from os.path import expanduser, join
 
+from scopus import config
 from scopus.utils import get_content
-
-CONTENT_AFFILIATION_DIR = os.path.expanduser('~/.scopus/affiliation_retrieval')
-
-if not os.path.exists(CONTENT_AFFILIATION_DIR):
-    os.makedirs(CONTENT_AFFILIATION_DIR)
 
 
 class ContentAffiliationRetrieval:
@@ -140,7 +136,8 @@ class ContentAffiliationRetrieval:
         """
         aff_id = str(int(str(aff_id).split('-')[-1]))
 
-        qfile = os.path.join(CONTENT_AFFILIATION_DIR, aff_id)
+        qfile = join(expanduser(config.get('Directories', 'ContentAffiliationRetrieval')),
+                     aff_id)
         url = ('https://api.elsevier.com/content/affiliation/'
                'affiliation_id/{}'.format(aff_id))
 
