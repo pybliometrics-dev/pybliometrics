@@ -1,16 +1,20 @@
 import os
 import requests
-import sys
 try:
-    from configparser import ConfigParser
+    import configparser
 except ImportError:
-    from ConfigParser import ConfigParser
+    import ConfigParser as configparser
 
-import scopus
+from scopus.utils import set_authentication
 
-config = ConfigParser()
+# Configuration setup
+CONFIG_FILE = os.path.expanduser("~/.scopus/config.ini")
+config = configparser.ConfigParser()
 config.optionxform = str
-config.read(os.path.expanduser("~/.scopus/config"))
+config.read(CONFIG_FILE)
+
+if 'Authentication' not in config.sections():
+    set_authentication(config, CONFIG_FILE)
 
 
 def download(url, params=None, accept="xml"):
@@ -48,27 +52,22 @@ def download(url, params=None, accept="xml"):
     If there is a config file, which must contain InstToken, it is given
     preference.  Alternatively it loads the API key from my_scopus.py file.
     """
+    # Value check
     accepted = ("json", "xml", "atom+xml")
     if accept.lower() not in accepted:
         raise ValueError('accept parameter must be one of ' +
                          ', '.join(accepted))
-    if config.has_section('Authentication'):
-        # Authentication with InstToken and Key from config file
-        if not valid_config(config):
-            msg = ("config file misspecified. It must contain an "
-                   "Authentication section with two entries: APIKey "
-                   "and InstToken. Please correct.")
-            raise ValueError(msg)
-        header = {'X-ELS-APIKey': config.get('Authentication', 'APIKey'),
-                  'X-ELS-Insttoken': config.get('Authentication', 'InstToken')}
-    else:
-        # Authentication with Key from my_scopus.py file
-        try:
-            key = scopus.MY_API_KEY
-        except AttributeError:
-            load_api_key()  # loads MY_API_KEY in scopus namespace
-        header = {'X-ELS-APIKey': scopus.MY_API_KEY}
+    # Get credentials
+    key = config['Authentication'].get('APIKey')
+    while key is None:
+        set_authentication(config, CONFIG_FILE)
+        key = config.get('Authentication', 'APIKey')
+    header = {'X-ELS-APIKey': key}
+    token = config['Authentication'].get('InstToken')
+    if token is not None:
+        header.update({'X-ELS-APIKey': key, 'X-ELS-Insttoken': token})
     header.update({'Accept': 'application/{}'.format(accept)})
+    # Perform request
     resp = requests.get(url, headers=header, params=params)
     resp.raise_for_status()
     return resp
@@ -102,30 +101,3 @@ def get_content(qfile, refresh, *args, **kwds):
         with open(qfile, 'wb') as f:
             f.write(content)
     return content
-
-
-def load_api_key():
-    """Helper function to create file with API Key on the first run.
-    Function needs to be here because in __init__.py it causes problems
-    with RTFD.io.
-    """
-    SCOPUS_API_FILE = os.path.expanduser("~/.scopus/my_scopus.py")
-    with open(SCOPUS_API_FILE, "a+") as f:
-        f.seek(0)
-        exec(f.read(), globals())
-        try:
-            scopus.MY_API_KEY = MY_API_KEY
-        except NameError:
-            prompt = ("No API Key detected. Please enter a valid API Key "
-                      "obtained from http://dev.elsevier.com/myapikey.html: \n")
-            if sys.version_info >= (3, 0):
-                key = input(prompt)
-            else:
-                key = raw_input(prompt)
-            f.write('MY_API_KEY = "{}"'.format(key))
-            scopus.MY_API_KEY = key
-
-
-def valid_config(conf):
-    """Test if config contains necessary sections."""
-    return conf.has_option('Authentication', 'APIKey') and conf.has_option('Authentication', 'InstToken')
