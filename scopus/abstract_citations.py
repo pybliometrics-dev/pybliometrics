@@ -174,10 +174,10 @@ class CitationOverview(object):
         self._end = int(end)
 
         # citeInfoMatrix
-        m = data['citeInfoMatrix']['citeInfoMatrixXML']['citationMatrix']['citeInfo'][0]
+        m = self._data['citeInfoMatrix']['citeInfoMatrixXML']['citationMatrix']['citeInfo'][0]
         self._citeInfoMatrix = {k.split(":", 1)[-1]: v for k, v in m.items()}
         # identifier-legend
-        l = data['identifier-legend']['identifier'][0]
+        l = self._data['identifier-legend']['identifier'][0]
         self._identifierlegend = {k.split(":", 1)[-1]: v for k, v in l.items()}
         # citeColumnTotalXML
-        self._citeColumnTotalXML = data['citeColumnTotalXML']  # not used
+        self._citeColumnTotalXML = self._data['citeColumnTotalXML']  # not used
