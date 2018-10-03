@@ -219,8 +219,8 @@ class AuthorRetrieval(object):
     def get_coauthors(self):
         """Retrieves basic information about co-authors as a list of
         namedtuples in the form
-        (surname, given_name, scopus_id, affiliation, areas), where
-        areas is a list of subject area codes joined by "; ".
+        (surname, given_name, id, areas, affiliation_id, name, city, country),
+        where areas is a list of subject area codes joined by "; ".
         Note: These information will not be cached and are slow for large
         coauthor groups.
         """
@@ -229,7 +229,7 @@ class AuthorRetrieval(object):
         data = loads(res.text)['search-results']
         N = int(data.get('opensearch:totalResults', 0))
         # Store information in namedtuples
-        fields = 'surname given_name id affiliation areas'
+        fields = 'surname given_name id areas affiliation_id name city country'
         coauth = namedtuple('Coauthor', fields)
         coauthors = []
         # Iterate over search results in chunks of 25 results
@@ -237,17 +237,22 @@ class AuthorRetrieval(object):
         while count < N:
             params = {'start': count, 'count': 25}
             res = download(url=self.coauthor_link, params=params, accept='json')
-            data = loads(res.text)['author-retrieval-response']
+            data = loads(res.text)['search-results'].get('entry', [])
             # Extract information for each coauthor
             for entry in data:
-                surname = entry['author-profile']['preferred-name']['surname']
-                given = entry['author-profile']['preferred-name']['given-name']
-                scopus_id = entry['coredata']['dc:identifier'].split(':')[-1]
-                aff = entry['affiliation-current']['@id']
-                areas = [a['@code'] for a in
-                         entry['subject-areas']['subject-area']]
-                new = coauth(surname=surname, given_name=given, id=scopus_id,
-                             affiliation=aff, areas='; '.join(areas))
+                aff = entry.get('affiliation-current', {})
+                try:
+                    areas = [a['$'] for a in entry['subject-area']]
+                except TypeError:  # Only one subject area given
+                    areas = [entry['subject-area']['$']]
+                new = coauth(surname=entry['preferred-name']['surname'],
+                             given_name=entry['preferred-name']['given-name'],
+                             id=entry['dc:identifier'].split(':')[-1],
+                             areas='; '.join(areas),
+                             affiliation_id=aff.get('affiliation-id'),
+                             name=aff.get('affiliation-name'),
+                             city=aff.get('affiliation-city'),
+                             country=aff.get('affiliation-country'))
                 coauthors.append(new)
             count += 25
         return coauthors
