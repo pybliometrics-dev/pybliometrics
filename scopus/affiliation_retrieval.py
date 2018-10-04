@@ -1,6 +1,6 @@
 from collections import namedtuple
 from json import loads
-from os.path import expanduser, join
+from os.path import join
 
 from scopus import config
 from scopus.utils import get_content
@@ -136,7 +136,7 @@ class ContentAffiliationRetrieval:
         """
         aff_id = str(int(str(aff_id).split('-')[-1]))
 
-        qfile = join(expanduser(config.get('Directories', 'ContentAffiliationRetrieval')),
+        qfile = join(config.get('Directories', 'ContentAffiliationRetrieval'),
                      aff_id)
         url = ('https://api.elsevier.com/content/affiliation/'
                'affiliation_id/{}'.format(aff_id))

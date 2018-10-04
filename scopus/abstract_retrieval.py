@@ -1,6 +1,6 @@
 from collections import namedtuple
 from json import loads
-from os.path import expanduser, join
+from os.path import join
 
 from scopus import config
 from scopus.utils import get_content
@@ -441,7 +441,7 @@ class AbstractRetrieval(object):
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
 
-        qfile = join(expanduser(config.get('Directories', 'AbstractRetrieval')), EID)
+        qfile = join(config.get('Directories', 'AbstractRetrieval'), EID)
         url = "https://api.elsevier.com/content/abstract/eid/{}".format(EID)
         res = get_content(qfile, url=url, refresh=refresh, accept='json',
                           params={'view': view})

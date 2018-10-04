@@ -2,7 +2,7 @@ import hashlib
 import warnings
 from collections import namedtuple
 from json import loads
-from os.path import expanduser, join
+from os.path import join
 
 from scopus import config
 from scopus.utils import download
@@ -85,7 +85,7 @@ class ScopusSearch(Search):
         """
 
         self.query = query
-        qfile = join(expanduser(config.get('Directories', 'ScopusSearch')),
+        qfile = join(config.get('Directories', 'ScopusSearch'),
                      hashlib.md5(query.encode('utf8')).hexdigest())
         url = 'https://api.elsevier.com/content/search/scopus'
         Search.__init__(self, query, qfile, url, refresh,

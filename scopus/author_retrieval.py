@@ -1,6 +1,6 @@
 from collections import namedtuple
 from json import loads
-from os.path import expanduser, join
+from os.path import join
 
 from scopus import config
 from .scopus_search import ScopusSearch
@@ -194,8 +194,7 @@ class AuthorRetrieval(object):
         """
         author_id = str(int(str(author_id).split('-')[-1]))
 
-        qfile = join(expanduser(config.get('Directories', 'AuthorRetrieval')),
-                     author_id)
+        qfile = join(config.get('Directories', 'AuthorRetrieval'),author_id)
         url = ('https://api.elsevier.com/content/author/'
                'author_id/{}').format(author_id)
         params = {'author_id': author_id, 'view': 'ENHANCED'}

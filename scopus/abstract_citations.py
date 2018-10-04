@@ -1,7 +1,7 @@
 from collections import namedtuple
 from datetime import datetime
 from json import loads
-from os.path import expanduser, join
+from os.path import join
 
 from scopus import config
 from scopus.utils import get_content
@@ -163,7 +163,7 @@ class CitationOverview(object):
         """
         # Get file content
         scopus_id = eid.split('0-')[-1]
-        qfile = join(expanduser(config.get('Directories', 'CitationOverview')), eid)
+        qfile = join(config.get('Directories', 'CitationOverview'), eid)
         url = "https://api.elsevier.com/content/abstract/citations/{}".format(scopus_id)
         params = {'scopus_id': scopus_id, 'date': '{}-{}'.format(start, end)}
         res = get_content(qfile, url=url, refresh=refresh, params=params,

@@ -1,3 +1,4 @@
+from os.path import expanduser
 from sys import version_info
 
 py3 = version_info >= (3, 0)
@@ -6,13 +7,15 @@ py3 = version_info >= (3, 0)
 def set_directories(config, fname):
     """Create section Directories in config file and add API Key to it."""
     config.add_section('Directories')
-    defaults = [('AbstractRetrieval', '~/.scopus/abstract_retrieval'),
-                ('AffiliationSearch', '~/.scopus/affiliation_search'),
-                ('AuthorRetrieval', '~/.scopus/author_retrieval'),
-                ('AuthorSearch', '~/.scopus/author_search'),
-                ('CitationOverview', '~/.scopus/citation_overview'),
-                ('ContentAffiliationRetrieval', '~/.scopus/affiliation_retrieval'),
-                ('ScopusSearch', '~/.scopus/scopus_search')]
+    defaults = [
+        ('AbstractRetrieval', expanduser('~/.scopus/abstract_retrieval')),
+        ('AffiliationSearch', expanduser('~/.scopus/affiliation_search')),
+        ('AuthorRetrieval', expanduser('~/.scopus/author_retrieval')),
+        ('AuthorSearch', expanduser('~/.scopus/author_search')),
+        ('CitationOverview', expanduser('~/.scopus/citation_overview')),
+        ('ContentAffiliationRetrieval', expanduser('~/.scopus/affiliation_retrieval')),
+        ('ScopusSearch', expanduser('~/.scopus/scopus_search'))
+    ]
     for key, value in defaults:
         config.set('Directories', key, value)
     with open(fname, 'w') as f:
