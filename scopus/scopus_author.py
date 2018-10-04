@@ -2,6 +2,7 @@ import os
 import sys
 import textwrap
 import time
+import warnings
 import xml.etree.ElementTree as ET
 from collections import Counter, namedtuple
 from operator import itemgetter
@@ -9,6 +10,7 @@ from operator import itemgetter
 from .scopus_api import ScopusAbstract
 from .scopus_search import ScopusSearch
 from .scopus_affiliation import ScopusAffiliation
+from scopus import config
 from scopus.utils import download, get_content, get_encoded_text, ns
 
 SCOPUS_AUTHOR_DIR = os.path.expanduser('~/.scopus/author')
@@ -195,6 +197,10 @@ class ScopusAuthor(object):
         The files are cached in ~/.scopus/author/{author_id} (without
         eventually leading '9-s2.0-').
         """
+        if config.getboolean('Warnings', 'Author'):
+            text = config.get('Warnings', 'Text').format('AuthorRetrieval')
+            warnings.warn(text, DeprecationWarning)
+            config.set('Warnings', 'Author', '0')
         author_id = str(int(str(author_id).split('-')[-1]))
         self.level = level
 

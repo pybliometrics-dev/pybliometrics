@@ -1,4 +1,5 @@
 import os
+import warnings
 try:
     import configparser
 except ImportError:
@@ -21,3 +22,14 @@ for _, directory in config.items('Directories'):
     path = os.path.expanduser(directory)
     if not os.path.exists(path):
         os.makedirs(path)
+
+# Temporary Deprecation Warnings flags
+warnings.simplefilter('always', DeprecationWarning)
+config.add_section('Warnings')
+text = "This class is deprecated and its maintenance has been suspended.  "\
+       "Please use {}() instead.  For details see https://scopus."\
+       "readthedocs.io/en/latest/tips.html#migration-guide-to-0-x-to-1-x."
+config.set('Warnings', 'Text', text)
+config.set('Warnings', 'Affiliation', '1')
+config.set('Warnings', 'Author', '1')
+config.set('Warnings', 'Abstract', '1')

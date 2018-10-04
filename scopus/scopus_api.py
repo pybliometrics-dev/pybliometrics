@@ -1,7 +1,9 @@
 import os
 import sys
 import xml.etree.ElementTree as ET
+import warnings
 
+from scopus import config
 from scopus.utils import get_content, get_encoded_text, ns
 
 SCOPUS_XML_DIR = os.path.expanduser('~/.scopus/xml')
@@ -250,6 +252,10 @@ class ScopusAbstract(object):
         -----
         The files are cached in ~/.scopus/xml/{eid}.
         """
+        if config.getboolean('Warnings', 'Abstract'):
+            text = config.get('Warnings', 'Text').format('AbstractRetrieval')
+            warnings.warn(text, DeprecationWarning)
+            config.set('Warnings', 'Abstract', '0')
         allowed_views = ('META', 'META_ABS', 'FULL')
         if view not in allowed_views:
             raise ValueError('view parameter must be one of ' +

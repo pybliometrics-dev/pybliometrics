@@ -1,6 +1,8 @@
 import os
 import xml.etree.ElementTree as ET
+import warnings
 
+from scopus import config
 from scopus.utils import get_content, get_encoded_text
 
 SCOPUS_AFFILIATION_DIR = os.path.expanduser('~/.scopus/affiliation')
@@ -106,6 +108,10 @@ class ScopusAffiliation:
         -----
         The files are cached in ~/.scopus/affiliation/{aff_id}.
         """
+        if config.getboolean('Warnings', 'Affiliation'):
+            text = config.get('Warnings', 'Text').format('ContentAffiliationRetrieval')
+            warnings.warn(text, DeprecationWarning)
+            config.set('Warnings', 'Affiliation', '0')
         aff_id = str(int(str(aff_id).split('-')[-1]))
 
         qfile = os.path.join(SCOPUS_AFFILIATION_DIR, aff_id)
