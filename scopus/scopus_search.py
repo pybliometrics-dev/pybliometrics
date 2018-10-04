@@ -1,4 +1,5 @@
 import hashlib
+import warnings
 from collections import namedtuple
 from json import loads
 from os.path import expanduser, join
@@ -16,10 +17,10 @@ class ScopusSearch(Search):
         https://scopus.readthedocs.io/en/latest/tips.html#migration-guide-to-0-x-to-1-x.
         """
         text = "Outdated property, will be removed in a future release.  "\
-            "Please use get_eids() instead.  For details see "\
-            "https://scopus.readthedocs.io/en/latest/tips.html#"\
-            "migration-guide-to-0-x-to-1-x."
-        raise(DeprecationWarning(text))
+               "Please use get_eids() instead.  For details see "\
+               "https://scopus.readthedocs.io/en/latest/tips.html#"\
+               "migration-guide-to-0-x-to-1-x."
+        warnings.warn(text, DeprecationWarning)
         return self.get_eids()
 
     @property
