@@ -390,8 +390,8 @@ class ScopusAbstract(object):
         else:
             pages = '(no pages found)'
         doi = '\\href{{https://doi.org/{0}}}{{doi:{0}}}'.format(self.doi)
-        scopus_url = '\href{{{0}}}{{scopus:{1}}}'.format(self.scopus_url,
-                                                         self.eid)
+        scopus_url = '\\href{{{0}}}{{scopus:{1}}}'.format(self.scopus_url,
+                                                          self.eid)
 
         return s.format(**locals())
 
