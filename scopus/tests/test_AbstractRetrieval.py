@@ -50,13 +50,11 @@ def test_authkeywords():
 
 
 def test_authors():
-    fields = 'auid indexed_name surname given_name affiliation_id '\
-             'affiliation city country'
+    fields = 'auid indexed_name surname given_name affiliation_id'
     auth = namedtuple('Author', fields)
     expected = [auth(auid='7004212771', indexed_name='Kitchin J.R.',
                 surname='Kitchin', given_name='John R.',
-                affiliation_id='60027950', affiliation=None, city=None,
-                country=None)]
+                affiliation_id=['60027950'])]
     assert_equal(ab1.authors, expected)
 
 
@@ -236,13 +234,13 @@ def test_refcount():
 
 
 def test_references():
-    fields = 'position id title authors sourcetitle publicationyear '\
+    fields = 'position id doi title authors sourcetitle publicationyear '\
              'volume issue first last text fulltext'
     ref = namedtuple('Reference', fields)
     fulltext1 = 'Implementing Reproducible Research; Stodden, V.; Leisch, '\
                 'F.; Peng, R. D., Eds., Chapman and Hall/CRC: London, 2014.'
-    expected1 = ref(position='22', id='84917679308', title=None,
-        authors='Stodden, V.; Leisch, F.; Peng, R.D.', fulltext=fulltext1,
+    expected1 = ref(position='22', id='84917679308', doi=None, title=None,
+        authors=['Stodden, V.', 'Leisch, F.', 'Peng, R.D.'], fulltext=fulltext1,
         sourcetitle='Implementing Reproducible Research',
         publicationyear='2014', volume=None, issue=None, first=None,
         last=None, text='Eds. Chapman and Hall/CRC: London.',)
@@ -250,8 +248,8 @@ def test_references():
     assert_equal(ab2.references, None)
     fulltext4 = 'Chib, S., 1995, Marginal likelihood from the Gibbs output, '\
                 'Journal of the American Statistical Association 90, 1313-1321.'
-    expected4 = ref(position='1', id='0041974049',
-        title='Marginal likelihood from the Gibbs output', authors='Chib, S.',
+    expected4 = ref(position='1', id='0041974049', doi=None,
+        title='Marginal likelihood from the Gibbs output', authors=['Chib, S.'],
         sourcetitle='Journal of the American Statistical Association',
         publicationyear='1995', volume='90', issue=None, first='1313',
         last='1321', text=None, fulltext=fulltext4)
