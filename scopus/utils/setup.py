@@ -28,7 +28,7 @@ warnings.simplefilter('always', DeprecationWarning)
 config.add_section('Warnings')
 text = "This class is deprecated and its maintenance has been suspended.  "\
        "Please use {}() instead.  For details see https://scopus."\
-       "readthedocs.io/en/latest/tips.html#migration-guide-to-0-x-to-1-x."
+       "readthedocs.io/en/latest/tips.html#migration-guide-from-0-x-to-1-x."
 config.set('Warnings', 'Text', text)
 config.set('Warnings', 'Affiliation', '1')
 config.set('Warnings', 'Author', '1')

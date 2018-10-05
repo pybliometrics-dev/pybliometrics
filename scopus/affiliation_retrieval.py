@@ -10,7 +10,7 @@ class ContentAffiliationRetrieval:
     @property
     def address(self):
         """The address of the affiliation."""
-        return self._json['address']
+        return self._json.get('address', {})
 
     @property
     def affiliation_name(self):
@@ -20,17 +20,17 @@ class ContentAffiliationRetrieval:
     @property
     def author_count(self):
         """Number of authors associated with the affiliation."""
-        return self._json['coredata']['author-count']
+        return self._json['coredata'].get('author-count')
 
     @property
     def city(self):
         """The city of the affiliation."""
-        return self._json['city']
+        return self._json.get('city')
 
     @property
     def country(self):
         """The country of the affiliation."""
-        return self._json['country']
+        return self._json.get('country')
 
     @property
     def date_created(self):
@@ -44,7 +44,7 @@ class ContentAffiliationRetrieval:
     @property
     def document_count(self):
         """Number of documents for the affiliation."""
-        return self._json['coredata']['document-count']
+        return self._json['coredata'].get('document-count')
 
     @property
     def eid(self):
@@ -64,7 +64,7 @@ class ContentAffiliationRetrieval:
         out = []
         variant = namedtuple('Variant', 'name doc_count')
         for var in self._json['name-variants'].get('name-variant', []):
-            new = variant(name=var['$'], doc_count=var['@doc-count'])
+            new = variant(name=var['$'], doc_count=var.get('@doc-count'))
             out.append(new)
         return out
 
@@ -86,7 +86,7 @@ class ContentAffiliationRetrieval:
     @property
     def postal_code(self):
         """The postal code of the affiliation."""
-        return self._json['institution-profile']['address'].get('postal-code')
+        return self._json['institution-profile'].get('address', {}).get('postal-code')
 
     @property
     def scopus_affiliation_link(self):
@@ -106,7 +106,7 @@ class ContentAffiliationRetrieval:
     @property
     def state(self):
         """The state (country's administrative sububunit) of the affiliation."""
-        return self._json['institution-profile']['address'].get('state')
+        return self._json['institution-profile'].get('address', {}).get('state')
 
     @property
     def sort_name(self):

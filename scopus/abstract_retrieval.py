@@ -38,7 +38,7 @@ class AbstractRetrieval(object):
     @property
     def aggregationType(self):
         """Aggregation type of source the abstract is published in."""
-        return self._json['coredata']['prism:aggregationType']
+        return self._json['coredata'].get('prism:aggregationType')
 
     @property
     def authkeywords(self):
@@ -47,7 +47,10 @@ class AbstractRetrieval(object):
         if keywords is None:
             return None
         else:
-            return [d['$'] for d in keywords['author-keyword']]
+            try:
+                return [d['$'] for d in keywords['author-keyword']]
+            except TypeError:  # Singleton keyword
+                return [keywords['author-keyword']['$']]
 
     @property
     def authors(self):
@@ -59,18 +62,16 @@ class AbstractRetrieval(object):
         property author_group.
         """
         out = []
-        fields = 'auid indexed_name surname given_name affiliation_id '\
-                 'affiliation city country'
+        fields = 'auid indexed_name surname given_name affiliation'
         auth = namedtuple('Author', fields)
         for item in self._json['authors']['author']:
-            aff = item.get('affiliation', {})
+            affs = item.get('affiliation', {})
+            if not isinstance(affs, list):
+                affs = [affs]
             new = auth(auid=item['@auid'], indexed_name=item['ce:indexed-name'],
                        surname=item['ce:surname'],
                        given_name=item['preferred-name'].get('ce:given-name'),
-                       affiliation_id=aff.get('@id'),
-                       affiliation=aff.get('affilname'),
-                       city=aff.get('affiliation-city'),
-                       country=aff.get('affiliation-country'))
+                       affiliation=[aff.get('@id') for aff in affs])
             out.append(new)
         return out
 
@@ -92,21 +93,30 @@ class AbstractRetrieval(object):
         if not isinstance(items, list):
             items = [items]
         for item in items:
+            # Affiliation information
+            aff = item.get('affiliation', {})
             try:
-                aff = item['affiliation']
-                try:
-                    org = aff['organization']['$']
-                except TypeError:  # Multiple names given
-                    org = ', '.join([d['$'] for d in aff['organization']])
+                org = aff['organization']
+                if isinstance(org, dict):
+                    try:
+                        org = org['$']
+                    except TypeError:  # Multiple names given
+                        org = [d['$'] for d in org]
             except KeyError:  # Author group w/o affiliation
                 org = None
-                aff = {}
-            for au in item['author']:
+            # Author information (might relate to collaborations)
+            authors = item.get('author', item.get('collaboration'))
+            if not isinstance(authors, list):
+                authors = [authors]
+            for au in authors:
+                try:
+                    given = au.get('ce:given-name', au['ce:initials'])
+                except KeyError:  # Collaboration
+                    given = au.get('ce:text')
                 new = auth(affiliation_id=aff.get('@afid'), organization=org,
                            city_group=aff.get('city-group'),
-                           country=aff.get('country'), auid=au['@auid'],
-                           surname=au['ce:surname'],
-                           given_name=au.get('ce:given-name', au['ce:initials']),
+                           country=aff.get('country'), auid=au.get('@auid'),
+                           surname=au.get('ce:surname'), given_name=given,
                            indexed_name=au.get('preferred-name', {}).get('ce:indexed-name'))
                 out.append(new)
         return out
@@ -174,7 +184,8 @@ class AbstractRetrieval(object):
     @property
     def correspondence(self):
         """namedtuple representing the author to whom correspondence should
-        be addressed.
+        be addressed, in the form
+        (surname, initials, organization, country, city_group).
         Note: Requires the FULL view of the abstract.  Might be empty.
         """
         fields = 'surname initials organization country city_group'
@@ -184,14 +195,16 @@ class AbstractRetrieval(object):
             return None
         aff = corr.get('affiliation', {})
         try:
-            try:
-                org = aff['organization']['$']
-            except TypeError:  # Multiple names given
-                org = ', '.join([d['$'] for d in aff['organization']])
+            org = aff['organization']
+            if isinstance(org, dict):
+                try:
+                    org = org['$']
+                except TypeError:  # Multiple names given
+                    org = [d['$'] for d in org]
         except KeyError:
             org = None
-        return auth(surname=corr['person']['ce:surname'],
-                    initials=corr['person']['ce:initials'],
+        return auth(surname=corr.get('person', {}).get('ce:surname'),
+                    initials=corr.get('person', {}).get('ce:initials'),
                     organization=org, country=aff.get('country'),
                     city_group=aff.get('city-group'))
 
@@ -205,7 +218,7 @@ class AbstractRetrieval(object):
         """Return the description of a record.
         Note: If this is empty, try property abstract instead.
         """
-        return self._json['coredata']['dc:description']
+        return self._json['coredata'].get('dc:description')
 
     @property
     def doi(self):
@@ -220,7 +233,7 @@ class AbstractRetrieval(object):
     @property
     def endingPage(self):
         """Ending page."""
-        return self._json['coredata']['prism:endingPage']
+        return self._json['coredata'].get('prism:endingPage')
 
     @property
     def issn(self):
@@ -228,7 +241,7 @@ class AbstractRetrieval(object):
         Note: If E-ISSN is known to Scopus, this returns both
         ISSN and E-ISSN in random order separated by blank space.
         """
-        return self._json['coredata']['prism:issn']
+        return self._json['coredata'].get('prism:issn')
 
     @property
     def identifier(self):
@@ -238,16 +251,21 @@ class AbstractRetrieval(object):
     @property
     def idxterms(self):
         """List of index terms."""
-        terms = self._json.get("idxterms", {})
         try:
-            return [d['$'] for d in terms.get('mainterm', [])]
+            terms = self._json.get("idxterms", {}).get('mainterm', [])
+        except AttributeError:  # idxterms is empty
+            return None
+        if not isinstance(terms, list):
+            terms = [terms]
+        try:
+            return [d['$'] for d in terms]
         except AttributeError:
             return None
 
     @property
     def issueIdentifier(self):
         """Issue number for abstract."""
-        return self._json['coredata']['prism:issueIdentifier']
+        return self._json['coredata'].get('prism:issueIdentifier')
 
     @property
     def issuetitle(self):
@@ -264,12 +282,12 @@ class AbstractRetrieval(object):
     @property
     def pageRange(self):
         """Page range."""
-        return self._json['coredata']['prism:pageRange']
+        return self._json['coredata'].get('prism:pageRange')
 
     @property
     def publicationName(self):
         """Name of source the abstract is published in."""
-        return self._json['coredata']['prism:publicationName']
+        return self._json['coredata'].get('prism:publicationName')
 
     @property
     def publisher(self):
@@ -297,37 +315,52 @@ class AbstractRetrieval(object):
         """Number of references of an article.
         Note: Requires the FULL view of the article.
         """
-        return self._json['item']['bibrecord'].get('tail', {}).get('bibliography', {}).get('@refcount')
+        return self._tail.get('bibliography', {}).get('@refcount')
 
     @property
     def references(self):
         """List of namedtuples representing references listed in the abstract,
-        in the form (position, id, title, authors, sourcetitle,
+        in the form (position, id, doi, title, authors, sourcetitle,
         publicationyear, volume, issue, first, last, text, fulltext).
         `position` is the number at which the reference appears in the
         document, `id` is the Scopus ID of the referenced abstract (EID
-        without the "2-s2.0-"), `authors` are the names of the authors in
-        the format "Surname1, Initials1; Surname2, Initials2; ...", `first`
-        and `last` refer to the page range, `text` is Scopus-provided
-        information on the publication and `fulltext` is the text
-        the authors used for the reference.
+        without the "2-s2.0-"), `authors` is a list of the names of the
+        authors in the format "Surname, Initials", `first` and `last` refer
+        to the page range, `text` is Scopus-provided information on the
+        publication and `fulltext` is the text the authors used for
+        the reference.
         Note: Requires the FULL view of the article.  Might be empty even if
         refcount is positive.
         """
         out = []
-        fields = 'position id title authors sourcetitle publicationyear '\
+        fields = 'position id doi title authors sourcetitle publicationyear '\
                  'volume issue first last text fulltext'
         ref = namedtuple('Reference', fields)
-        items = self._json['item']['bibrecord'].get('tail', {}).get('bibliography', {}).get('reference', [])
+        items = self._tail.get('bibliography', {}).get('reference', [])
+        if not isinstance(items, list):
+            items = [items]
         for item in items:
             info = item['ref-info']
             volisspag = info.get('ref-volisspag', {})
-            authors = [', '.join([d['ce:surname'], d['ce:initials']]) for d in
-                       info['ref-authors']['author']]
-            new = ref(position=item['@id'],
-                      id=info['refd-itemidlist']['itemid']['$'],
+            try:
+                auth = info['ref-authors']['author']
+                if not isinstance(auth, list):
+                    auth = [auth]
+                authors = [', '.join([d['ce:surname'], d['ce:initials']])
+                           for d in auth]
+            except KeyError:  # No authors given
+                authors = None
+            ids = info['refd-itemidlist']['itemid']
+            if not isinstance(ids, list):
+                ids = [ids]
+            try:
+                doi = [d['$'] for d in ids if d['@idtype'] == 'DOI'][0]
+            except IndexError:
+                doi = None
+            new = ref(position=item.get('@id'),
+                      id=[d['$'] for d in ids if d['@idtype'] == 'SGR'][0],
+                      doi=doi, authors=authors,
                       title=info.get('ref-title', {}).get('ref-titletext'),
-                      authors='; '.join(authors),
                       sourcetitle=info.get('ref-sourcetitle'),
                       publicationyear=info.get('ref-publicationyear', {}).get('@first'),
                       volume=volisspag.get('voliss', {}).get('@volume'),
@@ -335,7 +368,7 @@ class AbstractRetrieval(object):
                       first=volisspag.get('pagerange', {}).get('@first'),
                       last=volisspag.get('pagerange', {}).get('@last'),
                       text=info.get('ref-text'),
-                      fulltext=item['ref-fulltext'])
+                      fulltext=item.get('ref-fulltext'))
             out.append(new)
         if len(out) > 0:
             return out
@@ -369,12 +402,12 @@ class AbstractRetrieval(object):
         """Aggregation type of source the abstract is published in (short
         version of aggregationType.
         """
-        return self._json['coredata']['srctype']
+        return self._json['coredata'].get('srctype')
 
     @property
     def startingPage(self):
         """Starting page."""
-        return self._json['coredata']['prism:startingPage']
+        return self._json['coredata'].get('prism:startingPage')
 
     @property
     def subject_areas(self):
@@ -384,7 +417,13 @@ class AbstractRetrieval(object):
         """
         out = []
         area = namedtuple('Area', 'area abbreviation code')
-        for item in self._json['subject-areas'].get('subject-area', []):
+        try:
+            items = self._json.get('subject-areas', {}).get('subject-area', [])
+        except AttributeError:  # subject-areas empty
+            return None
+        if not isinstance(items, list):
+            items = [items]
+        for item in items:
             new = area(area=item['$'], abbreviation=item['@abbrev'],
                        code=item['@code'])
             out.append(new)
@@ -403,7 +442,7 @@ class AbstractRetrieval(object):
     @property
     def volume(self):
         """Volume for the abstract."""
-        return self._json['coredata']['prism:volume']
+        return self._json['coredata'].get('prism:volume')
 
     @property
     def website(self):
@@ -446,7 +485,10 @@ class AbstractRetrieval(object):
         res = get_content(qfile, url=url, refresh=refresh, accept='json',
                           params={'view': view})
         self._json = loads(res.decode('utf-8'))['abstracts-retrieval-response']
-        self._head = self._json['item'].get('bibrecord', {}).get('head', {})
+        self._head = self._json.get('item', {}).get('bibrecord', {}).get('head', {})
+        self._tail = self._json.get('item', {}).get('bibrecord', {}).get('tail', {})
+        if self._tail is None:
+            self._tail = {}
         self._confinfo = self._head.get('source', {}).get('additional-srcinfo', {}).get('conferenceinfo', {})
 
     def __str__(self):
@@ -598,7 +640,7 @@ class AbstractRetrieval(object):
                 vol=volissue, pages=pages, year=self.coverDate[:4])
         if self.doi is not None:
             s += ' \\href{{https://doi.org/{0}}}{{doi:{0}}}, '.format(self.doi)
-        s += '\href{{{0}}}{{scopus:{1}}}.'.format(self.scopus_link, self.eid)
+        s += '\\href{{{0}}}{{scopus:{1}}}.'.format(self.scopus_link, self.eid)
         return s
 
     def get_ris(self):

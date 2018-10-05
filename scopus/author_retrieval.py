@@ -11,15 +11,15 @@ class AuthorRetrieval(object):
     @property
     def affiliation_current(self):
         """The ID of the current affiliation according to Scopus."""
-        return self._json['affiliation-current']['@id']
+        return self._json.get('affiliation-current', {}).get('@id')
 
     @property
     def affiliation_history(self):
         """Unordered list of IDs of all affiliations the author was
         affiliated with acccording to Scopus.
         """
-        return [d['@id'] for d in
-                self._json['affiliation-history']['affiliation']]
+        affs = self._json.get('affiliation-history', {}).get('affiliation', {})
+        return [d['@id'] for d in affs]
 
     @property
     def citation_count(self):
@@ -39,9 +39,12 @@ class AuthorRetrieval(object):
     @property
     def classificationgroup(self):
         """List with (subject group ID, number of documents)-tuples."""
-        clg = self._json['author-profile']['classificationgroup'].get('classifications', {})
+        clg = self._json['author-profile'].get('classificationgroup', {}).get('classifications', {})
         out = []
-        for item in clg.get('classification', []):
+        items = clg.get('classification', [])
+        if not isinstance(items, list):
+            items = [items]
+        for item in items:
             out.append((item['$'], item['@frequency']))
         return out
     
@@ -100,9 +103,11 @@ class AuthorRetrieval(object):
         (sourcetitle, abbreviation, type, issn).  issn is only given
         for journals.  abbreviation and issn may be None.
         """
-        pub_hist = self._json['author-profile']['journal-history'].get('journal', [])
         hist = []
         jour = namedtuple('Journal', 'sourcetitle abbreviation type issn')
+        pub_hist = self._json['author-profile']['journal-history'].get('journal', [])
+        if not isinstance(pub_hist, list):
+            pub_hist = [pub_hist]
         for pub in pub_hist:
             new = jour(sourcetitle=pub['sourcetitle'],
                        abbreviation=pub.get('sourcetitle-abbrev'),
@@ -123,11 +128,14 @@ class AuthorRetrieval(object):
         out = []
         fields = 'indexed_name initials surname given_name doc_count'
         variant = namedtuple('Variant', fields)
-        for var in self._json['author-profile'].get('name-variant', []):
+        items = self._json['author-profile'].get('name-variant', [])
+        if not isinstance(items, list):
+            items = [items]
+        for var in items:
             new = variant(indexed_name=var['indexed-name'],
                           initials=var['initials'], surname=var['surname'],
                           given_name=var['given-name'],
-                          doc_count=var['@doc-count'])
+                          doc_count=var.get('@doc-count'))
             out.append(new)
         return out
 
