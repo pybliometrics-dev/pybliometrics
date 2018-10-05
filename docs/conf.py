@@ -29,7 +29,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 project = 'scopus'
 author = 'John Kitchin and Michael E. Rose'
-copyright = ','.join(['2017', author])
+copyright = ','.join(['2017-2018', author])
 
 version = scopus.__version__
 release = scopus.__version__

@@ -1,14 +1,8 @@
 Configuration
 -------------
 
-Version 0.6 introduced a config file in in `~/.scopus/`.  This config file will gradually be extended to steer `scopus` to a greater extend but is currently only used for one purpose:  To store credentials for the `token-based authentication <https://dev.elsevier.com/tecdoc_api_authentication.html>`_.  If you want to stick to the more common IP address based authentication, do not create the config file.
+Since version 1.0 `scopus` uses a config file in folder `~/.scopus/` to save credentials as well as directory names for folder that store cached files.  `scopus` creates this file and autopopulates it with default directories if it does not exist.  You can always change those values, e.g. when you want to cache files on a shared drive.
 
-If you have an InstToken and an API Key, please create a file `~/.scopus/config`.  Edit it to look like follows:
-
-.. code-block:: none
-
-    [Authentication]
-    InstToken = <Your InstToken goes here>
-    APIKey = <Your API Key goes here>
+On first usage, `scopus` prompts you for your credentials.  Most users only need to provide the API Key and hit enter on the second prompt.  If you have to use InstToken authentication, enter it in the second step.
 
 Folder `~/` refers to your private home directory or home path.  On many Windows machines this is usually `C:\Document and Settings\<Your User Name>`.  In there you find a hidden folder `.scopus`, which is also the directory where `scopus` caches downloaded files.
