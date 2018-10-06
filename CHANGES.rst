@@ -3,6 +3,18 @@ Change Log
 
 .. toctree::
 
+1.0
+~~~
+
+2018-10-06
+
+* New class AbstractRetrieval to replace ScopusAbstract, with the following properties renamed: `affiliations`: `affiliation`, `bibtex`: `get_bibtex()`, `citationLanguage`: `language`, `citationType`: `srctype`, `citingby_url`: `citingby_link`, `html`: `get_html()`, `ris`: `get_ris()`, `latex`: `get_latex()`, `scopus_url`: `scopus_link`, `subjectAreas`: `subject_areas`
+* New class AuthorRetrieval to replace ScopusAuthor, with the following properties renamed: `author_id`: `identifier`, `coauthor_url`: `coauthor_link`, `current_affiliation`: `affiliation_current`, `firstname`: `given_name`, `hindex`: `h_index`, `lastname`: `surname`, `name`: `indexed_name`, `ncited_by`: `cited_by_count`, `ncoauthors`: `coauthor_count`, `ndocuments`: `document_count`, `publication_history`: `journal_history`
+* New class ContentAffiliationRetrieval to replace ScopusAffiliation, with  the following properties renamed: `api_url`: `self_link`, `nauthors`: `author_count`, `ndocuments`: `document_count`, `name`: `affiliation_name`, `org_url`: `org_URL`, `scopus_id`: `identifier`
+* Rewrite class ScopusSearch: new property `results`, cache search results in json format with hex-ed filename and new method `get_eids()`, which replaces property `EIDS`
+* Use config.ini to store API Key (and if necessary, InstToken) as well as directories
+* Migration Guide to update code from scopus 0.x to 1.x
+
 0.10
 ~~~~
 
