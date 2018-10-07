@@ -3,6 +3,13 @@ Change Log
 
 .. toctree::
 
+1.1
+~~~
+
+2018-10-07
+
+* Generate configuration file via separate method, not directly on import.
+
 1.0
 ~~~
 
