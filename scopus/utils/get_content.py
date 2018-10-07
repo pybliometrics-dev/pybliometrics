@@ -1,7 +1,6 @@
 import os
 import requests
 
-from scopus.utils import set_authentication
 from scopus.utils import config
 
 
@@ -47,9 +46,6 @@ def download(url, params=None, accept="xml"):
                          ', '.join(accepted))
     # Get credentials
     key = config.get('Authentication', 'APIKey')
-    while key is None:
-        set_authentication(config, CONFIG_FILE)
-        key = config.get('Authentication', 'APIKey')
     header = {'X-ELS-APIKey': key}
     if config.has_option('Authentication', 'InstToken'):
         token = config.get('Authentication', 'InstToken')
