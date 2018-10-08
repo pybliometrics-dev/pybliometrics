@@ -449,7 +449,7 @@ class AbstractRetrieval(object):
         """Website of publisher."""
         return self._head.get('source', {}).get('website', {}).get('ce:e-address', {}).get('$')
 
-    def __init__(self, EID, view='META_ABS', refresh=False):
+    def __init__(self, EID, view='META_ABS', refresh=False, IDtype='eid'):
         """Class to represent the results from a Scopus abstract.
 
         Parameters
@@ -468,6 +468,10 @@ class AbstractRetrieval(object):
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
 
+        IDtype: str (optional, default=eid)
+            The overload type of used ID. On Scopus it can be one of
+            {'eid','pii','scopus_id','pubmed_id','doi'}
+
         ValueError
             If the view parameters contains invalid entries.
 
@@ -480,8 +484,13 @@ class AbstractRetrieval(object):
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
 
+        allowed_id_types = ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi')
+        if IDtype not in allowed_id_types:
+            raise ValueError('IDtype parameter must be one of ' +
+                             ', '.join(allowed_id_types))
+
         qfile = join(config.get('Directories', 'AbstractRetrieval'), EID)
-        url = "https://api.elsevier.com/content/abstract/eid/{}".format(EID)
+        url = "https://api.elsevier.com/content/abstract/{}/{}".format(IDtype, EID)
         res = get_content(qfile, url=url, refresh=refresh, accept='json',
                           params={'view': view})
         self._json = loads(res.decode('utf-8'))['abstracts-retrieval-response']
