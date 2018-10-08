@@ -4,7 +4,7 @@ from os.path import join
 
 from scopus import config
 from scopus.utils import get_content
-
+from scopus.utils import discover_id_type
 
 class AbstractRetrieval(object):
     @property
@@ -449,7 +449,7 @@ class AbstractRetrieval(object):
         """Website of publisher."""
         return self._head.get('source', {}).get('website', {}).get('ce:e-address', {}).get('$')
 
-    def __init__(self, EID, view='META_ABS', refresh=False, IDtype='eid'):
+    def __init__(self, EID, view='META_ABS', refresh=False, ID_type='auto'):
         """Class to represent the results from a Scopus abstract.
 
         Parameters
@@ -468,9 +468,10 @@ class AbstractRetrieval(object):
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
 
-        IDtype: str (optional, default=eid)
+        ID_type: str (optional, default=auto)
             The overload type of used ID. On Scopus it can be one of
-            {'eid','pii','scopus_id','pubmed_id','doi'}
+            {'eid','pii','scopus_id','pubmed_id','doi'}. If using option
+            'auto', the function tries to infer the ID type itself.
 
         ValueError
             If the view parameters contains invalid entries.
@@ -484,13 +485,16 @@ class AbstractRetrieval(object):
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
 
-        allowed_id_types = ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi')
-        if IDtype not in allowed_id_types:
-            raise ValueError('IDtype parameter must be one of ' +
-                             ', '.join(allowed_id_types))
+        if ID_type == 'auto':
+            ID_type = discover_id_type(EID)
+        else:
+            allowed_id_types = ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi')
+            if ID_type not in allowed_id_types:
+                raise ValueError('ID_type parameter must be one of ' +
+                                 ', '.join(allowed_id_types))
 
-        qfile = join(config.get('Directories', 'AbstractRetrieval'), EID)
-        url = "https://api.elsevier.com/content/abstract/{}/{}".format(IDtype, EID)
+        qfile = join(config.get('Directories', 'AbstractRetrieval'), EID.replace('/','_'))
+        url = "https://api.elsevier.com/content/abstract/{}/{}".format(ID_type, EID)
         res = get_content(qfile, url=url, refresh=refresh, accept='json',
                           params={'view': view})
         self._json = loads(res.decode('utf-8'))['abstracts-retrieval-response']
