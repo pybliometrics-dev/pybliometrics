@@ -6,6 +6,7 @@ from scopus import config
 from scopus.utils import get_content
 from scopus.utils import discover_id_type
 
+
 class AbstractRetrieval(object):
     @property
     def abstract(self):
@@ -449,7 +450,7 @@ class AbstractRetrieval(object):
         """Website of publisher."""
         return self._head.get('source', {}).get('website', {}).get('ce:e-address', {}).get('$')
 
-    def __init__(self, EID, view='META_ABS', refresh=False, ID_type='auto'):
+    def __init__(self, EID, view='META_ABS', refresh=False, ID_type=None):
         """Class to represent the results from a Scopus abstract.
 
         Parameters
@@ -468,10 +469,10 @@ class AbstractRetrieval(object):
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
 
-        ID_type: str (optional, default=auto)
+        ID_type: str (optional, default=None)
             The overload type of used ID. On Scopus it can be one of
-            {'eid','pii','scopus_id','pubmed_id','doi'}. If using option
-            'auto', the function tries to infer the ID type itself.
+            {'eid','pii','scopus_id','pubmed_id','doi'}. If unspecified,
+             the function tries to infer the ID type itself.
 
         ValueError
             If the view parameters contains invalid entries.
@@ -485,7 +486,7 @@ class AbstractRetrieval(object):
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
 
-        if ID_type == 'auto':
+        if ID_type is None:
             ID_type = discover_id_type(EID)
         else:
             allowed_id_types = ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi')
