@@ -1,6 +1,7 @@
 from collections import namedtuple
 from json import loads
 from os.path import join
+from warnings import warn
 
 from scopus import config
 from .scopus_search import ScopusSearch
@@ -47,7 +48,7 @@ class AuthorRetrieval(object):
         for item in items:
             out.append((item['$'], item['@frequency']))
         return out
-    
+
     @property
     def coauthor_link(self):
         """URL to Scopus API search page for coauthors."""
@@ -85,7 +86,13 @@ class AuthorRetrieval(object):
     @property
     def identifier(self):
         """The author's ID.  Might differ from the one provided."""
-        return self._json['coredata']['dc:identifier'].split(":")[-1]
+        ident = self._json['coredata']['dc:identifier'].split(":")[-1]
+        if ident != self._id:
+            text = "Profile with ID {} has been merged and the new ID is "\
+                   "{}.  Please update your records manually.  Files have "\
+                   "been cached with the old ID.".format(self._id, ident)
+            warn(text, UserWarning)
+        return ident
 
     @property
     def indexed_name(self):
@@ -200,15 +207,27 @@ class AuthorRetrieval(object):
         The files are cached in ~/.scopus/author_retrieval/{author_id} (without
         eventually leading '9-s2.0-').
         """
-        author_id = str(int(str(author_id).split('-')[-1]))
+        self._id = str(int(str(author_id).split('-')[-1]))
 
-        qfile = join(config.get('Directories', 'AuthorRetrieval'),author_id)
+        qfile = join(config.get('Directories', 'AuthorRetrieval'), self._id)
         url = ('https://api.elsevier.com/content/author/'
-               'author_id/{}').format(author_id)
-        params = {'author_id': author_id, 'view': 'ENHANCED'}
+               'author_id/{}').format(self._id)
+        params = {'author_id': self._id, 'view': 'ENHANCED'}
         res = get_content(qfile, url=url, refresh=refresh, accept='json',
                           params=params)
-        self._json = loads(res.decode('utf-8'))['author-retrieval-response'][0]
+        self._json = loads(res.decode('utf-8'))['author-retrieval-response']
+        try:
+            self._json = self._json[0]
+        except KeyError:
+            alias_json = self._json['alias']['prism:url']
+            if not isinstance(alias_json, list):
+                alias_json = [alias_json]
+            alias = ', '.join([d['$'].split(':')[-1] for d in alias_json])
+            text = 'Author profile with ID {} has been merged and the main '\
+                   'profile is now one of {}.  Please update your records '\
+                   'manually.  Functionality of this object is '\
+                   'reduced.'.format(author_id, alias)
+            warn(text, UserWarning)
 
     def __str__(self):
         """Return a summary string."""

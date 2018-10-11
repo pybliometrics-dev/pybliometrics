@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 """Tests for `AuthorRetrieval` module."""
 
+import warnings
 from collections import Counter
 from nose.tools import assert_equal, assert_true
 
 import scopus
 
+warnings.simplefilter("always")
 
 au = scopus.AuthorRetrieval("7004212771", refresh=True)
 
@@ -134,3 +136,21 @@ def test_subject_areas():
 def test_url():
     expected = 'http://api.elsevier.com/content/author/author_id/7004212771'
     assert_equal(au.url, expected)
+
+
+def test_warning_without_forwarding():
+    with warnings.catch_warnings(record=True) as w:
+        au = scopus.AuthorRetrieval("24079538400", refresh=False)
+        assert_equal(len(w), 1)
+        assert_true(issubclass(w[-1].category, UserWarning))
+        assert_true("24079538400" in str(w[-1].message))
+
+
+def test_warning_with_forwarding():
+    au = scopus.AuthorRetrieval("57191449583", refresh=False)
+    with warnings.catch_warnings(record=True) as w:
+        auth_id = au.identifier
+        assert_equal(len(w), 1)
+        assert_true(issubclass(w[-1].category, UserWarning))
+        assert_true("57191449583" in str(w[-1].message))
+    assert_equal(auth_id, '36854449200')
