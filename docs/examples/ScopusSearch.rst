@@ -18,8 +18,8 @@ The class' main attribute `results` returns a list of `namedtuples <https://docs
     >>> import pandas as pd
     >>> res.columns
     Index(['eid', 'doi', 'pii', 'title', 'subtype', 'creator', 'authname',
-           'authid', 'coverDate', 'coverDisplayDate', 'publicationName', 'issn',
-           'source_id', 'aggregationType', 'volume', 'issueIdentifier',
+           'authid', 'afid', 'coverDate', 'coverDisplayDate', 'publicationName',
+           'issn', 'source_id', 'aggregationType', 'volume', 'issueIdentifier',
            'pageRange', 'citedby_count', 'openaccess'],
           dtype='object')
     >>> res.shape
