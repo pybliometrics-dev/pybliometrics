@@ -26,9 +26,9 @@ class AbstractRetrieval(object):
         if not isinstance(affs, list):
             affs = [affs]
         for item in affs:
-            new = aff(id=item['@id'], name=item['affilname'],
-                      city=item['affiliation-city'],
-                      country=item['affiliation-country'])
+            new = aff(id=item.get('@id'), name=item.get('affilname'),
+                      city=item.get('affiliation-city'),
+                      country=item.get('affiliation-country'))
             out.append(new)
         if len(out) > 0:
             return out
@@ -105,7 +105,7 @@ class AbstractRetrieval(object):
             except KeyError:  # Author group w/o affiliation
                 org = None
             # Author information (might relate to collaborations)
-            authors = item.get('author', item.get('collaboration'))
+            authors = item.get('author', item.get('collaboration', []))
             if not isinstance(authors, list):
                 authors = [authors]
             for au in authors:
