@@ -65,7 +65,7 @@ class ScopusSearch(Search):
                 authid = None
                 afid = None
             new = doc(eid=item['eid'], doi=item.get('prism:doi'),
-                      pii=item.get('pii'), title=item['dc:title'],
+                      pii=item.get('pii'), title=item.get('dc:title'),
                       subtype=item.get('subtype'), creator=item.get('dc:creator'),
                       authname=authname, authid=authid, afid=afid,
                       coverDate=item.get('prism:coverDate'),
