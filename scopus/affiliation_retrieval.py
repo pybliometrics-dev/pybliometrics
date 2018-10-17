@@ -10,7 +10,7 @@ class ContentAffiliationRetrieval:
     @property
     def address(self):
         """The address of the affiliation."""
-        return self._json.get('address', {})
+        return self._json.get('address')
 
     @property
     def affiliation_name(self):
