@@ -1,6 +1,7 @@
 from collections import namedtuple
 from json import loads
 from os.path import join
+from warnings import warn
 
 from scopus import config
 from scopus.utils import get_content, detect_id_type
@@ -561,13 +562,24 @@ class AbstractRetrieval(object):
         """Website of publisher."""
         return self._head.get('source', {}).get('website', {}).get('ce:e-address', {}).get('$')
 
-    def __init__(self, EID, view='META_ABS', refresh=False, id_type=None):
+    def __init__(self, identifier=None, view='META_ABS', refresh=False,
+                 id_type=None, EID=None):
         """Class to represent the results from a Scopus abstract.
 
         Parameters
         ----------
-        EID : str
-            The Scopus ID (EID) of an abstract.
+        identifier : str or int
+            The identifier of an abstract.  Can be the Scoups EID, the Scopus
+            ID, the PII, the Pubmed-ID or the DOI.
+
+        EID : str (deprecated since 1.2)
+            Deprecated in favor of `identifier`, will be removed in a future
+            release.
+
+        id_type: str (optional, default=None)
+            The type of used ID. Allowed values: None, 'eid', 'pii',
+            'scopus_id', 'pubmed_id','doi'.  If the value is None, the
+            function tries to infer the ID type itself.
 
         view : str (optional, default=META_ABS)
             The view of the file that should be downloaded.  Will not take
@@ -580,13 +592,8 @@ class AbstractRetrieval(object):
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
 
-        id_type: str (optional, default=None)
-            The type of used ID. Allowed values: None, 'eid','pii',
-            'scopus_id','pubmed_id','doi'. If the value is None, the function
-            tries to infer the ID type itself. Other values manually set the
-            ID type to one of the types supported by Scopus.
-
         ValueError
+            If the id_type parameters contains invalid entries.
             If the view parameters contains invalid entries.
 
         Notes
@@ -596,22 +603,28 @@ class AbstractRetrieval(object):
         DOI always contains '/' symbol, which is a path separator in some operating
         systems so '/' has to be replaced in the filename for caching.
         """
-        EID = str(EID)
+        if identifier is None and EID:
+            text = "Parameter EID is deprecated in favor of parameter "\
+                   "identifier.  Please update your code."
+            warn(text, UserWarning)
+            identifier = EID
+        identifier = str(identifier)
         allowed_views = ('META', 'META_ABS', 'FULL')
         if view not in allowed_views:
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
 
         if id_type is None:
-            id_type = detect_id_type(EID)
+            id_type = detect_id_type(identifier)
         else:
             allowed_id_types = ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi')
             if id_type not in allowed_id_types:
                 raise ValueError('id_type parameter must be one of ' +
                                  ', '.join(allowed_id_types))
 
-        qfile = join(config.get('Directories', 'AbstractRetrieval'), EID.replace('/', '_'))
-        url = "https://api.elsevier.com/content/abstract/{}/{}".format(id_type, EID)
+        qfile = join(config.get('Directories', 'AbstractRetrieval'),
+                     identifier.replace('/', '_'))
+        url = "https://api.elsevier.com/content/abstract/{}/{}".format(id_type, identifier)
         res = get_content(qfile, url=url, refresh=refresh, accept='json',
                           params={'view': view})
         self._json = loads(res.decode('utf-8'))['abstracts-retrieval-response']
