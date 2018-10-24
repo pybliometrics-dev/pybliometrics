@@ -122,6 +122,7 @@ def test_confname():
 
 def test_confsponsor():
     assert_equal(ab2.confsponsor, 'IEEE')
+    assert_equal(ab3.confsponsor, None)
     expected7 = ['ARTOV.IMM.CNR.IT', 'CMP.IMAG.FR', 'CNRS.FR',
                  'EPS.IEEE.ORG', 'LIRMM.FR']
     assert_equal(ab7.confsponsor, expected7)

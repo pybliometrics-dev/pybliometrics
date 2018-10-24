@@ -205,6 +205,8 @@ class AbstractRetrieval(object):
         Note: Requires the FULL view of the abstract.
         """
         sponsors = self._confinfo.get('confevent', {}).get('confsponsors', {}).get('confsponsor', [])
+        if len(sponsors) == 0:
+            return None
         if isinstance(sponsors, list):
             return [s['$'] for s in sponsors]
         return sponsors
