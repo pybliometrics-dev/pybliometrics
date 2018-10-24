@@ -132,6 +132,34 @@ class AbstractRetrieval(object):
         return self._json['coredata']['link'][2].get('@href')
 
     @property
+    def chemicals(self):
+        """List of namedtuples representing chemical entities in the form
+        (source, chemical_name, cas_registry_number).  In case multiple
+        numbers given, they are joined on ";".
+        """
+        items = self._head.get('enhancement', {}).get('chemicalgroup', {}).get('chemicals', [])
+        if len(items) == 0:
+            return None
+        if not isinstance(items, list):
+            items = [items]
+        chemical = namedtuple('Chemical', 'source chemical_name cas_registry_number')
+        out = []
+        for item in items:
+            chems = item['chemical']
+            if not isinstance(chems, list):
+                chems = [chems]
+            for chem in chems:
+                number = chem['cas-registry-number']
+                try:  # Multiple numbers given
+                    num = ";".join([n['$'] for n in number])
+                except TypeError:
+                    num = number
+                new = chemical(source=item['@source'], cas_registry_number=num,
+                               chemical_name=chem['chemical-name'])
+                out.append(new)
+        return out
+
+    @property
     def confcode(self):
         """Code of the conference the abstract belong to.
         Note: Requires the FULL view of the abstract.
@@ -180,6 +208,28 @@ class AbstractRetrieval(object):
         if isinstance(sponsors, list):
             return [s['$'] for s in sponsors]
         return sponsors
+
+    @property
+    def contributor_group(self):
+        """List of namedtuples representing contributors compiled by Scopus,
+        in the form (given_name, initials, surname, indexed_name, role).
+        """
+        items = self._head.get('source', {}).get('contributor-group', [])
+        if len(items) == 0:
+            return None
+        if not isinstance(items, list):
+            items = [items]
+        out = []
+        fields = 'given_name initials surname indexed_name role'
+        pers = namedtuple('Contributor', fields)
+        for item in items:
+            entry = item.get('contributor', {})
+            new = pers(indexed_name=entry.get('ce:indexed-name'),
+                role=entry.get('@role'), surname=entry.get('ce:surname'),
+                given_name=entry.get('ce:given-name'),
+                initials=entry.get('ce:initials'))
+            out.append(new)
+        return out
 
     @property
     def correspondence(self):
@@ -234,6 +284,44 @@ class AbstractRetrieval(object):
     def endingPage(self):
         """Ending page."""
         return self._json['coredata'].get('prism:endingPage')
+
+    @property
+    def funding(self):
+        """List of namedtuples parsed funding information in the form
+        (agency string id acronym country).
+        """
+        funds = self._json['item'].get('xocs:meta', {}).get('xocs:funding-list', {}).get('xocs:funding', [])
+        if len(funds) == 0:
+            return None
+        if not isinstance(funds, list):
+            funds = [funds]
+        out = []
+        fund = namedtuple('Funding', 'agency string id acronym country')
+        for item in funds:
+            new = fund(agency=item.get('xocs:funding-agency'),
+                string=item.get('xocs:funding-agency-matched-string'),
+                id=item.get('xocs:funding-agency-id'),
+                acronym=item.get('xocs:funding-agency-acronym'),
+                country=item.get('xocs:funding-agency-country'))
+            out.append(new)
+        return out
+
+    @property
+    def funding_text(self):
+        """The raw text from which Scopus derives funding information."""
+        return self._json['item'].get('xocs:meta', {}).get('xocs:funding-list', {}).get('xocs:funding-text')
+
+    @property
+    def isbn(self):
+        """ISBNs belonging to publicationName as tuple of variying length,
+        (e.g. ISBN-10 or ISBN-13)."""
+        isbns = self._head.get('source', {}).get('isbn', [])
+        if not isinstance(isbns, list):
+            isbns = [isbns]
+        if len(isbns) == 0:
+            return None
+        else:
+            return tuple((i['$'] for i in isbns))
 
     @property
     def issn(self):
@@ -384,6 +472,28 @@ class AbstractRetrieval(object):
     def self_link(self):
         """URL to Scopus API page of this abstract."""
         return self._json['coredata']['link'][0].get('@href')
+
+    @property
+    def sequencebank(self):
+        """List of namedtuples representing biological entities defined or
+        mentioned in the text, in the form (name, sequence_number, type).
+        """
+        items = self._head.get('enhancement', {}).get('sequencebanks', {}).get('sequencebank', [])
+        if len(items) == 0:
+            return None
+        if not isinstance(items, list):
+            items = [items]
+        bank = namedtuple('Sequencebank', 'name sequence_number type')
+        out = []
+        for item in items:
+            numbers = item['sequence-number']
+            if not isinstance(numbers, list):
+                numbers = [numbers]
+            for number in numbers:
+                new = bank(name=item['@name'], sequence_number=number['$'],
+                           type=number['@type'])
+                out.append(new)
+        return out
 
     @property
     def source_id(self):

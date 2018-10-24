@@ -15,6 +15,12 @@ ab2 = scopus.AbstractRetrieval("2-s2.0-0029486824", view="FULL", refresh=True)
 ab3 = scopus.AbstractRetrieval("2-s2.0-0001270077", view="FULL", refresh=True)
 # Author group broken and author keywords
 ab4 = scopus.AbstractRetrieval("2-s2.0-0000016206", view="FULL", refresh=True)
+# ISBN
+ab5 = scopus.AbstractRetrieval("2-s2.0-84919546381", view="FULL", refresh=True)
+# Funding, sequencebanks, chemicals
+ab6 = scopus.AbstractRetrieval("2-s2.0-85053478849", view="FULL", refresh=True)
+# Contributor group
+ab7 = scopus.AbstractRetrieval("2-s2.0-85050253030", view="FULL", refresh=True)
 
 
 def test_abstract():
@@ -81,6 +87,17 @@ def test_citedby_link():
     assert_equal(ab1.citedby_link, expected)
 
 
+def test_chemials():
+    received = ab6.chemicals
+    assert_true(isinstance(received, list))
+    assert_equal(len(received), 2)
+    chemical = namedtuple('Chemical', 'source chemical_name cas_registry_number')
+    expected = chemical(source='esbd', chemical_name='magnesium',
+                        cas_registry_number='7439-95-4')
+    assert_true(expected in received)
+    assert_equal(ab3.chemicals, None)
+
+
 def test_confcode():
     assert_equal(ab2.confcode, '44367')
 
@@ -94,13 +111,31 @@ def test_conflocation():
 
 
 def test_confname():
-    expected = "Proceedings of the 1995 34th IEEE Conference on Decision and"\
-               " Control. Part 1 (of 4)"
-    assert_equal(ab2.confname, expected)
+    expected2 = "Proceedings of the 1995 34th IEEE Conference on Decision "\
+                "and Control. Part 1 (of 4)"
+    assert_equal(ab2.confname, expected2)
+    assert_equal(ab3.confname, None)
+    expected7 = '20th Symposium on Design, Test, Integration and Packaging '\
+                'of MEMS and MOEMS, DTIP 2018'
+    assert_equal(ab7.confname, expected7)
 
 
 def test_confsponsor():
     assert_equal(ab2.confsponsor, 'IEEE')
+    expected7 = ['ARTOV.IMM.CNR.IT', 'CMP.IMAG.FR', 'CNRS.FR',
+                 'EPS.IEEE.ORG', 'LIRMM.FR']
+    assert_equal(ab7.confsponsor, expected7)
+
+
+def test_contributor_group():
+    fields = 'given_name initials surname indexed_name role'
+    pers = namedtuple('Contributor', fields)
+    expected = pers(given_name='Romolo', initials='R.', surname='Marcelli',
+                    indexed_name='Marcelli R.', role='edit')
+    received = ab7.contributor_group
+    assert_equal(len(received), 7)
+    assert_true(expected in received)
+    assert_equal(ab3.contributor_group, None)
 
 
 def test_correspondence():
@@ -141,6 +176,25 @@ def test_eid():
 
 def test_endingPage():
     assert_equal(ab1.endingPage, '3899')
+
+
+def test_funding():
+    received = ab6.funding
+    assert_true(isinstance(received, list))
+    assert_equal(len(received), 1)
+    fund = namedtuple('Funding', 'agency string id acronym country')
+    expected6 = fund(agency=None, string='CNRT “Nickel et son Environnement',
+        acronym=None, id=None, country=None)
+    assert_true(expected6 in received)
+    assert_equal(ab5.funding, None)
+
+
+def test_funding_text():
+    e = 'The authors gratefully acknowledge CNRT “Nickel et son '\
+        'Environnement” for providing the financial support. The results '\
+        'reported in this publication are gathered from the CNRT report '\
+        '“Ecomine BioTop”. Appendix A'
+    assert_equal(ab6.funding_text, e)
 
 
 def test_get_html():
@@ -185,8 +239,14 @@ def test_get_html():
     assert_equal(ab3.get_html(), e)
 
 
+def test_isbn():
+    assert_equal(ab3.isbn, None)
+    assert_equal(ab5.isbn, ('0203881486', '9780203881484'))
+
+
 def test_issn():
     assert_equal(ab1.issn, '21555435')
+    assert_equal(ab5.issn, None)
 
 
 def test_identifier():
@@ -265,6 +325,16 @@ def test_scopus_link():
 def test_self_link():
     expected = 'https://api.elsevier.com/content/abstract/scopus_id/84930616647'
     assert_equal(ab1.self_link, expected)
+
+
+def test_sequencebank():
+    received = ab6.sequencebank
+    assert_true(isinstance(received, list))
+    bank = namedtuple('Chemical', 'name sequence_number type')
+    expected = bank(name='GENBANK', type='submitted',
+                    sequence_number='MH150839:MH150870')
+    assert_true(expected in received)
+    assert_equal(ab3.sequencebank, None)
 
 
 def test_source_id():
