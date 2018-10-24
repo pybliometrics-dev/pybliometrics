@@ -3,6 +3,21 @@ Change Log
 
 .. toctree::
 
+1.2
+~~~
+
+2018-10-24
+
+* In AbstractRetrieval, users can now initate the class with DOI, Scopus ID, PII or Pubmed ID.  Parameter `EID` has hence been deprecatd in favor of the new parameter `identifier`.
+* New properties for AbstractRetrieval: `chemicals`, `contributor_group`, `funding`, `funding_text`, `isbn`, `sequencebank`.
+* In ContentAffiliationRetrieval, return None rather than empty dict when no address is provided.
+* In AbstractRetrieval.confsponsor, return None when no confsponsor is provided.
+* In ScopusSearch.results, return "afid" as part of namedtuple.
+* Fix bug in AbstractRetrieval.authorgroup related to affiliation groups without authors.
+* Fix bug in AbstractRetrieval.affiliation related to affiliations without Scopus ID.
+* Fix bugs in ScopusSearch.results with duplicate authors, missing titles and unusual coverDates.
+* AuthorRetrieval warns User via UserWarnings if the supplied author ID is outdated or if it has been forwarded to a new profile.
+
 1.1
 ~~~
 
