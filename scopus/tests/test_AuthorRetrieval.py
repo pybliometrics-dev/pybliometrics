@@ -20,19 +20,19 @@ def test_affiliation_current():
 def test_affiliation_history():
     affs = au.affiliation_history
     assert_true(len(affs) >= 5)
-    assert_true(isinstance(affs[0], unicode))
+    assert_true(isinstance(affs[0], str))
 
 
 def test_citation_count():
-    assert_true(au.citation_count >= '7584')
+    assert_true(int(au.citation_count) >= 7584)
 
 
 def test_cited_by_count():
-    assert_true(au.cited_by_count >= '6066')
+    assert_true(int(au.cited_by_count) >= 6066)
 
 
 def test_coauthor_count():
-    assert_true(au.coauthor_count >= '164')
+    assert_true(int(au.coauthor_count) >= 164)
 
 
 def test_classificationgroup():
@@ -52,7 +52,7 @@ def test_date_created():
 
 
 def test_document_count():
-    assert_true(au.document_count >= '99')
+    assert_true(int(au.document_count) >= 99)
 
 
 def test_eid():
@@ -64,7 +64,7 @@ def test_given_name():
 
 
 def test_h_index():
-    assert_true(au.h_index >= '27')
+    assert_true(int(au.h_index) >= 27)
 
 
 def test_identifier():
@@ -121,8 +121,8 @@ def test_search_link():
 
 
 def test_publication_range():
-    assert_true(au.publication_range[0] <= '1995')
-    assert_true(au.publication_range[1] >= '2018')
+    assert_equal(au.publication_range[0], '1995')
+    assert_true(int(au.publication_range[1]) >= 2018)
 
 
 def test_subject_areas():
