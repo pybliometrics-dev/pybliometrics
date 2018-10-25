@@ -69,17 +69,17 @@ class ScopusSearch(Search):
                 date = date[0].get('$')
             new = doc(eid=item['eid'], doi=item.get('prism:doi'),
                       pii=item.get('pii'), title=item.get('dc:title'),
-                      subtype=item.get('subtype'), creator=item.get('dc:creator'),
-                      authname=authname, authid=authid, afid=afid,
+                      subtype=item.get('subtype'), issn=item.get('prism:issn'),
+                      creator=item.get('dc:creator'), authname=authname,
                       coverDate=date, volume=item.get('prism:volume'),
                       coverDisplayDate=item.get('prism:coverDisplayDate'),
                       publicationName=item.get('prism:publicationName'),
-                      issn=item.get('prism:issn'), source_id=item.get('source-id'),
+                      source_id=item.get('source-id'), authid=authid,
                       aggregationType=item.get('prism:aggregationType'),
                       issueIdentifier=item.get('prism:issueIdentifier'),
-                      pageRange=item.get('prism:pageRange'),
+                      pageRange=item.get('prism:pageRange'), afid=afid,
                       citedby_count=item.get('citedby-count'),
-                      openaccess=item['openaccess'])
+                      openaccess=item.get('openaccess'))
             out.append(new)
         return out
 
