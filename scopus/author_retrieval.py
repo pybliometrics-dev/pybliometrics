@@ -73,8 +73,8 @@ class AuthorRetrieval(Retrieval):
     @property
     def given_name(self):
         """Author's preferred given name."""
-        return self._json['author-profile'].get('preferred-name',
-                                                {}).get('given-name')
+        profile = self._json['author-profile']
+        return profile.get('preferred-name', {}).get('given-name')
 
     @property
     def h_index(self):
