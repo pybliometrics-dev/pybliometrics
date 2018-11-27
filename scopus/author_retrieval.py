@@ -187,7 +187,8 @@ class AuthorRetrieval(Retrieval):
         except AttributeError:
             # Sometimes subject-areas is mapped to None
             pass
-        return areas
+        finally:
+            return areas or None
 
     @property
     def url(self):
