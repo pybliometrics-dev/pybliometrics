@@ -11,7 +11,7 @@ The class is initialized with a search query which you can read about in `Author
     >>> s = AuthorSearch('AUTHLAST(Reinhard) and AUTHFIRST(Selten)', refresh=True)
 
 
-The class mostly serves to provide a list of named tuples storing author EIDs, which you can use for the `ScopusAuthor <../reference/scopus.ScopusAuthor.html>`_ class, and corresponding information:
+The class mostly serves to provide a list of `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the `ScopusAuthor <../reference/scopus.ScopusAuthor.html>`_ class, and corresponding information:
 
 .. code-block:: python
 
@@ -19,7 +19,7 @@ The class mostly serves to provide a list of named tuples storing author EIDs, w
     [Author(eid='9-s2.0-6602907525', surname='Selten', initials='R.', givenname='Reinhard', affiliation='Universitat Bonn', documents='73', affiliation_id='60007493', city='Bonn', country='Germany', areas='ECON (71); MATH (19); BUSI (15)')]
 
 
-It's easy to work with `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_, for example using `pandas <https://pandas.pydata.org/>`_:
+It's easy to work with namedtuples, for example using `pandas <https://pandas.pydata.org/>`_:
 
 .. code-block:: python
 
