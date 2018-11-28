@@ -1,7 +1,14 @@
 import os
 import requests
 
+from scopus import exception
 from scopus.utils import config
+
+errors = {400: exception.Scopus400Error,
+          401: exception.Scopus401Error,
+          404: exception.Scopus404Error,
+          421: exception.Scopus421Error,
+          500: exception.Scopus500Error}
 
 
 def download(url, params=None, accept="xml"):
@@ -22,7 +29,7 @@ def download(url, params=None, accept="xml"):
 
     Raises
     ------
-    HTTPError
+    ScopusHtmlError
         If the status of the response is not ok.
 
     ValueError
@@ -53,7 +60,12 @@ def download(url, params=None, accept="xml"):
     header.update({'Accept': 'application/{}'.format(accept)})
     # Perform request
     resp = requests.get(url, headers=header, params=params)
-    resp.raise_for_status()
+    # Raise error if necessary
+    try:
+        reason = resp.reason.upper() + " for url:" + url
+        raise errors[resp.status_code](reason)
+    except KeyError:  # Exception not specified in scopus
+        resp.raise_for_status()  # Will pass when everything is ok
     return resp
 
 

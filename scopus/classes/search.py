@@ -3,6 +3,7 @@
 from json import dumps, loads
 from os.path import exists
 
+from scopus.exception import ScopusQueryError
 from scopus.utils import download, get_content
 
 
@@ -44,7 +45,7 @@ class Search:
 
         Raises
         ------
-        Exception
+        ScopusQueryError
             If the number of search results exceeds max_entries.
 
         ValueError
@@ -69,9 +70,9 @@ class Search:
             data = loads(res.decode('utf-8'))['search-results']
             N = int(data.get('opensearch:totalResults', 0))
             if N > max_entries:
-                raise Exception(('Found {} matches. '
-                                 'Set max_entries to a higher number or '
-                                 'change your query ({})').format(N, query))
+                text = ('Found {} matches. Set max_entries to a higher '
+                        'number or change your query ({})'.format(N, query))
+                raise ScopusQueryError(text)
 
             # Then download the information in chunks
             self._json = []
