@@ -96,7 +96,7 @@ class ScopusSearch(Search):
 
         Raises
         ------
-        Exception
+        ScopusQueryError
             If the number of search results exceeds 5000.
 
         Notes

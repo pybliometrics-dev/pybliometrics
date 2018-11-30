@@ -59,7 +59,7 @@ class AffiliationSearch(Search):
 
         Raises
         ------
-        Exception
+        ScopusQueryError
             If the number of search results exceeds max_entries.
 
         Notes

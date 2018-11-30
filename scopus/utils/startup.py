@@ -13,7 +13,7 @@ if not os.path.exists(CONFIG_FILE):
     text = "scopus did not find a configuration file.  Please issue "\
            "scopus.utils.create_config() to start the process which guides "\
            "you through the generation of the configuration file or read "\
-           "https://scopus.readthedocs.io/en/latest/configuration.html."
+           "https://scopus.readthedocs.io/en/stable/configuration.html."
     warnings.warn(text, UserWarning)
 else:
     config.read(CONFIG_FILE)
@@ -23,7 +23,7 @@ warnings.simplefilter('always', DeprecationWarning)
 config.add_section('Warnings')
 text = "This class is deprecated and its maintenance has been suspended.  "\
        "Please use {}() instead.  For details see https://scopus."\
-       "readthedocs.io/en/latest/tips.html#migration-guide-from-0-x-to-1-x."
+       "readthedocs.io/en/where/tips.html#migration-guide-from-0-x-to-1-x."
 config.set('Warnings', 'Text', text)
 config.set('Warnings', 'Affiliation', '1')
 config.set('Warnings', 'Author', '1')
