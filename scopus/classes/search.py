@@ -1,14 +1,21 @@
 """Superclass to access all search APIs and dump the results."""
 
+from hashlib import md5
 from json import dumps, loads
-from os.path import exists
+from os.path import exists, join
 
+from scopus import config
 from scopus.exception import ScopusQueryError
-from scopus.utils import download, get_content
+from scopus.utils import create_config, download, get_content
+
+BASE_URL = 'https://api.elsevier.com/content/search/'
+URL = {'AffiliationSearch': BASE_URL + 'affiliation',
+       'AuthorSearch': BASE_URL + 'author',
+       'ScopusSearch': BASE_URL + 'scopus'}
 
 
 class Search:
-    def __init__(self, query, filepath, url, refresh, count=200, start=0,
+    def __init__(self, query, api, refresh, count=200, start=0,
                  max_entries=5000, view='STANDARD'):
         """Class intended as superclass to perform a search query.
 
@@ -17,11 +24,9 @@ class Search:
         query : str
             A string of the query.
 
-        filepath : str
-            The complete filepath and -name of the cached file.
-
-        url : str
-            The API access point.
+        api : str
+            The name of the Scopus API to be accessed.  Allowed values:
+            AffiliationSearch, AuthorSearch, ScopusSearch.
 
         refresh : bool
             Whether to refresh the cached file if it exists or not.
@@ -41,7 +46,7 @@ class Search:
             The view of the file that should be downloaded.  Will not take
             effect for already cached files.  Allowed values: STANDARD,
             COMPLETE.
-            Note: Only the Scopus search API additionally uses view COMPLETE.
+            Note: Only the ScopusSearch API additionally uses view COMPLETE.
 
         Raises
         ------
@@ -49,36 +54,42 @@ class Search:
             If the number of search results exceeds max_entries.
 
         ValueError
-            If the view parameters contains invalid entries.
+            If the api parameter or view parameter is an invalid entry.
         """
+        # Checks
+        if api not in URL:
+            raise ValueError('api parameter must be one of ' +
+                             ', '.join(URL.keys()))
         allowed_views = ('STANDARD', 'COMPLETE')
         if view not in allowed_views:
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
-        # Read the file contents if it exists and we are not refreshing
-        if not refresh and exists(filepath):
-            self._json = []
-            with open(filepath) as f:
-                for r in f.readlines():
-                    self._json.append(loads(r))
-        # Download file if cached file doesn't exists or we are refreshing
+        if not config.has_section('Directories'):
+            create_config()
+
+        # Read the file contents if file exists and we are not refreshing,
+        # otherwise download query anew and cache file
+        qfile = join(config.get('Directories', api),
+                     md5(query.encode('utf8')).hexdigest())
+        if not refresh and exists(qfile):
+            with open(qfile) as f:
+                self._json = [loads(line) for line in f.readlines()]
         else:
             # First, get a count of how many things to retrieve
             params = {'query': query, 'count': 0, 'start': 0, 'view': view}
-            res = get_content(filepath, url=url, refresh=refresh, params=params,
-                              accept='json')
+            res = get_content(qfile, url=URL[api], refresh=refresh,
+                              params=params, accept='json')
             data = loads(res.decode('utf-8'))['search-results']
             N = int(data.get('opensearch:totalResults', 0))
             if N > max_entries:
                 text = ('Found {} matches. Set max_entries to a higher '
                         'number or change your query ({})'.format(N, query))
                 raise ScopusQueryError(text)
-
             # Then download the information in chunks
             self._json = []
             while N > 0:
-                params.update({'count': count, 'start': start})
-                res = download(url=url, params=params, accept="json")
+                params.update({'count': count, 'start': 0})
+                res = download(url=URL[api], params=params, accept="json")
                 results = res.json()
 
                 if 'entry' in results.get('search-results', []):
@@ -86,8 +97,7 @@ class Search:
                         self._json.append({f: r[f] for f in r.keys()})
                 start += count
                 N -= count
-
             # Finally write out the file
-            with open(filepath, 'wb') as f:
+            with open(qfile, 'wb') as f:
                 for item in self._json:
                     f.write('{}\n'.format(dumps(item)).encode('utf-8'))

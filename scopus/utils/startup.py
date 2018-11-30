@@ -20,7 +20,10 @@ else:
 
 # Temporary Deprecation Warnings flags
 warnings.simplefilter('always', DeprecationWarning)
-config.add_section('Warnings')
+try:
+    config.add_section('Warnings')
+except configparser.DuplicateSectionError:
+    pass
 text = "This class is deprecated and its maintenance has been suspended.  "\
        "Please use {}() instead.  For details see https://scopus."\
        "readthedocs.io/en/where/tips.html#migration-guide-from-0-x-to-1-x."

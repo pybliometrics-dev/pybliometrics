@@ -1,8 +1,5 @@
-import hashlib
 from collections import namedtuple
-from os.path import join
 
-from scopus import config
 from scopus.classes import Search
 
 
@@ -64,22 +61,15 @@ class AffiliationSearch(Search):
 
         Notes
         -----
-        Json results are cached in ~/.scopus/affiliation_search/{fname}, where
-        fname is the hashed version of query.
-
-        The results are stored as a property named authors.
+        Json results are cached in ~/.scopus/affiliation_search/{fname},
+        where fname is the md5-hashed version of query.
         """
 
         self.query = query
-        qfile = join(config.get('Directories', 'AffiliationSearch'),
-                     hashlib.md5(query.encode('utf8')).hexdigest())
-        url = 'https://api.elsevier.com/content/search/affiliation'
-        Search.__init__(self, query, qfile, url, refresh, count, start,
-                        max_entries)
+        Search.__init__(self, query, "AffiliationSearch", refresh, count,
+                        start, max_entries)
 
     def __str__(self):
-        s = """{query}
-        Resulted in {N} hits.
-    {entries}"""
-        return s.format(query=self.query, N=len(self._json),
+        s = """Search {} yielded {} affiliation(s):\n    {}"""
+        return s.format(self.query, len(self._json),
                         entries='\n    '.join([str(a) for a in self._json]))

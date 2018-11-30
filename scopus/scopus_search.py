@@ -1,11 +1,6 @@
-import hashlib
 import warnings
 from collections import namedtuple
-from json import loads
-from os.path import join
 
-from scopus import config
-from scopus.utils import download
 from scopus.classes import Search
 
 
@@ -101,23 +96,20 @@ class ScopusSearch(Search):
 
         Notes
         -----
-        Json results are cached in ~/.scopus/search_scoups/{fname} where fname
-        is the md5-hashed version of query.
+        Json results are cached in ~/.scopus/scopus_search/{fname},
+        where fname is the md5-hashed version of query.
 
         The COMPLETE view is used to access more fields, see
         https://dev.elsevier.com/guides/ScopusSearchViews.htm.
         """
 
         self.query = query
-        qfile = join(config.get('Directories', 'ScopusSearch'),
-                     hashlib.md5(query.encode('utf8')).hexdigest())
-        url = 'https://api.elsevier.com/content/search/scopus'
-        Search.__init__(self, query, qfile, url, refresh,
+        Search.__init__(self, query, 'ScopusSearch', refresh,
                         max_entries=5000, count=25, start=0, view='COMPLETE')
 
     def __str__(self):
         eids = self.get_eids()
-        s = """Search {} yielded in {} documents:\n    {}"""
+        s = """Search {} yielded {} document(s):\n    {}"""
         return s.format(self.query, len(eids), '\n    '.join(eids))
 
     def get_eids(self):
