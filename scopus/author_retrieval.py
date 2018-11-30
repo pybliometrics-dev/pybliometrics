@@ -1,14 +1,11 @@
 from collections import namedtuple
-from json import loads
-from os.path import join
 from warnings import warn
 
-from scopus import config
 from .scopus_search import ScopusSearch
-from scopus.utils import download, get_content
+from scopus.classes import Retrieval
 
 
-class AuthorRetrieval(object):
+class AuthorRetrieval(Retrieval):
     @property
     def affiliation_current(self):
         """The ID of the current affiliation according to Scopus."""
@@ -207,18 +204,14 @@ class AuthorRetrieval(object):
         The files are cached in ~/.scopus/author_retrieval/{author_id} (without
         eventually leading '9-s2.0-').
         """
+        # Load json
         self._id = str(int(str(author_id).split('-')[-1]))
-
-        qfile = join(config.get('Directories', 'AuthorRetrieval'), self._id)
-        url = ('https://api.elsevier.com/content/author/'
-               'author_id/{}').format(self._id)
-        params = {'author_id': self._id, 'view': 'ENHANCED'}
-        res = get_content(qfile, url=url, refresh=refresh, accept='json',
-                          params=params)
-        self._json = loads(res.decode('utf-8'))['author-retrieval-response']
+        Retrieval.__init__(self, self._id, 'AuthorRetrieval', refresh)
+        self._json = self._json['author-retrieval-response']
+        # Checks
         try:
             self._json = self._json[0]
-        except KeyError:
+        except KeyError:  # Incomplete forward
             alias_json = self._json['alias']['prism:url']
             if not isinstance(alias_json, list):
                 alias_json = [alias_json]

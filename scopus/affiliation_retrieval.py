@@ -1,12 +1,9 @@
 from collections import namedtuple
-from json import loads
-from os.path import join
 
-from scopus import config
-from scopus.utils import get_content
+from scopus.classes import Retrieval
 
 
-class ContentAffiliationRetrieval:
+class ContentAffiliationRetrieval(Retrieval):
     @property
     def address(self):
         """The address of the affiliation."""
@@ -134,15 +131,11 @@ class ContentAffiliationRetrieval:
         -----
         The files are cached in ~/.scopus/affiliation_retrieval/{aff_id}.
         """
+        # Load json
         aff_id = str(int(str(aff_id).split('-')[-1]))
-
-        qfile = join(config.get('Directories', 'ContentAffiliationRetrieval'),
-                     aff_id)
-        url = ('https://api.elsevier.com/content/affiliation/'
-               'affiliation_id/{}'.format(aff_id))
-
-        res = get_content(qfile, url=url, refresh=refresh, accept='json')
-        self._json = loads(res.decode('utf-8'))['affiliation-retrieval-response']
+        Retrieval.__init__(self, aff_id, 'ContentAffiliationRetrieval',
+                           refresh)
+        self._json = self._json['affiliation-retrieval-response']
 
     def __str__(self):
         s = '''{self.name} ({self.author_count} authors, {self.document_count} documents)

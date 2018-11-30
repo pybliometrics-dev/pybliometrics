@@ -1,13 +1,11 @@
 from collections import namedtuple
-from json import loads
-from os.path import join
 from warnings import warn
 
-from scopus import config
-from scopus.utils import get_content, detect_id_type
+from scopus.classes import Retrieval
+from scopus.utils import detect_id_type
 
 
-class AbstractRetrieval(object):
+class AbstractRetrieval(Retrieval):
     @property
     def abstract(self):
         """The abstract of a document.
@@ -578,7 +576,7 @@ class AbstractRetrieval(object):
 
         id_type: str (optional, default=None)
             The type of used ID. Allowed values: None, 'eid', 'pii',
-            'scopus_id', 'pubmed_id','doi'.  If the value is None, the
+            'scopus_id', 'pubmed_id', 'doi'.  If the value is None, the
             function tries to infer the ID type itself.
 
         view : str (optional, default=META_ABS)
@@ -603,6 +601,7 @@ class AbstractRetrieval(object):
         DOI always contains '/' symbol, which is a path separator in some operating
         systems so '/' has to be replaced in the filename for caching.
         """
+        # Checks
         if identifier is None and EID:
             text = "Parameter EID is deprecated in favor of parameter "\
                    "identifier.  Please update your code."
@@ -613,7 +612,6 @@ class AbstractRetrieval(object):
         if view not in allowed_views:
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
-
         if id_type is None:
             id_type = detect_id_type(identifier)
         else:
@@ -621,13 +619,10 @@ class AbstractRetrieval(object):
             if id_type not in allowed_id_types:
                 raise ValueError('id_type parameter must be one of ' +
                                  ', '.join(allowed_id_types))
-
-        qfile = join(config.get('Directories', 'AbstractRetrieval'),
-                     identifier.replace('/', '_'))
-        url = "https://api.elsevier.com/content/abstract/{}/{}".format(id_type, identifier)
-        res = get_content(qfile, url=url, refresh=refresh, accept='json',
-                          params={'view': view})
-        self._json = loads(res.decode('utf-8'))['abstracts-retrieval-response']
+        # Load json
+        Retrieval.__init__(self, identifier, 'AbstractRetrieval', refresh,
+                           id_type, view)
+        self._json = self._json['abstracts-retrieval-response']
         self._head = self._json.get('item', {}).get('bibrecord', {}).get('head', {})
         self._tail = self._json.get('item', {}).get('bibrecord', {}).get('tail', {})
         if self._tail is None:

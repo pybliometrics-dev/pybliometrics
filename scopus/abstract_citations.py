@@ -1,13 +1,10 @@
 from collections import namedtuple
 from datetime import datetime
-from json import loads
-from os.path import join
 
-from scopus import config
-from scopus.utils import get_content
+from scopus.classes import Retrieval
 
 
-class CitationOverview(object):
+class CitationOverview(Retrieval):
     @property
     def authors(self):
         """A list of namedtuples storing author information,
@@ -161,17 +158,15 @@ class CitationOverview(object):
         The files are cached in ~/.scopus/citation_overview/{eid}.
         Your API Key needs to be approved by Elsevier to access this view.
         """
-        # Get file content
-        scopus_id = eid.split('0-')[-1]
-        qfile = join(config.get('Directories', 'CitationOverview'), eid)
-        url = "https://api.elsevier.com/content/abstract/citations/{}".format(scopus_id)
-        params = {'scopus_id': scopus_id, 'date': '{}-{}'.format(start, end)}
-        res = get_content(qfile, url=url, refresh=refresh, params=params,
-                          accept='json')
-        self._data = loads(res.decode('utf-8'))['abstract-citations-response']
-
+        # Variables
         self._start = int(start)
         self._end = int(end)
+
+        # Get file content
+        date = '{}-{}'.format(start, end)
+        Retrieval.__init__(self, eid, 'CitationOverview', refresh,
+                           date=date)
+        self._data = self._json['abstract-citations-response']
 
         # citeInfoMatrix
         m = self._data['citeInfoMatrix']['citeInfoMatrixXML']['citationMatrix']['citeInfo'][0]
