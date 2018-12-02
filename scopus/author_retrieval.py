@@ -109,7 +109,8 @@ class AuthorRetrieval(Retrieval):
         """
         hist = []
         jour = namedtuple('Journal', 'sourcetitle abbreviation type issn')
-        pub_hist = self._json['author-profile']['journal-history'].get('journal', [])
+        jour_hist = self._json['author-profile'].get('journal-history', {})
+        pub_hist = jour_hist.get('journal', [])
         if not isinstance(pub_hist, list):
             pub_hist = [pub_hist]
         for pub in pub_hist:
