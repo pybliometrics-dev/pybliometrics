@@ -179,19 +179,15 @@ class AuthorRetrieval(Retrieval):
         """List of named tuples of subject areas in the form
         (area, abbreviation, code) of author's publication.
         """
-        areas = []
-        area = namedtuple('Subjectarea', 'area abbreviation code')
         try:
-            for item in self._json.get('subject-areas',
-                                       {}).get('subject-area', []):
-                new = area(area=item['$'], code=item['@code'],
-                           abbreviation=item['@abbrev'])
-                areas.append(new)
-        except AttributeError:
-            # Sometimes subject-areas is mapped to None
-            pass
-        finally:
-            return areas or None
+            items = self._json['subject-areas']['subject-area']
+        except (KeyError, TypeError):
+            return None
+        area = namedtuple('Subjectarea', 'area abbreviation code')
+        areas = [area(area=item['$'], code=item['@code'],
+                      abbreviation=item['@abbrev'])
+                 for item in items]
+        return areas or None
 
     @property
     def url(self):

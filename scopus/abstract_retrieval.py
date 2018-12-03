@@ -29,10 +29,7 @@ class AbstractRetrieval(Retrieval):
                       city=item.get('affiliation-city'),
                       country=item.get('affiliation-country'))
             out.append(new)
-        if len(out) > 0:
-            return out
-        else:
-            return None
+        return out or None
 
     @property
     def aggregationType(self):
@@ -458,10 +455,7 @@ class AbstractRetrieval(Retrieval):
                       text=info.get('ref-text'),
                       fulltext=item.get('ref-fulltext'))
             out.append(new)
-        if len(out) > 0:
-            return out
-        else:
-            return None
+        return out or None
 
     @property
     def scopus_link(self):
