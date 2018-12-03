@@ -16,8 +16,11 @@ class AuthorRetrieval(Retrieval):
         """Unordered list of IDs of all affiliations the author was
         affiliated with acccording to Scopus.
         """
-        affs = self._json.get('affiliation-history', {}).get('affiliation', {})
-        return [d['@id'] for d in affs]
+        affs = self._json.get('affiliation-history', {}).get('affiliation')
+        try:
+            return [d['@id'] for d in affs]
+        except TypeError:  # No affiliation history
+            return None
 
     @property
     def citation_count(self):
