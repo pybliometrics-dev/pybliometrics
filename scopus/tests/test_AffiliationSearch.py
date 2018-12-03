@@ -8,7 +8,7 @@ from nose.tools import assert_equal, assert_true
 
 import scopus
 
-s = scopus.AffiliationSearch('af-id(60021784)', refresh=False)
+s = scopus.AffiliationSearch('af-id(60021784)', refresh=True)
 
 
 def test_affiliations():

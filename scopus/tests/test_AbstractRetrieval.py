@@ -300,7 +300,7 @@ def test_references():
     ref = namedtuple('Reference', fields)
     fulltext1 = 'Implementing Reproducible Research; Stodden, V.; Leisch, '\
                 'F.; Peng, R. D., Eds., Chapman and Hall/CRC: London, 2014.'
-    expected1 = ref(position='22', id='84917679308', doi=None, title=None,
+    expected1 = ref(position='22', id='85055586929', doi=None, title=None,
         authors=['Stodden, V.', 'Leisch, F.', 'Peng, R.D.'], fulltext=fulltext1,
         sourcetitle='Implementing Reproducible Research',
         publicationyear='2014', volume=None, issue=None, first=None,
@@ -357,7 +357,8 @@ def test_startingPage():
 
 def test_subject_areas():
     area = namedtuple('Area', 'area abbreviation code')
-    expected = [area(area='Catalysis', abbreviation='CENG', code='1503')]
+    expected = [area(area='Catalysis', abbreviation='CENG', code='1503'),
+                area(area='Chemistry (all)', abbreviation='CHEM', code='1600')]
     assert_equal(ab1.subject_areas, expected)
 
 
