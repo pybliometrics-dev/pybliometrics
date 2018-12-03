@@ -63,6 +63,16 @@ def test_given_name():
     assert_equal(au.given_name, 'John R.')
 
 
+def test_get_documents():
+    subtypes = {'re', 'ed', 'no'}
+    received = au.get_documents(subtypes)
+    assert_equal(len(received), 6)
+
+
+def test_get_document_eids():
+    assert_true(len(au.get_document_eids()) >= 99)
+
+
 def test_h_index():
     assert_true(int(au.h_index) >= 27)
 

@@ -277,6 +277,16 @@ class AuthorRetrieval(Retrieval):
             count += 25
         return coauthors
 
+    def get_documents(self, subtypes=None, refresh=False):
+        """Return list of author's publications using ScopusSearch, which
+        fit a specified set of document subtypes.
+        """
+        search = ScopusSearch('au-id({})'.format(self.identifier), refresh)
+        if subtypes:
+            return [p for p in search.results if p.subtype in subtypes]
+        else:
+            return search.results
+
     def get_document_eids(self, *args, **kwds):
         """Return list of EIDs of author's publications using ScopusSearch."""
         search = ScopusSearch('au-id({})'.format(self.identifier),
