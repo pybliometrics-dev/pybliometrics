@@ -76,7 +76,8 @@ class AuthorRetrieval(Retrieval):
     @property
     def given_name(self):
         """Author's preferred given name."""
-        return self._json['author-profile'].get('preferred-name', {}).get('given-name')
+        profile = self._json['author-profile']
+        return profile.get('preferred-name', {}).get('given-name')
 
     @property
     def h_index(self):
@@ -142,7 +143,7 @@ class AuthorRetrieval(Retrieval):
         for var in items:
             new = variant(indexed_name=var['indexed-name'],
                           initials=var['initials'], surname=var['surname'],
-                          given_name=var['given-name'],
+                          given_name=var.get('given-name'),
                           doc_count=var.get('@doc-count'))
             out.append(new)
         return out
@@ -180,11 +181,17 @@ class AuthorRetrieval(Retrieval):
         """
         areas = []
         area = namedtuple('Subjectarea', 'area abbreviation code')
-        for item in self._json['subject-areas'].get('subject-area', []):
-            new = area(area=item['$'], code=item['@code'],
-                       abbreviation=item['@abbrev'])
-            areas.append(new)
-        return areas
+        try:
+            for item in self._json.get('subject-areas',
+                                       {}).get('subject-area', []):
+                new = area(area=item['$'], code=item['@code'],
+                           abbreviation=item['@abbrev'])
+                areas.append(new)
+        except AttributeError:
+            # Sometimes subject-areas is mapped to None
+            pass
+        finally:
+            return areas or None
 
     @property
     def url(self):
@@ -262,11 +269,11 @@ class AuthorRetrieval(Retrieval):
             for entry in data:
                 aff = entry.get('affiliation-current', {})
                 try:
-                    areas = [a['$'] for a in entry['subject-area']]
+                    areas = [a['$'] for a in entry.get('subject-area', [])]
                 except TypeError:  # Only one subject area given
                     areas = [entry['subject-area']['$']]
                 new = coauth(surname=entry['preferred-name']['surname'],
-                             given_name=entry['preferred-name']['given-name'],
+                             given_name=entry['preferred-name'].get('given-name'),
                              id=entry['dc:identifier'].split(':')[-1],
                              areas='; '.join(areas),
                              affiliation_id=aff.get('affiliation-id'),
