@@ -16,7 +16,10 @@ The class mostly serves to provide a list of `namedtuples <https://docs.python.o
 .. code-block:: python
 
     >>> s.authors
-    [Author(eid='9-s2.0-6602907525', surname='Selten', initials='R.', givenname='Reinhard', affiliation='Universitat Bonn', documents='73', affiliation_id='60007493', city='Bonn', country='Germany', areas='ECON (71); MATH (19); BUSI (15)')]
+    [Author(eid='9-s2.0-6602907525', surname='Selten', initials='R.',
+    givenname='Reinhard', affiliation='Universitat Bonn', documents='73',
+    affiliation_id='60007493', city='Bonn', country='Germany',
+    areas='ECON (71); MATH (19); BUSI (15)')]
 
 
 It's easy to work with namedtuples, for example using `pandas <https://pandas.pydata.org/>`_:

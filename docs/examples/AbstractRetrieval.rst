@@ -56,7 +56,8 @@ Attributes `idxterms`, `subject_areas` and `authkeywords` (if provided) provide 
 .. code-block:: python
 
     >>> ab.idxterms
-    ['Authoring tool', 'Data generation', 'Data Sharing', 'Human-readable', 'Scientific publications', 'Traditional publishing']
+    ['Authoring tool', 'Data generation', 'Data Sharing', 'Human-readable',
+    'Scientific publications', 'Traditional publishing']
     >>> ab.subject_areas
     [Area(area='Catalysis', abbreviation='CENG', code='1503')]
     >>> ab.authkeywords
@@ -76,11 +77,12 @@ You get the authors as a list of `namedtuples <https://docs.python.org/2/library
 .. code-block:: python
 
     >>> ab.authors
-    [Author(auid='7004212771', indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.', affiliation_id='60027950', affiliation=None, city=None, country=None)]
+    [Author(auid='7004212771', indexed_name='Kitchin J.R.', surname='Kitchin',
+    given_name='John R.', affiliation=['60027950'])]
     >>> import pandas as pd
     >>> print(pd.DataFrame(ab.authors))
-        auid  indexed_name  surname given_name affiliation_id affiliation  city country
-    0  7004212771  Kitchin J.R.  Kitchin    John R.       60027950        None  None    None
+        auid  indexed_name  surname given_name affiliation
+     0  7004212771  Kitchin J.R.  Kitchin    John R.  [60027950]
 
 
 The same structure applies for the attributes `affiliation` and `authorgroup`:
@@ -88,9 +90,12 @@ The same structure applies for the attributes `affiliation` and `authorgroup`:
 .. code-block:: python
 
     >>> ab.affiliation
-    [Affiliation(id='60027950', name='Carnegie Mellon University', city='Pittsburgh', country='United States')]
-    >>> ab.author_group
-    [Author(affiliation_id='60027950', organization='Department of Chemical Engineering, Carnegie Mellon University', city_group=None, country='United States', auid='7004212771', indexed_name='Kitchin J.', surname='Kitchin', given_name='John R.')]
+    [Affiliation(id='60027950', name='Carnegie Mellon University',
+    city='Pittsburgh', country='United States')]
+    >>> ab.authorgroup
+    [Author(affiliation_id='60027950', organization='Department of Chemical Engineering, Carnegie Mellon University',
+    city_group=None, country='United States', auid='7004212771',
+    indexed_name='Kitchin J.', surname='Kitchin', given_name='John R.')]
 
 
 Keep in mind that Scopus might not perfectly/correctly pair authors and affiliations as per the original document, even if it looks so on the web view.  In this case please request corrections to be made in Scopus' API here `here <https://service.elsevier.com/app/contact/supporthub/scopuscontent/>`_.
@@ -106,7 +111,10 @@ available if you downloaded the article with 'FULL' as `view` parameter.  T
     >>> len(refs)
     22
     >>> refs[0]
-    Reference(position='1', id='84881394200', title=None, authors='Hallenbeck, A.P.; Kitchin, J.R.', sourcetitle='Ind. Eng. Chem. Res.', publicationyear='2013', volume='52', issue=None, first='10788', last='10794', text=None, fulltext='Hallenbeck, A. P.; Kitchin, J. R. Ind. Eng. Chem. Res. 2013, 52, 10788-10794 10.1021/ie400582a')
+    Reference(position='1', id='84881394200', title=None, authors='Hallenbeck, A.P.; Kitchin, J.R.',
+    sourcetitle='Ind. Eng. Chem. Res.', publicationyear='2013', volume='52',
+    issue=None, first='10788', last='10794', text=None,
+    fulltext='Hallenbeck, A. P.; Kitchin, J. R. Ind. Eng. Chem. Res. 2013, 52, 10788-10794 10.1021/ie400582a')
     >>> df = pd.DataFrame(refs)
     >>> df.columns
     Index(['position', 'id', 'title', 'authors', 'sourcetitle', 'publicationyear',
@@ -132,6 +140,25 @@ For conference proceedings, Scopus also collects information on the conference:
     'New Orleans, LA, USA'
     >>> cp.confsponsor
     'IEEE'
+
+
+Some articles have information on funding, chemicals and genome banks:
+
+.. code-block:: python
+
+    >>> fund = AbstractRetrieval("2-s2.0-85053478849", view="FULL")
+    >>> fund.funding
+    [Funding(agency=None, string='CNRT “Nickel et son Environnement', id=None, acronym=None, country=None)]
+    >> fund.funding_text
+    'The authors gratefully acknowledge CNRT “Nickel et son Environnement” for
+    providing the financial support. The results reported in this publication
+    are gathered from the CNRT report “Ecomine BioTop”. Appendix A'
+    >>> fund.chemicals
+    [Chemical(source='esbd', chemical_name='calcium', cas_registry_number='7440-70-2;14092-94-5'),
+    Chemical(source='esbd', chemical_name='magnesium', cas_registry_number='7439-95-4')]
+    >>> fund.sequencebank
+    [Sequencebank(name='GENBANK', sequence_number='MH150839:MH150870',
+    type='submitted')]
 
 
 You can print the abstract in a variety of formats, including LaTeX, bibtex, HTML, and RIS. For bibtex entries, the key is the first author's surname, the year, and the first and last name of the title:

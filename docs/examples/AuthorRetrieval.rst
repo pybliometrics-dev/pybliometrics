@@ -26,7 +26,9 @@ Information on names:
     >>> au.initials
     'J.R.'
     >>> au.name_variants
-    [Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin', given_name='John R.', doc_count='81'), Variant(indexed_name='Kitchin J.', initials='J.', surname='Kitchin', given_name='John', doc_count='10'), Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin', given_name='J. R.', doc_count='8')]
+    [Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin', given_name='John R.', doc_count='81'),
+    Variant(indexed_name='Kitchin J.', initials='J.', surname='Kitchin', given_name='John', doc_count='10'),
+    Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin', given_name='J. R.', doc_count='8')]
     >>> au.eid
     '9-s2.0-7004212771'
 
@@ -124,7 +126,10 @@ With some additional lines of code you can get the number of journal articles wh
     >>> articles = eids[eids['aggregationType'] == 'Journal']
     >>> first = articles[articles['authid'].str.startswith('7004212771')]
     >>> list(first['eid'])
-    ['2-s2.0-85019169906', '2-s2.0-84971324241', '2-s2.0-84930349644', '2-s2.0-84930616647', '2-s2.0-84866142469', '2-s2.0-67449106405', '2-s2.0-40949100780', '2-s2.0-20544467859', '2-s2.0-13444307808', '2-s2.0-2942640180', '2-s2.0-0141924604', '2-s2.0-0037368024']
+    ['2-s2.0-85019169906', '2-s2.0-84971324241', '2-s2.0-84930349644',
+    '2-s2.0-84930616647', '2-s2.0-84866142469', '2-s2.0-67449106405',
+    '2-s2.0-40949100780', '2-s2.0-20544467859', '2-s2.0-13444307808',
+    '2-s2.0-2942640180', '2-s2.0-0141924604', '2-s2.0-0037368024']
 
 
 or you might be interested in the yearly number of publications:

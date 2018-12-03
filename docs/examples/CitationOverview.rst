@@ -45,7 +45,8 @@ There are also author information stored as list of `namedtuples <https://docs.p
 .. code-block:: python
 
     >>> co.authors
-    [Author(name='Kitchin J.R.', surname='Kitchin', initials='J.R.', id='7004212771', url='http://api.elsevier.com/content/author/author_id/7004212771')]
+    [Author(name='Kitchin J.R.', surname='Kitchin', initials='J.R.',
+    id='7004212771', url='http://api.elsevier.com/content/author/author_id/7004212771')]
     >>> auth_id = co.authors[0].id
     >>> auth_id
     '7004212771'
