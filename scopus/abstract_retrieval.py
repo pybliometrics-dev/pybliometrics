@@ -93,10 +93,11 @@ class AbstractRetrieval(Retrieval):
             aff = item.get('affiliation', {})
             try:
                 org = aff['organization']
-                try:
-                    org = org['$']
-                except TypeError:  # Multiple names given
-                    org = ', '.join([d['$'] for d in org])
+                if not isinstance(org, str):
+                    try:
+                        org = org['$']
+                    except TypeError:  # Multiple names given
+                        org = ', '.join([d['$'] for d in org])
             except KeyError:  # Author group w/o affiliation
                 org = None
             # Author information (might relate to collaborations)
