@@ -3,6 +3,16 @@ Change Log
 
 .. toctree::
 
+1.3
+~~~
+
+2018-11-04
+
+* Fix bugs related to empty values or missing keys in `AuthorRetrieval` (.affiliation_history, .get_coauthors(), .journal_history, .name_variant, referred_name, .subject_area) and in `ScopusSearch` (.results).
+* Introduce Retrieval() superclass for all retrieval and content classes.
+* Refactor Search() superclass and all search classes internally.
+* Implement scopus-specific exceptions.
+
 1.2
 ~~~
 
