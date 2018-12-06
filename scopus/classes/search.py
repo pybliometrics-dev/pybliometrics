@@ -72,7 +72,7 @@ class Search:
         qfile = join(config.get('Directories', api),
                      md5(query.encode('utf8')).hexdigest())
         if not refresh and exists(qfile):
-            with open(qfile) as f:
+            with open(qfile, "rb") as f:
                 self._json = [loads(line) for line in f.readlines()]
         else:
             # First, get a count of how many things to retrieve
