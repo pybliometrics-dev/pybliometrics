@@ -97,7 +97,7 @@ class AbstractRetrieval(Retrieval):
                     try:
                         org = org['$']
                     except TypeError:  # Multiple names given
-                        org = ', '.join([d['$'] for d in org])
+                        org = ', '.join([d['$'] for d in org if d])
             except KeyError:  # Author group w/o affiliation
                 org = None
             # Author information (might relate to collaborations)
