@@ -88,7 +88,7 @@ class Search:
             # Then download the information in chunks
             self._json = []
             while N > 0:
-                params.update({'count': count, 'start': 0})
+                params.update({'count': count, 'start': start})
                 res = download(url=URL[api], params=params, accept="json")
                 results = res.json()
 
