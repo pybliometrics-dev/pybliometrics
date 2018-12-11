@@ -3,10 +3,20 @@ Change Log
 
 .. toctree::
 
+1.3.1
+~~~~~
+
+2018-12-11
+
+* Extend tests for `ScopusSearch`.
+* Fix bug with zero search results.
+* Open cached search files in binary mode.
+* Fix bug in `AbstractRetrieval` with missing affiliation names in .authorgroup.
+
 1.3
 ~~~
 
-2018-11-04
+2018-12-04
 
 * Fix bugs related to empty values or missing keys in `AuthorRetrieval` (.affiliation_history, .get_coauthors(), .journal_history, .name_variant, referred_name, .subject_area) and in `ScopusSearch` (.results).
 * Introduce Retrieval() superclass for all retrieval and content classes.
