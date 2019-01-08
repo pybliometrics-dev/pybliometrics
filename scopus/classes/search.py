@@ -75,28 +75,22 @@ class Search:
             with open(qfile, "rb") as f:
                 self._json = [loads(line) for line in f.readlines()]
         else:
-            # First, get a count of how many things to retrieve
-            params = {'query': query, 'count': 0, 'start': 0, 'view': view}
-            res = get_content(qfile, url=URL[api], refresh=refresh,
-                              params=params, accept='json')
-            data = loads(res.decode('utf-8'))['search-results']
-            N = int(data.get('opensearch:totalResults', 0))
-            if N > max_entries:
+            # Get a count of how many things to retrieve from first chunk
+            params = {'query': query, 'count': count, 'start': 0, 'view': view}
+            res = download(url=URL[api], params=params, accept="json").json()
+            n = int(res['search-results'].get('opensearch:totalResults', 0))
+            if n > max_entries:  # Stop if there are too many results
                 text = ('Found {} matches. Set max_entries to a higher '
                         'number or change your query ({})'.format(N, query))
                 raise ScopusQueryError(text)
-            # Then download the information in chunks
-            self._json = []
-            while N > 0:
-                params.update({'count': count, 'start': start})
-                res = download(url=URL[api], params=params, accept="json")
-                results = res.json()
-
-                if 'entry' in results.get('search-results', []):
-                    for r in results['search-results']['entry']:
-                        self._json.append({f: r[f] for f in r.keys()})
+            self._json = res.get('search-results', {}).get('entry', [])
+            # Download the remaining information in chunks
+            while n > 0:
+                n -= count
                 start += count
-                N -= count
+                params.update({'count': count, 'start': start})
+                res = download(url=URL[api], params=params, accept="json").json()
+                self._json.extend(res.get('search-results', {}).get('entry', []))
             # Finally write out the file
             with open(qfile, 'wb') as f:
                 for item in self._json:
