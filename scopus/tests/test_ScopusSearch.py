@@ -22,7 +22,7 @@ def test_get_eids_author():
 
 
 def test_get_eids_journal():
-    assert_equal(len(s_j.get_eids()), 125)
+    assert_equal(len(s_j.get_eids()), 118)
 
 
 def test_results_author():
@@ -38,12 +38,11 @@ def test_results_author():
 
 
 def test_results_journal():
-    expected = doc(eid='2-s2.0-77955427791', doi='10.1016/j.respol.2010.05.011',
-        pii='S0048733310001356', title='Comment on mowery, nelson and martin',
-        subtype='no', creator='Perrow C.', authname='Perrow C.',
-        authid='6602918903', afid='60005455', coverDate='2010-10-01',
-        coverDisplayDate='October 2010', publicationName='Research Policy',
-        issn='00487333', source_id='22900', aggregationType='Journal',
-        volume='39', issueIdentifier='8', pageRange='1030-1031',
-        citedby_count='6', openaccess='0')
+    expected = doc(eid='2-s2.0-77955426868', doi='10.1016/j.respol.2010.05.009',
+        pii='S0048733310001332', title='Technology policy and global warming: Why new innovation models are needed',
+        subtype='le', creator='Hargadon A.', authname=None, authid=None,
+        afid=None, coverDate='2010-01-01', coverDisplayDate='October 2010',
+        publicationName='Research Policy', issn='00487333', source_id='22900',
+        aggregationType='Journal', volume='39', issueIdentifier='8',
+        pageRange='1024-1026', citedby_count='14', openaccess='0')
     assert_equal(s_j.results[-1], expected)
