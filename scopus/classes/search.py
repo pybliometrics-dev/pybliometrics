@@ -84,6 +84,8 @@ class Search:
                         'number or change your query ({})'.format(N, query))
                 raise ScopusQueryError(text)
             self._json = res.get('search-results', {}).get('entry', [])
+            if n == 0:
+                self._json = ""
             # Download the remaining information in chunks
             while n > 0:
                 n -= count
