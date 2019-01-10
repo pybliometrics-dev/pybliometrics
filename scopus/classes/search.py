@@ -81,7 +81,7 @@ class Search:
             n = int(res['search-results'].get('opensearch:totalResults', 0))
             if n > max_entries:  # Stop if there are too many results
                 text = ('Found {} matches. Set max_entries to a higher '
-                        'number or change your query ({})'.format(N, query))
+                        'number or change your query ({})'.format(n, query))
                 raise ScopusQueryError(text)
             self._json = res.get('search-results', {}).get('entry', [])
             if n == 0:
