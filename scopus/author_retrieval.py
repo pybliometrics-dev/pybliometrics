@@ -1,8 +1,11 @@
 from collections import namedtuple
 from warnings import warn
 
+from json import loads
+
 from .scopus_search import ScopusSearch
 from scopus.classes import Retrieval
+from scopus.utils import download
 
 
 class AuthorRetrieval(Retrieval):
