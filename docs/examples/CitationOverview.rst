@@ -16,7 +16,7 @@ The most important information is stored in attribute `cc`, which is a list of t
 
 .. code-block:: python
 
-    >>> print(co.cc)
+    >>> co.cc
     [(2015, '0'), (2016, '4'), (2017, '2')]
 
 
@@ -24,13 +24,13 @@ Sometimes there are citations outside the specified year range, which you can ge
 
 .. code-block:: python
 
-    >>> print(co.pcc)
+    >>> co.pcc
     0
-    >>> print(co.lcc)
+    >>> co.lcc
     0
 
 
-Attributes `rangeCount` and `rowTotal` give summaries.  `rangeCount` is the number of citations received within the specified years, while `rowTotal` additionally includes omitted years (hence it is the total number of citations.)
+Attributes `rangeCount` and `rowTotal` give summaries.  `rangeCount` is the number of citations received within the specified years, while `rowTotal` additionally includes omitted years (hence it is the total number of citations).
 
 .. code-block:: python
 

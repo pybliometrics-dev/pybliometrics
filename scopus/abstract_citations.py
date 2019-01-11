@@ -156,7 +156,7 @@ class CitationOverview(Retrieval):
         Notes
         -----
         The files are cached in ~/.scopus/citation_overview/{eid}.
-        Your API Key needs to be approved by Elsevier to access this view.
+        Your API Key needs to be approved by Elsevier to access this API.
         """
         # Variables
         self._start = int(start)

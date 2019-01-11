@@ -31,7 +31,7 @@ You can obtain basic information just by printing the object:
        Carnegie Mellon University
 
 
-The object has a 46 attributes and methods to interact with.  For example, to obtain bibliographic information:
+There are 48 attributes and 4 methods to interact with.  For example, to obtain bibliographic information:
 
 .. code-block:: python
 
@@ -101,7 +101,7 @@ The same structure applies for the attributes `affiliation` and `authorgroup`:
 Keep in mind that Scopus might not perfectly/correctly pair authors and affiliations as per the original document, even if it looks so on the web view.  In this case please request corrections to be made in Scopus' API here `here <https://service.elsevier.com/app/contact/supporthub/scopuscontent/>`_.
 
 The references of an article (useful to build citation networks) are only
-available if you downloaded the article with 'FULL' as `view` parameter.  T
+available if you downloaded the article with 'FULL' as `view` parameter.
 
 .. code-block:: python
 

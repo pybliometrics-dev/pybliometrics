@@ -55,8 +55,8 @@ class ContentAffiliationRetrieval(Retrieval):
 
     @property
     def name_variants(self):
-        """Variants of the affiliation name with number of documents
-        referring to this variant.
+        """A list of namedtuples representing variants of the affiliation name
+        with number of documents referring to this variant.
         """
         out = []
         variant = namedtuple('Variant', 'name doc_count')

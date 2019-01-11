@@ -95,7 +95,7 @@ There are a number of getter methods for convenience.  For example, you can obta
       dtype='object')
 
 
-Metho `get_document_eids()` performs a search for the author's publications with `ScopusSearch <../reference/scopus.ScopusSearch>`_ to ease interoperationability with other APIs:
+Method `get_document_eids()` performs a search for the author's publications with `ScopusSearch <../reference/scopus.ScopusSearch>`_ to ease interoperationability with other APIs:
 
 .. code-block:: python
 

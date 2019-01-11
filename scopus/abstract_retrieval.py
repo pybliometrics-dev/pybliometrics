@@ -585,15 +585,14 @@ class AbstractRetrieval(Retrieval):
             Whether to refresh the cached file if it exists or not.
 
         ValueError
-            If the id_type parameters contains invalid entries.
-            If the view parameters contains invalid entries.
+            If the id_type parameter or the view parameter contains
+            invalid entries.
 
         Notes
         -----
-        The files are cached in ~/.scopus/abstract_retrieval/{eid}.
-
-        DOI always contains '/' symbol, which is a path separator in some operating
-        systems so '/' has to be replaced in the filename for caching.
+        The files are cached in ~/.scopus/abstract_retrieval/{identifier}.  In
+        case a DOI is used as identifier, an underscore replaces the forward
+        slash in the filename.
         """
         # Checks
         if identifier is None and EID:
