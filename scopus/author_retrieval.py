@@ -45,9 +45,8 @@ class AuthorRetrieval(Retrieval):
         """List with (subject group ID, number of documents)-tuples."""
         path = ['author-profile', 'classificationgroup', 'classifications',
                 'classification']
-        out = []
-        for item in listify(chained_get(self._json, path, [])):
-            out.append((item['$'], item['@frequency']))
+        out = [(item['$'], item['@frequency']) for item in
+               listify(chained_get(self._json, path, []))]
         return out or None
 
     @property

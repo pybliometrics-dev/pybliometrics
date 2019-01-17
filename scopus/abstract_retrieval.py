@@ -47,27 +47,6 @@ class AbstractRetrieval(Retrieval):
                 return [keywords['author-keyword']['$']]
 
     @property
-    def authors(self):
-        """A list of namedtuples representing the article's authors, in the
-        form (auid, indexed_name, surname, given_name, affiliation_id,
-        affiliation, city, country).
-        Note: Affiliations listed here are often incomplete and sometimes
-        use the first author's affiliation for all others.  Rather use
-        property author_group.
-        """
-        out = []
-        fields = 'auid indexed_name surname given_name affiliation'
-        auth = namedtuple('Author', fields)
-        for item in self._json['authors']['author']:
-            affs = listify(item.get('affiliation', {}))
-            new = auth(auid=item['@auid'], indexed_name=item['ce:indexed-name'],
-                       surname=item['ce:surname'],
-                       given_name=item['preferred-name'].get('ce:given-name'),
-                       affiliation=[aff.get('@id') for aff in affs])
-            out.append(new)
-        return out or None
-
-    @property
     def authorgroup(self):
         """A list of namedtuples representing the article's authors organized
         by affiliation, in the form (affiliation_id, organization, city_group,
@@ -110,6 +89,27 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
+    def authors(self):
+        """A list of namedtuples representing the article's authors, in the
+        form (auid, indexed_name, surname, given_name, affiliation_id,
+        affiliation, city, country).
+        Note: Affiliations listed here are often incomplete and sometimes
+        use the first author's affiliation for all others.  Rather use
+        property author_group.
+        """
+        out = []
+        fields = 'auid indexed_name surname given_name affiliation'
+        auth = namedtuple('Author', fields)
+        for item in self._json['authors']['author']:
+            affs = listify(item.get('affiliation', {}))
+            new = auth(auid=item['@auid'], indexed_name=item['ce:indexed-name'],
+                       surname=item['ce:surname'],
+                       given_name=item['preferred-name'].get('ce:given-name'),
+                       affiliation=[aff.get('@id') for aff in affs])
+            out.append(new)
+        return out or None
+
+    @property
     def citedby_count(self):
         """Number of articles citing the abstract."""
         return int(self._json['coredata']['citedby-count'])
@@ -130,8 +130,7 @@ class AbstractRetrieval(Retrieval):
         chemical = namedtuple('Chemical', 'source chemical_name cas_registry_number')
         out = []
         for item in items:
-            chems = listify(item['chemical'])
-            for chem in chems:
+            for chem in listify(item['chemical']):
                 number = chem.get('cas-registry-number')
                 try:  # Multiple numbers given
                     num = ";".join([n['$'] for n in number])
