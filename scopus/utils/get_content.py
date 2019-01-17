@@ -11,6 +11,7 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
 
 def download(url, params=None, accept="xml"):
     """Helper function to download a file and return its content.
+
     Parameters
     ----------
     url : string
@@ -37,12 +38,6 @@ def download(url, params=None, accept="xml"):
     -------
     resp : byte-like object
         The content of the file, which needs to be serialized.
-
-    Notes
-    -----
-    Loads the Authentication creditation into scopus namespace on first run.
-    If there is a config file, which must contain InstToken, it is given
-    preference.  Alternatively it loads the API key from my_scopus.py file.
     """
     # Value check
     accepted = ("json", "xml", "atom+xml")
