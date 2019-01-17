@@ -5,7 +5,7 @@ from json import loads
 
 from .scopus_search import ScopusSearch
 from scopus.classes import Retrieval
-from scopus.utils import download
+from scopus.utils import download, listify
 
 
 class AuthorRetrieval(Retrieval):
@@ -45,9 +45,7 @@ class AuthorRetrieval(Retrieval):
         """List with (subject group ID, number of documents)-tuples."""
         clg = self._json['author-profile'].get('classificationgroup', {}).get('classifications', {})
         out = []
-        items = clg.get('classification', [])
-        if not isinstance(items, list):
-            items = [items]
+        items = listify(clg.get('classification', []))
         for item in items:
             out.append((item['$'], item['@frequency']))
         return out
@@ -117,9 +115,7 @@ class AuthorRetrieval(Retrieval):
         hist = []
         jour = namedtuple('Journal', 'sourcetitle abbreviation type issn')
         jour_hist = self._json['author-profile'].get('journal-history', {})
-        pub_hist = jour_hist.get('journal', [])
-        if not isinstance(pub_hist, list):
-            pub_hist = [pub_hist]
+        pub_hist = listify(jour_hist.get('journal', []))
         for pub in pub_hist:
             new = jour(sourcetitle=pub['sourcetitle'],
                        abbreviation=pub.get('sourcetitle-abbrev'),
@@ -140,9 +136,7 @@ class AuthorRetrieval(Retrieval):
         out = []
         fields = 'indexed_name initials surname given_name doc_count'
         variant = namedtuple('Variant', fields)
-        items = self._json['author-profile'].get('name-variant', [])
-        if not isinstance(items, list):
-            items = [items]
+        items = listify(self._json['author-profile'].get('name-variant', []))
         for var in items:
             new = variant(indexed_name=var['indexed-name'],
                           initials=var['initials'], surname=var['surname'],
@@ -222,9 +216,7 @@ class AuthorRetrieval(Retrieval):
         try:
             self._json = self._json[0]
         except KeyError:  # Incomplete forward
-            alias_json = self._json['alias']['prism:url']
-            if not isinstance(alias_json, list):
-                alias_json = [alias_json]
+            alias_json = listify(self._json['alias']['prism:url'])
             alias = ', '.join([d['$'].split(':')[-1] for d in alias_json])
             text = 'Author profile with ID {} has been merged and the main '\
                    'profile is now one of {}.  Please update your records '\

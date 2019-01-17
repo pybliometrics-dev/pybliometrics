@@ -2,7 +2,7 @@ from collections import namedtuple
 from warnings import warn
 
 from scopus.classes import Retrieval
-from scopus.utils import detect_id_type
+from scopus.utils import detect_id_type, listify
 
 
 class AbstractRetrieval(Retrieval):
@@ -21,9 +21,7 @@ class AbstractRetrieval(Retrieval):
         """
         out = []
         aff = namedtuple('Affiliation', 'id name city country')
-        affs = self._json.get('affiliation', [])
-        if not isinstance(affs, list):
-            affs = [affs]
+        affs = listify(self._json.get('affiliation', []))
         for item in affs:
             new = aff(id=item.get('@id'), name=item.get('affilname'),
                       city=item.get('affiliation-city'),
@@ -61,9 +59,7 @@ class AbstractRetrieval(Retrieval):
         fields = 'auid indexed_name surname given_name affiliation'
         auth = namedtuple('Author', fields)
         for item in self._json['authors']['author']:
-            affs = item.get('affiliation', {})
-            if not isinstance(affs, list):
-                affs = [affs]
+            affs = listify(item.get('affiliation', {}))
             new = auth(auid=item['@auid'], indexed_name=item['ce:indexed-name'],
                        surname=item['ce:surname'],
                        given_name=item['preferred-name'].get('ce:given-name'),
@@ -85,9 +81,7 @@ class AbstractRetrieval(Retrieval):
         fields = 'affiliation_id organization city_group country '\
                  'auid indexed_name surname given_name'
         auth = namedtuple('Author', fields)
-        items = self._head.get('author-group', [])
-        if not isinstance(items, list):
-            items = [items]
+        items = listify(self._head.get('author-group', []))
         for item in items:
             # Affiliation information
             aff = item.get('affiliation', {})
@@ -101,9 +95,7 @@ class AbstractRetrieval(Retrieval):
             except KeyError:  # Author group w/o affiliation
                 org = None
             # Author information (might relate to collaborations)
-            authors = item.get('author', item.get('collaboration', []))
-            if not isinstance(authors, list):
-                authors = [authors]
+            authors = listify(item.get('author', item.get('collaboration', [])))
             for au in authors:
                 try:
                     given = au.get('ce:given-name', au['ce:initials'])
@@ -133,18 +125,13 @@ class AbstractRetrieval(Retrieval):
         (source, chemical_name, cas_registry_number).  In case multiple
         numbers given, they are joined on ";".
         """
-        items = self._head.get('enhancement', {}).get('chemicalgroup', {}).get('chemicals', [])
+        items = listify(self._head.get('enhancement', {}).get('chemicalgroup', {}).get('chemicals', []))
         if len(items) == 0:
             return None
-        if not isinstance(items, list):
-            items = [items]
         chemical = namedtuple('Chemical', 'source chemical_name cas_registry_number')
         out = []
         for item in items:
-            chems = item['chemical']
-            if not isinstance(chems, list):
-                chems = [chems]
-            for chem in chems:
+            for chem in listify(item['chemical'], []):
                 number = chem['cas-registry-number']
                 try:  # Multiple numbers given
                     num = ";".join([n['$'] for n in number])
@@ -212,11 +199,9 @@ class AbstractRetrieval(Retrieval):
         """List of namedtuples representing contributors compiled by Scopus,
         in the form (given_name, initials, surname, indexed_name, role).
         """
-        items = self._head.get('source', {}).get('contributor-group', [])
+        items = listify(self._head.get('source', {}).get('contributor-group', []))
         if len(items) == 0:
             return None
-        if not isinstance(items, list):
-            items = [items]
         out = []
         fields = 'given_name initials surname indexed_name role'
         pers = namedtuple('Contributor', fields)
@@ -288,11 +273,9 @@ class AbstractRetrieval(Retrieval):
         """List of namedtuples parsed funding information in the form
         (agency string id acronym country).
         """
-        funds = self._json['item'].get('xocs:meta', {}).get('xocs:funding-list', {}).get('xocs:funding', [])
+        funds = listify(self._json['item'].get('xocs:meta', {}).get('xocs:funding-list', {}).get('xocs:funding', []))
         if len(funds) == 0:
             return None
-        if not isinstance(funds, list):
-            funds = [funds]
         out = []
         fund = namedtuple('Funding', 'agency string id acronym country')
         for item in funds:
@@ -313,9 +296,7 @@ class AbstractRetrieval(Retrieval):
     def isbn(self):
         """ISBNs belonging to publicationName as tuple of variying length,
         (e.g. ISBN-10 or ISBN-13)."""
-        isbns = self._head.get('source', {}).get('isbn', [])
-        if not isinstance(isbns, list):
-            isbns = [isbns]
+        isbns = listify(self._head.get('source', {}).get('isbn', []))
         if len(isbns) == 0:
             return None
         else:
@@ -338,11 +319,9 @@ class AbstractRetrieval(Retrieval):
     def idxterms(self):
         """List of index terms."""
         try:
-            terms = self._json.get("idxterms", {}).get('mainterm', [])
+            terms = listify(self._json.get("idxterms", {}).get('mainterm', []))
         except AttributeError:  # idxterms is empty
             return None
-        if not isinstance(terms, list):
-            terms = [terms]
         try:
             return [d['$'] for d in terms]
         except AttributeError:
@@ -422,23 +401,17 @@ class AbstractRetrieval(Retrieval):
         fields = 'position id doi title authors sourcetitle publicationyear '\
                  'volume issue first last text fulltext'
         ref = namedtuple('Reference', fields)
-        items = self._tail.get('bibliography', {}).get('reference', [])
-        if not isinstance(items, list):
-            items = [items]
+        items = listify(self._tail.get('bibliography', {}).get('reference', []))
         for item in items:
             info = item['ref-info']
             volisspag = info.get('ref-volisspag', {})
             try:
-                auth = info['ref-authors']['author']
-                if not isinstance(auth, list):
-                    auth = [auth]
+                auth = listify(info['ref-authors']['author'])
                 authors = [', '.join([d['ce:surname'], d['ce:initials']])
                            for d in auth]
             except KeyError:  # No authors given
                 authors = None
-            ids = info['refd-itemidlist']['itemid']
-            if not isinstance(ids, list):
-                ids = [ids]
+            ids = listify(info['refd-itemidlist']['itemid'])
             try:
                 doi = [d['$'] for d in ids if d['@idtype'] == 'DOI'][0]
             except IndexError:
@@ -473,17 +446,13 @@ class AbstractRetrieval(Retrieval):
         """List of namedtuples representing biological entities defined or
         mentioned in the text, in the form (name, sequence_number, type).
         """
-        items = self._head.get('enhancement', {}).get('sequencebanks', {}).get('sequencebank', [])
+        items = listify(self._head.get('enhancement', {}).get('sequencebanks', {}).get('sequencebank', []))
         if len(items) == 0:
             return None
-        if not isinstance(items, list):
-            items = [items]
         bank = namedtuple('Sequencebank', 'name sequence_number type')
         out = []
         for item in items:
-            numbers = item['sequence-number']
-            if not isinstance(numbers, list):
-                numbers = [numbers]
+            numbers = listify(item['sequence-number'])
             for number in numbers:
                 new = bank(name=item['@name'], sequence_number=number['$'],
                            type=number['@type'])
@@ -523,11 +492,9 @@ class AbstractRetrieval(Retrieval):
         out = []
         area = namedtuple('Area', 'area abbreviation code')
         try:
-            items = self._json.get('subject-areas', {}).get('subject-area', [])
+            items = listify(self._json.get('subject-areas', {}).get('subject-area', []))
         except AttributeError:  # subject-areas empty
             return None
-        if not isinstance(items, list):
-            items = [items]
         for item in items:
             new = area(area=item['$'], abbreviation=item['@abbrev'],
                        code=item['@code'])

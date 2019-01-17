@@ -2,6 +2,7 @@ import warnings
 from collections import namedtuple
 
 from scopus.classes import Search
+from scopus.utils import listify
 
 
 class ScopusSearch(Search):
@@ -67,9 +68,7 @@ class ScopusSearch(Search):
                 info["auth_ids"] = ";".join([d['authid'] for d in authors])
                 affs = []
                 for auth in authors:
-                    aff = _deduplicate(auth.get('afid', []))
-                    if not isinstance(aff, list):
-                        aff = [aff]
+                    aff = listify(_deduplicate(auth.get('afid', [])))
                     affs.append('-'.join([d['$'] for d in aff]))
                 info["auth_afid"] = (';'.join(affs) or None)
             except KeyError:
