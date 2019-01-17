@@ -26,55 +26,78 @@ class ScopusSearch(Search):
         pageRange citedby_count openaccess).
         Field definitions correspond to
         https://dev.elsevier.com/guides/ScopusSearchViews.htm, except for
-        authname, authid and afid:  These are the ;-joined names resp. Scopus
-        IDs resp. Affiliation IDs of the authors of the document.  In case
-        the author has multiple affiliations, they are joined on "-".
+        afid, affilname, affiliation_city; affilication_country, author_names,
+        auth_ids and afid:  These information are joined on ";".  In case
+        an author has multiple affiliations, they are joined on "-".
+
+        Notes
+        -----
+        The list of authors and the list of affiliations per author are
+        deduplicated.
         """
         out = []
-        fields = 'eid doi pii title subtype creator authname authid afid '\
-                 'coverDate coverDisplayDate publicationName issn source_id '\
-                 'aggregationType volume issueIdentifier pageRange '\
-                 'citedby_count openaccess'
+        fields = 'eid doi pii pubmed_id title subtype creator afid affilname '\
+                 'affiliation_city affiliation_country author_count '\
+                 'author_names author_ids author_afids coverDate '\
+                 'coverDisplayDate publicationName issn source_id eIssn '\
+                 'aggregationType volume issueIdentifier article_number '\
+                 'pageRange description authkeywords citedby_count '\
+                 'openaccess fund_acr fund_no fund_sponsor'
         doc = namedtuple('Document', fields)
         for item in self._json:
+            info = {}
+            # Parse affiliations
+            try:
+                info["affilname"] = _join(item['affiliation'], 'affilname')
+                info["afid"] = _join(item['affiliation'], 'afid')
+                info["aff_city"] = _join(item['affiliation'], 'affiliation-city')
+                info["aff_country"] = _join(item['affiliation'],
+                                            'affiliation-country')
+            except KeyError:
+                pass
+            # Parse authors
             try:
                 # Deduplicate list of authors
-                authors = []
-                for i in item['author']:
-                    if i not in authors:
-                        authors.append(i)
+                authors = _deduplicate(item['author'])
                 # Extract information
-                authname = ";".join([d['authname'] for d in authors])
-                authid = ";".join([d['authid'] for d in authors])
+                surnames = _replace_none([d['surname'] for d in authors])
+                firstnames = _replace_none([d['given-name'] for d in authors])
+                info["auth_names"] = ";".join([", ".join([t[0], t[1]]) for t in
+                                               zip(surnames, firstnames)])
+                info["auth_ids"] = ";".join([d['authid'] for d in authors])
                 affs = []
                 for auth in authors:
-                    aff = auth.get('afid', [])
+                    aff = _deduplicate(auth.get('afid', []))
                     if not isinstance(aff, list):
                         aff = [aff]
                     affs.append('-'.join([d['$'] for d in aff]))
-                afid = ';'.join(affs)
-                if afid == "":
-                    afid = None
+                info["auth_afid"] = (';'.join(affs) or None)
             except KeyError:
-                authname = None
-                authid = None
-                afid = None
+                pass
             date = item.get('prism:coverDate')
             if isinstance(date, list):
                 date = date[0].get('$')
-            new = doc(eid=item['eid'], doi=item.get('prism:doi'),
-                      pii=item.get('pii'), title=item.get('dc:title'),
-                      subtype=item.get('subtype'), issn=item.get('prism:issn'),
-                      creator=item.get('dc:creator'), authname=authname,
-                      coverDate=date, volume=item.get('prism:volume'),
-                      coverDisplayDate=item.get('prism:coverDisplayDate'),
-                      publicationName=item.get('prism:publicationName'),
-                      source_id=item.get('source-id'), authid=authid,
-                      aggregationType=item.get('prism:aggregationType'),
-                      issueIdentifier=item.get('prism:issueIdentifier'),
-                      pageRange=item.get('prism:pageRange'), afid=afid,
-                      citedby_count=item.get('citedby-count'),
-                      openaccess=item.get('openaccess'))
+            new = doc(article_number=item.get('article-number'),
+                title=item.get('dc:title'), fund_sponsor=item.get('fund-sponsor'),
+                subtype=item.get('subtype'), issn=item.get('prism:issn'),
+                creator=item.get('dc:creator'), affilname=info.get("affilname"),
+                author_names=info.get("auth_names"), doi=item.get('prism:doi'),
+                coverDate=date, volume=item.get('prism:volume'),
+                coverDisplayDate=item.get('prism:coverDisplayDate'),
+                publicationName=item.get('prism:publicationName'),
+                source_id=item.get('source-id'), author_ids=info.get("auth_ids"),
+                aggregationType=item.get('prism:aggregationType'),
+                issueIdentifier=item.get('prism:issueIdentifier'),
+                pageRange=item.get('prism:pageRange'),
+                author_afids=info.get("auth_afid"), fund_no=item.get('fund-no'),
+                affiliation_country=info.get("aff_country"),
+                citedby_count=item.get('citedby-count'),
+                openaccess=item.get('openaccess'), eIssn=item.get('prism:eIssn'),
+                author_count=item.get('author-count', {}).get('$'),
+                affiliation_city=info.get("aff_city"), afid=info.get("afid"),
+                description=item.get('dc:description'), pii=item.get('pii'),
+                authkeywords=item.get('authkeywords'), eid=item['eid'],
+                fund_acr=item.get('fund-acr'), pubmed_id=item.get('pubmed-id'))
             out.append(new)
         return out
 
@@ -115,3 +138,24 @@ class ScopusSearch(Search):
     def get_eids(self):
         """EIDs of retrieved documents."""
         return [d['eid'] for d in self._json]
+
+
+def _deduplicate(lst):
+    """Auxiliary function to deduplicate lst."""
+    out = []
+    for i in lst:
+        if i not in out:
+            out.append(i)
+    return out
+
+
+def _join(lst, key, sep=";"):
+    """Auxiliary function to join same elements of a list of dictionaries if
+    the elements are not None.
+    """
+    return sep.join([d[key] for d in lst if d[key]])
+
+
+def _replace_none(lst, repl=""):
+    """Auxiliary function to replace None's with another value."""
+    return ['' if v is None else v for v in lst]
