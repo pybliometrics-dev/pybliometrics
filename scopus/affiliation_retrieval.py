@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 from scopus.classes import Retrieval
+from scopus.utils import chained_get
 
 
 class ContentAffiliationRetrieval(Retrieval):
@@ -60,7 +61,7 @@ class ContentAffiliationRetrieval(Retrieval):
         """
         out = []
         variant = namedtuple('Variant', 'name doc_count')
-        for var in self._json['name-variants'].get('name-variant', []):
+        for var in chained_get(self._json, ['name-variants', 'name-variant'], []):
             new = variant(name=var['$'], doc_count=var.get('@doc-count'))
             out.append(new)
         return out
@@ -83,7 +84,8 @@ class ContentAffiliationRetrieval(Retrieval):
     @property
     def postal_code(self):
         """The postal code of the affiliation."""
-        return self._json['institution-profile'].get('address', {}).get('postal-code')
+        path = ['institution-profile', 'address', 'postal-code']
+        return chained_get(self._json, path)
 
     @property
     def scopus_affiliation_link(self):
@@ -103,7 +105,8 @@ class ContentAffiliationRetrieval(Retrieval):
     @property
     def state(self):
         """The state (country's administrative sububunit) of the affiliation."""
-        return self._json['institution-profile'].get('address', {}).get('state')
+        path = ['institution-profile', 'address', 'state']
+        return chained_get(self._json, path)
 
     @property
     def sort_name(self):

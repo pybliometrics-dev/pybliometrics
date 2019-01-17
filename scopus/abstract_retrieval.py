@@ -2,7 +2,7 @@ from collections import namedtuple
 from warnings import warn
 
 from scopus.classes import Retrieval
-from scopus.utils import detect_id_type, listify
+from scopus.utils import chained_get, detect_id_type, listify
 
 
 class AbstractRetrieval(Retrieval):
@@ -105,7 +105,7 @@ class AbstractRetrieval(Retrieval):
                            city_group=aff.get('city-group'),
                            country=aff.get('country'), auid=au.get('@auid'),
                            surname=au.get('ce:surname'), given_name=given,
-                           indexed_name=au.get('preferred-name', {}).get('ce:indexed-name'))
+                           indexed_name=chained_get(au, ['preferred-name', 'ce:indexed-name']))
                 out.append(new)
         return out
 
@@ -125,7 +125,8 @@ class AbstractRetrieval(Retrieval):
         (source, chemical_name, cas_registry_number).  In case multiple
         numbers given, they are joined on ";".
         """
-        items = listify(self._head.get('enhancement', {}).get('chemicalgroup', {}).get('chemicals', []))
+        path = ['enhancement', 'chemicalgroup', 'chemicals']
+        items = listify(chained_get(self._head, path, []))
         if len(items) == 0:
             return None
         chemical = namedtuple('Chemical', 'source chemical_name cas_registry_number')
@@ -148,7 +149,9 @@ class AbstractRetrieval(Retrieval):
         """Code of the conference the abstract belong to.
         Note: Requires the FULL view of the abstract.
         """
-        return self._confinfo.get('confevent', {}).get('confcode')
+        path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent',
+                'confcode']
+        return chained_get(self._head, path)
 
     @property
     def confdate(self):
@@ -156,7 +159,8 @@ class AbstractRetrieval(Retrieval):
         by two tuples in the form (YYYY, MM, DD).
         Note: Requires the FULL view of the abstract.
         """
-        date = self._confinfo.get('confevent', {}).get('confdate', {})
+        path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent', 'confdate']
+        date = chained_get(self._head, path, {})
         if len(date) > 0:
             start = (int(date['startdate']['@year']),
                      int(date['startdate']['@month']),
@@ -174,21 +178,27 @@ class AbstractRetrieval(Retrieval):
         """Location of the conference the abstract belongs to.
         Note: Requires the FULL view of the abstract.
         """
-        return self._confinfo.get('confevent', {}).get('conflocation', {}).get('city-group')
+        path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent',
+                'conflocation', 'city-group']
+        return chained_get(self._head, path)
 
     @property
     def confname(self):
         """Name of the conference the abstract belongs to.
         Note: Requires the FULL view of the abstract.
         """
-        return self._confinfo.get('confevent', {}).get('confname')
+        path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent',
+                'confname']
+        return chained_get(self._head, path)
 
     @property
     def confsponsor(self):
         """Sponsor(s) of the conference the abstract belongs to.
         Note: Requires the FULL view of the abstract.
         """
-        sponsors = self._confinfo.get('confevent', {}).get('confsponsors', {}).get('confsponsor', [])
+        path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent',
+                'confsponsors', 'confsponsor']
+        sponsors = chained_get(self._head, path, [])
         if len(sponsors) == 0:
             return None
         if isinstance(sponsors, list):
@@ -200,7 +210,7 @@ class AbstractRetrieval(Retrieval):
         """List of namedtuples representing contributors compiled by Scopus,
         in the form (given_name, initials, surname, indexed_name, role).
         """
-        items = listify(self._head.get('source', {}).get('contributor-group', []))
+        items = listify(chained_get(self._head, ['source', 'contributor-group'], []))
         if len(items) == 0:
             return None
         out = []
@@ -274,7 +284,8 @@ class AbstractRetrieval(Retrieval):
         """List of namedtuples parsed funding information in the form
         (agency string id acronym country).
         """
-        funds = listify(self._json['item'].get('xocs:meta', {}).get('xocs:funding-list', {}).get('xocs:funding', []))
+        path = ['item', 'xocs:meta', 'xocs:funding-list', 'xocs:funding']
+        funds = listify(chained_get(self._json, path, []))
         if len(funds) == 0:
             return None
         out = []
@@ -291,13 +302,14 @@ class AbstractRetrieval(Retrieval):
     @property
     def funding_text(self):
         """The raw text from which Scopus derives funding information."""
-        return self._json['item'].get('xocs:meta', {}).get('xocs:funding-list', {}).get('xocs:funding-text')
+        path = ['item', 'xocs:meta', 'xocs:funding-list', 'xocs:funding-text']
+        return chained_get(self._json, path)
 
     @property
     def isbn(self):
         """ISBNs belonging to publicationName as tuple of variying length,
         (e.g. ISBN-10 or ISBN-13)."""
-        isbns = listify(self._head.get('source', {}).get('isbn', []))
+        isbns = listify(chained_get(self._head, ['source', 'isbn'], []))
         if len(isbns) == 0:
             return None
         else:
@@ -362,7 +374,7 @@ class AbstractRetrieval(Retrieval):
         more complete.
         """
         # Return information from FULL view, fall back to other views
-        full = self._head.get('source', {}).get('publisher', {}).get('publishername')
+        full = chained_get(self._head, ['source', 'publisher', 'publishername'])
         if full is None:
             return self._json['coredata'].get('dc:publisher')
         else:
@@ -374,14 +386,15 @@ class AbstractRetrieval(Retrieval):
         Note: Requires the FULL view of the abstract. Might be empty, even
         for journal articles.
         """
-        return self._head.get('source', {}).get('publisher', {}).get('publisheraddress')
+        return chained_get(self._head, ['source', 'publisher', 'publisheraddress'])
 
     @property
     def refcount(self):
         """Number of references of an article.
         Note: Requires the FULL view of the article.
         """
-        return self._tail.get('bibliography', {}).get('@refcount')
+        path = ['item', 'bibrecord', 'tail', 'bibliography', '@refcount']
+        return chained_get(self._json, path)
 
     @property
     def references(self):
@@ -402,7 +415,8 @@ class AbstractRetrieval(Retrieval):
         fields = 'position id doi title authors sourcetitle publicationyear '\
                  'volume issue first last text fulltext'
         ref = namedtuple('Reference', fields)
-        items = listify(self._tail.get('bibliography', {}).get('reference', []))
+        path = ['item', 'bibrecord', 'tail', 'bibliography', 'reference']
+        items = listify(chained_get(self._json, path, []))
         for item in items:
             info = item['ref-info']
             volisspag = info.get('ref-volisspag', {})
@@ -447,7 +461,8 @@ class AbstractRetrieval(Retrieval):
         """List of namedtuples representing biological entities defined or
         mentioned in the text, in the form (name, sequence_number, type).
         """
-        items = listify(self._head.get('enhancement', {}).get('sequencebanks', {}).get('sequencebank', []))
+        path = ['enhancement', 'sequencebanks', 'sequencebank']
+        items = listify(chained_get(self._head, path, []))
         if len(items) == 0:
             return None
         bank = namedtuple('Sequencebank', 'name sequence_number type')
@@ -520,7 +535,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def website(self):
         """Website of publisher."""
-        return self._head.get('source', {}).get('website', {}).get('ce:e-address', {}).get('$')
+        return chained_get(self._head, ['source', 'website', 'ce:e-address', '$'])
 
     def __init__(self, identifier=None, view='META_ABS', refresh=False,
                  id_type=None, EID=None):
@@ -585,10 +600,6 @@ class AbstractRetrieval(Retrieval):
                            id_type, view)
         self._json = self._json['abstracts-retrieval-response']
         self._head = self._json.get('item', {}).get('bibrecord', {}).get('head', {})
-        self._tail = self._json.get('item', {}).get('bibrecord', {}).get('tail', {})
-        if self._tail is None:
-            self._tail = {}
-        self._confinfo = self._head.get('source', {}).get('additional-srcinfo', {}).get('conferenceinfo', {})
 
     def __str__(self):
         """Return pretty text version of the abstract.

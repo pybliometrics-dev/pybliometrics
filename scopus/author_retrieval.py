@@ -5,7 +5,7 @@ from json import loads
 
 from .scopus_search import ScopusSearch
 from scopus.classes import Retrieval
-from scopus.utils import download, listify
+from scopus.utils import chained_get, download, listify
 
 
 class AuthorRetrieval(Retrieval):
@@ -43,10 +43,10 @@ class AuthorRetrieval(Retrieval):
     @property
     def classificationgroup(self):
         """List with (subject group ID, number of documents)-tuples."""
-        clg = self._json['author-profile'].get('classificationgroup', {}).get('classifications', {})
+        path = ['author-profile', 'classificationgroup', 'classifications',
+                'classification']
         out = []
-        items = listify(clg.get('classification', []))
-        for item in items:
+        for item in listify(chained_get(self._json, path, [])):
             out.append((item['$'], item['@frequency']))
         return out
 
@@ -77,8 +77,8 @@ class AuthorRetrieval(Retrieval):
     @property
     def given_name(self):
         """Author's preferred given name."""
-        profile = self._json['author-profile']
-        return profile.get('preferred-name', {}).get('given-name')
+        path = ['author-profile', 'preferred-name', 'given-name']
+        return chained_get(self._json, path)
 
     @property
     def h_index(self):
@@ -99,12 +99,14 @@ class AuthorRetrieval(Retrieval):
     @property
     def indexed_name(self):
         """Author's name as indexed by Scopus."""
-        return self._json['author-profile'].get('preferred-name', {}).get('indexed-name')
+        path = ['author-profile', 'preferred-name', 'indexed-name']
+        return chained_get(self._json, path)
 
     @property
     def initials(self):
         """Author's preferred initials."""
-        return self._json['author-profile'].get('preferred-name', {}).get('initials')
+        path = ['author-profile', 'preferred-name', 'initials']
+        return chained_get(self._json, path)
 
     @property
     def journal_history(self):
@@ -114,8 +116,8 @@ class AuthorRetrieval(Retrieval):
         """
         hist = []
         jour = namedtuple('Journal', 'sourcetitle abbreviation type issn')
-        jour_hist = self._json['author-profile'].get('journal-history', {})
-        pub_hist = listify(jour_hist.get('journal', []))
+        path = ['author-profile', 'journal-history', 'journal']
+        pub_hist = listify(chained_get(self._json, path, []))
         for pub in pub_hist:
             new = jour(sourcetitle=pub['sourcetitle'],
                        abbreviation=pub.get('sourcetitle-abbrev'),
@@ -148,7 +150,8 @@ class AuthorRetrieval(Retrieval):
     @property
     def surname(self):
         """Author's preferred surname."""
-        return self._json['author-profile'].get('preferred-name', {}).get('surname')
+        path = ['author-profile', 'preferred-name', 'surname']
+        return chained_get(self._json, path)
 
     @property
     def scopus_author_link(self):
