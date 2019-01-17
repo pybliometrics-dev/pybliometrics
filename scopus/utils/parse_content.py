@@ -22,6 +22,11 @@ def chained_get(container, path, default=None):
     return container
 
 
+def get_link(dct, idx):
+    """Helper function to return the link at position `idx` from coredata."""
+    return dct['coredata'].get('link', [])[idx].get('@href')
+
+
 def listify(element):
     """Helper function to turn an element into a list if it isn't a list yet.
     """

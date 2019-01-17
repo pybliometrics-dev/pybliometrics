@@ -2,7 +2,7 @@ from collections import namedtuple
 from warnings import warn
 
 from scopus.classes import Retrieval
-from scopus.utils import chained_get, detect_id_type, listify
+from scopus.utils import chained_get, detect_id_type, get_link, listify
 
 
 class AbstractRetrieval(Retrieval):
@@ -117,7 +117,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def citedby_link(self):
         """URL to Scopus page listing citing documents."""
-        return self._json['coredata']['link'][2].get('@href')
+        return get_link(self._json, 2)
 
     @property
     def chemicals(self):
@@ -442,12 +442,12 @@ class AbstractRetrieval(Retrieval):
     @property
     def scopus_link(self):
         """URL to the abstract page on Scopus."""
-        return self._json['coredata']['link'][1].get('@href')
+        return get_link(self._json, 1)
 
     @property
     def self_link(self):
         """URL to Scopus API page of this abstract."""
-        return self._json['coredata']['link'][0].get('@href')
+        return get_link(self._json, 0)
 
     @property
     def sequencebank(self):

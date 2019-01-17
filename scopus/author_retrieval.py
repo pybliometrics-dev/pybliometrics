@@ -5,7 +5,7 @@ from json import loads
 
 from .scopus_search import ScopusSearch
 from scopus.classes import Retrieval
-from scopus.utils import chained_get, download, listify
+from scopus.utils import chained_get, download, get_link, listify
 
 
 class AuthorRetrieval(Retrieval):
@@ -52,7 +52,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def coauthor_link(self):
         """URL to Scopus API search page for coauthors."""
-        return self._json['coredata'].get('link', [])[3].get('@href')
+        return get_link(self._json, 3)
 
     @property
     def date_created(self):
@@ -155,17 +155,17 @@ class AuthorRetrieval(Retrieval):
     @property
     def scopus_author_link(self):
         """Link to the Scopus web view of the author."""
-        return self._json['coredata'].get('link', [])[1].get('@href')
+        return get_link(self._json, 1)
 
     @property
     def self_link(self):
         """Link to the author's API page."""
-        return self._json['coredata'].get('link', [])[0].get('@href')
+        return get_link(self._json, 0)
 
     @property
     def search_link(self):
         """URL to the API page listing documents of the author."""
-        return self._json['coredata'].get('link', [])[2].get('@href')
+        return get_link(self._json, 2)
 
     @property
     def publication_range(self):

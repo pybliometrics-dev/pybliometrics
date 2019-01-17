@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 from scopus.classes import Retrieval
-from scopus.utils import chained_get
+from scopus.utils import chained_get, get_link
 
 
 class ContentAffiliationRetrieval(Retrieval):
@@ -90,17 +90,17 @@ class ContentAffiliationRetrieval(Retrieval):
     @property
     def scopus_affiliation_link(self):
         """Link to the Scopus web view of the affiliation."""
-        return self._json['coredata'].get('link', [])[2].get('@href')
+        return get_link(self._json, 2)
 
     @property
     def self_link(self):
         """Link to the affiliation's API page."""
-        return self._json['coredata'].get('link', [])[0].get('@href')
+        return get_link(self._json, 0)
 
     @property
     def search_link(self):
         """URL to the API page listing documents of the affiliation."""
-        return self._json['coredata'].get('link', [])[1].get('@href')
+        return get_link(self._json, 1)
 
     @property
     def state(self):
