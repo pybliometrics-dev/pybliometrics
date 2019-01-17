@@ -3,6 +3,22 @@ Change Log
 
 .. toctree::
 
+1.4
+~~~
+
+2019-01-17
+
+* Use number of results from first search query rather than from separate query.
+* Write empty file if search is empty.
+* In `ScopusSearch.results`, add new fields: affilname, affiliation_city, affiliation_country, article_number, author_count, authkeywords, eIssn, description, fund_acr, fund_no, fund_sponsor, pubmed_id.
+* In `ScopusSearch.results`, rename the following fields: names to author_names, authid to author_ids, afid to author_afids.
+* In `ScopusSearch`, add parameter view to specify the view and number of entries per query run.
+* In `AbstractRetrieval.affiliation`, `AbstractRetrieval.authorgroup`, `AbstractRetrieval.authors`, `AbstractRetrieval.subject_areas`, `AffiliationSearch.affiliations`, `AuthorRetrieval.classificationgroup`, `AuthorRetrieval.journal_history`, `AuthorRetrieval.name_variants`, `AuthorSearch.authors`, `CitationOverview.authors` and `ScopusSearch.results` return None if the result list is empty, instead of an empty list.
+* In `AbstractRetrieval.chemicals`, fix bug with missing values for cas-registry-number.
+* Allow for the STANDARD view in `ScopusSearch` to increase number of results per query.
+* Refactor all classes internally for maintainability and readability.
+* Register project with Code Climate.
+
 1.3.1
 ~~~~~
 
