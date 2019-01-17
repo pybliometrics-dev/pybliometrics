@@ -8,9 +8,7 @@ from scopus.utils import chained_get, detect_id_type, get_link, listify
 class AbstractRetrieval(Retrieval):
     @property
     def abstract(self):
-        """The abstract of a document.
-        Note: Requires the FULL view of the abstract.
-        """
+        """The abstract of a document."""
         return self._head.get('abstracts')
 
     @property
@@ -52,9 +50,9 @@ class AbstractRetrieval(Retrieval):
         by affiliation, in the form (affiliation_id, organization, city_group,
         country, auid, indexed_name, surname, given_name).  If no
         "given_name" is given, fall back to initials.
-        Note: Requires the FULL view of the abstract.  Affiliation information
-        might be missing or mal-assigned even when it lookes correct in
-        the web view.  In this case please request a correction.
+        Note: Affiliation information might be missing or mal-assigned even
+        when it lookes correct in the web view.  In this case please request
+        a correction.
         """
         out = []
         fields = 'affiliation_id organization city_group country '\
@@ -135,9 +133,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def confcode(self):
-        """Code of the conference the abstract belong to.
-        Note: Requires the FULL view of the abstract.
-        """
+        """Code of the conference the abstract belong to."""
         path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent',
                 'confcode']
         return chained_get(self._head, path)
@@ -146,7 +142,6 @@ class AbstractRetrieval(Retrieval):
     def confdate(self):
         """Date range of the conference the abstract belongs to represented
         by two tuples in the form (YYYY, MM, DD).
-        Note: Requires the FULL view of the abstract.
         """
         path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent', 'confdate']
         date = chained_get(self._head, path, {})
@@ -160,27 +155,21 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def conflocation(self):
-        """Location of the conference the abstract belongs to.
-        Note: Requires the FULL view of the abstract.
-        """
+        """Location of the conference the abstract belongs to."""
         path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent',
                 'conflocation', 'city-group']
         return chained_get(self._head, path)
 
     @property
     def confname(self):
-        """Name of the conference the abstract belongs to.
-        Note: Requires the FULL view of the abstract.
-        """
+        """Name of the conference the abstract belongs to."""
         path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent',
                 'confname']
         return chained_get(self._head, path)
 
     @property
     def confsponsor(self):
-        """Sponsor(s) of the conference the abstract belongs to.
-        Note: Requires the FULL view of the abstract.
-        """
+        """Sponsor(s) of the conference the abstract belongs to."""
         path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent',
                 'confsponsors', 'confsponsor']
         sponsors = chained_get(self._head, path, [])
@@ -213,7 +202,6 @@ class AbstractRetrieval(Retrieval):
         """namedtuple representing the author to whom correspondence should
         be addressed, in the form
         (surname, initials, organization, country, city_group).
-        Note: Requires the FULL view of the abstract.  Might be empty.
         """
         fields = 'surname initials organization country city_group'
         auth = namedtuple('Correspondence', fields)
@@ -328,9 +316,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def issuetitle(self):
-        """Title of the issue the abstract is published in.
-        Note: Requires the FULL view of the abstract.
-        """
+        """Title of the issue the abstract is published in."""
         return self._head.get('source', {}).get('issuetitle')
 
     @property
@@ -363,10 +349,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def publisheraddress(self):
-        """Name of the publisher of the abstract.
-        Note: Requires the FULL view of the abstract. Might be empty, even
-        for journal articles.
-        """
+        """Name of the publisher of the abstract."""
         return chained_get(self._head, ['source', 'publisher', 'publisheraddress'])
 
     @property
