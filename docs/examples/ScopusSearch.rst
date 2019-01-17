@@ -131,6 +131,11 @@ The class' main attribute `results` returns a list of `namedtuples <https://docs
 
 The EIDs can be used for the `AbstractRetrieval <../reference/scopus.AbstractRetrieval.html>`_ class and the Scopus Author IDs in column "authid" for the `AuthorRetrieval <../reference/scopus.AuthorRetrieval.html>`_ class.
 
+The Scopus API allows a differing information depth via
+`views <https://dev.elsevier.com/guides/ScopusSearchViews.htm>`_.  The view 'COMPLETE' is the highest unrestricted view and contains all information also included in the 'STANDARD' view.  It is therefore the default view.  However, when speed is an issue to you, go for the STANDARD view, because the STANDARD view allows faster querying.  Note that the view parameter does not take effect for cached files, i.e. to switch to another view set `refresh=True` as well.
+
+Note that the view parameter does not take effect for cached files, i.e. to switch to another view set `refresh=True` as well.
+
 For convenience, method `s.get_eids()` returns the list of EIDs (similar to attribute `EIDS` in scopus 0.x):
 
 .. code-block:: python
