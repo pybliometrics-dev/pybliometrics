@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 from scopus.classes import Retrieval
-from scopus.utils import chained_get, get_link
+from scopus.utils import chained_get, get_link, parse_date_created
 
 
 class ContentAffiliationRetrieval(Retrieval):
@@ -33,11 +33,7 @@ class ContentAffiliationRetrieval(Retrieval):
     @property
     def date_created(self):
         """Date the Scopus record was created."""
-        date = self._json['institution-profile']['date-created']
-        if date is not None:
-            return (int(date['@year']), int(date['@month']), int(date['@day']))
-        else:
-            return (None, None, None)
+        return parse_date_created(self._json['institution-profile'])
 
     @property
     def document_count(self):

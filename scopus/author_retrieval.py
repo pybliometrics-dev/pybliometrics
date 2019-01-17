@@ -5,7 +5,8 @@ from json import loads
 
 from .scopus_search import ScopusSearch
 from scopus.classes import Retrieval
-from scopus.utils import chained_get, download, get_link, listify
+from scopus.utils import chained_get, download, get_link, listify,\
+    parse_date_created
 
 
 class AuthorRetrieval(Retrieval):
@@ -57,11 +58,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def date_created(self):
         """Date the Scopus record was created."""
-        date = self._json['author-profile']['date-created']
-        if date is not None:
-            return (int(date['@year']), int(date['@month']), int(date['@day']))
-        else:
-            return (None, None, None)
+        return parse_date_created(self._json['author-profile'])
 
     @property
     def document_count(self):
