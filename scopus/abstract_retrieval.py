@@ -65,7 +65,7 @@ class AbstractRetrieval(Retrieval):
                        given_name=item['preferred-name'].get('ce:given-name'),
                        affiliation=[aff.get('@id') for aff in affs])
             out.append(new)
-        return out
+        return out or None
 
     @property
     def authorgroup(self):
@@ -107,7 +107,7 @@ class AbstractRetrieval(Retrieval):
                            surname=au.get('ce:surname'), given_name=given,
                            indexed_name=chained_get(au, ['preferred-name', 'ce:indexed-name']))
                 out.append(new)
-        return out
+        return out or None
 
     @property
     def citedby_count(self):
@@ -127,8 +127,6 @@ class AbstractRetrieval(Retrieval):
         """
         path = ['enhancement', 'chemicalgroup', 'chemicals']
         items = listify(chained_get(self._head, path, []))
-        if len(items) == 0:
-            return None
         chemical = namedtuple('Chemical', 'source chemical_name cas_registry_number')
         out = []
         for item in items:
@@ -142,7 +140,7 @@ class AbstractRetrieval(Retrieval):
                 new = chemical(source=item['@source'], cas_registry_number=num,
                                chemical_name=chem['chemical-name'])
                 out.append(new)
-        return out
+        return out or None
 
     @property
     def confcode(self):
@@ -211,8 +209,6 @@ class AbstractRetrieval(Retrieval):
         in the form (given_name, initials, surname, indexed_name, role).
         """
         items = listify(chained_get(self._head, ['source', 'contributor-group'], []))
-        if len(items) == 0:
-            return None
         out = []
         fields = 'given_name initials surname indexed_name role'
         pers = namedtuple('Contributor', fields)
@@ -223,7 +219,7 @@ class AbstractRetrieval(Retrieval):
                 given_name=entry.get('ce:given-name'),
                 initials=entry.get('ce:initials'))
             out.append(new)
-        return out
+        return out or None
 
     @property
     def correspondence(self):
@@ -286,8 +282,6 @@ class AbstractRetrieval(Retrieval):
         """
         path = ['item', 'xocs:meta', 'xocs:funding-list', 'xocs:funding']
         funds = listify(chained_get(self._json, path, []))
-        if len(funds) == 0:
-            return None
         out = []
         fund = namedtuple('Funding', 'agency string id acronym country')
         for item in funds:
@@ -297,7 +291,7 @@ class AbstractRetrieval(Retrieval):
                 acronym=item.get('xocs:funding-agency-acronym'),
                 country=item.get('xocs:funding-agency-country'))
             out.append(new)
-        return out
+        return out or None
 
     @property
     def funding_text(self):
@@ -463,8 +457,6 @@ class AbstractRetrieval(Retrieval):
         """
         path = ['enhancement', 'sequencebanks', 'sequencebank']
         items = listify(chained_get(self._head, path, []))
-        if len(items) == 0:
-            return None
         bank = namedtuple('Sequencebank', 'name sequence_number type')
         out = []
         for item in items:
@@ -473,7 +465,7 @@ class AbstractRetrieval(Retrieval):
                 new = bank(name=item['@name'], sequence_number=number['$'],
                            type=number['@type'])
                 out.append(new)
-        return out
+        return out or None
 
     @property
     def source_id(self):
@@ -515,7 +507,7 @@ class AbstractRetrieval(Retrieval):
             new = area(area=item['$'], abbreviation=item['@abbrev'],
                        code=item['@code'])
             out.append(new)
-        return out
+        return out or None
 
     @property
     def title(self):

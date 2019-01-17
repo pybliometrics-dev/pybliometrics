@@ -19,6 +19,7 @@ doc = namedtuple('Document', order)
 # Set to False because of citation count
 s_au = scopus.ScopusSearch('AU-ID(24320488600)', refresh=False)
 s_j = scopus.ScopusSearch('SOURCE-ID(22900) AND PUBYEAR IS 2010', refresh=False)
+s_empty = scopus.ScopusSearch('SOURCE-ID(19700188323) AND PUBYEAR IS 1900', refresh=False)
 
 
 def test_get_eids_author():
@@ -84,3 +85,6 @@ def test_results_journal():
         description=abstract, authkeywords=keywords, citedby_count='120',
         openaccess='0', fund_acr='NSF', fund_no='0531184', fund_sponsor='Array BioPharma')
     assert_equal(s_j.results[-1], expected)
+
+def test_results_empty():
+    assert_equal(s_empty.results, None)

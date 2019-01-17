@@ -27,18 +27,16 @@ class AuthorSearch(Search):
                 fields = [fields]
             areas = ["{} ({})".format(d.get('@abbrev', ''), d.get('@frequency', ''))
                      for d in fields]
-            new = auth(eid=item['eid'],
-                       surname=name.get('surname'),
-                       initials=name.get('initials'),
+            new = auth(eid=item['eid'], initials=name.get('initials'),
+                       surname=name.get('surname'), areas="; ".join(areas),
                        givenname=name.get('given-name'),
                        documents=item.get('document-count', '0'),
                        affiliation=aff.get('affiliation-name'),
                        affiliation_id=aff.get('affiliation-id'),
                        city=aff.get('affiliation-city'),
-                       country=aff.get('affiliation-country'),
-                       areas="; ".join(areas))
+                       country=aff.get('affiliation-country'))
             out.append(new)
-        return out
+        return out or None
 
     def __init__(self, query, count=200, start=0,
                  max_entries=5000, refresh=False):

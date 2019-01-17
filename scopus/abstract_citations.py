@@ -23,7 +23,7 @@ class CitationOverview(Retrieval):
                        id=author.get('authid'),
                        url=author.get('author-url'))
             out.append(new)
-        return out
+        return out or None
 
     @property
     def cc(self):

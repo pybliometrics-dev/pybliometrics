@@ -98,7 +98,7 @@ class ScopusSearch(Search):
                 authkeywords=item.get('authkeywords'), eid=item['eid'],
                 fund_acr=item.get('fund-acr'), pubmed_id=item.get('pubmed-id'))
             out.append(new)
-        return out
+        return out or None
 
     def __init__(self, query, refresh=False):
         """Class to search a query, and retrieve a list of EIDs as results.

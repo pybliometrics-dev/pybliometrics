@@ -21,15 +21,12 @@ class AffiliationSearch(Search):
             name = item.get('affiliation-name')
             variants = [d.get('$', "") for d in item.get('name-variant', [])
                         if d.get('$', "") != name]
-            new = aff(eid=item['eid'],
-                      name=name,
-                      variant=";".join(variants),
-                      documents=item.get('document-count', '0'),
-                      city=item.get('city'),
-                      country=item.get('country'),
+            new = aff(eid=item['eid'], variant=";".join(variants),                 
+                      documents=item.get('document-count', '0'), name=name,
+                      city=item.get('city'), country=item.get('country'),
                       parent=item.get('parent-affiliation-id'))
             out.append(new)
-        return out
+        return out or None
 
     def __init__(self, query, count=200, start=0,
                  max_entries=5000, refresh=False):

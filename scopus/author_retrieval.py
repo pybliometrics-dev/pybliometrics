@@ -48,7 +48,7 @@ class AuthorRetrieval(Retrieval):
         out = []
         for item in listify(chained_get(self._json, path, [])):
             out.append((item['$'], item['@frequency']))
-        return out
+        return out or None
 
     @property
     def coauthor_link(self):
@@ -123,7 +123,7 @@ class AuthorRetrieval(Retrieval):
                        abbreviation=pub.get('sourcetitle-abbrev'),
                        type=pub['@type'], issn=pub.get('issn'))
             hist.append(new)
-        return hist
+        return hist or None
 
     @property
     def orcid(self):
@@ -145,7 +145,7 @@ class AuthorRetrieval(Retrieval):
                           given_name=var.get('given-name'),
                           doc_count=var.get('@doc-count'))
             out.append(new)
-        return out
+        return out or None
 
     @property
     def surname(self):
