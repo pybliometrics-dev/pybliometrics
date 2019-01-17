@@ -90,7 +90,7 @@ def test_citedby_link():
 def test_chemials():
     received = ab6.chemicals
     assert_true(isinstance(received, list))
-    assert_equal(len(received), 2)
+    assert_equal(len(received), 5)
     chemical = namedtuple('Chemical', 'source chemical_name cas_registry_number')
     expected = chemical(source='esbd', chemical_name='magnesium',
                         cas_registry_number='7439-95-4')

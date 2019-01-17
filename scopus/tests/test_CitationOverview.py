@@ -22,7 +22,7 @@ def test_authors():
 
 
 def test_cc():
-    assert_equal(co.cc, [(2015, '0'), (2016, '4'), (2017, '2'), (2018, '1')])
+    assert_equal(co.cc, [(2015, '0'), (2016, '4'), (2017, '2'), (2018, '2')])
 
 
 def test_citationType_long():
@@ -70,11 +70,11 @@ def test_publicationName():
 
 
 def test_rangeCount():
-    assert_equal(co.rangeCount, '7')
+    assert_true(int(co.rangeCount) >= 7)
 
 
 def test_rowTotal():
-    assert_equal(co.rowTotal, '7')
+    assert_true(int(co.rowTotal) >= 7)
 
 
 def test_scopus_id():
