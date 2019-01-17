@@ -583,10 +583,7 @@ class AbstractRetrieval(Retrieval):
         """
         # Authors
         if len(self.authors) > 1:
-            authors = ', '.join([a.given_name + ' ' + a.surname
-                                 for a in self.authors[0:-1]])
-            authors += (' and ' + self.authors[-1].given_name + ' ' +
-                        self.authors[-1].surname)
+            authors = _list_authors(self.authors)
         else:
             a = self.authors[0]
             authors = str(a.given_name) + ' ' + str(a.surname)
@@ -700,10 +697,7 @@ class AbstractRetrieval(Retrieval):
     def get_latex(self):
         """Bibliographic entry in LaTeX format."""
         if len(self.authors) > 1:
-            authors = ', '.join([' '.join([a.given_name, a.surname])
-                                 for a in self.authors[0:-1]])
-            authors += (' and ' + self.authors[-1].given_name +
-                        ' ' + self.authors[-1].surname)
+            authors = _list_authors(self.authors)
         else:
             a = self.authors
             authors = ' '.join([a.given_name, a.surname])
@@ -771,3 +765,10 @@ def _get_org(aff):
     except KeyError:  # Author group w/o affiliation
         org = None
     return org
+
+
+def _list_authors(lst):
+    """Format a list of authors (Surname, Firstname and Firstname Surname)."""
+    authors = ', '.join([' '.join([a.given_name, a.surname]) for a in lst[0:-1]])
+    authors += ' and ' + ' '.join([lst[-1].given_name, lst[-1].surname])
+    return authors
