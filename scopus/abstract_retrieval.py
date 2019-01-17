@@ -131,8 +131,9 @@ class AbstractRetrieval(Retrieval):
         chemical = namedtuple('Chemical', 'source chemical_name cas_registry_number')
         out = []
         for item in items:
-            for chem in listify(item['chemical'], []):
-                number = chem['cas-registry-number']
+            chems = listify(item['chemical'])
+            for chem in chems:
+                number = chem.get('cas-registry-number')
                 try:  # Multiple numbers given
                     num = ";".join([n['$'] for n in number])
                 except TypeError:
