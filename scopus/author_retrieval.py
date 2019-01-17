@@ -113,15 +113,12 @@ class AuthorRetrieval(Retrieval):
         (sourcetitle, abbreviation, type, issn).  issn is only given
         for journals.  abbreviation and issn may be None.
         """
-        hist = []
         jour = namedtuple('Journal', 'sourcetitle abbreviation type issn')
         path = ['author-profile', 'journal-history', 'journal']
-        pub_hist = listify(chained_get(self._json, path, []))
-        for pub in pub_hist:
-            new = jour(sourcetitle=pub['sourcetitle'],
-                       abbreviation=pub.get('sourcetitle-abbrev'),
-                       type=pub['@type'], issn=pub.get('issn'))
-            hist.append(new)
+        hist = [jour(sourcetitle=pub['sourcetitle'], issn=pub.get('issn'),
+                     abbreviation=pub.get('sourcetitle-abbrev'),
+                     type=pub['@type'])
+                for pub in listify(chained_get(self._json, path, []))]
         return hist or None
 
     @property
@@ -134,16 +131,13 @@ class AuthorRetrieval(Retrieval):
         """List of named tuples containing variants of the author name with
         number of documents published with that variant.
         """
-        out = []
         fields = 'indexed_name initials surname given_name doc_count'
         variant = namedtuple('Variant', fields)
-        items = listify(self._json['author-profile'].get('name-variant', []))
-        for var in items:
-            new = variant(indexed_name=var['indexed-name'],
-                          initials=var['initials'], surname=var['surname'],
-                          given_name=var.get('given-name'),
-                          doc_count=var.get('@doc-count'))
-            out.append(new)
+        path = ['author-profile', 'name-variant']
+        out = [variant(indexed_name=var['indexed-name'], surname=var['surname'],
+                       doc_count=var.get('@doc-count'), initials=var['initials'],
+                       given_name=var.get('given-name'))
+               for var in listify(chained_get(self._json, path, []))]
         return out or None
 
     @property
@@ -178,14 +172,11 @@ class AuthorRetrieval(Retrieval):
         """List of named tuples of subject areas in the form
         (area, abbreviation, code) of author's publication.
         """
-        try:
-            items = self._json['subject-areas']['subject-area']
-        except (KeyError, TypeError):
-            return None
+        path = ['subject-areas', 'subject-area']
         area = namedtuple('Subjectarea', 'area abbreviation code')
         areas = [area(area=item['$'], code=item['@code'],
                       abbreviation=item['@abbrev'])
-                 for item in items]
+                 for item in chained_get(self._json, path, [])]
         return areas or None
 
     @property

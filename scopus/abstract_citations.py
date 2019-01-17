@@ -17,10 +17,9 @@ class CitationOverview(Retrieval):
         auth = namedtuple('Author', order)
         for author in self._citeInfoMatrix.get('author'):
             author = {k.split(":", 1)[-1]: v for k, v in author.items()}
-            new = auth(name=author.get('index-name'),
+            new = auth(name=author.get('index-name'), id=author.get('authid'),
                        surname=author.get('surname'),
                        initials=author.get('initials'),
-                       id=author.get('authid'),
                        url=author.get('author-url'))
             out.append(new)
         return out or None
@@ -170,9 +169,14 @@ class CitationOverview(Retrieval):
 
         # citeInfoMatrix
         m = self._data['citeInfoMatrix']['citeInfoMatrixXML']['citationMatrix']['citeInfo'][0]
-        self._citeInfoMatrix = {k.split(":", 1)[-1]: v for k, v in m.items()}
+        self._citeInfoMatrix = _parse_dict(m)
         # identifier-legend
         l = self._data['identifier-legend']['identifier'][0]
-        self._identifierlegend = {k.split(":", 1)[-1]: v for k, v in l.items()}
+        self._identifierlegend = _parse_dict(l)
         # citeColumnTotalXML
         self._citeColumnTotalXML = self._data['citeColumnTotalXML']  # not used
+
+
+def _parse_dict(dct):
+    """Auxiliary function to change the keys of a dictionary."""
+    return {k.split(":", 1)[-1]: v for k, v in dct.items()}

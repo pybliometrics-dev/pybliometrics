@@ -64,15 +64,7 @@ class AbstractRetrieval(Retrieval):
         for item in items:
             # Affiliation information
             aff = item.get('affiliation', {})
-            try:
-                org = aff['organization']
-                if not isinstance(org, str):
-                    try:
-                        org = org['$']
-                    except TypeError:  # Multiple names given
-                        org = ', '.join([d['$'] for d in org if d])
-            except KeyError:  # Author group w/o affiliation
-                org = None
+            org = _get_org(aff)
             # Author information (might relate to collaborations)
             authors = listify(item.get('author', item.get('collaboration', [])))
             for au in authors:
@@ -159,16 +151,12 @@ class AbstractRetrieval(Retrieval):
         path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent', 'confdate']
         date = chained_get(self._head, path, {})
         if len(date) > 0:
-            start = (int(date['startdate']['@year']),
-                     int(date['startdate']['@month']),
-                     int(date['startdate']['@day']))
-            end = (int(date['enddate']['@year']),
-                   int(date['enddate']['@month']),
-                   int(date['enddate']['@day']))
+            start = {k: int(v) for k, v in date['startdate'].items()}
+            end = {k: int(v) for k, v in date['enddate'].items()}
+            return ((start['@year'], start['@month'], start['@day']),
+                    (end['@year'], end['@month'], end['@day']))
         else:
-            start = (None, None, None)
-            end = (None, None, None)
-        return (start, end)
+            return ((None, None, None), (None, None, None))
 
     @property
     def conflocation(self):
@@ -496,16 +484,11 @@ class AbstractRetrieval(Retrieval):
         in the form ().
         Note: Requires the FULL view of the article.
         """
-        out = []
         area = namedtuple('Area', 'area abbreviation code')
-        try:
-            items = listify(self._json.get('subject-areas', {}).get('subject-area', []))
-        except AttributeError:  # subject-areas empty
-            return None
-        for item in items:
-            new = area(area=item['$'], abbreviation=item['@abbrev'],
-                       code=item['@code'])
-            out.append(new)
+        path = ['subject-areas', 'subject-area']
+        out = [area(area=item['$'], abbreviation=item['@abbrev'],
+                    code=item['@code'])
+               for item in listify(chained_get(self._json, path, []))]
         return out or None
 
     @property
@@ -772,3 +755,19 @@ class AbstractRetrieval(Retrieval):
             ris += 'IS  - {}\n'.format(self.issueIdentifier)
         ris += 'ER  - \n\n'
         return ris
+
+
+def _get_org(aff):
+    """Auxiliary function to extract org information from affiliation
+    for authorgroup.
+    """
+    try:
+        org = aff['organization']
+        if not isinstance(org, str):
+            try:
+                org = org['$']
+            except TypeError:  # Multiple names given
+                org = ', '.join([d['$'] for d in org if d])
+    except KeyError:  # Author group w/o affiliation
+        org = None
+    return org
