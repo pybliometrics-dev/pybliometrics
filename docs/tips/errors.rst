@@ -17,7 +17,7 @@ The following exceptions are defined:
 `scopus.exception.Scopus404Error: NOT FOUND`
     The entity you are looking for does not exist.  Check that your identifier is still pointing to the item you are looking for.
 
-`scopus.exception.Scopus421Error: QUOTA EXCEEDED`
+`scopus.exception.Scopus429Error: QUOTA EXCEEDED`
     Your provided API key's weekly allowance of 5000 requests (for standard views) is depleted.  Wait a week or change the key in `~/.scopus/my_scopus.py`
 
 `scopus.exception.Scopus500Error: INTERNAL SERVER ERROR`
