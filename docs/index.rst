@@ -25,13 +25,6 @@ scopus provides classes to interact with the various Scopus APIs (see https://de
    CitationOverview
 
 
-There is one class to provide reports:
-
-.. autosummary::
-
-   report
-
-
 ==================
 Indices and tables
 ==================

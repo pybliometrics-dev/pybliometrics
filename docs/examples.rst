@@ -33,12 +33,3 @@ Metadata APIs
     examples/CitationOverview.rst
 
 Two other Metadata APIs, Serial Title Metadata and Subject Classifications, are not implemented yet.
-
-
-report
-~~~~~~
-
-.. toctree::
-    :maxdepth: 1
-
-    examples/report.rst

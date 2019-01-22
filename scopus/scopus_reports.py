@@ -1,5 +1,7 @@
-import matplotlib.pyplot as plt
+import warnings
 from operator import itemgetter
+
+import matplotlib.pyplot as plt
 
 from .scopus_api import ScopusAbstract, ScopusJournal
 from .scopus_author import ScopusAuthor
@@ -16,6 +18,10 @@ def report(scopus_search, label):
     label : str
         The label used in the document title ("Report for ...").
     """
+    text = "Development of this class has been suspended;  Please use the new"\
+           "package 'scopusreport' (https://scopusreport.readthedocs.io/en/latest/)"\
+           "instead."
+    warnings.warn(text, DeprecationWarning)
 
     counts = {}  # to count papers per author
     journals = {}  # to count publications per journal
