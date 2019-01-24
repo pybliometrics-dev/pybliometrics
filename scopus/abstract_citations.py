@@ -176,6 +176,20 @@ class CitationOverview(Retrieval):
         # citeColumnTotalXML
         self._citeColumnTotalXML = self._data['citeColumnTotalXML']  # not used
 
+    def __str__(self):
+        """Return a summary string."""
+        authors = [a.name for a in self.authors]
+        if len(authors) > 1:
+            authors[-1] = " and ".join([authors[-2], authors[-1]])
+        s = "Document '{self.title}' by {authors} published in "\
+            "'{self.publicationName}' has the following citation trajectory "\
+            "for years {self._start} to {self._end}:\n"\
+            "{self.cc}\n"\
+            "Additionally cited {self.pcc} times before {self._start}, and "\
+            "{self.lcc} times after {self._end}".format(
+                self=self, authors=", ".join(authors))
+        return s
+
 
 def _parse_dict(dct):
     """Auxiliary function to change the keys of a dictionary."""
