@@ -3,6 +3,15 @@ Change Log
 
 .. toctree::
 
+1.4.1
+~~~~~
+
+2019-01-24
+
+* Add citation
+* Render reports class deprecated
+* Add str-magic function for `CitationOverview` class
+
 1.4
 ~~~
 
