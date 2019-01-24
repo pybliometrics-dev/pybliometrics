@@ -1,1 +1,1 @@
-.. include:: ../CHANGES.rst
+.. include:: ../meta/CHANGES.rst

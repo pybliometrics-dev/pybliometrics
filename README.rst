@@ -40,16 +40,22 @@ or development version from GitHub repository:
 
     pip install git+git://github.com/scopus-api/scopus
 
+Citation
+========
+If scopus helped you getting data for research, please cite our corresponding paper:
+
+* Rose, Michael E. and John R. Kitchin (2019): "`scopus: Scriptable bibliometrics using a Python interface to Scopus <./meta/RoseJohn2019_scopus.pdf>`_", Max Planck Institute for Innovation and Competition Research Paper No. 19-03.
+
 Change log
 ==========
 
-Please see `CHANGES.rst <CHANGES.rst>`_.
+Please see `CHANGES.rst <./meta/CHANGES.rst>`_.
 
 Contributing
 ============
 
 Please see `CONTRIBUTING.rst <CONTRIBUTING.rst>`_. For a list of contributors see
-`AUTHORS.rst <AUTHORS.rst>`_.
+`AUTHORS.rst <./meta/AUTHORS.rst>`_.
 
 License
 =======

@@ -25,6 +25,14 @@ scopus provides classes to interact with the various Scopus APIs (see https://de
    CitationOverview
 
 
+========
+Citation
+========
+
+If scopus helped you getting data for research, please cite our corresponding paper:
+
+* Rose, Michael E. and John R. Kitchin (2019): "`scopus: Scriptable bibliometrics using a Python interface to Scopus <https://raw.githubusercontent.com/scopus-api/scopus/master/meta/RoseJohn2019_scopus.pdf>`_", Max Planck Institute for Innovation and Competition Research Paper No. 19-03.
+
 ==================
 Indices and tables
 ==================
