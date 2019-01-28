@@ -17,7 +17,7 @@ def chained_get(container, path, default=None):
     for key in path:
         try:
             container = container[key]
-        except (AttributeError, KeyError):
+        except (AttributeError, KeyError, TypeError):
             return default
     return container
 
