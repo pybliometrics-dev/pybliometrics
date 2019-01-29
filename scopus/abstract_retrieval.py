@@ -90,12 +90,15 @@ class AbstractRetrieval(Retrieval):
         out = []
         fields = 'auid indexed_name surname given_name affiliation'
         auth = namedtuple('Author', fields)
-        for item in self._json['authors']['author']:
-            affs = listify(item.get('affiliation', {}))
-            new = auth(auid=item['@auid'], indexed_name=item['ce:indexed-name'],
-                       surname=item['ce:surname'],
-                       given_name=item['preferred-name'].get('ce:given-name'),
-                       affiliation=[aff.get('@id') for aff in affs])
+        for item in chained_get(self._json, ['authors', 'author'], []):
+            affs = [a for a in listify(item.get('affiliation')) if a]
+            if affs:
+                aff = [aff.get('@id') for aff in affs]
+            else:
+                aff = None
+            new = auth(auid=item['@auid'], surname=item.get('ce:surname'),
+                indexed_name=item.get('ce:indexed-name'), affiliation=aff,
+                given_name=chained_get(item, ['preferred-name', 'ce:given-name']))
             out.append(new)
         return out or None
 
