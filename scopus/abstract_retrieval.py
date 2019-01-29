@@ -480,7 +480,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def title(self):
         """Title of the abstract."""
-        return self._json['coredata']['dc:title']
+        return self._json['coredata'].get('dc:title')
 
     @property
     def url(self):
