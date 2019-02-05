@@ -3,6 +3,15 @@ Change Log
 
 .. toctree::
 
+1.4.2
+~~~~~
+
+2019-02-05
+
+* Fix bug with TypeErrors when navigating a path in the json.
+* Fix bug with missing author information in `AbstractRetrieval.authors`.
+* Fix bug with missing title in `AbstractRetrieval.title`.
+
 1.4.1
 ~~~~~
 
