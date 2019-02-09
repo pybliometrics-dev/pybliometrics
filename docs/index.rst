@@ -52,5 +52,3 @@ Indices and tables
    reference
    configuration
    changelog
-   contributing
-   authors

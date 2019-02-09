@@ -1,5 +1,5 @@
-Citation Oveview
-----------------
+Citation Overview
+-----------------
 
 :doc:`CitationOverview <../reference/scopus.CitationOverview>` implements the `Citations Overview API <https://api.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key needs to be approved by Elsevier manually.  Please contact Scopus to do so.
 
