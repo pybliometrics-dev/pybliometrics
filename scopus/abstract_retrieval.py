@@ -325,7 +325,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def language(self):
         """Language of the article."""
-        return self._json['language'].get('@xml:lang')
+        return chained_get(self._json, ['language', '@xml:lang'])
 
     @property
     def pageRange(self):
