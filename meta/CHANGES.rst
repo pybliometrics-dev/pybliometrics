@@ -3,6 +3,14 @@ Change Log
 
 .. toctree::
 
+1.4.3
+~~~~~
+
+2019-02-12
+
+* Fix bug with empty value in `AbstractRetrieval.language`.
+* Add matplotlib as requirement.
+
 1.4.2
 ~~~~~
 
