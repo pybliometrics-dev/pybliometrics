@@ -416,13 +416,16 @@ class AbstractRetrieval(Retrieval):
                     authors.append(new_auth)
                                 
             ids = []
-            scopus_id = None
             try:
                 ids = listify(info['refd-itemidlist']['itemid'])
                 doi = [d['$'] for d in ids if d['@idtype'] == 'DOI'][0]
-                scopus_id = [d['$'] for d in ids if d['@idtype'] == 'SGR'][0]
-            except (KeyError, IndexError):
+            except IndexError:
                 doi = info.get('ce:doi')
+
+            scopus_id = None
+            try:
+                scopus_id = [d['$'] for d in ids if d['@idtype'] == 'SGR'][0]
+            except KeyError:
                 scopus_id = info.get('scopus-id')
 
             new = ref(position=item.get('@id'),
