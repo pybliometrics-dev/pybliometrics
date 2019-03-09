@@ -386,7 +386,9 @@ class AbstractRetrieval(Retrieval):
         """
         out = []
         fields = 'position id doi title authors sourcetitle publicationyear '\
-                 'volume issue first last text fulltext scopuseid citedbycount'
+                 'volume issue first last text fulltext citedbycount '\
+                 'authors_auid authors_url authors_affiliationurl '\
+                 'authors_affiliationid '
         ref = namedtuple('Reference', fields)
         path = ['item', 'bibrecord', 'tail', 'bibliography', 'reference']
         items = listify(chained_get(self._json, path, 
@@ -395,42 +397,41 @@ class AbstractRetrieval(Retrieval):
             info = item.get('ref-info', item)
             volisspag = info.get('ref-volisspag', info.get('volisspag') or {})
             authors = []
+            authors_seq = []
+            authors_auid = []
+            authors_url = []
+            authors_aff_url = []
+            authors_aff_id = []
             try:
-                auth = listify(info['ref-authors']['author'])
+                auth = listify(item['ref-info']['ref-authors']['author'])
                 authors = [', '.join([d['ce:surname'], d['ce:initials']])
                            for d in auth]
             except KeyError:  # No authors given
-                auth_fields = 'givenname initials surname indexedname seq affiliationid '\
-                              'affiliationhref auid authorurl'
-                auth = namedtuple('Author', auth_fields)
-                for author in info.get('author-list', {}).get('author', []):
-                    new_auth = auth(givenname=author.get('ce:given-name'),
-                                    initials=author.get('ce:initials'),
-                                    surname=author.get('ce:surname'),
-                                    indexedname=author.get('ce:indexed-name'),
-                                    seq=author.get('@seq'),
-                                    affiliationid=(author.get('affiliation') or {}).get('@id'),
-                                    affiliationhref=(author.get('affiliation') or {}).get('@href'),
-                                    auid=author.get('@auid'),
-                                    authorurl=author.get('author-url'))
-                    authors.append(new_auth)
+                auth = info.get('author-list', {}).get('author', [])
+                authors = [', '.join(filter(None, [d.get('ce:surname'), 
+                            d.get('ce:given-name')])) for d in auth]
+                authors_auid = [d.get('@auid') for d in auth]
+                authors_url = [d.get('author-url') for d in auth]
+                authors_aff_url = [(d.get('affiliation') or {}).get('@href') for d in auth]
+                authors_aff_id = [(d.get('affiliation') or {}).get('@id') for d in auth]
                                 
             ids = []
             try:
                 ids = listify(info['refd-itemidlist']['itemid'])
                 doi = [d['$'] for d in ids if d['@idtype'] == 'DOI'][0]
-            except IndexError:
+            except (KeyError, IndexError):
                 doi = info.get('ce:doi')
 
             scopus_id = None
             try:
                 scopus_id = [d['$'] for d in ids if d['@idtype'] == 'SGR'][0]
-            except KeyError:
+            except (KeyError, IndexError):
                 scopus_id = info.get('scopus-id')
 
             new = ref(position=item.get('@id'),
                       id=scopus_id,
-                      doi=doi, authors=authors,
+                      doi=doi,
+                      authors=authors,
                       title=info.get('ref-title', {}).get('ref-titletext', info.get('title')),
                       sourcetitle=info.get('ref-sourcetitle', info.get('sourcetitle')),
                       publicationyear=info.get('ref-publicationyear', {}).get('@first'),
@@ -440,8 +441,11 @@ class AbstractRetrieval(Retrieval):
                       last=volisspag.get('pagerange', {}).get('@last'),
                       text=info.get('ref-text'),
                       fulltext=item.get('ref-fulltext'),
-                      scopuseid=info.get('scopus-eid'),
-                      citedbycount=info.get('citedby-count'))
+                      citedbycount=info.get('citedby-count'),
+                      authors_auid=authors_auid,
+                      authors_url=authors_url,
+                      authors_affiliationurl=authors_aff_url,
+                      authors_affiliationid=authors_aff_id)
             out.append(new)
         return out or None
 

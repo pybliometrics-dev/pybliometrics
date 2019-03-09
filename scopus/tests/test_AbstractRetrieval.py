@@ -296,7 +296,9 @@ def test_refcount():
 
 def test_references():
     fields = 'position id doi title authors sourcetitle publicationyear '\
-             'volume issue first last text fulltext scopuseid citedbycount'
+             'volume issue first last text fulltext citedbycount '\
+             'authors_auid authors_url authors_affiliationurl '\
+             'authors_affiliationid '
     ref = namedtuple('Reference', fields)
     fulltext1 = 'Implementing Reproducible Research; Stodden, V.; Leisch, '\
                 'F.; Peng, R. D., Eds., Chapman and Hall/CRC: London, 2014.'
@@ -304,8 +306,9 @@ def test_references():
         authors=['Stodden, V.', 'Leisch, F.', 'Peng, R.D.'], fulltext=fulltext1,
         sourcetitle='Implementing Reproducible Research',
         publicationyear='2014', volume=None, issue=None, first=None,
-        last=None, text='Eds. Chapman and Hall/CRC: London.', scopuseid=None,
-        citedbycount=None)
+        last=None, text='Eds. Chapman and Hall/CRC: London.', citedbycount=None, 
+        authors_auid=[], authors_url=[], authors_affiliationurl=[],
+        authors_affiliationid=[])
     assert_equal(ab1.references[-1], expected1)
     assert_equal(ab2.references, None)
     fulltext4 = 'Chib, S., 1995, Marginal likelihood from the Gibbs output, '\
@@ -314,8 +317,9 @@ def test_references():
         title='Marginal likelihood from the Gibbs output', authors=['Chib, S.'],
         sourcetitle='Journal of the American Statistical Association',
         publicationyear='1995', volume='90', issue=None, first='1313',
-        last='1321', text=None, fulltext=fulltext4, scopuseid=None,
-        citedbycount=None)
+        last='1321', text=None, fulltext=fulltext4, citedbycount=None,
+        authors_auid=[], authors_url=[], authors_affiliationurl=[],
+        authors_affiliationid=[])
     assert_equal(ab4.references[0], expected4)
 
 
