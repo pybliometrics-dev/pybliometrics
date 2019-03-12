@@ -95,8 +95,6 @@ class Search:
                 # Download the remaining information in chunks
                 while n > 0:
                     n -= count
-                    print(n)
-                    start += count
                     params.update({'count': count, 'start': start})
                     print(params)
                     res = download(url=URL[api], params=params, accept="json").json()
