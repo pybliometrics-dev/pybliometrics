@@ -21,6 +21,9 @@ ab5 = scopus.AbstractRetrieval("2-s2.0-84919546381", view="FULL", refresh=True)
 ab6 = scopus.AbstractRetrieval("2-s2.0-85053478849", view="FULL", refresh=True)
 # Contributor group
 ab7 = scopus.AbstractRetrieval("2-s2.0-85050253030", view="FULL", refresh=True)
+# REF view
+ab8 = scopus.AbstractRetrieval("2-s2.0-84951753303", view="REF", refresh=True)
+
 
 
 def test_abstract():
@@ -321,6 +324,46 @@ def test_references():
         authors_auid=[], authors_url=[], authors_affiliationurl=[],
         authors_affiliationid=[])
     assert_equal(ab4.references[0], expected4)
+    expected8 =  ref(position='1', id='77950347409', 
+        doi='10.1145/1721654.1721672',
+        title='A view of cloud computing', authors=['Armbrust, Michael', 
+            'Fox, Armando', 'Griffith, Rean', 'Joseph, Anthony D.', 
+            'Katz, Randy', 'Konwinski, Andy', 'Lee, Gunho', 'Patterson, David', 
+            'Rabkin, Ariel', 'Stoica, Ion', 'Zaharia, Matei'],
+        sourcetitle='Communications of the ACM',
+        publicationyear=None, volume='53', issue='4', first='50',
+        last='58', text=None, fulltext=None, citedbycount='4972',
+        authors_auid=['35800975300', '35571093800', '57198081560', '7202236336',
+            '7401788602', '25926395200', '56326032000', '7401930147', 
+            '26534952300', '7007009125', '15064891400'], 
+        authors_url=[
+            'https://api.elsevier.com/content/author/author_id/35800975300',
+            'https://api.elsevier.com/content/author/author_id/35571093800',
+            'https://api.elsevier.com/content/author/author_id/57198081560',
+            'https://api.elsevier.com/content/author/author_id/7202236336',
+            'https://api.elsevier.com/content/author/author_id/7401788602',
+            'https://api.elsevier.com/content/author/author_id/25926395200',
+            'https://api.elsevier.com/content/author/author_id/56326032000',
+            'https://api.elsevier.com/content/author/author_id/7401930147',
+            'https://api.elsevier.com/content/author/author_id/26534952300',
+            'https://api.elsevier.com/content/author/author_id/7007009125',
+            'https://api.elsevier.com/content/author/author_id/15064891400'], 
+        authors_affiliationurl=[
+            'https://api.elsevier.com/content/affiliation/affiliation_id/60025038',
+            'https://api.elsevier.com/content/affiliation/affiliation_id/60025038',
+            'https://api.elsevier.com/content/affiliation/affiliation_id/60025038',
+            'https://api.elsevier.com/content/affiliation/affiliation_id/60025038',
+            'https://api.elsevier.com/content/affiliation/affiliation_id/60025038',
+            'https://api.elsevier.com/content/affiliation/affiliation_id/60025038',
+            'https://api.elsevier.com/content/affiliation/affiliation_id/60025038',
+            'https://api.elsevier.com/content/affiliation/affiliation_id/60025038',
+            'https://api.elsevier.com/content/affiliation/affiliation_id/60025038',
+            'https://api.elsevier.com/content/affiliation/affiliation_id/60025038',
+            'https://api.elsevier.com/content/affiliation/affiliation_id/60025038'],
+        authors_affiliationid=['60025038', '60025038', '60025038', '60025038', 
+            '60025038', '60025038', '60025038', '60025038', '60025038', 
+            '60025038', '60025038'])
+    assert_equal(ab8.references[0], expected8)
 
 
 def test_scopus_link():
