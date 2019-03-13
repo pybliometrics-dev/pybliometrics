@@ -387,8 +387,7 @@ class AbstractRetrieval(Retrieval):
         out = []
         fields = 'position id doi title authors sourcetitle publicationyear '\
                  'volume issue first last text fulltext citedbycount '\
-                 'authors_auid authors_url authors_affiliationurl '\
-                 'authors_affiliationid '
+                 'authors_auid authors_affiliationid '
         ref = namedtuple('Reference', fields)
         path = ['item', 'bibrecord', 'tail', 'bibliography', 'reference']
         items = listify(chained_get(self._json, path, 
@@ -399,8 +398,6 @@ class AbstractRetrieval(Retrieval):
             authors = []
             authors_seq = []
             authors_auid = []
-            authors_url = []
-            authors_aff_url = []
             authors_aff_id = []
             try:
                 auth = listify(item['ref-info']['ref-authors']['author'])
@@ -411,8 +408,6 @@ class AbstractRetrieval(Retrieval):
                 authors = [', '.join(filter(None, [d.get('ce:surname'), 
                             d.get('ce:given-name')])) for d in auth]
                 authors_auid = [d.get('@auid') for d in auth]
-                authors_url = [d.get('author-url') for d in auth]
-                authors_aff_url = [(d.get('affiliation') or {}).get('@href') for d in auth]
                 authors_aff_id = [(d.get('affiliation') or {}).get('@id') for d in auth]
                                 
             ids = []
@@ -443,8 +438,6 @@ class AbstractRetrieval(Retrieval):
                       fulltext=item.get('ref-fulltext'),
                       citedbycount=info.get('citedby-count'),
                       authors_auid=authors_auid,
-                      authors_url=authors_url,
-                      authors_affiliationurl=authors_aff_url,
                       authors_affiliationid=authors_aff_id)
             out.append(new)
         return out or None
