@@ -367,49 +367,78 @@ class AbstractRetrieval(Retrieval):
     def references(self):
         """List of namedtuples representing references listed in the abstract,
         in the form (position, id, doi, title, authors, sourcetitle,
-        publicationyear, volume, issue, first, last, text, fulltext).
+        publicationyear, volume, issue, first, last, text, fulltext, scopuseid,
+        citedbycount).
         `position` is the number at which the reference appears in the
         document, `id` is the Scopus ID of the referenced abstract (EID
         without the "2-s2.0-"), `authors` is a list of the names of the
-        authors in the format "Surname, Initials", `first` and `last` refer
-        to the page range, `text` is Scopus-provided information on the
-        publication and `fulltext` is the text the authors used for
-        the reference.
-        Note: Requires the FULL view of the article.  Might be empty even if
-        refcount is positive.
+        authors in the format "Surname, Initials" if view is set to FULL, 
+        a list of namedtuples in the form (givenname, initials, surname,
+        indexedname, seq, affiliationid, affiliationhref, auid, authorurl)
+        if view is set to REF, `first` and `last` refer to the page range, 
+        `text` is Scopus-provided information on the publication and `fulltext`
+        is the text the authors used for the reference.
+        `text` and `fulltext` fields are always None if view is set to REF.
+        `scopuseid` nad `citedbycount` fields are always None if view is
+        set to FULL.
+        Note: Requires either the FULL view or REF view of the article. 
+        Might be empty even if refcount is positive.
         """
         out = []
         fields = 'position id doi title authors sourcetitle publicationyear '\
-                 'volume issue first last text fulltext'
+                 'volume issue first last text fulltext citedbycount '\
+                 'authors_auid authors_affiliationid '
         ref = namedtuple('Reference', fields)
         path = ['item', 'bibrecord', 'tail', 'bibliography', 'reference']
-        items = listify(chained_get(self._json, path, []))
+        items = listify(chained_get(self._json, path, 
+                    self._json.get('references', {}).get('reference', [])))
         for item in items:
-            info = item['ref-info']
-            volisspag = info.get('ref-volisspag', {})
+            info = item.get('ref-info', item)
+            volisspag = info.get('ref-volisspag', info.get('volisspag') or {})
+            authors = []
+            authors_seq = []
+            authors_auid = []
+            authors_aff_id = []
             try:
-                auth = listify(info['ref-authors']['author'])
+                auth = listify(item['ref-info']['ref-authors']['author'])
                 authors = [', '.join([d['ce:surname'], d['ce:initials']])
                            for d in auth]
             except KeyError:  # No authors given
-                authors = None
-            ids = listify(info['refd-itemidlist']['itemid'])
+                auth = info.get('author-list', {}).get('author', [])
+                authors = [', '.join(filter(None, [d.get('ce:surname'), 
+                            d.get('ce:given-name')])) for d in auth]
+                authors_auid = [d.get('@auid') for d in auth]
+                authors_aff_id = [(d.get('affiliation') or {}).get('@id') for d in auth]
+                                
+            ids = []
             try:
+                ids = listify(info['refd-itemidlist']['itemid'])
                 doi = [d['$'] for d in ids if d['@idtype'] == 'DOI'][0]
-            except IndexError:
-                doi = None
+            except (KeyError, IndexError):
+                doi = info.get('ce:doi')
+
+            scopus_id = None
+            try:
+                scopus_id = [d['$'] for d in ids if d['@idtype'] == 'SGR'][0]
+            except (KeyError, IndexError):
+                scopus_id = info.get('scopus-id')
+
             new = ref(position=item.get('@id'),
-                      id=[d['$'] for d in ids if d['@idtype'] == 'SGR'][0],
-                      doi=doi, authors=authors,
-                      title=info.get('ref-title', {}).get('ref-titletext'),
-                      sourcetitle=info.get('ref-sourcetitle'),
+                      id=scopus_id,
+                      doi=doi,
+                      authors=authors,
+                      title=info.get('ref-title', {}).get('ref-titletext', info.get('title')),
+                      sourcetitle=info.get('ref-sourcetitle', info.get('sourcetitle')),
                       publicationyear=info.get('ref-publicationyear', {}).get('@first'),
                       volume=volisspag.get('voliss', {}).get('@volume'),
                       issue=volisspag.get('voliss', {}).get('@issue'),
                       first=volisspag.get('pagerange', {}).get('@first'),
                       last=volisspag.get('pagerange', {}).get('@last'),
                       text=info.get('ref-text'),
-                      fulltext=item.get('ref-fulltext'))
+                      fulltext=item.get('ref-fulltext'),
+                      citedbycount=info.get('citedby-count'),
+                      authors_auid=authors_auid,
+                      authors_affiliationid=authors_aff_id)
             out.append(new)
         return out or None
 
@@ -519,7 +548,7 @@ class AbstractRetrieval(Retrieval):
         view : str (optional, default=META_ABS)
             The view of the file that should be downloaded.  Will not take
             effect for already cached files. Allowed values: META, META_ABS,
-            FULL, where FULL includes all information of META_ABS view and
+            REF, FULL, where FULL includes all information of META_ABS view and
             META_ABS includes all information of the META view .  See
             https://dev.elsevier.com/guides/AbstractRetrievalViews.htm
             for details.
@@ -544,7 +573,7 @@ class AbstractRetrieval(Retrieval):
             warn(text, UserWarning)
             identifier = EID
         identifier = str(identifier)
-        allowed_views = ('META', 'META_ABS', 'FULL')
+        allowed_views = ('META', 'META_ABS', 'REF', 'FULL')
         if view not in allowed_views:
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
