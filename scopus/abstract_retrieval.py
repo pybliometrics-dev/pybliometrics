@@ -409,7 +409,7 @@ class AbstractRetrieval(Retrieval):
                 auids = None
                 affids = None
             except KeyError:  # REF view parsing
-                auth = info.get('author-list', {}).get('author', [])
+                auth = (info.get('author-list') or {}).get('author', [])
                 authors = [', '.join(filter(None, [d.get('ce:surname'),
                                                    d.get('ce:given-name')]))
                            for d in auth]
