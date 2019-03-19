@@ -326,13 +326,15 @@ def test_references():
         doi='10.1145/1721654.1721672', title='A view of cloud computing',
         sourcetitle='Communications of the ACM',
         publicationyear=None, volume='53', issue='4', first='50',
-        last='58', text=None, fulltext=None, citedbycount='4979',
+        last='58', text=None, fulltext=None, citedbycount='0',
         authors_auid='35800975300; 35571093800; 57198081560; 7202236336; '\
             '7401788602; 25926395200; 56326032000; 7401930147; 26534952300; '\
             '7007009125; 15064891400',
         authors_affiliationid='60025038; 60025038; 60025038; 60025038; 60025038; '\
             '60025038; 60025038; 60025038; 60025038; 60025038; 60025038')
-    assert_equal(ab8.references[0], expected8)
+    assert_true(int(ab8.references[0].citedbycount) >= 0)
+    assert_equal(ab8.references[0]._replace(citedbycount="0"), expected8)
+
 
 
 def test_scopus_link():
