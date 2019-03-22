@@ -16,7 +16,7 @@ URL = {'AffiliationSearch': BASE_URL + 'affiliation',
 
 class Search:
     def __init__(self, query, api, refresh, count=200, start=0,
-                 max_entries=5000, view='STANDARD'):
+                 max_entries=5000, view='STANDARD', **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
@@ -48,6 +48,10 @@ class Search:
             COMPLETE.
             Note: Only the ScopusSearch API additionally uses view COMPLETE.
 
+        kwds : key-value parings, optional
+            Keywords passed on to requests header.  Must contain fields
+            and values specified in the respective API specification.
+
         Raises
         ------
         ScopusQueryError
@@ -77,7 +81,7 @@ class Search:
         else:
             # Get a count of how many things to retrieve from first chunk
             params = {'query': query, 'count': count, 'start': 0, 'view': view}
-            res = download(url=URL[api], params=params, accept="json").json()
+            res = download(url=URL[api], params=params, accept="json", **kwds).json()
             n = int(res['search-results'].get('opensearch:totalResults', 0))
             if n > max_entries:  # Stop if there are too many results
                 text = ('Found {} matches. Set max_entries to a higher '
@@ -91,7 +95,7 @@ class Search:
                 n -= count
                 start += count
                 params.update({'count': count, 'start': start})
-                res = download(url=URL[api], params=params, accept="json").json()
+                res = download(url=URL[api], params=params, accept="json", **kwds).json()
                 self._json.extend(res.get('search-results', {}).get('entry', []))
             # Finally write out the file
             with open(qfile, 'wb') as f:

@@ -47,7 +47,7 @@ def detect_id_type(sid):
         raise ValueError('ID type detection failed for \'{}\'.'.format(sid))
 
 
-def download(url, params=None, accept="xml"):
+def download(url, params=None, accept="xml", **kwds):
     """Helper function to download a file and return its content.
 
     Parameters
@@ -63,6 +63,10 @@ def download(url, params=None, accept="xml"):
     accept : str (optional, default=xml)
         mime type of the file to be downloaded.  Accepted values are json,
         atom+xml, xml.
+
+    kwds : key-value parings, optional
+        Keywords passed on to requests header.  Must contain fields
+        and values specified in the respective API specification.
 
     Raises
     ------
@@ -89,6 +93,7 @@ def download(url, params=None, accept="xml"):
         token = config.get('Authentication', 'InstToken')
         header.update({'X-ELS-APIKey': key, 'X-ELS-Insttoken': token})
     header.update({'Accept': 'application/{}'.format(accept)})
+    header.update(**kwds)
     # Perform request
     resp = requests.get(url, headers=header, params=params)
     # Raise error if necessary

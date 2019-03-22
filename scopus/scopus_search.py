@@ -103,7 +103,7 @@ class ScopusSearch(Search):
             out.append(new)
         return out or None
 
-    def __init__(self, query, refresh=False, view="COMPLETE"):
+    def __init__(self, query, refresh=False, view="COMPLETE", **kwds):
         """Class to search a query, and retrieve a list of EIDs as results.
 
         Parameters
@@ -119,6 +119,12 @@ class ScopusSearch(Search):
             https://dev.elsevier.com/guides/ScopusSearchViews.htm.
             Allowed values: STANDARD, COMPLETE.  By default, the COMPLETE view
             is used, which returns more fields but results in a slower query.
+
+        kwds : key-value parings, optional
+            Keywords passed on to requests header.  Must contain fields
+            and values listed mentioned in the API specification
+            (https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl),
+            such as "field" or "date".
 
         Raises
         ------
@@ -145,7 +151,7 @@ class ScopusSearch(Search):
         else:
             count = 200
         Search.__init__(self, query, 'ScopusSearch', refresh, max_entries=5000,
-                        count=count, start=0, view=view)
+                        count=count, start=0, view=view, **kwds)
 
     def __str__(self):
         eids = self.get_eids()
