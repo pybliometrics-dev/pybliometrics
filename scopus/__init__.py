@@ -12,7 +12,5 @@ from scopus.affiliation_retrieval import *
 from scopus.affiliation_search import *
 from scopus.author_retrieval import *
 from scopus.author_search import *
-from scopus.scopus_affiliation import *
-from scopus.scopus_author import *
-from scopus.scopus_reports import *
 from scopus.scopus_search import *
+from scopus.deprecated_ import *
