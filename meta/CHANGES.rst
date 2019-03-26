@@ -26,8 +26,8 @@ Change Log
 2019-01-24
 
 * Add citation
-* Render reports class deprecated
-* Add str-magic function for `CitationOverview` class
+* Render reports class deprecated.
+* Add str-magic function for `CitationOverview` class.
 
 1.4
 ~~~

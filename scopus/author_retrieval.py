@@ -78,7 +78,7 @@ class AuthorRetrieval(Retrieval):
 
     @property
     def h_index(self):
-        """The author's h-index"""
+        """The author's h-index."""
         return self._json.get('h-index', '0')
 
     @property
@@ -119,11 +119,6 @@ class AuthorRetrieval(Retrieval):
         return hist or None
 
     @property
-    def orcid(self):
-        """The author's ORCID."""
-        return self._json['coredata'].get('orcid')
-
-    @property
     def name_variants(self):
         """List of named tuples containing variants of the author name with
         number of documents published with that variant.
@@ -138,10 +133,16 @@ class AuthorRetrieval(Retrieval):
         return out or None
 
     @property
-    def surname(self):
-        """Author's preferred surname."""
-        path = ['author-profile', 'preferred-name', 'surname']
-        return chained_get(self._json, path)
+    def orcid(self):
+        """The author's ORCID."""
+        return self._json['coredata'].get('orcid')
+
+    @property
+    def publication_range(self):
+        """Tuple containing years of first and last publication."""
+        r = self._json['author-profile']['publication-range']
+        return (r['@start'], r['@end'])
+        return self._json['coredata'].get('orcid')
 
     @property
     def scopus_author_link(self):
@@ -149,20 +150,14 @@ class AuthorRetrieval(Retrieval):
         return get_link(self._json, 1)
 
     @property
-    def self_link(self):
-        """Link to the author's API page."""
-        return get_link(self._json, 0)
-
-    @property
     def search_link(self):
         """URL to the API page listing documents of the author."""
         return get_link(self._json, 2)
 
     @property
-    def publication_range(self):
-        """Tuple containing years of first and last publication."""
-        r = self._json['author-profile']['publication-range']
-        return (r['@start'], r['@end'])
+    def self_link(self):
+        """Link to the author's API page."""
+        return get_link(self._json, 0)
 
     @property
     def subject_areas(self):
@@ -175,6 +170,12 @@ class AuthorRetrieval(Retrieval):
                       abbreviation=item['@abbrev'])
                  for item in chained_get(self._json, path, [])]
         return areas or None
+
+    @property
+    def surname(self):
+        """Author's preferred surname."""
+        path = ['author-profile', 'preferred-name', 'surname']
+        return chained_get(self._json, path)
 
     @property
     def url(self):
