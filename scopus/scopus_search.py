@@ -121,7 +121,7 @@ class ScopusSearch(Search):
             is used, which returns more fields but results in a slower query.
 
         kwds : key-value parings, optional
-            Keywords passed on to requests header.  Must contain fields
+            Keywords passed on as query parameters.  Must contain fields
             and values listed mentioned in the API specification
             (https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl),
             such as "field" or "date".

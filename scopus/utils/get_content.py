@@ -65,7 +65,7 @@ def download(url, params=None, accept="xml", **kwds):
         atom+xml, xml.
 
     kwds : key-value parings, optional
-        Keywords passed on to requests header.  Must contain fields
+        Keywords passed on to as query parameters.  Must contain fields
         and values specified in the respective API specification.
 
     Raises
@@ -93,8 +93,8 @@ def download(url, params=None, accept="xml", **kwds):
         token = config.get('Authentication', 'InstToken')
         header.update({'X-ELS-APIKey': key, 'X-ELS-Insttoken': token})
     header.update({'Accept': 'application/{}'.format(accept)})
-    header.update(**kwds)
     # Perform request
+    params.update(**kwds)
     resp = requests.get(url, headers=header, params=params)
     # Raise error if necessary
     try:
