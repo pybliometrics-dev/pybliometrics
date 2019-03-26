@@ -77,6 +77,12 @@ def test_h_index():
     assert_true(int(au.h_index) >= 27)
 
 
+def test_historical_identifier():
+    expected = ['35787230500', '36488127000', '54974425600', '55004143700',
+                '55004143800', '57057263700', '56641032000', '36747787600']
+    assert_equal(au.historical_identifier, expected)
+
+
 def test_identifier():
     assert_equal(au.identifier, "7004212771")
 
@@ -129,6 +135,10 @@ def test_self_link():
     expected = 'https://www.scopus.com/authid/detail.uri?partnerID=HzOxMe3b&'\
                'authorId=7004212771&origin=inward'
     assert_equal(au.self_link, expected)
+
+
+def test_status():
+    assert_equal(au.status, "update")
 
 
 def test_subject_areas():

@@ -82,6 +82,12 @@ class AuthorRetrieval(Retrieval):
         return self._json.get('h-index', '0')
 
     @property
+    def historical_identifier(self):
+        """Scopus IDs of previous profiles now compromising this profile."""
+        hist = chained_get(self._json, ["coredata", 'historical-identifier'], [])
+        return [d['$'].split(":")[-1] for d in hist] or None
+
+    @property
     def identifier(self):
         """The author's ID.  Might differ from the one provided."""
         ident = self._json['coredata']['dc:identifier'].split(":")[-1]
@@ -158,6 +164,11 @@ class AuthorRetrieval(Retrieval):
     def self_link(self):
         """Link to the author's API page."""
         return get_link(self._json, 0)
+
+    @property
+    def status(self):
+        """The status of the author profile."""
+        return chained_get(self._json, ["author-profile", "status"])
 
     @property
     def subject_areas(self):
