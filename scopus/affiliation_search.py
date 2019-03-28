@@ -49,7 +49,7 @@ class AffiliationSearch(Search):
 
         max_entries : int (optional, default=5000)
             Raise error when the number of results is beyond this number.
-            The Scopus Search Engine does not allow more than 5000 entries.
+            The Affiliation Search API does not allow more than 5000 entries.
 
         Raises
         ------

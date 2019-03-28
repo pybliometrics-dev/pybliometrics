@@ -40,7 +40,7 @@ class Search:
 
         max_entries : int (optional, default=5000)
             Raise error when the number of results is beyond this number.
-            The Scopus Search Engine does not allow more than 5000 entries.
+            To skip this check, set `max_entries` to `None`.
 
         view : str (optional, default=STANDARD)
             The view of the file that should be downloaded.  Will not take
@@ -83,7 +83,7 @@ class Search:
             params = {'query': query, 'count': count, 'start': 0, 'view': view}
             res = download(url=URL[api], params=params, accept="json", **kwds).json()
             n = int(res['search-results'].get('opensearch:totalResults', 0))
-            if n > max_entries:  # Stop if there are too many results
+            if max_entries and n > max_entries:  # Stop if there are too many results
                 text = ('Found {} matches. Set max_entries to a higher '
                         'number or change your query ({})'.format(n, query))
                 raise ScopusQueryError(text)

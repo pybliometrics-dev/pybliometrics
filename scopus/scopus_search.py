@@ -104,7 +104,7 @@ class ScopusSearch(Search):
         return out or None
 
     def __init__(self, query, refresh=False, view="COMPLETE", count=25,
-                 **kwds):
+                 max_entries=None, **kwds):
         """Class to search a query, and retrieve a list of EIDs as results.
 
         Parameters
@@ -124,6 +124,14 @@ class ScopusSearch(Search):
         count : int (optional, default=25)
             The number of entries to be displayed at once.  A smaller number
             means more queries with each query having less results.
+
+        max_entries : int (optional, default=None)
+            Raise error when the number of results is beyond this number.
+            The Scopus Search API only allows 5000 results for non-subscribers,
+            so users who don't subscribe to Scopus should set this value to
+            5000. The API doesn't have any restrictions for subscribers,
+            though, so subscribers will not want to perform this check. This
+            can be achieved by setting `max_entries` to `None`.
 
         kwds : key-value parings, optional
             Keywords passed on as query parameters.  Must contain fields
@@ -146,8 +154,9 @@ class ScopusSearch(Search):
         """
         # Query
         self.query = query
-        Search.__init__(self, query, 'ScopusSearch', refresh, max_entries=5000,
-                        count=count, start=0, view=view, **kwds)
+        Search.__init__(self, query, 'ScopusSearch', refresh,
+                        count=count, max_entries=max_entries, start=0,
+                        view=view, **kwds)
 
     def __str__(self):
         eids = self.get_eids()
