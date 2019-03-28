@@ -139,11 +139,6 @@ class ScopusSearch(Search):
         Json results are cached in ~/.scopus/scopus_search/{fname},
         where fname is the md5-hashed version of query.
         """
-        # Checks
-        allowed_views = ('STANDARD', 'COMPLETE')
-        if view not in allowed_views:
-            raise ValueError('view parameter must be one of ' +
-                             ', '.join(allowed_views))
         # Query
         self.query = query
         if view == "COMPLETE":
