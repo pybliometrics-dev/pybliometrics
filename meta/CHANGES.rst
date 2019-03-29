@@ -3,14 +3,31 @@ Change Log
 
 .. toctree::
 
+1.4.3
+~~~~~
+
+2019-02-12
+
+* Fix bug with empty value in `AbstractRetrieval.language`.
+* Add matplotlib as requirement.
+
+1.4.2
+~~~~~
+
+2019-02-05
+
+* Fix bug with TypeErrors when navigating a path in the json.
+* Fix bug with missing author information in `AbstractRetrieval.authors`.
+* Fix bug with missing title in `AbstractRetrieval.title`.
+
 1.4.1
 ~~~~~
 
 2019-01-24
 
 * Add citation
-* Render reports class deprecated
-* Add str-magic function for `CitationOverview` class
+* Render reports class deprecated.
+* Add str-magic function for `CitationOverview` class.
 
 1.4
 ~~~

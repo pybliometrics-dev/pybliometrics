@@ -21,6 +21,8 @@ ab5 = scopus.AbstractRetrieval("2-s2.0-84919546381", view="FULL", refresh=True)
 ab6 = scopus.AbstractRetrieval("2-s2.0-85053478849", view="FULL", refresh=True)
 # Contributor group
 ab7 = scopus.AbstractRetrieval("2-s2.0-85050253030", view="FULL", refresh=True)
+# REF view
+ab8 = scopus.AbstractRetrieval("2-s2.0-84951753303", view="REF", refresh=True)
 
 
 def test_abstract():
@@ -295,26 +297,44 @@ def test_refcount():
 
 
 def test_references():
-    fields = 'position id doi title authors sourcetitle publicationyear '\
-             'volume issue first last text fulltext'
+    fields = 'position id doi title authors authors_auid authors_affiliationid '\
+             'sourcetitle publicationyear volume issue first last citedbycount '\
+             'text fulltext'
     ref = namedtuple('Reference', fields)
     fulltext1 = 'Implementing Reproducible Research; Stodden, V.; Leisch, '\
                 'F.; Peng, R. D., Eds., Chapman and Hall/CRC: London, 2014.'
     expected1 = ref(position='22', id='85055586929', doi=None, title=None,
-        authors=['Stodden, V.', 'Leisch, F.', 'Peng, R.D.'], fulltext=fulltext1,
+        authors='Stodden, V.; Leisch, F.; Peng, R.D.', authors_auid=None,
+        authors_affiliationid=None, fulltext=fulltext1,
         sourcetitle='Implementing Reproducible Research',
         publicationyear='2014', volume=None, issue=None, first=None,
-        last=None, text='Eds. Chapman and Hall/CRC: London.',)
+        last=None, citedbycount=None, text='Eds. Chapman and Hall/CRC: London.')
     assert_equal(ab1.references[-1], expected1)
     assert_equal(ab2.references, None)
     fulltext4 = 'Chib, S., 1995, Marginal likelihood from the Gibbs output, '\
                 'Journal of the American Statistical Association 90, 1313-1321.'
     expected4 = ref(position='1', id='0041974049', doi=None,
-        title='Marginal likelihood from the Gibbs output', authors=['Chib, S.'],
+        title='Marginal likelihood from the Gibbs output', authors='Chib, S.',
         sourcetitle='Journal of the American Statistical Association',
         publicationyear='1995', volume='90', issue=None, first='1313',
-        last='1321', text=None, fulltext=fulltext4)
-    assert_equal(ab4.references[0], expected4)
+        last='1321', text=None, fulltext=fulltext4, citedbycount=None,
+        authors_auid=None, authors_affiliationid=None)
+    authors3 = 'Armbrust, Michael; Fox, Armando; Griffith, Rean; Joseph, '\
+        'Anthony D.; Katz, Randy; Konwinski, Andy; Lee, Gunho; '\
+        'Patterson, David; Rabkin, Ariel; Stoica, Ion; Zaharia, Matei'
+    expected8 =  ref(position='1', id='77950347409', authors=authors3,
+        doi='10.1145/1721654.1721672', title='A view of cloud computing',
+        sourcetitle='Communications of the ACM',
+        publicationyear=None, volume='53', issue='4', first='50',
+        last='58', text=None, fulltext=None, citedbycount='0',
+        authors_auid='35800975300; 35571093800; 57198081560; 7202236336; '\
+            '7401788602; 25926395200; 56326032000; 7401930147; 26534952300; '\
+            '7007009125; 15064891400',
+        authors_affiliationid='60025038; 60025038; 60025038; 60025038; 60025038; '\
+            '60025038; 60025038; 60025038; 60025038; 60025038; 60025038')
+    assert_true(int(ab8.references[0].citedbycount) >= 0)
+    assert_equal(ab8.references[0]._replace(citedbycount="0"), expected8)
+
 
 
 def test_scopus_link():

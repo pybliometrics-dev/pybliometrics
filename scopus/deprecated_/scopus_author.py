@@ -8,7 +8,7 @@ from collections import Counter, namedtuple
 from operator import itemgetter
 
 from .scopus_api import ScopusAbstract
-from .scopus_search import ScopusSearch
+from ..scopus_search import ScopusSearch
 from .scopus_affiliation import ScopusAffiliation
 from scopus import config
 from scopus.utils import download, get_content, get_encoded_text, ns

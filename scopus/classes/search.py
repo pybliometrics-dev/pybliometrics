@@ -16,7 +16,7 @@ URL = {'AffiliationSearch': BASE_URL + 'affiliation',
 
 class Search:
     def __init__(self, query, api, refresh, count=200, start=0,
-                 max_entries=5000, view='STANDARD', cursor=False):
+                 max_entries=5000, view='STANDARD', curosr=False **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
@@ -53,6 +53,10 @@ class Search:
             results without limit on the number of the results.  In contrast
             to `start` parameter, the `cursor` parameter does not allow users
             to obtain partial results.
+
+        kwds : key-value parings, optional
+            Keywords passed on to requests header.  Must contain fields
+            and values specified in the respective API specification.
 
         Raises
         ------

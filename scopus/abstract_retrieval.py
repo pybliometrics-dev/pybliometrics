@@ -48,8 +48,8 @@ class AbstractRetrieval(Retrieval):
     def authorgroup(self):
         """A list of namedtuples representing the article's authors organized
         by affiliation, in the form (affiliation_id, organization, city_group,
-        country, auid, indexed_name, surname, given_name).  If no
-        "given_name" is given, fall back to initials.
+        country, auid, indexed_name, surname, given_name).  If "given_name"
+        is not present, fall back to initials.
         Note: Affiliation information might be missing or mal-assigned even
         when it lookes correct in the web view.  In this case please request
         a correction.
@@ -62,6 +62,8 @@ class AbstractRetrieval(Retrieval):
         for item in items:
             # Affiliation information
             aff = item.get('affiliation', {})
+            aff_ids = listify(aff['affiliation-id'])
+            aff_id = ", ".join([a["@afid"] for a in aff_ids])
             org = _get_org(aff)
             # Author information (might relate to collaborations)
             authors = listify(item.get('author', item.get('collaboration', [])))
@@ -70,7 +72,7 @@ class AbstractRetrieval(Retrieval):
                     given = au.get('ce:given-name', au['ce:initials'])
                 except KeyError:  # Collaboration
                     given = au.get('ce:text')
-                new = auth(affiliation_id=aff.get('@afid'), organization=org,
+                new = auth(affiliation_id=aff_id, organization=org,
                            city_group=aff.get('city-group'),
                            country=aff.get('country'), auid=au.get('@auid'),
                            surname=au.get('ce:surname'), given_name=given,
@@ -83,9 +85,9 @@ class AbstractRetrieval(Retrieval):
         """A list of namedtuples representing the article's authors, in the
         form (auid, indexed_name, surname, given_name, affiliation_id,
         affiliation, city, country).
-        Note: Affiliations listed here are often incomplete and sometimes
-        use the first author's affiliation for all others.  Rather use
-        property author_group.
+        Note: The affiliation referred to here is what Scopus' algorithm
+        determined as the main affiliation.  Property `authorgroup` provides
+        all affiliations.
         """
         out = []
         fields = 'auid indexed_name surname given_name affiliation'
@@ -325,7 +327,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def language(self):
         """Language of the article."""
-        return self._json['language'].get('@xml:lang')
+        return chained_get(self._json, ['language', '@xml:lang'])
 
     @property
     def pageRange(self):
@@ -366,48 +368,84 @@ class AbstractRetrieval(Retrieval):
     @property
     def references(self):
         """List of namedtuples representing references listed in the abstract,
-        in the form (position, id, doi, title, authors, sourcetitle,
-        publicationyear, volume, issue, first, last, text, fulltext).
+        in the form (position, id, doi, title, authors, authors_auid,
+        authors_affiliationid, sourcetitle, publicationyear, volume, issue, first,
+        last, citedbycount, text, fulltext).
         `position` is the number at which the reference appears in the
         document, `id` is the Scopus ID of the referenced abstract (EID
-        without the "2-s2.0-"), `authors` is a list of the names of the
-        authors in the format "Surname, Initials", `first` and `last` refer
-        to the page range, `text` is Scopus-provided information on the
-        publication and `fulltext` is the text the authors used for
-        the reference.
-        Note: Requires the FULL view of the article.  Might be empty even if
-        refcount is positive.
+        without the "2-s2.0-"), `authors` is a string of the names of the
+        authors in the format "Surname1, Initials1; Surname2, Initials2",
+        `authors_auid` is a string of the author IDs joined on "; ",
+        `authors_affiliationid` is a string of the authors' affiliation IDs
+        joined on "; ", `sourcetitle` is the name of the source (e.g. the
+        journal), `publicationyear` is the year of the publication as a string,
+        `volume` and `issue`, are strings referring to the volume and issue,
+        `first` and `last` refer to the page range, `citedbycount` is a string
+        for the total number of citations of the cited item, `text` is
+        Scopus-provided information on the publication, `fulltext` is the text
+        the authors used for the reference.
+
+        Note: Requires either the FULL view or REF view of the article.  Might
+        be empty even if refcount is positive.  Specific fields can be empty.
+        Author lists (authors, authors_auid, authors_affiliationid) may contain
+        duplicates but have been filtered of None's.
         """
         out = []
-        fields = 'position id doi title authors sourcetitle publicationyear '\
-                 'volume issue first last text fulltext'
+        fields = 'position id doi title authors authors_auid '\
+                 'authors_affiliationid sourcetitle publicationyear volume '\
+                 'issue first last citedbycount text fulltext'
         ref = namedtuple('Reference', fields)
         path = ['item', 'bibrecord', 'tail', 'bibliography', 'reference']
-        items = listify(chained_get(self._json, path, []))
+        items = listify(chained_get(self._json, path,
+                    self._json.get('references', {}).get('reference', [])))
         for item in items:
-            info = item['ref-info']
-            volisspag = info.get('ref-volisspag', {})
-            try:
-                auth = listify(info['ref-authors']['author'])
+            info = item.get('ref-info', item)
+            volisspag = info.get('volisspag', {}) or {}
+            if isinstance(volisspag, list):
+                volisspag = volisspag[0]
+            # Parse author information
+            try:  # FULL view parsing
+                auth = listify(item['ref-info']['ref-authors']['author'])
                 authors = [', '.join([d['ce:surname'], d['ce:initials']])
                            for d in auth]
-            except KeyError:  # No authors given
-                authors = None
-            ids = listify(info['refd-itemidlist']['itemid'])
+                auids = None
+                affids = None
+            except KeyError:  # REF view parsing
+                auth = (info.get('author-list') or {}).get('author', [])
+                authors = [', '.join(filter(None, [d.get('ce:surname'),
+                                                   d.get('ce:given-name')]))
+                           for d in auth]
+                auids = "; ".join(filter(None, [d.get('@auid') for d in auth]))
+                affs = filter(None, [d.get('affiliation') for d in auth])
+                affids = "; ".join([aff.get('@id') for aff in affs])
+            # Parse IDs
+            try:
+                ids = listify(info['refd-itemidlist']['itemid'])
+            except KeyError:
+                ids = []
             try:
                 doi = [d['$'] for d in ids if d['@idtype'] == 'DOI'][0]
             except IndexError:
-                doi = None
+                doi = info.get('ce:doi')
+            try:
+                scopus_id = [d['$'] for d in ids if d['@idtype'] == 'SGR'][0]
+            except IndexError:
+                scopus_id = info.get('scopus-id')
+            # Combine information
             new = ref(position=item.get('@id'),
-                      id=[d['$'] for d in ids if d['@idtype'] == 'SGR'][0],
-                      doi=doi, authors=authors,
-                      title=info.get('ref-title', {}).get('ref-titletext'),
-                      sourcetitle=info.get('ref-sourcetitle'),
+                      id=scopus_id,
+                      doi=doi,
+                      authors="; ".join(authors),
+                      authors_auid=auids or None,
+                      authors_affiliationid=affids or None,
+                      title=info.get('ref-title', {}).get('ref-titletext', info.get('title')),
+                      sourcetitle=info.get('ref-sourcetitle', info.get('sourcetitle')),
                       publicationyear=info.get('ref-publicationyear', {}).get('@first'),
                       volume=volisspag.get('voliss', {}).get('@volume'),
                       issue=volisspag.get('voliss', {}).get('@issue'),
                       first=volisspag.get('pagerange', {}).get('@first'),
                       last=volisspag.get('pagerange', {}).get('@last'),
+                      citedbycount=info.get('citedby-count'),
                       text=info.get('ref-text'),
                       fulltext=item.get('ref-fulltext'))
             out.append(new)
@@ -519,7 +557,7 @@ class AbstractRetrieval(Retrieval):
         view : str (optional, default=META_ABS)
             The view of the file that should be downloaded.  Will not take
             effect for already cached files. Allowed values: META, META_ABS,
-            FULL, where FULL includes all information of META_ABS view and
+            REF, FULL, where FULL includes all information of META_ABS view and
             META_ABS includes all information of the META view .  See
             https://dev.elsevier.com/guides/AbstractRetrievalViews.htm
             for details.
@@ -544,7 +582,7 @@ class AbstractRetrieval(Retrieval):
             warn(text, UserWarning)
             identifier = EID
         identifier = str(identifier)
-        allowed_views = ('META', 'META_ABS', 'FULL')
+        allowed_views = ('META', 'META_ABS', 'REF', 'FULL')
         if view not in allowed_views:
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))

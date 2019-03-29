@@ -46,6 +46,8 @@ If scopus helped you getting data for research, please cite our corresponding pa
 
 * Rose, Michael E. and John R. Kitchin (2019): "`scopus: Scriptable bibliometrics using a Python interface to Scopus <./meta/RoseJohn2019_scopus.pdf>`_", Max Planck Institute for Innovation and Competition Research Paper No. 19-03.
 
+Citing the paper helps the development of scopus, because it justifies funneling resources into the development.
+
 Change log
 ==========
 

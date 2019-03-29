@@ -3,7 +3,7 @@
 """Tests for `ScopusSearch` module."""
 
 from collections import namedtuple
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 
 import scopus
 
@@ -17,9 +17,10 @@ order = 'eid doi pii pubmed_id title subtype creator afid affilname '\
 doc = namedtuple('Document', order)
 
 # Set to False because of citation count
-s_au = scopus.ScopusSearch('AU-ID(24320488600)', refresh=False)
-s_j = scopus.ScopusSearch('SOURCE-ID(22900) AND PUBYEAR IS 2010', refresh=False)
-s_empty = scopus.ScopusSearch('SOURCE-ID(19700188323) AND PUBYEAR IS 1900', refresh=False)
+s_au = scopus.ScopusSearch('AU-ID(24320488600)', refresh=True)
+s_j = scopus.ScopusSearch('SOURCE-ID(22900) AND PUBYEAR IS 2010', refresh=True)
+q_empty = 'SOURCE-ID(19700188323) AND PUBYEAR IS 1900'
+s_empty = scopus.ScopusSearch(q_empty, refresh=True)
 
 
 def test_get_eids_author():
@@ -31,6 +32,7 @@ def test_get_eids_journal():
 
 
 def test_results_author():
+    recieved = s_au.results[-1]
     expected = doc(eid='2-s2.0-26444452434', doi='10.1016/0014-2921(92)90085-B',
         pii='001429219290085B', pubmed_id=None, title='Economists as policymakers: A round-table discussion. Introduction',
         subtype='ar', creator='Draghi M.', afid=None, affilname=None,
@@ -40,51 +42,49 @@ def test_results_author():
         publicationName='European Economic Review', issn='00142921',
         source_id='20749', eIssn=None, aggregationType='Journal', volume='36',
         issueIdentifier='2-3', article_number=None, pageRange='307-309',
-        description=None, authkeywords=None, citedby_count='1', openaccess='0',
+        description=None, authkeywords=None, citedby_count='0', openaccess='0',
         fund_acr=None, fund_no='undefined', fund_sponsor=None)
-    assert_equal(s_au.results[-1], expected)
+    assert_true(int(recieved.citedby_count) > 0)
+    assert_equal(recieved._replace(citedby_count="0"), expected)
 
 
 def test_results_journal():
-    abstract = 'In recent years, the threat of global climate change has '\
-        'come to be seen as one of the most serious confronting humanity. '\
-        'To meet this challenge will require the development of new '\
-        'technologies and the substantial improvement of existing ones, as '\
-        'well as ensuring their prompt and widespread deployment. Some have '\
-        'argued that the urgency of the situation requires a "Manhattan '\
-        'Project" or an "Apollo Program". This paper examines why such a '\
-        'policy model is inappropriate, arguing that the nature of the '\
-        'policy context for confronting climate change necessitates a '\
-        'different kind of technology policy than that for building an '\
-        'atomic bomb or for achieving a manned lunar landing. Instead, it '\
-        'seeks to draw lessons from three sectors that seem to be more '\
-        'pertinent and where government technological development and '\
-        'deployment programs have been pursued with some success in the '\
-        'United States - namely, agriculture, biomedical research and '\
-        'information technology. It compares and contrasts these with the '\
-        'policies pursued with regard to the first two of these sectors in '\
-        'the United Kingdom. The paper concludes by drawing out the '\
-        'implications for the design of policies supporting technological '\
-        'development and innovation to address the problem of global climate '\
-        'change. © 2010 Elsevier B.V. All rights reserved.'
-    keywords = 'Global warming | Innovation | R&amp;D | Technology adoption '\
-               '| Technology policy'
-    expected = doc(eid='2-s2.0-77955427414', doi='10.1016/j.respol.2010.05.008',
-        pii='S0048733310001320', pubmed_id=None,
-        title="Technology policy and global warming: Why new policy models are needed (or why putting new wine in old bottles won't work)",
-        subtype='no', creator='Mowery D.', afid='60072522;60030162;60003771;60017317',
-        affilname='UC Berkeley Haas School of Business;Columbia University in the City of New York;University of Manchester;University of Sussex',
-        affiliation_city='Berkeley;New York;Manchester;Sussex',
-        affiliation_country='United States;United States;United Kingdom;United Kingdom',
-        author_count='4', author_names='Mowery, David C.;Nelson, Richard R.;Martin, Ben R.',
-        author_ids='7003916189;7404560006;7402931873',
-        author_afids='60072522;60030162-60003771;60017317', coverDate='2010-01-01',
-        coverDisplayDate='October 2010', publicationName='Research Policy',
-        issn='00487333', source_id='22900', eIssn=None, aggregationType='Journal',
-        volume='39', issueIdentifier='8', article_number=None, pageRange='1011-1023',
-        description=abstract, authkeywords=keywords, citedby_count='120',
-        openaccess='0', fund_acr='NSF', fund_no='0531184', fund_sponsor='Array BioPharma')
-    assert_equal(s_j.results[-1], expected)
+    recieved = s_j.results[-1]
+    abstract = 'This paper investigates the determinants of R&D investment '\
+        'at the national level with an emphasis on the roles of patent '\
+        'rights protection, international technology transfer through trade '\
+        'and FDI, and economic growth, in addition to the essentials of '\
+        'human capital accumulation and the number of scientific '\
+        'researchers. The Extreme-Bounds-Analysis (EBA) approach is applied '\
+        'to examine the robustness and sensitivity of these factors. The '\
+        'results of the EBA tests on data from 26 OECD countries from 1996 '\
+        'to 2006 showed that tertiary education and the proportion of '\
+        'scientific researchers in a country were robust determinants that '\
+        'had positive effects on R&D intensity. Foreign technology inflows '\
+        'had a robust and negative impact on domestic R&D. Patent rights '\
+        'protection and the income growth rate are fragile determinants of '\
+        'R&D investment. © 2009 Elsevier B.V. All rights reserved.'
+    keywords = 'Extreme-Bounds-Analysis (EBA) | Patent rights protection | '\
+        'R&amp;D investment | Technology transfer'
+    title = 'Determinants of R&amp;D investment: The Extreme-Bounds-'\
+            'Analysis approach applied to 26 OECD countries'
+    expected = doc(eid='2-s2.0-74249121335', doi='10.1016/j.respol.2009.11.010',
+        pii='S0048733309002145', pubmed_id=None, title=title, subtype='ar',
+        creator='Wang E.', afid='60007954',
+        affilname='National Chung Cheng University',
+        affiliation_city='Min-Hsiung', affiliation_country='Taiwan',
+        author_count='1', author_names='Wang, Eric C.',
+        author_ids='7403414138', author_afids='60007954',
+        coverDate='2010-01-01', coverDisplayDate='2010',
+        publicationName='Research Policy', issn='00487333', source_id='22900',
+        eIssn=None, aggregationType='Journal', volume='39', issueIdentifier='1',
+        article_number=None, pageRange='103-116', description=abstract,
+        authkeywords=keywords, citedby_count='0', openaccess='0',
+        fund_acr='NSC', fund_no='NSC94-2415-H-194-001',
+        fund_sponsor='National Science Council')
+    assert_true(int(recieved.citedby_count) > 0)
+    assert_equal(recieved._replace(citedby_count="0"), expected)
+
 
 def test_results_empty():
     assert_equal(s_empty.results, None)
