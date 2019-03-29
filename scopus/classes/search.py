@@ -16,7 +16,7 @@ URL = {'AffiliationSearch': BASE_URL + 'affiliation',
 
 class Search:
     def __init__(self, query, api, refresh, count=200, start=0,
-                 max_entries=5000, view='STANDARD', **kwds):
+                 max_entries=5000, view='STANDARD', curosr=False, **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
@@ -47,6 +47,12 @@ class Search:
             effect for already cached files.  Allowed values: STANDARD,
             COMPLETE.
             Note: Only the ScopusSearch API additionally uses view COMPLETE.
+
+        cursor : str (optional, default=False)
+            Whether to use the cursor in order to iterate over all search
+            results without limit on the number of the results.  In contrast
+            to `start` parameter, the `cursor` parameter does not allow users
+            to obtain partial results.
 
         kwds : key-value parings, optional
             Keywords passed on to requests header.  Must contain fields
@@ -80,12 +86,16 @@ class Search:
                 self._json = [loads(line) for line in f.readlines()]
         else:
             # Get a count of how many things to retrieve from first chunk
-            params = {'query': query, 'count': count, 'start': 0, 'view': view}
+            params = {'query': query, 'count': count, 'view': view}
+            if cursor:
+                params.update({'cursor': '*'})
+            else:
+                params.update({'start': 0})
             res = download(url=URL[api], params=params, accept="json", **kwds).json()
             n = int(res['search-results'].get('opensearch:totalResults', 0))
-            if n > max_entries:  # Stop if there are too many results
+            if cursor and n > max_entries:  # Stop if there are too many results
                 text = ('Found {} matches. Set max_entries to a higher '
-                        'number or change your query ({})'.format(n, query))
+                        'number, change your query ({}) or set cursor=True'.format(n, query))
                 raise ScopusQueryError(text)
             self._json = res.get('search-results', {}).get('entry', [])
             if n == 0:
@@ -93,8 +103,13 @@ class Search:
             # Download the remaining information in chunks
             while n > 0:
                 n -= count
-                start += count
-                params.update({'count': count, 'start': start})
+                params.update({'count': count})
+                if cursor:
+                    pointer = res['search-results']['cursor'].get('@next')
+                    params.update({'cursor': pointer})
+                else:
+                    start += count
+                    params.update({'start': start})
                 res = download(url=URL[api], params=params, accept="json", **kwds).json()
                 self._json.extend(res.get('search-results', {}).get('entry', []))
             # Finally write out the file
