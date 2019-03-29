@@ -103,7 +103,11 @@ class ScopusSearch(Search):
             out.append(new)
         return out or None
 
+<<<<<<< Updated upstream
     def __init__(self, query, refresh=False, view="COMPLETE", cursor=False):
+=======
+    def __init__(self, query, refresh=False, view="COMPLETE", cursor=True, **kwds):
+>>>>>>> Stashed changes
         """Class to search a query, and retrieve a list of EIDs as results.
 
         Parameters

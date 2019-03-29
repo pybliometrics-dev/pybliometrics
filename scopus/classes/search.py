@@ -48,9 +48,11 @@ class Search:
             COMPLETE.
             Note: Only the ScopusSearch API additionally uses view COMPLETE.
 
-        cursor : str (optional, default = False)
-            Using 'cursor' instead of start itterates over all search results with no limit on the number of the resutls.
-            In contrast to 'start' parameter, the 'cursor' parameter does not allow users to obtain partial results.
+        cursor : str (optional, default=False)
+            Whether to use the cursor in order to iterate over all search
+            results without limit on the number of the results.  In contrast
+            to `start` parameter, the `cursor` parameter does not allow users
+            to obtain partial results.
 
         Raises
         ------
@@ -80,45 +82,33 @@ class Search:
                 self._json = [loads(line) for line in f.readlines()]
         else:
             # Get a count of how many things to retrieve from first chunk
-
-            if cursor == False:
-                params = {'query': query, 'count': count, 'start': 0, 'view': view}
-                res = download(url=URL[api], params=params, accept="json").json()
-                n = int(res['search-results'].get('opensearch:totalResults', 0))
-                if n > max_entries:  # Stop if there are too many results
-                    text = ('Found {} matches. Set max_entries to a higher '
-                            'number, change your query ({}) or set cursor=True'.format(n, query))
-                    raise ScopusQueryError(text)
-                self._json = res.get('search-results', {}).get('entry', [])
-                if n == 0:
-                    self._json = ""
-                # Download the remaining information in chunks
-                while n > 0:
-                    n -= count
-                    params.update({'count': count, 'start': start})
-                    print(params)
-                    res = download(url=URL[api], params=params, accept="json").json()
-                    self._json.extend(res.get('search-results', {}).get('entry', []))
-                # Finally write out the file
-                with open(qfile, 'wb') as f:
-                    for item in self._json:
-                        f.write('{}\n'.format(dumps(item)).encode('utf-8'))
+            params = {'query': query, 'count': count, 'view': view}
+            if cursor:
+                params.update({'cursor': '*'})
             else:
-                params = {'query': query, 'count': count, 'cursor': '*', 'view': view} # see https://dev.elsevier.com/tecdoc_developer_faq.html
-                res = download(url=URL[api], params=params, accept="json").json()
-                n = int(res['search-results'].get('opensearch:totalResults', 0))
-                if n == 0:
-                    self._json = ""
-                self._json = res.get('search-results', {}).get('entry', [])
-                # Download the remaining information in chunks
-                while n > 0:
-                    next = res['search-results']['cursor'].get('@next')
-                    params.update({'count': count, 'cursor': next})
-                    res = download(url=URL[api], params=params, accept="json").json()
-                    self._json.extend(res.get('search-results', {}).get('entry', []))
-                    n -= count
-                # Finally write out the file
-                with open(qfile, 'wb') as f:
-                    for item in self._json:
-                        f.write('{}\n'.format(dumps(item)).encode('utf-8'))
-
+                params.update({'start': 0})
+            res = download(url=URL[api], params=params, accept="json", **kwds).json()
+            n = int(res['search-results'].get('opensearch:totalResults', 0))
+            if cursor and n > max_entries:  # Stop if there are too many results
+                text = ('Found {} matches. Set max_entries to a higher '
+                        'number, change your query ({}) or set cursor=True'.format(n, query))
+                raise ScopusQueryError(text)
+            self._json = res.get('search-results', {}).get('entry', [])
+            if n == 0:
+                self._json = ""
+            # Download the remaining information in chunks
+            while n > 0:
+                n -= count
+                params.update({'count': count})
+                if cursor:
+                    pointer = res['search-results']['cursor'].get('@next')
+                    params.update({'cursor': pointer})
+                else:
+                    start += count
+                    params.update({'start': start})
+                res = download(url=URL[api], params=params, accept="json", **kwds).json()
+                self._json.extend(res.get('search-results', {}).get('entry', []))
+            # Finally write out the file
+            with open(qfile, 'wb') as f:
+                for item in self._json:
+                    f.write('{}\n'.format(dumps(item)).encode('utf-8'))
