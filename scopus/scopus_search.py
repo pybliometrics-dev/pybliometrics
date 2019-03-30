@@ -104,7 +104,7 @@ class ScopusSearch(Search):
         return out or None
 
     def __init__(self, query, refresh=False, view="COMPLETE", count=25,
-                 max_entries=None, **kwds):
+                 max_entries=None, cursor=True, **kwds):
         """Class to search a query, and retrieve a list of EIDs as results.
 
         Parameters
@@ -155,8 +155,8 @@ class ScopusSearch(Search):
         # Query
         self.query = query
         Search.__init__(self, query, 'ScopusSearch', refresh,
-                        count=count, max_entries=max_entries, start=0,
-                        view=view, **kwds)
+                        count=count, max_entries=max_entries, cursor=cursor,
+                        start=0, view=view, **kwds)
 
     def __str__(self):
         eids = self.get_eids()

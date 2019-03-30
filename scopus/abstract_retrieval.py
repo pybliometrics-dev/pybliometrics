@@ -48,8 +48,8 @@ class AbstractRetrieval(Retrieval):
     def authorgroup(self):
         """A list of namedtuples representing the article's authors organized
         by affiliation, in the form (affiliation_id, organization, city_group,
-        country, auid, indexed_name, surname, given_name).  If no
-        "given_name" is given, fall back to initials.
+        country, auid, indexed_name, surname, given_name).  If "given_name"
+        is not present, fall back to initials.
         Note: Affiliation information might be missing or mal-assigned even
         when it lookes correct in the web view.  In this case please request
         a correction.
@@ -62,6 +62,8 @@ class AbstractRetrieval(Retrieval):
         for item in items:
             # Affiliation information
             aff = item.get('affiliation', {})
+            aff_ids = listify(aff['affiliation-id'])
+            aff_id = ", ".join([a["@afid"] for a in aff_ids])
             org = _get_org(aff)
             # Author information (might relate to collaborations)
             authors = listify(item.get('author', item.get('collaboration', [])))
@@ -70,7 +72,7 @@ class AbstractRetrieval(Retrieval):
                     given = au.get('ce:given-name', au['ce:initials'])
                 except KeyError:  # Collaboration
                     given = au.get('ce:text')
-                new = auth(affiliation_id=aff.get('@afid'), organization=org,
+                new = auth(affiliation_id=aff_id, organization=org,
                            city_group=aff.get('city-group'),
                            country=aff.get('country'), auid=au.get('@auid'),
                            surname=au.get('ce:surname'), given_name=given,
@@ -83,9 +85,9 @@ class AbstractRetrieval(Retrieval):
         """A list of namedtuples representing the article's authors, in the
         form (auid, indexed_name, surname, given_name, affiliation_id,
         affiliation, city, country).
-        Note: Affiliations listed here are often incomplete and sometimes
-        use the first author's affiliation for all others.  Rather use
-        property author_group.
+        Note: The affiliation referred to here is what Scopus' algorithm
+        determined as the main affiliation.  Property `authorgroup` provides
+        all affiliations.
         """
         out = []
         fields = 'auid indexed_name surname given_name affiliation'
