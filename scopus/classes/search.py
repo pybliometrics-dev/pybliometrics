@@ -16,7 +16,7 @@ URL = {'AffiliationSearch': BASE_URL + 'affiliation',
 
 class Search:
     def __init__(self, query, api, refresh, count=200, start=0,
-                 max_entries=5000, view='STANDARD', curosr=False, **kwds):
+                 max_entries=5000, view='STANDARD', cursor=False, **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
