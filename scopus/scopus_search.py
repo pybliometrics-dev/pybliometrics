@@ -120,6 +120,11 @@ class ScopusSearch(Search):
             Allowed values: STANDARD, COMPLETE.  By default, the COMPLETE view
             is used, which returns more fields but results in a slower query.
 
+        cursor : bool (optional, default=True)
+            Whether to use Scopus's cursor navigation to obtain results.
+            Using the cursor allows to download an unlimited results set.
+            Non-subscribers should set this to False.
+
         kwds : key-value parings, optional
             Keywords passed on as query parameters.  Must contain fields
             and values listed mentioned in the API specification
@@ -129,7 +134,7 @@ class ScopusSearch(Search):
         Raises
         ------
         ScopusQueryError
-            If the number of search results exceeds 5000.
+            If cursor is False and the number of search results exceeds 5000.
 
         ValueError
             If the view parameter is not one of the allowed ones.

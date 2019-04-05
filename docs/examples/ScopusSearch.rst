@@ -11,6 +11,8 @@ The class is initialized with a search query on which you can read about in `Sco
     >>> s = ScopusSearch('FIRSTAUTH ( kitchin  j.r. )', refresh=True)
 
 
+Non-subscribers must instantiate the class with `cursor=False`.  They may only get 5000 results per query, whereas this limit does not exist for subscribers.
+
 The class' main attribute `results` returns a list of `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_.  They can be used neatly with `pandas <https://pandas.pydata.org/>`_ to form DataFrames:
 
 .. code-block:: python
