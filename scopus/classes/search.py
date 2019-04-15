@@ -93,7 +93,7 @@ class Search:
                 params.update({'start': 0})
             res = download(url=URL[api], params=params, accept="json", **kwds).json()
             n = int(res['search-results'].get('opensearch:totalResults', 0))
-            if max_entries and n > max_entries and cursor:  # Stop if there are too many results
+            if not cursor and n > max_entries:  # Stop if there are too many results
                 text = ('Found {} matches. Set max_entries to a higher '
                         'number, change your query ({}) or set
                         'subscription=True'.format(n, query))

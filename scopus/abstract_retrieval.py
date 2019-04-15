@@ -8,7 +8,9 @@ from scopus.utils import chained_get, detect_id_type, get_link, listify
 class AbstractRetrieval(Retrieval):
     @property
     def abstract(self):
-        """The abstract of a document."""
+        """The abstract of a document.
+        Note: If this is empty, try property description instead.
+        """
         return self._head.get('abstracts')
 
     @property
