@@ -46,9 +46,7 @@ class Search:
 
         view : str (optional, default=STANDARD)
             The view of the file that should be downloaded.  Will not take
-            effect for already cached files.  Allowed values: STANDARD,
-            COMPLETE.
-            Note: Only the ScopusSearch API additionally uses view COMPLETE.
+            effect for already cached files.
 
         cursor : str (optional, default=False)
             Whether to use the cursor in order to iterate over all search
@@ -66,16 +64,12 @@ class Search:
             If the number of search results exceeds max_entries.
 
         ValueError
-            If the api parameter or view parameter is an invalid entry.
+            If the api parameteris an invalid entry.
         """
         # Checks
         if api not in URL:
             raise ValueError('api parameter must be one of ' +
                              ', '.join(URL.keys()))
-        allowed_views = ('STANDARD', 'COMPLETE')
-        if view not in allowed_views:
-            raise ValueError('view parameter must be one of ' +
-                             ', '.join(allowed_views))
         if not config.has_section('Directories'):
             create_config()
         if start != 0:
