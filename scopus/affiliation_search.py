@@ -1,4 +1,5 @@
 from collections import namedtuple
+from warnings import warn
 
 from scopus.classes import Search
 
@@ -42,14 +43,16 @@ class AffiliationSearch(Search):
             means more queries with each query having less results.
 
         start : int (optional, default=0)
-            The entry number of the first search item to start with.
+            DEPRECATED! The entry number of the first search item
+            to start with.
 
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
 
         max_entries : int (optional, default=5000)
-            Raise error when the number of results is beyond this number.
-            The Affiliation Search API does not allow more than 5000 entries.
+            DEPRECATED!  Raise error when the number of results is
+            beyond this number.  The Affiliation Search API does not
+            allow more than 5000 entries.
 
         Raises
         ------
@@ -61,7 +64,14 @@ class AffiliationSearch(Search):
         Json results are cached in ~/.scopus/affiliation_search/{fname},
         where fname is the md5-hashed version of query.
         """
-
+        if max_entries != 5000:
+            text = "Parameter max_entries is deprecated and will be removed "\
+                   "in scopus 1.6."
+            warn(text, UserWarning)
+        if start != 0:
+            text = "Parameter start is deprecated and will be removed "\
+                   "in scopus 1.6."
+            warn(text, UserWarning)
         self.query = query
         Search.__init__(self, query, "AffiliationSearch", refresh, count,
                         start, max_entries)
