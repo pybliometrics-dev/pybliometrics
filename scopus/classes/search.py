@@ -3,6 +3,7 @@
 from hashlib import md5
 from json import dumps, loads
 from os.path import exists, join
+from warnings import warn
 
 from scopus import config
 from scopus.exception import ScopusQueryError
@@ -36,7 +37,8 @@ class Search:
             means more queries with each query having less results.
 
         start : int (optional, default=0)
-            The entry number of the first search item to start with.
+            DEPRECATED! The entry number of the first search item
+            to start with.
 
         max_entries : int (optional, default=5000)
             Raise error when the number of results is beyond this number.
@@ -76,6 +78,10 @@ class Search:
                              ', '.join(allowed_views))
         if not config.has_section('Directories'):
             create_config()
+        if start != 0:
+            text = "Parameter start is deprecated and will be removed "\
+                   "in scopus 1.6."
+            warn(text, UserWarning)
 
         # Read the file contents if file exists and we are not refreshing,
         # otherwise download query anew and cache file
