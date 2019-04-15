@@ -103,9 +103,9 @@ class ScopusSearch(Search):
             out.append(new)
         return out or None
 
-    def __init__(self, query, refresh=False, view="COMPLETE", count=25,
-                 max_entries=None, cursor=True, **kwds):
-        """Class to search a query, and retrieve a list of EIDs as results.
+    def __init__(self, query, refresh=False, subscriber=True,
+                 view=None, **kwds):
+        """Class to perform a query against the Scopus Search API.
 
         Parameters
         ----------
@@ -115,23 +115,17 @@ class ScopusSearch(Search):
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
 
-        view : str (optional, default=COMPLETE)
+        subscriber : bool (optional, default=True)
+            Whether the user accesses Scopus with a subscription or not.
+            For subscribers, Scopus's cursor navigation will be used.
+            Sets the number of entries in each query iteration to the maximum
+            number allowed by the corresponding view.
+
+        view : str (optional, default=None)
             Which view to use for the query, see
             https://dev.elsevier.com/guides/ScopusSearchViews.htm.
-            Allowed values: STANDARD, COMPLETE.  By default, the COMPLETE view
-            is used, which returns more fields but results in a slower query.
-
-        count : int (optional, default=25)
-            The number of entries to be displayed at once.  A smaller number
-            means more queries with each query having less results.
-
-        max_entries : int (optional, default=None)
-            Raise error when the number of results is beyond this number.
-            The Scopus Search API only allows 5000 results for non-subscribers,
-            so users who don't subscribe to Scopus should set this value to
-            5000. The API doesn't have any restrictions for subscribers,
-            though, so subscribers will not want to perform this check. This
-            can be achieved by setting `max_entries` to `None`.
+            Allowed values: STANDARD, COMPLETE.  If None, defaults to
+            COMPLETE if subscriber=True and to STANDARD if subscriber=False.
 
         kwds : key-value parings, optional
             Keywords passed on as query parameters.  Must contain fields
@@ -142,7 +136,7 @@ class ScopusSearch(Search):
         Raises
         ------
         ScopusQueryError
-            If the number of search results exceeds 5000.
+            For non-subscribers, if the number of search results exceeds 5000.
 
         ValueError
             If the view parameter is not one of the allowed ones.
@@ -152,11 +146,24 @@ class ScopusSearch(Search):
         Json results are cached in ~/.scopus/scopus_search/{fname},
         where fname is the md5-hashed version of query.
         """
+        # Checks
+        allowed_views = ('STANDARD', 'COMPLETE')
+        if view not in allowed_views:
+            raise ValueError('view parameter must be one of ' +
+                             ', '.join(allowed_views))
+        # Parameters
+        if not view:
+            if subscriber:
+                view = "COMPLETE"
+            else:
+                view = "STANDARD"
+        count = 25
+        if view == "STANDARD" and subscriber:
+            count = 200
         # Query
         self.query = query
-        Search.__init__(self, query, 'ScopusSearch', refresh,
-                        count=count, max_entries=max_entries, cursor=cursor,
-                        start=0, view=view, **kwds)
+        Search.__init__(self, query, 'ScopusSearch', refresh, count=count,
+                        cursor=subscriber, view=view, **kwds)
 
     def __str__(self):
         eids = self.get_eids()

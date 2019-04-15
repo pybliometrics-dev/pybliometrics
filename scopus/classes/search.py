@@ -16,7 +16,7 @@ URL = {'AffiliationSearch': BASE_URL + 'affiliation',
 
 class Search:
     def __init__(self, query, api, refresh, count=200, start=0,
-                 max_entries=5000, view='STANDARD', curosr=False, **kwds):
+                 max_entries=5000, view='STANDARD', cursor=False, **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
@@ -95,7 +95,8 @@ class Search:
             n = int(res['search-results'].get('opensearch:totalResults', 0))
             if max_entries and n > max_entries and cursor:  # Stop if there are too many results
                 text = ('Found {} matches. Set max_entries to a higher '
-                        'number, change your query ({}) or set cursor=True'.format(n, query))
+                        'number, change your query ({}) or set
+                        'subscription=True'.format(n, query))
                 raise ScopusQueryError(text)
             self._json = res.get('search-results', {}).get('entry', [])
             if n == 0:
