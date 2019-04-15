@@ -103,8 +103,9 @@ class ScopusSearch(Search):
             out.append(new)
         return out or None
 
-    def __init__(self, query, refresh=False, view="COMPLETE", cursor=True, **kwds):
-        """Class to search a query, and retrieve a list of EIDs as results.
+    def __init__(self, query, refresh=False, subscriber=True,
+                 view=None, **kwds):
+        """Class to perform a query against the Scopus Search API.
 
         Parameters
         ----------
@@ -114,11 +115,17 @@ class ScopusSearch(Search):
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
 
-        view : str (optional, default=COMPLETE)
+        subscriber : bool (optional, default=True)
+            Whether the user accesses Scopus with a subscription or not.
+            For subscribers, Scopus's cursor navigation will be used.
+            Sets the number of entries in each query iteration to the maximum
+            number allowed by the corresponding view.
+
+        view : str (optional, default=None)
             Which view to use for the query, see
             https://dev.elsevier.com/guides/ScopusSearchViews.htm.
-            Allowed values: STANDARD, COMPLETE.  By default, the COMPLETE view
-            is used, which returns more fields but results in a slower query.
+            Allowed values: STANDARD, COMPLETE.  If None, defaults to
+            COMPLETE if subscriber=True and to STANDARD if subscriber=False.
 
         cursor : bool (optional, default=True)
             Whether to use Scopus's cursor navigation to obtain results.
@@ -134,7 +141,7 @@ class ScopusSearch(Search):
         Raises
         ------
         ScopusQueryError
-            If cursor is False and the number of search results exceeds 5000.
+            For non-subscribers, if the number of search results exceeds 5000.
 
         ValueError
             If the view parameter is not one of the allowed ones.
@@ -149,14 +156,19 @@ class ScopusSearch(Search):
         if view not in allowed_views:
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
+        # Parameters
+        if not view:
+            if subscriber:
+                view = "COMPLETE"
+            else:
+                view = "STANDARD"
+        count = 25
+        if view == "STANDARD" and subscriber:
+            count = 200
         # Query
         self.query = query
-        if view == "COMPLETE":
-            count = 25
-        else:
-            count = 200
-        Search.__init__(self, query, 'ScopusSearch', refresh, max_entries=5000,
-                        count=count, start=0, view=view, cursor=cursor, **kwds)
+        Search.__init__(self, query, 'ScopusSearch', refresh, count=count,
+                        cursor=subscriber, view=view, **kwds)
 
     def __str__(self):
         eids = self.get_eids()
