@@ -153,7 +153,7 @@ class ScopusSearch(Search):
         """
         # Checks
         allowed_views = ('STANDARD', 'COMPLETE')
-        if view not in allowed_views:
+        if view and view not in allowed_views:
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
         # Parameters
