@@ -3,6 +3,22 @@ Change Log
 
 .. toctree::
 
+1.5
+~~~
+
+2019-05-16
+
+* Add parameter `subscriber` to `ScopusSearch` class to set request parameters to maximum values depending on view.
+* Add support for cursor-navigation in searches.
+* Add `__citation__` dunder.
+* Allow for the REF view in `AbstractRetrieval` to obtain detailed information on referenced items.
+* New properties for `AuthorRetrieval`: `historical_identifier` and `status`.
+* Allow `ScopusSearch` to pass on kwds as query params.
+* Deprecate `start` and `max_entries` parameters in `AffiliationSearch` and `AuthorSearch`.
+* Deprecate `start` parameter in `ScopusSearch` class.
+* Fix bug with `ContentAffiliationRetrieval.__str__`.
+* Fix bugs in `AbstractRetrieval` related to missing information obtained from Scopus.
+
 1.4.3
 ~~~~~
 
