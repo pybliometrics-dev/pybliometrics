@@ -54,7 +54,7 @@ def test_issueIdentifier():
 
 
 def test_lcc():
-    assert_equal(co.lcc, '0')
+    assert_true(int(co.lcc) >= 0)
 
 
 def test_pcc():

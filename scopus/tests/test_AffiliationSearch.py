@@ -20,4 +20,5 @@ def test_affiliations():
     expected = [Affiliation(eid='10-s2.0-60021784', name='New York University',
                 variant='', documents='101148', city='New York',
                 country='United States', parent='0')]
-    assert_equal(received, expected)
+    assert_true(int(received.documents) >= 101148)
+    assert_equal(received._replace(documents="0"), expected)

@@ -184,9 +184,9 @@ def test_endingPage():
 def test_funding():
     received = ab6.funding
     assert_true(isinstance(received, list))
-    assert_equal(len(received), 1)
+    assert_equal(len(received), 2)
     fund = namedtuple('Funding', 'agency string id acronym country')
-    expected6 = fund(agency=None, string='CNRT “Nickel et son Environnement',
+    expected6 = fund(agency=None, string='CNRT',
         acronym=None, id=None, country=None)
     assert_true(expected6 in received)
     assert_equal(ab5.funding, None)
