@@ -212,7 +212,8 @@ class AuthorRetrieval(Retrieval):
         """
         # Load json
         self._id = str(int(str(author_id).split('-')[-1]))
-        Retrieval.__init__(self, self._id, 'AuthorRetrieval', refresh)
+        Retrieval.__init__(self, identifier=self._id, api='AuthorRetrieval',
+                           refresh=refresh)
         self._json = self._json['author-retrieval-response']
         # Checks
         try:

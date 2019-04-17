@@ -132,8 +132,8 @@ class ContentAffiliationRetrieval(Retrieval):
         """
         # Load json
         aff_id = str(int(str(aff_id).split('-')[-1]))
-        Retrieval.__init__(self, aff_id, 'ContentAffiliationRetrieval',
-                           refresh)
+        Retrieval.__init__(self, identifier=aff_id,
+                           api='ContentAffiliationRetrieval', refresh=refresh)
         self._json = self._json['affiliation-retrieval-response']
 
     def __str__(self):

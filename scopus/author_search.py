@@ -84,8 +84,8 @@ class AuthorSearch(Search):
                    "in scopus 1.6."
             warn(text, UserWarning)
         self.query = query
-        Search.__init__(self, query, 'AuthorSearch', refresh, count, start,
-                        max_entries)
+        Search.__init__(self, query=query, api='AuthorSearch', refresh=refresh,
+                        count=count, start=start, max_entries=max_entries)
 
     def __str__(self):
         s = """Search {} yielded {} author(s):\n    {}"""

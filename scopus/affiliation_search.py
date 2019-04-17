@@ -73,8 +73,9 @@ class AffiliationSearch(Search):
                    "in scopus 1.6."
             warn(text, UserWarning)
         self.query = query
-        Search.__init__(self, query, "AffiliationSearch", refresh, count,
-                        start, max_entries)
+        Search.__init__(self, query=query, api="AffiliationSearch",
+                        refresh=refresh, count=count, start=start,
+                        max_entries=max_entries)
 
     def __str__(self):
         s = """Search {} yielded {} affiliation(s):\n    {}"""

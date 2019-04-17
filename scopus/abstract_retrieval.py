@@ -596,8 +596,8 @@ class AbstractRetrieval(Retrieval):
                 raise ValueError('id_type parameter must be one of ' +
                                  ', '.join(allowed_id_types))
         # Load json
-        Retrieval.__init__(self, identifier, 'AbstractRetrieval', refresh,
-                           id_type, view)
+        Retrieval.__init__(self, identifier=identifier, id_type=id_type,
+                           api='AbstractRetrieval', refresh=refresh, view=view)
         self._json = self._json['abstracts-retrieval-response']
         self._head = self._json.get('item', {}).get('bibrecord', {}).get('head', {})
 

@@ -167,8 +167,8 @@ class ScopusSearch(Search):
             count = 200
         # Query
         self.query = query
-        Search.__init__(self, query, 'ScopusSearch', refresh, count=count,
-                        cursor=subscriber, view=view, **kwds)
+        Search.__init__(self, query=query, api='ScopusSearch', refresh=refresh,
+                        count=count, cursor=subscriber, view=view, **kwds)
 
     def __str__(self):
         eids = self.get_eids()
