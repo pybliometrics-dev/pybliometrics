@@ -14,11 +14,10 @@ s = scopus.AffiliationSearch('af-id(60021784)', refresh=True)
 def test_affiliations():
     received = s.affiliations
     assert_true(isinstance(received, list))
-
     order = 'eid name variant documents city country parent'
     Affiliation = namedtuple('Affiliation', order)
-    expected = [Affiliation(eid='10-s2.0-60021784', name='New York University',
-                variant='', documents='101148', city='New York',
-                country='United States', parent='0')]
-    assert_true(int(received.documents) >= 101148)
-    assert_equal(received._replace(documents="0"), expected)
+    expected = Affiliation(eid='10-s2.0-60021784', name='New York University',
+        variant='', documents='0', city='New York', country='United States',
+        parent='0')
+    assert_true(int(received[0].documents) >= 101148)
+    assert_equal(received[0]._replace(documents="0"), expected)
