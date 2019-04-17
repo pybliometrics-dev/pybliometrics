@@ -3,12 +3,13 @@
 """Tests for `AuthorSearch` module."""
 
 from collections import namedtuple
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 
 import scopus
 
-s = scopus.AuthorSearch('authlast(selten) and authfirst(reinhard)',
+s1 = scopus.AuthorSearch('authlast(selten) and authfirst(reinhard)',
                         refresh=True)
+s2 = scopus.AuthorSearch('authlast(selten)', refresh=True, download=False)
 
 
 def test_authors():
@@ -19,4 +20,14 @@ def test_authors():
         initials='R.', givenname='Reinhard', affiliation='Universität Bonn',
         documents='73', affiliation_id='60007493', city='Bonn',
         country='Germany', areas='ECON (71); MATH (19); BUSI (15)')]
-    assert_equal(s.authors, expected)
+    assert_equal(s1.authors, expected)
+
+
+@raises(AttributeError)
+def test_authors_error():
+    recieved = s2.authors
+
+
+def test_results_size():
+    assert_equal(s1.get_results_size(), 1)
+    assert_equal(s2.get_results_size(), 25)

@@ -8,7 +8,16 @@ The class is initialized with a search query which you can read about in `Author
 .. code-block:: python
    
     >>> from scopus import AuthorSearch
-    >>> s = AuthorSearch('AUTHLAST(Reinhard) and AUTHFIRST(Selten)', refresh=True)
+    >>> s = AuthorSearch('AUTHLAST(Selten) and AUTHFIRST(Reinhard)', refresh=True)
+
+
+To know the the number of results use the `.get_results_size()` method, even before you download the results:
+
+.. code-block:: python
+   
+    >>> other = AuthorSearch("AUTHLAST(Selten)", download=False)
+    >>> other.get_results_size()
+    25
 
 
 The class mostly serves to provide a list of `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the `ScopusAuthor <../reference/scopus.ScopusAuthor.html>`_ class, and corresponding information:

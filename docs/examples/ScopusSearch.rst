@@ -13,6 +13,24 @@ The class is initialized with a search query on which you can read about in `Sco
 
 Non-subscribers must instantiate the class with `cursor=False`.  They may only get 5000 results per query, whereas this limit does not exist for subscribers.
 
+Users can recieve the number of results programmatically via `.get_results_size()`:
+
+.. code-block:: python
+
+    >>> s.get_results_size()
+    12
+
+
+This method works even if one chooses to not download results.  It thus helps subscribers to decide programmatically if one wants to proceed downloading or not:
+
+.. code-block:: python
+   
+    >>> from scopus import ScopusSearch
+    >>> other = ScopusSearch('AUTHLASTNAME(Brown)', download=False)
+    >>> other.get_results_size()
+    259526
+
+
 The class' main attribute `results` returns a list of `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_.  They can be used neatly with `pandas <https://pandas.pydata.org/>`_ to form DataFrames:
 
 .. code-block:: python

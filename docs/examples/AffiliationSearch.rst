@@ -37,8 +37,16 @@ It's easy to work with `namedtuples <https://docs.python.org/2/library/collectio
     parent                                                       0
 
 
-Often you receive more search results than Scopus allows.  Currently the cap is
-at 5000 results.  In this case it helps to narrow down the research, i.e. instead
-of "affil('Harvard Medical School')" you search for "affil('Harvard Medical School Boston')".
+You can get the number of results using the `.get_results_size()` method, even before you download the results:
+
+.. code-block:: python
+   
+    >>> query = "AFFIL(Max Planck Institute)"
+    >>> s = AffiliationSearch(query, refresh=True, download=False)
+    >>> s.get_results_size()
+    4554
+
+
+Often you receive more search results than Scopus allows.  Currently the cap is at 5000 results.  In this case the only solution is to narrow down the research, i.e. instead of "affil('Harvard Medical School')" you search for "affil('Harvard Medical School Boston')".
 
 More on different types of affiliations in section `tips <../tips.html#affiliations>`_.

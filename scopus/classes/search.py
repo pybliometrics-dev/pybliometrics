@@ -17,7 +17,8 @@ URL = {'AffiliationSearch': BASE_URL + 'affiliation',
 
 class Search:
     def __init__(self, query, api, refresh, count=200, start=0,
-                 max_entries=5000, view='STANDARD', cursor=False, **kwds):
+                 max_entries=5000, view='STANDARD', cursor=False,
+                 download_results=True, **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
@@ -54,6 +55,9 @@ class Search:
             to `start` parameter, the `cursor` parameter does not allow users
             to obtain partial results.
 
+        download_results : bool (optional, default=True)
+            Whether to download results (if they have not been cached) or not.
+
         kwds : key-value parings, optional
             Keywords passed on to requests header.  Must contain fields
             and values specified in the respective API specification.
@@ -84,6 +88,7 @@ class Search:
         if not refresh and exists(qfile):
             with open(qfile, "rb") as f:
                 self._json = [loads(line) for line in f.readlines()]
+            self._n = n = len(self._json)
         else:
             # Set query parameters
             params = {'query': query, 'count': count, 'view': view}
@@ -94,16 +99,22 @@ class Search:
             # Download results
             res = download(url=URL[api], params=params, accept="json", **kwds).json()
             n = int(res['search-results'].get('opensearch:totalResults', 0))
+            self._n = n
             if not cursor and n > max_entries:  # Stop if there are too many results
                 text = ('Found {} matches. Set max_entries to a higher '
                         'number, change your query ({}) or set '
                         'subscription=True'.format(n, query))
                 raise ScopusQueryError(text)
-            self._json = _parse(res, params, n, api, **kwds)
-            # Finally write out the file
-            with open(qfile, 'wb') as f:
-                for item in self._json:
-                    f.write('{}\n'.format(dumps(item)).encode('utf-8'))
+            if download_results:
+                self._json = _parse(res, params, n, api, **kwds)
+                # Finally write out the file
+                with open(qfile, 'wb') as f:
+                    for item in self._json:
+                        f.write('{}\n'.format(dumps(item)).encode('utf-8'))
+
+    def get_results_size(self):
+        """Return the number of results (works even if download=False)."""
+        return self._n
 
 
 def _parse(res, params, n, api, **kwds):

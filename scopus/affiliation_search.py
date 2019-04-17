@@ -22,15 +22,15 @@ class AffiliationSearch(Search):
             name = item.get('affiliation-name')
             variants = [d.get('$', "") for d in item.get('name-variant', [])
                         if d.get('$', "") != name]
-            new = aff(eid=item['eid'], variant=";".join(variants),                 
+            new = aff(eid=item['eid'], variant=";".join(variants),
                       documents=item.get('document-count', '0'), name=name,
                       city=item.get('city'), country=item.get('country'),
                       parent=item.get('parent-affiliation-id'))
             out.append(new)
         return out or None
 
-    def __init__(self, query, count=200, start=0,
-                 max_entries=5000, refresh=False):
+    def __init__(self, query, count=200, start=0, max_entries=5000,
+                 refresh=False, download=True):
         """Class to perform a search for an affiliation.
 
         Parameters
@@ -54,6 +54,9 @@ class AffiliationSearch(Search):
             beyond this number.  The Affiliation Search API does not
             allow more than 5000 entries.
 
+        download : bool (optional, default=True)
+            Whether to download results (if they have not been cached).
+
         Raises
         ------
         ScopusQueryError
@@ -75,7 +78,7 @@ class AffiliationSearch(Search):
         self.query = query
         Search.__init__(self, query=query, api="AffiliationSearch",
                         refresh=refresh, count=count, start=start,
-                        max_entries=max_entries)
+                        max_entries=max_entries, download_results=download)
 
     def __str__(self):
         s = """Search {} yielded {} affiliation(s):\n    {}"""

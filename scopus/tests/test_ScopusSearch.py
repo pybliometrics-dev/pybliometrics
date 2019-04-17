@@ -31,6 +31,12 @@ def test_get_eids_journal():
     assert_equal(len(s_j.get_eids()), 118)
 
 
+def test_get_results_size():
+    assert_equal(s_au.get_results_size(), 1)
+    assert_equal(s_j.get_results_size(), 118)
+    assert_equal(s_empty.get_results_size(), 0)
+
+
 def test_results_author():
     recieved = s_au.results[-1]
     expected = doc(eid='2-s2.0-26444452434', doi='10.1016/0014-2921(92)90085-B',

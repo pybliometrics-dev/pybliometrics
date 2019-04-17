@@ -104,7 +104,7 @@ class ScopusSearch(Search):
         return out or None
 
     def __init__(self, query, refresh=False, subscriber=True,
-                 view=None, **kwds):
+                 view=None, download=True, **kwds):
         """Class to perform a query against the Scopus Search API.
 
         Parameters
@@ -131,6 +131,9 @@ class ScopusSearch(Search):
             Whether to use Scopus's cursor navigation to obtain results.
             Using the cursor allows to download an unlimited results set.
             Non-subscribers should set this to False.
+
+        download : bool (optional, default=True)
+            Whether to download results (if they have not been cached).
 
         kwds : key-value parings, optional
             Keywords passed on as query parameters.  Must contain fields
@@ -168,7 +171,8 @@ class ScopusSearch(Search):
         # Query
         self.query = query
         Search.__init__(self, query=query, api='ScopusSearch', refresh=refresh,
-                        count=count, cursor=subscriber, view=view, **kwds)
+                        count=count, cursor=subscriber, view=view, **kwds,
+                        download_results=download)
 
     def __str__(self):
         eids = self.get_eids()

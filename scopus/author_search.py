@@ -39,8 +39,8 @@ class AuthorSearch(Search):
             out.append(new)
         return out or None
 
-    def __init__(self, query, count=200, start=0,
-                 max_entries=5000, refresh=False):
+    def __init__(self, query, count=200, start=0, max_entries=5000,
+                 refresh=False, download=True):
         """Class to search a query, and retrieve a list of author IDs as results.
 
         Parameters
@@ -65,6 +65,9 @@ class AuthorSearch(Search):
             beyond this number.  The Affiliation Search API does not
             allow more than 5000 entries.
 
+        download : bool (optional, default=True)
+            Whether to download results (if they have not been cached).
+
         Raises
         ------
         ScopusQueryError
@@ -85,7 +88,8 @@ class AuthorSearch(Search):
             warn(text, UserWarning)
         self.query = query
         Search.__init__(self, query=query, api='AuthorSearch', refresh=refresh,
-                        count=count, start=start, max_entries=max_entries)
+                        count=count, start=start, max_entries=max_entries,
+                        download_results=download)
 
     def __str__(self):
         s = """Search {} yielded {} author(s):\n    {}"""
