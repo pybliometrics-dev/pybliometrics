@@ -85,12 +85,13 @@ class Search:
             with open(qfile, "rb") as f:
                 self._json = [loads(line) for line in f.readlines()]
         else:
-            # Get a count of how many things to retrieve from first chunk
+            # Set query parameters
             params = {'query': query, 'count': count, 'view': view}
             if cursor:
                 params.update({'cursor': '*'})
             else:
                 params.update({'start': 0})
+            # Download results
             res = download(url=URL[api], params=params, accept="json", **kwds).json()
             n = int(res['search-results'].get('opensearch:totalResults', 0))
             if not cursor and n > max_entries:  # Stop if there are too many results
@@ -98,22 +99,30 @@ class Search:
                         'number, change your query ({}) or set '
                         'subscription=True'.format(n, query))
                 raise ScopusQueryError(text)
-            self._json = res.get('search-results', {}).get('entry', [])
-            if n == 0:
-                self._json = ""
-            # Download the remaining information in chunks
-            while n > 0:
-                n -= count
-                params.update({'count': count})
-                if cursor:
-                    pointer = res['search-results']['cursor'].get('@next')
-                    params.update({'cursor': pointer})
-                else:
-                    start += count
-                    params.update({'start': start})
-                res = download(url=URL[api], params=params, accept="json", **kwds).json()
-                self._json.extend(res.get('search-results', {}).get('entry', []))
+            self._json = _parse(res, params, n, api, **kwds)
             # Finally write out the file
             with open(qfile, 'wb') as f:
                 for item in self._json:
                     f.write('{}\n'.format(dumps(item)).encode('utf-8'))
+
+
+def _parse(res, params, n, api, **kwds):
+    """Auxiliary function to download results and parse json."""
+    cursor = "cursor" in params
+    if not cursor:
+        start = params["start"]
+    if n == 0:
+        return ""
+    _json = res.get('search-results', {}).get('entry', [])
+    # Download the remaining information in chunks
+    while n > 0:
+        n -= params["count"]
+        if cursor:
+            pointer = res['search-results']['cursor'].get('@next')
+            params.update({'cursor': pointer})
+        else:
+            start += params["count"]
+            params.update({'start': start})
+        res = download(url=URL[api], params=params, accept="json", **kwds).json()
+        _json.extend(res.get('search-results', {}).get('entry', []))
+    return _json
