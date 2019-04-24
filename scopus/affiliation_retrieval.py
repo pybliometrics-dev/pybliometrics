@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 from scopus.classes import Retrieval
-from scopus.utils import chained_get, get_link, parse_date_created
+from scopus.utils import chained_get, get_id, get_link, parse_date_created
 
 
 class ContentAffiliationRetrieval(Retrieval):
@@ -48,7 +48,7 @@ class ContentAffiliationRetrieval(Retrieval):
     @property
     def identifier(self):
         """The Scopus ID of the affiliation."""
-        return self._json['coredata']['dc:identifier'].split(':')[1]
+        return get_id(self._json)
 
     @property
     def name_variants(self):

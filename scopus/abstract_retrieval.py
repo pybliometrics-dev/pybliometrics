@@ -2,7 +2,7 @@ from collections import namedtuple
 from warnings import warn
 
 from scopus.classes import Retrieval
-from scopus.utils import chained_get, detect_id_type, get_link, listify
+from scopus.utils import chained_get, get_id, detect_id_type, get_link, listify
 
 
 class AbstractRetrieval(Retrieval):
@@ -141,17 +141,14 @@ class AbstractRetrieval(Retrieval):
     @property
     def confcode(self):
         """Code of the conference the abstract belong to."""
-        path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent',
-                'confcode']
-        return chained_get(self._head, path)
+        return self._confevent.get('confcode')
 
     @property
     def confdate(self):
         """Date range of the conference the abstract belongs to represented
         by two tuples in the form (YYYY, MM, DD).
         """
-        path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent', 'confdate']
-        date = chained_get(self._head, path, {})
+        date = self._confevent.get('confdate', {})
         if len(date) > 0:
             start = {k: int(v) for k, v in date['startdate'].items()}
             end = {k: int(v) for k, v in date['enddate'].items()}
@@ -163,23 +160,17 @@ class AbstractRetrieval(Retrieval):
     @property
     def conflocation(self):
         """Location of the conference the abstract belongs to."""
-        path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent',
-                'conflocation', 'city-group']
-        return chained_get(self._head, path)
+        return chained_get(self._confevent, ['conflocation', 'city-group'])
 
     @property
     def confname(self):
         """Name of the conference the abstract belongs to."""
-        path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent',
-                'confname']
-        return chained_get(self._head, path)
+        return self._confevent.get('confname')
 
     @property
     def confsponsor(self):
         """Sponsor(s) of the conference the abstract belongs to."""
-        path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent',
-                'confsponsors', 'confsponsor']
-        sponsors = chained_get(self._head, path, [])
+        sponsors = chained_get(self._confevent, ['confsponsors', 'confsponsor'], [])
         if len(sponsors) == 0:
             return None
         if isinstance(sponsors, list):
@@ -302,7 +293,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def identifier(self):
         """ID of the abstract (same as EID without "2-s2.0-")."""
-        return self._json['coredata']['dc:identifier'].split(':')[-1]
+        return get_id(self._json)
 
     @property
     def idxterms(self):
@@ -426,11 +417,11 @@ class AbstractRetrieval(Retrieval):
             except KeyError:
                 ids = []
             try:
-                doi = [d['$'] for d in ids if d['@idtype'] == 'DOI'][0]
+                doi = _select_by_idtype(ids, 'DOI')[0]
             except IndexError:
                 doi = info.get('ce:doi')
             try:
-                scopus_id = [d['$'] for d in ids if d['@idtype'] == 'SGR'][0]
+                scopus_id = _select_by_idtype(ids, 'SGR')[0]
             except IndexError:
                 scopus_id = info.get('scopus-id')
             # Combine information
@@ -599,7 +590,9 @@ class AbstractRetrieval(Retrieval):
         Retrieval.__init__(self, identifier=identifier, id_type=id_type,
                            api='AbstractRetrieval', refresh=refresh, view=view)
         self._json = self._json['abstracts-retrieval-response']
-        self._head = self._json.get('item', {}).get('bibrecord', {}).get('head', {})
+        self._head = chained_get(self._json, ["item", "bibrecord", "head"], {})
+        path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent']
+        self._confevent = chained_get(self._head, path, {})
 
     def __str__(self):
         """Return pretty text version of the abstract.
@@ -691,31 +684,20 @@ class AbstractRetrieval(Retrieval):
         else:
             a = self.authors[0]
             authors = au_link.format(a.auid, a.given_name + ' ' + a.surname)
-        # Title links
         title = u'<a href="{}">{}</a>'.format(self.scopus_link, self.title)
-        # Volume and issue
         if self.volume and self.issueIdentifier:
             volissue = u'<b>{}({})</b>'.format(self.volume, self.issueIdentifier)
         elif self.volume:
             volissue = u'<b>{}</b>'.format(self.volume)
         else:
             volissue = 'no volume'
-        # Journal link
         jlink = '<a href="https://www.scopus.com/source/sourceInfo.url'\
                 '?sourceId={}">{}</a>'.format(
                     self.source_id, self.publicationName)
-        # Pages
-        if self.pageRange:
-            pages = u'pp. {}'.format(self.pageRange)
-        elif self.startingPage:
-            pages = u'pp. {}-{}'.format(self.startingPage, self.endingPage)
-        else:
-            pages = '(no pages found)'
-        # All information
+        pages = _parse_pages(self, unicode=True)
         s = "{auth}, {title}, {jour}, {volissue}, {pages}, ({year}).".format(
                 auth=authors, title=title, jour=jlink, volissue=volissue,
                 pages=pages, year=self.coverDate[:4])
-        # DOI
         if self.doi:
             s += ' <a href="https://doi.org/{0}">doi:{0}</a>.'.format(self.doi)
         return s
@@ -733,12 +715,7 @@ class AbstractRetrieval(Retrieval):
             volissue = '\\textbf{{{}}}'.format(self.volume)
         else:
             volissue = 'no volume'
-        if self.pageRange:
-            pages = 'pp. {}'.format(self.pageRange)
-        elif self.startingPage:
-            pages = 'pp. {}-{}'.format(self.startingPage, self.endingPage)
-        else:
-            pages = '(no pages found)'
+        pages = _parse_pages(self)
         s = '{auth}, \\textit{{{title}}}, {jour}, {vol}, {pages} ({year}).'.format(
                 auth=authors, title=self.title, jour=self.publicationName,
                 vol=volissue, pages=pages, year=self.coverDate[:4])
@@ -798,3 +775,21 @@ def _list_authors(lst):
     authors = ', '.join([' '.join([a.given_name, a.surname]) for a in lst[0:-1]])
     authors += ' and ' + ' '.join([lst[-1].given_name, lst[-1].surname])
     return authors
+
+
+def _parse_pages(self, unicode=False):
+    """Auxiliary function to parse and format page range of a document."""
+    if self.pageRange:
+        pages = 'pp. {}'.format(self.pageRange)
+    elif self.startingPage:
+        pages = 'pp. {}-{}'.format(self.startingPage, self.endingPage)
+    else:
+        pages = '(no pages found)'
+    if unicode:
+        pages = u'{}'.format(pages)
+    return pages
+
+
+def _select_by_idtype(lst, selector):
+    """Auxiliary function to return items matching a special idtype."""
+    return [d['$'] for d in lst if d['@idtype'] == selector]

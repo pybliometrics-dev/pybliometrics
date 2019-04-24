@@ -22,6 +22,11 @@ def chained_get(container, path, default=None):
     return container
 
 
+def get_id(s):
+    """Helper function to return the Scopus ID at a fixed position."""
+    return s['coredata']['dc:identifier'].split(':')[-1]
+
+
 def get_link(dct, idx):
     """Helper function to return the link at position `idx` from coredata."""
     return dct['coredata'].get('link', [])[idx].get('@href')

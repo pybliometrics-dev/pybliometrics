@@ -267,13 +267,12 @@ class AuthorRetrieval(Retrieval):
                 except TypeError:  # Only one subject area given
                     areas = [entry['subject-area']['$']]
                 new = coauth(surname=entry['preferred-name']['surname'],
-                             given_name=entry['preferred-name'].get('given-name'),
-                             id=entry['dc:identifier'].split(':')[-1],
-                             areas='; '.join(areas),
-                             affiliation_id=aff.get('affiliation-id'),
-                             name=aff.get('affiliation-name'),
-                             city=aff.get('affiliation-city'),
-                             country=aff.get('affiliation-country'))
+                    given_name=entry['preferred-name'].get('given-name'),
+                    id=entry['dc:identifier'].split(':')[-1],
+                    areas='; '.join(areas), name=aff.get('affiliation-name'),
+                    affiliation_id=aff.get('affiliation-id'),
+                    city=aff.get('affiliation-city'),
+                    country=aff.get('affiliation-country'))
                 coauthors.append(new)
             count += 25
         return coauthors
