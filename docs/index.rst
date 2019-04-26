@@ -54,3 +54,5 @@ Indices and tables
    reference
    configuration
    changelog
+   authors
+   contributing
