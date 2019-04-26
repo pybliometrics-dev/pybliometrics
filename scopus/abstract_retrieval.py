@@ -64,8 +64,11 @@ class AbstractRetrieval(Retrieval):
         for item in items:
             # Affiliation information
             aff = item.get('affiliation', {})
-            aff_ids = listify(aff['affiliation-id'])
-            aff_id = ", ".join([a["@afid"] for a in aff_ids])
+            try:
+                aff_ids = listify(aff['affiliation-id'])
+                aff_id = ", ".join([a["@afid"] for a in aff_ids])
+            except KeyError:
+                aff_id = aff.get("@afid")
             org = _get_org(aff)
             # Author information (might relate to collaborations)
             authors = listify(item.get('author', item.get('collaboration', [])))
