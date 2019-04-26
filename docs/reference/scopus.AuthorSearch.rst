@@ -5,3 +5,4 @@ scopus.AuthorSearch
 
 .. autoclass:: AuthorSearch
    :members:
+   :inherited-members:

@@ -5,3 +5,4 @@ scopus.CitationOverview
 
 .. autoclass:: CitationOverview
    :members:
+   :inherited-members:

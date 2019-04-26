@@ -5,3 +5,4 @@ scopus.ScopusSearch
 
 .. autoclass:: ScopusSearch
    :members:
+   :inherited-members:

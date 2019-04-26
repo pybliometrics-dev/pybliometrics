@@ -5,3 +5,4 @@ scopus.AbstractRetrieval
 
 .. autoclass:: AbstractRetrieval
    :members:
+   :inherited-members:

@@ -5,3 +5,4 @@ scopus.AffiliationSearch
 
 .. autoclass:: AffiliationSearch
    :members:
+   :inherited-members:

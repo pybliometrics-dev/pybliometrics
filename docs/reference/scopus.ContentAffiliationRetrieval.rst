@@ -5,3 +5,4 @@ scopus.ContentAffiliationRetrieval
 
 .. autoclass:: ContentAffiliationRetrieval
    :members:
+   :inherited-members:
