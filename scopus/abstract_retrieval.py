@@ -49,21 +49,22 @@ class AbstractRetrieval(Retrieval):
     @property
     def authorgroup(self):
         """A list of namedtuples representing the article's authors organized
-        by affiliation, in the form (affiliation_id, organization, city_group,
-        country, auid, indexed_name, surname, given_name).  If "given_name"
-        is not present, fall back to initials.
+        by affiliation, in the form (affiliation_id, dptid, organization,
+        city, postalcode, addresspart, country, auid, indexed_name,
+        surname, given_name).
+        If "given_name" is not present, fall back to initials.
         Note: Affiliation information might be missing or mal-assigned even
         when it lookes correct in the web view.  In this case please request
         a correction.
         """
         out = []
-        fields = 'affiliation_id organization city_group country '\
-                 'auid indexed_name surname given_name'
+        fields = 'affiliation_id dptid organization city postalcode '\
+                 'addresspart country auid indexed_name surname given_name'
         auth = namedtuple('Author', fields)
         items = listify(self._head.get('author-group', []))
         for item in items:
             # Affiliation information
-            aff = item.get('affiliation', {})
+            aff = item.get('affiliation', {})            
             try:
                 aff_ids = listify(aff['affiliation-id'])
                 aff_id = ", ".join([a["@afid"] for a in aff_ids])
@@ -78,7 +79,9 @@ class AbstractRetrieval(Retrieval):
                 except KeyError:  # Collaboration
                     given = au.get('ce:text')
                 new = auth(affiliation_id=aff_id, organization=org,
-                           city_group=aff.get('city-group'),
+                           city=aff.get('city'), dptid=aff.get("@dptid"),
+                           postalcode=aff.get('postal-code'),
+                           addresspart=aff.get('address-part'),
                            country=aff.get('country'), auid=au.get('@auid'),
                            surname=au.get('ce:surname'), given_name=given,
                            indexed_name=chained_get(au, ['preferred-name', 'ce:indexed-name']))

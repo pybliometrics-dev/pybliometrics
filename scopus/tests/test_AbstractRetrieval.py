@@ -67,14 +67,14 @@ def test_authors():
 
 
 def test_authorgroup():
-    fields = 'affiliation_id organization city_group country '\
-             'auid indexed_name surname given_name'
+    fields = 'affiliation_id dptid organization city postalcode '\
+             'addresspart country auid indexed_name surname given_name'
     auth = namedtuple('Author', fields)
-    expected = [auth(
-        affiliation_id='60027950', city_group=None, country='United States',
+    expected = [auth(affiliation_id='60027950', dptid='110785688',
         organization='Department of Chemical Engineering, Carnegie Mellon University',
-        auid='7004212771', indexed_name='Kitchin J.',
-        surname='Kitchin', given_name='John R.')]
+        city='Pittsburgh', postalcode='15213', addresspart='5000 Forbes Avenue',
+        country='United States', auid='7004212771',
+        indexed_name='Kitchin J.', surname='Kitchin', given_name='John R.')]
     assert_equal(ab1.authorgroup, expected)
 
 

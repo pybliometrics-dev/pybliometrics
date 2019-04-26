@@ -93,9 +93,11 @@ The same structure applies for the attributes `affiliation` and `authorgroup`:
     [Affiliation(id='60027950', name='Carnegie Mellon University',
     city='Pittsburgh', country='United States')]
     >>> ab.authorgroup
-    [Author(affiliation_id='60027950', organization='Department of Chemical Engineering, Carnegie Mellon University',
-    city_group=None, country='United States', auid='7004212771',
-    indexed_name='Kitchin J.', surname='Kitchin', given_name='John R.')]
+    [Author(affiliation_id='60027950', dptid='110785688',
+    organization='Department of Chemical Engineering, Carnegie Mellon University',
+    city='Pittsburgh', postalcode='15213', addresspart='5000 Forbes Avenue',
+    country='United States', auid='7004212771', indexed_name='Kitchin J.',
+    surname='Kitchin', given_name='John R.')]
 
 
 Keep in mind that Scopus might not perfectly/correctly pair authors and affiliations as per the original document, even if it looks so on the web view.  In this case please request corrections to be made in Scopus' API here `here <https://service.elsevier.com/app/contact/supporthub/scopuscontent/>`_.
