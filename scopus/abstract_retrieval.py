@@ -555,15 +555,17 @@ class AbstractRetrieval(Retrieval):
 
         view : str (optional, default=META_ABS)
             The view of the file that should be downloaded.  Will not take
-            effect for already cached files. Allowed values: META, META_ABS,
-            REF, FULL, where FULL includes all information of META_ABS view and
-            META_ABS includes all information of the META view .  See
+            effect for already cached files.  Allowed values: META, META_ABS,
+            REF, FULL, where FULL includes all information of META_ABS view
+            and META_ABS includes all information of the META view.  See
             https://dev.elsevier.com/guides/AbstractRetrievalViews.htm
             for details.
 
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
 
+        Raises
+        ------
         ValueError
             If the id_type parameter or the view parameter contains
             invalid entries.
