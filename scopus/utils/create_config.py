@@ -20,7 +20,8 @@ def create_config():
             ('AuthorSearch', expanduser('~/.scopus/author_search')),
             ('CitationOverview', expanduser('~/.scopus/citation_overview')),
             ('ContentAffiliationRetrieval', expanduser('~/.scopus/affiliation_retrieval')),
-            ('ScopusSearch', expanduser('~/.scopus/scopus_search'))
+            ('ScopusSearch', expanduser('~/.scopus/scopus_search')),
+            ('SerialTitle', expanduser('~/.scopus/serial_title'))
         ]
         for key, value in defaults:
             config.set('Directories', key, value)

@@ -31,5 +31,6 @@ Metadata APIs
 
 .. toctree::
     examples/CitationOverview.rst
+    examples/SerialTitle.rst
 
-Two other Metadata APIs, Serial Title Metadata and Subject Classifications, are not implemented yet.
+One other Metadata API, the Subject Classifications, is not implemented yet.

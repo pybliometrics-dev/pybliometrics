@@ -10,7 +10,8 @@ BASE_URL = 'https://api.elsevier.com/content/'
 URL = {'AbstractRetrieval': BASE_URL + 'abstract/',
        'AuthorRetrieval': BASE_URL + 'author/author_id/',
        'CitationOverview': BASE_URL + 'abstract/citations/',
-       'ContentAffiliationRetrieval': BASE_URL + 'affiliation/affiliation_id/'}
+       'ContentAffiliationRetrieval': BASE_URL + 'affiliation/affiliation_id/',
+       'SerialTitle': BASE_URL + 'serial/title/issn/'}
 
 
 class Retrieval:
