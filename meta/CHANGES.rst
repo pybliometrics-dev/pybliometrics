@@ -3,6 +3,18 @@ Change Log
 
 .. toctree::
 
+1.6
+~~~
+
+2019-05-09
+
+* SerialTitle class to access the Serial Title API.
+* In all search classes, add method `.get_results_size()` to return the number of matches.
+* In all search classes, add boolean parameter `download` to not download the results (but get the number of matches anyways).
+* In `AbstractRetrieval.authogroup`, rename field "city-group" to "city" and add new fields: "dptid", "postalcode", "addresspart".
+* In `AbstractRetrieval.authorgroup`, fix bug with missing affiliation information.
+* In all search classes, remove deprecated paramter `start`.
+
 1.5
 ~~~
 
