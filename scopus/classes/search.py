@@ -2,13 +2,11 @@
 
 from hashlib import md5
 from json import dumps, loads
-from os import makedirs
 from os.path import exists, join
 from warnings import warn
 
-from scopus import config
 from scopus.exception import ScopusQueryError
-from scopus.utils import SEARCH_URL, create_config, download, get_content
+from scopus.utils import SEARCH_URL, download, get_content, get_folder
 
 
 class Search:
@@ -70,8 +68,6 @@ class Search:
         if api not in SEARCH_URL:
             raise ValueError('api parameter must be one of ' +
                              ', '.join(SEARCH_URL.keys()))
-        if not config.has_section('Directories'):
-            create_config()
         if start != 0:
             text = "Parameter start is deprecated and will be removed "\
                    "in scopus 1.6."
@@ -79,10 +75,7 @@ class Search:
 
         # Read the file contents if file exists and we are not refreshing,
         # otherwise download query anew and cache file
-        folder = config.get('Directories', api)
-        if not exists(folder):
-            makedirs(folder)
-        qfile = join(folder, md5(query.encode('utf8')).hexdigest())
+        qfile = join(get_folder(api), md5(query.encode('utf8')).hexdigest())
         if not refresh and exists(qfile):
             with open(qfile, "rb") as f:
                 self._json = [loads(line) for line in f.readlines()]

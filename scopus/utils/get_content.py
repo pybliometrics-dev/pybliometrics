@@ -1,8 +1,9 @@
 import os
 import requests
+from configparser import NoOptionError
 
 from scopus import exception
-from scopus.utils import config
+from scopus.utils import DEFAULT_PATHS, config
 
 errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           404: exception.Scopus404Error, 429: exception.Scopus429Error,
@@ -135,3 +136,18 @@ def get_content(qfile, refresh, *args, **kwds):
         with open(qfile, 'wb') as f:
             f.write(content)
     return content
+
+
+def get_folder(api):
+    """Auxiliary function to get the cache folder belonging to a an API
+    and eventually create the folder.
+    """
+    if not config.has_section('Directories'):
+        create_config()
+    try:
+        folder = config.get('Directories', api)
+    except NoOptionError:
+        folder = DEFAULT_PATHS[api]
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    return folder
