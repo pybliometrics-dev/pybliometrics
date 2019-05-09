@@ -10,9 +10,8 @@ from scopus.utils import SEARCH_URL, download, get_content, get_folder
 
 
 class Search:
-    def __init__(self, query, api, refresh, count=200, start=0,
-                 max_entries=5000, view='STANDARD', cursor=False,
-                 download_results=True, **kwds):
+    def __init__(self, query, api, refresh, count=200, max_entries=5000,
+                 view='STANDARD', cursor=False, download_results=True, **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
@@ -30,10 +29,6 @@ class Search:
         count : int (optional, default=200)
             The number of entries to be displayed at once.  A smaller number
             means more queries with each query having less results.
-
-        start : int (optional, default=0)
-            DEPRECATED! The entry number of the first search item
-            to start with.
 
         max_entries : int (optional, default=5000)
             Raise error when the number of results is beyond this number.
@@ -68,10 +63,6 @@ class Search:
         if api not in SEARCH_URL:
             raise ValueError('api parameter must be one of ' +
                              ', '.join(SEARCH_URL.keys()))
-        if start != 0:
-            text = "Parameter start is deprecated and will be removed "\
-                   "in scopus 1.6."
-            warn(text, UserWarning)
 
         # Read the file contents if file exists and we are not refreshing,
         # otherwise download query anew and cache file
