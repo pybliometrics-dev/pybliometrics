@@ -1,7 +1,8 @@
 """Superclass to access all retrieval APIs and dump the results."""
 
 from json import loads
-from os.path import join
+from os import makedirs
+from os.path import exists, join
 
 from scopus import config
 from scopus.utils import RETRIEVAL_URL, create_config, get_content
@@ -64,8 +65,10 @@ class Retrieval:
         url += identifier
 
         # Parse file contents
-        qfile = join(config.get('Directories', api),
-                     identifier.replace('/', '_'))
+        folder = config.get('Directories', api)
+        if not exists(folder):
+            makedirs(folder)
+        qfile = join(folder, identifier.replace('/', '_'))
         res = get_content(qfile, refresh, url=url, accept='json',
                           params=params)
         self._json = loads(res.decode('utf-8'))

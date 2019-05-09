@@ -2,6 +2,7 @@
 
 from hashlib import md5
 from json import dumps, loads
+from os import makedirs
 from os.path import exists, join
 from warnings import warn
 
@@ -78,8 +79,10 @@ class Search:
 
         # Read the file contents if file exists and we are not refreshing,
         # otherwise download query anew and cache file
-        qfile = join(config.get('Directories', api),
-                     md5(query.encode('utf8')).hexdigest())
+        folder = config.get('Directories', api)
+        if not exists(folder):
+            makedirs(folder)
+        qfile = join(folder, md5(query.encode('utf8')).hexdigest())
         if not refresh and exists(qfile):
             with open(qfile, "rb") as f:
                 self._json = [loads(line) for line in f.readlines()]

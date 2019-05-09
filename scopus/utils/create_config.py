@@ -1,5 +1,3 @@
-from os import makedirs
-from os.path import exists
 from sys import version_info
 
 from scopus.utils.constants import DEFAULT_PATHS
@@ -16,8 +14,6 @@ def create_config():
         config.add_section('Directories')
         for key, value in DEFAULT_PATHS:
             config.set('Directories', key, value)
-            if not exists(value):
-                makedirs(value)
         # Set authentication
         config.add_section('Authentication')
         prompt_key = "Please enter your API Key, obtained from "\
