@@ -4,14 +4,7 @@ from json import loads
 from os.path import join
 
 from scopus import config
-from scopus.utils import create_config, get_content
-
-BASE_URL = 'https://api.elsevier.com/content/'
-URL = {'AbstractRetrieval': BASE_URL + 'abstract/',
-       'AuthorRetrieval': BASE_URL + 'author/author_id/',
-       'CitationOverview': BASE_URL + 'abstract/citations/',
-       'ContentAffiliationRetrieval': BASE_URL + 'affiliation/affiliation_id/',
-       'SerialTitle': BASE_URL + 'serial/title/issn/'}
+from scopus.utils import RETRIEVAL_URL, create_config, get_content
 
 
 class Retrieval:
@@ -53,14 +46,14 @@ class Retrieval:
             If the api parameter or view parameter is an invalid entry.
         """
         # Checks
-        if api not in URL:
+        if api not in RETRIEVAL_URL:
             raise ValueError('api parameter must be one of ' +
-                             ', '.join(URL.keys()))
+                             ', '.join(RETRIEVAL_URL.keys()))
         if not config.has_section('Directories'):
             create_config()
 
         # Construct parameters
-        url = URL[api]
+        url = RETRIEVAL_URL[api]
         if api == "AbstractRetrieval":
             url += id_type + "/"
         elif api == "AuthorRetrieval":

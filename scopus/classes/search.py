@@ -7,12 +7,7 @@ from warnings import warn
 
 from scopus import config
 from scopus.exception import ScopusQueryError
-from scopus.utils import create_config, download, get_content
-
-BASE_URL = 'https://api.elsevier.com/content/search/'
-URL = {'AffiliationSearch': BASE_URL + 'affiliation',
-       'AuthorSearch': BASE_URL + 'author',
-       'ScopusSearch': BASE_URL + 'scopus'}
+from scopus.utils import SEARCH_URL, create_config, download, get_content
 
 
 class Search:
@@ -71,9 +66,9 @@ class Search:
             If the api parameteris an invalid entry.
         """
         # Checks
-        if api not in URL:
+        if api not in SEARCH_URL:
             raise ValueError('api parameter must be one of ' +
-                             ', '.join(URL.keys()))
+                             ', '.join(SEARCH_URL.keys()))
         if not config.has_section('Directories'):
             create_config()
         if start != 0:
@@ -97,7 +92,7 @@ class Search:
             else:
                 params.update({'start': 0})
             # Download results
-            res = download(url=URL[api], params=params, accept="json", **kwds).json()
+            res = download(url=SEARCH_URL[api], params=params, accept="json", **kwds).json()
             n = int(res['search-results'].get('opensearch:totalResults', 0))
             self._n = n
             if not cursor and n > max_entries:  # Stop if there are too many results
@@ -134,6 +129,6 @@ def _parse(res, params, n, api, **kwds):
         else:
             start += params["count"]
             params.update({'start': start})
-        res = download(url=URL[api], params=params, accept="json", **kwds).json()
+        res = download(url=SEARCH_URL[api], params=params, accept="json", **kwds).json()
         _json.extend(res.get('search-results', {}).get('entry', []))
     return _json

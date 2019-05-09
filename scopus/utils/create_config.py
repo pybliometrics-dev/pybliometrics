@@ -1,7 +1,8 @@
 from os import makedirs
-from os.path import exists, expanduser
+from os.path import exists
 from sys import version_info
 
+from scopus.utils.constants import DEFAULT_PATHS
 from scopus.utils.startup import config, CONFIG_FILE
 
 py3 = version_info >= (3, 0)
@@ -13,17 +14,7 @@ def create_config():
     if not file_exists:
         # Set directories
         config.add_section('Directories')
-        defaults = [
-            ('AbstractRetrieval', expanduser('~/.scopus/abstract_retrieval')),
-            ('AffiliationSearch', expanduser('~/.scopus/affiliation_search')),
-            ('AuthorRetrieval', expanduser('~/.scopus/author_retrieval')),
-            ('AuthorSearch', expanduser('~/.scopus/author_search')),
-            ('CitationOverview', expanduser('~/.scopus/citation_overview')),
-            ('ContentAffiliationRetrieval', expanduser('~/.scopus/affiliation_retrieval')),
-            ('ScopusSearch', expanduser('~/.scopus/scopus_search')),
-            ('SerialTitle', expanduser('~/.scopus/serial_title'))
-        ]
-        for key, value in defaults:
+        for key, value in DEFAULT_PATHS:
             config.set('Directories', key, value)
             if not exists(value):
                 makedirs(value)
