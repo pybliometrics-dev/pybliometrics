@@ -1,4 +1,5 @@
 from sys import version_info
+from os.path import exists
 
 from scopus.utils.constants import DEFAULT_PATHS
 from scopus.utils.startup import config, CONFIG_FILE
