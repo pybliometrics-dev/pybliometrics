@@ -13,7 +13,7 @@ def create_config():
     if not file_exists:
         # Set directories
         config.add_section('Directories')
-        for key, value in DEFAULT_PATHS:
+        for key, value in DEFAULT_PATHS.items():
             config.set('Directories', key, value)
         # Set authentication
         config.add_section('Authentication')
