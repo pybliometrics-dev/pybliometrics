@@ -3,6 +3,15 @@ Change Log
 
 .. toctree::
 
+1.6.1
+~~~~~
+
+2019-05-14
+
+* Add support for proxies.
+* In `AbstractRetrieval.correspondence`, turn values into proper strings.
+* Fix bug when creating the config file.
+
 1.6
 ~~~
 
