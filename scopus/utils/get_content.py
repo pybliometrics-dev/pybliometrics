@@ -98,7 +98,18 @@ def download(url, params=None, accept="xml", **kwds):
     header.update({'Accept': 'application/{}'.format(accept)})
     # Perform request
     params.update(**kwds)
-    resp = requests.get(url, headers=header, params=params)
+    # If config.ini has a section as follows:
+    #
+    # [Proxy]
+    # https = protocol://server:port
+    #
+    # it uses a proxy as defined
+    # see requests documentation for details
+    if config.has_section("Proxy"):
+        proxyDict = dict(config.items("Proxy"))
+        resp = requests.get(url, headers=header, proxies=proxyDict, params=params)
+    else:
+        resp = requests.get(url, headers=header, params=params)
     # Raise error if necessary
     try:
         reason = resp.reason.upper() + " for url: " + url
