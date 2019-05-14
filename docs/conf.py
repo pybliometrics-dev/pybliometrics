@@ -9,6 +9,7 @@ autodoc_mock_imports = ["_tkinter"]
 
 cwd = os.getcwd()
 project_root = os.path.dirname(cwd)
+sys.path.insert(0, os.path.abspath('source'))
 sys.path.insert(0, project_root)
 
 import scopus
