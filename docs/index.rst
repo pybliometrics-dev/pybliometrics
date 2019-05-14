@@ -16,13 +16,14 @@ scopus provides classes to interact with the various Scopus APIs (see https://de
 
 .. autosummary::
 
-   ScopusAbstract
-   ScopusAffiliation
-   ScopusAuthor
+   AbstractRetrieval
+   ContentAffiliationRetrieval
+   AuthorRetrieval
    AffiliationSearch
    AuthorSearch
    ScopusSearch
    CitationOverview
+   SerialTitle
 
 
 ========
