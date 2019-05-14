@@ -205,7 +205,8 @@ class AbstractRetrieval(Retrieval):
     def correspondence(self):
         """namedtuple representing the author to whom correspondence should
         be addressed, in the form
-        (surname, initials, organization, country, city_group).
+        (surname, initials, organization, country, city_group).  Multiple
+        organziations are joined on semicolon.
         """
         fields = 'surname initials organization country city_group'
         auth = namedtuple('Correspondence', fields)
@@ -215,11 +216,10 @@ class AbstractRetrieval(Retrieval):
         aff = corr.get('affiliation', {})
         try:
             org = aff['organization']
-            if isinstance(org, dict):
-                try:
-                    org = org['$']
-                except TypeError:  # Multiple names given
-                    org = [d['$'] for d in org]
+            try:
+                org = org['$']
+            except TypeError:  # Multiple names given
+                org = "; ".join([d['$'] for d in org])
         except KeyError:
             org = None
         return auth(surname=corr.get('person', {}).get('ce:surname'),
