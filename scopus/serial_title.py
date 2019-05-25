@@ -141,15 +141,13 @@ class SerialTitle(Retrieval):
             Whether to refresh the cached file (if it exists) or not.
 
         view : str (optional, default="ENHANCED")
-            The view of the file that should be downloaded.  Will not take
-            effect for already cached files.  Allowed values: BASIC, STANDARD,
-            ENHANCED.  See
-            https://dev.elsevier.com/guides/SerialTitleViews.htm
-            for details.
+            The view of the file that should be downloaded.  Allowed values:
+            BASIC, STANDARD, ENHANCED.  For details see
+            https://dev.elsevier.com/guides/SerialTitleViews.htm.
 
         Notes
         -----
-        The files are cached in ~/.scopus/serial_title/{source_id}.
+        The files are cached in ~/.scopus/serial_title/{view}/{source_id}.
         """
         # Checks
         allowed_views = ('BASIC', 'STANDARD', 'ENHANCED')

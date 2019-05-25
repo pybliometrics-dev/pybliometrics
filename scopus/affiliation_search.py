@@ -53,9 +53,11 @@ class AffiliationSearch(Search):
 
         Notes
         -----
-        Json results are cached in ~/.scopus/affiliation_search/{fname},
+        Json results are cached in ~/.scopus/affiliation_search/STANDARD/{fname},
         where fname is the md5-hashed version of query.
         """
+        view = "STANDARD"  # In case Scopus adds different views in future
+
         self.query = query
         Search.__init__(self, query=query, api="AffiliationSearch",
                         refresh=refresh, count=count, download_results=download)

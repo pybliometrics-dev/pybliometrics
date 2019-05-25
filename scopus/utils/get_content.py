@@ -139,7 +139,7 @@ def get_content(qfile, refresh, *args, **kwds):
     return content
 
 
-def get_folder(api):
+def get_folder(api, view):
     """Auxiliary function to get the cache folder belonging to a an API
     and eventually create the folder.
     """
@@ -149,6 +149,7 @@ def get_folder(api):
         folder = config.get('Directories', api)
     except NoOptionError:
         folder = DEFAULT_PATHS[api]
+    folder = os.path.join(folder, view or '')
     if not os.path.exists(folder):
         os.makedirs(folder)
     return folder

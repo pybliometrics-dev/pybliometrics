@@ -64,12 +64,13 @@ class AuthorSearch(Search):
 
         Notes
         -----
-        Json results are cached in ~/.scopus/author_search/{fname},
+        Json results are cached in ~/.scopus/author_search/STANDARD/{fname},
         where fname is the md5-hashed version of query.
         """
+        view = "STANDARD"  # In case Scopus adds different views in future
         self.query = query
         Search.__init__(self, query=query, api='AuthorSearch', refresh=refresh,
-                        count=count, download_results=download)
+                        view=view, count=count, download_results=download)
 
     def __str__(self):
         s = """Search {} yielded {} author(s):\n    {}"""

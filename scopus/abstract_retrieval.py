@@ -552,12 +552,11 @@ class AbstractRetrieval(Retrieval):
             function tries to infer the ID type itself.
 
         view : str (optional, default=META_ABS)
-            The view of the file that should be downloaded.  Will not take
-            effect for already cached files.  Allowed values: META, META_ABS,
-            REF, FULL, where FULL includes all information of META_ABS view
-            and META_ABS includes all information of the META view.  See
-            https://dev.elsevier.com/guides/AbstractRetrievalViews.htm
-            for details.
+            The view of the file that should be downloaded.  Allowed values:
+            META, META_ABS, REF, FULL, where FULL includes all information
+            of META_ABS view and META_ABS includes all information of the
+            META view.  For details see
+            https://dev.elsevier.com/guides/AbstractRetrievalViews.htm.
 
         Raises
         ------
@@ -567,9 +566,9 @@ class AbstractRetrieval(Retrieval):
 
         Notes
         -----
-        The files are cached in ~/.scopus/abstract_retrieval/{identifier}.  In
-        case a DOI is used as identifier, an underscore replaces the forward
-        slash in the filename.
+        The files are cached in ~/.scopus/abstract_retrieval/{view}/{identifier}.
+        In case a DOI is used as identifier, an underscore replaces the
+        forward slash in the filename.
         """
         # Checks
         identifier = str(identifier)

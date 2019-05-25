@@ -10,8 +10,8 @@ from scopus.utils import SEARCH_URL, download, get_content, get_folder
 
 
 class Search:
-    def __init__(self, query, api, refresh, count=200, max_entries=5000,
-                 view='STANDARD', cursor=False, download_results=True, **kwds):
+    def __init__(self, query, api, refresh, view='STANDARD', count=200,
+                 max_entries=5000, cursor=False, download_results=True, **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
@@ -26,6 +26,9 @@ class Search:
         refresh : bool
             Whether to refresh the cached file if it exists or not.
 
+        view : str
+            The view of the file that should be downloaded.
+
         count : int (optional, default=200)
             The number of entries to be displayed at once.  A smaller number
             means more queries with each query having less results.
@@ -34,9 +37,6 @@ class Search:
             Raise error when the number of results is beyond this number.
             To skip this check, set `max_entries` to `None`.
 
-        view : str (optional, default=STANDARD)
-            The view of the file that should be downloaded.  Will not take
-            effect for already cached files.
 
         cursor : str (optional, default=False)
             Whether to use the cursor in order to iterate over all search
@@ -66,7 +66,7 @@ class Search:
 
         # Read the file contents if file exists and we are not refreshing,
         # otherwise download query anew and cache file
-        qfile = join(get_folder(api), md5(query.encode('utf8')).hexdigest())
+        qfile = join(get_folder(api, view), md5(query.encode('utf8')).hexdigest())
         if not refresh and exists(qfile):
             with open(qfile, "rb") as f:
                 self._json = [loads(line) for line in f.readlines()]

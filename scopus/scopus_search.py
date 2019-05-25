@@ -137,7 +137,7 @@ class ScopusSearch(Search):
 
         Notes
         -----
-        Json results are cached in ~/.scopus/scopus_search/{fname},
+        Json results are cached in ~/.scopus/scopus_search/{view}/{fname},
         where fname is the md5-hashed version of query.
         """
         # Checks

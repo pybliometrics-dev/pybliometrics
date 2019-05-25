@@ -154,16 +154,17 @@ class CitationOverview(Retrieval):
 
         Notes
         -----
-        The files are cached in ~/.scopus/citation_overview/{eid}.
+        The files are cached in ~/.scopus/citation_overview/STANDARD/{eid}.
         Your API Key needs to be approved by Elsevier to access this API.
         """
         # Variables
         self._start = int(start)
         self._end = int(end)
+        view = "STANDARD"  # In case Scopus adds different views in future
 
         # Get file content
         date = '{}-{}'.format(start, end)
-        Retrieval.__init__(self, eid, 'CitationOverview', refresh,
+        Retrieval.__init__(self, eid, 'CitationOverview', refresh, view=view,
                            date=date)
         self._data = self._json['abstract-citations-response']
 
