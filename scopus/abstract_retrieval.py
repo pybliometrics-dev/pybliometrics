@@ -1,5 +1,4 @@
 from collections import namedtuple
-from warnings import warn
 
 from scopus.classes import Retrieval
 from scopus.utils import chained_get, get_id, detect_id_type, get_link, listify
@@ -535,7 +534,7 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._head, ['source', 'website', 'ce:e-address', '$'])
 
     def __init__(self, identifier=None, refresh=False, view='META_ABS',
-                 id_type=None, EID=None):
+                 id_type=None):
         """Class to represent the results from a Scopus abstract.
 
         Parameters
@@ -546,10 +545,6 @@ class AbstractRetrieval(Retrieval):
 
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
-
-        EID : str (deprecated since 1.2)
-            Deprecated in favor of `identifier`, will be removed in a future
-            release.
 
         id_type: str (optional, default=None)
             The type of used ID. Allowed values: None, 'eid', 'pii',
@@ -577,11 +572,6 @@ class AbstractRetrieval(Retrieval):
         slash in the filename.
         """
         # Checks
-        if identifier is None and EID:
-            text = "Parameter EID is deprecated in favor of parameter "\
-                   "identifier.  Please update your code."
-            warn(text, UserWarning)
-            identifier = EID
         identifier = str(identifier)
         allowed_views = ('META', 'META_ABS', 'REF', 'FULL')
         if view not in allowed_views:
