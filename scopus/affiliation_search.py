@@ -1,5 +1,4 @@
 from collections import namedtuple
-from warnings import warn
 
 from scopus.classes import Search
 
@@ -29,8 +28,7 @@ class AffiliationSearch(Search):
             out.append(new)
         return out or None
 
-    def __init__(self, query, count=200, start=0, max_entries=5000,
-                 refresh=False, download=True):
+    def __init__(self, query, count=200, refresh=False, download=True):
         """Class to perform a search for an affiliation.
 
         Parameters
@@ -42,17 +40,8 @@ class AffiliationSearch(Search):
             The number of entries to be displayed at once.  A smaller number
             means more queries with each query having less results.
 
-        start : int (optional, default=0)
-            DEPRECATED! The entry number of the first search item
-            to start with.
-
         refresh : bool (optional, default=False)
             Whether to refresh the cached file if it exists or not.
-
-        max_entries : int (optional, default=5000)
-            DEPRECATED!  Raise error when the number of results is
-            beyond this number.  The Affiliation Search API does not
-            allow more than 5000 entries.
 
         download : bool (optional, default=True)
             Whether to download results (if they have not been cached).
@@ -60,25 +49,16 @@ class AffiliationSearch(Search):
         Raises
         ------
         ScopusQueryError
-            If the number of search results exceeds max_entries.
+            If the number of search results exceeds 5000.
 
         Notes
         -----
         Json results are cached in ~/.scopus/affiliation_search/{fname},
         where fname is the md5-hashed version of query.
         """
-        if max_entries != 5000:
-            text = "Parameter max_entries is deprecated and will be removed "\
-                   "in scopus 1.6."
-            warn(text, UserWarning)
-        if start != 0:
-            text = "Parameter start is deprecated and will be removed "\
-                   "in scopus 1.6."
-            warn(text, UserWarning)
         self.query = query
         Search.__init__(self, query=query, api="AffiliationSearch",
-                        refresh=refresh, count=count, start=start,
-                        max_entries=max_entries, download_results=download)
+                        refresh=refresh, count=count, download_results=download)
 
     def __str__(self):
         s = """Search {} yielded {} affiliation(s):\n    {}"""
