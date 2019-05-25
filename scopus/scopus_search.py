@@ -1,4 +1,3 @@
-import warnings
 from collections import namedtuple
 
 from scopus.classes import Search
@@ -6,19 +5,6 @@ from scopus.utils import listify
 
 
 class ScopusSearch(Search):
-    @property
-    def EIDS(self):
-        """Outdated property, will be removed in a future release.  Please use
-        get_eids() instead.  For details see
-        https://scopus.readthedocs.io/en/latest/tips.html#migration-guide-to-0-x-to-1-x.
-        """
-        text = "Outdated property, will be removed in a future release.  "\
-               "Please use get_eids() instead.  For details see "\
-               "https://scopus.readthedocs.io/en/latest/tips.html#"\
-               "migration-guide-to-0-x-to-1-x."
-        warnings.warn(text, DeprecationWarning)
-        return self.get_eids()
-
     @property
     def results(self):
         """A list of namedtuples in the form (eid doi pii pubmed_id title
