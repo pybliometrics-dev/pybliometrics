@@ -18,4 +18,3 @@ from scopus.author_retrieval import *
 from scopus.author_search import *
 from scopus.scopus_search import *
 from scopus.serial_title import *
-from scopus.deprecated_ import *

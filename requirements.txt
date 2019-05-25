@@ -1,3 +1,2 @@
 pbr
 requests
-matplotlib
