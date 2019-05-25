@@ -50,7 +50,7 @@ def detect_id_type(sid):
     return id_type
 
 
-def download(url, params=None, accept="xml", **kwds):
+def download(url, params=None, **kwds):
     """Helper function to download a file and return its content.
 
     Parameters
@@ -62,10 +62,6 @@ def download(url, params=None, accept="xml", **kwds):
         Dictionary containing query parameters.  For required keys
         and accepted values see e.g.
         https://api.elsevier.com/documentation/AuthorRetrievalAPI.wadl
-
-    accept : str (optional, default=xml)
-        mime type of the file to be downloaded.  Accepted values are json,
-        atom+xml, xml.
 
     kwds : key-value parings, optional
         Keywords passed on to as query parameters.  Must contain fields
@@ -84,18 +80,12 @@ def download(url, params=None, accept="xml", **kwds):
     resp : byte-like object
         The content of the file, which needs to be serialized.
     """
-    # Value check
-    accepted = ("json", "xml", "atom+xml")
-    if accept.lower() not in accepted:
-        raise ValueError('accept parameter must be one of ' +
-                         ', '.join(accepted))
     # Get credentials
     key = config.get('Authentication', 'APIKey')
-    header = {'X-ELS-APIKey': key}
+    header = {'X-ELS-APIKey': key, 'Accept': 'application/json'}
     if config.has_option('Authentication', 'InstToken'):
         token = config.get('Authentication', 'InstToken')
         header.update({'X-ELS-APIKey': key, 'X-ELS-Insttoken': token})
-    header.update({'Accept': 'application/{}'.format(accept)})
     # Perform request
     params.update(**kwds)
     # If config.ini has a section as follows:

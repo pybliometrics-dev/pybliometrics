@@ -62,6 +62,5 @@ class Retrieval:
 
         # Parse file contents
         qfile = join(get_folder(api), identifier.replace('/', '_'))
-        res = get_content(qfile, refresh, url=url, accept='json',
-                          params=params)
+        res = get_content(qfile, refresh, url=url, params=params)
         self._json = loads(res.decode('utf-8'))
