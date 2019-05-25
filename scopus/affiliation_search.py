@@ -28,7 +28,7 @@ class AffiliationSearch(Search):
             out.append(new)
         return out or None
 
-    def __init__(self, query, count=200, refresh=False, download=True):
+    def __init__(self, query, refresh=False, download=True, count=200):
         """Class to perform a search for an affiliation.
 
         Parameters
@@ -36,12 +36,12 @@ class AffiliationSearch(Search):
         query : str
             A string of the query, e.g. "af-id(60021784)".
 
+        refresh : bool (optional, default=False)
+            Whether to refresh the cached file if it exists or not.
+
         count : int (optional, default=200)
             The number of entries to be displayed at once.  A smaller number
             means more queries with each query having less results.
-
-        refresh : bool (optional, default=False)
-            Whether to refresh the cached file if it exists or not.
 
         download : bool (optional, default=True)
             Whether to download results (if they have not been cached).

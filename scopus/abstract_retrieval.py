@@ -534,7 +534,7 @@ class AbstractRetrieval(Retrieval):
         """Website of publisher."""
         return chained_get(self._head, ['source', 'website', 'ce:e-address', '$'])
 
-    def __init__(self, identifier=None, view='META_ABS', refresh=False,
+    def __init__(self, identifier=None, refresh=False, view='META_ABS',
                  id_type=None, EID=None):
         """Class to represent the results from a Scopus abstract.
 
@@ -543,6 +543,9 @@ class AbstractRetrieval(Retrieval):
         identifier : str or int
             The identifier of an abstract.  Can be the Scoups EID, the Scopus
             ID, the PII, the Pubmed-ID or the DOI.
+
+        refresh : bool (optional, default=False)
+            Whether to refresh the cached file if it exists or not.
 
         EID : str (deprecated since 1.2)
             Deprecated in favor of `identifier`, will be removed in a future
@@ -560,9 +563,6 @@ class AbstractRetrieval(Retrieval):
             and META_ABS includes all information of the META view.  See
             https://dev.elsevier.com/guides/AbstractRetrievalViews.htm
             for details.
-
-        refresh : bool (optional, default=False)
-            Whether to refresh the cached file if it exists or not.
 
         Raises
         ------

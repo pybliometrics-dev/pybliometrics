@@ -38,7 +38,7 @@ class AuthorSearch(Search):
             out.append(new)
         return out or None
 
-    def __init__(self, query, count=200, refresh=False, download=True):
+    def __init__(self, query, refresh=False, count=200, download=True):
         """Class to search a query, and retrieve a list of author IDs as results.
 
         Parameters
@@ -47,12 +47,12 @@ class AuthorSearch(Search):
             A string of the query, e.g. "authlast(Einstein) and
             authfirst(Albert)".
 
+        refresh : bool (optional, default=False)
+            Whether to refresh the cached file if it exists or not.
+
         count : int (optional, default=200)
             The number of entries to be displayed at once.  A smaller number
             means more queries with each query having less results.
-
-        refresh : bool (optional, default=False)
-            Whether to refresh the cached file if it exists or not.
 
         download : bool (optional, default=True)
             Whether to download results (if they have not been cached).
