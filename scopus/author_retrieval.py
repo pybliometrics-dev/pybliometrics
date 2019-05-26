@@ -233,7 +233,8 @@ class AuthorRetrieval(Retrieval):
         s = '''{self.indexed_name} from {self.affiliation_current},
     published {self.document_count} documents since {since}
     in {journals} distinct journals
-    which were cited by {self.cited_by_count} authors in {self.citation_count} documents
+    which were cited by {self.cited_by_count} authors
+    in {self.citation_count} documents
     '''.format(self=self, since=self.publication_range[0],
                journals=len(self.journal_history))
         return s

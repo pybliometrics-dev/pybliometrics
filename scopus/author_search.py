@@ -25,7 +25,8 @@ class AuthorSearch(Search):
                               [{'@abbrev': '', '@frequency': ''}])
             if isinstance(fields, dict):
                 fields = [fields]
-            areas = ["{} ({})".format(d.get('@abbrev', ''), d.get('@frequency', ''))
+            areas = ["{} ({})".format(d.get('@abbrev', ''),
+                                      d.get('@frequency', ''))
                      for d in fields]
             new = auth(eid=item['eid'], initials=name.get('initials'),
                        surname=name.get('surname'), areas="; ".join(areas),
@@ -69,8 +70,9 @@ class AuthorSearch(Search):
         """
         view = "STANDARD"  # In case Scopus adds different views in future
         self.query = query
-        Search.__init__(self, query=query, api='AuthorSearch', refresh=refresh,
-                        view=view, count=count, download_results=download)
+        Search.__init__(self, query=query, refresh=refresh, view=view,
+                        api='AuthorSearch', count=count,
+                        download_results=download)
 
     def __str__(self):
         s = """Search {} yielded {} author(s):\n    {}"""

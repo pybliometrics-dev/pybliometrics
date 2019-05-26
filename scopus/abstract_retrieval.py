@@ -1,7 +1,8 @@
 from collections import namedtuple
 
 from scopus.classes import Retrieval
-from scopus.utils import chained_get, get_id, detect_id_type, get_link, listify
+from scopus.utils import chained_get, get_id, detect_id_type, get_link,\
+    listify
 
 
 class AbstractRetrieval(Retrieval):
@@ -61,9 +62,10 @@ class AbstractRetrieval(Retrieval):
                  'addresspart country auid indexed_name surname given_name'
         auth = namedtuple('Author', fields)
         items = listify(self._head.get('author-group', []))
+        index_path = ['preferred-name', 'ce:indexed-name']
         for item in items:
             # Affiliation information
-            aff = item.get('affiliation', {})            
+            aff = item.get('affiliation', {})
             try:
                 aff_ids = listify(aff['affiliation-id'])
                 aff_id = ", ".join([a["@afid"] for a in aff_ids])
@@ -83,7 +85,7 @@ class AbstractRetrieval(Retrieval):
                            addresspart=aff.get('address-part'),
                            country=aff.get('country'), auid=au.get('@auid'),
                            surname=au.get('ce:surname'), given_name=given,
-                           indexed_name=chained_get(au, ['preferred-name', 'ce:indexed-name']))
+                           indexed_name=chained_get(au, index_path))
                 out.append(new)
         return out or None
 
@@ -129,7 +131,8 @@ class AbstractRetrieval(Retrieval):
         """
         path = ['enhancement', 'chemicalgroup', 'chemicals']
         items = listify(chained_get(self._head, path, []))
-        chemical = namedtuple('Chemical', 'source chemical_name cas_registry_number')
+        fields = 'source chemical_name cas_registry_number'
+        chemical = namedtuple('Chemical', fields)
         out = []
         for item in items:
             for chem in listify(item['chemical']):
@@ -175,7 +178,8 @@ class AbstractRetrieval(Retrieval):
     @property
     def confsponsor(self):
         """Sponsor(s) of the conference the abstract belongs to."""
-        sponsors = chained_get(self._confevent, ['confsponsors', 'confsponsor'], [])
+        path = ['confsponsors', 'confsponsor']
+        sponsors = chained_get(self._confevent, path, [])
         if len(sponsors) == 0:
             return None
         if isinstance(sponsors, list):
@@ -187,7 +191,8 @@ class AbstractRetrieval(Retrieval):
         """List of namedtuples representing contributors compiled by Scopus,
         in the form (given_name, initials, surname, indexed_name, role).
         """
-        items = listify(chained_get(self._head, ['source', 'contributor-group'], []))
+        path = ['source', 'contributor-group']
+        items = listify(chained_get(self._head, path, []))
         out = []
         fields = 'given_name initials surname indexed_name role'
         pers = namedtuple('Contributor', fields)
@@ -430,22 +435,19 @@ class AbstractRetrieval(Retrieval):
             except IndexError:
                 scopus_id = info.get('scopus-id')
             # Combine information
-            new = ref(position=item.get('@id'),
-                      id=scopus_id,
-                      doi=doi,
-                      authors="; ".join(authors),
-                      authors_auid=auids or None,
-                      authors_affiliationid=affids or None,
-                      title=info.get('ref-title', {}).get('ref-titletext', info.get('title')),
-                      sourcetitle=info.get('ref-sourcetitle', info.get('sourcetitle')),
-                      publicationyear=info.get('ref-publicationyear', {}).get('@first'),
-                      volume=volisspag.get('voliss', {}).get('@volume'),
-                      issue=volisspag.get('voliss', {}).get('@issue'),
-                      first=volisspag.get('pagerange', {}).get('@first'),
-                      last=volisspag.get('pagerange', {}).get('@last'),
-                      citedbycount=info.get('citedby-count'),
-                      text=info.get('ref-text'),
-                      fulltext=item.get('ref-fulltext'))
+            new = ref(position=item.get('@id'), id=scopus_id, doi=doi,
+                authors="; ".join(authors), authors_auid=auids or None,
+                authors_affiliationid=affids or None,
+                title=info.get('ref-title', {}).get('ref-titletext', info.get('title')),
+                sourcetitle=info.get('ref-sourcetitle', info.get('sourcetitle')),
+                publicationyear=info.get('ref-publicationyear', {}).get('@first'),
+                volume=volisspag.get('voliss', {}).get('@volume'),
+                issue=volisspag.get('voliss', {}).get('@issue'),
+                first=volisspag.get('pagerange', {}).get('@first'),
+                last=volisspag.get('pagerange', {}).get('@last'),
+                citedbycount=info.get('citedby-count'),
+                text=info.get('ref-text'),
+                fulltext=item.get('ref-fulltext'))
             out.append(new)
         return out or None
 
@@ -531,7 +533,8 @@ class AbstractRetrieval(Retrieval):
     @property
     def website(self):
         """Website of publisher."""
-        return chained_get(self._head, ['source', 'website', 'ce:e-address', '$'])
+        path = ['source', 'website', 'ce:e-address', '$']
+        return chained_get(self._head, path)
 
     def __init__(self, identifier=None, refresh=False, view='META_ABS',
                  id_type=None):

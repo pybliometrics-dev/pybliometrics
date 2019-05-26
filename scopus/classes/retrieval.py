@@ -7,7 +7,7 @@ from scopus.utils import RETRIEVAL_URL, get_content, get_folder
 
 
 class Retrieval:
-    def __init__(self, identifier, api, refresh, id_type=None, view=None,
+    def __init__(self, identifier, api, refresh, view=None, id_type=None,
                  date=None):
         """Class intended as superclass to perform retrievals.
 
@@ -24,14 +24,11 @@ class Retrieval:
         refresh : bool
             Whether to refresh the cached file if it exists or not.
 
+        view : str
+            The view of the file that should be downloaded.
+
         id_type : str (optional, default=None)
             The type of used ID.
-            Note: Will only take effect for the AbstractRetrieval API.
-
-        view : str (optional, default=None)
-            The view of the file that should be downloaded.  Will not take
-            effect for already cached files.  Allowed values: STANDARD,
-            COMPLETE.
             Note: Will only take effect for the AbstractRetrieval API.
 
         date : str (optional, default=None)

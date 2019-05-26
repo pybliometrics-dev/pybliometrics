@@ -70,7 +70,7 @@ class Search:
         if not refresh and exists(qfile):
             with open(qfile, "rb") as f:
                 self._json = [loads(line) for line in f.readlines()]
-            self._n = n = len(self._json)
+            self._n = len(self._json)
         else:
             # Set query parameters
             params = {'query': query, 'count': count, 'view': view}
@@ -79,7 +79,7 @@ class Search:
             else:
                 params.update({'start': 0})
             # Download results
-            res = download(url=SEARCH_URL[api], params=params, accept="json", **kwds).json()
+            res = download(url=SEARCH_URL[api], params=params, **kwds).json()
             n = int(res['search-results'].get('opensearch:totalResults', 0))
             self._n = n
             if not cursor and n > max_entries:  # Stop if there are too many results
@@ -116,6 +116,6 @@ def _parse(res, params, n, api, **kwds):
         else:
             start += params["count"]
             params.update({'start': start})
-        res = download(url=SEARCH_URL[api], params=params, accept="json", **kwds).json()
+        res = download(url=SEARCH_URL[api], params=params, **kwds).json()
         _json.extend(res.get('search-results', {}).get('entry', []))
     return _json

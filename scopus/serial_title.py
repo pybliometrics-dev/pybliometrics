@@ -1,7 +1,7 @@
 from collections import namedtuple
-from json import loads
 
 from scopus.classes import Retrieval
+
 
 class SerialTitle(Retrieval):
     @property
@@ -21,7 +21,7 @@ class SerialTitle(Retrieval):
         current = (d['citeScoreCurrentMetricYear'], d['citeScoreCurrentMetric'])
         tracker = (d['citeScoreTrackerYear'], d['citeScoreTracker'])
         return [current, tracker]
-    
+
     @property
     def eissn(self):
         """The electronic ISSN of the source."""
@@ -31,12 +31,12 @@ class SerialTitle(Retrieval):
     def issn(self):
         """The ISSN of the source."""
         return self._entry.get('prism:issn')
-    
+
     @property
     def oaallowsauthorpaid(self):
         """Whether under the Open-Access policy authors are allowed to pay."""
         return self._entry.get('oaAllowsAuthorPaid')
-    
+
     @property
     def openaccess(self):
         """Open Access status (0 or 1)."""
@@ -46,17 +46,17 @@ class SerialTitle(Retrieval):
     def openaccessstartdate(self):
         """Starting availability date."""
         return self._entry.get('openaccessStartDate')
-    
+
     @property
     def openaccesstype(self):
         """Open Archive status (full or partial)."""
         return self._entry.get('openaccessType')
-    
+
     @property
     def openaccessarticle(self):
         """Open Access status (boolean)."""
         return self._entry.get('openaccessArticle')
-    
+
     @property
     def openarchivearticle(self):
         """Open Archive status (boolean)."""
@@ -66,7 +66,7 @@ class SerialTitle(Retrieval):
     def openaccesssponsorname(self):
         """The name of the Open Access sponsor."""
         return self._entry.get('openaccessSponsorName')
-    
+
     @property
     def openaccesssponsortype(self):
         """The type of the Open Access sponsor."""
@@ -76,7 +76,7 @@ class SerialTitle(Retrieval):
     def openaccessuserlicense(self):
         """The User license."""
         return self._entry.get('openaccessUserLicense')
-    
+
     @property
     def publisher(self):
         """The publisher of the source."""
@@ -104,10 +104,11 @@ class SerialTitle(Retrieval):
     @property
     def sniplist(self):
         """Source-Normalized Impact per Paper (SNIP) of the source.  See
-        https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip."""
+        https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip.
+        """
         return (self._entry['SNIPList']['SNIP'][0]['@year'],
                 self._entry['SNIPList']['SNIP'][0]['$'])
-    
+
     @property
     def source_id(self):
         """The Scopus ID of the source."""
@@ -123,7 +124,7 @@ class SerialTitle(Retrieval):
                       abbreviation=item['@abbrev'])
                  for item in self._entry["subject-area"]]
         return areas or None
-    
+
     @property
     def title(self):
         """The title of the source."""
@@ -156,8 +157,8 @@ class SerialTitle(Retrieval):
                              ', '.join(allowed_views))
         # Load json
         self._id = str(issn)
-        Retrieval.__init__(self, identifier=self._id, api='SerialTitle',
-                           refresh=refresh)
+        Retrieval.__init__(self, identifier=self._id, view=view,
+                           api='SerialTitle', refresh=refresh)
         self._json = self._json['serial-metadata-response']
         self._entry = self._json['entry'][0]
 

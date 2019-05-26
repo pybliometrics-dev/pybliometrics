@@ -57,10 +57,9 @@ class ContentAffiliationRetrieval(Retrieval):
         """
         out = []
         variant = namedtuple('Variant', 'name doc_count')
-        for var in chained_get(self._json, ['name-variants', 'name-variant'], []):
-            new = variant(name=var['$'], doc_count=var.get('@doc-count'))
-            out.append(new)
-        return out
+        path = ['name-variants', 'name-variant']
+        return [variant(name=var['$'], doc_count=var.get('@doc-count'))
+                for var in chained_get(self._json, path, [])]
 
     @property
     def org_domain(self):
@@ -100,7 +99,9 @@ class ContentAffiliationRetrieval(Retrieval):
 
     @property
     def state(self):
-        """The state (country's administrative sububunit) of the affiliation."""
+        """The state (country's administrative sububunit)
+        of the affiliation.
+        """
         path = ['institution-profile', 'address', 'state']
         return chained_get(self._json, path)
 
@@ -134,12 +135,14 @@ class ContentAffiliationRetrieval(Retrieval):
 
         # Load json
         aff_id = str(int(str(aff_id).split('-')[-1]))
-        Retrieval.__init__(self, identifier=aff_id, view=view,
-                           api='ContentAffiliationRetrieval', refresh=refresh)
+        Retrieval.__init__(self, identifier=aff_id, view=view, refresh=refresh,
+                           api='ContentAffiliationRetrieval')
+
         self._json = self._json['affiliation-retrieval-response']
 
     def __str__(self):
-        s = '''{self.affiliation_name} ({self.author_count} authors, {self.document_count} documents)
+        s = '''{self.affiliation_name}
+    ({self.author_count} authors, {self.document_count} documents)
     {self.address}
     {self.city}, {self.country}
     {self.url}'''.format(self=self)
