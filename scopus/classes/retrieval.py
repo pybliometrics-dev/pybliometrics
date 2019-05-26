@@ -7,7 +7,7 @@ from scopus.utils import RETRIEVAL_URL, get_content, get_folder
 
 
 class Retrieval:
-    def __init__(self, identifier, api, refresh, view=None, id_type=None,
+    def __init__(self, identifier, api, refresh, view, id_type=None,
                  date=None):
         """Class intended as superclass to perform retrievals.
 
@@ -50,8 +50,6 @@ class Retrieval:
         url = RETRIEVAL_URL[api]
         if api == "AbstractRetrieval":
             url += id_type + "/"
-        elif api == "AuthorRetrieval":
-            view = 'ENHANCED'
         params = {'view': view}
         if api == 'CitationOverview':
             params.update({'date': date, 'scopus_id': identifier.split('0-')[-1]})

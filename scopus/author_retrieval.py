@@ -207,11 +207,11 @@ class AuthorRetrieval(Retrieval):
 
         Notes
         -----
-        The files are cached in ~/.scopus/author_retrieval/LIGHT/{author_id}
+        The files are cached in ~/.scopus/author_retrieval/ENHANCED/{author_id}
         (without eventually leading '9-s2.0-').
         """
         # Load json
-        view = "LIGHT"  # In case Scopus adds different views in future
+        view = "ENHANCED"  # In case Scopus adds different views in future
         self._id = str(int(str(author_id).split('-')[-1]))
         Retrieval.__init__(self, identifier=self._id, api='AuthorRetrieval',
                            refresh=refresh, view=view)
