@@ -69,7 +69,7 @@ def download(url, params=None, **kwds):
 
     Raises
     ------
-    ScopusHtmlError
+    ScopusHtmlError or HTTPError
         If the status of the response is not ok.
 
     ValueError
@@ -100,12 +100,15 @@ def download(url, params=None, **kwds):
         resp = requests.get(url, headers=header, proxies=proxyDict, params=params)
     else:
         resp = requests.get(url, headers=header, params=params)
-    # Raise error if necessary
-    try:
-        reason = resp.reason.upper() + " for url: " + url
-        raise errors[resp.status_code](reason)
-    except KeyError:  # Exception not specified in scopus
-        resp.raise_for_status()  # Will pass when everything is ok
+    # Handle error messages
+    if resp.ok:
+        return resp
+    else:
+        try:
+            reason = resp.json()['service-error']['status']['statusText']
+            raise errors[resp.status_code](reason)
+        except KeyError:  # Exception not specified in scopus
+            resp.raise_for_status()
     return resp
 
 
