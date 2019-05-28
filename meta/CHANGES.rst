@@ -3,6 +3,15 @@ Change Log
 
 .. toctree::
 
+2.0
+~~~
+
+* Cache files in subfolders according to the used view.
+* Add method `.estimate_uniqueness()` to `AuthorRetrieval()` to estimate how unique an author profile is.
+* Use error message provided by Scopus for ScopusErrors.
+* Add tip how to deal with "KeyError: 'eid'".
+* Remove deprecated classes, modules, parameters and attributes.  Removed deprecated classes are `ScopusAbstract()`, `ScopusAffiliation()`, `ScopusAuthor()` and `report()`.  Removed deprecated parameters are start and max_entries in `AuthorSearch()` and `AffiliationSearch()`.  Removed deprecated attributes include only `ScopusSearch.EIDS`.
+
 1.6.1
 ~~~~~
 
