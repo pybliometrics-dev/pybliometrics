@@ -59,6 +59,10 @@ def test_eid():
     assert_equal(au.eid, '9-s2.0-7004212771')
 
 
+def test_estimate_uniqueness():
+    assert_equal(au.estimate_uniqueness(), 2)
+
+
 def test_given_name():
     assert_equal(au.given_name, 'John R.')
 

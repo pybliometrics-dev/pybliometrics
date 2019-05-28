@@ -3,6 +3,7 @@ from warnings import warn
 
 from json import loads
 
+from .author_search import AuthorSearch
 from .scopus_search import ScopusSearch
 from scopus.classes import Retrieval
 from scopus.utils import chained_get, download, get_link, listify,\
@@ -294,3 +295,37 @@ class AuthorRetrieval(Retrieval):
         search = ScopusSearch('au-id({})'.format(self.identifier),
                               *args, **kwds)
         return search.get_eids()
+
+    def estimate_uniqueness(self, query=None, refresh=False, download=False):
+        """Estimate how unqiue a profile is by get the number of
+        matches of an AuthorSearch for this person.
+
+        Parameters
+        ----------
+        query : str (optional, default=None)
+            The query string to perform to search for authors.  If empty,
+            the query is of form "AUTHLAST() AND AUTHFIRST()" with the
+            corresponding information included.  Provided queries may include
+            "SUBJAREA()" OR "AF-ID() AND SUBJAREA()".  For details see
+            https://dev.elsevier.com/tips/AuthorSearchTips.htm.
+
+        refresh : bool (optional, default=False)
+            Whether to refresh the cached file (if it exists) or not.
+
+        download : bool (optional, defaul=False)
+            Whether to cached the file or not.
+
+        Returns
+        -------
+        n : int
+            The number of matches of the query.
+
+        Notes
+        -----
+        If download=True, the search files are cached with AuthorSearch().
+        """
+        if not query:
+            query = "AUTHLAST({}) AND AUTHFIRST({})".format(
+                self.surname, self.given_name)
+        s = AuthorSearch(query, download=download, refresh=refresh)
+        return s.get_results_size()
