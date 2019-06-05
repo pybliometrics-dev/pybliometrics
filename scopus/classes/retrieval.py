@@ -59,3 +59,4 @@ class Retrieval:
         qfile = join(get_folder(api, view), identifier.replace('/', '_'))
         res = get_content(qfile, refresh, url=url, params=params)
         self._json = loads(res.decode('utf-8'))
+        self._view = view

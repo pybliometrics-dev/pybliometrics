@@ -93,6 +93,7 @@ class Search:
                 with open(qfile, 'wb') as f:
                     for item in self._json:
                         f.write('{}\n'.format(dumps(item)).encode('utf-8'))
+        self._view = view
 
     def get_results_size(self):
         """Return the number of results (works even if download=False)."""
