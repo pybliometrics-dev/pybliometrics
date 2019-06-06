@@ -31,12 +31,12 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def aggregationType(self):
-        """Aggregation type of source the abstract is published in."""
+        """Aggregation type of source the document is published in."""
         return chained_get(self._json, ['coredata', 'prism:aggregationType'])
 
     @property
     def authkeywords(self):
-        """List of author-provided keywords of the abstract."""
+        """List of author-provided keywords of the document."""
         keywords = self._json.get('authkeywords')
         if not keywords:
             return None
@@ -115,7 +115,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def citedby_count(self):
-        """Number of articles citing the abstract."""
+        """Number of articles citing the document."""
         cites = chained_get(self._json, ['coredata', 'citedby-count'])
         if cites:
             cites = int(cites)
@@ -151,12 +151,12 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def confcode(self):
-        """Code of the conference the abstract belong to."""
+        """Code of the conference the document belong to."""
         return self._confevent.get('confcode')
 
     @property
     def confdate(self):
-        """Date range of the conference the abstract belongs to represented
+        """Date range of the conference the document belongs to represented
         by two tuples in the form (YYYY, MM, DD).
         """
         date = self._confevent.get('confdate', {})
@@ -170,17 +170,17 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def conflocation(self):
-        """Location of the conference the abstract belongs to."""
+        """Location of the conference the document belongs to."""
         return chained_get(self._confevent, ['conflocation', 'city-group'])
 
     @property
     def confname(self):
-        """Name of the conference the abstract belongs to."""
+        """Name of the conference the document belongs to."""
         return self._confevent.get('confname')
 
     @property
     def confsponsor(self):
-        """Sponsor(s) of the conference the abstract belongs to."""
+        """Sponsor(s) of the conference the document belongs to."""
         path = ['confsponsors', 'confsponsor']
         sponsors = chained_get(self._confevent, path, [])
         if len(sponsors) == 0:
@@ -236,7 +236,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def coverDate(self):
-        """The date of the cover the abstract is in."""
+        """The date of the cover the document is in."""
         return chained_get(self._json, ['coredata', 'prism:coverDate'])
 
     @property
@@ -248,12 +248,12 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def doi(self):
-        """DOI of the abstract."""
+        """DOI of the document."""
         return chained_get(self._json, ['coredata', 'prism:doi'])
 
     @property
     def eid(self):
-        """EID of the abstract."""
+        """EID of the document."""
         return chained_get(self._json, ['coredata', 'eid'])
 
     @property
@@ -305,7 +305,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def identifier(self):
-        """ID of the abstract (same as EID without "2-s2.0-")."""
+        """ID of the document (same as EID without "2-s2.0-")."""
         return get_id(self._json)
 
     @property
@@ -322,12 +322,12 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def issueIdentifier(self):
-        """Issue number for abstract."""
+        """Number of the issue the document was published in."""
         return chained_get(self._json, ['coredata', 'prism:issueIdentifier'])
 
     @property
     def issuetitle(self):
-        """Title of the issue the abstract is published in."""
+        """Title of the issue the document was published in."""
         return chained_get(self._head, ['source', 'issuetitle'])
 
     @property
@@ -342,12 +342,12 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def publicationName(self):
-        """Name of source the abstract is published in."""
+        """Name of source the document is published in."""
         return chained_get(self._json, ['coredata', 'prism:publicationName'])
 
     @property
     def publisher(self):
-        """Name of the publisher of the abstract.
+        """Name of the publisher of the document.
         Note: Information provided in the FULL view of the article might be
         more complete.
         """
@@ -360,7 +360,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def publisheraddress(self):
-        """Name of the publisher of the abstract."""
+        """Name of the publisher of the document."""
         return chained_get(self._head, ['source', 'publisher', 'publisheraddress'])
 
     @property
@@ -376,12 +376,12 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def references(self):
-        """List of namedtuples representing references listed in the abstract,
+        """List of namedtuples representing references listed in the document,
         in the form (position, id, doi, title, authors, authors_auid,
         authors_affiliationid, sourcetitle, publicationyear, volume, issue,
         first, last, citedbycount, type, text, fulltext).
         `position` is the number at which the reference appears in the
-        document, `id` is the Scopus ID of the referenced abstract (EID
+        document, `id` is the Scopus ID of the referenced document (EID
         without the "2-s2.0-"), `authors` is a string of the names of the
         authors in the format "Surname1, Initials1; Surname2, Initials2",
         `authors_auid` is a string of the author IDs joined on "; ",
@@ -462,12 +462,12 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def scopus_link(self):
-        """URL to the abstract page on Scopus."""
+        """URL to the document page on Scopus."""
         return get_link(self._json, 1)
 
     @property
     def self_link(self):
-        """URL to Scopus API page of this abstract."""
+        """URL to Scopus API page of this document."""
         return get_link(self._json, 0)
 
     @property
@@ -489,20 +489,20 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def source_id(self):
-        """Scopus source ID of the abstract."""
+        """Scopus source ID of the document."""
         return chained_get(self._json, ['coredata', 'source-id'])
 
     @property
     def sourcetitle_abbreviation(self):
-        """Abbreviation of the source the abstract is published in.
+        """Abbreviation of the source the document is published in.
         Note: Requires the FULL view of the article.
         """
         return self._head.get('source', {}).get('sourcetitle-abbrev')
 
     @property
     def srctype(self):
-        """Aggregation type of source the abstract is published in (short
-        version of aggregationType.
+        """Aggregation type of source the document is published in (short
+        version of aggregationType).
         """
         return chained_get(self._json, ['coredata', 'srctype'])
 
@@ -514,7 +514,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def subject_areas(self):
         """List of namedtuples containing subject areas of the article
-        in the form ().
+        in the form (area abbreviation code).
         Note: Requires the FULL view of the article.
         """
         area = namedtuple('Area', 'area abbreviation code')
@@ -526,17 +526,17 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def title(self):
-        """Title of the abstract."""
+        """Title of the document."""
         return chained_get(self._json, ['coredata', 'dc:title'])
 
     @property
     def url(self):
-        """URL to the API view of the abstract."""
+        """URL to the API view of the document."""
         return chained_get(self._json, ['coredata', 'prism:url'])
 
     @property
     def volume(self):
-        """Volume for the abstract."""
+        """Volume for the document."""
         return chained_get(self._json, ['coredata', 'prism:volume'])
 
     @property
@@ -547,12 +547,13 @@ class AbstractRetrieval(Retrieval):
 
     def __init__(self, identifier=None, refresh=False, view='META_ABS',
                  id_type=None):
-        """Class to represent the results from a Scopus abstract.
+        """Class to represent the results from retrieval request from the
+        Scopus Abstract API.
 
         Parameters
         ----------
         identifier : str or int
-            The identifier of an abstract.  Can be the Scoups EID, the Scopus
+            The identifier of a document.  Can be the Scoups EID, the Scopus
             ID, the PII, the Pubmed-ID or the DOI.
 
         refresh : bool (optional, default=False)
@@ -604,9 +605,9 @@ class AbstractRetrieval(Retrieval):
         self._confevent = chained_get(self._head, path, {})
 
     def __str__(self):
-        """Return pretty text version of the abstract.
+        """Return pretty text version of the document.
 
-        Assumes the abstract is a journal article and was loaded with
+        Assumes the document is a journal article and was loaded with
         view="META_ABS" or view="FULL".
         """
         # Authors
