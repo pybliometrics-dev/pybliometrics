@@ -378,8 +378,8 @@ class AbstractRetrieval(Retrieval):
     def references(self):
         """List of namedtuples representing references listed in the abstract,
         in the form (position, id, doi, title, authors, authors_auid,
-        authors_affiliationid, sourcetitle, publicationyear, volume, issue, first,
-        last, citedbycount, text, fulltext).
+        authors_affiliationid, sourcetitle, publicationyear, volume, issue,
+        first, last, citedbycount, type, text, fulltext).
         `position` is the number at which the reference appears in the
         document, `id` is the Scopus ID of the referenced abstract (EID
         without the "2-s2.0-"), `authors` is a string of the names of the
@@ -390,7 +390,8 @@ class AbstractRetrieval(Retrieval):
         journal), `publicationyear` is the year of the publication as a string,
         `volume` and `issue`, are strings referring to the volume and issue,
         `first` and `last` refer to the page range, `citedbycount` is a string
-        for the total number of citations of the cited item, `text` is
+        for the total number of citations of the cited item, `type` describes
+        the parsing status of the reference (resolved or not), `text` is
         Scopus-provided information on the publication, `fulltext` is the text
         the authors used for the reference.
 
@@ -402,7 +403,7 @@ class AbstractRetrieval(Retrieval):
         out = []
         fields = 'position id doi title authors authors_auid '\
                  'authors_affiliationid sourcetitle publicationyear volume '\
-                 'issue first last citedbycount text fulltext'
+                 'issue first last citedbycount type text fulltext'
         ref = namedtuple('Reference', fields)
         if self._view == "REF":
             path = ['references', 'reference']
@@ -453,7 +454,7 @@ class AbstractRetrieval(Retrieval):
                 issue=volisspag.get('voliss', {}).get('@issue'),
                 first=volisspag.get('pagerange', {}).get('@first'),
                 last=volisspag.get('pagerange', {}).get('@last'),
-                citedbycount=info.get('citedby-count'),
+                citedbycount=info.get('citedby-count'), type=info.get('type'),
                 text=info.get('ref-text'),
                 fulltext=item.get('ref-fulltext'))
             out.append(new)
