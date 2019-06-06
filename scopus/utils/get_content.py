@@ -33,14 +33,18 @@ def detect_id_type(sid):
     ID will be rendered invalid and the type will be misinterpreted.
     """
     sid = str(sid)
-    if not sid.isnumeric():
+    try:
+        isnumeric = sid.isnumeric()
+    except AttributeError:  # Python2
+        isnumeric = unicode(sid, 'utf-8').isnumeric()
+    if not isnumeric:
         if sid.startswith('2-s2.0-'):
             id_type = 'eid'
         elif '/' in sid:
             id_type = 'doi'
         elif 16 <= len(sid) <= 17:
             id_type = 'pii'
-    elif sid.isnumeric():
+    elif isnumeric:
         if len(sid) < 10:
             id_type = 'pubmed_id'
         else:
