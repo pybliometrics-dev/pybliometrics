@@ -368,7 +368,10 @@ class AbstractRetrieval(Retrieval):
         """Number of references of an article.
         Note: Requires the FULL view of the article.
         """
-        path = ['item', 'bibrecord', 'tail', 'bibliography', '@refcount']
+        if self._view == "REF":
+            path = ["references", '@total-references']
+        else:
+            path = ['item', 'bibrecord', 'tail', 'bibliography', '@refcount']
         return chained_get(self._json, path)
 
     @property
@@ -401,9 +404,11 @@ class AbstractRetrieval(Retrieval):
                  'authors_affiliationid sourcetitle publicationyear volume '\
                  'issue first last citedbycount text fulltext'
         ref = namedtuple('Reference', fields)
-        path = ['item', 'bibrecord', 'tail', 'bibliography', 'reference']
-        items = listify(chained_get(self._json, path,
-                    self._json.get('references', {}).get('reference', [])))
+        if self._view == "REF":
+            path = ['references', 'reference']
+        else:
+            path = ['item', 'bibrecord', 'tail', 'bibliography', 'reference']
+        items = listify(chained_get(self._json, path, []))
         for item in items:
             info = item.get('ref-info', item)
             volisspag = info.get('volisspag', {}) or {}

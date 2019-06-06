@@ -327,7 +327,7 @@ def test_publisheraddress():
 
 def test_refcount():
     assert_equal(ab4.refcount, '18')
-    assert_equal(ab8.refcount, None)
+    assert_equal(ab8.refcount, '48')
 
 
 def test_references():
