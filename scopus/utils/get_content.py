@@ -4,6 +4,7 @@ from configparser import NoOptionError
 
 from scopus import exception
 from scopus.utils import DEFAULT_PATHS, config
+from scopus.utils.create_config import create_config
 
 errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           404: exception.Scopus404Error, 429: exception.Scopus429Error,
