@@ -24,12 +24,17 @@ def chained_get(container, path, default=None):
 
 def get_id(s):
     """Helper function to return the Scopus ID at a fixed position."""
-    return s['coredata']['dc:identifier'].split(':')[-1]
+    path = ['coredata', 'dc:identifier']
+    return chained_get(s, path, "").split(':')[-1] or None
 
 
 def get_link(dct, idx):
     """Helper function to return the link at position `idx` from coredata."""
-    return dct['coredata'].get('link', [])[idx].get('@href')
+    links = chained_get(dct, ['coredata', 'link'], [])
+    try:
+        return links[idx].get('@href')
+    except IndexError:
+        return None
 
 
 def listify(element):

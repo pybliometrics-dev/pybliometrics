@@ -32,13 +32,13 @@ class AbstractRetrieval(Retrieval):
     @property
     def aggregationType(self):
         """Aggregation type of source the abstract is published in."""
-        return self._json['coredata'].get('prism:aggregationType')
+        return chained_get(self._json, ['coredata', 'prism:aggregationType'])
 
     @property
     def authkeywords(self):
         """List of author-provided keywords of the abstract."""
-        keywords = self._json['authkeywords']
-        if keywords is None:
+        keywords = self._json.get('authkeywords')
+        if not keywords:
             return None
         else:
             try:
@@ -116,7 +116,10 @@ class AbstractRetrieval(Retrieval):
     @property
     def citedby_count(self):
         """Number of articles citing the abstract."""
-        return int(self._json['coredata']['citedby-count'])
+        cites = chained_get(self._json, ['coredata', 'citedby-count'])
+        if cites:
+            cites = int(cites)
+        return cites
 
     @property
     def citedby_link(self):
@@ -234,29 +237,29 @@ class AbstractRetrieval(Retrieval):
     @property
     def coverDate(self):
         """The date of the cover the abstract is in."""
-        return self._json['coredata']['prism:coverDate']
+        return chained_get(self._json, ['coredata', 'prism:coverDate'])
 
     @property
     def description(self):
         """Return the description of a record.
         Note: If this is empty, try property abstract instead.
         """
-        return self._json['coredata'].get('dc:description')
+        return chained_get(self._json, ['coredata', 'dc:description'])
 
     @property
     def doi(self):
         """DOI of the abstract."""
-        return self._json['coredata'].get('prism:doi')
+        return chained_get(self._json, ['coredata', 'prism:doi'])
 
     @property
     def eid(self):
         """EID of the abstract."""
-        return self._json['coredata']['eid']
+        return chained_get(self._json, ['coredata', 'eid'])
 
     @property
     def endingPage(self):
         """Ending page."""
-        return self._json['coredata'].get('prism:endingPage')
+        return chained_get(self._json, ['coredata', 'prism:endingPage'])
 
     @property
     def funding(self):
@@ -298,7 +301,7 @@ class AbstractRetrieval(Retrieval):
         Note: If E-ISSN is known to Scopus, this returns both
         ISSN and E-ISSN in random order separated by blank space.
         """
-        return self._json['coredata'].get('prism:issn')
+        return chained_get(self._json, ['coredata', 'prism:issn'])
 
     @property
     def identifier(self):
@@ -320,12 +323,12 @@ class AbstractRetrieval(Retrieval):
     @property
     def issueIdentifier(self):
         """Issue number for abstract."""
-        return self._json['coredata'].get('prism:issueIdentifier')
+        return chained_get(self._json, ['coredata', 'prism:issueIdentifier'])
 
     @property
     def issuetitle(self):
         """Title of the issue the abstract is published in."""
-        return self._head.get('source', {}).get('issuetitle')
+        return chained_get(self._head, ['source', 'issuetitle'])
 
     @property
     def language(self):
@@ -335,12 +338,12 @@ class AbstractRetrieval(Retrieval):
     @property
     def pageRange(self):
         """Page range."""
-        return self._json['coredata'].get('prism:pageRange')
+        return chained_get(self._json, ['coredata', 'prism:pageRange'])
 
     @property
     def publicationName(self):
         """Name of source the abstract is published in."""
-        return self._json['coredata'].get('prism:publicationName')
+        return chained_get(self._json, ['coredata', 'prism:publicationName'])
 
     @property
     def publisher(self):
@@ -351,7 +354,7 @@ class AbstractRetrieval(Retrieval):
         # Return information from FULL view, fall back to other views
         full = chained_get(self._head, ['source', 'publisher', 'publishername'])
         if full is None:
-            return self._json['coredata'].get('dc:publisher')
+            return chained_get(self._json, ['coredata', 'dc:publisher'])
         else:
             return full
 
@@ -481,7 +484,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def source_id(self):
         """Scopus source ID of the abstract."""
-        return self._json['coredata']['source-id']
+        return chained_get(self._json, ['coredata', 'source-id'])
 
     @property
     def sourcetitle_abbreviation(self):
@@ -495,12 +498,12 @@ class AbstractRetrieval(Retrieval):
         """Aggregation type of source the abstract is published in (short
         version of aggregationType.
         """
-        return self._json['coredata'].get('srctype')
+        return chained_get(self._json, ['coredata', 'srctype'])
 
     @property
     def startingPage(self):
         """Starting page."""
-        return self._json['coredata'].get('prism:startingPage')
+        return chained_get(self._json, ['coredata', 'prism:startingPage'])
 
     @property
     def subject_areas(self):
@@ -518,17 +521,17 @@ class AbstractRetrieval(Retrieval):
     @property
     def title(self):
         """Title of the abstract."""
-        return self._json['coredata'].get('dc:title')
+        return chained_get(self._json, ['coredata', 'dc:title'])
 
     @property
     def url(self):
         """URL to the API view of the abstract."""
-        return self._json['coredata']['prism:url']
+        return chained_get(self._json, ['coredata', 'prism:url'])
 
     @property
     def volume(self):
         """Volume for the abstract."""
-        return self._json['coredata'].get('prism:volume')
+        return chained_get(self._json, ['coredata', 'prism:volume'])
 
     @property
     def website(self):

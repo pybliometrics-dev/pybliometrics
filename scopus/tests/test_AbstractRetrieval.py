@@ -35,6 +35,7 @@ def test_abstract():
         'roots in the presence of mean shifts using Bayesian techniques. '\
         'Our method is illustrated using several simulated and empirical data.'
     assert_equal(ab4.abstract, expected)
+    assert_equal(ab8.abstract, None)
 
 
 def test_affiliation():
@@ -43,11 +44,13 @@ def test_affiliation():
                     city='Pittsburgh', country='United States')]
     assert_equal(ab1.affiliation, expected)
     assert_equal(ab3.affiliation, None)
+    assert_equal(ab8.affiliation, None)
 
 
 def test_aggregationType():
     assert_equal(ab1.aggregationType, 'Journal')
     assert_equal(ab2.aggregationType, 'Conference Proceeding')
+    assert_equal(ab8.aggregationType, None)
 
 
 def test_authkeywords():
@@ -55,15 +58,7 @@ def test_authkeywords():
     expected = ['Bayesian analysis', 'Seasonality',
                 'Structural breaks', 'Unit roots']
     assert_equal(ab4.authkeywords, expected)
-
-
-def test_authors():
-    fields = 'auid indexed_name surname given_name affiliation_id'
-    auth = namedtuple('Author', fields)
-    expected = [auth(auid='7004212771', indexed_name='Kitchin J.R.',
-                surname='Kitchin', given_name='John R.',
-                affiliation_id=['60027950'])]
-    assert_equal(ab1.authors, expected)
+    assert_equal(ab8.authkeywords, None)
 
 
 def test_authorgroup():
@@ -76,17 +71,30 @@ def test_authorgroup():
         country='United States', auid='7004212771',
         indexed_name='Kitchin J.', surname='Kitchin', given_name='John R.')]
     assert_equal(ab1.authorgroup, expected)
+    assert_equal(ab8.authorgroup, None)
+
+
+def test_authors():
+    fields = 'auid indexed_name surname given_name affiliation_id'
+    auth = namedtuple('Author', fields)
+    expected = [auth(auid='7004212771', indexed_name='Kitchin J.R.',
+                surname='Kitchin', given_name='John R.',
+                affiliation_id=['60027950'])]
+    assert_equal(ab1.authors, expected)
+    assert_equal(ab8.authors, None)
 
 
 def test_citedby_count():
     expected = 5
     assert_true(ab1.citedby_count >= expected)
+    assert_equal(ab8.citedby_count, None)
 
 
 def test_citedby_link():
     expected = 'https://www.scopus.com/inward/citedby.uri?partnerID=HzOxMe3b'\
         '&scp=84930616647&origin=inward'
     assert_equal(ab1.citedby_link, expected)
+    assert_equal(ab8.citedby_link, None)
 
 
 def test_chemials():
@@ -98,18 +106,22 @@ def test_chemials():
                         cas_registry_number='7439-95-4')
     assert_true(expected in received)
     assert_equal(ab3.chemicals, None)
+    assert_equal(ab8.chemicals, None)
 
 
 def test_confcode():
     assert_equal(ab2.confcode, '44367')
+    assert_equal(ab8.confcode, None)
 
 
 def test_confdate():
     assert_equal(ab2.confdate, ((1995, 12, 13), (1995, 12, 15)))
+    assert_equal(ab8.confdate, ((None, None, None), (None, None, None)))
 
 
 def test_conflocation():
     assert_equal(ab2.conflocation, 'New Orleans, LA, USA')
+    assert_equal(ab8.conflocation, None)
 
 
 def test_confname():
@@ -120,6 +132,7 @@ def test_confname():
     expected7 = '20th Symposium on Design, Test, Integration and Packaging '\
                 'of MEMS and MOEMS, DTIP 2018'
     assert_equal(ab7.confname, expected7)
+    assert_equal(ab8.confname, None)
 
 
 def test_confsponsor():
@@ -128,6 +141,7 @@ def test_confsponsor():
     expected7 = ['ARTOV.IMM.CNR.IT', 'CMP.IMAG.FR', 'CNRS.FR',
                  'EPS.IEEE.ORG', 'LIRMM.FR']
     assert_equal(ab7.confsponsor, expected7)
+    assert_equal(ab8.confsponsor, None)
 
 
 def test_contributor_group():
@@ -139,6 +153,7 @@ def test_contributor_group():
     assert_equal(len(received), 7)
     assert_true(expected in received)
     assert_equal(ab3.contributor_group, None)
+    assert_equal(ab8.contributor_group, None)
 
 
 def test_correspondence():
@@ -149,10 +164,12 @@ def test_correspondence():
         city_group='Montreal')
     assert_equal(ab2.correspondence, expected2)
     assert_equal(ab3.correspondence, None)
+    assert_equal(ab8.correspondence, None)
 
 
 def test_coverDate():
-    assert_true(ab1.coverDate, '2015-06-05')
+    assert_equal(ab1.coverDate, '2015-06-05')
+    assert_equal(ab8.coverDate, None)
 
 
 def test_description():
@@ -166,19 +183,23 @@ def test_description():
                'shifts using Bayesian techniques. Our method is illustrated '\
                'using several simulated and empirical data.'
     assert_equal(ab4.description, expected)
+    assert_equal(ab8.description, None)
 
 
 def test_doi():
     assert_equal(ab1.doi, '10.1021/acscatal.5b00538')
     assert_equal(ab4.doi, None)
+    assert_equal(ab8.doi, None)
 
 
 def test_eid():
     assert_equal(ab1.eid, '2-s2.0-84930616647')
+    assert_equal(ab8.eid, None)
 
 
 def test_endingPage():
     assert_equal(ab1.endingPage, '3899')
+    assert_equal(ab8.endingPage, None)
 
 
 def test_funding():
@@ -190,6 +211,7 @@ def test_funding():
         acronym=None, id=None, country=None)
     assert_true(expected6 in received)
     assert_equal(ab5.funding, None)
+    assert_equal(ab8.funding, None)
 
 
 def test_funding_text():
@@ -198,6 +220,7 @@ def test_funding_text():
         'reported in this publication are gathered from the CNRT report '\
         '“Ecomine BioTop”. Appendix A'
     assert_equal(ab6.funding_text, e)
+    assert_equal(ab8.funding_text, None)
 
 
 def test_get_html():
@@ -245,15 +268,18 @@ def test_get_html():
 def test_isbn():
     assert_equal(ab3.isbn, None)
     assert_equal(ab5.isbn, ('0203881486', '9780203881484'))
+    assert_equal(ab8.isbn, None)
 
 
 def test_issn():
     assert_equal(ab1.issn, '21555435')
     assert_equal(ab5.issn, None)
+    assert_equal(ab8.issn, None)
 
 
 def test_identifier():
     assert_equal(ab1.identifier, '84930616647')
+    assert_equal(ab8.identifier, None)
 
 
 def test_idxterms():
@@ -266,34 +292,42 @@ def test_idxterms():
 
 def test_issueIdentifier():
     assert_equal(ab1.issueIdentifier, '6')
+    assert_equal(ab8.issueIdentifier, None)
 
 
 def test_issuetitle():
     assert_equal(ab3.issuetitle, 'Law, Economics and Behavioural Sciences')
+    assert_equal(ab8.issuetitle, None)
 
 
 def test_language():
     assert_equal(ab1.language, 'eng')
+    assert_equal(ab8.language, None)
 
 
 def test_pageRange():
     assert_equal(ab1.pageRange, '3894-3899')
+    assert_equal(ab8.pageRange, None)
 
 
 def test_publicationName():
     assert_equal(ab1.publicationName, 'ACS Catalysis')
+    assert_equal(ab8.publicationName, None)
 
 
 def test_publisher():
     assert_equal(ab1.publisher, 'American Chemical Society')
+    assert_equal(ab8.publisher, None)
 
 
 def test_publisheraddress():
     assert_equal(ab2.publisheraddress, 'Piscataway, NJ, United States')
+    assert_equal(ab8.publisheraddress, None)
 
 
 def test_refcount():
     assert_equal(ab4.refcount, '18')
+    assert_equal(ab8.refcount, None)
 
 
 def test_references():
@@ -336,7 +370,6 @@ def test_references():
     assert_equal(ab8.references[0]._replace(citedbycount="0"), expected8)
 
 
-
 def test_scopus_link():
     expected = 'https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&'\
         'scp=84930616647&origin=inward'
@@ -346,6 +379,7 @@ def test_scopus_link():
 def test_self_link():
     expected = 'https://api.elsevier.com/content/abstract/scopus_id/84930616647'
     assert_equal(ab1.self_link, expected)
+    assert_equal(ab8.self_link, None)
 
 
 def test_sequencebank():
@@ -356,23 +390,28 @@ def test_sequencebank():
                     sequence_number='MH150839:MH150870')
     assert_true(expected in received)
     assert_equal(ab3.sequencebank, None)
+    assert_equal(ab8.sequencebank, None)
 
 
 def test_source_id():
     assert_equal(ab1.source_id, '19700188320')
+    assert_equal(ab8.source_id, None)
 
 
 def test_sourcetitle_abbreviation():
     assert_equal(ab1.sourcetitle_abbreviation, 'ACS Catal.')
+    assert_equal(ab8.sourcetitle_abbreviation, None)
 
 
 def test_srctype():
     assert_equal(ab1.srctype, 'j')
     assert_equal(ab2.srctype, 'p')
+    assert_equal(ab8.srctype, None)
 
 
 def test_startingPage():
     assert_equal(ab1.startingPage, '3894')
+    assert_equal(ab8.startingPage, None)
 
 
 def test_subject_areas():
@@ -380,22 +419,27 @@ def test_subject_areas():
     expected = [area(area='Catalysis', abbreviation='CENG', code='1503'),
                 area(area='Chemistry (all)', abbreviation='CHEM', code='1600')]
     assert_equal(ab1.subject_areas, expected)
+    assert_equal(ab8.subject_areas, None)
 
 
 def test_title():
     expected = 'Examples of effective data sharing in scientific publishing'
     assert_equal(ab1.title, expected)
+    assert_equal(ab8.title, None)
 
 
 def test_url():
     expected = 'https://api.elsevier.com/content/abstract/scopus_id/84930616647'
     assert_equal(ab1.url, expected)
+    assert_equal(ab8.url, None)
 
 
 def test_volume():
     assert_equal(ab1.volume, '5')
+    assert_equal(ab8.volume, None)
 
 
 def test_website():
     assert_equal(ab1.website, 'http://pubs.acs.org/page/accacs/about.html')
     assert_equal(ab2.website, None)
+    assert_equal(ab8.website, None)
