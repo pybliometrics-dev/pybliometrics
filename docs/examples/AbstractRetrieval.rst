@@ -10,16 +10,14 @@ The Scopus API allows a differing information depth via
 are restricted.  The view 'META_ABS' is the highest unrestricted view and contains all information from other unrestricted views.  It is therefore the default view.  The view
 with the most information content is 'FULL', which includes all information available with
 'META_ABS', but is restricted.  In generally you should always try to use `view='FULL'`
-when downloading an abstract and fall back to the default otherwise.  Note that
-the view parameter does not take effect for cached files, i.e. to switch to another
-view set `refresh=True` as well.
+when downloading an abstract and fall back to the default otherwise.
 
 You initalize the class with an ID that Scopus uses, e.g. the EID:
 
 .. code-block:: python
    
     >>> from scopus import AbstractRetrieval
-    >>> ab = AbstractRetrieval("2-s2.0-84930616647", view='FULL', refresh=True)
+    >>> ab = AbstractRetrieval("2-s2.0-84930616647", view='FULL')
 
 You can obtain basic information just by printing the object:
 
@@ -114,33 +112,43 @@ available if you downloaded the article with 'FULL' as `view` parameter.
     22
     >>> refs[0]
     Reference(position='1', id='84881394200', doi=None, title=None,
-    authors='Hallenbeck, A.P.; Kitchin, J.R.', sourcetitle='Ind. Eng. Chem. Res.',
-    publicationyear='2013', volume='52', issue=None, first='10788', last='10794',
-    text=None, fulltext='Hallenbeck, A. P.; Kitchin, J. R. Ind. Eng. Chem. Res. 2013, 52, 10788-10794 10.1021/ie400582a', citedbycount=None, authors_auid=[], authors_affiliationid=[])
+    authors='Hallenbeck, A.P.; Kitchin, J.R.', authors_auid=None,
+    authors_affiliationid=None, sourcetitle='Ind. Eng. Chem. Res.',
+    publicationyear='2013', volume=None, issue=None, first=None, last=None,
+    citedbycount=None, type=None, text=None, fulltext='Hallenbeck, A. P.;
+    Kitchin, J. R. Ind. Eng. Chem. Res. 2013, 52, 10788-10794 0.1021/ie400582a')
     >>> df = pd.DataFrame(refs)
     >>> df.columns
     Index(['position', 'id', 'doi', 'title', 'authors', 'authors_auid',
            'authors_affiliationid', 'sourcetitle', 'publicationyear', 'volume',
-           'issue', 'first', 'last', 'citedbycount', 'text', 'fulltext'],
+           'issue', 'first', 'last', 'citedbycount', 'type', 'text', 'fulltext'],
           dtype='object')
     >>> df['eid'] = '2-s2.0-' + df['id']
     >>> list(df['eid'])
-    ['2-s2.0-84881394200', '2-s2.0-84896585411', '2-s2.0-84949115648', '2-s2.0-84908637059', '2-s2.0-84901638552', '2-s2.0-84896380535', '2-s2.0-84923164062', '2-s2.0-84923164062', '2-s2.0-84930667693', '2-s2.0-79952591087', '2-s2.0-84923165709', '2-s2.0-0036572216', '2-s2.0-84924117832', '2-s2.0-84930624433', '2-s2.0-79955561198', '2-s2.0-84930642229', '2-s2.0-0010630518', '2-s2.0-84861337169', '2-s2.0-34247481878', '2-s2.0-79958260504', '2-s2.0-58149108944', '2-s2.0-84917679308']
+    ['2-s2.0-84881394200', '2-s2.0-84896585411', '2-s2.0-84949115648',
+    '2-s2.0-84908637059', '2-s2.0-84901638552', '2-s2.0-84896380535',
+    '2-s2.0-84923164062', '2-s2.0-84923164062', '2-s2.0-84930667693',
+    '2-s2.0-79952591087', '2-s2.0-84923165709', '2-s2.0-0036572216',
+    '2-s2.0-84924117832', '2-s2.0-84930624433', '2-s2.0-79955561198',
+    '2-s2.0-84930642229', '2-s2.0-0010630518', '2-s2.0-84861337169',
+    '2-s2.0-34247481878', '2-s2.0-79958260504', '2-s2.0-58149108944',
+    '2-s2.0-84917679308']
 
 Setting `view="REF"` accesses the REF view of the article, which provides more information on the referenced items (but less on other attributes of the document):
 
 .. code-block:: python
 
-    >>> ab = AbstractRetrieval("2-s2.0-84930616647", view='REF', refresh=True)
+    >>> ab = AbstractRetrieval("2-s2.0-84930616647", view='REF')
     >>> ab.references[0]
     Reference(position='1', id='84881394200', doi='10.1021/ie400582a',
     title='Effects of O2 and SO2 on the capture capacity of a primary-amine
-    based polymeric CO2 sorbent', authors='Hallenbeck, Alexander P.; Kitchin, John R.;
-    Hallenbeck, Alexander P.; Kitchin, John R.', authors_auid=['55569145100', '7004212771',
-    '55569145100', '7004212771'], authors_affiliationid=['60090776', '60090776',
-    '60027950', '60027950'], sourcetitle='Industrial and Engineering Chemistry Research',
+    based polymeric CO2 sorbent', authors='Hallenbeck, Alexander P.; Kitchin,
+    John R.; Hallenbeck, Alexander P.; Kitchin, John R.',
+    authors_auid='55569145100; 7004212771; 55569145100; 7004212771',
+    authors_affiliationid='60090776; 60090776; 60027950; 60027950',
+    sourcetitle='Industrial and Engineering Chemistry Research',
     publicationyear=None, volume='52', issue='31', first='10788', last='10794',
-    citedbycount='28', text=None, fulltext=None)
+    citedbycount='30', type='resolvedReference', text=None, fulltext=None)
 
 For conference proceedings, Scopus also collects information on the conference:
 
