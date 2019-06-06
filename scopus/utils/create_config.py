@@ -1,5 +1,6 @@
 from sys import version_info
-from os.path import exists
+from os import makedirs
+from os.path import exists, expanduser
 
 from scopus.utils.constants import DEFAULT_PATHS
 from scopus.utils.startup import config, CONFIG_FILE
@@ -34,8 +35,13 @@ def create_config():
         if len(token) > 0:
             config.set('Authentication', 'InstToken', token)
         # Write out
+        try:
+            makedirs(expanduser('~/.scopus/'))
+        except FileExistsError:
+            pass
         with open(CONFIG_FILE, 'w') as f:
             config.write(f)
+        print("Configuration file successfully created at {}".format(fname))
     else:
         text = "Configuration file already exists at {}; process to create "\
                "the file aborted.  Please open the file and edit the "\
