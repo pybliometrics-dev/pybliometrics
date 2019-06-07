@@ -119,9 +119,9 @@ class AuthorRetrieval(Retrieval):
         """
         jour = namedtuple('Journal', 'sourcetitle abbreviation type issn')
         path = ['author-profile', 'journal-history', 'journal']
-        hist = [jour(sourcetitle=pub['sourcetitle'], issn=pub.get('issn'),
+        hist = [jour(sourcetitle=pub.get('sourcetitle'), issn=pub.get('issn'),
                      abbreviation=pub.get('sourcetitle-abbrev'),
-                     type=pub['@type'])
+                     type=pub.get('@type'))
                 for pub in listify(chained_get(self._json, path, []))]
         return hist or None
 
