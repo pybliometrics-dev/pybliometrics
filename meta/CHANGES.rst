@@ -3,8 +3,22 @@ Change Log
 
 .. toctree::
 
+2.0.1
+~~~~~
+
+2019-06-08
+
+* In `AbstractRetrieval().references`, add field "type" for the status of the parsed reference.
+* Raise proper Scopus.exception even when no Scopus-supplied error message exists.
+* In all search classes, properties return None if download=False instead of raising an error.
+* In `AbstractRetrieval()`, update docstrings.
+* Fix bug related to creating the config when the config doesn't exist.
+* Fix bug when using `AbstractRetrieval()` in Python 2.
+
 2.0
 ~~~
+
+2019-05-28
 
 * Cache files in subfolders according to the used view.
 * Add method `.estimate_uniqueness()` to `AuthorRetrieval()` to estimate how unique an author profile is.
