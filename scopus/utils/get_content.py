@@ -109,10 +109,16 @@ def download(url, params=None, **kwds):
     if resp.ok:
         return resp
     else:
-        try:
-            reason = resp.json()['service-error']['status']['statusText']
+        # Try raising ScopusError with supplied error message
+        # if no message given, do without supplied error message
+        # at least raise requests error
+        if resp.status_code in errors:
+            try:
+                reason = resp.json()['service-error']['status']['statusText']
+            except:
+                reason = ""
             raise errors[resp.status_code](reason)
-        except KeyError:  # Exception not specified in scopus
+        else:
             resp.raise_for_status()
     return resp
 
