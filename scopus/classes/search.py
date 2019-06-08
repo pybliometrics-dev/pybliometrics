@@ -93,6 +93,9 @@ class Search:
                 with open(qfile, 'wb') as f:
                     for item in self._json:
                         f.write('{}\n'.format(dumps(item)).encode('utf-8'))
+            else:
+                # Assures that properties will not result in an error
+                self._json = None
         self._view = view
 
     def get_results_size(self):
