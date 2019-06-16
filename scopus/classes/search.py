@@ -105,7 +105,7 @@ class Search:
                         f.write('{}\n'.format(dumps(item)).encode('utf-8'))
             else:
                 # Assures that properties will not result in an error
-                self._json = None
+                self._json = []
         self._view = view
 
     def get_results_size(self):
