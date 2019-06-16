@@ -9,9 +9,19 @@ from scopus.exception import ScopusQueryError
 from scopus.utils import SEARCH_URL, download, get_content, get_folder
 
 
+def print_progress(iteration, total, length=50):
+    """Print terminal progress bar."""
+    percent = 100 * (iteration / float(total))
+    filled_len = int(length * iteration // total)
+    bar = '█' * filled_len + '-' * (length - filled_len)
+    print('\rProgress: |{}| {:.2f}% Complete'.format(bar, percent), end='\r')
+    if iteration == total:
+        print()
+
+
 class Search:
     def __init__(self, query, api, refresh, view='STANDARD', count=200,
-                 max_entries=5000, cursor=False, download_results=True, **kwds):
+                 max_entries=5000, cursor=False, download_results=True, print_PB=False, **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
@@ -88,14 +98,14 @@ class Search:
                         'subscription=True'.format(n, query))
                 raise ScopusQueryError(text)
             if download_results:
-                self._json = _parse(res, params, n, api, **kwds)
+                self._json = _parse(res, params, n, api, print_PB, **kwds)
                 # Finally write out the file
                 with open(qfile, 'wb') as f:
                     for item in self._json:
                         f.write('{}\n'.format(dumps(item)).encode('utf-8'))
             else:
                 # Assures that properties will not result in an error
-                self._json = []
+                self._json = None
         self._view = view
 
     def get_results_size(self):
@@ -103,7 +113,7 @@ class Search:
         return self._n
 
 
-def _parse(res, params, n, api, **kwds):
+def _parse(res, params, n, api, print_PB, **kwds):
     """Auxiliary function to download results and parse json."""
     cursor = "cursor" in params
     if not cursor:
@@ -111,6 +121,11 @@ def _parse(res, params, n, api, **kwds):
     if n == 0:
         return ""
     _json = res.get('search-results', {}).get('entry', [])
+    if print_PB:
+        chunk = 1
+        chunks = int(n/params['count']) + (n % params['count'] > 0) + 1 #roundup + 1 for the final iteration
+        print('Downloading results for query "{}":'.format(params['query']))
+        print_progress(chunk, chunks)
     # Download the remaining information in chunks
     while n > 0:
         n -= params["count"]
@@ -122,4 +137,7 @@ def _parse(res, params, n, api, **kwds):
             params.update({'start': start})
         res = download(url=SEARCH_URL[api], params=params, **kwds).json()
         _json.extend(res.get('search-results', {}).get('entry', []))
+        if print_PB:
+            chunk += 1
+            print_progress(chunk, chunks)
     return _json
