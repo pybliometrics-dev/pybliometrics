@@ -3,6 +3,14 @@ Change Log
 
 .. toctree::
 
+2.1.0
+~~~~~
+
+2019-06-17
+
+* Rename package to pybliometrics
+* In all search classes, properties return None if download=False instead of raising an error.
+
 2.0.1
 ~~~~~
 
@@ -10,7 +18,6 @@ Change Log
 
 * In `AbstractRetrieval().references`, add field "type" for the status of the parsed reference.
 * Raise proper Scopus.exception even when no Scopus-supplied error message exists.
-* In all search classes, properties return None if download=False instead of raising an error.
 * In `AbstractRetrieval()`, update docstrings.
 * Fix bug related to creating the config when the config doesn't exist.
 * Fix bug when using `AbstractRetrieval()` in Python 2.
