@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=scopus
+set SPHINXPROJ=pybliometrics
 
 if "%1" == "" goto help
 

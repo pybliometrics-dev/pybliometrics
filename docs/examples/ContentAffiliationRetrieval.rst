@@ -1,13 +1,13 @@
 Content Affiliation Retrieval
 -----------------------------
 
-:doc:`ContentAffiliationRetrieval <../reference/scopus.ContentAffiliationRetrieval>` implements the `Content Affiliation Retrieval API <https://api.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, like city, country, its members, and more.
+:doc:`ContentAffiliationRetrieval <../reference/pybliometrics.ContentAffiliationRetrieval>` implements the `Content Affiliation Retrieval API <https://api.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, like city, country, its members, and more.
 
 You initialize the class with Scopus' Affiliation ID:
 
 .. code-block:: python
    
-    >>> from scopus import ContentAffiliationRetrieval
+    >>> from pybliometrics.scopus import ContentAffiliationRetrieval
     >>> aff = ContentAffiliationRetrieval("60000356")
 
 
@@ -45,7 +45,7 @@ There are meta information, too:
     '53312'
 
 
-Scopus also collects information on different names affiliated authors use for this affiliation, which `scopus` returns as list of `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_:
+Scopus also collects information on different names affiliated authors use for this affiliation, which `pybliometrics` returns as list of `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_:
 
 .. code-block:: python
 

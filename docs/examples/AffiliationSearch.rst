@@ -1,18 +1,18 @@
 Affiliation Search
 ------------------
 
-:doc:`AffiliationSearch <../reference/scopus.AffiliationSearch>` implements the `Affiliation Search API <https://dev.elsevier.com/documentation/AffiliationSearchAPI.wadl>`_.  It performs a query to search for affiliations and then retrieves the records of the query.
+:doc:`AffiliationSearch <../reference/pybliometrics.AffiliationSearch>` implements the `Affiliation Search API <https://dev.elsevier.com/documentation/AffiliationSearchAPI.wadl>`_.  It performs a query to search for affiliations and then retrieves the records of the query.
 
 The class is initialized with a search query which you can read about in `Affiliation Search Guide <https://dev.elsevier.com/tips/AffiliationSearchTips.htm>`_.  Keep in mind that an invalid search query will result in an error.
 
 .. code-block:: python
    
-    >>> from scopus import AffiliationSearch
+    >>> from pybliometrics.scopus import AffiliationSearch
     >>> query = "AFFIL(Max Planck Institute for Innovation and Competition Munich)"
     >>> s = AffiliationSearch(query, refresh=True)
 
 
-The class mostly serves to provide a list of namedtuples storing information about the affiliation. One of them is the affiliation ID which you can use for the `ScopusAffiliation <../reference/scopus.ScopusAffiliation.html>`_ class:
+The class mostly serves to provide a list of namedtuples storing information about the affiliation. One of them is the affiliation ID which you can use for the `ScopusAffiliation <../reference/pybliometrics.ScopusAffiliation.html>`_ class:
 
 .. code-block:: python
 

@@ -1,13 +1,13 @@
 Scopus Search
 -------------
 
-:doc:`ScopusSearch <../reference/scopus.ScopusSearch>` implements the `Scopus Search API <https://api.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_.  It performs a query to search for articles and then retrieves the records of the query.
+:doc:`ScopusSearch <../reference/pybliometrics.ScopusSearch>` implements the `Scopus Search API <https://api.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_.  It performs a query to search for articles and then retrieves the records of the query.
 
 The class is initialized with a search query.  Any query that works in the `Advanced Search on scopus.com <https://www.scopus.com/search/form.uri?display=advanced>`_ will work.  An invalid search query will result in an error.
 
 .. code-block:: python
    
-    >>> from scopus import ScopusSearch
+    >>> from pybliometrics.scopus import ScopusSearch
     >>> s = ScopusSearch('FIRSTAUTH ( kitchin  j.r. )', refresh=True)
 
 
@@ -25,7 +25,7 @@ This method works even if one chooses to not download results.  It thus helps su
 
 .. code-block:: python
    
-    >>> from scopus import ScopusSearch
+    >>> from pybliometrics.scopus import ScopusSearch
     >>> other = ScopusSearch('AUTHLASTNAME(Brown)', download=False)
     >>> other.get_results_size()
     259526
@@ -149,14 +149,14 @@ The class' main attribute `results` returns a list of `namedtuples <https://docs
     4     None     undefined                         None
 
 
-The EIDs can be used for the `AbstractRetrieval <../reference/scopus.AbstractRetrieval.html>`_ class and the Scopus Author IDs in column "authid" for the `AuthorRetrieval <../reference/scopus.AuthorRetrieval.html>`_ class.
+The EIDs can be used for the `AbstractRetrieval <../reference/pybliometrics.AbstractRetrieval.html>`_ class and the Scopus Author IDs in column "authid" for the `AuthorRetrieval <../reference/pybliometrics.AuthorRetrieval.html>`_ class.
 
 The Scopus API allows a differing information depth via
 `views <https://dev.elsevier.com/guides/ScopusSearchViews.htm>`_.  The view 'COMPLETE' is the highest unrestricted view and contains all information also included in the 'STANDARD' view.  It is therefore the default view.  However, when speed is an issue to you, go for the STANDARD view, because the STANDARD view allows faster querying.  Note that the view parameter does not take effect for cached files, i.e. to switch to another view set `refresh=True` as well.
 
 Note that the view parameter does not take effect for cached files, i.e. to switch to another view set `refresh=True` as well.
 
-For convenience, method `s.get_eids()` returns the list of EIDs (similar to attribute `EIDS` in scopus 0.x):
+For convenience, method `s.get_eids()` returns the list of EIDs:
 
 .. code-block:: python
 

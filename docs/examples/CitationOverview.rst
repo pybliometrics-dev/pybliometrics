@@ -1,7 +1,7 @@
 Citation Overview
 -----------------
 
-:doc:`CitationOverview <../reference/scopus.CitationOverview>` implements the `Citations Overview API <https://api.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key needs to be approved by Elsevier manually.  Please contact Scopus to do so.
+:doc:`CitationOverview <../reference/pybliometrics.CitationOverview>` implements the `Citations Overview API <https://api.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key needs to be approved by Elsevier manually.  Please contact Scopus to do so.
 
 It takes a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_ as argument and additionally a starting year and an ending year for which yearly citations will be retrieved.  If no ending year is given, `CitationOverview` will use the current year.  Retrieving these results is not fast, so we cache them to speed up subsequent uses of the code.  Sometimes you may want new results, e.g. to update citation counts, and then you set `refresh=True`.
 
@@ -9,7 +9,7 @@ You initalize the class with Scopus' Electronic Identifier (EID):
 
 .. code-block:: python
    
-    >>> from scopus import CitationOverview
+    >>> from pybliometrics.scopus import CitationOverview
     >>> co = CitationOverview("2-s2.0-84930616647", start=2015, end=2017)
 
 The most important information is stored in attribute `cc`, which is a list of tuples storing year-wise citations to the article:
@@ -51,7 +51,7 @@ There are also author information stored as list of `namedtuples <https://docs.p
     >>> auth_id
     '7004212771'
 
-Object `auth_id` can for example be used with :doc:`AuthorRetrieval <../reference/scopus.AuthorRetrieval>`.
+Object `auth_id` can for example be used with :doc:`AuthorRetrieval <../reference/pybliometrics.AuthorRetrieval>`.
 
 
 Apart from that, there are bibliographic information, too:

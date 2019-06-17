@@ -1,13 +1,13 @@
 Author Retrieval
 ----------------
 
-:doc:`AuthorRetrieval <../reference/scopus.AuthorRetrieval>` implements the `Author Retrieval API <https://api.elsevier.com/documentation/AuthorRetrievalAPI.wadl>`_.
+:doc:`AuthorRetrieval <../reference/pybliometrics.AuthorRetrieval>` implements the `Author Retrieval API <https://api.elsevier.com/documentation/AuthorRetrievalAPI.wadl>`_.
 
 This class is to interact with the entire author record in Scopus, using the author's Scopus ID (which can be passed as either an integer or a string):
 
 .. code-block:: python
    
-    >>> from scopus import AuthorRetrieval
+    >>> from pybliometrics.scopus import AuthorRetrieval
     >>> au = AuthorRetrieval(7004212771)
 
 
@@ -72,7 +72,7 @@ Bibliometric information:
     [('1906', '1'), ('1602', '1'), ('2611', '5'), ('3311', '2'), ('1305', '4'), ('2304', '1'), ('2500', '11'), ('1604', '2'), ('1505', '1'), ('1909', '1'), ('2207', '2'), ('2200', '2'), ('1605', '4'), ('1706', '1'), ('1607', '1'), ('2504', '9'), ('1303', '1'), ('2103', '3'), ('1508', '2'), ('3104', '20'), ('2308', '2'), ('2209', '5'), ('2105', '1'), ('1311', '1'), ('1606', '22'), ('1603', '3'), ('2305', '3'), ('2503', '1'), ('3309', '1'), ('1500', '27'), ('2508', '13'), ('2100', '10'), ('1600', '26'), ('2310', '2'), ('2208', '1'), ('2300', '1'), ('1503', '20'), ('2102', '3'), ('1000', '1'), ('3110', '9'), ('3107', '2'), ('2104', '2'), ('2505', '6'), ('1710', '5'), ('2213', '5'), ('1502', '1'), ('3100', '9')]
 
 
-Information on current and former affiliation(s) to be used for the `ContentAffiliationRetrieval <../reference/scopus.ContentAffiliationRetrieval>`_ class:
+Information on current and former affiliation(s) to be used for the `ContentAffiliationRetrieval <../reference/pybliometrics.ContentAffiliationRetrieval>`_ class:
 
 .. code-block:: python
 
@@ -95,7 +95,7 @@ There are a number of getter methods for convenience.  For example, you can obta
       dtype='object')
 
 
-Method `get_document_eids()` performs a search for the author's publications with `ScopusSearch <../reference/scopus.ScopusSearch>`_ to ease interoperationability with other APIs:
+Method `get_document_eids()` performs a search for the author's publications with `ScopusSearch <../reference/pybliometrics.ScopusSearch>`_ to ease interoperationability with other APIs:
 
 .. code-block:: python
 

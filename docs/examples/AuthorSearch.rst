@@ -1,13 +1,13 @@
 Author Search
 -------------
 
-:doc:`AuthorSearch <../reference/scopus.AuthorSearch>` implements the `Author Search API <https://dev.elsevier.com/documentation/AuthorSearchAPI.wadl>`_.  It performs a query to search for authors and then retrieves the records of the query.
+:doc:`AuthorSearch <../reference/pybliometrics.AuthorSearch>` implements the `Author Search API <https://dev.elsevier.com/documentation/AuthorSearchAPI.wadl>`_.  It performs a query to search for authors and then retrieves the records of the query.
 
 The class is initialized with a search query which you can read about in `Author Search Guide <https://dev.elsevier.com/tips/AuthorSearchTips.htm>`_.  Keep in mind that an invalid search query will result in an error.
 
 .. code-block:: python
    
-    >>> from scopus import AuthorSearch
+    >>> from pybliometrics.scopus import AuthorSearch
     >>> s = AuthorSearch('AUTHLAST(Selten) and AUTHFIRST(Reinhard)', refresh=True)
 
 
@@ -20,7 +20,7 @@ To know the the number of results use the `.get_results_size()` method, even bef
     25
 
 
-The class mostly serves to provide a list of `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the `ScopusAuthor <../reference/scopus.ScopusAuthor.html>`_ class, and corresponding information:
+The class mostly serves to provide a list of `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the `ScopusAuthor <../reference/pybliometrics.ScopusAuthor.html>`_ class, and corresponding information:
 
 .. code-block:: python
 

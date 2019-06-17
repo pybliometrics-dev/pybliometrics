@@ -1,6 +1,7 @@
 Tips
 ----
 
+.. include:: tips/rename.rst
 .. include:: tips/KeyError.rst
 .. include:: tips/updates.rst
 .. include:: tips/errors.rst

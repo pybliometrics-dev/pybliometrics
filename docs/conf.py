@@ -12,7 +12,7 @@ project_root = os.path.dirname(cwd)
 sys.path.insert(0, os.path.abspath('source'))
 sys.path.insert(0, project_root)
 
-import scopus
+import pybliometrics
 
 # General configuration
 needs_sphinx = '1.3'
@@ -28,12 +28,12 @@ extensions = [
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
-project = 'scopus'
+project = 'pybliometrics'
 author = 'John Kitchin and Michael E. Rose'
 copyright = ','.join(['2017-2019', author])
 
-version = scopus.__version__
-release = scopus.__version__
+version = pybliometrics.__version__
+release = pybliometrics.__version__
 
 language = None
 
@@ -46,8 +46,8 @@ autodoc_member_order = 'groupwise'
 # Options for HTML output
 html_theme = 'alabaster'
 html_theme_options = {
-    'github_user': 'scopus-api',
-    'github_repo': 'scopus',
+    'github_user': 'pybliometrics-dev',
+    'github_repo': 'pybliometrics',
     'github_banner': 'true',
     'github_button': 'true',
     'github_type': 'star',
@@ -64,7 +64,7 @@ html_static_path = ['_static']
 
 # Options for HTMLHelp output
 html_show_sourcelink = True
-htmlhelp_basename = 'scopusdoc'
+htmlhelp_basename = 'pybliometricsdoc'
 autoclass_content = 'both'
 
 # Option to group members of classes
@@ -90,19 +90,19 @@ latex_elements = {
 }
 
 latex_documents = [
-    (master_doc, 'scopus.tex', 'scopus Documentation',
+    (master_doc, 'pybliometrics.tex', 'pybliometrics Documentation',
      author, 'manual'),
 ]
 
 # Options for manual page output
 man_pages = [
-    (master_doc, 'scopus', 'scopus Documentation',
+    (master_doc, 'pybliometrics', 'pybliometrics Documentation',
      [author], 1)
 ]
 
 # Options for Texinfo output
 texinfo_documents = [
-    (master_doc, 'scopus', 'scopus Documentation',
-     author, 'scopus', 'One line description of project.',
+    (master_doc, 'pybliometrics', 'pybliometrics Documentation',
+     author, 'pybliometrics', 'One line description of project.',
      'Miscellaneous'),
 ]

@@ -1,29 +1,29 @@
-scopus
-======
+pybliometrics
+=============
 
 Access Elsevier Scopus's API from Python on a large scale.
 
-Documentation: https://scopus.readthedocs.io
+Documentation: https://pybliometrics.readthedocs.io
 
-Development: https://github.com/scopus-api/scopus
+Development: https://github.com/pybliometrics-dev/pybliometrics
 
-.. image:: https://badge.fury.io/py/scopus.svg
-    :target: https://badge.fury.io/py/scopus
+.. image:: https://badge.fury.io/py/pybliometrics.svg
+    :target: https://badge.fury.io/py/pybliometrics
 
-.. image:: https://img.shields.io/pypi/pyversions/scopus.svg
-    :target: https://img.shields.io/pypi/pyversions/scopus.svg
+.. image:: https://img.shields.io/pypi/pyversions/pybliometrics.svg
+    :target: https://img.shields.io/pypi/pyversions/pybliometrics.svg
 
-.. image:: https://readthedocs.org/projects/scopus/badge/?version=latest
-    :target: https://readthedocs.org/projects/scopus/badge/?version=latest
+.. image:: https://readthedocs.org/projects/pybliometrics/badge/?version=stable
+    :target: https://readthedocs.org/projects/pybliometrics/badge/?version=stable
 
-.. image:: https://img.shields.io/pypi/dm/scopus.svg
-    :target: https://img.shields.io/pypi/dm/scopus.svg
+.. image:: https://img.shields.io/pypi/dm/pybliometrics.svg
+    :target: https://img.shields.io/pypi/dm/pybliometrics.svg
 
-.. image:: https://img.shields.io/pypi/l/scopus.svg
-    :target: https://img.shields.io/pypi/l/scopus.svg
+.. image:: https://img.shields.io/pypi/l/pybliometrics.svg
+    :target: https://img.shields.io/pypi/l/pybliometrics.svg
 
-.. image:: https://api.codeclimate.com/v1/badges/047a5aceea97e601e924/maintainability
-   :target: https://codeclimate.com/github/scopus-api/scopus/maintainability
+.. image:: https://api.codeclimate.com/v1/badges/a4d7edd206a1252dfcfe/maintainability
+   :target: https://codeclimate.com/github/pybliometrics-dev/pybliometrics/maintainability
 
 Installation
 ============
@@ -32,21 +32,21 @@ Install stable version from PyPI:
 
 .. code:: bash
 
-    pip install scopus
+    pip install pybliometrics
 
 or development version from GitHub repository:
 
 .. code:: bash
 
-    pip install git+git://github.com/scopus-api/scopus
+    pip install git+git://github.com/pybliometrics-dev/pybliometrics
 
 Citation
 ========
-If scopus helped you getting data for research, please cite our corresponding paper:
+If pybliometrics helped you getting data for research, please cite our corresponding paper:
 
 * Rose, Michael E. and John R. Kitchin (2019): "`scopus: Scriptable bibliometrics using a Python interface to Scopus <./meta/RoseJohn2019_scopus.pdf>`_", Max Planck Institute for Innovation and Competition Research Paper No. 19-03.
 
-Citing the paper helps the development of scopus, because it justifies funneling resources into the development.
+Citing the paper helps the development of pybliometrics, because it justifies funneling resources into the development.
 
 Change log
 ==========

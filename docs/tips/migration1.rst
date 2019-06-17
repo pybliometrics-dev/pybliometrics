@@ -1,9 +1,9 @@
 Migration Guide from 0.x to 1.x
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The upgrade from scopus 0.x to 1.x saw many changes in `scopus`' internal architecture, but also in four classes (see `change log <https://scopus.readthedocs.io/en/latest/changelog.html>`_): `ScopusAbstract()`, `ScopusAffiliation()`, `ScopusAuthor()` and `ScopusSearch()`.
+The upgrade from `scopus` (now `pybliometrics`) 0.x to 1.x saw many changes in `pybliometrics`' internal architecture, but also in four classes (see `change log <https://scopus.readthedocs.io/en/latest/changelog.html>`_): `ScopusAbstract()`, `ScopusAffiliation()`, `ScopusAuthor()` and `ScopusSearch()`.
 
-To avoid too many issues resulting from missing backward-compatibility, new classes were introduced to gradually replace other ones: `AbstractRetrieval()` (replacing `ScopusAbstract()`), `AuthorRetrieval()` (replacing `ScopusAuthor()`) and `ContentAffiliationRetrieval()` (replacing `ScopusAffiliation()`).  The corresponding old classes will stay until scopus 2.x but their maintenance has been suspended.  Cached files that were downloaded with the old classes are not usable by the new classes.
+To avoid too many issues resulting from missing backward-compatibility, new classes were introduced to gradually replace other ones: `AbstractRetrieval()` (replacing `ScopusAbstract()`), `AuthorRetrieval()` (replacing `ScopusAuthor()`) and `ContentAffiliationRetrieval()` (replacing `ScopusAffiliation()`).  The corresponding old classes will remained until pybliometrics 2.x but their maintenance has been suspended immediately.  Cached files that were downloaded with the old classes are not usable by the new classes.
 
 `ScopusSearch()` had to be revamped completely; code that uses `ScopusSearch()` has to be updated, but not significantly.
 
