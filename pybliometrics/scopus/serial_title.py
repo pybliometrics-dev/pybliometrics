@@ -99,16 +99,14 @@ class SerialTitle(Retrieval):
         (year, indicator)-tuple.  See
         https://www.scimagojr.com/journalrank.php.
         """
-        return (self._entry['SJRList']['SJR'][0]['@year'],
-                self._entry['SJRList']['SJR'][0]['$'])
+        return _parse_list(self._entry, "SJR")
 
     @property
     def sniplist(self):
         """Source-Normalized Impact per Paper (SNIP) of the source.  See
         https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip.
         """
-        return (self._entry['SNIPList']['SNIP'][0]['@year'],
-                self._entry['SNIPList']['SNIP'][0]['$'])
+        return _parse_list(self._entry, "SNIP")
 
     @property
     def source_id(self):
@@ -177,3 +175,9 @@ SNIP ({self.sniplist[0]}): ({self.sniplist[1]})
 ISSN: {self.issn}, E-ISSN: {self.eissn}, Scopus ID: {self.source_id}'''.format(
             self=self, areas=areas)
         return s
+
+
+def _parse_list(d, list):
+    """Auxiliary function to parse SNIP and SJR lists."""
+    keyword = list + "List"
+    return (d[keyword][list][0]['@year'], d[keyword][list][0]['$'])
