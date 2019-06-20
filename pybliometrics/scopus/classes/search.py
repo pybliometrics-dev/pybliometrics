@@ -60,14 +60,10 @@ class Search:
         ValueError
             If the api parameteris an invalid entry.
         """
-        # Checks
-        if api not in SEARCH_URL:
-            raise ValueError('api parameter must be one of ' +
-                             ', '.join(SEARCH_URL.keys()))
-
         # Read the file contents if file exists and we are not refreshing,
         # otherwise download query anew and cache file
-        qfile = join(get_folder(api, view), md5(query.encode('utf8')).hexdigest())
+        fname = md5(query.encode('utf8')).hexdigest()
+        qfile = join(get_folder(api, view), fname)
         if not refresh and exists(qfile):
             with open(qfile, "rb") as f:
                 self._json = [loads(line) for line in f.readlines()]
