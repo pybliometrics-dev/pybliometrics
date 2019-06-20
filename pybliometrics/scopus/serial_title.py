@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 from pybliometrics.scopus.classes import Retrieval
+from pybliometrics.scopus.utils import get_link
 
 
 class SerialTitle(Retrieval):
@@ -85,12 +86,12 @@ class SerialTitle(Retrieval):
     @property
     def scopus_source_link(self):
         """URL to info site on scopus.com."""
-        return self._entry.get('link', [{}])[0].get('@href')
+        return get_link(self._entry, 0, ["link"])
 
     @property
     def self_link(self):
         """URL to the source's API page."""
-        return self._json.get('link', [{}])[0].get('@href')
+        return get_link(self._json, 0, ["link"])
 
     @property
     def sjrlist(self):

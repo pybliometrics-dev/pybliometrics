@@ -28,9 +28,9 @@ def get_id(s):
     return chained_get(s, path, "").split(':')[-1] or None
 
 
-def get_link(dct, idx):
+def get_link(dct, idx, path=['coredata', 'link']):
     """Helper function to return the link at position `idx` from coredata."""
-    links = chained_get(dct, ['coredata', 'link'], [])
+    links = chained_get(dct, path, [{}])
     try:
         return links[idx].get('@href')
     except IndexError:
