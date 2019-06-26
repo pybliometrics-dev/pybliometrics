@@ -310,6 +310,12 @@ def test_pageRange():
     assert_equal(ab8.pageRange, None)
 
 
+def test_pii():
+    assert_equal(ab4.pii, 'S0304407697000183')
+    assert_equal(ab5.pii, None)
+    assert_equal(ab6.pii, 'S0048969718335976')
+
+
 def test_publicationName():
     assert_equal(ab1.publicationName, 'ACS Catalysis')
     assert_equal(ab8.publicationName, None)
@@ -323,6 +329,11 @@ def test_publisher():
 def test_publisheraddress():
     assert_equal(ab2.publisheraddress, 'Piscataway, NJ, United States')
     assert_equal(ab8.publisheraddress, None)
+
+
+def test_pubmed_id():
+    assert_equal(ab6.pubmed_id, '30240917')
+    assert_equal(ab7.pubmed_id, None)
 
 
 def test_refcount():

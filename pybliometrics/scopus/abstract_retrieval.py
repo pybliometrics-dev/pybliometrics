@@ -341,6 +341,11 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'prism:pageRange'])
 
     @property
+    def pii(self):
+        """The PII (Publisher Item Identifier) of the document."""
+        return chained_get(self._json, ['coredata', 'pii'])
+
+    @property
     def publicationName(self):
         """Name of source the document is published in."""
         return chained_get(self._json, ['coredata', 'prism:publicationName'])
@@ -362,6 +367,11 @@ class AbstractRetrieval(Retrieval):
     def publisheraddress(self):
         """Name of the publisher of the document."""
         return chained_get(self._head, ['source', 'publisher', 'publisheraddress'])
+
+    @property
+    def pubmed_id(self):
+        """The PubMed ID of the document."""
+        return chained_get(self._json, ['coredata', 'pubmed-id'])
 
     @property
     def refcount(self):
