@@ -310,7 +310,9 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def idxterms(self):
-        """List of index terms."""
+        """List of index terms (these are just one category of those
+        Scopus provides in the web version)
+        ."""
         try:
             terms = listify(self._json.get("idxterms", {}).get('mainterm', []))
         except AttributeError:  # idxterms is empty
