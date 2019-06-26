@@ -3,6 +3,16 @@ Change Log
 
 .. toctree::
 
+
+2.1.1
+~~~~~
+
+2019-06-26
+
+* New properties for `AbstractRetrieval()`: `pii` and `pubmed_id`.
+* Improve documentation (`AbstractRetrieval().idxterms` and download machine).
+* Fix bug forcing the presence of the package `scopus`.
+
 2.1.0
 ~~~~~
 
