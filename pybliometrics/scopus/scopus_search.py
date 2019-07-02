@@ -89,7 +89,7 @@ class ScopusSearch(Search):
             out.append(new)
         return out or None
 
-    def __init__(self, query, refresh=False, subscriber=True,
+    def __init__(self, query, refresh=False, subscriber=True, cursor=True,
                  view=None, download=True, **kwds):
         """Class to perform a query against the Scopus Search API.
 
@@ -157,8 +157,8 @@ class ScopusSearch(Search):
         # Query
         self.query = query
         Search.__init__(self, query=query, api='ScopusSearch', refresh=refresh,
-                        count=count, cursor=subscriber, view=view,
-                        download_results=download, **kwds)
+                        count=count, subscriber=subscriber, cursor=cursor,
+                        view=view, download_results=download, **kwds)
 
     def __str__(self):
         eids = self.get_eids()
