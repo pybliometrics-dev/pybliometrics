@@ -427,6 +427,9 @@ class AbstractRetrieval(Retrieval):
             volisspag = info.get('volisspag', {}) or {}
             if isinstance(volisspag, list):
                 volisspag = volisspag[0]
+            volis = volisspag.get("voliss", {})
+            if isinstance(volis, list):
+                volis = volis[0]
             # Parse author information
             try:  # FULL view parsing
                 auth = listify(item['ref-info']['ref-authors']['author'])
@@ -462,8 +465,7 @@ class AbstractRetrieval(Retrieval):
                 title=info.get('ref-title', {}).get('ref-titletext', info.get('title')),
                 sourcetitle=info.get('ref-sourcetitle', info.get('sourcetitle')),
                 publicationyear=info.get('ref-publicationyear', {}).get('@first'),
-                volume=volisspag.get('voliss', {}).get('@volume'),
-                issue=volisspag.get('voliss', {}).get('@issue'),
+                volume=volis.get('@volume'), issue=volis.get('@issue'),
                 first=volisspag.get('pagerange', {}).get('@first'),
                 last=volisspag.get('pagerange', {}).get('@last'),
                 citedbycount=info.get('citedby-count'), type=info.get('type'),
