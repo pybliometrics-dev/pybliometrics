@@ -367,7 +367,7 @@ def test_references():
     authors3 = 'Armbrust, Michael; Fox, Armando; Griffith, Rean; Joseph, '\
         'Anthony D.; Katz, Randy; Konwinski, Andy; Lee, Gunho; '\
         'Patterson, David; Rabkin, Ariel; Stoica, Ion; Zaharia, Matei'
-    expected8 =  ref(position='1', id='77950347409', authors=authors3,
+    expected8 = ref(position='1', id='77950347409', authors=authors3,
         doi='10.1145/1721654.1721672', title='A view of cloud computing',
         sourcetitle='Communications of the ACM', type='resolvedReference',
         publicationyear=None, volume='53', issue='4', first='50',

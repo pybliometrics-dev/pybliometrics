@@ -11,7 +11,7 @@ aff = ContentAffiliationRetrieval('60000356', refresh=True)
 
 
 def test_address():
-    assert_equal(aff.address, 'Private Bag X3')
+    assert_equal(aff.address, 'Private Bag X3, Rondebosch')
 
 
 def test_affiliation_name():

@@ -20,7 +20,7 @@ def test_aggregation_type():
 
 def test_citescoreyearinfolist():
     assert_equal(sofwarex.citescoreyearinfolist,
-        [('2017', '10.13'), ('2018', '11.54')])
+        [('2018', '11.56'), ('2019', '0.99')])
     assert_equal(isa.citescoreyearinfolist, None)
 
 
@@ -93,12 +93,12 @@ def test_self_link():
         "https://api.elsevier.com/content/serial/title/issn/56171099")
 
 def test_sjrlist():
-    assert_equal(sofwarex.sjrlist, ('2017', '3.724'))
+    assert_equal(sofwarex.sjrlist, ('2018', '4.539'))
     assert_equal(isa.sjrlist, ('2006', '0.101'))
 
 
 def test_sniplist():
-    assert_equal(sofwarex.sniplist, ('2017', '5.022'))
+    assert_equal(sofwarex.sniplist, ('2018', '4.905'))
     assert_equal(isa.sniplist, ('2006', '0'))
 
 
