@@ -19,3 +19,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+The Licensee undertakes to mention the name pybliometrics and to cite the
+following article in all publications in which results of analyses conducted
+with the Software are published: Rose, Michael E. and John R. Kitchin (2019):
+"pybliometrics: Scriptable bibliometrics using a Python interface to Scopus",
+SoftwareX 10 (2019) 100263.
