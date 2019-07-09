@@ -3,6 +3,14 @@ Change Log
 
 .. toctree::
 
+2.1.2
+~~~~~
+
+2019-07-09
+
+* Fix bugs arising from passing duplicate parameters through kwds in Search classes.
+* Fix bug in `AbstractRetrieval().references` with duplicte volume/issue information from Scopus.
+* Fix bug with wrong object type when using `AuthorRetrieval().get_coauthors()`.
 
 2.1.1
 ~~~~~
