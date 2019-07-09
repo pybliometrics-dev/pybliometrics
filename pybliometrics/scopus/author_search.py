@@ -71,8 +71,7 @@ class AuthorSearch(Search):
         view = "STANDARD"  # In case Scopus adds different views in future
         self.query = query
         Search.__init__(self, query=query, refresh=refresh, view=view,
-                        api='AuthorSearch', count=count,
-                        download_results=download)
+                        api='AuthorSearch', count=count, download=download)
 
     def __str__(self):
         s = """Search {} yielded {} author(s):\n    {}"""

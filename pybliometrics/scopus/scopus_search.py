@@ -113,11 +113,6 @@ class ScopusSearch(Search):
             Allowed values: STANDARD, COMPLETE.  If None, defaults to
             COMPLETE if subscriber=True and to STANDARD if subscriber=False.
 
-        cursor : bool (optional, default=True)
-            Whether to use Scopus's cursor navigation to obtain results.
-            Using the cursor allows to download an unlimited results set.
-            Non-subscribers should set this to False.
-
         download : bool (optional, default=True)
             Whether to download results (if they have not been cached).
 
@@ -154,11 +149,14 @@ class ScopusSearch(Search):
         count = 25
         if view == "STANDARD" and subscriber:
             count = 200
+        if "cursor" in kwds:
+            subscriber = kwds["cursor"]
+            kwds.pop("cursor")
         # Query
         self.query = query
         Search.__init__(self, query=query, api='ScopusSearch', refresh=refresh,
                         count=count, cursor=subscriber, view=view,
-                        download_results=download, **kwds)
+                        download=download, **kwds)
 
     def __str__(self):
         eids = self.get_eids()

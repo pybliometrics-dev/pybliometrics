@@ -60,7 +60,7 @@ class AffiliationSearch(Search):
 
         self.query = query
         Search.__init__(self, query=query, api="AffiliationSearch",
-                        refresh=refresh, count=count, download_results=download)
+                        refresh=refresh, count=count, download=download)
 
     def __str__(self):
         s = """Search {} yielded {} affiliation(s):\n    {}"""

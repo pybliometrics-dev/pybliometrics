@@ -6,13 +6,13 @@ from os.path import exists, join
 from warnings import warn
 
 from pybliometrics.scopus.exception import ScopusQueryError
-from pybliometrics.scopus.utils import SEARCH_URL, download, get_content,\
+from pybliometrics.scopus.utils import SEARCH_URL, cache_file, get_content,\
     get_folder
 
 
 class Search:
     def __init__(self, query, api, refresh, view='STANDARD', count=200,
-                 max_entries=5000, cursor=False, download_results=True, **kwds):
+                 max_entries=5000, cursor=False, download=True, **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
@@ -45,7 +45,7 @@ class Search:
             to `start` parameter, the `cursor` parameter does not allow users
             to obtain partial results.
 
-        download_results : bool (optional, default=True)
+        download : bool (optional, default=True)
             Whether to download results (if they have not been cached) or not.
 
         kwds : key-value parings, optional
@@ -76,7 +76,7 @@ class Search:
             else:
                 params.update({'start': 0})
             # Download results
-            res = download(url=SEARCH_URL[api], params=params, **kwds).json()
+            res = cache_file(url=SEARCH_URL[api], params=params, **kwds).json()
             n = int(res['search-results'].get('opensearch:totalResults', 0))
             self._n = n
             if not cursor and n > max_entries:  # Stop if there are too many results
@@ -84,7 +84,7 @@ class Search:
                         'number, change your query ({}) or set '
                         'subscription=True'.format(n, query))
                 raise ScopusQueryError(text)
-            if download_results:
+            if download:
                 self._json = _parse(res, params, n, api, **kwds)
                 # Finally write out the file
                 with open(qfile, 'wb') as f:
@@ -117,6 +117,6 @@ def _parse(res, params, n, api, **kwds):
         else:
             start += params["count"]
             params.update({'start': start})
-        res = download(url=SEARCH_URL[api], params=params, **kwds).json()
+        res = cache_file(url=SEARCH_URL[api], params=params, **kwds).json()
         _json.extend(res.get('search-results', {}).get('entry', []))
     return _json

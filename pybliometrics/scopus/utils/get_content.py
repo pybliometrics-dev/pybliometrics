@@ -11,51 +11,7 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           500: exception.Scopus500Error}
 
 
-def detect_id_type(sid):
-    """Method that tries to infer the type of abstract ID.
-
-    Parameters
-    ----------
-    sid : str
-        The ID of an abstract on Scopus.
-
-    Raises
-    ------
-    ValueError
-        If the ID type cannot be inferred.
-
-    Notes
-    -----
-    PII usually has 17 chars, but in Scopus there are valid cases with only
-    16 for old converted articles.
-
-    Scopus ID contains only digits, but it can have leading zeros.  If ID
-    with leading zeros is treated as a number, SyntaxError can occur, or the
-    ID will be rendered invalid and the type will be misinterpreted.
-    """
-    sid = str(sid)
-    try:
-        isnumeric = sid.isnumeric()
-    except AttributeError:  # Python2
-        isnumeric = unicode(sid, 'utf-8').isnumeric()
-    if not isnumeric:
-        if sid.startswith('2-s2.0-'):
-            id_type = 'eid'
-        elif '/' in sid:
-            id_type = 'doi'
-        elif 16 <= len(sid) <= 17:
-            id_type = 'pii'
-    elif isnumeric:
-        if len(sid) < 10:
-            id_type = 'pubmed_id'
-        else:
-            id_type = 'scopus_id'
-    else:
-        raise ValueError('ID type detection failed for \'{}\'.'.format(sid))
-    return id_type
-
-
-def download(url, params={}, **kwds):
+def cache_file(url, params={}, **kwds):
     """Helper function to download a file and return its content.
 
     Parameters
@@ -123,6 +79,50 @@ def download(url, params={}, **kwds):
     return resp
 
 
+def detect_id_type(sid):
+    """Method that tries to infer the type of abstract ID.
+
+    Parameters
+    ----------
+    sid : str
+        The ID of an abstract on Scopus.
+
+    Raises
+    ------
+    ValueError
+        If the ID type cannot be inferred.
+
+    Notes
+    -----
+    PII usually has 17 chars, but in Scopus there are valid cases with only
+    16 for old converted articles.
+
+    Scopus ID contains only digits, but it can have leading zeros.  If ID
+    with leading zeros is treated as a number, SyntaxError can occur, or the
+    ID will be rendered invalid and the type will be misinterpreted.
+    """
+    sid = str(sid)
+    try:
+        isnumeric = sid.isnumeric()
+    except AttributeError:  # Python2
+        isnumeric = unicode(sid, 'utf-8').isnumeric()
+    if not isnumeric:
+        if sid.startswith('2-s2.0-'):
+            id_type = 'eid'
+        elif '/' in sid:
+            id_type = 'doi'
+        elif 16 <= len(sid) <= 17:
+            id_type = 'pii'
+    elif isnumeric:
+        if len(sid) < 10:
+            id_type = 'pubmed_id'
+        else:
+            id_type = 'scopus_id'
+    else:
+        raise ValueError('ID type detection failed for \'{}\'.'.format(sid))
+    return id_type
+
+
 def get_content(qfile, refresh, *args, **kwds):
     """Helper function to read file content as xml.  The file is cached
     in a subfolder of ~/.scopus/.
@@ -147,7 +147,7 @@ def get_content(qfile, refresh, *args, **kwds):
         with open(qfile, 'rb') as f:
             content = f.read()
     else:
-        content = download(*args, **kwds).text.encode('utf-8')
+        content = cache_file(*args, **kwds).text.encode('utf-8')
         with open(qfile, 'wb') as f:
             f.write(content)
     return content

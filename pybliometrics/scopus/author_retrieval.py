@@ -6,7 +6,7 @@ from json import loads
 from .author_search import AuthorSearch
 from .scopus_search import ScopusSearch
 from pybliometrics.scopus.classes import Retrieval
-from pybliometrics.scopus.utils import chained_get, download, get_link,\
+from pybliometrics.scopus.utils import chained_get, cache_file, get_link,\
     listify, parse_date_created
 
 
@@ -249,7 +249,7 @@ class AuthorRetrieval(Retrieval):
         coauthor groups.
         """
         # Get number of authors to search for
-        res = download(url=self.coauthor_link)
+        res = cache_file(url=self.coauthor_link)
         data = loads(res.text)['search-results']
         N = int(data.get('opensearch:totalResults', 0))
         # Store information in namedtuples
@@ -260,7 +260,7 @@ class AuthorRetrieval(Retrieval):
         count = 0
         while count < N:
             params = {'start': count, 'count': 25}
-            res = download(url=self.coauthor_link, params=params, accept='json')
+            res = cache_file(url=self.coauthor_link, params=params, accept='json')
             data = loads(res.text)['search-results'].get('entry', [])
             # Extract information for each coauthor
             for entry in data:
