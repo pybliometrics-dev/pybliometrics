@@ -249,7 +249,7 @@ class AuthorRetrieval(Retrieval):
         coauthor groups.
         """
         # Get number of authors to search for
-        res = download(url=self.coauthor_link, accept='json')
+        res = download(url=self.coauthor_link)
         data = loads(res.text)['search-results']
         N = int(data.get('opensearch:totalResults', 0))
         # Store information in namedtuples

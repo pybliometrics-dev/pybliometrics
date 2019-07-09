@@ -55,7 +55,7 @@ def detect_id_type(sid):
     return id_type
 
 
-def download(url, params=None, **kwds):
+def download(url, params={}, **kwds):
     """Helper function to download a file and return its content.
 
     Parameters
