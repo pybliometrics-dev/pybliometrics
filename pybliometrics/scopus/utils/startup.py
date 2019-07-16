@@ -13,7 +13,7 @@ if not os.path.exists(CONFIG_FILE):
     text = "pybliometrics did not find a configuration file.  Please issue "\
            "pybliometrics.scopus.utils.create_config() to start the process "\
            "which guides you through the generation of the configuration "\
-           "file or read https://scopus.readthedocs.io/en/stable/configuration.html."
+           "file or read https://pybliometrics.readthedocs.io/en/stable/configuration.html."
     warnings.warn(text, UserWarning)
 else:
     config.read(CONFIG_FILE)
