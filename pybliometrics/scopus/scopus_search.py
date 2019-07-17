@@ -84,7 +84,7 @@ class ScopusSearch(Search):
                 author_count=item.get('author-count', {}).get('$'),
                 affiliation_city=info.get("aff_city"), afid=info.get("afid"),
                 description=item.get('dc:description'), pii=item.get('pii'),
-                authkeywords=item.get('authkeywords'), eid=item['eid'],
+                authkeywords=item.get('authkeywords'), eid=item.get['eid'],
                 fund_acr=item.get('fund-acr'), pubmed_id=item.get('pubmed-id'))
             out.append(new)
         return out or None
