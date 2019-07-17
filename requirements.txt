@@ -1,2 +1,3 @@
+nose
 pbr
 requests
