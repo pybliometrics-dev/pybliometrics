@@ -65,6 +65,10 @@ class ScopusSearch(Search):
             date = item.get('prism:coverDate')
             if isinstance(date, list):
                 date = date[0].get('$')
+            try:
+                eid=item['eid']
+            except KeyError:
+                pass
             new = doc(article_number=item.get('article-number'),
                 title=item.get('dc:title'), fund_sponsor=item.get('fund-sponsor'),
                 subtype=item.get('subtype'), issn=item.get('prism:issn'),
@@ -84,7 +88,7 @@ class ScopusSearch(Search):
                 author_count=item.get('author-count', {}).get('$'),
                 affiliation_city=info.get("aff_city"), afid=info.get("afid"),
                 description=item.get('dc:description'), pii=item.get('pii'),
-                authkeywords=item.get('authkeywords'), eid=item.get['eid'],
+                authkeywords=item.get('authkeywords'),
                 fund_acr=item.get('fund-acr'), pubmed_id=item.get('pubmed-id'))
             out.append(new)
         return out or None
