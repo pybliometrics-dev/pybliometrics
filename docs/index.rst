@@ -32,7 +32,7 @@ Citation
 
 If pybliometrics helped you getting data for research, please cite our corresponding paper:
 
-* Rose, Michael E. and John R. Kitchin: "`pybliometrics: Scriptable bibliometrics using a Python interface to Scopus <./meta/1-s2.0-S2352711019300573-main.pdf>`_", SoftwareX 10 (2019) 100263.
+* Rose, Michael E. and John R. Kitchin: "`pybliometrics: Scriptable bibliometrics using a Python interface to Scopus <https://github.com/pybliometrics-dev/pybliometrics/blob/master/meta/1-s2.0-S2352711019300573-main.pdf>`_", SoftwareX 10 (2019) 100263.
 
 Citing the paper helps the development of pybliometrics, because it justifies funneling resources into the development.  It also signals that you obtained data from Scopus in a transparent and replicable way.
 
