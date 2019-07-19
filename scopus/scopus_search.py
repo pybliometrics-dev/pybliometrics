@@ -117,7 +117,7 @@ class ScopusSearch(Search):
             Whether to download results (if they have not been cached).
 
         verbose : bool (optional, default=False)
-            Whether to print a downloading progress bar to terminal. requiers download=True.
+            Whether to print a downloading progress bar to terminal. Has no effect for download=False.
 
         kwds : key-value parings, optional
             Keywords passed on as query parameters.  Must contain fields
