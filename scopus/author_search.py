@@ -59,7 +59,7 @@ class AuthorSearch(Search):
             Whether to download results (if they have not been cached).
 
         verbose : bool (optional, default=False)
-            Whether to print a downloading progress bar to terminal. requiers download=True.
+            Whether to print a downloading progress bar to terminal. Has no effect for download=False.
 
         Raises
         ------
