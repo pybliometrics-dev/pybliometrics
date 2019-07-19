@@ -1,4 +1,5 @@
 from collections import namedtuple
+from warnings import warn
 
 from pybliometrics.scopus.classes import Search
 from pybliometrics.scopus.utils import listify
@@ -68,7 +69,8 @@ class ScopusSearch(Search):
             try:
                 eid=item['eid']
             except KeyError:
-                pass
+                warn("KeyError: 'eID' missing in download. Filling in 'NA' now. Retry the download if you need the eID.")
+                item['eid']="NA"
             new = doc(article_number=item.get('article-number'),
                 title=item.get('dc:title'), fund_sponsor=item.get('fund-sponsor'),
                 subtype=item.get('subtype'), issn=item.get('prism:issn'),
@@ -88,7 +90,7 @@ class ScopusSearch(Search):
                 author_count=item.get('author-count', {}).get('$'),
                 affiliation_city=info.get("aff_city"), afid=info.get("afid"),
                 description=item.get('dc:description'), pii=item.get('pii'),
-                authkeywords=item.get('authkeywords'),
+                authkeywords=item.get('authkeywords'), eid=item['eid'],
                 fund_acr=item.get('fund-acr'), pubmed_id=item.get('pubmed-id'))
             out.append(new)
         return out or None
