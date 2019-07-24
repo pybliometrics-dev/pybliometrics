@@ -109,7 +109,7 @@ def detect_id_type(sid):
     if not isnumeric:
         if sid.startswith('2-s2.0-'):
             id_type = 'eid'
-        elif '/' in sid:
+        elif '/' in sid or "." in sid:
             id_type = 'doi'
         elif 16 <= len(sid) <= 17:
             id_type = 'pii'
@@ -118,9 +118,10 @@ def detect_id_type(sid):
             id_type = 'pubmed_id'
         else:
             id_type = 'scopus_id'
-    else:
+    try:
+        return id_type
+    except UnboundLocalError:
         raise ValueError('ID type detection failed for \'{}\'.'.format(sid))
-    return id_type
 
 
 def get_content(qfile, refresh, *args, **kwds):

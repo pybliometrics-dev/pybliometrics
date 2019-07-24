@@ -3,6 +3,14 @@ Change Log
 
 .. toctree::
 
+2.1.3
+~~~~~
+
+2019-07-16
+
+* Fix bug detecting DOIs without slash in `AbstractRetrieval()`.
+* Fix bug related to creating the config file.
+
 2.1.2
 ~~~~~
 
