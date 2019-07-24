@@ -112,9 +112,9 @@ def _parse(res, params, n, api, **kwds):
     while n > 0:
         n -= params["count"]
         if cursor:
-            cursor = res['search-results'].get('cursor')
-            if cursor:
-                pointer =cursor.get('@next')
+            cursor_generator = res['search-results'].get('cursor')
+            if cursor_generator:
+                pointer = cursor_generator.get('@next')
                 params.update({'cursor': pointer})
         else:
             start += params["count"]
