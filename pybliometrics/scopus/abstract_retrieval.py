@@ -64,6 +64,8 @@ class AbstractRetrieval(Retrieval):
         items = listify(self._head.get('author-group', []))
         index_path = ['preferred-name', 'ce:indexed-name']
         for item in items:
+            if not item:
+                continue
             # Affiliation information
             aff = item.get('affiliation', {})
             try:
