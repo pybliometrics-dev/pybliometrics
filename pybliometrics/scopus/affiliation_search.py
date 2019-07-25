@@ -28,7 +28,7 @@ class AffiliationSearch(Search):
             out.append(new)
         return out or None
 
-    def __init__(self, query, refresh=False, download=True, count=200, verbose=False)):
+    def __init__(self, query, refresh=False, download=True, count=200, verbose=False):
         """Class to perform a search for an affiliation.
 
         Parameters
