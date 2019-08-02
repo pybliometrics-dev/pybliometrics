@@ -7,12 +7,12 @@ from warnings import warn
 
 from pybliometrics.scopus.exception import ScopusQueryError
 from pybliometrics.scopus.utils import SEARCH_URL, cache_file, get_content,\
-    get_folder
+    get_folder, print_progress
 
 
 class Search:
     def __init__(self, query, api, refresh, view='STANDARD', count=200,
-                 max_entries=5000, cursor=False, download=True, **kwds):
+                 max_entries=5000, cursor=False, download=True, verbose=False, **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
@@ -85,7 +85,7 @@ class Search:
                         'subscription=True'.format(n, query))
                 raise ScopusQueryError(text)
             if download:
-                self._json = _parse(res, params, n, api, **kwds)
+                self._json = _parse(res, params, n, api, verbose, **kwds)
                 # Finally write out the file
                 with open(qfile, 'wb') as f:
                     for item in self._json:
@@ -100,7 +100,7 @@ class Search:
         return self._n
 
 
-def _parse(res, params, n, api, **kwds):
+def _parse(res, params, n, api, verbose, **kwds):
     """Auxiliary function to download results and parse json."""
     cursor = "cursor" in params
     if not cursor:
@@ -108,6 +108,11 @@ def _parse(res, params, n, api, **kwds):
     if n == 0:
         return ""
     _json = res.get('search-results', {}).get('entry', [])
+    if verbose:
+        chunk = 1
+        chunks = int(n/params['count']) + (n % params['count'] > 0) + 1 #roundup + 1 for the final iteration
+        print('Downloading results for query "{}":'.format(params['query']))
+        print_progress(chunk, chunks)
     # Download the remaining information in chunks
     while n > 0:
         n -= params["count"]
@@ -119,4 +124,7 @@ def _parse(res, params, n, api, **kwds):
             params.update({'start': start})
         res = cache_file(url=SEARCH_URL[api], params=params, **kwds).json()
         _json.extend(res.get('search-results', {}).get('entry', []))
+        if verbose:
+            chunk += 1
+            print_progress(chunk, chunks)
     return _json

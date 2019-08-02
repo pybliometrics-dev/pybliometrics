@@ -39,7 +39,7 @@ class AuthorSearch(Search):
             out.append(new)
         return out or None
 
-    def __init__(self, query, refresh=False, count=200, download=True):
+    def __init__(self, query, refresh=False, count=200, download=True, verbose=False):
         """Class to search a query, and retrieve a list of author IDs as results.
 
         Parameters
@@ -58,6 +58,9 @@ class AuthorSearch(Search):
         download : bool (optional, default=True)
             Whether to download results (if they have not been cached).
 
+        verbose : bool (optional, default=False)
+            Whether to print a downloading progress bar to terminal. Has no effect for download=False.
+
         Raises
         ------
         ScopusQueryError
@@ -71,7 +74,7 @@ class AuthorSearch(Search):
         view = "STANDARD"  # In case Scopus adds different views in future
         self.query = query
         Search.__init__(self, query=query, refresh=refresh, view=view,
-                        api='AuthorSearch', count=count, download=download)
+                        api='AuthorSearch', count=count, download=download, verbose=verbose)
 
     def __str__(self):
         s = """Search {} yielded {} author(s):\n    {}"""

@@ -28,7 +28,7 @@ class AffiliationSearch(Search):
             out.append(new)
         return out or None
 
-    def __init__(self, query, refresh=False, download=True, count=200):
+    def __init__(self, query, refresh=False, download=True, count=200, verbose=False):
         """Class to perform a search for an affiliation.
 
         Parameters
@@ -46,6 +46,9 @@ class AffiliationSearch(Search):
         download : bool (optional, default=True)
             Whether to download results (if they have not been cached).
 
+        verbose : bool (optional, default=False)
+            Whether to print a downloading progress bar to terminal. Has no effect for download=False.
+
         Raises
         ------
         ScopusQueryError
@@ -60,7 +63,7 @@ class AffiliationSearch(Search):
 
         self.query = query
         Search.__init__(self, query=query, api="AffiliationSearch",
-                        refresh=refresh, count=count, download=download)
+                        refresh=refresh, count=count, download=download, verbose=verbose)
 
     def __str__(self):
         s = """Search {} yielded {} affiliation(s):\n    {}"""

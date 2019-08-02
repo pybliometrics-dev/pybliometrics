@@ -168,3 +168,14 @@ def get_folder(api, view):
     if not os.path.exists(folder):
         os.makedirs(folder)
     return folder
+
+
+def print_progress(iteration, total, length=50):
+    """Print terminal progress bar."""
+    percent = 100 * (iteration / float(total))
+    filled_len = int(length * iteration // total)
+    bar = '█' * filled_len + '-' * (length - filled_len)
+    print('\rProgress: |{}| {:.2f}% Complete'.format(bar, percent), end='\r')
+    if iteration == total:
+        print()
+
