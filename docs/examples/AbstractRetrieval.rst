@@ -75,8 +75,8 @@ You get the authors as a list of `namedtuples <https://docs.python.org/2/library
 .. code-block:: python
 
     >>> ab.authors
-    [Author(auid='7004212771', indexed_name='Kitchin J.R.', surname='Kitchin',
-    given_name='John R.', affiliation=['60027950'])]
+    [Author(auid='7004212771', indexed_name='Kitchin J.R.',
+    surname='Kitchin', given_name='John R.', affiliation=['60027950'])]
     >>> import pandas as pd
     >>> print(pd.DataFrame(ab.authors))
         auid  indexed_name  surname given_name affiliation
@@ -173,7 +173,8 @@ Some articles have information on funding, chemicals and genome banks:
 
     >>> fund = AbstractRetrieval("2-s2.0-85053478849", view="FULL")
     >>> fund.funding
-    [Funding(agency=None, string='CNRT “Nickel et son Environnement', id=None, acronym=None, country=None)]
+    [Funding(agency=None, string='CNRT “Nickel et son Environnement',
+    id=None, acronym=None, country=None)]
     >> fund.funding_text
     'The authors gratefully acknowledge CNRT “Nickel et son Environnement” for
     providing the financial support. The results reported in this publication

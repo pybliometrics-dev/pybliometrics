@@ -18,7 +18,8 @@ The class mostly serves to provide a list of namedtuples storing information abo
 
     >>> s.affiliations
     [Affiliation(eid='10-s2.0-60105007', name='Max Planck Institute for Innovation and Competition',
-    variant='Max Planck Institute For Innovation And Competition', documents='307', city='Munich', country='Germany', parent='0')]
+    variant='Max Planck Institute For Innovation And Competition',
+    documents='307', city='Munich', country='Germany', parent='0')]
 
 
 It's easy to work with `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_, for example using `pandas <https://pandas.pydata.org/>`_ you can quickly turn the results into a DataFrame:

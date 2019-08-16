@@ -5,9 +5,6 @@ All classes (except the reports class) correspond to one of the `Product Specifi
 
 There are Search APIs and Retrieval APIs. They have in common that the obtained result is cached in a subfolder in `~/.scopus/` on your hard drive. Subsequent analysis becomes much quicker this way. A boolean `refresh` parameter steers whether this file should be refreshed or not.
 
-.. contents::
-
-
 Search APIs
 ~~~~~~~~~~~
 
@@ -16,7 +13,6 @@ Search APIs
     examples/AuthorSearch.rst
     examples/ScopusSearch.rst
 
-
 Retrieval APIs
 ~~~~~~~~~~~~~~
 
@@ -24,7 +20,6 @@ Retrieval APIs
     examples/AbstractRetrieval.rst
     examples/AuthorRetrieval.rst
     examples/ContentAffiliationRetrieval.rst
-
 
 Metadata APIs
 ~~~~~~~~~~~~~

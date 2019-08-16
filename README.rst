@@ -25,28 +25,59 @@ Development: https://github.com/pybliometrics-dev/pybliometrics
 .. image:: https://api.codeclimate.com/v1/badges/a4d7edd206a1252dfcfe/maintainability
    :target: https://codeclimate.com/github/pybliometrics-dev/pybliometrics/maintainability
 
+Example
+=======
+.. example-begin
+.. code:: python
+
+    >>> from pybliometrics.scopus import AbstractRetrieval, AuthorRetrieval, ContentAffiliationRetrieval
+    >>> ab = AbstractRetrieval("10.1016/j.softx.2019.100263")
+    >>> ab.title
+    'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
+    >>> ab.publicationName
+    'SoftwareX'
+    >>> ab.authors
+    [Author(auid='57209617104', indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.', affiliation=['60105007']),
+    Author(auid='7004212771', indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.', affiliation=['60027950'])]
+    >>> au2 = AuthorRetrieval(ab.authors[1].auid)
+    >>> au2.h_index
+    '30'
+    >>> au1 = AuthorRetrieval(ab.authors[0].auid)
+    >>> au1.affiliation_current
+    '60105007'
+    >>> aff1 = ContentAffiliationRetrieval(au1.affiliation_current)
+    >>> aff1.affiliation_name
+    'Max Planck Institute for Innovation and Competition'
+
+.. example-end
+
 Installation
 ============
+.. installation-begin
+Install the stable version from PyPI:
 
-Install stable version from PyPI:
-
-.. code:: bash
+.. code-block:: bash
 
     pip install pybliometrics
 
-or development version from GitHub repository:
+or the development version from the GitHub repository (requires git on your system):
 
-.. code:: bash
+.. code-block:: bash
 
     pip install git+git://github.com/pybliometrics-dev/pybliometrics
 
+.. installation-end
+
 Citation
 ========
+.. citation-begin
 If pybliometrics helped you getting data for research, please cite our corresponding paper:
 
 * Rose, Michael E. and John R. Kitchin: "`pybliometrics: Scriptable bibliometrics using a Python interface to Scopus <./meta/1-s2.0-S2352711019300573-main.pdf>`_", SoftwareX 10 (2019) 100263.
 
 Citing the paper helps the development of pybliometrics, because it justifies funneling resources into the development.  It also signals that you obtained data from Scopus in a transparent and replicable way.
+
+.. citation-end
 
 Change log
 ==========
