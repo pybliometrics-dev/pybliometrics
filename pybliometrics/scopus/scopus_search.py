@@ -1,7 +1,9 @@
 from collections import namedtuple
+from warnings import warn
 
 from pybliometrics.scopus.classes import Search
-from pybliometrics.scopus.utils import listify
+from pybliometrics.scopus.utils import listify, check_integrity,\
+    check_field_consistency
 
 
 class ScopusSearch(Search):
@@ -20,12 +22,18 @@ class ScopusSearch(Search):
         joined on ";".  In case an author has multiple affiliations, they are
         joined on "-" (e.g. Author1Aff;Author2Aff1-Author2Aff2).
 
+        Raises
+        ------
+        ValueError
+            If the elements provided in integrity_fields do not match the
+            actual field names (listed above).
+
         Notes
         -----
         The list of authors and the list of affiliations per author are
         deduplicated.
         """
-        out = []
+        # Initiate namedtuple with ordered list of fields
         fields = 'eid doi pii pubmed_id title subtype creator afid affilname '\
                  'affiliation_city affiliation_country author_count '\
                  'author_names author_ids author_afids coverDate '\
@@ -34,6 +42,9 @@ class ScopusSearch(Search):
                  'pageRange description authkeywords citedby_count '\
                  'openaccess fund_acr fund_no fund_sponsor'
         doc = namedtuple('Document', fields)
+        check_field_consistency(self.integrity, fields)
+        # Parse elements one-by-one
+        out = []
         for item in self._json:
             info = {}
             # Parse affiliations
@@ -84,13 +95,16 @@ class ScopusSearch(Search):
                 author_count=item.get('author-count', {}).get('$'),
                 affiliation_city=info.get("aff_city"), afid=info.get("afid"),
                 description=item.get('dc:description'), pii=item.get('pii'),
-                authkeywords=item.get('authkeywords'), eid=item['eid'],
+                authkeywords=item.get('authkeywords'), eid=item.get('eid'),
                 fund_acr=item.get('fund-acr'), pubmed_id=item.get('pubmed-id'))
             out.append(new)
+        # Finalize
+        check_integrity(out, self.integrity, self.action)
         return out or None
 
-    def __init__(self, query, refresh=False, subscriber=True,
-                 view=None, download=True, verbose=False, **kwds):
+    def __init__(self, query, refresh=False, subscriber=True, view=None,
+                 download=True, integrity_fields=None,
+                 integrity_action="raise", verbose=False, **kwds):
         """Class to perform a query against the Scopus Search API.
 
         Parameters
@@ -116,6 +130,19 @@ class ScopusSearch(Search):
         download : bool (optional, default=True)
             Whether to download results (if they have not been cached).
 
+        integrity_fields : None or iterable (default=None)
+            Iterable of field names whose completeness should be checked.
+            ScopusSearch will perform the action specified in
+            `integrity_action` if elements in these fields are missing.  This
+            helps avoiding idiosynchratically missing elements that should
+            always be present, such as the EID or the source ID.
+
+        integrity_action : str (optional, default="raise")
+            What to do in case integrity of provided fields cannot be
+            verified.  Possible actions:
+            - "raise": Raise an AttributeError
+            - "warn": Raise a UserWarning
+
         verbose : bool (optional, default=False)
             Whether to print a downloading progress bar to terminal. Has no effect for download=False.
 
@@ -131,7 +158,8 @@ class ScopusSearch(Search):
             For non-subscribers, if the number of search results exceeds 5000.
 
         ValueError
-            If the view parameter is not one of the allowed ones.
+            If the view or the integrity_action parameter is not one of
+            the allowed ones.
 
         Notes
         -----
@@ -141,8 +169,14 @@ class ScopusSearch(Search):
         # Checks
         allowed_views = ('STANDARD', 'COMPLETE')
         if view and view not in allowed_views:
-            raise ValueError('view parameter must be one of ' +
-                             ', '.join(allowed_views))
+            msg = 'view parameter must be one of ' + ', '.join(allowed_views)
+            raise ValueError()
+        allowed_actions = ("warn", "raise")
+        if integrity_action not in allowed_actions:
+            msg = 'integrity_action parameter must be one of ' +\
+                  ', '.join(allowed_actions)
+            raise ValueError(msg)
+
         # Parameters
         if not view:
             if subscriber:
@@ -155,11 +189,14 @@ class ScopusSearch(Search):
         if "cursor" in kwds:
             subscriber = kwds["cursor"]
             kwds.pop("cursor")
+
         # Query
         self.query = query
         Search.__init__(self, query=query, api='ScopusSearch', refresh=refresh,
                         count=count, cursor=subscriber, view=view,
                         download=download, verbose=verbose, **kwds)
+        self.integrity = integrity_fields or []
+        self.action = integrity_action
 
     def __str__(self):
         eids = self.get_eids()

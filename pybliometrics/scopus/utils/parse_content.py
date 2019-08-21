@@ -1,3 +1,6 @@
+from warnings import warn
+
+
 def chained_get(container, path, default=None):
     """Helper function to perform a series of .get() methods on a dictionary
     and return a default object type in the end.
@@ -22,6 +25,30 @@ def chained_get(container, path, default=None):
     return container
 
 
+def check_integrity(tuples, fields, action):
+    """Check integrity of specific fields in a list of tuples and perfom
+    provided action.
+    """
+    for field in fields:
+        elements = [getattr(e, field) for e in tuples]
+        if None in elements:
+            msg = "Parsed information doesn't pass integrity check "\
+                  "because of incomplete field '{}'".format(field)
+            if action == "raise":
+                raise AttributeError(msg)
+            elif action == "warn":
+                warn(msg)
+
+
+def check_field_consistency(needles, haystack):
+    """Raise ValueError if elements of a list are not present in a string."""
+    wrong = set(needles) - set(haystack.split())
+    if wrong:
+        msg = "Element(s) '{}' not allowed in parameter "\
+              "integrity_fields".format("', '".join(sorted(wrong)))
+        raise ValueError(msg)
+
+
 def get_id(s):
     """Helper function to return the Scopus ID at a fixed position."""
     path = ['coredata', 'dc:identifier']
@@ -44,6 +71,7 @@ def listify(element):
         return element
     else:
         return [element]
+
 
 def parse_date_created(dct):
     """Helper function to parse date-created from profile."""
