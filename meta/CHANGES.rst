@@ -3,6 +3,15 @@ Change Log
 
 .. toctree::
 
+2.2
+~~~
+
+2019-08-21
+
+* Add parameters `integrity_fields` and `integrity_action` to all search classes to avoid KeyErrors of missing fields.
+* Add progress bar to all search classes indicating download progress.
+* Fix bug with missing entries in author-group list in `AbstractRetrieval()`.
+
 2.1.3
 ~~~~~
 
