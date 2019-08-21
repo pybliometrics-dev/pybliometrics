@@ -3,14 +3,9 @@ Abstract Retrieval
 
 :doc:`AbstractRetrieval <../reference/pybliometrics.AbstractRetrieval>` implements the `Abstract Retrieval API <https://api.elsevier.com/documentation/AbstractRetrievalAPI.wadl>`_.
 
-It takes any identifier as main arguemnt: Most of the time it will be a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_ but DOI, Scopus ID (the last part of the EID), PubMed identifier or Publisher Item Identifier (PII) work as well. `AbstractRetrieval` tries to infer the class itself - to speed this up you can tell the ID type via `ID_type`.  Retrieving these results is not fast, so we cache them to speed up subsequent uses of the code.  Sometimes you may want new results, e.g. to update citation counts, and then you set `refresh=True`.
+It takes any identifier as main arguemnt: Most of the time it will be a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_, but DOI, Scopus ID (the last part of the EID), PubMed identifier or Publisher Item Identifier (PII) work as well. `AbstractRetrieval` tries to infer the class itself - to speed this up you can tell the ID type via `ID_type`.  Retrieving these results is not fast, so we cache them to speed up subsequent uses of the code.  Sometimes you may want new results, e.g. to update citation counts, and then you set `refresh=True`.
 
-The Scopus API allows a differing information depth via
-`views <https://dev.elsevier.com/guides/AbstractRetrievalViews.htm>`_, some of which
-are restricted.  The view 'META_ABS' is the highest unrestricted view and contains all information from other unrestricted views.  It is therefore the default view.  The view
-with the most information content is 'FULL', which includes all information available with
-'META_ABS', but is restricted.  In generally you should always try to use `view='FULL'`
-when downloading an abstract and fall back to the default otherwise.
+The Abstract Retrieval API allows a differing information depth via `views <https://dev.elsevier.com/guides/AbstractRetrievalViews.htm>`_, some of which are restricted.  The view 'META_ABS' is the highest unrestricted view and contains all information from other unrestricted views.  It is therefore the default view.  The view with the most information content is 'FULL', which includes all information available with 'META_ABS', but is restricted.  In generally you should always try to use `view='FULL'` when downloading an abstract and fall back to the default otherwise.
 
 You initalize the class with an ID that Scopus uses, e.g. the EID:
 

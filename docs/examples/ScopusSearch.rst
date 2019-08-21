@@ -8,10 +8,10 @@ The class is initialized with a search query.  Any query that works in the `Adva
 .. code-block:: python
    
     >>> from pybliometrics.scopus import ScopusSearch
-    >>> s = ScopusSearch('FIRSTAUTH ( kitchin  j.r. )', refresh=True)
+    >>> s = ScopusSearch('FIRSTAUTH ( kitchin  j.r. )')
 
 
-Non-subscribers must instantiate the class with `cursor=False`.  They may only get 5000 results per query, whereas this limit does not exist for subscribers.
+Non-subscribers must instantiate the class with `subscriber=False`.  They may only get 5000 results per query, whereas this limit does not exist for subscribers.
 
 Users can recieve the number of results programmatically via `.get_results_size()`:
 
@@ -151,10 +151,8 @@ The class' main attribute `results` returns a list of `namedtuples <https://docs
 
 The EIDs can be used for the `AbstractRetrieval <../reference/pybliometrics.AbstractRetrieval.html>`_ class and the Scopus Author IDs in column "authid" for the `AuthorRetrieval <../reference/pybliometrics.AuthorRetrieval.html>`_ class.
 
-The Scopus API allows a differing information depth via
-`views <https://dev.elsevier.com/guides/ScopusSearchViews.htm>`_.  The view 'COMPLETE' is the highest unrestricted view and contains all information also included in the 'STANDARD' view.  It is therefore the default view.  However, when speed is an issue to you, go for the STANDARD view, because the STANDARD view allows faster querying.  Note that the view parameter does not take effect for cached files, i.e. to switch to another view set `refresh=True` as well.
-
-Note that the view parameter does not take effect for cached files, i.e. to switch to another view set `refresh=True` as well.
+The Scopus Search API allows a differing information depth via
+`views <https://dev.elsevier.com/guides/ScopusSearchViews.htm>`_.  The view 'COMPLETE' is the highest unrestricted view and contains all information also included in the 'STANDARD' view.  It is therefore the default view.  However, when speed is an issue, choose the STANDARD view.
 
 For convenience, method `s.get_eids()` returns the list of EIDs:
 

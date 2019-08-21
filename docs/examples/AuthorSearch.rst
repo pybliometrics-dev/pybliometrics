@@ -3,7 +3,7 @@ Author Search
 
 :doc:`AuthorSearch <../reference/pybliometrics.AuthorSearch>` implements the `Author Search API <https://dev.elsevier.com/documentation/AuthorSearchAPI.wadl>`_.  It performs a query to search for authors and then retrieves the records of the query.
 
-The class is initialized with a search query which you can read about in `Author Search Guide <https://dev.elsevier.com/tips/AuthorSearchTips.htm>`_.  Keep in mind that an invalid search query will result in an error.
+The class is initialized with a search query which you can read about in `Author Search Guide <https://dev.elsevier.com/tips/AuthorSearchTips.htm>`_.  An invalid search query will result in an error.
 
 .. code-block:: python
    
