@@ -53,7 +53,9 @@ Example
 
 Installation
 ============
+
 .. installation-begin
+
 Install the stable version from PyPI:
 
 .. code-block:: bash
@@ -70,7 +72,9 @@ or the development version from the GitHub repository (requires git on your syst
 
 Citation
 ========
+
 .. citation-begin
+
 If pybliometrics helped you getting data for research, please cite our corresponding paper:
 
 * Rose, Michael E. and John R. Kitchin: "`pybliometrics: Scriptable bibliometrics using a Python interface to Scopus <./meta/1-s2.0-S2352711019300573-main.pdf>`_", SoftwareX 10 (2019) 100263.
