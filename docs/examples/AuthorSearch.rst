@@ -42,3 +42,10 @@ It's easy to work with namedtuples, for example using `pandas <https://pandas.py
 
       affiliation_id  city  country                            areas  
     0       60007493  Bonn  Germany  ECON (71); MATH (19); BUSI (15)
+
+
+There are sometimes missing information in the returned results although it exists in the Scopus database.  For example, the EID may be missing, even though every element always has an EID.  This is not a bug of `pybliometrics`.  Instead it is somehow related to a problem in the download process from the Scopus database.  To check for completeness of specific fields, use parameter `integrity_fields`, which accepts any iterable.  Using parameter `integrity_action` you can choose between two actions on what to do if the integrity check fails: Set `integrity_action="warn"` to issue a UserWarning, or set `integrity_action="raise"` to raise an AttributeError.
+
+.. code-block:: python
+   
+    >>> s = AuthorSearch("AUTHLAST(Selten)", integrity_fields=["eid"], integrity_action="warn")

@@ -48,6 +48,13 @@ You can get the number of results using the `.get_results_size()` method, even b
     4554
 
 
+There are sometimes missing information in the returned results although it exists in the Scopus database.  For example, the EID may be missing, even though every element always has an EID.  This is not a bug of `pybliometrics`.  Instead it is somehow related to a problem in the download process from the Scopus database.  To check for completeness of specific fields, use parameter `integrity_fields`, which accepts any iterable.  Using parameter `integrity_action` you can choose between two actions on what to do if the integrity check fails: Set `integrity_action="warn"` to issue a UserWarning, or set `integrity_action="raise"` to raise an AttributeError.
+
+.. code-block:: python
+   
+    >>> s = AffiliationSearch(query, integrity_fields=["eid"], integrity_action="warn")
+
+
 Often you receive more search results than Scopus allows.  Currently the cap is at 5000 results.  In this case the only solution is to narrow down the research, i.e. instead of "affil('Harvard Medical School')" you search for "affil('Harvard Medical School Boston')".
 
 More on different types of affiliations in section `tips <../tips.html#affiliations>`_.

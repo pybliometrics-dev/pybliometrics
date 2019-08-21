@@ -151,6 +151,25 @@ The class' main attribute `results` returns a list of `namedtuples <https://docs
 
 The EIDs can be used for the `AbstractRetrieval <../reference/pybliometrics.AbstractRetrieval.html>`_ class and the Scopus Author IDs in column "authid" for the `AuthorRetrieval <../reference/pybliometrics.AuthorRetrieval.html>`_ class.
 
+There are sometimes missing fields in the returned results although it exists in the Scopus database.  For example, the EID may be missing, even though every element always has an EID.  This is not a bug of `pybliometrics`.  Instead it is somehow related to a problem in the download process from the Scopus database.  To check for completeness of specific fields, use parameter `integrity_fields`, which accepts any iterable.  Using parameter `integrity_action` you can choose between two actions on what to do if the integrity check fails: Set `integrity_action="warn"` to issue a UserWarning, or set `integrity_action="raise"` to raise an AttributeError.
+
+.. code-block:: python
+   
+    >>> s = ScopusSearch('FIRSTAUTH ( kitchin  j.r. )', integrity_fields=["eid"], integrity_action="warn")
+
+
+If you care about integrity of specific fields, you can attempt to refresh the downloaded file:
+
+.. code-block:: python
+   
+    def robust_query(q, refresh=False):
+        """Wrapper function for individual ScopusSearch query."""
+        try:
+            return ScopusSearch(q, refresh=refresh).results
+        except AttributeError:
+            return ScopusSearch(q, refresh=True).results
+
+
 The Scopus Search API allows a differing information depth via
 `views <https://dev.elsevier.com/guides/ScopusSearchViews.htm>`_.  The view 'COMPLETE' is the highest unrestricted view and contains all information also included in the 'STANDARD' view.  It is therefore the default view.  However, when speed is an issue, choose the STANDARD view.
 
