@@ -223,7 +223,7 @@ def test_funding_text():
     assert_equal(ab8.funding_text, None)
 
 
-def test_get_html():
+def test_get_bibtex():
     e = '@article{Kaufmann1991FairnessPricing,\n  author = {Patrick J. '\
         'Kaufmann and Gwen Ortmeyer and N. Craig Smith},\n  title = {{'\
         'Fairness in consumer pricing}},\n  journal = {Journal of Consumer '\

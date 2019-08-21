@@ -20,7 +20,7 @@ def test_aggregation_type():
 
 def test_citescoreyearinfolist():
     assert_equal(sofwarex.citescoreyearinfolist,
-        [('2018', '11.56'), ('2019', '0.99')])
+        [('2018', '11.56'), ('2019', '1.16')])
     assert_equal(isa.citescoreyearinfolist, None)
 
 

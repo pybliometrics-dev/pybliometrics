@@ -3,7 +3,7 @@
 """Tests for `scopus.AuthorSearch` module."""
 
 from collections import namedtuple
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 
 from pybliometrics.scopus import AuthorSearch
 
@@ -27,5 +27,7 @@ def test_authors_nodownload():
 
 
 def test_results_size():
-    assert_equal(s1.get_results_size(), 1)
-    assert_equal(s2.get_results_size(), 25)
+    received1 = s1.get_results_size()
+    assert_true(received1 >= 1)
+    received2 = s2.get_results_size()
+    assert_true(received2 >= 25)
