@@ -32,9 +32,11 @@ pybliometrics provides one class per Scopus API Access Point (see https://dev.el
 Citation
 ========
 
-.. include:: ../README.rst
-   :start-after: citation-begin
-   :end-before: citation-end
+If pybliometrics helped you getting data for research, please cite our corresponding paper:
+
+* Rose, Michael E. and John R. Kitchin: "`pybliometrics: Scriptable bibliometrics using a Python interface to Scopus <https://www.sciencedirect.com/science/article/pii/S2352711019300573>`_", SoftwareX 10 (2019) 100263.
+
+Citing the paper helps the development of pybliometrics, because it justifies funneling resources into the development.  It also signals that you obtained data from Scopus in a transparent and replicable way.
 
 ==================
 Indices and tables
