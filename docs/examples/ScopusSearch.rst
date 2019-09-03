@@ -38,8 +38,8 @@ The class' main attribute `results` returns a list of `namedtuples <https://docs
     >>> import pandas as pd
     >>> df = pd.DataFrame(pd.DataFrame(s.results))
     >>> df.columns
-    Index(['eid', 'doi', 'pii', 'pubmed_id', 'title', 'subtype', 'creator', 'afid',
-       'affilname', 'affiliation_city', 'affiliation_country', 'author_count',
+    Index(['eid', 'doi', 'pii', 'pubmed_id', 'title', 'subtype', 'subtypeDescription', 'creator',
+       'afid', 'affilname', 'affiliation_city', 'affiliation_country', 'author_count',
        'author_names', 'author_ids', 'author_afids', 'coverDate',
        'coverDisplayDate', 'publicationName', 'issn', 'source_id', 'eIssn',
        'aggregationType', 'volume', 'issueIdentifier', 'article_number',

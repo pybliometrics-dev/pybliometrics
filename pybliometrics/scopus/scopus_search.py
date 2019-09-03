@@ -1,8 +1,7 @@
 from collections import namedtuple
-from warnings import warn
 
 from pybliometrics.scopus.classes import Search
-from pybliometrics.scopus.utils import listify, check_integrity,\
+from pybliometrics.scopus.utils import listify, check_integrity, \
     check_field_consistency
 
 
@@ -10,7 +9,7 @@ class ScopusSearch(Search):
     @property
     def results(self):
         """A list of namedtuples in the form (eid doi pii pubmed_id title
-        subtype creator afid affilname affiliation_city affiliation_country
+        subtype subtypeDescription creator afid affilname affiliation_city affiliation_country
         author_count author_names author_ids author_afids coverDate
         coverDisplayDate publicationName issn source_id eIssn aggregationType
         volume issueIdentifier article_number pageRange description
@@ -34,8 +33,8 @@ class ScopusSearch(Search):
         deduplicated.
         """
         # Initiate namedtuple with ordered list of fields
-        fields = 'eid doi pii pubmed_id title subtype creator afid affilname '\
-                 'affiliation_city affiliation_country author_count '\
+        fields = 'eid doi pii pubmed_id title subtype subtypeDescription creator ' \
+                 'afid affilname affiliation_city affiliation_country author_count ' \
                  'author_names author_ids author_afids coverDate '\
                  'coverDisplayDate publicationName issn source_id eIssn '\
                  'aggregationType volume issueIdentifier article_number '\
@@ -77,26 +76,27 @@ class ScopusSearch(Search):
             if isinstance(date, list):
                 date = date[0].get('$')
             new = doc(article_number=item.get('article-number'),
-                title=item.get('dc:title'), fund_sponsor=item.get('fund-sponsor'),
-                subtype=item.get('subtype'), issn=item.get('prism:issn'),
-                creator=item.get('dc:creator'), affilname=info.get("affilname"),
-                author_names=info.get("auth_names"), doi=item.get('prism:doi'),
-                coverDate=date, volume=item.get('prism:volume'),
-                coverDisplayDate=item.get('prism:coverDisplayDate'),
-                publicationName=item.get('prism:publicationName'),
-                source_id=item.get('source-id'), author_ids=info.get("auth_ids"),
-                aggregationType=item.get('prism:aggregationType'),
-                issueIdentifier=item.get('prism:issueIdentifier'),
-                pageRange=item.get('prism:pageRange'),
-                author_afids=info.get("auth_afid"), fund_no=item.get('fund-no'),
-                affiliation_country=info.get("aff_country"),
-                citedby_count=item.get('citedby-count'),
-                openaccess=item.get('openaccess'), eIssn=item.get('prism:eIssn'),
-                author_count=item.get('author-count', {}).get('$'),
-                affiliation_city=info.get("aff_city"), afid=info.get("afid"),
-                description=item.get('dc:description'), pii=item.get('pii'),
-                authkeywords=item.get('authkeywords'), eid=item.get('eid'),
-                fund_acr=item.get('fund-acr'), pubmed_id=item.get('pubmed-id'))
+                      title=item.get('dc:title'), fund_sponsor=item.get('fund-sponsor'),
+                      subtype=item.get('subtype'), subtypeDescription=item.get('subtypeDescription'),
+                      issn=item.get('prism:issn'),
+                      creator=item.get('dc:creator'), affilname=info.get("affilname"),
+                      author_names=info.get("auth_names"), doi=item.get('prism:doi'),
+                      coverDate=date, volume=item.get('prism:volume'),
+                      coverDisplayDate=item.get('prism:coverDisplayDate'),
+                      publicationName=item.get('prism:publicationName'),
+                      source_id=item.get('source-id'), author_ids=info.get("auth_ids"),
+                      aggregationType=item.get('prism:aggregationType'),
+                      issueIdentifier=item.get('prism:issueIdentifier'),
+                      pageRange=item.get('prism:pageRange'),
+                      author_afids=info.get("auth_afid"), fund_no=item.get('fund-no'),
+                      affiliation_country=info.get("aff_country"),
+                      citedby_count=item.get('citedby-count'),
+                      openaccess=item.get('openaccess'), eIssn=item.get('prism:eIssn'),
+                      author_count=item.get('author-count', {}).get('$'),
+                      affiliation_city=info.get("aff_city"), afid=info.get("afid"),
+                      description=item.get('dc:description'), pii=item.get('pii'),
+                      authkeywords=item.get('authkeywords'), eid=item.get('eid'),
+                      fund_acr=item.get('fund-acr'), pubmed_id=item.get('pubmed-id'))
             out.append(new)
         # Finalize
         check_integrity(out, self.integrity, self.action)
