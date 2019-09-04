@@ -5,24 +5,24 @@ Since `pybliometrics` (formerly `scopus`) 0.2.0, an exception is raised when the
 
 The following exceptions are defined:
 
-`pybliometrics.exception.ScopusQueryError`
+`pybliometrics.scopus.exception.ScopusQueryError`
     When a search query returns more results than specified or allowed (Scoups allows 5000 results maximum).  Change the query such that less than or equal to 5000 results are returned.
 
-`pybliometrics.exception.Scopus400Error: BAD REQUEST`
+`pybliometrics.scopus.exception.Scopus400Error: BAD REQUEST`
     Usually an invalid search query, such as a missing parenthesis.  Verify that your query works in `Advanced Search <https://www.scopus.com/search/form.uri?display=advanced>`_.
 
-`pybliometrics.exception.Scopus401Error: UNAUTHORIZED`
+`pybliometrics.scopus.exception.Scopus401Error: UNAUTHORIZED`
     Either the provided key is not correct, in which case you should change it in `~/.scopus/config.ini`, or you are outside the network that provides you access to the Scopus database (e.g. your university network).  Remember that you need both to access Scopus.
 
-`pybliometrics.exception.Scopus404Error: NOT FOUND`
+`pybliometrics.scopus.exception.Scopus404Error: NOT FOUND`
     The entity you are looking for does not exist.  Check that your identifier is still pointing to the item you are looking for.
 
 .. _Scopus429Error:
 
-`pybliometrics.exception.Scopus429Error: QUOTA EXCEEDED`
+`pybliometrics.scopus.exception.Scopus429Error: QUOTA EXCEEDED`
     Your provided API key's weekly allowance of 5000 requests (for standard views) is depleted.  Wait a week or change the key in `~/.scopus/config.ini`.
 
-`pybliometrics.exception.Scopus500Error: INTERNAL SERVER ERROR`
+`pybliometrics.scopus.exception.Scopus500Error: INTERNAL SERVER ERROR`
     Formally, the server does not respond, for various reasons.  A common reason in searches is that you use a fieldname that does not exist.  Verify that your query works in `Advanced Search <https://www.scopus.com/search/form.uri?display=advanced>`_.
 
 If queries break for other reasons, exceptions of type `requests.exceptions <http://docs.python-requests.org/en/master/api/#requests.RequestException>`_ are raised, such as:
