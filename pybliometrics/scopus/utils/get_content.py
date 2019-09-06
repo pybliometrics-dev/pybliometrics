@@ -5,6 +5,11 @@ from configparser import NoOptionError
 from pybliometrics.scopus import exception
 from pybliometrics.scopus.utils import DEFAULT_PATHS, config
 from pybliometrics.scopus.utils.create_config import create_config
+from pybliometrics import version_info
+
+# define user agent string for HTTP requests
+user_agent = 'pybliometrics-v' + '.'.join(
+            [str(e) for e in version_info[:3]])
 
 errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           404: exception.Scopus404Error, 429: exception.Scopus429Error,
@@ -41,9 +46,13 @@ def cache_file(url, params={}, **kwds):
     resp : byte-like object
         The content of the file, which needs to be serialized.
     """
-    # Get credentials
+    # Get credentials and set request headers
     key = config.get('Authentication', 'APIKey')
-    header = {'X-ELS-APIKey': key, 'Accept': 'application/json'}
+    header = {
+        'X-ELS-APIKey': key,
+        'Accept': 'application/json',
+        'User-Agent': user_agent
+        }
     if config.has_option('Authentication', 'InstToken'):
         token = config.get('Authentication', 'InstToken')
         header.update({'X-ELS-APIKey': key, 'X-ELS-Insttoken': token})
