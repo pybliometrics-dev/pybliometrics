@@ -3,6 +3,14 @@ Change Log
 
 .. toctree::
 
+2.2.1
+~~~~~
+
+2019-09-09
+
+* Add user agent string to evaluate usage.
+* Fix bug with missing journal metrics in `SerialTitle()`.
+
 2.2
 ~~~
 
