@@ -180,4 +180,7 @@ ISSN: {self.issn}, E-ISSN: {self.eissn}, Scopus ID: {self.source_id}'''.format(
 def _parse_list(d, list):
     """Auxiliary function to parse SNIP and SJR lists."""
     keyword = list + "List"
-    return (d[keyword][list][0]['@year'], d[keyword][list][0]['$'])
+    try:
+        return (d[keyword][list][0]['@year'], d[keyword][list][0]['$'])
+    except KeyError:
+        return None
