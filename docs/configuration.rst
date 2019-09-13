@@ -1,7 +1,7 @@
 Configuration
 -------------
 
-Since version 1.0 `pybliometrics` (formerly `scopus`) uses a config file `~/.scopus/config.ini` to save credentials as well as directory names for folder that store cached files.
+Since version 1.0 `pybliometrics` (formerly `scopus`) uses a config file `~/.scopus/config.ini`.  I saves credentials as well as directory names for folders that store cached files.
 
 To change your key or to change directories for cached files, edit this file manually and `import pybliometrics` again.
 
@@ -9,10 +9,12 @@ If the configuration file does not exist, `pybliometrics` will raise a warning. 
 
 .. code-block:: python
 
-    >>> pybliometrics.utils.create_config()
+    >>> pybliometrics.scopus.utils.create_config()
 
 
-after import.  `pybliometrics` then prompts you for your credentials.  Most users only need to provide the API Key and hit enter on the second prompt.  If you have to use InstToken authentication, enter it in the second step.  If you need to use a Proxy, please edit the file manually to include a section that looks like so:
+after `import pybliometrics`.
+
+`pybliometrics` then prompts you for your credentials.  Most users only need to provide the API Key and hit enter on the second prompt.  If you have to use InstToken authentication, enter it in the second step.  If you need to use a Proxy, please edit the file manually to include a section that looks like so:
 
 .. code-block:: batch
 
