@@ -30,7 +30,8 @@ Example
 .. example-begin
 .. code:: python
 
-    >>> from pybliometrics.scopus import AbstractRetrieval, AuthorRetrieval, ContentAffiliationRetrieval
+    >>> # Document-specific information
+    >>> from pybliometrics.scopus import AbstractRetrieval
     >>> ab = AbstractRetrieval("10.1016/j.softx.2019.100263")
     >>> ab.title
     'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
@@ -39,12 +40,16 @@ Example
     >>> ab.authors
     [Author(auid='57209617104', indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.', affiliation=['60105007']),
     Author(auid='7004212771', indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.', affiliation=['60027950'])]
+    >>> # Author-specific information
+    >>> from pybliometrics.scopus import AuthorRetrieval
     >>> au2 = AuthorRetrieval(ab.authors[1].auid)
     >>> au2.h_index
     '30'
     >>> au1 = AuthorRetrieval(ab.authors[0].auid)
     >>> au1.affiliation_current
     '60105007'
+    >>> # Affiliation information
+    >>> from pybliometrics.scopus import ContentAffiliationRetrieval
     >>> aff1 = ContentAffiliationRetrieval(au1.affiliation_current)
     >>> aff1.affiliation_name
     'Max Planck Institute for Innovation and Competition'
