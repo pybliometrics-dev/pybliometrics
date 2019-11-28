@@ -114,7 +114,7 @@ Method `get_document_eids()` performs a search for the author's publications wit
     >>> eids.shape
     (99, 19)
     >>> eids.columns
-    Index(['eid', 'doi', 'pii', 'title', 'subtype', 'creator', 'authname',
+    Index(['eid', 'doi', 'pii', 'title', 'subtype', 'subtypeDescription', 'creator', 'authname',
            'authid', 'coverDate', 'coverDisplayDate', 'publicationName', 'issn',
            'source_id', 'aggregationType', 'volume', 'issueIdentifier',
            'pageRange', 'citedby_count', 'openaccess'],
