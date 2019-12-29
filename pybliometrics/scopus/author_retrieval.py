@@ -14,6 +14,10 @@ class AuthorRetrieval(Retrieval):
     @property
     def affiliation_current(self):
         """The ID of the current affiliation according to Scopus."""
+        warn(
+            "In pybliometrics 2.3, the type of this property will be namedtuple",
+            UserWarning
+        )
         return self._json.get('affiliation-current', {}).get('@id')
 
     @property
@@ -21,6 +25,10 @@ class AuthorRetrieval(Retrieval):
         """Unordered list of IDs of all affiliations the author was
         affiliated with acccording to Scopus.
         """
+        warn(
+            "In pybliometrics 2.3, the type of this property will be namedtuple",
+            UserWarning
+        )
         affs = self._json.get('affiliation-history', {}).get('affiliation')
         try:
             return [d['@id'] for d in affs]
