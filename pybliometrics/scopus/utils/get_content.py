@@ -69,21 +69,18 @@ def cache_file(url, params={}, **kwds):
         resp = requests.get(url, headers=header, proxies=proxyDict, params=params)
     else:
         resp = requests.get(url, headers=header, params=params)
-    # Handle error messages
-    if resp.ok:
-        return resp
-    else:
-        # Try raising ScopusError with supplied error message
-        # if no message given, do without supplied error message
-        # at least raise requests error
-        if resp.status_code in errors:
-            try:
-                reason = resp.json()['service-error']['status']['statusText']
-            except:
-                reason = ""
-            raise errors[resp.status_code](reason)
-        else:
-            resp.raise_for_status()
+    # Try raising ScopusError with supplied error message
+    # if no message given, do without supplied error message
+    # at least raise requests error
+    try:
+        error_type = errors[resp.status_code]
+        try:
+            reason = resp.json()['service-error']['status']['statusText']
+        except:
+            reason = ""
+        raise errors[resp.status_code](reason)
+    except KeyError:
+        resp.raise_for_status()
     return resp
 
 
