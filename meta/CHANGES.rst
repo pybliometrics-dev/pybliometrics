@@ -3,6 +3,17 @@ Change Log
 
 .. toctree::
 
+2.2.2
+~~~~~
+
+2019-12-29
+
+* EIDs starting with "1-s2.0-" are automatically detected as EID as well.
+* In `ScopusSearch().results` add field "subtypeDescription".
+* In `AbstractRetrieval().idxterms` return None instead of empty lists.
+* In `AbstractRetrieval().confdate` return None instead of list with tuples with None.
+* Add UserWarning for change of type of `AuthorRetrieval().affiliation_current` and `AuthorRetrieval().affiliation_history`.
+
 2.2.1
 ~~~~~
 
