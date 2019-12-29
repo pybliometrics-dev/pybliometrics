@@ -320,7 +320,7 @@ class AbstractRetrieval(Retrieval):
         except AttributeError:  # idxterms is empty
             return None
         try:
-            return [d['$'] for d in terms]
+            return [d['$'] for d in terms] or None
         except AttributeError:
             return None
 
