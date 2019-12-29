@@ -168,7 +168,7 @@ class AbstractRetrieval(Retrieval):
             return ((start['@year'], start['@month'], start['@day']),
                     (end['@year'], end['@month'], end['@day']))
         else:
-            return ((None, None, None), (None, None, None))
+            return None
 
     @property
     def conflocation(self):
