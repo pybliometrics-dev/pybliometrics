@@ -7,9 +7,8 @@ from pybliometrics.scopus.utils import DEFAULT_PATHS, config
 from pybliometrics.scopus.utils.create_config import create_config
 from pybliometrics import version_info
 
-# define user agent string for HTTP requests
-user_agent = 'pybliometrics-v' + '.'.join(
-            [str(e) for e in version_info[:3]])
+# Define user agent string for HTTP requests
+user_agent = 'pybliometrics-v' + '.'.join([str(e) for e in version_info[:3]])
 
 errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           404: exception.Scopus404Error, 429: exception.Scopus429Error,
@@ -103,12 +102,8 @@ def detect_id_type(sid):
 
     Notes
     -----
-    PII usually has 17 chars, but in Scopus there are valid cases with only
-    16 for old converted articles.
-
-    Scopus ID contains only digits, but it can have leading zeros.  If ID
-    with leading zeros is treated as a number, SyntaxError can occur, or the
-    ID will be rendered invalid and the type will be misinterpreted.
+    Scopus IDs and Pubmed IDs are sometimes hard to distinguish.  If you
+    work with both types, consider specifying the ID type manually.
     """
     sid = str(sid)
     try:
@@ -116,7 +111,7 @@ def detect_id_type(sid):
     except AttributeError:  # Python2
         isnumeric = unicode(sid, 'utf-8').isnumeric()
     if not isnumeric:
-        if sid.startswith('2-s2.0-'):
+        if sid.startswith('1-s2.0-') or sid.startswith('2-s2.0-'):
             id_type = 'eid'
         elif '/' in sid or "." in sid:
             id_type = 'doi'
@@ -134,8 +129,8 @@ def detect_id_type(sid):
 
 
 def get_content(qfile, refresh, *args, **kwds):
-    """Helper function to read file content as xml.  The file is cached
-    in a subfolder of ~/.scopus/.
+    """Helper function to read file content as json.  The file is cached
+    in a folder specified in ~/.scopus/config.ini.
 
     Parameters
     ----------
@@ -164,8 +159,8 @@ def get_content(qfile, refresh, *args, **kwds):
 
 
 def get_folder(api, view):
-    """Auxiliary function to get the cache folder belonging to a an API
-    and eventually create the folder.
+    """Auxiliary function to get the cache folder belonging to an API,
+    eventually create the folder.
     """
     if not config.has_section('Directories'):
         create_config()
