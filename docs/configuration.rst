@@ -1,7 +1,7 @@
 Configuration
 -------------
 
-Since version 1.0 `pybliometrics` (formerly `scopus`) uses a config file `~/.scopus/config.ini`.  I saves credentials as well as directory names for folders that store cached files.
+Since version 1.0 `pybliometrics` (formerly `scopus`) uses a config file `~/.scopus/config.ini`.  It saves credentials as well as directory names for folders that store cached files.
 
 To change your key or to change directories for cached files, edit this file manually and `import pybliometrics` again.
 
