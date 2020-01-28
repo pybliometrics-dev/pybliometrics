@@ -1,6 +1,7 @@
 Tips
 ----
 
+.. include:: tips/configuration.rst
 .. include:: tips/rename.rst
 .. include:: tips/updates.rst
 .. include:: tips/errors.rst
