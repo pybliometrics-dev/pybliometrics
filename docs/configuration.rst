@@ -34,10 +34,9 @@ If the configuration file does not exist, `pybliometrics` will raise a warning. 
 
 .. code-block:: python
 
+    >>> import pybliometrics
     >>> pybliometrics.scopus.utils.create_config()
 
-
-after `import pybliometrics`.
 
 `pybliometrics` then prompts you for your credentials.  Most users only need to provide the API Key and hit enter on the second prompt.  If you have to use InstToken authentication, enter it in the second step.  If you need to use a Proxy, please edit the file manually to include a section that looks like so:
 
