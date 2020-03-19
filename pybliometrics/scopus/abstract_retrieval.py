@@ -627,11 +627,14 @@ class AbstractRetrieval(Retrieval):
         view="META_ABS" or view="FULL".
         """
         # Authors
-        if len(self.authors) > 1:
-            authors = _list_authors(self.authors)
+        if self.authors:
+            if len(self.authors) > 1:
+                authors = _list_authors(self.authors)
+            else:
+                a = self.authors[0]
+                authors = str(a.given_name) + ' ' + str(a.surname)
         else:
-            a = self.authors[0]
-            authors = str(a.given_name) + ' ' + str(a.surname)
+            authors = "(No authors found)"
         # All other information
         s = '[[{link}][{eid}]]  {auth}, {title}, {jour}, {vol}'.format(
             link=self.scopus_link, eid=self.eid, auth=authors,
@@ -649,9 +652,11 @@ class AbstractRetrieval(Retrieval):
         s += '({}).'.format(self.coverDate[:4])
         if self.doi:
             s += ' https://doi.org/{},'.format(self.doi)
-        s += ' {}, cited {} times (Scopus).\n  Affiliations:\n   '.format(
+        s += ' {}, cited {} times (Scopus).'.format(
             self.scopus_link, self.citedby_count)
-        s += '\n   '.join([aff.name for aff in self.affiliation])
+        if self.affiliation:
+            s += "\n  Affiliations:\n   "
+            s += '\n   '.join([aff.name for aff in self.affiliation])
         return s
 
     def get_bibtex(self):
