@@ -6,8 +6,8 @@ from os.path import exists, join
 from warnings import warn
 
 from pybliometrics.scopus.exception import ScopusQueryError
-from pybliometrics.scopus.utils import SEARCH_URL, cache_file, get_content,\
-    get_folder, print_progress
+from pybliometrics.scopus.utils import SEARCH_URL, cache_file, get_folder,\
+    print_progress
 
 
 class Search:
@@ -36,8 +36,8 @@ class Search:
 
         max_entries : int (optional, default=5000)
             Raise error when the number of results is beyond this number.
-            To skip this check, set `max_entries` to `None`.
-
+            To skip this check, set `max_entries` to `None`. Has no
+            effect if cursor=True.
 
         cursor : str (optional, default=False)
             Whether to use the cursor in order to iterate over all search
@@ -58,7 +58,7 @@ class Search:
             If the number of search results exceeds max_entries.
 
         ValueError
-            If the api parameteris an invalid entry.
+            If the api parameter is an invalid entry.
         """
         # Read the file contents if file exists and we are not refreshing,
         # otherwise download query anew and cache file

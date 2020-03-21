@@ -74,7 +74,8 @@ class AffiliationSearch(Search):
             - "warn": Raise a UserWarning
 
         verbose : bool (optional, default=False)
-            Whether to print a downloading progress bar to terminal. Has no effect for download=False.
+            Whether to print a downloading progress bar to terminal. Has no
+            effect for download=False.
 
         Raises
         ------

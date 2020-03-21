@@ -144,7 +144,9 @@ class ScopusSearch(Search):
             - "warn": Raise a UserWarning
 
         verbose : bool (optional, default=False)
-            Whether to print a downloading progress bar to terminal. Has no effect for download=False.
+            Whether to print a downloading progress bar to terminal.
+            Has no effect for download=False or when query file is
+            in cache.
 
         kwds : key-value parings, optional
             Keywords passed on as query parameters.  Must contain fields
