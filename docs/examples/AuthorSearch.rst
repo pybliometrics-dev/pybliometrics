@@ -20,7 +20,7 @@ To know the the number of results use the `.get_results_size()` method, even bef
     25
 
 
-The class mostly serves to provide a list of `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the `ScopusAuthor <../reference/pybliometrics.ScopusAuthor.html>`_ class, and corresponding information:
+The class mostly serves to provide a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the `ScopusAuthor <../reference/pybliometrics.ScopusAuthor.html>`_ class, and corresponding information:
 
 .. code-block:: python
 
@@ -31,7 +31,7 @@ The class mostly serves to provide a list of `namedtuples <https://docs.python.o
     areas='ECON (71); MATH (19); BUSI (15)')]
 
 
-It's easy to work with namedtuples, for example using `pandas <https://pandas.pydata.org/>`_:
+It's easy to work with namedtuples: Using `pandas <https://pandas.pydata.org/>`_, you can quickly turn the results set into a DataFrame:
 
 .. code-block:: python
 

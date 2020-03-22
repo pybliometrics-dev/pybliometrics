@@ -12,7 +12,7 @@ The class is initialized with a search query which you can read about in `Affili
     >>> s = AffiliationSearch(query)
 
 
-The class mostly serves to provide a list of namedtuples storing information about the affiliation.  One of them is the affiliation ID which you can use for the `ScopusAffiliation <../reference/pybliometrics.ScopusAffiliation.html>`_ class:
+The class mostly serves to provide a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing information about the affiliation.  One of them is the affiliation ID which you can use for the `ScopusAffiliation <../reference/pybliometrics.ScopusAffiliation.html>`_ class:
 
 .. code-block:: python
 
@@ -22,7 +22,7 @@ The class mostly serves to provide a list of namedtuples storing information abo
     documents='307', city='Munich', country='Germany', parent='0')]
 
 
-It's easy to work with `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_, for example using `pandas <https://pandas.pydata.org/>`_ you can quickly turn the results into a DataFrame:
+It's easy to work with namedtuples: using `pandas <https://pandas.pydata.org/>`_ for example you can quickly turn the results into a DataFrame:
 
 .. code-block:: python
 

@@ -31,7 +31,7 @@ This method works even if one chooses to not download results.  It thus helps su
     259526
 
 
-The class' main attribute `results` returns a list of `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_.  They can be used neatly with `pandas <https://pandas.pydata.org/>`_ to form DataFrames:
+The class' main attribute `results` returns a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_.  They can be used neatly with `pandas <https://pandas.pydata.org/>`_ to form DataFrames:
 
 .. code-block:: python
 

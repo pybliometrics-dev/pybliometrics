@@ -37,7 +37,7 @@ Perhaps most importantly the SCImago Journal Rank indicator and the Source-norma
     ('2017', '7.154')
 
 
-The fields associated with the source are stored as a list of `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_:
+The fields associated with the source are stored as a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
 
 .. code-block:: python
 

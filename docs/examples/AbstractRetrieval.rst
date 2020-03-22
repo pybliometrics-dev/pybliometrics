@@ -65,7 +65,7 @@ To obtain the total citation count (at the time the abstract was retrieved and c
     7
 
 
-You get the authors as a list of `namedtuples <https://docs.python.org/2/library/collections.html#collections.namedtuple>`_, which pair conveniently with `pandas <https://pandas.pydata.org/>`_:
+You get the authors as a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_, which pair conveniently with `pandas <https://pandas.pydata.org/>`_:
 
 .. code-block:: python
 
