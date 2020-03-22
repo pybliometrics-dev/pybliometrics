@@ -8,7 +8,7 @@ from nose.tools import assert_equal, assert_true
 from pybliometrics.scopus import CitationOverview
 
 
-co = CitationOverview("2-s2.0-84930616647", refresh=True, start=2015, end=2018)
+co = CitationOverview("2-s2.0-84930616647", refresh=30, start=2015, end=2018)
 
 
 def test_authors():

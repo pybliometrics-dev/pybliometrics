@@ -8,21 +8,21 @@ from nose.tools import assert_equal, assert_true
 from pybliometrics.scopus import AbstractRetrieval
 
 # Base information
-ab1 = AbstractRetrieval("2-s2.0-84930616647", view="FULL", refresh=True)
+ab1 = AbstractRetrieval("2-s2.0-84930616647", view="FULL", refresh=30)
 # Conference proceeding and no references
-ab2 = AbstractRetrieval("2-s2.0-0029486824", view="FULL", refresh=True)
+ab2 = AbstractRetrieval("2-s2.0-0029486824", view="FULL", refresh=30)
 # Issuetitle and no affiliation
-ab3 = AbstractRetrieval("2-s2.0-0001270077", view="FULL", refresh=True)
+ab3 = AbstractRetrieval("2-s2.0-0001270077", view="FULL", refresh=30)
 # Author group broken and author keywords
-ab4 = AbstractRetrieval("2-s2.0-0000016206", view="FULL", refresh=True)
+ab4 = AbstractRetrieval("2-s2.0-0000016206", view="FULL", refresh=30)
 # ISBN
-ab5 = AbstractRetrieval("2-s2.0-84919546381", view="FULL", refresh=True)
+ab5 = AbstractRetrieval("2-s2.0-84919546381", view="FULL", refresh=30)
 # Funding, sequencebanks, chemicals
-ab6 = AbstractRetrieval("2-s2.0-85040230676", view="FULL", refresh=True)
+ab6 = AbstractRetrieval("2-s2.0-85040230676", view="FULL", refresh=30)
 # Contributor group
-ab7 = AbstractRetrieval("2-s2.0-85050253030", view="FULL", refresh=True)
+ab7 = AbstractRetrieval("2-s2.0-85050253030", view="FULL", refresh=30)
 # REF view
-ab8 = AbstractRetrieval("2-s2.0-84951753303", view="REF", refresh=True)
+ab8 = AbstractRetrieval("2-s2.0-84951753303", view="REF", refresh=30)
 
 
 def test_abstract():

@@ -8,9 +8,9 @@ from nose.tools import assert_equal, assert_true
 from pybliometrics.scopus import SerialTitle
 
 # SoftwareX
-sofwarex = SerialTitle("2352-7110", refresh=True)
+sofwarex = SerialTitle("2352-7110", refresh=30)
 # ISA
-isa = SerialTitle("5617-1099", refresh=True)
+isa = SerialTitle("5617-1099", refresh=30)
 
 
 def test_aggregation_type():

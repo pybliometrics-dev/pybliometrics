@@ -10,7 +10,7 @@ from pybliometrics.scopus import AuthorRetrieval
 
 warnings.simplefilter("always")
 
-au = AuthorRetrieval("7004212771", refresh=True)
+au = AuthorRetrieval("7004212771", refresh=30)
 
 
 def test_affiliation_current():

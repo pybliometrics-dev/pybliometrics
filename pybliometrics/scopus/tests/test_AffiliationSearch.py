@@ -8,7 +8,7 @@ from nose.tools import assert_equal, assert_true
 
 from pybliometrics.scopus import AffiliationSearch
 
-s1 = AffiliationSearch('af-id(60021784)', refresh=True)
+s1 = AffiliationSearch('af-id(60021784)', refresh=30)
 s2 = AffiliationSearch('affil(Max Planck Munich)', download=False)
 
 

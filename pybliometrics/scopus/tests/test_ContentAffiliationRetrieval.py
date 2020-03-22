@@ -7,7 +7,7 @@ from nose.tools import assert_equal, assert_true
 from pybliometrics.scopus import ContentAffiliationRetrieval
 
 
-aff = ContentAffiliationRetrieval('60000356', refresh=True)
+aff = ContentAffiliationRetrieval('60000356', refresh=30)
 
 
 def test_address():
