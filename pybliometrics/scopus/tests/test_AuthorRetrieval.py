@@ -19,7 +19,7 @@ def test_affiliation_current():
 
 def test_affiliation_history():
     affs = au.affiliation_history
-    assert_true(len(affs) >= 5)
+    assert_true(len(affs) >= 2)
     assert_true(isinstance(affs[0], str))
 
 
@@ -70,7 +70,7 @@ def test_given_name():
 def test_get_documents():
     subtypes = {'re', 'ed', 'no'}
     received = au.get_documents(subtypes)
-    assert_equal(len(received), 6)
+    assert_equal(len(received), 7)
 
 
 def test_get_document_eids():

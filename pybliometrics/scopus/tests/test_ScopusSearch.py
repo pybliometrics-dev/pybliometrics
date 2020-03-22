@@ -86,9 +86,8 @@ def test_results_journal():
         eIssn=None, aggregationType='Journal', volume='39', issueIdentifier='1',
         article_number=None, pageRange='103-116', description=abstract,
         authkeywords=keywords, citedby_count='0', openaccess='0',
-        fund_acr=None, fund_no='undefined',
-        fund_sponsor='National Science Council')
-    assert_true(int(recieved.citedby_count) > 0)
+        fund_acr=None, fund_no='undefined', fund_sponsor=None)
+    assert_true(int(recieved.citedby_count) > 50)
     assert_equal(recieved._replace(citedby_count="0"), expected)
 
 

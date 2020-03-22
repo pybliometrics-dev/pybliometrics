@@ -18,7 +18,7 @@ ab4 = AbstractRetrieval("2-s2.0-0000016206", view="FULL", refresh=True)
 # ISBN
 ab5 = AbstractRetrieval("2-s2.0-84919546381", view="FULL", refresh=True)
 # Funding, sequencebanks, chemicals
-ab6 = AbstractRetrieval("2-s2.0-85053478849", view="FULL", refresh=True)
+ab6 = AbstractRetrieval("2-s2.0-85040230676", view="FULL", refresh=True)
 # Contributor group
 ab7 = AbstractRetrieval("2-s2.0-85050253030", view="FULL", refresh=True)
 # REF view
@@ -100,10 +100,10 @@ def test_citedby_link():
 def test_chemials():
     received = ab6.chemicals
     assert_true(isinstance(received, list))
-    assert_equal(len(received), 5)
+    assert_equal(len(received), 6)
     chemical = namedtuple('Chemical', 'source chemical_name cas_registry_number')
-    expected = chemical(source='esbd', chemical_name='magnesium',
-                        cas_registry_number='7439-95-4')
+    expected = chemical(source='esbd', cas_registry_number='126547-89-5',
+        chemical_name='intercellular adhesion molecule 1')
     assert_true(expected in received)
     assert_equal(ab3.chemicals, None)
     assert_equal(ab8.chemicals, None)
@@ -116,7 +116,7 @@ def test_confcode():
 
 def test_confdate():
     assert_equal(ab2.confdate, ((1995, 12, 13), (1995, 12, 15)))
-    assert_equal(ab8.confdate, ((None, None, None), (None, None, None)))
+    assert_equal(ab8.confdate, None)
 
 
 def test_conflocation():
@@ -205,20 +205,26 @@ def test_endingPage():
 def test_funding():
     received = ab6.funding
     assert_true(isinstance(received, list))
-    assert_equal(len(received), 2)
+    assert_equal(len(received), 5)
     fund = namedtuple('Funding', 'agency string id acronym country')
-    expected6 = fund(agency=None, string='CNRT',
-        acronym=None, id=None, country=None)
+    expected6 = fund(agency='Deutsche Forschungsgemeinschaft',
+        string='German Research Foundation', acronym='DFG',
+        id='http://data.elsevier.com/vocabulary/SciValFunders/501100001659',
+        country='http://sws.geonames.org/2921044/')
     assert_true(expected6 in received)
     assert_equal(ab5.funding, None)
     assert_equal(ab8.funding, None)
 
 
 def test_funding_text():
-    e = 'The authors gratefully acknowledge CNRT “Nickel et son '\
-        'Environnement” for providing the financial support. The results '\
-        'reported in this publication are gathered from the CNRT report '\
-        '“Ecomine BioTop”. Appendix A'
+    e = 'ACKNOWLEDGMENTS. We thank Dieter Blaas for providing ICAM-1–specific '\
+        'antiserum (supersup). This work was supported by Netherlands '\
+        'Organization for Scientific Research Grant NWO-VICI-91812628 '\
+        '(to F.J.M.v.K.), by German Research Foundation Grant SFB685 '\
+        '(to T.S. and G.Z.), and Wellcome Trust PhD Studentship support '\
+        '102572/B/13/Z (to D.L.H.). All EM was performed in the Astbury '\
+        'Biostructure Laboratory, which was funded by the University of '\
+        'Leeds and the Wellcome Trust (108466/Z/15/Z).'
     assert_equal(ab6.funding_text, e)
     assert_equal(ab8.funding_text, None)
 
@@ -256,12 +262,12 @@ def test_get_html():
         'https://www.scopus.com/authid/detail.url?origin=AuthorProfile&'\
         'authorId=16430389100">Gwen Ortmeyer</a> and <a href="https://'\
         'www.scopus.com/authid/detail.url?origin=AuthorProfile&authorId='\
-        '55456187700">N. Craig Smith</a>, <a href="https://www.scopus.com/'\
-        'inward/record.uri?partnerID=HzOxMe3b&scp=0001270077&origin=inward'\
-        '">Fairness in consumer pricing</a>, <a href="https://www.scopus.'\
-        'com/source/sourceInfo.url?sourceId=130073">Journal of Consumer '\
-        'Policy</a>, <b>14(2)</b>, pp. 117-140, (1991). <a href="https://'\
-        'doi.org/10.1007/BF00381915">doi:10.1007/BF00381915</a>.'
+        '55613241349">N. Craig Smith</a>, <a href="https://www.scopus.com/'\
+        'inward/record.uri?partnerID=HzOxMe3b&scp=0001270077&origin=inward">'\
+        'Fairness in consumer pricing</a>, <a href="https://www.scopus.com/'\
+        'source/sourceInfo.url?sourceId=130073">Journal of Consumer Policy'\
+        '</a>, <b>14(2)</b>, pp. 117-140, (1991). <a href="https://doi.org/'\
+        '10.1007/BF00381915">doi:10.1007/BF00381915</a>.'
     assert_equal(ab3.get_html(), e)
 
 
@@ -313,7 +319,7 @@ def test_pageRange():
 def test_pii():
     assert_equal(ab4.pii, 'S0304407697000183')
     assert_equal(ab5.pii, None)
-    assert_equal(ab6.pii, 'S0048969718335976')
+    assert_equal(ab6.pii, None)
 
 
 def test_publicationName():
@@ -332,7 +338,7 @@ def test_publisheraddress():
 
 
 def test_pubmed_id():
-    assert_equal(ab6.pubmed_id, '30240917')
+    assert_equal(ab6.pubmed_id, '29284752')
     assert_equal(ab7.pubmed_id, None)
 
 
@@ -396,9 +402,10 @@ def test_self_link():
 def test_sequencebank():
     received = ab6.sequencebank
     assert_true(isinstance(received, list))
+    assert_equal(len(received), 3)
     bank = namedtuple('Chemical', 'name sequence_number type')
-    expected = bank(name='GENBANK', type='submitted',
-                    sequence_number='MH150839:MH150870')
+    expected = bank(name='GENBANK', sequence_number='MG272373',
+                    type='referenced')
     assert_true(expected in received)
     assert_equal(ab3.sequencebank, None)
     assert_equal(ab8.sequencebank, None)
