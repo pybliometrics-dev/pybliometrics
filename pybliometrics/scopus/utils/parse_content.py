@@ -82,8 +82,10 @@ def parse_affiliation(affs):
     aff = namedtuple('Affiliation', order)
     out = []
     for item in listify(affs):
-        doc = item.get('ip-doc', {})
-        address = doc.get('address', {})
+        if not item:
+            continue
+        doc = item.get('ip-doc', {}) or {}
+        address = doc.get('address', {}) or {}
         new = aff(id=item.get('@affiliation-id'), parent=item.get('@parent'),
             type=doc.get('@type'), relationship=doc.get('@relationship'),
             afdispname=doc.get('@afdispname'),
