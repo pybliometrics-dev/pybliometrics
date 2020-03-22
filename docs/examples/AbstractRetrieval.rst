@@ -3,7 +3,7 @@ Abstract Retrieval
 
 :doc:`AbstractRetrieval <../reference/pybliometrics.AbstractRetrieval>` implements the `Abstract Retrieval API <https://api.elsevier.com/documentation/AbstractRetrievalAPI.wadl>`_.
 
-It takes any identifier as main arguemnt: Most of the time it will be a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_, but DOI, Scopus ID (the last part of the EID), PubMed identifier or Publisher Item Identifier (PII) work as well. `AbstractRetrieval` tries to infer the class itself - to speed this up you can tell the ID type via `ID_type`.  Retrieving these results is not fast, so we cache them to speed up subsequent uses of the code.  Sometimes you may want new results, e.g. to update citation counts, and then you set `refresh=True`.
+It takes any identifier as main arguemnt: Most of the time it will be a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_, but DOI, Scopus ID (the last part of the EID), PubMed identifier or Publisher Item Identifier (PII) work as well. `AbstractRetrieval` tries to infer the class itself - to speed this up you can tell the ID type via `ID_type`.  Retrieving these results is not fast, so we cache them to speed up subsequent uses of the code.
 
 The Abstract Retrieval API allows a differing information depth via `views <https://dev.elsevier.com/guides/AbstractRetrievalViews.htm>`_, some of which are restricted.  The view 'META_ABS' is the highest unrestricted view and contains all information from other unrestricted views.  It is therefore the default view.  The view with the most information content is 'FULL', which includes all information available with 'META_ABS', but is restricted.  In generally you should always try to use `view='FULL'` when downloading an abstract and fall back to the default otherwise.
 
@@ -211,3 +211,4 @@ You can print the abstract in a variety of formats, including LaTeX, bibtex, HTM
     ER  - 
 
 
+Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpeted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to get the date of last modification, and `ab.get_cache_file_age()` the number of days since the last modification.

@@ -9,7 +9,7 @@ The class is initialized with a search query which you can read about in `Affili
    
     >>> from pybliometrics.scopus import AffiliationSearch
     >>> query = "AFFIL(Max Planck Institute for Innovation and Competition Munich)"
-    >>> s = AffiliationSearch(query, refresh=True)
+    >>> s = AffiliationSearch(query)
 
 
 The class mostly serves to provide a list of namedtuples storing information about the affiliation.  One of them is the affiliation ID which you can use for the `ScopusAffiliation <../reference/pybliometrics.ScopusAffiliation.html>`_ class:
@@ -38,12 +38,14 @@ It's easy to work with `namedtuples <https://docs.python.org/2/library/collectio
     parent                                                       0
 
 
+Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpeted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `s.get_cache_file_mdate()` to get the date of last modification, and `s.get_cache_file_age()` the number of days since the last modification.
+
 You can get the number of results using the `.get_results_size()` method, even before you download the results:
 
 .. code-block:: python
    
     >>> query = "AFFIL(Max Planck Institute)"
-    >>> s = AffiliationSearch(query, refresh=True, download=False)
+    >>> s = AffiliationSearch(query, download=False)
     >>> s.get_results_size()
     4554
 

@@ -44,5 +44,6 @@ The fields associated with the source are stored as a list of `namedtuples <http
     >>> source.subject_area
     [Subjectarea(area='Multidisciplinary', abbreviation='MULT', code='1000')]
 
-
 Additionally there are many bits of information on Open Access status which are often empty however.
+
+Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpeted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `source.get_cache_file_mdate()` to get the date of last modification, and `source.get_cache_file_age()` the number of days since the last modification.

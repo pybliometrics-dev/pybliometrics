@@ -8,7 +8,7 @@ The class is initialized with a search query which you can read about in `Author
 .. code-block:: python
    
     >>> from pybliometrics.scopus import AuthorSearch
-    >>> s = AuthorSearch('AUTHLAST(Selten) and AUTHFIRST(Reinhard)', refresh=True)
+    >>> s = AuthorSearch('AUTHLAST(Selten) and AUTHFIRST(Reinhard)')
 
 
 To know the the number of results use the `.get_results_size()` method, even before you download the results:
@@ -43,6 +43,8 @@ It's easy to work with namedtuples, for example using `pandas <https://pandas.py
       affiliation_id  city  country                            areas  
     0       60007493  Bonn  Germany  ECON (71); MATH (19); BUSI (15)
 
+
+Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpeted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `s.get_cache_file_mdate()` to get the date of last modification, and `s.get_cache_file_age()` the number of days since the last modification.
 
 There are sometimes missing information in the returned results although it exists in the Scopus database.  For example, the EID may be missing, even though every element always has an EID.  This is not a bug of `pybliometrics`.  Instead it is somehow related to a problem in the download process from the Scopus database.  To check for completeness of specific fields, use parameter `integrity_fields`, which accepts any iterable.  Using parameter `integrity_action` you can choose between two actions on what to do if the integrity check fails: Set `integrity_action="warn"` to issue a UserWarning, or set `integrity_action="raise"` to raise an AttributeError.
 

@@ -106,6 +106,8 @@ There are a number of getter methods for convenience.  For example, you can obta
       dtype='object')
 
 
+Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpeted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `au.get_cache_file_mdate()` to get the date of last modification, and `au.get_cache_file_age()` the number of days since the last modification.
+
 Method `get_document_eids()` performs a search for the author's publications with `ScopusSearch <../reference/pybliometrics.ScopusSearch>`_ to ease interoperationability with other APIs:
 
 .. code-block:: python
