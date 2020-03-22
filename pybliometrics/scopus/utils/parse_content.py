@@ -1,3 +1,4 @@
+from collections import namedtuple
 from warnings import warn
 
 
@@ -71,6 +72,29 @@ def listify(element):
         return element
     else:
         return [element]
+
+
+def parse_affiliation(affs):
+    """Helper function to parse list of affiliation-related information."""
+    order = 'id parent type relationship afdispname preferred_name '\
+            'parent_preferred_name country_code country address_part city '\
+            'state postal_code org_domain org_URL'
+    aff = namedtuple('Affiliation', order)
+    out = []
+    for item in listify(affs):
+        doc = item.get('ip-doc', {})
+        address = doc.get('address', {})
+        new = aff(id=item.get('@affiliation-id'), parent=item.get('@parent'),
+            type=doc.get('@type'), relationship=doc.get('@relationship'),
+            afdispname=doc.get('@afdispname'),
+            preferred_name=doc.get('preferred-name', {}).get('$'),
+            parent_preferred_name=doc.get('parent-preferred-name', {}).get('$'),
+            country_code=address.get('@country'), country=address.get('country'),
+            address_part=address.get("address-part"), city=address.get('city'),
+            postal_code=address.get('postal-code'), state=address.get('state'),
+            org_domain=doc.get('org-domain'), org_URL=doc.get('org-URL'))
+        out.append(new)
+    return out or None
 
 
 def parse_date_created(dct):

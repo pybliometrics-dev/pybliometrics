@@ -3,7 +3,7 @@
 """Tests for `scopus.AuthorRetrieval` module."""
 
 import warnings
-from collections import Counter
+from collections import Counter, namedtuple
 from nose.tools import assert_equal, assert_true
 
 from pybliometrics.scopus import AuthorRetrieval
@@ -14,13 +14,39 @@ au = AuthorRetrieval("7004212771", refresh=30)
 
 
 def test_affiliation_current():
-    assert_equal(au.affiliation_current, '110785688')
+    received = au.affiliation_current
+    assert_true(isinstance(received, list))
+    assert_true(len(received) >= 1)
+    order = 'id parent type relationship afdispname preferred_name '\
+            'parent_preferred_name country_code country address_part city '\
+            'state postal_code org_domain org_URL'
+    aff = namedtuple('Affiliation', order)
+    expected = aff(id='110785688', parent='60027950', type='dept',
+        relationship='author', afdispname=None, country='United States',
+        preferred_name='Department of Chemical Engineering',
+        parent_preferred_name='Carnegie Mellon University', country_code='usa',
+        address_part='5000 Forbes Avenue', city='Pittsburgh', state='PA',
+        postal_code='15213-3890', org_domain='cmu.edu',
+        org_URL='https://www.cmu.edu/')
+    assert_true(expected in received)
 
 
 def test_affiliation_history():
-    affs = au.affiliation_history
-    assert_true(len(affs) >= 2)
-    assert_true(isinstance(affs[0], str))
+    received = au.affiliation_history
+    assert_true(isinstance(received, list))
+    assert_true(len(received) >= 10)
+    order = 'id parent type relationship afdispname preferred_name '\
+            'parent_preferred_name country_code country address_part city '\
+            'state postal_code org_domain org_URL'
+    aff = namedtuple('Affiliation', order)
+    expected = aff(id='60008644', parent=None, type='parent',
+        relationship='author', afdispname=None,
+        preferred_name='Fritz Haber Institute of the Max Planck Society',
+        parent_preferred_name=None, country_code='deu', country='Germany',
+        address_part='Faradayweg 4-6', city='Berlin', state=None,
+        postal_code='14195', org_domain='fhi.mpg.de',
+        org_URL='https://www.fhi.mpg.de/')
+    assert_true(expected in received)
 
 
 def test_citation_count():

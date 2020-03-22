@@ -7,33 +7,35 @@ from .author_search import AuthorSearch
 from .scopus_search import ScopusSearch
 from pybliometrics.scopus.classes import Retrieval
 from pybliometrics.scopus.utils import chained_get, get_content, get_link,\
-    listify, parse_date_created
+    listify, parse_affiliation, parse_date_created
 
 
 class AuthorRetrieval(Retrieval):
     @property
     def affiliation_current(self):
-        """The ID of the current affiliation according to Scopus."""
-        warn(
-            "In pybliometrics 2.3, the type of this property will be namedtuple",
-            UserWarning
-        )
-        return self._json.get('affiliation-current', {}).get('@id')
+        """A list of namedtuples representing the authors's current
+        affiliation(s), in the form (id parent type relationship afdispname
+        preferred_name parent_preferred_name country_code country address_part
+        city state postal_code org_domain org_URL).
+        Note: Affiliation information might be missing or mal-assigned even
+        when it lookes correct in the web view.  In this case please request
+        a correction.
+        """
+        path = ["author-profile", "affiliation-current", "affiliation"]
+        return parse_affiliation(chained_get(self._json, path))
 
     @property
     def affiliation_history(self):
-        """Unordered list of IDs of all affiliations the author was
-        affiliated with acccording to Scopus.
+        """A list of namedtuples representing the authors's historical
+        affiliation(s), in the form (id parent type relationship afdispname
+        preferred_name parent_preferred_name country_code country address_part
+        city state postal_code org_domain org_URL).
+        Note: Affiliation information might be missing or mal-assigned even
+        when it lookes correct in the web view.  In this case please request
+        a correction.
         """
-        warn(
-            "In pybliometrics 2.3, the type of this property will be namedtuple",
-            UserWarning
-        )
-        affs = self._json.get('affiliation-history', {}).get('affiliation')
-        try:
-            return [d['@id'] for d in affs]
-        except TypeError:  # No affiliation history
-            return None
+        path = ["author-profile", "affiliation-history", "affiliation"]
+        return parse_affiliation(chained_get(self._json, path))
 
     @property
     def citation_count(self):

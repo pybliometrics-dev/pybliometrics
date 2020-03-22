@@ -83,15 +83,27 @@ Bibliometric information:
     ('2213', '5'), ('1502', '1'), ('3100', '9')]
 
 
-Information on current and former affiliation(s) to be used for the `ContentAffiliationRetrieval <../reference/pybliometrics.ContentAffiliationRetrieval>`_ class:
+Extensive nformation on current and former affiliations is provided as namedtuples as well:
 
 .. code-block:: python
 
     >>> au.affiliation_current
-    '110785688'
-    >>> au.affiliation_history
-    ['60026531', '60030926', '60090776', '60027757', '60008644']
+    [Affiliation(id='110785688', parent='60027950', type='dept', relationship='author',
+    afdispname=None, preferred_name='Department of Chemical Engineering',
+    parent_preferred_name='Carnegie Mellon University', country_code='usa',
+    country='United States', address_part='5000 Forbes Avenue', city='Pittsburgh',
+    state='PA', postal_code='15213-3890', org_domain='cmu.edu', org_URL='https://www.cmu.edu/')]
+    >>> len(au.affiliation_history)
+    15
+    >>> au.affiliation_history[9]
+    Affiliation(id='60008644', parent=None, type='parent', relationship='author',
+    afdispname=None, preferred_name='Fritz Haber Institute of the Max Planck Society',
+    parent_preferred_name=None, country_code='deu', country='Germany',
+    address_part='Faradayweg 4-6', city='Berlin', state=None, postal_code='14195',
+    org_domain='fhi.mpg.de', org_URL='https://www.fhi.mpg.de/')
 
+
+The affiliation ID to be used for the `ContentAffiliationRetrieval <../reference/pybliometrics.ContentAffiliationRetrieval>`_ class.
 
 There are a number of getter methods for convenience.  For example, you can obtain some basic information on co-authors as a list of namedtuples (query will not be cached):
 
