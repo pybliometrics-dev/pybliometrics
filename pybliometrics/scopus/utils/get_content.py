@@ -15,7 +15,7 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           500: exception.Scopus500Error}
 
 
-def cache_file(url, params={}, **kwds):
+def get_content(url, params={}, *args, **kwds):
     """Helper function to download a file and return its content.
 
     Parameters
@@ -28,7 +28,7 @@ def cache_file(url, params={}, **kwds):
         and accepted values see e.g.
         https://api.elsevier.com/documentation/AuthorRetrievalAPI.wadl
 
-    kwds : key-value parings, optional
+    *args, **kwds : key-value parings, optional
         Keywords passed on to as query parameters.  Must contain fields
         and values specified in the respective API specification.
 
@@ -123,36 +123,6 @@ def detect_id_type(sid):
         return id_type
     except UnboundLocalError:
         raise ValueError('ID type detection failed for \'{}\'.'.format(sid))
-
-
-def get_content(qfile, refresh, *args, **kwds):
-    """Helper function to read file content as json.  The file is cached
-    in a folder specified in ~/.scopus/config.ini.
-
-    Parameters
-    ----------
-    qfile : string
-        The name of the file to be created.
-
-    refresh : bool
-        Whether the file content should be refreshed if it exists.
-
-    *args, **kwds :
-        Arguments and keywords to be passed on to download().
-
-    Returns
-    -------
-    content : str
-        The content of the file.
-    """
-    if not refresh and os.path.exists(qfile):
-        with open(qfile, 'rb') as f:
-            content = f.read()
-    else:
-        content = cache_file(*args, **kwds).text.encode('utf-8')
-        with open(qfile, 'wb') as f:
-            f.write(content)
-    return content
 
 
 def get_folder(api, view):

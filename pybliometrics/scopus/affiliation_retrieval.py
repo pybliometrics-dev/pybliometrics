@@ -132,13 +132,10 @@ class ContentAffiliationRetrieval(Retrieval):
         -----
         The files are cached in ~/.scopus/affiliation_retrieval/STANDARD/{aff_id}.
         """
-        view = "STANDARD"  # In case Scopus adds different views in future
-
         # Load json
         aff_id = str(int(str(aff_id).split('-')[-1]))
-        Retrieval.__init__(self, identifier=aff_id, view=view, refresh=refresh,
-                           api='ContentAffiliationRetrieval')
-
+        Retrieval.__init__(self, identifier=aff_id, view="STANDARD",
+                           refresh=refresh, api='ContentAffiliationRetrieval')
         self._json = self._json['affiliation-retrieval-response']
 
     def __str__(self):

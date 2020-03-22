@@ -1,18 +1,16 @@
 """Superclass to access all Scopus search APIs and dump the results."""
 
 from hashlib import md5
-from json import dumps, loads
-from os.path import exists, join
-from warnings import warn
+from os.path import join
 
-from pybliometrics.scopus.exception import ScopusQueryError
-from pybliometrics.scopus.utils import SEARCH_URL, cache_file, get_folder,\
-    print_progress
+from pybliometrics.scopus.classes import Base
+from pybliometrics.scopus.utils import SEARCH_URL, get_folder
 
 
-class Search:
+class Search(Base):
     def __init__(self, query, api, refresh, view='STANDARD', count=200,
-                 max_entries=5000, cursor=False, download=True, verbose=False, **kwds):
+                 max_entries=5000, cursor=False, download=True,
+                 verbose=False, **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
@@ -60,71 +58,18 @@ class Search:
         ValueError
             If the api parameter is an invalid entry.
         """
-        # Read the file contents if file exists and we are not refreshing,
-        # otherwise download query anew and cache file
         fname = md5(query.encode('utf8')).hexdigest()
         qfile = join(get_folder(api, view), fname)
-        if not refresh and exists(qfile):
-            with open(qfile, "rb") as f:
-                self._json = [loads(line) for line in f.readlines()]
-            self._n = len(self._json)
+        params = {'query': query, 'count': count, 'view': view}
+        if cursor:
+            params.update({'cursor': '*'})
         else:
-            # Set query parameters
-            params = {'query': query, 'count': count, 'view': view}
-            if cursor:
-                params.update({'cursor': '*'})
-            else:
-                params.update({'start': 0})
-            # Download results
-            res = cache_file(url=SEARCH_URL[api], params=params, **kwds).json()
-            n = int(res['search-results'].get('opensearch:totalResults', 0))
-            self._n = n
-            if not cursor and n > max_entries:  # Stop if there are too many results
-                text = ('Found {} matches. Set max_entries to a higher '
-                        'number, change your query ({}) or set '
-                        'subscription=True'.format(n, query))
-                raise ScopusQueryError(text)
-            if download:
-                self._json = _parse(res, params, n, api, verbose, **kwds)
-                # Finally write out the file
-                with open(qfile, 'wb') as f:
-                    for item in self._json:
-                        f.write('{}\n'.format(dumps(item)).encode('utf-8'))
-            else:
-                # Assures that properties will not result in an error
-                self._json = []
+            params.update({'start': 0})
+        Base.__init__(self, qfile, refresh, params=params, url=SEARCH_URL[api],
+                      download=download, max_entries=max_entries)
+        # Set query parameters
         self._view = view
 
     def get_results_size(self):
         """Return the number of results (works even if download=False)."""
         return self._n
-
-
-def _parse(res, params, n, api, verbose, **kwds):
-    """Auxiliary function to download results and parse json."""
-    cursor = "cursor" in params
-    if not cursor:
-        start = params["start"]
-    if n == 0:
-        return ""
-    _json = res.get('search-results', {}).get('entry', [])
-    if verbose:
-        chunk = 1
-        chunks = int(n/params['count']) + (n % params['count'] > 0) + 1 #roundup + 1 for the final iteration
-        print('Downloading results for query "{}":'.format(params['query']))
-        print_progress(chunk, chunks)
-    # Download the remaining information in chunks
-    while n > 0:
-        n -= params["count"]
-        if cursor:
-            pointer = res['search-results']['cursor'].get('@next')
-            params.update({'cursor': pointer})
-        else:
-            start += params["count"]
-            params.update({'start': start})
-        res = cache_file(url=SEARCH_URL[api], params=params, **kwds).json()
-        _json.extend(res.get('search-results', {}).get('entry', []))
-        if verbose:
-            chunk += 1
-            print_progress(chunk, chunks)
-    return _json

@@ -1,12 +1,12 @@
 """Superclass to access all Scopus retrieval APIs and dump the results."""
 
-from json import loads
 from os.path import join
 
-from pybliometrics.scopus.utils import RETRIEVAL_URL, get_content, get_folder
+from pybliometrics.scopus.classes import Base
+from pybliometrics.scopus.utils import RETRIEVAL_URL, get_folder
 
 
-class Retrieval:
+class Retrieval(Base):
     def __init__(self, identifier, api, refresh, view, id_type=None,
                  date=None):
         """Class intended as superclass to perform retrievals.
@@ -57,6 +57,6 @@ class Retrieval:
 
         # Parse file contents
         qfile = join(get_folder(api, view), identifier.replace('/', '_'))
-        res = get_content(qfile, refresh, url=url, params=params)
-        self._json = loads(res.decode('utf-8'))
+        Base.__init__(self, qfile, refresh, params=params, url=url)
+        # print(self._json)
         self._view = view
