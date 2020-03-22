@@ -3,6 +3,19 @@ Change Log
 
 .. toctree::
 
+2.3
+~~~
+
+2020-03-22
+
+* Support for python 2.7 has ended.
+* Introduce Base() class from which all classes inherit the following two methos: `get_cache_file_age()` and `get_cache_file_mdate()`.
+* In all classes, refresh parameter accepts an integer which will refresh the cached file if the last modification date is longer than that number of days ago.
+* Provide extensive affiliation information in `AuthorRetrieval().affiliation_current` and `AuthorRetrieval().affiliation_history` as namedtuples.
+* Provide more robust example of the "Download Machine" in the documentation.
+* Fix typos and formatting errors in the documentation.
+* In `AbstractRetrieval().__str__`, fix bug due to missing authors and affiliations.
+
 2.2.2
 ~~~~~
 
