@@ -47,12 +47,15 @@ Example
     '30'
     >>> au1 = AuthorRetrieval(ab.authors[0].auid)
     >>> au1.affiliation_current
-    '60105007'
+    [Affiliation(id='60105007', parent=None, type='parent', relationship='author', afdispname=None,
+    preferred_name='Max Planck Institute for Innovation and Competition', parent_preferred_name=None,
+    country_code='deu', country='Germany', address_part='Marstallplatz 1', city='Munich', state=None,
+    postal_code='80539', org_domain=None, org_URL='http://www.ip.mpg.de/')]
     >>> # Affiliation information
     >>> from pybliometrics.scopus import ContentAffiliationRetrieval
-    >>> aff1 = ContentAffiliationRetrieval(au1.affiliation_current)
-    >>> aff1.affiliation_name
-    'Max Planck Institute for Innovation and Competition'
+    >>> aff1 = ContentAffiliationRetrieval(au1.affiliation_current[0].id)
+    >>> aff1.author_count
+    '72'
 
 .. example-end
 
