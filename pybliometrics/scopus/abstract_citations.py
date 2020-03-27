@@ -149,12 +149,16 @@ class CitationOverview(Retrieval):
             The last year for which the citation count should be loaded.
             Default is the current year.
 
-        refresh : bool (optional, default=False)
-            Whether to refresh the cached file if it exists or not.
+        refresh : bool or int (optional, default=False)
+            Whether to refresh the cached file if it exists or not.  If int
+            is passed, cached file will be refreshed if the number of days
+            since last modification exceeds that value.
 
         Notes
         -----
-        The files are cached in ~/.scopus/citation_overview/STANDARD/{eid}.
+        The directory for cached results is `{path}/STANDARD/{eid}`,
+        where `path` is specified in `~/.scopus/config.ini`.
+
         Your API Key needs to be approved by Elsevier to access this API.
         """
         # Variables

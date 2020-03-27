@@ -22,8 +22,10 @@ class Search(Base):
             The name of the Scopus API to be accessed.  Allowed values:
             AffiliationSearch, AuthorSearch, ScopusSearch.
 
-        refresh : bool
-            Whether to refresh the cached file if it exists or not.
+        refresh : bool or int
+            Whether to refresh the cached file if it exists or not.  If int
+            is passed, cached file will be refreshed if the number of days
+            since last modification exceeds that value.
 
         view : str
             The view of the file that should be downloaded.

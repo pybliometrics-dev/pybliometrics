@@ -125,12 +125,15 @@ class ContentAffiliationRetrieval(Retrieval):
             The Scopus Affiliation ID.  Optionally expressed
             as an Elsevier EID (i.e., in the form 10-s2.0-nnnnnnnn).
 
-        refresh : bool (optional, default=False)
-            Whether to refresh the cached file if it exists or not.
+        refresh : bool or int (optional, default=False)
+            Whether to refresh the cached file if it exists or not.  If int
+            is passed, cached file will be refreshed if the number of days
+            since last modification exceeds that value.
 
         Notes
         -----
-        The files are cached in ~/.scopus/affiliation_retrieval/STANDARD/{aff_id}.
+        The directory for cached results is `{path}/STANDARD/{aff_id}`,
+        where `path` is specified in `~/.scopus/config.ini`.
         """
         # Load json
         aff_id = str(int(str(aff_id).split('-')[-1]))

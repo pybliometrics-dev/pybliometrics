@@ -112,8 +112,10 @@ class ScopusSearch(Search):
         query : str
             A string of the query.
 
-        refresh : bool (optional, default=False)
-            Whether to refresh the cached file if it exists or not.
+        refresh : bool or int (optional, default=False)
+            Whether to refresh the cached file if it exists or not.  If int
+            is passed, cached file will be refreshed if the number of days
+            since last modification exceeds that value.
 
         subscriber : bool (optional, default=True)
             Whether the user accesses Scopus with a subscription or not.
@@ -165,8 +167,9 @@ class ScopusSearch(Search):
 
         Notes
         -----
-        Json results are cached in ~/.scopus/scopus_search/{view}/{fname},
-        where fname is the md5-hashed version of query.
+        The directory for cached results is `{path}/{view}/{fname}`,
+        where `path` is specified in `~/.scopus/config.ini` and fname is
+        the md5-hashed version of `query`.
         """
         # Checks
         allowed_views = ('STANDARD', 'COMPLETE')

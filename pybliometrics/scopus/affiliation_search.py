@@ -50,8 +50,10 @@ class AffiliationSearch(Search):
         query : str
             A string of the query, e.g. "af-id(60021784)".
 
-        refresh : bool (optional, default=False)
-            Whether to refresh the cached file if it exists or not.
+        refresh : bool or int (optional, default=False)
+            Whether to refresh the cached file if it exists or not.  If int
+            is passed, cached file will be refreshed if the number of days
+            since last modification exceeds that value.
 
         count : int (optional, default=200)
             The number of entries to be displayed at once.  A smaller number
@@ -87,8 +89,9 @@ class AffiliationSearch(Search):
 
         Notes
         -----
-        Json results are cached in ~/.scopus/affiliation_search/STANDARD/{fname},
-        where fname is the md5-hashed version of query.
+        The directory for cached results is `{path}/STANDARD/{fname}`,
+        where  `path` is specified in `~/.scopus/config.ini` and fname is
+        the md5-hashed version of `query`.
         """
         # Checks
         allowed_actions = ("warn", "raise")

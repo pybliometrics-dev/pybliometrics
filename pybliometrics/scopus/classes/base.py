@@ -19,11 +19,9 @@ class Base:
             The filename (including path) of the cache object.
 
         refresh : bool or int
-            Whether to refresh the cached file if it exists or not. If int
-            is passed, value will be interpreted as allowed age measured
-            in number of days. When the number of days since the cached
-            file was last modified exceeds the allowed age, the file will
-            be refreshed.
+            Whether to refresh the cached file if it exists or not.  If int
+            is passed, cached file will be refreshed if the number of days
+            since last modification exceeds that value.
 
         params : dict
             Dictionary used as header during the API request.

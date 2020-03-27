@@ -572,8 +572,10 @@ class AbstractRetrieval(Retrieval):
             The identifier of a document.  Can be the Scoups EID, the Scopus
             ID, the PII, the Pubmed-ID or the DOI.
 
-        refresh : bool (optional, default=False)
-            Whether to refresh the cached file if it exists or not.
+        refresh : bool or int (optional, default=False)
+            Whether to refresh the cached file if it exists or not.  If int
+            is passed, cached file will be refreshed if the number of days
+            since last modification exceeds that value.
 
         id_type: str (optional, default=None)
             The type of used ID. Allowed values: None, 'eid', 'pii',
@@ -595,9 +597,9 @@ class AbstractRetrieval(Retrieval):
 
         Notes
         -----
-        The files are cached in ~/.scopus/abstract_retrieval/{view}/{identifier}.
-        In case a DOI is used as identifier, an underscore replaces the
-        forward slash in the filename.
+        The directory for cached results is `{path}/{view}/{identifier}`,
+        where `path` is specified in `~/.scopus/config.ini`.  In case
+        `identifier` is a DOI,, an underscore replaces the forward slash.
         """
         # Checks
         identifier = str(identifier)

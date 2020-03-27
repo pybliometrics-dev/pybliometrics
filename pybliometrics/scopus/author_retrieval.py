@@ -213,13 +213,16 @@ class AuthorRetrieval(Retrieval):
             The ID of the author to search for.  Optionally expressed
             as an Elsevier EID (i.e., in the form 9-s2.0-nnnnnnnn).
 
-        refresh : bool (optional, default=False)
-            Whether to refresh the cached file (if it exists) or not.
+        refresh : bool or int (optional, default=False)
+            Whether to refresh the cached file if it exists or not.  If int
+            is passed, cached file will be refreshed if the number of days
+            since last modification exceeds that value.
 
         Notes
         -----
-        The files are cached in ~/.scopus/author_retrieval/ENHANCED/{author_id}
-        (without eventually leading '9-s2.0-').
+        The directory for cached results is `{path}/ENHANCED/{author_id}`,
+        where `path` is specified in `~/.scopus/config.ini` and `author_id`
+        is stripped of an eventually leading `'9-s2.0-'`.
         """
         # Load json
         view = "ENHANCED"  # In case Scopus adds different views in future

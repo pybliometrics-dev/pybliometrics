@@ -137,8 +137,10 @@ class SerialTitle(Retrieval):
         issn : str or int
             The ISSN or the E-ISSN of the source.
 
-        refresh : bool (optional, default=False)
-            Whether to refresh the cached file (if it exists) or not.
+        refresh : bool or int (optional, default=False)
+            Whether to refresh the cached file if it exists or not.  If int
+            is passed, cached file will be refreshed if the number of days
+            since last modification exceeds that value.
 
         view : str (optional, default="ENHANCED")
             The view of the file that should be downloaded.  Allowed values:
@@ -147,7 +149,8 @@ class SerialTitle(Retrieval):
 
         Notes
         -----
-        The files are cached in ~/.scopus/serial_title/{view}/{source_id}.
+        The directory for cached results is `{path}/{view}/{source_id}`,
+        where `path` is specified in `~/.scopus/config.ini`.
         """
         # Checks
         allowed_views = ('BASIC', 'STANDARD', 'ENHANCED')
