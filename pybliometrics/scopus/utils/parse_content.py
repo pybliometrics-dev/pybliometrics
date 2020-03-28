@@ -32,13 +32,14 @@ def check_integrity(tuples, fields, action):
     """
     for field in fields:
         elements = [getattr(e, field) for e in tuples]
-        if None in elements:
-            msg = "Parsed information doesn't pass integrity check "\
-                  "because of incomplete field '{}'".format(field)
-            if action == "raise":
-                raise AttributeError(msg)
-            elif action == "warn":
-                warn(msg)
+        if None not in elements:
+            continue
+        msg = "Parsed information doesn't pass integrity check becaue of "\
+              "incomplete information in field '{}'".format(field)
+        if action == "raise":
+            raise AttributeError(msg)
+        elif action == "warn":
+            warn(msg)
 
 
 def check_integrity_params(action, allowed=("warn", "raise")):
