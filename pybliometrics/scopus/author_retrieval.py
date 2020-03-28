@@ -296,8 +296,8 @@ class AuthorRetrieval(Retrieval):
         return coauthors or None
 
     def get_documents(self, subtypes=None, **kwds):
-        """Return list of author's publications using ScopusSearch, which
-        fit a specified set of document subtypes.
+        """Return list of the author's publications using a ScopusSearch()
+        query, where publications may fit specified set of document subtypes.
 
         Parameters
         ----------
@@ -310,21 +310,22 @@ class AuthorRetrieval(Retrieval):
         Returns
         -------
         results : list of namedtuple
-            The same type of results returned from any ScopusSearch.
+            The same type of results returned from any ScopusSearch().
         """
-        search = ScopusSearch('au-id({})'.format(self.identifier), **kwds)
+        s = ScopusSearch('AU-ID({})'.format(self.identifier), **kwds)
         if subtypes:
-            return [p for p in search.results if p.subtype in subtypes]
+            return [p for p in s.results if p.subtype in subtypes]
         else:
-            return search.results
+            return s.results
 
     def get_document_eids(self, *args, **kwds):
-        """Return list of EIDs of author's publications using ScopusSearch."""
-        search = ScopusSearch('au-id({})'.format(self.identifier),
-                              *args, **kwds)
-        return search.get_eids()
+        """Return list of EIDs of the author's publications using
+        a ScopusSearch() query.
+        """
+        s = ScopusSearch('AU-ID({})'.format(self.identifier), *args, **kwds)
+        return s.get_eids()
 
-    def estimate_uniqueness(self, query=None, refresh=False, download=False):
+    def estimate_uniqueness(self, query=None, **kwds):
         """Estimate how unqiue a profile is by get the number of
         matches of an AuthorSearch for this person.
 
@@ -337,11 +338,8 @@ class AuthorRetrieval(Retrieval):
             "SUBJAREA()" OR "AF-ID() AND SUBJAREA()".  For details see
             https://dev.elsevier.com/tips/AuthorSearchTips.htm.
 
-        refresh : bool (optional, default=False)
-            Whether to refresh the cached file (if it exists) or not.
-
-        download : bool (optional, defaul=False)
-            Whether to cached the file or not.
+        **kwds : dict-like
+            Parameters to be passed on to ScopusSearch().
 
         Returns
         -------
@@ -355,5 +353,5 @@ class AuthorRetrieval(Retrieval):
         if not query:
             query = "AUTHLAST({}) AND AUTHFIRST({})".format(
                 self.surname, self.given_name)
-        s = AuthorSearch(query, download=download, refresh=refresh)
+        s = AuthorSearch(query, **kwds)
         return s.get_results_size()
