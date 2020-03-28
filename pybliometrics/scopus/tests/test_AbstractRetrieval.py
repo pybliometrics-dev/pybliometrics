@@ -347,7 +347,7 @@ def test_refcount():
     assert_equal(ab8.refcount, '48')
 
 
-def test_references():
+def test_references_full():
     fields = 'position id doi title authors authors_auid authors_affiliationid '\
              'sourcetitle publicationyear volume issue first last citedbycount '\
              'type text fulltext'
@@ -362,18 +362,17 @@ def test_references():
         last=None, citedbycount=None, text='Eds. Chapman and Hall/CRC: London.')
     assert_equal(ab1.references[-1], expected1)
     assert_equal(ab2.references, None)
-    fulltext4 = 'Chib, S., 1995, Marginal likelihood from the Gibbs output, '\
-                'Journal of the American Statistical Association 90, 1313-1321.'
-    expected4 = ref(position='1', id='0041974049', doi=None,
-        title='Marginal likelihood from the Gibbs output', authors='Chib, S.',
-        sourcetitle='Journal of the American Statistical Association',
-        publicationyear='1995', volume='90', issue=None, first='1313',
-        last='1321', text=None, fulltext=fulltext4, citedbycount=None,
-        authors_auid=None, authors_affiliationid=None, type=None)
-    authors3 = 'Armbrust, Michael; Fox, Armando; Griffith, Rean; Joseph, '\
+
+
+def test_references_ref():
+    fields = 'position id doi title authors authors_auid authors_affiliationid '\
+             'sourcetitle publicationyear volume issue first last citedbycount '\
+             'type text fulltext'
+    ref = namedtuple('Reference', fields)
+    authors8 = 'Armbrust, Michael; Fox, Armando; Griffith, Rean; Joseph, '\
         'Anthony D.; Katz, Randy; Konwinski, Andy; Lee, Gunho; '\
         'Patterson, David; Rabkin, Ariel; Stoica, Ion; Zaharia, Matei'
-    expected8 = ref(position='1', id='77950347409', authors=authors3,
+    expected8 = ref(position='1', id='77950347409', authors=authors8,
         doi='10.1145/1721654.1721672', title='A view of cloud computing',
         sourcetitle='Communications of the ACM', type='resolvedReference',
         publicationyear=None, volume='53', issue='4', first='50',

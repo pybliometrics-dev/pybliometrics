@@ -380,13 +380,12 @@ class AbstractRetrieval(Retrieval):
     @property
     def refcount(self):
         """Number of references of an article.
-        Note: Requires the FULL view of the article.
+        Note: Requires either the FULL view or REF view.
         """
-        if self._view == "REF":
-            path = ["references", '@total-references']
-        else:
-            path = ['item', 'bibrecord', 'tail', 'bibliography', '@refcount']
-        return chained_get(self._json, path)
+        try:  # REF view
+            return self._ref['@total-references']
+        except KeyError:  # FULL view
+            return self._ref.get('@refcount')
 
     @property
     def references(self):
@@ -409,21 +408,18 @@ class AbstractRetrieval(Retrieval):
         Scopus-provided information on the publication, `fulltext` is the text
         the authors used for the reference.
 
-        Note: Requires either the FULL view or REF view of the article.  Might
-        be empty even if refcount is positive.  Specific fields can be empty.
+        Note: Requires either the FULL view or REF view.
+        Might be empty even if refcount is positive.  Specific fields can
+        be empty.
         Author lists (authors, authors_auid, authors_affiliationid) may contain
-        duplicates but have been filtered of None's.
+        duplicates but None's have been filtered out.
         """
         out = []
         fields = 'position id doi title authors authors_auid '\
                  'authors_affiliationid sourcetitle publicationyear volume '\
                  'issue first last citedbycount type text fulltext'
         ref = namedtuple('Reference', fields)
-        if self._view == "REF":
-            path = ['references', 'reference']
-        else:
-            path = ['item', 'bibrecord', 'tail', 'bibliography', 'reference']
-        items = listify(chained_get(self._json, path, []))
+        items = listify(self._ref.get("reference", []))
         for item in items:
             info = item.get('ref-info', item)
             volisspag = info.get('volisspag', {}) or {}
@@ -439,6 +435,9 @@ class AbstractRetrieval(Retrieval):
                            for d in auth]
                 auids = None
                 affids = None
+                ids = listify(info['refd-itemidlist']['itemid'])
+                doi = _select_by_idtype(ids, id_type='DOI')
+                scopus_id = _select_by_idtype(ids, id_type='SGR')
             except KeyError:  # REF view parsing
                 auth = (info.get('author-list') or {}).get('author', [])
                 authors = [', '.join(filter(None, [d.get('ce:surname'),
@@ -447,13 +446,8 @@ class AbstractRetrieval(Retrieval):
                 auids = "; ".join(filter(None, [d.get('@auid') for d in auth]))
                 affs = filter(None, [d.get('affiliation') for d in auth])
                 affids = "; ".join([aff.get('@id') for aff in affs])
-            # Parse IDs
-            try:
-                ids = listify(info['refd-itemidlist']['itemid'])
-            except KeyError:
-                ids = []
-            doi = _select_by_idtype(ids, id_type='DOI', alt_d=info)
-            scopus_id = _select_by_idtype(ids, id_type='SGR', alt_d=info)
+                doi = info.get('ce:doi')
+                scopus_id = info.get('scopus-id')
             # Combine information
             new = ref(position=item.get('@id'), id=scopus_id, doi=doi,
                 authors="; ".join(authors), authors_auid=auids or None,
@@ -608,13 +602,19 @@ class AbstractRetrieval(Retrieval):
             if id_type not in allowed_id_types:
                 raise ValueError('id_type parameter must be one of ' +
                                  ', '.join(allowed_id_types))
+
         # Load json
         Retrieval.__init__(self, identifier=identifier, id_type=id_type,
                            api='AbstractRetrieval', refresh=refresh, view=view)
         self._json = self._json['abstracts-retrieval-response']
         self._head = chained_get(self._json, ["item", "bibrecord", "head"], {})
-        path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent']
-        self._confevent = chained_get(self._head, path, {})
+        conf_path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent']
+        self._confevent = chained_get(self._head, conf_path, {})
+        if self._view == "REF":
+            ref_path = ["references"]
+        else:
+            ref_path = ['item', 'bibrecord', 'tail', 'bibliography']
+        self._ref = chained_get(self._json, ref_path, {})
 
     def __str__(self):
         """Return pretty text version of the document.
@@ -817,13 +817,9 @@ def _parse_pages(self, unicode=False):
     return pages
 
 
-def _select_by_idtype(lst, id_type, alt_d):
+def _select_by_idtype(lst, id_type):
     """Auxiliary function to return items matching a special idtype."""
     try:
         return [d['$'] for d in lst if d['@idtype'] == id_type][0]
     except IndexError:
-        if id_type == 'DOI':
-            field = 'ce:doi'
-        elif id_type == 'SGR':
-            field = 'scopus_id'
-        return alt_d.get(field)
+        return None
