@@ -161,13 +161,13 @@ class AbstractRetrieval(Retrieval):
         """Date range of the conference the document belongs to represented
         by two tuples in the form (YYYY, MM, DD).
         """
-        date = self._confevent.get('confdate', {})
-        if len(date) > 0:
-            start = {k: int(v) for k, v in date['startdate'].items()}
-            end = {k: int(v) for k, v in date['enddate'].items()}
-            return ((start['@year'], start['@month'], start['@day']),
-                    (end['@year'], end['@month'], end['@day']))
-        else:
+        dates = self._confevent.get('confdate', {})
+        try:
+            keys = ("startdate", "enddate")
+            date_order = ("@year", "@month", "@day")
+            d = (tuple(int(dates[k1][k2]) for k2 in date_order) for k1 in keys)
+            return tuple(d)
+        except KeyError:
             return None
 
     @property
