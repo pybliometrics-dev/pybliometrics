@@ -262,7 +262,8 @@ class AuthorRetrieval(Retrieval):
         coauthor groups.
         """
         # Get number of authors to search for
-        res = get_content(url=self.coauthor_link)
+        url = self.coauthor_link
+        res = get_content(url=url)
         data = loads(res.text)['search-results']
         N = int(data.get('opensearch:totalResults', 0))
         # Store information in namedtuples
@@ -270,10 +271,11 @@ class AuthorRetrieval(Retrieval):
         coauth = namedtuple('Coauthor', fields)
         coauthors = []
         # Iterate over search results in chunks of 25 results
-        count = 0
-        while count < N:
-            params = {'start': count, 'count': 25}
-            res = get_content(url=self.coauthor_link, params=params, accept='json')
+        count = 25
+        start = 0
+        while start < N:
+            params = {'start': start, 'count': count}
+            res = get_content(url=url, params=params, accept='json')
             data = loads(res.text)['search-results'].get('entry', [])
             # Extract information for each coauthor
             for entry in data:
@@ -291,7 +293,7 @@ class AuthorRetrieval(Retrieval):
                     country=aff.get('affiliation-country'))
                 coauthors.append(new)
             count += 25
-        return coauthors
+        return coauthors or None
 
     def get_documents(self, subtypes=None, **kwds):
         """Return list of author's publications using ScopusSearch, which

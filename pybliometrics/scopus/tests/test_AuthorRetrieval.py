@@ -93,6 +93,19 @@ def test_given_name():
     assert_equal(au.given_name, 'John R.')
 
 
+def get_coauthors():
+    received = au.get_coauthors()
+    assert_true(isinstance(received, list))
+    assert_true(len(received) > 155)
+    fields = 'surname given_name id areas affiliation_id name city country'
+    coauth = namedtuple('Coauthor', fields)
+    expected = coauth(surname='Rose', given_name='Michael E.', id='57209617104',
+        areas='Computer Science (all)', affiliation_id='60105007',
+        name='Max-Planck-Institut für Innovation und Wettbewerb',
+        city='Munich', country='Germany')
+    assert_true(expected in received)
+
+
 def test_get_documents():
     subtypes = {'re', 'ed', 'no'}
     received = au.get_documents(subtypes)
