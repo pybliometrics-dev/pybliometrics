@@ -452,14 +452,8 @@ class AbstractRetrieval(Retrieval):
                 ids = listify(info['refd-itemidlist']['itemid'])
             except KeyError:
                 ids = []
-            try:
-                doi = _select_by_idtype(ids, 'DOI')[0]
-            except IndexError:
-                doi = info.get('ce:doi')
-            try:
-                scopus_id = _select_by_idtype(ids, 'SGR')[0]
-            except IndexError:
-                scopus_id = info.get('scopus-id')
+            doi = _select_by_idtype(ids, id_type='DOI', alt_d=info)
+            scopus_id = _select_by_idtype(ids, id_type='SGR', alt_d=info)
             # Combine information
             new = ref(position=item.get('@id'), id=scopus_id, doi=doi,
                 authors="; ".join(authors), authors_auid=auids or None,
@@ -823,6 +817,13 @@ def _parse_pages(self, unicode=False):
     return pages
 
 
-def _select_by_idtype(lst, selector):
+def _select_by_idtype(lst, id_type, alt_d):
     """Auxiliary function to return items matching a special idtype."""
-    return [d['$'] for d in lst if d['@idtype'] == selector]
+    try:
+        return [d['$'] for d in lst if d['@idtype'] == id_type][0]
+    except IndexError:
+        if id_type == 'DOI':
+            field = 'ce:doi'
+        elif id_type == 'SGR':
+            field = 'scopus_id'
+        return alt_d.get(field)
