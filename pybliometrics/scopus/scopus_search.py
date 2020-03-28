@@ -1,8 +1,8 @@
 from collections import namedtuple
 
 from pybliometrics.scopus.classes import Search
-from pybliometrics.scopus.utils import listify, check_integrity, \
-    check_field_consistency
+from pybliometrics.scopus.utils import check_integrity, check_integrity_params,\
+    check_field_consistency, listify
 
 
 class ScopusSearch(Search):
@@ -176,11 +176,7 @@ class ScopusSearch(Search):
         if view and view not in allowed_views:
             msg = 'view parameter must be one of ' + ', '.join(allowed_views)
             raise ValueError()
-        allowed_actions = ("warn", "raise")
-        if integrity_action not in allowed_actions:
-            msg = 'integrity_action parameter must be one of ' +\
-                  ', '.join(allowed_actions)
-            raise ValueError(msg)
+        check_integrity_params(integrity_action)
 
         # Parameters
         if not view:

@@ -1,7 +1,8 @@
 from collections import namedtuple
 
 from pybliometrics.scopus.classes import Search
-from pybliometrics.scopus.utils import check_integrity, check_field_consistency
+from pybliometrics.scopus.utils import check_integrity, check_integrity_params,\
+    check_field_consistency
 
 
 class AuthorSearch(Search):
@@ -106,18 +107,11 @@ class AuthorSearch(Search):
         the md5-hashed version of `query`.
         """
         # Checks
-        allowed_actions = ("warn", "raise")
-        if integrity_action not in allowed_actions:
-            msg = 'integrity_action parameter must be one of ' +\
-                  ', '.join(allowed_actions)
-            raise ValueError(msg)
-
-        # Parameters
-        view = "STANDARD"  # In case Scopus adds different views in future
+        check_integrity_params(integrity_action)
 
         # Query
         self.query = query
-        Search.__init__(self, query=query, refresh=refresh, view=view,
+        Search.__init__(self, query=query, refresh=refresh, view="STANDARD",
                         api='AuthorSearch', count=count, download=download,
                         verbose=verbose)
         self.integrity = integrity_fields or []
