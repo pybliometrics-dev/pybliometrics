@@ -53,7 +53,7 @@ class Base:
             If `refresh` is neither boolean nor numeric.
         """
         # Compare age of file to test whether we refresh
-        refresh, exists = _check_file_age(fname, refresh)
+        refresh, exists, mod_ts = _check_file_age(fname, refresh)
 
         # Read or dowload eventually with caching
         search_request = "query" in params
@@ -93,7 +93,7 @@ class Base:
                 self._json = loads(content)
                 with open(fname, 'wb') as f:
                     f.write(content)
-            self._mdate = now
+            self._mdate = time()
 
     def get_cache_file_age(self):
         """Return the age of the cached file in days."""
@@ -110,23 +110,24 @@ class Base:
 
 def _check_file_age(fname, refresh):
     """Check whether a file needs to be refreshed based on its age."""
-    now = time()
     exists = None
     try:
         mod_ts = getmtime(fname)
         exists = True
         if not isinstance(refresh, bool):
-            diff = now - mod_ts
+            diff = time() - mod_ts
             days = int(diff / 86400) + 1
             try:
                 allowed_age = int(refresh)
             except ValueError:
-                raise ValueError("refresh parameter needs to be numeric.")
+                msg = "Parameter refresh needs to be numeric or boolean."
+                raise ValueError(msg)
             refresh = allowed_age < days
     except FileNotFoundError:
         exists = False
         refresh = True
-    return refresh, exists
+        mod_ts = None
+    return refresh, exists, mod_ts
 
 
 def _parse(res, n, url, params, verbose, *args, **kwds):
