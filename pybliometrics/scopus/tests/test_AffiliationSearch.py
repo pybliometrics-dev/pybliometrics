@@ -8,8 +8,8 @@ from nose.tools import assert_equal, assert_true
 
 from pybliometrics.scopus import AffiliationSearch
 
-s1 = AffiliationSearch('af-id(60021784)', refresh=30)
-s2 = AffiliationSearch('affil(Max Planck Munich)', download=False)
+s1 = AffiliationSearch('AF-ID(60021784)', refresh=30)
+s2 = AffiliationSearch('AFFIL(Max Planck Munich)', download=False)
 
 
 def test_affiliations():
@@ -32,4 +32,4 @@ def test_get_results_size():
     received1 = s1.get_results_size()
     assert_true(received1 >= 1)
     received2 = s2.get_results_size()
-    assert_true(received2 >= 90)
+    assert_true(received2 >= 80)
