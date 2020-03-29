@@ -3,6 +3,14 @@ Change Log
 
 .. toctree::
 
+2.3.2
+~~~~~
+
+2020-03-29
+
+* In `AuthorRetrieval().estimate_uniqueness()`, allow for *args and fix documentation.
+* Fix bug with missing file modification time stamp.
+
 2.3.1
 ~~~~~
 
