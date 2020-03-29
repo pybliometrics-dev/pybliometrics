@@ -3,6 +3,15 @@ Change Log
 
 .. toctree::
 
+2.3.1
+~~~~~
+
+2020-03-29
+
+* In `AuthorRetrieval().get_coauthors()`, return None instead of empty list when there are no coauthors.
+* Improve warning and error messages.
+* Improve all documentation.
+
 2.3
 ~~~
 
