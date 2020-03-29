@@ -325,7 +325,7 @@ class AuthorRetrieval(Retrieval):
         s = ScopusSearch('AU-ID({})'.format(self.identifier), *args, **kwds)
         return s.get_eids()
 
-    def estimate_uniqueness(self, query=None, **kwds):
+    def estimate_uniqueness(self, query=None, *args, **kwds):
         """Estimate how unqiue a profile is by get the number of
         matches of an AuthorSearch for this person.
 
@@ -338,17 +338,13 @@ class AuthorRetrieval(Retrieval):
             "SUBJAREA()" OR "AF-ID() AND SUBJAREA()".  For details see
             https://dev.elsevier.com/tips/AuthorSearchTips.htm.
 
-        **kwds : dict-like
-            Parameters to be passed on to ScopusSearch().
+        *args, **kwds : key-value pairings
+            Parameters to be passed on to AuthorSearch().
 
         Returns
         -------
         n : int
             The number of matches of the query.
-
-        Notes
-        -----
-        If download=True, the search files are cached with AuthorSearch().
         """
         if not query:
             query = "AUTHLAST({}) AND AUTHFIRST({})".format(
