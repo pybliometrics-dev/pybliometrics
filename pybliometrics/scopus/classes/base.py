@@ -48,24 +48,12 @@ class Base:
         ------
         ScopusQueryError
             If `refresh` is neither boolean nor numeric.
+
+        ValueError
+            If `refresh` is neither boolean nor numeric.
         """
-        # Compare age of file
-        now = time()
-        exists = None
-        try:
-            mod_ts = getmtime(fname)
-            exists = True
-            if not isinstance(refresh, bool):
-                diff = now - mod_ts
-                days = int(diff / 86400) + 1
-                try:
-                    allowed_age = int(refresh)
-                except ValueError:
-                    raise ValueError("refresh parameter needs to be numeric.")
-                refresh = allowed_age < days
-        except FileNotFoundError:
-            exists = False
-            refresh = True
+        # Compare age of file to test whether we refresh
+        refresh, exists = _check_file_age(fname, refresh)
 
         # Read or dowload eventually with caching
         search_request = "query" in params
@@ -83,9 +71,9 @@ class Base:
                 # Download results
                 res = get_content(url, params, *args, **kwds).json()
                 n = int(res['search-results'].get('opensearch:totalResults', 0))
-                print(n)
                 self._n = n
-                if "cursor" in params and not params["cursor"] and n > max_entries:
+                cursor_false = "cursor" in params and not params["cursor"]
+                if cursor_false and n > max_entries:
                     # Stop if there are too many results
                     text = ('Found {} matches. Set max_entries to a higher '
                             'number, change your query ({}) or set '
@@ -118,6 +106,27 @@ class Base:
         """
         from datetime import datetime
         return datetime.fromtimestamp(self._mdate)
+
+
+def _check_file_age(fname, refresh):
+    """Check whether a file needs to be refreshed based on its age."""
+    now = time()
+    exists = None
+    try:
+        mod_ts = getmtime(fname)
+        exists = True
+        if not isinstance(refresh, bool):
+            diff = now - mod_ts
+            days = int(diff / 86400) + 1
+            try:
+                allowed_age = int(refresh)
+            except ValueError:
+                raise ValueError("refresh parameter needs to be numeric.")
+            refresh = allowed_age < days
+    except FileNotFoundError:
+        exists = False
+        refresh = True
+    return refresh, exists
 
 
 def _parse(res, n, url, params, verbose, *args, **kwds):
