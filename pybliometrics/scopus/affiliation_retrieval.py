@@ -117,7 +117,7 @@ class ContentAffiliationRetrieval(Retrieval):
         return self._json['coredata'].get('prism:url')
 
     def __init__(self, aff_id, refresh=False):
-        """Class to represent an Affiliation in Scopus.
+        """Interaction with the Content Affiliation Retrieval API.
 
         Parameters
         ----------

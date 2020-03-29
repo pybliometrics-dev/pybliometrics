@@ -44,7 +44,7 @@ class AffiliationSearch(Search):
     def __init__(self, query, refresh=False, download=True, count=200,
                  integrity_fields=None, integrity_action="raise",
                  verbose=False):
-        """Class to perform a search for an affiliation.
+        """Interaction with the Affiliation Search API.
 
         Parameters
         ----------

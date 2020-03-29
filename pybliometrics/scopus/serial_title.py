@@ -130,7 +130,7 @@ class SerialTitle(Retrieval):
         return self._entry['dc:title']
 
     def __init__(self, issn, refresh=False, view="ENHANCED"):
-        """Class to represent a Serial Title retrieval.
+        """Interaction with the Serial Title API.
 
         Parameters
         ----------

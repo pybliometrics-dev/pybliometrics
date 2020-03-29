@@ -55,7 +55,7 @@ class AuthorSearch(Search):
     def __init__(self, query, refresh=False, count=200, download=True,
                  integrity_fields=None, integrity_action="raise",
                  verbose=False):
-        """Class to search a query, and retrieve a list of author IDs as results.
+        """Interaction with the Author Search API.
 
         Parameters
         ----------

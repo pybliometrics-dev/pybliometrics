@@ -205,7 +205,7 @@ class AuthorRetrieval(Retrieval):
         return self._json['coredata']['prism:url']
 
     def __init__(self, author_id, refresh=False):
-        """Class to represent a Scopus Author query by the scopus-id.
+        """Interaction with the Author Retrieval API.
 
         Parameters
         ----------

@@ -134,8 +134,7 @@ class CitationOverview(Retrieval):
         return self._citeInfoMatrix.get('volume')
 
     def __init__(self, eid, start, end=datetime.now().year, refresh=False):
-        """Class to represent the results from a Scopus Citation Overview.
-        See https://api.elsevier.com/documentation/guides/AbstractCitationViews.htm.
+        """Interaction witht the Citation Overview API.
 
         Parameters
         ----------

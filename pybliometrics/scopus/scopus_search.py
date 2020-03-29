@@ -105,7 +105,7 @@ class ScopusSearch(Search):
     def __init__(self, query, refresh=False, subscriber=True, view=None,
                  download=True, integrity_fields=None,
                  integrity_action="raise", verbose=False, **kwds):
-        """Class to perform a query against the Scopus Search API.
+        """Interaction with the Scopus Search API.
 
         Parameters
         ----------
