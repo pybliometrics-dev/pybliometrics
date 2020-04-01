@@ -10,7 +10,8 @@ class PlumXMetrics(Retrieval):
         by PlumX Metrics in the form (capture, citation, mention, socialMedia,
         usage).
         Note: Can be empty. Specific categories can be absent depending on
-        existence of data and applicability of metrics to document type.
+        existence of data and applicability of metrics to document type. For 
+        Citation category a maximum citation count across sources is shown.
         For details on PlumX Metrics categories see
         https://plumanalytics.com/learn/about-metrics/
         """
@@ -49,8 +50,8 @@ class PlumXMetrics(Retrieval):
         """
         categories = self._json.get('count_categories', [])
         citation_metrics = _category_metrics('citation', categories)
+        source_metrics = []
         if citation_metrics:
-            source_metrics = []
             for item in citation_metrics:
                 if item.get('sources'):
                     source_metrics += item.get('sources')
@@ -109,12 +110,6 @@ class PlumXMetrics(Retrieval):
             is passed, cached file will be refreshed if the number of days
             since last modification exceeds that value.
 
-        Raises
-        ------
-        Scopus
-            If the id_type parameter or the view parameter contains
-            invalid entries.
-
         Notes
         -----
         The directory for cached results is `{path}/ENHANCED/{identifier}`,
@@ -144,6 +139,7 @@ def _list_metrics_totals(metric_counts):
     (name, total)
     """
     out = []
+    # Metric names and associated counts if either is not None
     values = [[m.get('name'), m.get('total')] for m in metric_counts
               if m.get('name') and m.get('total')]
     fields = 'name total'
