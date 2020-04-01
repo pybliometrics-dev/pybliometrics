@@ -9,7 +9,8 @@ DEFAULT_PATHS = {
     'CitationOverview': expanduser('~/.scopus/citation_overview'),
     'ContentAffiliationRetrieval': expanduser('~/.scopus/affiliation_retrieval'),
     'ScopusSearch': expanduser('~/.scopus/scopus_search'),
-    'SerialTitle': expanduser('~/.scopus/serial_title')
+    'SerialTitle': expanduser('~/.scopus/serial_title'),
+    'PlumXMetrics': expanduser('~/.scopus/plumx')
 }
 
 # URL prefix and suffixes for retrieval classes
@@ -19,7 +20,8 @@ RETRIEVAL_URL = {
     'AuthorRetrieval': RETRIEVAL_BASE + 'author/author_id/',
     'CitationOverview': RETRIEVAL_BASE + 'abstract/citations/',
     'ContentAffiliationRetrieval': RETRIEVAL_BASE + 'affiliation/affiliation_id/',
-    'SerialTitle': RETRIEVAL_BASE + 'serial/title/issn/'
+    'SerialTitle': RETRIEVAL_BASE + 'serial/title/issn/',
+    'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/'
 }
 
 # URL prefix and suffixes for search classes
