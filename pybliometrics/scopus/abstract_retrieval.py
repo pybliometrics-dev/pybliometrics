@@ -556,7 +556,7 @@ class AbstractRetrieval(Retrieval):
         Parameters
         ----------
         identifier : str or int
-            The identifier of a document.  Can be the Scoups EID, the Scopus
+            The identifier of a document.  Can be the Scopus EID, the Scopus
             ID, the PII, the Pubmed-ID or the DOI.
 
         refresh : bool or int (optional, default=False)
