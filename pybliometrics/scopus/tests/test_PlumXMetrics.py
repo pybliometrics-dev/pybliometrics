@@ -102,3 +102,4 @@ def test_usage():
     assert_equal(m2_fields, expected)
     assert_equal([i.total for i in m1.usage if i.total <= 0], [])
     assert_equal([i.total for i in m2.usage if i.total <= 0], [])
+

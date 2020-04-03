@@ -50,7 +50,7 @@ class Retrieval(Base):
 
         # Construct parameters
         url = RETRIEVAL_URL[api]
-        if api == "AbstractRetrieval" or api == "PlumXMetrics":
+        if api in ("AbstractRetrieval", "PlumXMetrics"):
             url += id_type + "/"
         params = {'view': view}
         if api == 'CitationOverview':

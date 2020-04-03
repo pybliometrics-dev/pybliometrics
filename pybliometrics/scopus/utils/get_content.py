@@ -76,7 +76,7 @@ def get_content(url, params={}, *args, **kwds):
         error_type = errors[resp.status_code]
         try:
             reason = resp.json()['service-error']['status']['statusText']
-        except:
+        except KeyError:
             try:
                 reason = resp.json()['message']
             except:

@@ -97,8 +97,7 @@ class PlumXMetrics(Retrieval):
         return _list_metrics_totals(usage_metrics) or None     
     
     def __init__(self, identifier, refresh=False):
-        """Class to represent the results from retrieval request from the
-        Scopus PlumX Metrics API.
+        """Interaction with the PlumX Metrics API.
 
         Parameters
         ----------
@@ -148,3 +147,4 @@ def _list_metrics_totals(metric_counts):
         new = capture(name=v[0], total=v[1])
         out.append(new)
     return out
+

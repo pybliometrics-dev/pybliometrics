@@ -551,8 +551,7 @@ class AbstractRetrieval(Retrieval):
 
     def __init__(self, identifier=None, refresh=False, view='META_ABS',
                  id_type=None):
-        """Class to represent the results from retrieval request from the
-        Scopus Abstract API.
+        """Interaction with the Abstract Retrieval API.
 
         Parameters
         ----------
