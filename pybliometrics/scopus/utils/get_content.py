@@ -3,7 +3,7 @@ import requests
 from configparser import NoOptionError
 
 from pybliometrics.scopus import exception
-from pybliometrics.scopus.utils import DEFAULT_PATHS, config
+from pybliometrics.scopus.utils import CONFIG_FILE, DEFAULT_PATHS, config
 from pybliometrics.scopus.utils.create_config import create_config
 from pybliometrics import version_info
 
@@ -138,6 +138,9 @@ def get_folder(api, view):
         folder = config.get('Directories', api)
     except NoOptionError:
         folder = DEFAULT_PATHS[api]
+        config.set('Directories', api, folder)
+        with open(CONFIG_FILE, 'w') as f:
+            config.write(f)
     folder = os.path.join(folder, view or '')
     if not os.path.exists(folder):
         os.makedirs(folder)
