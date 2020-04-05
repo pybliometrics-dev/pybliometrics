@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from pybliometrics.scopus.classes import Search
+from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, check_integrity_params,\
     check_field_consistency
 

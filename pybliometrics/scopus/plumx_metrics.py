@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from pybliometrics.scopus.classes import Retrieval
+from pybliometrics.scopus.superclasses import Retrieval
 
 
 class PlumXMetrics(Retrieval):

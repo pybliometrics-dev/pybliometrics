@@ -2,7 +2,7 @@
 
 from os.path import join
 
-from pybliometrics.scopus.classes import Base
+from pybliometrics.scopus.superclasses import Base
 from pybliometrics.scopus.utils import RETRIEVAL_URL, get_folder
 
 

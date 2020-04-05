@@ -1,7 +1,7 @@
 from collections import namedtuple
 from datetime import datetime
 
-from pybliometrics.scopus.classes import Retrieval
+from pybliometrics.scopus.superclasses import Retrieval
 
 
 class CitationOverview(Retrieval):

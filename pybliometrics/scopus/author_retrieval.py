@@ -5,7 +5,7 @@ from json import loads
 
 from .author_search import AuthorSearch
 from .scopus_search import ScopusSearch
-from pybliometrics.scopus.classes import Retrieval
+from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, get_content, get_link,\
     listify, parse_affiliation, parse_date_created
 

@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from pybliometrics.scopus.classes import Retrieval
+from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, get_id, detect_id_type,\
     get_link, listify
 
