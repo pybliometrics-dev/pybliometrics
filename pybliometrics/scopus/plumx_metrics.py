@@ -10,7 +10,7 @@ class PlumXMetrics(Retrieval):
         by PlumX Metrics in the form (capture, citation, mention, socialMedia,
         usage).
         Note: Can be empty. Specific categories can be absent depending on
-        existence of data and applicability of metrics to document type. For 
+        existence of data and applicability of metrics to document type. For
         Citation category a maximum citation count across sources is shown.
         For details on PlumX Metrics categories see
         https://plumanalytics.com/learn/about-metrics/
@@ -38,7 +38,7 @@ class PlumXMetrics(Retrieval):
         """
         categories = self._json.get('count_categories', [])
         mention_metrics = _category_metrics('capture', categories)
-        return _list_metrics_totals(mention_metrics) or None   
+        return _list_metrics_totals(mention_metrics) or None
     
     @property
     def citation(self):
@@ -68,7 +68,7 @@ class PlumXMetrics(Retrieval):
         """
         categories = self._json.get('count_categories', [])
         mention_metrics = _category_metrics('mention', categories)
-        return _list_metrics_totals(mention_metrics) or None   
+        return _list_metrics_totals(mention_metrics) or None
     
     @property
     def social_media(self):
@@ -81,7 +81,7 @@ class PlumXMetrics(Retrieval):
         """
         categories = self._json.get('count_categories', [])
         social_metrics = _category_metrics('socialMedia', categories)
-        return _list_metrics_totals(social_metrics) or None   
+        return _list_metrics_totals(social_metrics) or None
     
     @property
     def usage(self):
@@ -94,15 +94,52 @@ class PlumXMetrics(Retrieval):
         """
         categories = self._json.get('count_categories', [])
         usage_metrics = _category_metrics('usage', categories)
-        return _list_metrics_totals(usage_metrics) or None     
+        return _list_metrics_totals(usage_metrics) or None
     
-    def __init__(self, identifier, refresh=False):
+    def __init__(self, identifier, id_type, refresh=False):
         """Interaction with the PlumX Metrics API.
 
         Parameters
         ----------
         identifier : str
             The identifier of a document. Must be Scopus EID.
+
+        id_type: str
+            The type of used ID. Allowed values are:
+                
+                - 'airitiDocId'
+                - 'arxivId'
+                - 'cabiAbstractId'
+                - 'citeulikeId'
+                - 'digitalMeasuresArtifactId'
+                - 'doi'
+                - 'elsevierId'
+                - 'elsevierPii'
+                - 'facebookCountUrlId'
+                - 'figshareArticleId'
+                - 'githubRepoId'
+                - 'isbn'
+                - 'lccn'
+                - 'medwaveId'
+                - 'nctId'
+                - 'oclc'
+                - 'pittEprintDscholarId'
+                - 'pmcid'
+                - 'pmid'
+                - 'redditId'
+                - 'repecHandle'
+                - 'repoUrl'
+                - 'scieloId'
+                - 'sdEid'
+                - 'slideshareUrlId'
+                - 'smithsonianPddrId'
+                - 'soundcloudTrackId'
+                - 'ssrnId'
+                - 'urlId'
+                - 'usPatentApplicationId'
+                - 'usPatentPublicationId'
+                - 'vimeoVideoId'
+                - 'youtubeVideoId'
 
         refresh : bool or int (optional, default=False)
             Whether to refresh the cached file if it exists or not.  If int
@@ -114,9 +151,23 @@ class PlumXMetrics(Retrieval):
         The directory for cached results is `{path}/ENHANCED/{identifier}`,
         where `path` is specified in `~/.scopus/config.ini`.
         """
+        allowed_ids = ('airitiDocId', 'arxivId', 'cabiAbstractId',
+                       'citeulikeId', 'digitalMeasuresArtifactId', 'doi',
+                       'elsevierId', 'elsevierPii', 'facebookCountUrlId',
+                       'figshareArticleId', 'githubRepoId', 'isbn',
+                       'lccn', 'medwaveId', 'nctId',
+                       'oclc', 'pittEprintDscholarId', 'pmcid',
+                       'pmid', 'redditId', 'repecHandle',
+                       'repoUrl', 'scieloId', 'sdEid',
+                       'slideshareUrlId', 'smithsonianPddrId', 'soundcloudTrackId',
+                       'ssrnId', 'urlId', 'usPatentApplicationId',
+                       'usPatentPublicationId', 'vimeoVideoId', 'youtubeVideoId')
+        if id_type not in allowed_ids:
+            raise ValueError('Id type must be one of: ' +
+                             ', '.join(allowed_ids))
         Retrieval.__init__(self,
                            identifier=identifier,
-                           id_type='elsevierId',
+                           id_type=id_type,
                            api='PlumXMetrics',
                            refresh=refresh,
                            view='ENHANCED')
