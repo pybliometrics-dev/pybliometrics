@@ -102,11 +102,10 @@ class PlumXMetrics(Retrieval):
         Parameters
         ----------
         identifier : str
-            The identifier of a document. Must be Scopus EID.
+            The identifier of a document.
 
         id_type: str
             The type of used ID. Allowed values are:
-                
                 - 'airitiDocId'
                 - 'arxivId'
                 - 'cabiAbstractId'

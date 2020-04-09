@@ -22,7 +22,6 @@ m6 = PlumXMetrics('tensorflow/tensorflow', 'githubRepoId', refresh=30)
 m7 = PlumXMetrics('dQw4w9WgXcQ', 'youtubeVideoId', refresh=30)
 
 
-
 def test_category_totals():
     expected = set(['name', 'total'])
     assert_equal(m3.category_totals, None)
