@@ -45,6 +45,7 @@ def get_content(url, params={}, *args, **kwds):
     resp : byte-like object
         The content of the file, which needs to be serialized.
     """
+    from simplejson import JSONDecodeError
     # Get credentials and set request headers
     key = config.get('Authentication', 'APIKey')
     header = {
@@ -76,7 +77,7 @@ def get_content(url, params={}, *args, **kwds):
         error_type = errors[resp.status_code]
         try:
             reason = resp.json()['service-error']['status']['statusText']
-        except KeyError:
+        except (JSONDecodeError, KeyError):
             try:
                 reason = resp.json()['message']
             except:
