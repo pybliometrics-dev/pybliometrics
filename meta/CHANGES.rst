@@ -3,6 +3,15 @@ Change Log
 
 .. toctree::
 
+2.4
+~~~
+
+2020-04-15
+
+* PlumXMetrics class to access the PlumX Metrics API.
+* Fix and update the str dunder functions of all classes.
+* Fix bug with raising a ScopusException when the resulting json is malformatted.
+
 2.3.2
 ~~~~~
 
