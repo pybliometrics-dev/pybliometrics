@@ -1,11 +1,8 @@
-from sys import version_info
 from os import makedirs
 from os.path import exists, expanduser
 
 from pybliometrics.scopus.utils.constants import DEFAULT_PATHS
 from pybliometrics.scopus.utils.startup import config, CONFIG_FILE
-
-py3 = version_info >= (3, 0)
 
 
 def create_config():
@@ -20,19 +17,13 @@ def create_config():
         config.add_section('Authentication')
         prompt_key = "Please enter your API Key, obtained from "\
                      "http://dev.elsevier.com/myapikey.html: \n"
-        if py3:
-            key = input(prompt_key)
-        else:
-            key = raw_input(prompt_key)
+        key = input(prompt_key)
         config.set('Authentication', 'APIKey', key)
         prompt_token = "API Keys are sufficient for most users.  If you "\
                        "have to use Authtoken authentication, please enter "\
                        "the token, otherwise press Enter: \n"
-        if py3:
-            token = input(prompt_token)
-        else:
-            token = raw_input(prompt_token)
-        if len(token) > 0:
+        token = input(prompt_token)
+        if token:
             config.set('Authentication', 'InstToken', token)
         # Write out
         try:
