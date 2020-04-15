@@ -201,8 +201,9 @@ class ScopusSearch(Search):
 
     def __str__(self):
         eids = self.get_eids()
-        s = """Search {} yielded {} document(s):\n    {}"""
-        return s.format(self.query, len(eids), '\n    '.join(eids))
+        s = f"Search '{self.query}' yielded {len(eids):,} document(s):\n    "
+        s += '\n    '.join(eids)
+        return s
 
     def get_eids(self):
         """EIDs of retrieved documents."""

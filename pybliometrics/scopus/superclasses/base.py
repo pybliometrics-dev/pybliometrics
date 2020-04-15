@@ -75,16 +75,16 @@ class Base:
                 cursor_false = "cursor" in params and not params["cursor"]
                 if cursor_false and n > max_entries:
                     # Stop if there are too many results
-                    text = ('Found {} matches. Set max_entries to a higher '
-                            'number, change your query ({}) or set '
-                            'subscription=True'.format(n, query))
+                    text = (f'Found {n} matches. Set max_entries to a higher '
+                            f'number, change your query ({query}) or set '
+                            'subscription=True')
                     raise ScopusQueryError(text)
                 if download:
                     self._json = _parse(res, n, url, params, verbose,
                                         *args, **kwds)
                     with open(fname, 'wb') as f:
                         for item in self._json:
-                            f.write('{}\n'.format(dumps(item)).encode('utf-8'))
+                            f.write(f'{dumps(item)}\n'.encode('utf-8'))
                 else:
                     # Assures that properties will not result in an error
                     self._json = []
@@ -142,7 +142,7 @@ def _parse(res, n, url, params, verbose, *args, **kwds):
         chunk = 1
         # Roundup + 1 for the final iteration
         chunks = int(n/params['count']) + (n % params['count'] > 0) + 1
-        print('Downloading results for query "{}":'.format(params['query']))
+        print(f'Downloading results for query "{params["query"]}":')
         print_progress(chunk, chunks)
     # Download the remaining information in chunks
     while n > 0:

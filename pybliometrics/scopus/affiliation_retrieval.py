@@ -142,9 +142,7 @@ class ContentAffiliationRetrieval(Retrieval):
         self._json = self._json['affiliation-retrieval-response']
 
     def __str__(self):
-        s = '''{self.affiliation_name}
-    ({self.author_count} authors, {self.document_count} documents)
-    {self.address}
-    {self.city}, {self.country}
-    {self.url}'''.format(self=self)
+        s = f"{self.affiliation_name} ({int(self.author_count):,} authors, "\
+            f"{int(self.document_count):,} documents)\n"\
+            f"{self.address}\n {self.city}, {self.country}\n{self.url}"""
         return s

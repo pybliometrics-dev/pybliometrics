@@ -166,7 +166,7 @@ class CitationOverview(Retrieval):
         view = "STANDARD"  # In case Scopus adds different views in future
 
         # Get file content
-        date = '{}-{}'.format(start, end)
+        date = f'{start}-{end}'
         Retrieval.__init__(self, eid, 'CitationOverview', refresh, view=view,
                            date=date)
         self._data = self._json['abstract-citations-response']
@@ -185,13 +185,12 @@ class CitationOverview(Retrieval):
         authors = [a.name for a in self.authors]
         if len(authors) > 1:
             authors[-1] = " and ".join([authors[-2], authors[-1]])
-        s = "Document '{self.title}' by {authors} published in "\
-            "'{self.publicationName}' has the following citation trajectory "\
-            "for years {self._start} to {self._end}:\n"\
-            "{self.cc}\n"\
-            "Additionally cited {self.pcc} times before {self._start}, and "\
-            "{self.lcc} times after {self._end}".format(
-                self=self, authors=", ".join(authors))
+        s = f"Document '{self.title}' by {', '.join(authors)} published in "\
+            f"'{self.publicationName}' with citation trajectory "\
+            f"for years {self._start} to {self._end}:\n"\
+            f"{'; '.join([f'{item[0]}: {item[1]}' for item in self.cc])}\n"\
+            f"Additionally cited {self.pcc} times before {self._start}, and "\
+            f"{self.lcc} times after {self._end}"
         return s
 
 

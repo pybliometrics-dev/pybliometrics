@@ -125,7 +125,7 @@ def detect_id_type(sid):
     try:
         return id_type
     except UnboundLocalError:
-        raise ValueError('ID type detection failed for \'{}\'.'.format(sid))
+        raise ValueError(f'ID type detection failed for "{sid}".')
 
 
 def get_folder(api, view):
@@ -149,10 +149,10 @@ def get_folder(api, view):
 
 def print_progress(iteration, total, length=50):
     """Print terminal progress bar."""
-    percent = 100 * (iteration / float(total))
+    share = iteration / float(total)
     filled_len = int(length * iteration // total)
     bar = '█' * filled_len + '-' * (length - filled_len)
-    print('\rProgress: |{}| {:.2f}% Complete'.format(bar, percent), end='\r')
+    print(f'\rProgress: |{bar}| {share:.2%} Complete', end='\r')
     if iteration == total:
         print()
 

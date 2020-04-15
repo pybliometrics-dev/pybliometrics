@@ -2,7 +2,7 @@ from collections import namedtuple
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, check_integrity_params,\
-    check_field_consistency
+    check_field_consistency, listify
 
 
 class AuthorSearch(Search):
@@ -34,11 +34,8 @@ class AuthorSearch(Search):
             aff = item.get('affiliation-current', {})
             fields = item.get('subject-area',
                               [{'@abbrev': '', '@frequency': ''}])
-            if isinstance(fields, dict):
-                fields = [fields]
-            areas = ["{} ({})".format(d.get('@abbrev', ''),
-                                      d.get('@frequency', ''))
-                     for d in fields]
+            areas = [f"{d.get('@abbrev', '')} ({d.get('@frequency', '')})"
+                     for d in listify(fields)]
             new = auth(eid=item.get('eid'), initials=name.get('initials'),
                        surname=name.get('surname'), areas="; ".join(areas),
                        givenname=name.get('given-name'),
@@ -118,6 +115,8 @@ class AuthorSearch(Search):
         self.action = integrity_action
 
     def __str__(self):
-        s = """Search {} yielded {} author(s):\n    {}"""
-        return s.format(self.query, len(self._json),
-                        '\n    '.join([str(a) for a in self._json]))
+        names = [f'{a["preferred-name"]["surname"]}, {a["preferred-name"]["given-name"]}'
+                 for a in self._json]
+        s = f"Search '{self.query}' yielded {len(self._json):,} author(s):\n    "
+        s += '\n    '.join(names)
+        return s

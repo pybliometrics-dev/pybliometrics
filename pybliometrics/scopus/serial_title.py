@@ -171,12 +171,17 @@ class SerialTitle(Retrieval):
             areas = areas[0]
         else:
             areas = " and ".join([", ".join(areas[:-1]), areas[-1]])
-        s = '''{self.title}, {self.aggregation_type} published by {self.publisher}
-active in {areas}.
-SJR ({self.sjrlist[0]}): ({self.sjrlist[1]}),
-SNIP ({self.sniplist[0]}): ({self.sniplist[1]})
-ISSN: {self.issn}, E-ISSN: {self.eissn}, Scopus ID: {self.source_id}'''.format(
-            self=self, areas=areas)
+        s = f"'{self.title}', {self.aggregation_type} published by "\
+            f"{self.publisher} is active in {areas}\n"
+        metrics = []
+        if self.sjrlist:
+            metrics.append(f"SJR ({self.sjrlist[0]}): ({self.sjrlist[1]})")
+        if self.sniplist:
+            metrics.append(f"SNIP ({self.sniplist[0]}): ({self.sniplist[1]})")
+        if metrics:
+            s += "    " + ", ".join(metrics) + "\n"
+        s += f"    ISSN: {self.issn or '-'}, E-ISSN: {self.eissn or '-'}, "\
+             f"Scopus ID: {self.source_id}"
         return s
 
 

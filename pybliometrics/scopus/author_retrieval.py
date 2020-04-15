@@ -103,9 +103,9 @@ class AuthorRetrieval(Retrieval):
         """The author's ID.  Might differ from the one provided."""
         ident = self._json['coredata']['dc:identifier'].split(":")[-1]
         if ident != self._id:
-            text = "Profile with ID {} has been merged and the new ID is "\
-                   "{}.  Please update your records manually.  Files have "\
-                   "been cached with the old ID.".format(self._id, ident)
+            text = f"Profile with ID {self._id} has been merged and the new "\
+                   f"ID is {ident}.  Please update your records manually.  "\
+                   "Files have been cached with the old ID."
             warn(text, UserWarning)
         return ident
 
@@ -236,21 +236,20 @@ class AuthorRetrieval(Retrieval):
         except KeyError:  # Incomplete forward
             alias_json = listify(self._json['alias']['prism:url'])
             alias = ', '.join([d['$'].split(':')[-1] for d in alias_json])
-            text = 'Author profile with ID {} has been merged and the main '\
-                   'profile is now one of {}.  Please update your records '\
-                   'manually.  Functionality of this object is '\
-                   'reduced.'.format(author_id, alias)
+            text = f'Author profile with ID {author_id} has been merged and '\
+                   f'the main profile is now one of {alias}.  Please update '\
+                   'your records manually.  Functionality of this object is '\
+                   'reduced.'
             warn(text, UserWarning)
 
     def __str__(self):
         """Return a summary string."""
-        s = '''{self.indexed_name} from {self.affiliation_current},
-    published {self.document_count} documents since {since}
-    in {journals} distinct journals
-    which were cited by {self.cited_by_count} authors
-    in {self.citation_count} documents
-    '''.format(self=self, since=self.publication_range[0],
-               journals=len(self.journal_history))
+        s = f"{self.indexed_name} from {self.affiliation_current[0].preferred_name},"\
+            f"\npublished {int(self.document_count):,} document(s) since "\
+            f"{self.publication_range[0]} in {len(self.journal_history):,} "\
+            "distinct source(s),\nwhich were cited by "\
+            f"{int(self.cited_by_count):,} author(s) in "\
+            f"{int(self.citation_count):,} document(s)"
         return s
 
     def get_coauthors(self):
@@ -312,7 +311,7 @@ class AuthorRetrieval(Retrieval):
         results : list of namedtuple
             The same type of results returned from any ScopusSearch().
         """
-        s = ScopusSearch('AU-ID({})'.format(self.identifier), **kwds)
+        s = ScopusSearch(f'AU-ID({self.identifier})', **kwds)
         if subtypes:
             return [p for p in s.results if p.subtype in subtypes]
         else:
@@ -322,7 +321,7 @@ class AuthorRetrieval(Retrieval):
         """Return list of EIDs of the author's publications using
         a ScopusSearch() query.
         """
-        s = ScopusSearch('AU-ID({})'.format(self.identifier), *args, **kwds)
+        s = ScopusSearch(f'AU-ID({self.identifier})', *args, **kwds)
         return s.get_eids()
 
     def estimate_uniqueness(self, query=None, *args, **kwds):
@@ -347,7 +346,6 @@ class AuthorRetrieval(Retrieval):
             The number of matches of the query.
         """
         if not query:
-            query = "AUTHLAST({}) AND AUTHFIRST({})".format(
-                self.surname, self.given_name)
+            query = f"AUTHLAST({self.surname}) AND AUTHFIRST({self.given_name})"
         s = AuthorSearch(query, **kwds)
         return s.get_results_size()

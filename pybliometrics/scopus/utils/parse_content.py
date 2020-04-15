@@ -35,7 +35,7 @@ def check_integrity(tuples, fields, action):
         if None not in elements:
             continue
         msg = "Parsed information doesn't pass integrity check becaue of "\
-              "incomplete information in field '{}'".format(field)
+              f"incomplete information in field '{field}'"
         if action == "raise":
             raise AttributeError(msg)
         elif action == "warn":
@@ -53,8 +53,8 @@ def check_field_consistency(needles, haystack):
     """Raise ValueError if elements of a list are not present in a string."""
     wrong = set(needles) - set(haystack.split())
     if wrong:
-        msg = "Element(s) '{}' not allowed in parameter "\
-              "integrity_fields".format("', '".join(sorted(wrong)))
+        msg = f"Element(s) '{', '.join(sorted(wrong))}' not allowed in "\
+              "parameter integrity_fields"
         raise ValueError(msg)
 
 

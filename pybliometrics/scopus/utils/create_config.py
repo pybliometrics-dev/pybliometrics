@@ -41,9 +41,9 @@ def create_config():
             pass
         with open(CONFIG_FILE, 'w') as f:
             config.write(f)
-        print("Configuration file successfully created at {}".format(CONFIG_FILE))
+        print(f"Configuration file successfully created at {CONFIG_FILE}")
     else:
-        text = "Configuration file already exists at {}; process to create "\
-               "the file aborted.  Please open the file and edit the "\
-               "entries manually.".format(CONFIG_FILE)
+        text = f"Configuration file already exists at {CONFIG_FILE}; process "\
+               "to create the file aborted.  Please open the file and edit "\
+               "the entries manually."
         raise FileExistsError(text)

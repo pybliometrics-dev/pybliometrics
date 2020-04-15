@@ -164,12 +164,18 @@ class PlumXMetrics(Retrieval):
         if id_type not in allowed_ids:
             raise ValueError('Id type must be one of: ' +
                              ', '.join(allowed_ids))
-        Retrieval.__init__(self,
-                           identifier=identifier,
-                           id_type=id_type,
-                           api='PlumXMetrics',
-                           refresh=refresh,
-                           view='ENHANCED')
+        self.id_type = id_type
+        self.identifier = identifier
+        Retrieval.__init__(self, identifier=identifier, id_type=id_type,
+                           api='PlumXMetrics', refresh=refresh, view='ENHANCED')
+
+    def __str__(self):
+        """Print a summary string."""
+        cats = [f"{c.total:,} citations in category {c.name}"
+                for c in self.category_totals]
+        s = f"Document with {self.id_type} {self.identifier} has "
+        s += ", ".join(cats)
+        return s
 
 
 def _category_metrics(category_name, categories_list):

@@ -631,24 +631,16 @@ class AbstractRetrieval(Retrieval):
         else:
             authors = "(No authors found)"
         # All other information
-        s = '[[{link}][{eid}]]  {auth}, {title}, {jour}, {vol}'.format(
-            link=self.scopus_link, eid=self.eid, auth=authors,
-            title=self.title, jour=self.publicationName, vol=self.volume)
+        s = f'[[{self.scopus_link}][{self.eid}]]  {authors}, {self.title}, '\
+            f'{self.publicationName}, {self.volume}'
         if self.issueIdentifier:
-            s += '({}), '.format(self.issueIdentifier)
-        else:
-            s += ', '
-        if self.pageRange:
-            s += 'pp. {}, '.format(self.pageRange)
-        elif self.startingPage:
-            s += 'pp. {}-{}, '.format(self.startingPage, self.endingPage)
-        else:
-            s += '(no pages found) '
-        s += '({}).'.format(self.coverDate[:4])
+            s += f'({self.issueIdentifier})'
+        s += ', '
+        s += _parse_pages(self)
+        s += f'({self.coverDate[:4]}).'
         if self.doi:
-            s += ' https://doi.org/{},'.format(self.doi)
-        s += ' {}, cited {} times (Scopus).'.format(
-            self.scopus_link, self.citedby_count)
+            s += ' https://doi.org/{self.doi},'
+        s += f' {self.scopus_link}, cited {self.citedby_count} times (Scopus).'
         if self.affiliation:
             s += "\n  Affiliations:\n   "
             s += '\n   '.join([aff.name for aff in self.affiliation])
@@ -670,13 +662,13 @@ class AbstractRetrieval(Retrieval):
         last = self.title.split()[-1].title()
         key = ''.join([self.authors[0].surname, year, first, last])
         # Authors
-        authors = ' and '.join(["{} {}".format(a.given_name, a.surname)
+        authors = ' and '.join([f"{a.given_name} {a.surname}"
                                 for a in self.authors])
         # Pages
         if self.pageRange:
             pages = self.pageRange
         elif self.startingPage:
-            pages = '{}-{}'.format(self.startingPage, self.endingPage)
+            pages = f'{self.startingPage}-{self.endingPage}'
         else:
             pages = '-'
         # All information
@@ -718,14 +710,11 @@ class AbstractRetrieval(Retrieval):
         else:
             volissue = 'no volume'
         jlink = '<a href="https://www.scopus.com/source/sourceInfo.url'\
-                '?sourceId={}">{}</a>'.format(
-                    self.source_id, self.publicationName)
-        pages = _parse_pages(self, unicode=True)
-        s = "{auth}, {title}, {jour}, {volissue}, {pages}, ({year}).".format(
-                auth=authors, title=title, jour=jlink, volissue=volissue,
-                pages=pages, year=self.coverDate[:4])
+                f'?sourceId={self.source_id}">{self.publicationName}</a>'
+        s = f"{authors}, {title}, {jlink}, {volissue}, " +\
+            f"{_parse_pages(self, unicode=True)}, ({self.coverDate[:4]})."
         if self.doi:
-            s += ' <a href="https://doi.org/{0}">doi:{0}</a>.'.format(self.doi)
+            s += f' <a href="https://doi.org/{self.doi}">doi:{self.doi}</a>.'
         return s
 
     def get_latex(self):
@@ -736,18 +725,16 @@ class AbstractRetrieval(Retrieval):
             a = self.authors
             authors = ' '.join([a.given_name, a.surname])
         if self.volume and self.issueIdentifier:
-            volissue = '\\textbf{{{}({})}}'.format(self.volume, self.issueIdentifier)
+            volissue = f'\\textbf{{{self.volume}({self.issueIdentifier})}}'
         elif self.volume:
-            volissue = '\\textbf{{{}}}'.format(self.volume)
+            volissue = f'\\textbf{{{self.volume}}}'
         else:
             volissue = 'no volume'
-        pages = _parse_pages(self)
-        s = '{auth}, \\textit{{{title}}}, {jour}, {vol}, {pages} ({year}).'.format(
-                auth=authors, title=self.title, jour=self.publicationName,
-                vol=volissue, pages=pages, year=self.coverDate[:4])
-        if self.doi is not None:
-            s += ' \\href{{https://doi.org/{0}}}{{doi:{0}}}, '.format(self.doi)
-        s += '\\href{{{0}}}{{scopus:{1}}}.'.format(self.scopus_link, self.eid)
+        s = f'{authors}, \\textit{{{self.title}}}, {self.publicationName}, ' +\
+            f'{volissue}, {_parse_pages(self)} ({self.coverDate[:4]}).'
+        if self.doi:
+            s += f' \\href{{https://doi.org/{self.doi}}}{{doi:{self.doi}}}, '
+        s += f'\\href{{{self.scopus_link}}}{{scopus:{self.eid}}}.'
         return s
 
     def get_ris(self):
@@ -762,20 +749,18 @@ class AbstractRetrieval(Retrieval):
         if self.aggregationType != 'Journal':
             raise ValueError('Only Journal articles supported.')
         # Basic information
-        ris = "TY  - JOUR\nTI  - {title}\nJO  - {jour}\nVL  - {vol}\n"\
-              "DA  - {date}\nPY  - {year}\nSP  - {pages}\n".format(
-                title=self.title, jour=self.publicationName, vol=self.volume,
-                date=self.coverDate, year=self.coverDate[0:4],
-                pages=self.pageRange)
+        ris = f"TY  - JOUR\nTI  - {self.title}\nJO  - {self.publicationName}"\
+              f"\nVL  - {self.volume}\nDA  - {self.coverDate}\n"\
+              f"PY  - {self.coverDate[0:4]}\nSP  - {self.pageRange}\n"
         # Authors
         for au in self.authors:
-            ris += 'AU  - {}\n'.format(au.indexed_name)
+            ris += f'AU  - {au.indexed_name}\n'
         # DOI
-        if self.doi is not None:
-            ris += 'DO  - {0}\nUR  - https://doi.org/{0}\n'.format(self.doi)
+        if self.doi:
+            ris += f'DO  - {self.doi}\nUR  - https://doi.org/{self.doi}\n'
         # Issue
-        if self.issueIdentifier is not None:
-            ris += 'IS  - {}\n'.format(self.issueIdentifier)
+        if self.issueIdentifier:
+            ris += f'IS  - {self.issueIdentifier}\n'
         ris += 'ER  - \n\n'
         return ris
 
@@ -806,9 +791,9 @@ def _list_authors(lst):
 def _parse_pages(self, unicode=False):
     """Auxiliary function to parse and format page range of a document."""
     if self.pageRange:
-        pages = 'pp. {}'.format(self.pageRange)
+        pages = f'pp. {self.pageRange}'
     elif self.startingPage:
-        pages = 'pp. {}-{}'.format(self.startingPage, self.endingPage)
+        pages = f'pp. {self.startingPage}-{self.endingPage}'
     else:
         pages = '(no pages found)'
     if unicode:
