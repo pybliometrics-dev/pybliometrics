@@ -11,6 +11,17 @@ You initialize the class with an ISSN or an E-ISSN (works with and without hyphe
     >>> source = SerialTitle("00368075")
 
 
+You can obtain basic information just by printing the object:
+
+.. code-block:: python
+
+    >>> print(source)
+    'Science', journal published by American Association for the Advancement of Science
+    is active in Multidisciplinary
+        SJR (2017): (14.142), SNIP (2017): (7.154)
+        ISSN: 0036-8075, E-ISSN: 1095-9203, Scopus ID: 23571
+
+
 The object has a number of attributes but no methods.  For example, information regarding the source itself:
 
 .. code-block:: python

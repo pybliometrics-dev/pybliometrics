@@ -11,6 +11,16 @@ The class is initialized with a search query which you can read about in `Author
     >>> s = AuthorSearch('AUTHLAST(Selten) and AUTHFIRST(Reinhard)')
 
 
+You can obtain a search summary just by printing the object:
+
+.. code-block:: python
+
+    >>> print(s)
+    Search 'AUTHLAST(Selten) and AUTHFIRST(Reinhard)' yielded 2 authors:
+        Selten, Reinhard
+        Selten, Reinhard
+
+
 To know the the number of results use the `.get_results_size()` method, even before you download the results:
 
 .. code-block:: python

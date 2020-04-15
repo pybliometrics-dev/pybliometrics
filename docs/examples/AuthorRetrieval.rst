@@ -11,6 +11,16 @@ This class is to interact with the entire author record in Scopus, using the aut
     >>> au = AuthorRetrieval(7004212771)
 
 
+You can obtain basic information just by printing the object:
+
+.. code-block:: python
+
+    >>> print(au)
+    Kitchin J. from Department of Chemical Engineering,
+    published 100 document(s) since 1995 in 52 distinct source(s),
+    which were cited by 8,992 author(s) in 11,187 document(s)
+
+
 The object can access many bits of data about an author, including the number of papers, h-index, current affiliation, etc.  When a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ is returned, the can neatly be turned into `pandas <https://pandas.pydata.org/>`_ DataFrames.
 
 Information on names:

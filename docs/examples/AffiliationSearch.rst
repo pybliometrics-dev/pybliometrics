@@ -12,6 +12,15 @@ The class is initialized with a search query which you can read about in `Affili
     >>> s = AffiliationSearch(query)
 
 
+You can obtain a search summary just by printing the object:
+
+.. code-block:: python
+
+    >>> print(s)
+    Search 'AFFIL(Max Planck Institute for Innovation and Competition Munich)' yielded 1 affiliation:
+        Max Planck Institute for Innovation and Competition
+
+
 The class mostly serves to provide a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing information about the affiliation.  One of them is the affiliation ID which you can use for the `ScopusAffiliation <../reference/pybliometrics.ScopusAffiliation.html>`_ class:
 
 .. code-block:: python

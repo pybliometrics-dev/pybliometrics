@@ -11,6 +11,27 @@ The class is initialized with a search query.  Any query that works in the `Adva
     >>> s = ScopusSearch('FIRSTAUTH ( kitchin  j.r. )')
 
 
+You can obtain a search summary just by printing the object:
+
+.. code-block:: python
+
+    >>> print(s)
+    Search 'FIRSTAUTH ( kitchin  j.r. )' yielded 13 documents:
+        2-s2.0-85048443766
+        2-s2.0-85019169906
+        2-s2.0-84971324241
+        2-s2.0-84930349644
+        2-s2.0-84930616647
+        2-s2.0-67449106405
+        2-s2.0-40949100780
+        2-s2.0-37349101648
+        2-s2.0-20544467859
+        2-s2.0-13444307808
+        2-s2.0-2942640180
+        2-s2.0-0141924604
+        2-s2.0-0037368024
+
+
 Non-subscribers must instantiate the class with `subscriber=False`.  They may only get 5000 results per query, whereas this limit does not exist for subscribers.
 
 Users can recieve the number of results programmatically via `.get_results_size()`:
@@ -18,7 +39,7 @@ Users can recieve the number of results programmatically via `.get_results_size(
 .. code-block:: python
 
     >>> s.get_results_size()
-    12
+    13
 
 
 This method works even if one chooses to not download results.  It thus helps subscribers to decide programmatically if one wants to proceed downloading or not:

@@ -11,6 +11,17 @@ You initialize the class with Scopus' Affiliation ID:
     >>> aff = ContentAffiliationRetrieval("60000356")
 
 
+You can obtain basic information just by printing the object:
+
+.. code-block:: python
+
+    >>> print(aff)
+    University of Cape Town (12,226 authors, 67,008 documents)
+    Private Bag X3, Rondebosch
+     Cape Town, South Africa
+    https://api.elsevier.com/content/affiliation/affiliation_id/60000356
+
+
 The object has a number of attributes but no methods.  For example, information regarding the affiliation itself:
 
 .. code-block:: python

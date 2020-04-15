@@ -12,6 +12,17 @@ You initalize the class with Scopus' Electronic Identifier (EID):
     >>> from pybliometrics.scopus import CitationOverview
     >>> co = CitationOverview("2-s2.0-84930616647", start=2015, end=2017)
 
+
+You can obtain basic information just by printing the object:
+
+.. code-block:: python
+
+    Document 'Examples of effective data sharing in scientific publishing' by Kitchin J.R.
+    published in 'ACS Catalysis' with citation trajectory for years 2015 to 2017:
+    2015: 0; 2016: 4; 2017: 2
+    Additionally cited 0 times before 2015, and 2 times after 2017
+
+
 The most important information is stored in attribute `cc`, which is a list of tuples storing year-wise citations to the article:
 
 .. code-block:: python
