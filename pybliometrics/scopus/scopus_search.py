@@ -2,7 +2,7 @@ from collections import namedtuple
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, check_integrity_params,\
-    check_field_consistency, listify
+    check_field_consistency, listify, make_search_summary
 
 
 class ScopusSearch(Search):
@@ -200,10 +200,7 @@ class ScopusSearch(Search):
         self.action = integrity_action
 
     def __str__(self):
-        eids = self.get_eids()
-        s = f"Search '{self.query}' yielded {len(eids):,} document(s):\n    "
-        s += '\n    '.join(eids)
-        return s
+        return make_search_summary(self, "document", self.get_eids())
 
     def get_eids(self):
         """EIDs of retrieved documents."""

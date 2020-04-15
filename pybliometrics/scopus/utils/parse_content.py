@@ -82,6 +82,22 @@ def listify(element):
         return [element]
 
 
+def make_search_summary(self, keyword, results, joiner="\n    "):
+    """Create string for str dunder of search classes."""
+    if self._n != 1:
+        appendix = "s"
+        verb = "have"
+    else:
+        appendix = ""
+        verb = "has"
+    s = f"Search '{self.query}' yielded {self._n:,} {keyword}{appendix}"
+    if results:
+        s += ":" + joiner + joiner.join(results)
+    elif self._n:
+        s += f", which {verb} not been downloaded"
+    return s
+
+
 def parse_affiliation(affs):
     """Helper function to parse list of affiliation-related information."""
     order = 'id parent type relationship afdispname preferred_name '\

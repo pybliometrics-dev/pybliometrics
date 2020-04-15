@@ -2,7 +2,7 @@ from collections import namedtuple
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity,\
-    check_integrity_params, check_field_consistency
+    check_integrity_params, check_field_consistency, make_search_summary
 
 
 class AffiliationSearch(Search):
@@ -106,7 +106,5 @@ class AffiliationSearch(Search):
         self.action = integrity_action
 
     def __str__(self):
-        s = f"Search '{self.query}' yielded {len(self._json):,} " +\
-            "affiliation(s):\n    " +\
-            '\n    '.join([a['affiliation-name'] for a in self._json])
-        return s
+        res = [a['affiliation-name'] for a in self._json]
+        return make_search_summary(self, "affiliation", res)

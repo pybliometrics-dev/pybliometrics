@@ -2,7 +2,7 @@ from collections import namedtuple
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, check_integrity_params,\
-    check_field_consistency, listify
+    check_field_consistency, listify, make_search_summary
 
 
 class AuthorSearch(Search):
@@ -117,6 +117,4 @@ class AuthorSearch(Search):
     def __str__(self):
         names = [f'{a["preferred-name"]["surname"]}, {a["preferred-name"]["given-name"]}'
                  for a in self._json]
-        s = f"Search '{self.query}' yielded {len(self._json):,} author(s):\n    "
-        s += '\n    '.join(names)
-        return s
+        return make_search_summary(self, "author", names)
