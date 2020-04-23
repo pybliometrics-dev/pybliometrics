@@ -10,7 +10,8 @@ DEFAULT_PATHS = {
     'ContentAffiliationRetrieval': expanduser('~/.scopus/affiliation_retrieval'),
     'ScopusSearch': expanduser('~/.scopus/scopus_search'),
     'SerialTitle': expanduser('~/.scopus/serial_title'),
-    'PlumXMetrics': expanduser('~/.scopus/plumx')
+    'PlumXMetrics': expanduser('~/.scopus/plumx'),
+    'SerialSearch': expanduser('~/.scopus/serial_search')
 }
 
 # URL prefix and suffixes for retrieval classes
@@ -29,5 +30,6 @@ SEARCH_BASE = 'https://api.elsevier.com/content/search/'
 SEARCH_URL = {
     'AffiliationSearch': SEARCH_BASE + 'affiliation',
     'AuthorSearch': SEARCH_BASE + 'author',
-    'ScopusSearch': SEARCH_BASE + 'scopus'
+    'ScopusSearch': SEARCH_BASE + 'scopus',
+    'SerialSearch': RETRIEVAL_BASE + 'serial/title'
 }

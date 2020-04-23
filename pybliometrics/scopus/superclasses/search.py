@@ -60,9 +60,17 @@ class Search(Base):
         ValueError
             If the api parameter is an invalid entry.
         """
-        fname = md5(query.encode('utf8')).hexdigest()
+        params = {'count': count, 'view': view}
+        if api != 'SerialSearch':
+            name = query
+            params['query'] = query
+        else:
+            name = ''
+            params.update(query)
+            for q in query:
+                name += q + query[q] + '&'
+        fname = md5(name.encode('utf8')).hexdigest()
         qfile = join(get_folder(api, view), fname)
-        params = {'query': query, 'count': count, 'view': view}
         if cursor:
             params.update({'cursor': '*'})
         else:
