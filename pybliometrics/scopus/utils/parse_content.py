@@ -34,7 +34,7 @@ def check_integrity(tuples, fields, action):
         elements = [getattr(e, field) for e in tuples]
         if None not in elements:
             continue
-        msg = "Parsed information doesn't pass integrity check becaue of "\
+        msg = "Parsed information doesn't pass integrity check because of "\
               f"incomplete information in field '{field}'"
         if action == "raise":
             raise AttributeError(msg)
