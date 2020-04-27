@@ -178,19 +178,20 @@ There are sometimes missing fields in the returned results although it exists in
 
 .. code-block:: python
    
-    >>> s = ScopusSearch('FIRSTAUTH ( kitchin  j.r. )', integrity_fields=["eid"], integrity_action="warn")
+    >>> s = ScopusSearch('FIRSTAUTH ( kitchin  j.r. )',
+                         integrity_fields=["eid"], integrity_action="warn")
 
 
 If you care about integrity of specific fields, you can attempt to refresh the downloaded file:
 
 .. code-block:: python
    
-    def robust_query(q, refresh=False):
+    def robust_query(q, refresh=False, fields=["eid"]):
         """Wrapper function for individual ScopusSearch query."""
         try:
-            return ScopusSearch(q, refresh=refresh).results
+            return ScopusSearch(q, refresh=refresh, integrity_fields=fields).results
         except AttributeError:
-            return ScopusSearch(q, refresh=True).results
+            return ScopusSearch(q, refresh=True, integrity_fields=fields).results
 
 
 The Scopus Search API allows a differing information depth via
