@@ -68,7 +68,7 @@ class Search(Base):
         else:
             params.update({'start': 0})
         Base.__init__(self, qfile, refresh, params=params, url=SEARCH_URL[api],
-                      download=download, max_entries=max_entries)
+                      download=download, max_entries=max_entries, verbose=verbose)
         # Set query parameters
         self._view = view
 

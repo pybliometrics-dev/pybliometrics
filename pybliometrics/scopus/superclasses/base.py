@@ -5,7 +5,7 @@ from os.path import getmtime
 from time import time
 
 from pybliometrics.scopus.exception import ScopusQueryError
-from pybliometrics.scopus.utils import get_content
+from pybliometrics.scopus.utils import get_content, print_progress
 
 
 class Base:
