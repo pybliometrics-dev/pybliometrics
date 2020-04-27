@@ -28,6 +28,10 @@ class Scopus401Error(ScopusHtmlError):
     """Raised if a query yields a 401 error (Unauthorized for url)."""
 
 
+class Scopus403Error(ScopusHtmlError):
+    """Raised if a query yields a 403 error (Forbidden for url)."""
+
+
 class Scopus404Error(ScopusHtmlError):
     """Raised if a query yields a 404 error (Not Found for url)."""
 
