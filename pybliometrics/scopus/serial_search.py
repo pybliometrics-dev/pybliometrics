@@ -90,3 +90,4 @@ def _form_fields(results, ignore=[]):
     fields = list(fields)
     fields += ['subject_area_codes', 'subject_area_abbrevs', 'subject_area_names']
     return fields
+
