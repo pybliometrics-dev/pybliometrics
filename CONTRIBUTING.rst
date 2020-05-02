@@ -90,5 +90,5 @@ Pull Request Guidelines
 Before you submit a pull request, check that it meets these guidelines:
 
 1. Adhere to `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_
-2. Run nosetests locally `python -m nose --verbose` (on Windows) or `nosetests3 pybliometrics/tests/ --verbose`.
+2. Run nosetests locally `python -m nose --verbose` (on Windows) or `nosetests3 pybliometrics/scopus/tests/ --verbose`.
 3. The pull request should work for Python 3.X.

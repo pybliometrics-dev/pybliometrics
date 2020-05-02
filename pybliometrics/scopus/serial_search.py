@@ -39,10 +39,10 @@ class SerialSearch(Search):
                 out.append(serial._make(obs.values()))
         return out or None
             
-    def __init__(self, query, refresh=False, download=True, count=200,
+    def __init__(self, query, refresh=False, count=200,
                  verbose=False, view='STANDARD'):
         Search.__init__(self, query=query, api='SerialSearch',
-                        refresh=refresh, download=download, count=count,
+                        refresh=refresh, count=count,
                         verbose=verbose, view=view)
 
 
