@@ -68,7 +68,7 @@ class Search(Base):
             name = ''
             params.update(query)
             for q in query:
-                name += q + query[q] + '&'
+                name += q + ' ' + query[q] + '&'
             name = name[:-1]
         fname = md5(name.encode('utf8')).hexdigest()
         qfile = join(get_folder(api, view), fname)
