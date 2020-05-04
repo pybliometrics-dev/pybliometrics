@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Tests for `scopus.SerialSearch` module."""
 
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 
 from pybliometrics.scopus import SerialSearch, SerialTitle
 
@@ -15,7 +15,7 @@ ser2 = SerialSearch({'title':'computational', 'field':'dc:publisher'},
 # Search by subject area code. Namedtuples with at least 18 fields.
 ser3  = SerialSearch({'subjCode':'2612'}, refresh=30)
 # Search by subject abbreviation with specific date range for historic data.
-ser4 = SerialSearch({'subj':'COMP', 'date':'2015-2015'}, refresh=30)
+ser4 = SerialSearch({'subj':'COMP', 'date':'2015-2020'}, refresh=30)
 
 
 def test_serials():
@@ -23,11 +23,7 @@ def test_serials():
     assert_equal(ser1.results[0].dc_title, 'Econometrica')
     mirror = SerialTitle('1468-0262', refresh=30)
     assert_equal(ser1.results[0].source_id, mirror.source_id)
-    expected_fields = set(['dc_publisher',
-                           'prism_url',
-                           'subject_area_abbrevs',
-                           'subject_area_codes',
-                           'subject_area_names'])
+    expected_fields = set(['dc_publisher', 'prism_url'])
     ser2_fields = set(j for i in ser2.results for j in i._fields)
     assert_equal(ser2_fields, expected_fields)
     assert_equal(set(len(i) >= 18 for i in ser3.results), set([True]))
@@ -36,4 +32,4 @@ def test_serials():
     ser4_subj_abbs = set(i.subject_area_abbrevs for i in ser4.results)
     assert_equal(set('COMP' in i for i in ser4_subj_abbs), set([True]))
     ser4_sjr_fields = set(j for i in ser4.results for j in i._fields if 'SJR' in j)
-    assert_equal(set(['SJR_2015']), ser4_sjr_fields)
+    assert_true('SJR_2017' in ser4_sjr_fields)
