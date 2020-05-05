@@ -67,9 +67,7 @@ class Search(Base):
         else:
             name = ''
             params.update(query)
-            for q in query:
-                name += q + ' ' + query[q] + '&'
-            name = name[:-1]
+            name = "&".join(["=".join(t) for t in zip(query.keys(), query.values())])
         fname = md5(name.encode('utf8')).hexdigest()
         qfile = join(get_folder(api, view), fname)
         if cursor:

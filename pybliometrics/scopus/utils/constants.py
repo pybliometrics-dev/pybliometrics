@@ -9,9 +9,9 @@ DEFAULT_PATHS = {
     'CitationOverview': expanduser('~/.scopus/citation_overview'),
     'ContentAffiliationRetrieval': expanduser('~/.scopus/affiliation_retrieval'),
     'ScopusSearch': expanduser('~/.scopus/scopus_search'),
+    'SerialSearch': expanduser('~/.scopus/serial_search'),
     'SerialTitle': expanduser('~/.scopus/serial_title'),
-    'PlumXMetrics': expanduser('~/.scopus/plumx'),
-    'SerialSearch': expanduser('~/.scopus/serial_search')
+    'PlumXMetrics': expanduser('~/.scopus/plumx')
 }
 
 # URL prefix and suffixes for retrieval classes

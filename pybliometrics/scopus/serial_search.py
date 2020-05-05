@@ -1,4 +1,4 @@
-from collections import namedtuple, OrderedDict
+from collections import OrderedDict
 
 from pybliometrics.scopus.superclasses import Search
 
@@ -6,44 +6,39 @@ from pybliometrics.scopus.superclasses import Search
 class SerialSearch(Search):
     @property
     def results(self):
-        """A list of namedtuples representing results of serial search. The
-        number of fields may vary from one search query to another depending
-        on the length of yearly data Note: can be empty.
+        """A list of OrderedDicts representing results of serial search. The
+        number of keys may vary from one search result to another depending
+        on the length of yearly data. Note: can be empty.
         """
         out = []
-        search_results = self._json['serial-metadata-response'].get('entry')
-        if search_results:
-            # Namedtuple fields from union of keys of each dictionary in result list
-            fields = [_clean_field_name(i) for i in _form_fields(search_results)]
-            serial = namedtuple('Serial', fields)
-            for i in search_results:
-                # OrderedDict to populate with individual serial data
-                obs = OrderedDict.fromkeys(fields)
-                for key in i:
-                    if key != '@_fa' and i[key]:
-                        if key == 'subject-area':
-                            subject_data = _merge_subject_data(i[key])
-                            obs['subject_area_codes'] = subject_data[0]
-                            obs['subject_area_abbrevs'] = subject_data[1]
-                            obs['subject_area_names'] = subject_data[2]
-                        elif key == 'SNIPList' or key == 'SJRList':
-                            for j in _retrieve_source_rankings(i[key]):
+        search_results = self._json['serial-metadata-response'].get('entry', [])
+        for i in search_results:
+            # OrderedDict to populate with individual serial data
+            obs = OrderedDict()
+            for key in i:
+                if key != '@_fa' and i[key]:
+                    if key == 'subject-area':
+                        subject_data = _merge_subject_data(i[key])
+                        obs['subject_area_codes'] = subject_data[0]
+                        obs['subject_area_abbrevs'] = subject_data[1]
+                        obs['subject_area_names'] = subject_data[2]
+                    elif key == 'SNIPList' or key == 'SJRList':
+                        for j in _retrieve_source_rankings(i[key]):
+                            obs[j[0]] = j[1]
+                    elif key == 'citeScoreYearInfoList':
+                        for j in _retrieve_cite_scores(i[key]):
+                            obs[j[0]] = j[1]
+                    elif key == 'link':
+                        for j in _retrieve_links(i['link']):
+                            obs[j[0]] = j[1]
+                    elif key == 'yearly-data':
+                        if i['yearly-data'].get('info'):
+                            time_data = _retrieve_yearly_data(i['yearly-data']['info'])
+                            for j in time_data:
                                 obs[j[0]] = j[1]
-                        elif key == 'citeScoreYearInfoList':
-                            for j in _retrieve_cite_scores(i[key]):
-                                obs[j[0]] = j[1]
-                        elif key == 'link':
-                            for j in _retrieve_links(i['link']):
-                                obs[_clean_field_name(j[0])] = j[1]
-                        elif key == 'yearly-data':
-                            if i['yearly-data'].get('info'):
-                                time_data = _retrieve_yearly_data(i['yearly-data']['info'])
-                                for j in time_data:
-                                    obs[j[0]] = j[1]
-                        else:
-                            obs[_clean_field_name(key)] = i[key]
-                # Make namedtuple from OrderedDict
-                out.append(serial._make(obs.values())) or None
+                    else:
+                        obs[key] = i[key]
+            out.append(obs) or None
         return out or None
 
     def __init__(self, query, refresh=False, count=200, verbose=False,
@@ -140,7 +135,7 @@ class SerialSearch(Search):
         The directory for cached results is `{path}/{view}/{fname}`,
         where `path` is specified in `~/.scopus/config.ini` and fname is
         the md5-hashed version of `query` dict turned into string in format of
-        'key value' deliminated by '&'.
+        'key=value' deliminated by '&'.
         """
         allowed_query_keys = set(['date', 'field', 'issn',
                                   'oa', 'subj','subjCode',
@@ -156,81 +151,11 @@ class SerialSearch(Search):
                         refresh=refresh, count=count, view=view)
 
 
-def _form_fields(results):
-    """Auxiliary function that returns tuple represiting union of keys
-    of all dictionaries inside search result list including keys of nested
-    dictionaries. Nested dictionaries correspond to links data, citescore
-    metric data from last available year, subject area data and other data
-    varying by year (e.g.  SNIP and SJR yearly data). Keys of periodic data
-    and citescore metrics data are treated by merging stat name and period with
-    underscore. If subject area data is present, keys corresponding to area
-    code, names and abbreviations are created. Keys of links data are
-    created corresponding to link names given by data.
-    """
-    special_keys = ['@_fa',
-                    'subject-area',
-                    'SNIPList',
-                    'SJRList',
-                    'citeScoreYearInfoList',
-                    'link',
-                    'yearly-data']
-    base_fields = set() # Subject area keys, links keys and keys with non-nested dictionaries
-    time_fields = set() # SJR, SNIP, citescore and yearly data keys
-    for i in results:
-        base_fields.update(set(key for key in i if key not in special_keys))
-        # Keys from dictionaries of yearly data
-        if i.get('yearly-data'):
-            yearly_fields = set()
-            for t in i['yearly-data'].get('info', []):
-                period_fields = set(key
-                                    + '_'
-                                    + str(t.get('@year'))
-                                    for key in t.keys()
-                                    if key not in ('@year', '@_fa'))
-                yearly_fields.update(period_fields)
-            time_fields.update(yearly_fields)
-        # Link names
-        links = [j['@ref'] for j in i.get('link', []) if j.get('@ref')]
-        base_fields.update(set(links))
-        if i.get('citeScoreYearInfoList'):
-            cite = i['citeScoreYearInfoList']
-            if cite.get('citeScoreCurrentMetric'):
-                metric = ('citeScoreCurrentMetric'
-                          + '_'
-                          + str(cite.get('citeScoreCurrentMetricYear')))
-                time_fields.add(metric)
-            if cite.get('citeScoreTracker'):
-                tracker = ('citeScoreTracker'
-                           + '_'
-                           + str(cite.get('citeScoreTrackerYear')))
-                time_fields.add(tracker)
-        if i.get('SNIPList'):
-            for key in i['SNIPList']:
-                snip = i['SNIPList'][key]
-                for t in snip:
-                    time_fields.add(key + '_' + str(t.get('@year')))
-        if i.get('SJRList'):
-            for key in i['SJRList']:
-                sjr = i['SJRList'][key]
-                for t in sjr:
-                    time_fields.add(key + '_' + str(t.get('@year')))
-        if i.get('subject-area'):
-            subject_fields = set(['subject_area_codes',
-                                  'subject_area_abbrevs',
-                                  'subject_area_names'])
-            base_fields.update(subject_fields)
-    # Sort time and base fields alphabetically
-    return sorted(list(base_fields)) + sorted(list(time_fields))
-
-
-def _clean_field_name(fieldname):
-    """Cleans string for use as namedtuple field"""
-    return fieldname.replace(':', '_').replace('-','_').replace('@','')
-
-
 def _merge_subject_data(subject_area_data):
-    """Collects and concatenates data on subject area into string.
-    Returns tuple of strings for subject area names, codes and abbreviations
+    """Auxiliary function to collect and concatenate subject area data into string.
+    
+    Returns tuple of strings for subject area names, subject area codes and
+    subject area abbreviations deliminated by ';'.
     """
     codes = set([j.get('@code') for j in subject_area_data if j.get('@code')])
     abbrevs = set([j.get('@abbrev')
@@ -243,8 +168,9 @@ def _merge_subject_data(subject_area_data):
 
 
 def _retrieve_links(link_data):
-    """Collects data on links. Returns list of lists in the form of
-    [linkname, link]
+    """Auxiliary function to collect data on links.
+    
+    Returns list of lists in the form of [linkname, link].
     """
     out = []
     for l in link_data:
@@ -254,9 +180,10 @@ def _retrieve_links(link_data):
 
 
 def _retrieve_yearly_data(yearly_data):
-    """Collects yearly data. Returns list of lists in the form 
-    [mergedstatname, stat], where mergedstatname - dictionary key joined with
-    associated period
+    """Auxiliary function to collect yearly data.
+    
+    Returns list of lists in the form [mergedstatname, stat], where
+    mergedstatname - dictionary key joined with associated period.
     """
     out = []
     for t in yearly_data:
@@ -267,9 +194,10 @@ def _retrieve_yearly_data(yearly_data):
 
 
 def _retrieve_cite_scores(cite_score_data):
-    """Collects citescore data. Returns list of lists in the form 
-    [mergedstatname, stat], where mergedstatname - dictionary key joined with
-    associated period
+    """Auxiliary function to collect citescore data.
+    
+    Returns list of lists in the form [mergedstatname, stat], where
+    mergedstatname - dictionary key joined with associated period.
     """
     out = []
     if cite_score_data.get('citeScoreTracker'):
@@ -288,9 +216,10 @@ def _retrieve_cite_scores(cite_score_data):
 
 
 def _retrieve_source_rankings(source_data):
-    """Collects SNIP and SJR data. Returns list of lists in the form 
-    [mergedstatname, stat], where mergedstatname - dictionary key joined with
-    associated period
+    """Auxiliary function to collect SNIP and SJR data.
+    
+    Returns list of lists in the form [mergedstatname, stat],
+    where mergedstatname - dictionary key joined with associated period
     """
     out = []
     for key in source_data:
@@ -300,4 +229,3 @@ def _retrieve_source_rankings(source_data):
             stat_val = t.get('$')
             out.append([stat_name, stat_val])
     return out or None
-            

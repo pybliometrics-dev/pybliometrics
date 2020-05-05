@@ -175,7 +175,7 @@ class ScopusSearch(Search):
         allowed_views = ('STANDARD', 'COMPLETE')
         if view and view not in allowed_views:
             msg = 'view parameter must be one of ' + ', '.join(allowed_views)
-            raise ValueError()
+            raise ValueError(msg)
         check_integrity_params(integrity_action)
 
         # Parameters
