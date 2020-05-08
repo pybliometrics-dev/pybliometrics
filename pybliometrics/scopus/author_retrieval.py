@@ -260,6 +260,7 @@ class AuthorRetrieval(Retrieval):
         Note: These information will not be cached and are slow for large
         coauthor groups.
         """
+        SIZE = 25
         # Get number of authors to search for
         url = self.coauthor_link
         res = get_content(url=url)
@@ -270,7 +271,7 @@ class AuthorRetrieval(Retrieval):
         coauth = namedtuple('Coauthor', fields)
         coauthors = []
         # Iterate over search results in chunks of 25 results
-        count = 25
+        count = SIZE
         start = 0
         while start < N:
             params = {'start': start, 'count': count}
@@ -291,7 +292,7 @@ class AuthorRetrieval(Retrieval):
                     city=aff.get('affiliation-city'),
                     country=aff.get('affiliation-country'))
                 coauthors.append(new)
-            count += 25
+            start += SIZE
         return coauthors or None
 
     def get_documents(self, subtypes=None, **kwds):
