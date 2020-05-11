@@ -43,7 +43,7 @@ class SerialSearch(Search):
                 elif key == 'yearly-data':
                     if not value:
                         continue
-                    time_data = _retrieve_yearly_data(value.get('info'))
+                    time_data = _retrieve_yearly_data(value.get('info', []))
                     for j in time_data:
                         obs[j[0]] = j[1]
                 else:
