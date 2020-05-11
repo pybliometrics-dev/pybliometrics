@@ -65,7 +65,6 @@ class Search(Base):
             name = query
             params['query'] = query
         else:
-            name = ''
             params.update(query)
             name = "&".join(["=".join(t) for t in zip(query.keys(), query.values())])
         fname = md5(name.encode('utf8')).hexdigest()
