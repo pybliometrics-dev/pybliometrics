@@ -30,7 +30,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 project = 'pybliometrics'
 author = 'John Kitchin and Michael E. Rose'
-copyright = ','.join(['2017-2019', author])
+copyright = ','.join(['2017-2020', author])
 
 version = pybliometrics.__version__
 release = pybliometrics.__version__

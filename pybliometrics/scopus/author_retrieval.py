@@ -338,7 +338,7 @@ class AuthorRetrieval(Retrieval):
             "SUBJAREA()" OR "AF-ID() AND SUBJAREA()".  For details see
             https://dev.elsevier.com/tips/AuthorSearchTips.htm.
 
-        *args, **kwds : key-value pairings
+        args, kwds : key-value pairings
             Parameters to be passed on to AuthorSearch().
 
         Returns
