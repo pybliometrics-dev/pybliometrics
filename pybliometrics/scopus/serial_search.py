@@ -16,39 +16,33 @@ class SerialSearch(Search):
             # OrderedDict to populate with individual serial data
             obs = OrderedDict()
             for key, value in result.items():
+                if not value:
+                    continue
+                key = key.split(":", 1)[-1]
                 if key == '@_fa':
                     continue
-                if key == 'subject-area':
-                    if not value:
-                        continue
+                elif key == 'subject-area':
                     subject_data = _merge_subject_data(value)
                     obs['subject_area_codes'] = subject_data[0]
                     obs['subject_area_abbrevs'] = subject_data[1]
                     obs['subject_area_names'] = subject_data[2]
                 elif key == 'SNIPList' or key == 'SJRList':
-                    if not value:
-                        continue
                     for j in _retrieve_source_rankings(value):
                         obs[j[0]] = j[1]
                 elif key == 'citeScoreYearInfoList':
-                    if not value:
-                        continue
                     for j in _retrieve_cite_scores(value):
                         obs[j[0]] = j[1]
                 elif key == 'link':
-                    if not value:
-                        continue
                     for j in _retrieve_links(value):
                         obs[j[0]] = j[1]
                 elif key == 'yearly-data':
-                    if not value:
-                        continue
                     time_data = _retrieve_yearly_data(value.get('info', []))
                     for j in time_data:
                         obs[j[0]] = j[1]
                 else:
                     obs[key] = value
-            out.append(obs) or None
+            if obs:
+                out.append(obs)
         return out or None
 
     def __init__(self, query, refresh=False, count=200, view='ENHANCED'):

@@ -20,10 +20,10 @@ ser4 = SerialSearch({'subj':'COMP', 'date':'2015-2020'}, refresh=30)
 
 def test_serials():
     assert_equal(len(ser1.results), 1)
-    assert_equal(ser1.results[0]['dc:title'], 'Econometrica')
+    assert_equal(ser1.results[0]['title'], 'Econometrica')
     mirror = SerialTitle('1468-0262', refresh=30)
     assert_equal(ser1.results[0]['source-id'], mirror.source_id)
-    expected_fields = set(['dc:publisher', 'prism:url'])
+    expected_fields = set(['publisher', 'url'])
     ser2_fields = set(j for i in ser2.results for j in i.keys())
     assert_equal(ser2_fields, expected_fields)
     ser3_subj_codes = set(i['subject_area_codes'] for i in ser3.results)
