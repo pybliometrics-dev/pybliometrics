@@ -45,74 +45,16 @@ class SerialSearch(Search):
                 out.append(obs)
         return out or None
 
-    def __init__(self, query, refresh=False, count=200, view='ENHANCED'):
+    def __init__(self, query, refresh=False, view='ENHANCED'):
         """Interaction with the Serial Title API.
 
         Parameters
         ----------
         query: dict
-            Query parameters. Allowed keys are:
-                'date'
-                     Represents the date range for filtering info entries in
-                     ENHANCED view, with the lowest granularity being year
-                     (e.g. '2007-2010' or '2010').
-                'field'
-                    Represents the name of specific fields that
-                    should be returned. One or more fields can
-                    be provided, deliminated by comma. The list of fields
-                    include all of the fields returned in search results.
-                'issn'
-                    Represents the source identifier filter. Can be either ISSN
-                    or e-ISSN. One or more identifiers can be provided,
-                    deliminated by comma.
-                'oa'
-                    Filter used to specify whether the source titles returned
-                    should include Open Access types. It will limit the results
-                    based upon Open Access status. Values should be one of:
-                        - 'all' - all source titles, regardless of Open Access status.
-                        - 'full' - include only FULL Open Access titles.
-                        - 'partial' - include only PARTIAL Open Access titles.
-                        - 'none' - no FULL or PARTIAL Open Access titles.
-                'subj'
-                     Represents the SCOPUS subject area abbreviation associated
-                     with the content category desired. Values should be one of:
-                         - 'AGRI' - Agricultural and Biological Sciences
-                         - 'ARTS' - Arts and Humanities
-                         - 'BIOC' - Biochemistry, Genetics and Molecular Biology
-                         - 'BUSI' - Business, Management and Accounting
-                         - 'CENG' - Chemical Engineering
-                         - 'CHEM' - Chemistry
-                         - 'COMP' - Computer Science
-                         - 'DECI' - Decision Sciences
-                         - 'DENT' - Dentistry
-                         - 'EART' - Earth and Planetary Sciences
-                         - 'ECON' - Economics, Econometrics and Finance
-                         - 'ENER' - Energy
-                         - 'ENGI' - Engineering
-                         - 'ENVI' - Environmental Science
-                         - 'HEAL' - Health Professions
-                         - 'IMMU' - Immunology and Microbiology
-                         - 'MATE' - Materials Science
-                         - 'MATH' - Mathematics
-                         - 'MEDI' - Medicine
-                         - 'NEUR' - Neuroscience
-                         - 'NURS' - Nursing
-                         - 'PHAR' - Pharmacology, Toxicology and Pharmaceutics
-                         - 'PHYS' - Physics and Astronomy
-                         - 'PSYC' - Psychology
-                         - 'SOCI' - Social Sciences
-                         - 'VETE' - Veterinary
-                         - 'MULT' - Multidisciplinary
-                'subjCode'
-                    Represents the SCOPUS subject area code associated with the
-                    content category desired. One or more subject codes can be
-                    provided, deliminated by comma. For full list of possible
-                    values see
-                    https://api.elsevier.com/content/subject/scopus?httpAccept=text/xml
-                'title'
-                     Represents a partial or complete serial title. Will
-                     match the pattern provided anywhere within the title -
-                     no wildcard support is provided.
+            Query parameters and corresponding fields. Allowed keys 'title',
+            'issn', 'pub', 'subj', 'subjCode', 'content', 'oa'.  For
+            examples on possible values, please refer to
+            https://dev.elsevier.com/documentation/SerialTitleAPI.wadl#d1e22.
         
         refresh : bool or int (optional, default=False)
             Whether to refresh the cached file if it exists or not.  If int
@@ -127,31 +69,34 @@ class SerialSearch(Search):
         Raises
         ------
         Scopus400Error
-            If provided value for a query key is invalid or for non-subscribers,
-            if the number of search results exceeds 5000.
+            If provided value for a query key is invalid or if for
+            non-subscribers the number of search results exceeds 5000.
 
         ValueError
-            If provided query key is invalid.
+            If view parameter is not one of allowed ones or if query contains
+            invalid fields.
 
         Notes
         -----
         The directory for cached results is `{path}/{view}/{fname}`,
         where `path` is specified in `~/.scopus/config.ini` and fname is
-        the md5-hashed version of `query` dict turned into string in format of
-        'key=value' deliminated by '&'.
+        the md5-hashed version of `query` dict turned into string in format
+        of 'key=value' delimited by '&'.
         """
-        allowed_query_keys = set(['date', 'field', 'issn',
-                                  'oa', 'subj','subjCode',
-                                  'title'])
+        # Checks
+        allowed_query_keys = ('title', 'issn', 'date', 'pub', 'subj',
+                              'subjCode', 'content', 'oa')
+        invalid = [k for k in query.keys() if k not in allowed_query_keys]
+        if invalid:
+            raise ValueError(f'Query key(s) "{", ".join(invalid)}" invalid')
         allowed_views = ('STANDARD', 'ENHANCED', 'CITESCORE')
-        if not set(query.keys()).issubset(allowed_query_keys):
-            raise ValueError('allowed query keys are: ' + 
-                             ', '.join(allowed_query_keys))
         if view not in allowed_views:
             raise ValueError('view parameter must be one of ' +
                              ', '.join(allowed_views))
+
+        # Query
         Search.__init__(self, query=query, api='SerialSearch',
-                        refresh=refresh, count=count, view=view)
+                        refresh=refresh, view=view)
 
 
 def _merge_subject_data(subject_area_data):

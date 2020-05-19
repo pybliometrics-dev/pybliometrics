@@ -61,12 +61,12 @@ class Search(Base):
             If the api parameter is an invalid entry.
         """
         params = {'count': count, 'view': view}
-        if api != 'SerialSearch':
-            name = query
-            params['query'] = query
-        else:
+        if isinstance(query, dict):
             params.update(query)
             name = "&".join(["=".join(t) for t in zip(query.keys(), query.values())])
+        else:
+            name = query
+            params['query'] = query
         fname = md5(name.encode('utf8')).hexdigest()
         qfile = join(get_folder(api, view), fname)
         if cursor:
