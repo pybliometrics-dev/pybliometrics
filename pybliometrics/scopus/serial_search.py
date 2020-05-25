@@ -97,6 +97,7 @@ class SerialSearch(Search):
         # Query
         Search.__init__(self, query=query, api='SerialSearch',
                         refresh=refresh, view=view)
+        self._n = len(self._json['serial-metadata-response'].get('entry', []))
 
 
 def _merge_subject_data(subject_area_data):
