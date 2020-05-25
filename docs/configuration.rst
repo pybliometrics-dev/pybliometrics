@@ -38,9 +38,17 @@ If the configuration file does not exist, `pybliometrics` will raise a warning. 
     >>> pybliometrics.scopus.utils.create_config()
 
 
-`pybliometrics` then prompts you for your credentials.  Most users only need to provide the API Key and hit enter on the second prompt.  If you have to use InstToken authentication, enter it in the second step.  The corresponding part in the configuration file will look like this:
+`pybliometrics` then prompts you for your credentials.  There are two prompts: For your API Key and your InstToken.  Most users only need to provide the API Key and hit enter on the second prompt.  The corresponding part of the configuration file looks like this:
 
-.. code-block:: batch
+.. code-block:: none
+
+    [Authentication]
+    APIKey = XXX
+
+
+If you have to use InstToken authentication, enter it in the second prompt.  The corresponding part in the configuration file will look like this:
+
+.. code-block:: none
 
     [InstToken]
     X-ELS-APIKey = XXX
@@ -49,7 +57,7 @@ If the configuration file does not exist, `pybliometrics` will raise a warning. 
 
 If you need to use a proxy, please edit the file manually to include a section that looks like so:
 
-.. code-block:: batch
+.. code-block:: none
 
     [Proxy]
     ftp = socks5://127.0.0.1:1234
@@ -57,4 +65,17 @@ If you need to use a proxy, please edit the file manually to include a section t
     https = socks5://127.0.0.1:1234
 
 
-The presence of this information will make use of the proxy, so be sure to remove the block when you don't want to use a proxy.
+The presence of this information will make use of the proxy.  Be sure to remove the block when you don't want to use a proxy.
+
+Custom location
+~~~~~~~~~~~~~~~
+
+You may set the location of the configuration file yourself by putting it in the environ using the "PYB_CONFIG_FILE" keyword.  For this to take effect you need to set the environ *before* importing pybliometrics:
+
+.. code-block:: python
+
+    import os
+
+    os.environ['PYB_CONFIG_FILE'] = "C:/Custom/Location/config.ini"
+
+    import pybliometrics
