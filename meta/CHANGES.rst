@@ -3,6 +3,16 @@ Change Log
 
 .. toctree::
 
+2.5
+~~~
+
+2020-05-25
+
+* New class `SerialSearch()` to search via the Serial Title API.
+* Add new exception Scopus403Error for forbidden access.
+* Fix bug with `AuthorRetrieval().get_coauthors()` only returning the first 25 results.
+* Fix bug with progress bar in search classes not showing.
+
 2.4
 ~~~
 
