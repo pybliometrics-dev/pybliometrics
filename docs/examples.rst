@@ -25,6 +25,7 @@ Metadata APIs
 .. toctree::
     examples/CitationOverview.rst
     examples/PlumXMetrics.rst
+    examples/SerialSearch.rst
     examples/SerialTitle.rst
 
 One other Metadata API, the Subject Classifications, is not implemented yet.
