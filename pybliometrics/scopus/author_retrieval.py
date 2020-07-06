@@ -78,7 +78,10 @@ class AuthorRetrieval(Retrieval):
 
     @property
     def eid(self):
-        """The EID of the author.  Might differ from the one provided."""
+        """The EID of the author.  If it differs from the one provided,
+        pybliometrics will throw a warning informing the user about
+        author profile merges.
+        """
         return self._json['coredata']['eid']
 
     @property

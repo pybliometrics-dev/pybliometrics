@@ -21,7 +21,7 @@ You can obtain basic information just by printing the object:
     which were cited by 8,992 author(s) in 11,187 document(s)
 
 
-The object can access many bits of data about an author, including the number of papers, h-index, current affiliation, etc.  When a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ is returned, the can neatly be turned into `pandas <https://pandas.pydata.org/>`_ DataFrames.
+The object can access many bits of data about an author, including the number of papers, h-index, current affiliation, etc.  When a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ is returned, it can neatly be turned into a `pandas <https://pandas.pydata.org/>`_ DataFrame.
 
 Information on names:
 
@@ -93,7 +93,9 @@ Bibliometric information:
     ('2213', '5'), ('1502', '1'), ('3100', '9')]
 
 
-Extensive nformation on current and former affiliations is provided as namedtuples as well:
+If you request data of a merged author profile, Scopus returns information belonging to that new profile.  pybliometrics however caches information using the old ID.  With property `.identifer` you can verify the validity of the provided Author ID.  When the provided ID belongs to a profile that has been merged, pybliometrics will throw a UserWarning (upon accessing the property `.identifer`) pointing to the ID of the new main profile.
+
+Extensive information on current and former affiliations is provided as namedtuples as well:
 
 .. code-block:: python
 
@@ -113,7 +115,7 @@ Extensive nformation on current and former affiliations is provided as namedtupl
     org_domain='fhi.mpg.de', org_URL='https://www.fhi.mpg.de/')
 
 
-The affiliation ID to be used for the `ContentAffiliationRetrieval <../reference/pybliometrics.ContentAffiliationRetrieval>`_ class.
+The affiliation ID to be used for the :doc:`ContentAffiliationRetrieval <../reference/pybliometrics.ContentAffiliationRetrieval>` class.
 
 There are a number of getter methods for convenience.  For example, you can obtain some basic information on co-authors as a list of namedtuples (query will not be cached):
 
@@ -130,7 +132,7 @@ There are a number of getter methods for convenience.  For example, you can obta
 
 Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpeted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `au.get_cache_file_mdate()` to get the date of last modification, and `au.get_cache_file_age()` the number of days since the last modification.
 
-Method `get_document_eids()` performs a search for the author's publications with `ScopusSearch <../reference/pybliometrics.ScopusSearch>`_ to ease interoperationability with other APIs:
+Method `get_document_eids()` performs a search for the author's publications with :doc:`ScopusSearch <../reference/pybliometrics.ScopusSearch>` to ease interoperationability with other APIs:
 
 .. code-block:: python
 

@@ -172,7 +172,7 @@ The class' main attribute `results` returns a list of `namedtuples <https://docs
 
 Keep in mind that no more than 100 authors are included in the search results.
 
-The EIDs of documents can be used for the `AbstractRetrieval <../reference/pybliometrics.AbstractRetrieval.html>`_ class and the Scopus Author IDs in column "authid" for the `AuthorRetrieval <../reference/pybliometrics.AuthorRetrieval.html>`_ class.
+The EIDs of documents can be used for the :doc:`AbstractRetrieval <../reference/pybliometrics.AbstractRetrieval>` class and the Scopus Author IDs in column "authid" for the :doc:`AuthorRetrieval <../reference/pybliometrics.AuthorRetrieval>` class.
 
 Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpeted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `s.get_cache_file_mdate()` to get the date of last modification, and `s.get_cache_file_age()` the number of days since the last modification.
 

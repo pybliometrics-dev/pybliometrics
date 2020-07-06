@@ -21,7 +21,7 @@ You can obtain a search summary just by printing the object:
         Max Planck Institute for Innovation and Competition
 
 
-The class mostly serves to provide a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing information about the affiliation.  One of them is the affiliation ID which you can use for the `ScopusAffiliation <../reference/pybliometrics.ScopusAffiliation.html>`_ class:
+The class mostly serves to provide a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing information about the affiliation.  One of them is the affiliation ID which you can use for the :doc:`ContentAffiliationRetrieval <../reference/pybliometrics.ContentAffiliationRetrieval>` class:
 
 .. code-block:: python
 
