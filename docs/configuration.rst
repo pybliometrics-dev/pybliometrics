@@ -73,7 +73,7 @@ The presence of this information will make use of the proxy.  Be sure to remove 
 Runtime
 ~~~~~~~
 
-You can easily inspect or change configuration values at runtime.  Simply import the config beforhand and assign new values to the keys as if the config was a dictionary:
+You can easily inspect or change configuration values at runtime.  Simply import the config beforehand and assign new values to the keys as if the config was a dictionary:
 
 .. code-block:: python
 
@@ -86,7 +86,7 @@ You can easily inspect or change configuration values at runtime.  Simply import
 Custom location
 ~~~~~~~~~~~~~~~
 
-If you prefer to have the configuration file somwhere else, you can `pybliometrics` tell where to look for it.  You will need the `environment facility <https://docs.python.org/3/library/os.html#file-names-command-line-arguments-and-environment-variables>`_ of the base package `os`.  For this to take effect you need to set the environ *before* importing pybliometrics.  `pybliometrics` uses the "PYB_CONFIG_FILE" keyword:
+If you prefer to have the configuration file somewhere else, you can `pybliometrics` tell where to look for it.  You will need the `environment facility <https://docs.python.org/3/library/os.html#file-names-command-line-arguments-and-environment-variables>`_ of the base package `os`.  For this to take effect you need to set the environ *before* importing pybliometrics.  `pybliometrics` uses the "PYB_CONFIG_FILE" keyword:
 
 .. code-block:: python
 

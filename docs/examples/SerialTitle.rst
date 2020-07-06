@@ -1,7 +1,7 @@
 Serial Title
 ------------
 
-:doc:`Serial Title <../reference/pybliometrics.SerialTitle>` implements the `Serial Title API <https://api.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It provides basic information on registered serials (also called sources), like publisher and identifers, but also metrics.
+:doc:`Serial Title() <../reference/pybliometrics.SerialTitle>` implements the `Serial Title API <https://api.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It provides basic information on registered serials (also called sources), like publisher and identifiers, but also metrics.
 
 You initialize the class with an ISSN or an E-ISSN (works with and without hyphen, but leading zeros are mandatory):
 
@@ -57,4 +57,4 @@ The fields associated with the source are stored as a list of `namedtuples <http
 
 Additionally there are many bits of information on Open Access status which are often empty however.
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpeted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `source.get_cache_file_mdate()` to get the date of last modification, and `source.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `source.get_cache_file_mdate()` to get the date of last modification, and `source.get_cache_file_age()` the number of days since the last modification.

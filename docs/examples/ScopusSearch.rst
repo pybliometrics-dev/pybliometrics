@@ -1,7 +1,7 @@
 Scopus Search
 -------------
 
-:doc:`ScopusSearch <../reference/pybliometrics.ScopusSearch>` implements the `Scopus Search API <https://api.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_.  It performs a query to search for articles and then retrieves the records of the query.
+:doc:`ScopusSearch ()<../reference/pybliometrics.ScopusSearch>` implements the `Scopus Search API <https://api.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_.  It performs a query to search for articles and then retrieves the records of the query.
 
 The class is initialized with a search query.  Any query that works in the `Advanced Search on scopus.com <https://www.scopus.com/search/form.uri?display=advanced>`_ will work.  An invalid search query will result in an error.
 
@@ -34,7 +34,7 @@ You can obtain a search summary just by printing the object:
 
 Non-subscribers must instantiate the class with `subscriber=False`.  They may only get 5000 results per query, whereas this limit does not exist for subscribers.
 
-Users can recieve the number of results programmatically via `.get_results_size()`:
+Users can receive the number of results programmatically via `.get_results_size()`:
 
 .. code-block:: python
 
@@ -172,9 +172,9 @@ The class' main attribute `results` returns a list of `namedtuples <https://docs
 
 Keep in mind that no more than 100 authors are included in the search results.
 
-The EIDs of documents can be used for the :doc:`AbstractRetrieval <../reference/pybliometrics.AbstractRetrieval>` class and the Scopus Author IDs in column "authid" for the :doc:`AuthorRetrieval <../reference/pybliometrics.AuthorRetrieval>` class.
+The EIDs of documents can be used for the :doc:`AbstractRetrieval() <../reference/pybliometrics.AbstractRetrieval>` class and the Scopus Author IDs in column "authid" for the :doc:`AuthorRetrieval() <../reference/pybliometrics.AuthorRetrieval>` class.
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpeted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `s.get_cache_file_mdate()` to get the date of last modification, and `s.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `s.get_cache_file_mdate()` to get the date of last modification, and `s.get_cache_file_age()` the number of days since the last modification.
 
 There are sometimes missing fields in the returned results although it exists in the Scopus database.  For example, the EID may be missing, even though every element always has an EID.  This is not a bug of `pybliometrics`.  Instead it is somehow related to a problem in the download process from the Scopus database.  To check for completeness of specific fields, use parameter `integrity_fields`, which accepts any iterable.  Using parameter `integrity_action` you can choose between two actions on what to do if the integrity check fails: Set `integrity_action="warn"` to issue a UserWarning, or set `integrity_action="raise"` to raise an AttributeError.
 

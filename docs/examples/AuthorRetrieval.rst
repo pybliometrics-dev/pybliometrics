@@ -1,7 +1,7 @@
 Author Retrieval
 ----------------
 
-:doc:`AuthorRetrieval <../reference/pybliometrics.AuthorRetrieval>` implements the `Author Retrieval API <https://api.elsevier.com/documentation/AuthorRetrievalAPI.wadl>`_.
+:doc:`AuthorRetrieval() <../reference/pybliometrics.AuthorRetrieval>` implements the `Author Retrieval API <https://api.elsevier.com/documentation/AuthorRetrievalAPI.wadl>`_.
 
 This class is to interact with the entire author record in Scopus, using the author's Scopus ID (which can be passed as either an integer or a string):
 
@@ -130,7 +130,7 @@ There are a number of getter methods for convenience.  For example, you can obta
       dtype='object')
 
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpeted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `au.get_cache_file_mdate()` to get the date of last modification, and `au.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `au.get_cache_file_mdate()` to get the date of last modification, and `au.get_cache_file_age()` the number of days since the last modification.
 
 Method `get_document_eids()` performs a search for the author's publications with :doc:`ScopusSearch <../reference/pybliometrics.ScopusSearch>` to ease interoperationability with other APIs:
 

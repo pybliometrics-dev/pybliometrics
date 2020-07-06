@@ -1,7 +1,7 @@
 Serial Search
 -------------
 
-:doc:`SerialSearch <../reference/pybliometrics.SerialSearch>` implements the search of the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It performs a search for serial sources (journal, tradejournal, conferenceproceeding, bookseries) by title, ISSN, publisher, subject or source type.
+:doc:`SerialSearch() <../reference/pybliometrics.SerialSearch>` implements the search of the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It performs a search for serial sources (journal, tradejournal, conferenceproceeding, bookseries) by title, ISSN, publisher, subject or source type.
 
 The class is initialized with a search query dictionary.  Its keys are limited to the following set: "title", "issn", "pub", "subj", "subjCode", "content", and "oa".  No more than 200 results can be returned.
 
@@ -11,7 +11,7 @@ The class is initialized with a search query dictionary.  Its keys are limited t
     >>> s = SerialSearch(query={"title": "SoftwareX"})
 
 
-Users can recieve the number of results programmatically via `.get_results_size()`:
+Users can receive the number of results programmatically via `.get_results_size()`:
 
 .. code-block:: python
 
@@ -52,7 +52,7 @@ The class' main attribute `results` returns a list of `OrderedDict <https://docs
 
 Information beyond the first 16 columns refer to journal metrics: publication counts, citation counts, not-cited documents, share of not-cited documents, and the share of review article documents, for each year since indexation.
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpeted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `s.get_cache_file_mdate()` to get the date of last modification, and `s.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `s.get_cache_file_mdate()` to get the date of last modification, and `s.get_cache_file_age()` the number of days since the last modification.
 
 The Serial Title API allows a differing information depth via
 `views <https://dev.elsevier.com/guides/SerialTitleViews.htm>`_.  While all views are restricted, view 'ENHANCED' is the highest among them. In addition to the information contained in 'STANDARD' it contains yearly journal metrics.  If you are not interested in this information, or when speed is an issue, choose the 'STANDARD' view.

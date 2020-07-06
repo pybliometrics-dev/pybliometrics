@@ -1,7 +1,7 @@
 Content Affiliation Retrieval
 -----------------------------
 
-:doc:`ContentAffiliationRetrieval <../reference/pybliometrics.ContentAffiliationRetrieval>` implements the `Content Affiliation Retrieval API <https://api.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, like city, country, its members, and more.
+:doc:`ContentAffiliationRetrieval() <../reference/pybliometrics.ContentAffiliationRetrieval>` implements the `Content Affiliation Retrieval API <https://api.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, like city, country, its members, and more.
 
 You initialize the class with Scopus' Affiliation ID:
 
@@ -82,4 +82,4 @@ Using `pandas <https://pandas.pydata.org/>`_ you can easily turn this into a Dat
 
 More on different types of affiliations in section `tips <../tips.html#affiliations>`_.
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpeted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `aff.get_cache_file_mdate()` to get the date of last modification, and `aff.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `aff.get_cache_file_mdate()` to get the date of last modification, and `aff.get_cache_file_age()` the number of days since the last modification.
