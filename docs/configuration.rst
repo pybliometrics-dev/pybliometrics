@@ -1,7 +1,9 @@
 Configuration
 -------------
 
-Since version 1.0, `pybliometrics` uses a config file stored `~/.scopus/config.ini`.  It saves credentials as well as directory names for folders that store cached files.  Folder `~/` refers to your private home directory or home path.  On many Windows machines this is usually `C:/Document and Settings/<Your User Name>`.
+config.ini
+~~~~~~~~~~
+`pybliometrics` stores values it needs for operation in a config file `~/.scopus/config.ini`.  It saves credentials as well as directory names for folders that store cached files.  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
 
 By default, after initial set-up (see below), the file will look like this:
 
@@ -23,10 +25,10 @@ By default, after initial set-up (see below), the file will look like this:
 
 where YYY refers to `~/` and XXX refers to your API Key.
 
-Simply edit this file to change
+Simply edit this file to change constantly
 
-* ...your API key
-* ...the paths where `pybliometrics` should cache downloaded files (`pybliometrics` will create them if necessary)
+* ... your API key
+* ... the paths where `pybliometrics` should cache downloaded files (`pybliometrics` will create them if necessary)
 
 Set-up
 ~~~~~~
@@ -67,10 +69,24 @@ If you need to use a proxy, please edit the file manually to include a section t
 
 The presence of this information will make use of the proxy.  Be sure to remove the block when you don't want to use a proxy.
 
+
+Runtime
+~~~~~~~
+
+You can easily inspect or change configuration values at runtime.  Simply import the config beforhand and assign new values to the keys as if the config was a dictionary:
+
+.. code-block:: python
+
+    from pybliometrics.scopus.utils import config
+    
+    print(config['Authentication']['APIKey'])
+    config['Proxy']['ftp'] = 'socks5://localhost:8080'
+
+
 Custom location
 ~~~~~~~~~~~~~~~
 
-You may set the location of the configuration file yourself by putting it in the environ using the "PYB_CONFIG_FILE" keyword.  For this to take effect you need to set the environ *before* importing pybliometrics:
+If you prefer to have the configuration file somwhere else, you can `pybliometrics` tell where to look for it.  You will need the `environment facility <https://docs.python.org/3/library/os.html#file-names-command-line-arguments-and-environment-variables>`_ of the base package `os`.  For this to take effect you need to set the environ *before* importing pybliometrics.  `pybliometrics` uses the "PYB_CONFIG_FILE" keyword:
 
 .. code-block:: python
 
