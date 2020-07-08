@@ -23,43 +23,33 @@ m7 = PlumXMetrics('dQw4w9WgXcQ', 'youtubeVideoId', refresh=30)
 
 
 def test_category_totals():
-    expected = set(['name', 'total'])
+    m1_received = sorted([c.name  for c in m1.category_totals])
+    m1_expected = ['capture', 'citation', 'mention', 'socialMedia', 'usage']
+    assert_equal(m1_received, m1_expected)
+    m2_received = sorted([c.name  for c in m2.category_totals])
+    m2_expected = ['capture', 'citation', 'mention']
+    assert_equal(m2_received, m2_expected)
     assert_equal(m3.category_totals, None)
+    m4_received = sorted([c.name  for c in m4.category_totals])
+    m4_expected = ['capture', 'mention', 'socialMedia']
+    assert_equal(m4_received, m4_expected)
+    m6_received = sorted([c.name  for c in m6.category_totals])
+    m6_expected = ['capture', 'mention', 'socialMedia', 'usage']
+    assert_equal(m6_received, m6_expected)
+    m7_received = sorted([c.name  for c in m7.category_totals])
+    m7_expected = ['mention', 'socialMedia', 'usage']
+    assert_equal(m7_received, m7_expected)
     for plumx in (m1, m2, m4, m5, m6, m7):
-        assert_true(isinstance(plumx.category_totals, list))
-        cats = [i.name for i in plumx.category_totals]
-        if plumx in (m2, m5):
-            assert_true('socialMedia' not in cats)
-        else:
-            assert_true('socialMedia' in cats)
-        if plumx in (m1, m2, m5):
-            assert_true('citation' in cats)
-        else:
-            assert_true('citation' not in cats)
-        if plumx != m2:
-            assert_true('usage' in cats)
-        else:
-            assert_true('usage' not in cats)
-        if plumx != m7:
-            assert_true('capture' in cats)
-        else:
-            assert_true('capture' not in cats)
-        if plumx in (m2, m7):
-            assert_true(len(plumx.category_totals) >= 3)
-        elif plumx in (m4, m5, m6):
-            assert_true(len(plumx.category_totals) >= 4)
-        else:
-            assert_true(len(plumx.category_totals) >= 5)
         m_fields = set(field for ntup in plumx.category_totals for field in ntup._fields)
-        assert_equal(m_fields, expected)
+        assert_equal(m_fields, {'name', 'total'})
         zero_totals = [i.total for i in plumx.category_totals if i.total <= 0]
         assert_equal(zero_totals, [])
 
 
 def test_capture():
-    expected = set(['name', 'total'])
-    for plumx in (m3, m7):
-        assert_equal(plumx.capture, None)
+    assert_equal(m3.capture, None)
+    assert_equal(m7.capture, None)
+    expected = {'name', 'total'}
     for plumx in (m1, m2, m4, m5, m6):
         assert_true(isinstance(plumx.capture, list))
         assert_true(len(plumx.capture) > 0)
@@ -70,9 +60,11 @@ def test_capture():
 
 
 def test_citation():
-    expected = set(['name', 'total'])
-    for plumx in (m3, m4, m6, m7):
-        assert_equal(plumx.citation, None)
+    assert_equal(m4.citation, None)
+    assert_equal(m4.citation, None)
+    assert_equal(m6.citation, None)
+    assert_equal(m7.citation, None)
+    expected = {'name', 'total'}
     for plumx in (m1, m2, m5):
         assert_true(isinstance(plumx.citation, list))
         assert_true(len(plumx.citation) > 0)
@@ -83,8 +75,8 @@ def test_citation():
 
 
 def test_mention():
-    expected = set(['name', 'total'])
     assert_equal(m3.mention, None)
+    expected = {'name', 'total'}
     for plumx in (m1, m2, m4, m5, m6, m7):
         assert_true(isinstance(plumx.mention, list))
         assert_true(len(plumx.mention) > 0)
@@ -95,9 +87,10 @@ def test_mention():
 
 
 def test_social_media():
-    expected = set(['name', 'total'])
-    for plumx in (m2, m3, m5):
-        assert_equal(plumx.social_media, None)
+    assert_equal(m2.social_media, None)
+    assert_equal(m3.social_media, None)
+    assert_equal(m5.social_media, None)
+    expected = {'name', 'total'}
     for plumx in (m1, m4, m6, m7):
         assert_true(isinstance(plumx.social_media, list))
         assert_true(len(plumx.social_media) > 0)
@@ -108,15 +101,14 @@ def test_social_media():
 
 
 def test_usage():
-    expected = set(['name', 'total'])
-    for plumx in (m2, m3):
-        assert_equal(plumx.usage, None)
-    for plumx in (m1, m4, m5, m6, m7):
+    assert_equal(m2.usage, None)
+    assert_equal(m3.usage, None)
+    assert_equal(m4.usage, None)
+    expected = {'name', 'total'}
+    for plumx in (m1, m5, m6, m7):
         assert_true(isinstance(plumx.usage, list))
         assert_true(len(plumx.usage) > 0)
         m_fields = set(field for ntup in plumx.usage for field in ntup._fields)
         assert_equal(m_fields, expected)
         zero_totals = [i.total for i in plumx.usage if i.total <= 0]
         assert_equal(zero_totals, [])
-
-

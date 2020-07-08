@@ -10,101 +10,101 @@ from pybliometrics.scopus import SerialTitle
 # SoftwareX
 sofwarex = SerialTitle("2352-7110", refresh=30)
 # ISA
-isa = SerialTitle("5617-1099", refresh=30)
+# isa = SerialTitle("0018-9219", refresh=30)
 
 
 def test_aggregation_type():
     assert_equal(sofwarex.aggregation_type, "journal")
-    assert_equal(isa.aggregation_type, "conferenceproceeding")
+    # assert_equal(isa.aggregation_type, "conferenceproceeding")
 
 
 def test_citescoreyearinfolist():
-    assert_equal(sofwarex.citescoreyearinfolist,
-        [('2018', '11.56'), ('2019', '2.18')])
-    assert_equal(isa.citescoreyearinfolist, None)
+    expected1 = [('2019', '2.4'), ('2020', '2.1')]
+    assert_equal(sofwarex.citescoreyearinfolist, expected1)
+    # assert_equal(isa.citescoreyearinfolist, None)
 
 
 def test_eissn():
     assert_equal(sofwarex.eissn, "2352-7110")
-    assert_equal(isa.eissn, None)
+    # assert_equal(isa.eissn, None)
 
 
 def test_issn():
     assert_equal(sofwarex.issn, None)
-    assert_equal(isa.issn, "5617-1099")
+    # assert_equal(isa.issn, "5617-1099")
 
 
 def test_oaallowsauthorpaid():
     assert_equal(sofwarex.oaallowsauthorpaid, None)
-    assert_equal(isa.oaallowsauthorpaid, None)
+    # assert_equal(isa.oaallowsauthorpaid, None)
 
 
 def test_openaccess():
     assert_equal(sofwarex.openaccess, '1')
-    assert_equal(isa.openaccess, None)
+    # assert_equal(isa.openaccess, None)
 
 
 def test_openaccessstartdate():
     assert_equal(sofwarex.openaccessstartdate, None)
-    assert_equal(isa.openaccessstartdate, None)
+    # assert_equal(isa.openaccessstartdate, None)
 
 
 def test_openaccesstype():
     assert_equal(sofwarex.openaccesstype, None)
-    assert_equal(isa.openaccesstype, None)
+    # assert_equal(isa.openaccesstype, None)
 
 
 def test_openaccessarticle():
     assert_equal(sofwarex.openaccessarticle, True)
-    assert_equal(isa.openaccessarticle, None)
+    # assert_equal(isa.openaccessarticle, None)
 
 
 def test_openarchivearticle():
     assert_equal(sofwarex.openarchivearticle, None)
-    assert_equal(isa.openarchivearticle, None)
+    # assert_equal(isa.openarchivearticle, None)
 
 
 def test_openaccesssponsorname():
     assert_equal(sofwarex.openaccesssponsorname, None)
-    assert_equal(isa.openaccesssponsorname, None)
+    # assert_equal(isa.openaccesssponsorname, None)
 
 
 def test_openaccessuserlicense():
     assert_equal(sofwarex.openaccessuserlicense, None)
-    assert_equal(isa.openaccessuserlicense, None)
+    # assert_equal(isa.openaccessuserlicense, None)
 
 
 def test_publisher():
     assert_equal(sofwarex.publisher, "Elsevier BV")
-    assert_equal(isa.publisher, "Instrument Society of America")
+    # assert_equal(isa.publisher, "Instrument Society of America")
 
 
 def test_scopus_source_link():
-    assert_equal(sofwarex.scopus_source_link,
-        "https://www.scopus.com/source/sourceInfo.url?sourceId=21100422153")
-    assert_equal(isa.scopus_source_link,
-        "https://www.scopus.com/source/sourceInfo.url?sourceId=110387")
+    expected1 = "https://www.scopus.com/source/sourceInfo.url?sourceId=21100422153"
+    assert_equal(sofwarex.scopus_source_link, expected1)
+    # expected2 = "https://www.scopus.com/source/sourceInfo.url?sourceId=110387"
+    # assert_equal(isa.scopus_source_link, expected2)
 
 
 def test_self_link():
-    assert_equal(sofwarex.self_link,
-        "https://api.elsevier.com/content/serial/title/issn/23527110")
-    assert_equal(isa.self_link,
-        "https://api.elsevier.com/content/serial/title/issn/56171099")
+    expected1 = "https://api.elsevier.com/content/serial/title/issn/23527110"
+    assert_equal(sofwarex.self_link, expected1)
+    expected2 = "https://api.elsevier.com/content/serial/title/issn/56171099"
+    # assert_equal(isa.self_link, expected2)
 
 def test_sjrlist():
-    assert_equal(sofwarex.sjrlist, ('2018', '4.539'))
-    assert_equal(isa.sjrlist, ('2006', '0.101'))
+    assert_equal(sofwarex.sjrlist, ('2019', '0.445'))
+    # assert_equal(isa.sjrlist, ('2006', '0.101'))
 
 
 def test_sniplist():
-    assert_equal(sofwarex.sniplist, ('2018', '4.905'))
-    assert_equal(isa.sniplist, ('2006', '0'))
+    assert_equal(sofwarex.sniplist, ('2019', '1.08'))
+    # assert_equal(isa.sniplist, ('2006', '0'))
 
 
 def test_source_id():
     assert_equal(sofwarex.source_id, "21100422153")
-    assert_equal(isa.source_id, "110387")
+    # assert_equal(isa.source_id, "110387")
 
 
 def test_subject_area():
@@ -114,14 +114,13 @@ def test_subject_area():
         area(area='Computer Science Applications', abbreviation='COMP', code='1706')
     ]
     assert_equal(sofwarex.subject_area, expected1)
-    expected2 = [
-        area(area='Instrumentation', abbreviation='PHYS', code='3105'),
-        area(area='Condensed Matter Physics', abbreviation='PHYS', code='3104')
-    ]
-    assert_equal(isa.subject_area, expected2)
+    # expected2 = [
+    #     area(area='Instrumentation', abbreviation='PHYS', code='3105'),
+    #     area(area='Condensed Matter Physics', abbreviation='PHYS', code='3104')
+    # ]
+    # assert_equal(isa.subject_area, expected2)
 
 
 def test_title():
     assert_equal(sofwarex.title, "SoftwareX")
-    assert_equal(isa.title,
-        "Annual ISA Analysis Division Symposium - Proceedings")
+    # assert_equal(isa.title, "Annual ISA Analysis Division Symposium - Proceedings")

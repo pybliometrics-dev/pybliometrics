@@ -188,7 +188,7 @@ def test_description():
 
 def test_doi():
     assert_equal(ab1.doi, '10.1021/acscatal.5b00538')
-    assert_equal(ab4.doi, None)
+    assert_equal(ab4.doi, '10.1016/s0304-4076(97)00018-3')
     assert_equal(ab8.doi, None)
 
 
@@ -240,10 +240,12 @@ def test_get_bibtex():
 
 def test_get_latex():
     e = 'Philip Hans Franses, Henk Hoekh and Richard Paap, \\textit{'\
-        'Bayesian analysis of seasonal unit roots and seasonal mean shifts},'\
-        ' Journal of Econometrics, \\textbf{78(2)}, pp. 359-380 (1997).\\'\
-        'href{https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&'\
-        'scp=0000016206&origin=inward}{scopus:2-s2.0-0000016206}.'
+        'Bayesian analysis of seasonal unit roots and seasonal mean shifts}, '\
+        'Journal of Econometrics, \\textbf{78(2)}, pp. 359-380 (1997). \\'\
+        'href{https://doi.org/10.1016/s0304-4076(97)00018-3}{doi:10.1016/'\
+        's0304-4076(97)00018-3}, \\href{https://www.scopus.com/inward/'\
+        'record.uri?partnerID=HzOxMe3b&scp=0000016206&origin=inward}'\
+        '{scopus:2-s2.0-0000016206}.'
     assert_equal(ab4.get_latex(), e)
 
 
