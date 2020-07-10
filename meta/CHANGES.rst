@@ -3,6 +3,17 @@ Change Log
 
 .. toctree::
 
+2.6
+~~~
+
+2020-07-10
+
+* Add support for multiple keys in the configuration file, and replace depleted keys automatically.
+* In all classes, add methods `.get_key_remaining_quota()` and `.get_key_reset_time()` to get the remaining calls of the current key and the time when the current key will be reset, relative to the last actual request.
+* Provide link examples in reference of each class.
+* In `ScopusSearch().results`, use empty strings for missing affiliations (e.g. non-org profile affiliations) when information in concatenated.
+* Fix bug in `ScopusSearch().results` when affiliation information has the wrong type (e.g. boolean).
+
 2.5
 ~~~
 
@@ -45,7 +56,7 @@ Change Log
 2020-03-22
 
 * Support for python 2.7 has ended.
-* Introduce Base() class from which all classes inherit the following two methos: `get_cache_file_age()` and `get_cache_file_mdate()`.
+* Introduce `Base()` class from which all classes inherit the following two methods: `.get_cache_file_age()` and `.get_cache_file_mdate()`.
 * In all classes, refresh parameter accepts an integer which will refresh the cached file if the last modification date is longer than that number of days ago.
 * Provide extensive affiliation information in `AuthorRetrieval().affiliation_current` and `AuthorRetrieval().affiliation_history` as namedtuples.
 * Provide more robust example of the "Download Machine" in the documentation.
