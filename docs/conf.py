@@ -41,7 +41,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 pygments_style = 'sphinx'
 todo_include_todos = False
-autodoc_member_order = 'groupwise'
 
 # Options for HTML output
 html_theme = 'alabaster'
@@ -68,7 +67,7 @@ htmlhelp_basename = 'pybliometricsdoc'
 autoclass_content = 'both'
 
 # Option to group members of classes
-autodoc_member_order = 'groupwise'
+autodoc_member_order = 'bysource'
 
 # -- Options for LaTeX output ---------------------------------------------
 latex_elements = {
