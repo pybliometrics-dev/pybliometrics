@@ -147,6 +147,10 @@ class SerialTitle(Retrieval):
             BASIC, STANDARD, ENHANCED.  For details see
             https://dev.elsevier.com/guides/SerialTitleViews.htm.
 
+        Examples
+        --------
+        See https://pybliometrics.readthedocs.io/en/stable/examples/SerialTitle.html.
+
         Notes
         -----
         The directory for cached results is `{path}/{view}/{source_id}`,

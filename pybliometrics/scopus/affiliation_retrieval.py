@@ -130,6 +130,10 @@ class ContentAffiliationRetrieval(Retrieval):
             is passed, cached file will be refreshed if the number of days
             since last modification exceeds that value.
 
+        Examples
+        --------
+        See https://pybliometrics.readthedocs.io/en/stable/examples/ContentAffiliationRetrieval.html.
+
         Notes
         -----
         The directory for cached results is `{path}/STANDARD/{aff_id}`,

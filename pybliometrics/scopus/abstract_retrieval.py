@@ -582,6 +582,10 @@ class AbstractRetrieval(Retrieval):
             If the id_type parameter or the view parameter contains
             invalid entries.
 
+        Examples
+        --------
+        See https://pybliometrics.readthedocs.io/en/stable/examples/AbstractRetrieval.html.
+
         Notes
         -----
         The directory for cached results is `{path}/{view}/{identifier}`,

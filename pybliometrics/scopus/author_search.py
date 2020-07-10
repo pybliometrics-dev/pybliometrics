@@ -97,6 +97,10 @@ class AuthorSearch(Search):
         ValueError
             If the integrity_action parameter is not one of the allowed ones.
 
+        Examples
+        --------
+        See https://pybliometrics.readthedocs.io/en/stable/examples/AuthorSearch.html.
+
         Notes
         -----
         The directory for cached results is `{path}/STANDARD/{fname}`,

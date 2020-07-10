@@ -76,6 +76,10 @@ class SerialSearch(Search):
             If view parameter is not one of allowed ones or if query contains
             invalid fields.
 
+        Examples
+        --------
+        See https://pybliometrics.readthedocs.io/en/stable/examples/SerialSearch.html.
+
         Notes
         -----
         The directory for cached results is `{path}/{view}/{fname}`,
