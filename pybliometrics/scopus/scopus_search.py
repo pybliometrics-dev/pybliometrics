@@ -47,10 +47,10 @@ class ScopusSearch(Search):
         for item in self._json:
             info = {}
             # Parse affiliations
-            info["affilname"] = _join(item['affiliation'], 'affilname')
-            info["afid"] = _join(item['affiliation'], 'afid')
-            info["aff_city"] = _join(item['affiliation'], 'affiliation-city')
-            info["aff_country"] = _join(item['affiliation'], 'affiliation-country')
+            info["affilname"] = _join(item, 'affilname')
+            info["afid"] = _join(item, 'afid')
+            info["aff_city"] = _join(item, 'affiliation-city')
+            info["aff_country"] = _join(item, 'affiliation-country')
             # Parse authors
             try:
                 # Deduplicate list of authors
@@ -214,12 +214,12 @@ def _deduplicate(lst):
     return out
 
 
-def _join(lst, key, sep=";"):
+def _join(item, key, sep=";"):
     """Auxiliary function to join same elements of a list of dictionaries if
     the elements are not None.
     """
     try:
-        return sep.join([d[key] or "" for d in lst])
+        return sep.join([d[key] or "" for d in item["affiliation"]])
     except (KeyError, TypeError):
         return None
 
