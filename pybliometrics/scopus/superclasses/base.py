@@ -2,7 +2,7 @@
 
 from json import dumps, loads
 from os.path import getmtime
-from time import time
+from time import localtime, strftime, time
 
 from pybliometrics.scopus.exception import ScopusQueryError
 from pybliometrics.scopus.utils import get_content, print_progress
@@ -67,9 +67,10 @@ class Base:
                 with open(fname, 'rb') as f:
                     self._json = loads(f.read().decode('utf-8'))
         else:
+            resp = get_content(url, params, *args, **kwds)
             if search_request:
                 # Download results
-                res = get_content(url, params, *args, **kwds).json()
+                res = resp.json()
                 n = int(res['search-results'].get('opensearch:totalResults', 0))
                 self._n = n
                 cursor_false = "cursor" in params and not params["cursor"]
@@ -80,8 +81,10 @@ class Base:
                             'subscription=True')
                     raise ScopusQueryError(text)
                 if download:
-                    self._json = _parse(res, n, url, params, verbose,
-                                        *args, **kwds)
+                    data, header = _parse(res, n, url, params, verbose,
+                                          *args, **kwds)
+                    self._json = data
+                    self._header = header
                     with open(fname, 'wb') as f:
                         for item in self._json:
                             f.write(f'{dumps(item)}\n'.encode('utf-8'))
@@ -89,10 +92,11 @@ class Base:
                     # Assures that properties will not result in an error
                     self._json = []
             else:
-                content = get_content(url, params, *args, **kwds).text.encode('utf-8')
+                content = resp.text.encode('utf-8')
                 self._json = loads(content)
                 with open(fname, 'wb') as f:
                     f.write(content)
+                self._header = resp.headers
             self._mdate = time()
 
     def get_cache_file_age(self):
@@ -101,11 +105,27 @@ class Base:
         return int(diff / 86400)
 
     def get_cache_file_mdate(self):
-        """Return the modification date of the cached file as
-        datetime object.
+        """Return the modification date of the cached file."""
+        return strftime('%Y-%m-%d %H:%M:%S', localtime(self._mdate))
+
+    def get_key_remaining_quota(self):
+        """Return number of remaining requests for the current key and the
+        current API (relative on last actual request).
         """
-        from datetime import datetime
-        return datetime.fromtimestamp(self._mdate)
+        try:
+            return self._header['X-RateLimit-Remaining']
+        except AttributeError:
+            return None
+
+    def get_key_reset_time(self):
+        """Return time when current key is reset (relative on last
+        actual request).
+        """
+        try:
+            date = int(self._header['X-RateLimit-Reset'])/1000
+            return strftime('%Y-%m-%d %H:%M:%S', localtime(date))
+        except AttributeError:
+            return None
 
 
 def _check_file_age(fname, refresh):
@@ -153,9 +173,10 @@ def _parse(res, n, url, params, verbose, *args, **kwds):
         else:
             start += params["count"]
             params.update({'start': start})
-        res = get_content(url, params, *args, **kwds).json()
-        _json.extend(res.get('search-results', {}).get('entry', []))
+        resp = get_content(url, params, *args, **kwds)
+        data = resp.json()
+        _json.extend(data.get('search-results', {}).get('entry', []))
         if verbose:
             chunk += 1
             print_progress(chunk, chunks)
-    return _json
+    return _json, resp.headers
