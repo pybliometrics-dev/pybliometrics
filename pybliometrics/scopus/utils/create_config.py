@@ -15,8 +15,9 @@ def create_config():
             config.set('Directories', key, value)
         # Set authentication
         config.add_section('Authentication')
-        prompt_key = "Please enter your API Key, obtained from "\
-                     "http://dev.elsevier.com/myapikey.html: \n"
+        prompt_key = "Please enter your API Key(s), obtained from "\
+                     "http://dev.elsevier.com/myapikey.html.  Separate "\
+                     "multple keys using a comma:\n"
         key = input(prompt_key)
         config.set('Authentication', 'APIKey', key)
         prompt_token = "API Keys are sufficient for most users.  If you "\

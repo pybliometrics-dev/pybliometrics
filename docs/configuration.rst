@@ -10,29 +10,27 @@ By default, after initial set-up (see below), the file will look like this:
 .. code-block:: none
 
     [Directories]
-    AbstractRetrieval = YYY/.scopus/abstract_retrieval
-    AffiliationSearch = YYY/.scopus/affiliation_search
-    AuthorRetrieval = YYY/.scopus/author_retrieval
-    AuthorSearch = YYY/.scopus/author_search
-    CitationOverview = YYY/.scopus/citation_overview
-    ContentAffiliationRetrieval = YYY/.scopus/affiliation_retrieval
-    ScopusSearch = YYY/.scopus/scopus_search
-    SerialTitle = YYY/.scopus/serial_title
+    AbstractRetrieval = PPP/.scopus/abstract_retrieval
+    AffiliationSearch = PPP/.scopus/affiliation_search
+    AuthorRetrieval = PPP/.scopus/author_retrieval
+    AuthorSearch = PPP/.scopus/author_search
+    CitationOverview = PPP/.scopus/citation_overview
+    ContentAffiliationRetrieval = PPP/.scopus/affiliation_retrieval
+    ScopusSearch = PPP/.scopus/scopus_search
+    SerialTitle = PPP/.scopus/serial_title
 
     [Authentication]
-    APIKey = XXX
+    APIKey = XXX, YYYY,
+        ZZZ
 
 
-where YYY refers to `~/` and XXX refers to your API Key.
+where PPP refers to `~/` and XXX, YYYY and ZZZ refer to your API Keys, of which you can register 10 for your account.  To make pybliometrics replace a depleted key with a random one of the others, separate keys on a comma.  Multi-line statements are allowed as long they are indented.
 
-Simply edit this file to change constantly
-
-* ... your API key
-* ... the paths where `pybliometrics` should cache downloaded files (`pybliometrics` will create them if necessary)
+Simply edit this file to change the paths where `pybliometrics` should cache downloaded files (`pybliometrics` will create them if necessary)
 
 Set-up
 ~~~~~~
-If the configuration file does not exist, `pybliometrics` will raise a warning.  To generate the configuration file, issue the command
+If the configuration file does not exist, `pybliometrics` will prompt you to provide the configuration values.  To enforce the process yourself, issue the command
 
 .. code-block:: python
 
@@ -40,12 +38,12 @@ If the configuration file does not exist, `pybliometrics` will raise a warning. 
     >>> pybliometrics.scopus.utils.create_config()
 
 
-`pybliometrics` then prompts you for your credentials.  There are two prompts: For your API Key and your InstToken.  Most users only need to provide the API Key and hit enter on the second prompt.  The corresponding part of the configuration file looks like this:
+There are two prompts: For your API Key(s) and your InstToken.  Most users only need to provide the API Key(s) and hit enter on the second prompt.  The corresponding part of the configuration file looks like this:
 
 .. code-block:: none
 
     [Authentication]
-    APIKey = XXX
+    APIKey = XXX, YYY, ZZZ
 
 
 If you have to use InstToken authentication, enter it in the second prompt.  The corresponding part in the configuration file will look like this:
@@ -54,7 +52,7 @@ If you have to use InstToken authentication, enter it in the second prompt.  The
 
     [InstToken]
     X-ELS-APIKey = XXX
-    X-ELS-Insttoken = YYY
+    X-ELS-Insttoken = PPP
 
 
 If you need to use a proxy, please edit the file manually to include a section that looks like so:

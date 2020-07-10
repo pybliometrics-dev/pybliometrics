@@ -1,6 +1,6 @@
 import os
+
 import requests
-from configparser import NoOptionError
 
 from pybliometrics.scopus import exception
 from pybliometrics.scopus.utils import CONFIG_FILE, DEFAULT_PATHS, config
@@ -45,34 +45,36 @@ def get_content(url, params={}, *args, **kwds):
     resp : byte-like object
         The content of the file, which needs to be serialized.
     """
+    from random import shuffle
+
     from simplejson import JSONDecodeError
-    # Get credentials and set request headers
-    key = config.get('Authentication', 'APIKey')
-    header = {
-        'X-ELS-APIKey': key,
-        'Accept': 'application/json',
-        'User-Agent': user_agent
-        }
+
+    # Set header, params and proxy
+    keys = config.get('Authentication', 'APIKey').split(",")
+    header = {'X-ELS-APIKey': keys[0].strip(),
+              'Accept': 'application/json',
+              'User-Agent': user_agent}
     if config.has_option('Authentication', 'InstToken'):
         token = config.get('Authentication', 'InstToken')
-        header.update({'X-ELS-APIKey': key, 'X-ELS-Insttoken': token})
-    # Perform request
+        header['X-ELS-Insttoken'] = token
     params.update(**kwds)
-    # If config.ini has a section as follows:
-    #
-    # [Proxy]
-    # https = protocol://server:port
-    #
-    # it uses a proxy as defined
-    # see requests documentation for details
-    if config.has_section("Proxy"):
-        proxyDict = dict(config.items("Proxy"))
-        resp = requests.get(url, headers=header, proxies=proxyDict, params=params)
-    else:
-        resp = requests.get(url, headers=header, params=params)
-    # Try raising ScopusError with supplied error message
-    # if no message given, do without supplied error message
-    # at least raise requests error
+    proxies = dict(config._sections.get("Proxy", {}))
+
+    # Perform request, eventually replacing the current key
+    resp = requests.get(url, headers=header, proxies=proxies,
+                        params=params)
+    while resp.status_code == 429:
+        try:
+            keys.pop(0)  # Remove current key
+            shuffle(keys)
+            header['X-ELS-APIKey'] = keys[0].strip()
+            resp = requests.get(url, headers=header, proxies=proxies,
+                                params=params)
+            config['Authentication']['APIKey'] = ",".join(list(keys))
+        except IndexError:  # All keys depleted
+            break
+
+    # Eventually raise error, if possible with supplied error message
     try:
         error_type = errors[resp.status_code]
         try:
@@ -133,6 +135,7 @@ def get_folder(api, view):
     """Auxiliary function to get the cache folder belonging to an API,
     eventually create the folder.
     """
+    from configparser import NoOptionError
     if not config.has_section('Directories'):
         create_config()
     try:

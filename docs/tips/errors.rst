@@ -20,7 +20,7 @@ The following exceptions are defined:
 .. _Scopus429Error:
 
 `pybliometrics.scopus.exception.Scopus429Error: QUOTA EXCEEDED`
-    Your provided API key's weekly allowance of 5000 requests (for standard views) is depleted.  Wait a week or change the key in `~/.scopus/config.ini`.
+    Your provided API key's weekly allowance of 5000 requests (for standard views) is depleted.  If you use multiple keys, this means all your keys are depleted.
 
 `pybliometrics.scopus.exception.Scopus500Error: INTERNAL SERVER ERROR`
     Formally, the server does not respond, for various reasons.  A common reason in searches is that you use a fieldname that does not exist.  Verify that your query works in `Advanced Search <https://www.scopus.com/search/form.uri?display=advanced>`_.
