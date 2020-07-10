@@ -47,14 +47,10 @@ class ScopusSearch(Search):
         for item in self._json:
             info = {}
             # Parse affiliations
-            try:
-                info["affilname"] = _join(item['affiliation'], 'affilname')
-                info["afid"] = _join(item['affiliation'], 'afid')
-                info["aff_city"] = _join(item['affiliation'], 'affiliation-city')
-                info["aff_country"] = _join(item['affiliation'],
-                                            'affiliation-country')
-            except KeyError:
-                pass
+            info["affilname"] = _join(item['affiliation'], 'affilname')
+            info["afid"] = _join(item['affiliation'], 'afid')
+            info["aff_city"] = _join(item['affiliation'], 'affiliation-city')
+            info["aff_country"] = _join(item['affiliation'], 'affiliation-country')
             # Parse authors
             try:
                 # Deduplicate list of authors
@@ -76,11 +72,13 @@ class ScopusSearch(Search):
             if isinstance(date, list):
                 date = date[0].get('$')
             new = doc(article_number=item.get('article-number'),
-                      title=item.get('dc:title'), fund_sponsor=item.get('fund-sponsor'),
-                      subtype=item.get('subtype'), subtypeDescription=item.get('subtypeDescription'),
-                      issn=item.get('prism:issn'),
-                      creator=item.get('dc:creator'), affilname=info.get("affilname"),
-                      author_names=info.get("auth_names"), doi=item.get('prism:doi'),
+                      title=item.get('dc:title'), fund_no=item.get('fund-no'),
+                      fund_sponsor=item.get('fund-sponsor'),
+                      subtype=item.get('subtype'), doi=item.get('prism:doi'),
+                      subtypeDescription=item.get('subtypeDescription'),
+                      issn=item.get('prism:issn'), creator=item.get('dc:creator'),
+                      affilname=info.get("affilname"),
+                      author_names=info.get("auth_names"),
                       coverDate=date, volume=item.get('prism:volume'),
                       coverDisplayDate=item.get('prism:coverDisplayDate'),
                       publicationName=item.get('prism:publicationName'),
@@ -88,7 +86,7 @@ class ScopusSearch(Search):
                       aggregationType=item.get('prism:aggregationType'),
                       issueIdentifier=item.get('prism:issueIdentifier'),
                       pageRange=item.get('prism:pageRange'),
-                      author_afids=info.get("auth_afid"), fund_no=item.get('fund-no'),
+                      author_afids=info.get("auth_afid"),
                       affiliation_country=info.get("aff_country"),
                       citedby_count=item.get('citedby-count'),
                       openaccess=item.get('openaccess'), eIssn=item.get('prism:eIssn'),
@@ -220,7 +218,10 @@ def _join(lst, key, sep=";"):
     """Auxiliary function to join same elements of a list of dictionaries if
     the elements are not None.
     """
-    return sep.join([d[key] for d in lst if d[key]])
+    try:
+        return sep.join([d[key] or "" for d in lst])
+    except (KeyError, TypeError):
+        return None
 
 
 def _replace_none(lst, repl=""):
