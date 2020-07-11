@@ -68,12 +68,14 @@ class Base:
                     self._json = loads(f.read().decode('utf-8'))
         else:
             resp = get_content(url, params, *args, **kwds)
+            header = resp.headers
             if search_request:
-                # Download results
+                # Download results page-wise
                 res = resp.json()
                 n = int(res['search-results'].get('opensearch:totalResults', 0))
                 self._n = n
                 self._json = []
+                data = "".encode('utf-8')
                 cursor_false = "cursor" in params and not params["cursor"]
                 if cursor_false and n > max_entries:
                     # Stop if there are too many results
@@ -85,17 +87,14 @@ class Base:
                     data, header = _parse(res, n, url, params, verbose,
                                           *args, **kwds)
                     self._json = data
-                    self._header = header
-                    with open(fname, 'wb') as f:
-                        for item in self._json:
-                            f.write(f'{dumps(item)}\n'.encode('utf-8'))
             else:
-                content = resp.text.encode('utf-8')
-                self._json = loads(content)
-                with open(fname, 'wb') as f:
-                    f.write(content)
-                self._header = resp.headers
+                data = resp.text.encode('utf-8')
+                self._json = loads(data)
+            # Set private variables
             self._mdate = time()
+            self._header = header
+            # Finally write data
+            _write_json(fname, data)
 
     def get_cache_file_age(self):
         """Return the age of the cached file in days."""
@@ -176,3 +175,13 @@ def _parse(res, n, url, params, verbose, *args, **kwds):
             chunk += 1
             print_progress(chunk, chunks)
     return _json, resp.headers
+
+
+def _write_json(fname, data):
+    """Auxiliary function to write json to a file."""
+    with open(fname, 'wb') as f:
+        if isinstance(data, list):
+            for item in data:
+                f.write(f'{dumps(item)}\n'.encode('utf-8'))
+        else:
+            f.write(data)
