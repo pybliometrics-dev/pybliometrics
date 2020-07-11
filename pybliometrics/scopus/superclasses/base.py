@@ -73,6 +73,7 @@ class Base:
                 res = resp.json()
                 n = int(res['search-results'].get('opensearch:totalResults', 0))
                 self._n = n
+                self._json = []
                 cursor_false = "cursor" in params and not params["cursor"]
                 if cursor_false and n > max_entries:
                     # Stop if there are too many results
@@ -80,7 +81,7 @@ class Base:
                             f'number, change your query ({query}) or set '
                             'subscription=True')
                     raise ScopusQueryError(text)
-                if download:
+                if n and download:
                     data, header = _parse(res, n, url, params, verbose,
                                           *args, **kwds)
                     self._json = data
@@ -88,9 +89,6 @@ class Base:
                     with open(fname, 'wb') as f:
                         for item in self._json:
                             f.write(f'{dumps(item)}\n'.encode('utf-8'))
-                else:
-                    # Assures that properties will not result in an error
-                    self._json = []
             else:
                 content = resp.text.encode('utf-8')
                 self._json = loads(content)
@@ -155,8 +153,6 @@ def _parse(res, n, url, params, verbose, *args, **kwds):
     cursor = "cursor" in params
     if not cursor:
         start = params["start"]
-    if n == 0:
-        return ""
     _json = res.get('search-results', {}).get('entry', [])
     if verbose:
         chunk = 1
