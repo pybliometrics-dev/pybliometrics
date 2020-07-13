@@ -3,6 +3,16 @@ Change Log
 
 .. toctree::
 
+2.6.1
+~~~~~
+
+2020-07-14
+
+* Show date of retrieval when printing any class object.
+* Refactor some of the information when printing class objects.
+* Fix bug related to missing requests header with empty results.
+* Fix bug with missing source history when printing an `AuthorRetrieval()` object.
+
 2.6
 ~~~
 
