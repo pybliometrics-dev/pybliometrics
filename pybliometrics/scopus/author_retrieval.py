@@ -253,7 +253,7 @@ class AuthorRetrieval(Retrieval):
         """Return a summary string."""
         s = f"{self.indexed_name} from {self.affiliation_current[0].preferred_name},"\
             f"\npublished {int(self.document_count):,} document(s) since "\
-            f"{self.publication_range[0]} in {len(self.journal_history):,} "\
+            f"{self.publication_range[0]} in {len(self.journal_history or []):,} "\
             "distinct source(s),\nwhich were cited by "\
             f"{int(self.cited_by_count):,} author(s) in "\
             f"{int(self.citation_count):,} document(s)"
