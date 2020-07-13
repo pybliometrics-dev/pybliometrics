@@ -16,9 +16,9 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(au)
-    Kitchin J. from Department of Chemical Engineering,
-    published 100 document(s) since 1995 in 52 distinct source(s),
-    which were cited by 8,992 author(s) in 11,187 document(s)
+    Kitchin J. from Department of Chemical Engineering in United States,
+    published 101 document(s) since 1995 in 52 distinct source(s),
+    which were cited by 9,464 author(s) in 11,748 document(s) as of 2020-07-06
 
 
 The object can access many bits of data about an author, including the number of papers, h-index, current affiliation, etc.  When a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ is returned, it can neatly be turned into a `pandas <https://pandas.pydata.org/>`_ DataFrame.

@@ -16,8 +16,8 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(source)
-    'Science', journal published by American Association for the Advancement of Science
-    is active in Multidisciplinary
+    'Science', journal published by 'American Association for the Advancement of Science', is active in Multidisciplinary
+    Metrics as of 2019-05-09:
         SJR (2017): (14.142), SNIP (2017): (7.154)
         ISSN: 0036-8075, E-ISSN: 1095-9203, Scopus ID: 23571
 

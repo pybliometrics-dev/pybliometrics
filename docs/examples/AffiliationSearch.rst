@@ -17,7 +17,8 @@ You can obtain a search summary just by printing the object:
 .. code-block:: python
 
     >>> print(s)
-    Search 'AFFIL(Max Planck Institute for Innovation and Competition Munich)' yielded 1 affiliation:
+    Search 'AFFIL(Max Planck Institute for Innovation and Competition Munich)' yielded 1
+    affiliation as of 2019-01-11:
         Max Planck Institute for Innovation and Competition
 
 

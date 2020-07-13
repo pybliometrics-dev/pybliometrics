@@ -119,6 +119,7 @@ class AuthorSearch(Search):
         self.action = integrity_action
 
     def __str__(self):
+        """Print a summary string."""
         names = [f'{a["preferred-name"]["surname"]}, {a["preferred-name"]["given-name"]}'
                  for a in self._json]
         return make_search_summary(self, "author", names)

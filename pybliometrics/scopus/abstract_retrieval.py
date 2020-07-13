@@ -625,6 +625,7 @@ class AbstractRetrieval(Retrieval):
         Assumes the document is a journal article and was loaded with
         view="META_ABS" or view="FULL".
         """
+        date = self.get_cache_file_mdate().split()[0]
         # Authors
         if self.authors:
             if len(self.authors) > 1:
@@ -635,16 +636,15 @@ class AbstractRetrieval(Retrieval):
         else:
             authors = "(No authors found)"
         # All other information
-        s = f'[[{self.scopus_link}][{self.eid}]]  {authors}, {self.title}, '\
-            f'{self.publicationName}, {self.volume}'
+        s = f'{authors}: "{self.title}", {self.publicationName}, {self.volume}'
         if self.issueIdentifier:
             s += f'({self.issueIdentifier})'
         s += ', '
         s += _parse_pages(self)
         s += f'({self.coverDate[:4]}).'
         if self.doi:
-            s += ' https://doi.org/{self.doi},'
-        s += f' {self.scopus_link}, cited {self.citedby_count} times (Scopus).'
+            s += f' https://doi.org/{self.doi}.\n'
+        s += f'{self.citedby_count} citations as of {date}'
         if self.affiliation:
             s += "\n  Affiliations:\n   "
             s += '\n   '.join([aff.name for aff in self.affiliation])

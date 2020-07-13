@@ -84,13 +84,15 @@ def listify(element):
 
 def make_search_summary(self, keyword, results, joiner="\n    "):
     """Create string for str dunder of search classes."""
+    date = self.get_cache_file_mdate().split()[0]
     if self._n != 1:
         appendix = "s"
         verb = "have"
     else:
         appendix = ""
         verb = "has"
-    s = f"Search '{self.query}' yielded {self._n:,} {keyword}{appendix}"
+    s = f"Search '{self.query}' yielded {self._n:,} "\
+        f"{keyword}{appendix} as of {date}"
     if results:
         s += ":" + joiner + joiner.join(results)
     elif self._n:

@@ -110,5 +110,6 @@ class AffiliationSearch(Search):
         self.action = integrity_action
 
     def __str__(self):
+        """Return a summary string."""
         res = [a['affiliation-name'] for a in self._json]
         return make_search_summary(self, "affiliation", res)

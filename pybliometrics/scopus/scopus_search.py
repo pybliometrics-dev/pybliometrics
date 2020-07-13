@@ -202,6 +202,7 @@ class ScopusSearch(Search):
         self.action = integrity_action
 
     def __str__(self):
+        """Print a summary string."""
         return make_search_summary(self, "document", self.get_eids())
 
     def get_eids(self):

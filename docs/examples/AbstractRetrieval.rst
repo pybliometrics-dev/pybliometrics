@@ -20,11 +20,8 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(ab)
-    [[https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward][2-s2.0-84930616647]]
-    John R. Kitchin, Examples of effective data sharing in scientific publishing, ACS Catalysis,
-    5(6), pp. 3894-3899(2015). https://doi.org/{self.doi},
-    https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&scp=84930616647&origin=inward,
-    cited 10 times (Scopus).
+    John R. Kitchin: "Examples of effective data sharing in scientific publishing", ACS Catalysis, 5(6), pp. 3894-3899(2015). https://doi.org/10.1021/acscatal.5b00538.
+    11 citations as of 2020-07-07
       Affiliations:
        Carnegie Mellon University
 

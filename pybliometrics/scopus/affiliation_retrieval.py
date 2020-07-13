@@ -146,7 +146,9 @@ class ContentAffiliationRetrieval(Retrieval):
         self._json = self._json['affiliation-retrieval-response']
 
     def __str__(self):
-        s = f"{self.affiliation_name} ({int(self.author_count):,} authors, "\
-            f"{int(self.document_count):,} documents)\n"\
-            f"{self.address}\n {self.city}, {self.country}\n{self.url}"""
+        """Return a summary string."""
+        date = self.get_cache_file_mdate().split()[0]
+        s = f"{self.affiliation_name} in {self.city} in {self.country},\nhas "\
+            f"{int(self.author_count):,} connected authors and "\
+            f"{int(self.document_count):,} connected documents as of {date}"
         return s

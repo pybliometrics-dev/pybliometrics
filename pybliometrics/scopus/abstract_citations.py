@@ -186,15 +186,15 @@ class CitationOverview(Retrieval):
 
     def __str__(self):
         """Return a summary string."""
+        date = self.get_cache_file_mdate().split()[0]
         authors = [a.name for a in self.authors]
         if len(authors) > 1:
             authors[-1] = " and ".join([authors[-2], authors[-1]])
-        s = f"Document '{self.title}' by {', '.join(authors)} published in "\
-            f"'{self.publicationName}' with citation trajectory "\
-            f"for years {self._start} to {self._end}:\n"\
-            f"{'; '.join([f'{item[0]}: {item[1]}' for item in self.cc])}\n"\
-            f"Additionally cited {self.pcc} times before {self._start}, and "\
-            f"{self.lcc} times after {self._end}"
+        s = f"Document '{self.title}' by {', '.join(authors)}\npublished in "\
+            f"'{self.publicationName}' has the following citation trajectory "\
+            f"as of {date}:\n    Before {self._start} {self.pcc}; "\
+            f"{'; '.join([f'{item[0]}: {item[1]}' for item in self.cc])}; "\
+            f"After {self._end}: {self.lcc} times "
         return s
 
 

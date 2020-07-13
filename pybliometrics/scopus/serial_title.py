@@ -170,20 +170,21 @@ class SerialTitle(Retrieval):
 
     def __str__(self):
         """Print a summary string."""
+        date = self.get_cache_file_mdate().split()[0]
         areas = [e.area for e in self.subject_area]
         if len(areas) == 1:
             areas = areas[0]
         else:
             areas = " and ".join([", ".join(areas[:-1]), areas[-1]])
         s = f"'{self.title}', {self.aggregation_type} published by "\
-            f"{self.publisher} is active in {areas}\n"
+            f"'{self.publisher}', is active in {areas}\n"
         metrics = []
         if self.sjrlist:
             metrics.append(f"SJR ({self.sjrlist[0]}): ({self.sjrlist[1]})")
         if self.sniplist:
             metrics.append(f"SNIP ({self.sniplist[0]}): ({self.sniplist[1]})")
         if metrics:
-            s += "    " + ", ".join(metrics) + "\n"
+            s += f"Metrics as of {date}:\n    " + ", ".join(metrics) + "\n"
         s += f"    ISSN: {self.issn or '-'}, E-ISSN: {self.eissn or '-'}, "\
              f"Scopus ID: {self.source_id}"
         return s

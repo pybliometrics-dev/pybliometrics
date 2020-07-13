@@ -16,7 +16,7 @@ You can obtain a search summary just by printing the object:
 .. code-block:: python
 
     >>> print(s)
-    Search 'AUTHLAST(Selten) and AUTHFIRST(Reinhard)' yielded 2 authors:
+    Search 'AUTHLAST(Selten) and AUTHFIRST(Reinhard)' yielded 2 authors as of 2020-04-15:
         Selten, Reinhard
         Selten, Reinhard
 

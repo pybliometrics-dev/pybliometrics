@@ -16,10 +16,8 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(aff)
-    University of Cape Town (12,226 authors, 67,008 documents)
-    Private Bag X3, Rondebosch
-     Cape Town, South Africa
-    https://api.elsevier.com/content/affiliation/affiliation_id/60000356
+    University of Cape Town in Cape Town in South Africa,
+    has 12,463 connected authors and 68,181 connected documents as of 2020-07-11
 
 
 The object has a number of attributes but no methods.  For example, information regarding the affiliation itself:

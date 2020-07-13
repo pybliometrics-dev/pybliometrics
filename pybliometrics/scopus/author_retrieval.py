@@ -251,12 +251,14 @@ class AuthorRetrieval(Retrieval):
 
     def __str__(self):
         """Return a summary string."""
-        s = f"{self.indexed_name} from {self.affiliation_current[0].preferred_name},"\
-            f"\npublished {int(self.document_count):,} document(s) since "\
-            f"{self.publication_range[0]} in {len(self.journal_history or []):,} "\
-            "distinct source(s),\nwhich were cited by "\
-            f"{int(self.cited_by_count):,} author(s) in "\
-            f"{int(self.citation_count):,} document(s)"
+        date = self.get_cache_file_mdate().split()[0]
+        main_aff = self.affiliation_current[0]
+        s = f"{self.indexed_name} from {main_aff.preferred_name} in "\
+            f"{main_aff.country},\npublished {int(self.document_count):,} "\
+            f"document(s) since {self.publication_range[0]} in "\
+            f"{len(self.journal_history or []):,} distinct source(s),"\
+            f"\nwhich were cited by {int(self.cited_by_count):,} author(s) in "\
+            f"{int(self.citation_count):,} document(s) as of {date}"
         return s
 
     def get_coauthors(self):

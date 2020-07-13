@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
 from pybliometrics.scopus.superclasses import Search
+from pybliometrics.scopus.utils import make_search_summary
 
 
 class SerialSearch(Search):
@@ -99,9 +100,15 @@ class SerialSearch(Search):
                              ', '.join(allowed_views))
 
         # Query
+        self.query = str(query)
         Search.__init__(self, query=query, api='SerialSearch',
                         refresh=refresh, view=view)
         self._n = len(self._json['serial-metadata-response'].get('entry', []))
+
+    def __str__(self):
+        """Print a summary string."""
+        titles = [d['title'] for d in self.results]
+        return make_search_summary(self, "source", titles)
 
 
 def _merge_subject_data(subject_area_data):

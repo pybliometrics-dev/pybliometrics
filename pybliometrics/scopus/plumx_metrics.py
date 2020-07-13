@@ -175,8 +175,10 @@ class PlumXMetrics(Retrieval):
 
     def __str__(self):
         """Print a summary string."""
-        cats = [f"{c.total:,} citations in category {c.name}"
+        cats = [f"{c.total:,} citations in category '{c.name}'"
                 for c in self.category_totals]
+        date = self.get_cache_file_mdate().split()[0]
+        cats[0] += f" as of {date}"
         s = f"Document with {self.id_type} {self.identifier} has "
         s += ", ".join(cats)
         return s

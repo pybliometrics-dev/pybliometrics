@@ -11,6 +11,15 @@ The class is initialized with a search query dictionary.  Its keys are limited t
     >>> s = SerialSearch(query={"title": "SoftwareX"})
 
 
+You can obtain basic information just by printing the object:
+
+.. code-block:: python
+
+    >>> print(s)
+    Search '{'title': 'SoftwareX'}' yielded 1 source as of 2020-07-07:
+        SoftwareX
+
+
 Users can receive the number of results programmatically via `.get_results_size()`:
 
 .. code-block:: python

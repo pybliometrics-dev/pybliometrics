@@ -16,7 +16,7 @@ You can obtain a search summary just by printing the object:
 .. code-block:: python
 
     >>> print(s)
-    Search 'FIRSTAUTH ( kitchin  j.r. )' yielded 13 documents:
+    Search 'FIRSTAUTH ( kitchin  j.r. )' yielded 13 documents of 2020-04-15:
         2-s2.0-85048443766
         2-s2.0-85019169906
         2-s2.0-84971324241
