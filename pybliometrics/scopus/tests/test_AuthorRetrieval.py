@@ -138,14 +138,6 @@ def test_initials():
     assert_equal(au.initials, 'J.R.')
 
 
-def test_journal_history():
-    hist = au.journal_history
-    assert_true(isinstance(hist, list))
-    assert_true(len(hist) > 0)
-    expected = ('ACS Catalysis', 'ACS Catal.', 'j', '21555435')
-    assert_true(expected in hist)
-
-
 def test_name_variants():
     names = au.name_variants
     assert_true(isinstance(names, list))

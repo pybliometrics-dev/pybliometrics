@@ -125,20 +125,6 @@ class AuthorRetrieval(Retrieval):
         return chained_get(self._json, path)
 
     @property
-    def journal_history(self):
-        """List of named tuples of authored publications in the form
-        (sourcetitle, abbreviation, type, issn).  issn is only given
-        for journals.  abbreviation and issn may be None.
-        """
-        jour = namedtuple('Journal', 'sourcetitle abbreviation type issn')
-        path = ['author-profile', 'journal-history', 'journal']
-        hist = [jour(sourcetitle=pub.get('sourcetitle'), issn=pub.get('issn'),
-                     abbreviation=pub.get('sourcetitle-abbrev'),
-                     type=pub.get('@type'))
-                for pub in listify(chained_get(self._json, path, []))]
-        return hist or None
-
-    @property
     def name_variants(self):
         """List of named tuples containing variants of the author name with
         number of documents published with that variant.
