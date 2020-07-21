@@ -3,6 +3,14 @@ Change Log
 
 .. toctree::
 
+2.6.2
+~~~~~
+
+2020-07-21
+
+* In `AuthorRetrieval()`, remove property `.journal-history` as it was removed from the API.
+* Fix bug with duplicate entries in multi-page search results with cursors.
+
 2.6.1
 ~~~~~
 
