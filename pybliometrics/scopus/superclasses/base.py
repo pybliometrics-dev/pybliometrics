@@ -169,8 +169,8 @@ def _parse(res, n, url, params, verbose, *args, **kwds):
             start += params["count"]
             params.update({'start': start})
         resp = get_content(url, params, *args, **kwds)
-        data = resp.json()
-        _json.extend(data.get('search-results', {}).get('entry', []))
+        res = resp.json()
+        _json.extend(res.get('search-results', {}).get('entry', []))
         if verbose:
             chunk += 1
             print_progress(chunk, chunks)

@@ -61,8 +61,7 @@ def get_content(url, params={}, *args, **kwds):
     proxies = dict(config._sections.get("Proxy", {}))
 
     # Perform request, eventually replacing the current key
-    resp = requests.get(url, headers=header, proxies=proxies,
-                        params=params)
+    resp = requests.get(url, headers=header, proxies=proxies, params=params)
     while resp.status_code == 429:
         try:
             keys.pop(0)  # Remove current key
