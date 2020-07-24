@@ -260,8 +260,13 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def endingPage(self):
-        """Ending page."""
-        return chained_get(self._json, ['coredata', 'prism:endingPage'])
+        """Ending page. If this is empty, try .pageRange instead."""
+        # Try coredata first, fall back to head afterwards
+        ending = chained_get(self._json, ['coredata', 'prism:endingPage'])
+        if not ending:
+            path = ['source', 'volisspag', 'pagerange', '@last']
+            ending = chained_get(self._head, path)
+        return ending
 
     @property
     def funding(self):
@@ -341,8 +346,14 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def pageRange(self):
-        """Page range."""
-        return chained_get(self._json, ['coredata', 'prism:pageRange'])
+        """Page range.  If this is empty, try .startingPage and
+        .endingPage instead.
+        """
+        # Try data from coredata first, fall back to head afterwards
+        pages = chained_get(self._json, ['coredata', 'prism:pageRange'])
+        if not pages:
+            return chained_get(self._head, ['source', 'volisspag', 'pages'])
+        return pages
 
     @property
     def pii(self):
@@ -512,8 +523,13 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def startingPage(self):
-        """Starting page."""
-        return chained_get(self._json, ['coredata', 'prism:startingPage'])
+        """Starting page.  If this is empty, try .pageRange instead."""
+        # Try coredata first, fall back to bibrecord afterwards
+        starting = chained_get(self._json, ['coredata', 'prism:startingPage'])
+        if not starting:
+            path = ['source', 'volisspag', 'pagerange', '@first']
+            starting = chained_get(self._head, path)
+        return starting
 
     @property
     def subject_areas(self):
