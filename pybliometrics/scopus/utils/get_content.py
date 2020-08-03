@@ -158,4 +158,3 @@ def print_progress(iteration, total, length=50):
     print(f'\rProgress: |{bar}| {share:.2%} Complete', end='\r')
     if iteration == total:
         print()
-

@@ -70,12 +70,12 @@ class Base:
             resp = get_content(url, params, *args, **kwds)
             header = resp.headers
             if search_request:
-                # Download results page-wise
+                # Get number of results
                 res = resp.json()
                 n = int(res['search-results'].get('opensearch:totalResults', 0))
                 self._n = n
                 self._json = []
-                data = "".encode('utf-8')
+                # Results size check
                 cursor_false = "cursor" in params and not params["cursor"]
                 if cursor_false and n > max_entries:
                     # Stop if there are too many results
@@ -83,10 +83,15 @@ class Base:
                             f'number, change your query ({query}) or set '
                             'subscription=True')
                     raise ScopusQueryError(text)
-                if n and download:
-                    data, header = _parse(res, n, url, params, verbose,
-                                          *args, **kwds)
-                    self._json = data
+                # Download results page-wise
+                if download:
+                    data = "".encode('utf-8')
+                    if n:
+                        data, header = _parse(res, n, url, params, verbose,
+                                              *args, **kwds)
+                        self._json = data
+                else:
+                    data = None
             else:
                 data = resp.text.encode('utf-8')
                 self._json = loads(data)
@@ -179,6 +184,8 @@ def _parse(res, n, url, params, verbose, *args, **kwds):
 
 def _write_json(fname, data):
     """Auxiliary function to write json to a file."""
+    if data is None:
+        return None
     with open(fname, 'wb') as f:
         if isinstance(data, list):
             for item in data:
