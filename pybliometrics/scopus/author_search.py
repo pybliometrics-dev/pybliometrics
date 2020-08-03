@@ -120,6 +120,8 @@ class AuthorSearch(Search):
 
     def __str__(self):
         """Print a summary string."""
-        names = [f'{a["preferred-name"]["surname"]}, {a["preferred-name"]["given-name"]}'
-                 for a in self._json]
+        names = [f'{n["preferred-name"].get("surname", "?")}, '\
+                 f'{n["preferred-name"].get("given-name", "?")}; '\
+                 f'{n["dc:identifier"]} ({int(n["document-count"]):,} document(s))'\
+                 for n in self._json]
         return make_search_summary(self, "author", names)
