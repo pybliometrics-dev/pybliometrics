@@ -241,8 +241,7 @@ class AuthorRetrieval(Retrieval):
         main_aff = self.affiliation_current[0]
         s = f"{self.indexed_name} from {main_aff.preferred_name} in "\
             f"{main_aff.country},\npublished {int(self.document_count):,} "\
-            f"document(s) since {self.publication_range[0]} in "\
-            f"{len(self.journal_history or []):,} distinct source(s),"\
+            f"document(s) since {self.publication_range[0]} "\
             f"\nwhich were cited by {int(self.cited_by_count):,} author(s) in "\
             f"{int(self.citation_count):,} document(s) as of {date}"
         return s

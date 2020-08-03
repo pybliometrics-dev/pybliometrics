@@ -58,16 +58,6 @@ Bibliometric information:
     >>> au.publication_range
     ('1995', '2018')
     >>> import pandas as pd
-    >>> journals = pd.DataFrame(au.journal_history)
-    >>> journals.shape
-    (50, 4)
-    >>> journals.head()
-                                  sourcetitle           abbreviation type      issn
-    0         Journal of Physical Chemistry B          J Phys Chem B    j  15206106
-    1                        Energy and Fuels           Energy Fuels    j  15205029
-    2     Journal of Physics Condensed Matter  J Phys Condens Matter    j  1361648X
-    3                    Molecular Simulation            Mol. Simul.    j  10290435
-    4  Journal of the Electrochemical Society      J Electrochem Soc    j  00134651
     >>> areas = pd.DataFrame(au.subject_areas)
     >>> areas.shape
     (47, 3)
