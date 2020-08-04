@@ -26,7 +26,7 @@ You can obtain basic information just by printing the object:
        Carnegie Mellon University
 
 
-There are 48 attributes and 4 methods to interact with.  For example, to obtain bibliographic information:
+There are 52 attributes and 8 methods to interact with.  For example, to obtain bibliographic information:
 
 .. code-block:: python
 
@@ -44,6 +44,8 @@ There are 48 attributes and 4 methods to interact with.  For example, to obtain 
     '3894-3899'
     >>> ab.doi
     '10.1021/acscatal.5b00538'
+    >>> ab.openaccessFlag
+    True
 
 
 Attributes `idxterms`, `subject_areas` and `authkeywords` (if provided) provide an idea on the content of a document:

@@ -345,6 +345,19 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['language', '@xml:lang'])
 
     @property
+    def openaccess(self):
+        """The openaccess status encoded in single digits."""
+        return chained_get(self._json, ['coredata', 'openaccess'])
+
+    @property
+    def openaccessFlag(self):
+        """Whether the document is available via open access or not."""
+        flag = chained_get(self._json, ['coredata', 'openaccessFlag'])
+        if flag:
+            flag = flag == "true"
+        return flag
+
+    @property
     def pageRange(self):
         """Page range.  If this is empty, try .startingPage and
         .endingPage instead.

@@ -313,6 +313,20 @@ def test_language():
     assert_equal(ab8.language, None)
 
 
+def test_openaccess():
+    assert_equal(ab5.openaccess, "2")
+    assert_equal(ab6.openaccess, "1")
+    assert_equal(ab7.openaccess, "0")
+    assert_equal(ab8.openaccess, None)
+
+
+def test_openaccessFlag():
+    assert_equal(ab5.openaccessFlag, None)
+    assert_equal(ab6.openaccessFlag, True)
+    assert_equal(ab7.openaccessFlag, False)
+    assert_equal(ab8.openaccessFlag, None)
+
+
 def test_pageRange():
     assert_equal(ab1.pageRange, '3894-3899')
     assert_equal(ab8.pageRange, None)
