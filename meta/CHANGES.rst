@@ -3,6 +3,16 @@ Change Log
 
 .. toctree::
 
+2.6.3
+~~~~~
+
+2020-08-4
+
+* In `AbstractRetrieval()`, add new properties `.openaccess` and `.openaccessFlag`.
+* In `AuthorSearch().__str__`, fix bug with missing names.
+* In `AuthorRetrieval().__str__`, fix bug with already removed property `.journal-history`.
+* For all search classes, do not create an empty file when download=False.
+
 2.6.2
 ~~~~~
 
