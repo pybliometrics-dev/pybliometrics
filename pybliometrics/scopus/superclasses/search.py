@@ -60,7 +60,7 @@ class Search(Base):
         ValueError
             If the api parameter is an invalid entry.
         """
-        params = {'count': count, 'view': view}
+        params = {'count': count, 'view': view, **kwds}
         if isinstance(query, dict):
             params.update(query)
             name = "&".join(["=".join(t) for t in zip(query.keys(), query.values())])
