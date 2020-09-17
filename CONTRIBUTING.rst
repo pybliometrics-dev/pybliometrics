@@ -34,6 +34,7 @@ Report bugs at https://github.com/pybliometrics-dev/pybliometrics/issues.  Pleas
 * Your operating system name and version (after `import pybliometrics` in Python, type `print(pybliometrics.__version__)`.
 * Any details about your local setup that might be helpful in troubleshooting.
 * Detailed steps to reproduce the bug.
+* If you have a mere question on how to do things, please rather pose your question on `StackOverflow.com <https://stackoverflow.com/>`_ using the `#pybliometrics <https://stackoverflow.com/questions/tagged/pybliometrics>`_ tag.
 
 Fix Bugs
 ~~~~~~~~
