@@ -32,4 +32,4 @@ def test_get_results_size():
     received1 = s1.get_results_size()
     assert_true(received1 >= 1)
     received2 = s2.get_results_size()
-    assert_true(received2 >= 80)
+    assert_true(received2 >= 60)
