@@ -455,6 +455,20 @@ def test_subject_areas():
     assert_equal(ab8.subject_areas, None)
 
 
+def test_subtype():
+    assert_equal(ab1.subtype, "re")
+    assert_equal(ab2.subtype, "cp")
+    assert_equal(ab5.subtype, "bk")
+    assert_equal(ab6.subtype, "ar")
+
+
+def test_subtypedescription():
+    assert_equal(ab1.subtypedescription, "Review")
+    assert_equal(ab2.subtypedescription, "Conference Paper")
+    assert_equal(ab5.subtypedescription, "Book")
+    assert_equal(ab6.subtypedescription, "Article")
+
+
 def test_title():
     expected = 'Examples of effective data sharing in scientific publishing'
     assert_equal(ab1.title, expected)

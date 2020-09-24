@@ -558,6 +558,20 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
+    def subtype(self):
+        """Type of the document.  Refer to the Scopus Content Coverage Guide
+        for a list of possible values.  Short version of subtypedescription.
+        """
+        return chained_get(self._json, ['coredata', 'subtype']) or None
+
+    @property
+    def subtypedescription(self):
+        """Type of the document.  Refer to the Scopus Content Coverage Guide
+        for a list of possible values.  Long version of subtype.
+        """
+        return chained_get(self._json, ['coredata', 'subtypeDescription']) or None
+
+    @property
     def title(self):
         """Title of the document."""
         return chained_get(self._json, ['coredata', 'dc:title'])
