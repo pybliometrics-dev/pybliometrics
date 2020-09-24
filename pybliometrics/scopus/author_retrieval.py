@@ -38,9 +38,9 @@ class AuthorRetrieval(Retrieval):
         return parse_affiliation(chained_get(self._json, path))
 
     @property
-    def alias_identifier(self):
-        """Possible alternativa SCOPUS IDs, if any."""
-        return self._id_alias
+    def alias(self):
+        """Possible alternative Scopus Author Profile IDs, if any."""
+        return self._alias
         
     @property
     def citation_count(self):
@@ -233,15 +233,15 @@ class AuthorRetrieval(Retrieval):
             self._json = self._json[0]
         except KeyError:  # Incomplete forward
             alias_json = listify(self._json['alias']['prism:url'])
-            self._id_alias = [d['$'].split(':')[-1] for d in alias_json]
-            alias = ', '.join(self._id_alias)
+            self._alias = [d['$'].split(':')[-1] for d in alias_json]
+            alias_str = ', '.join(self._id_alias)
             text = f'Author profile with ID {author_id} has been merged and '\
-                   f'the main profile is now one of {alias}.  Please update '\
+                   f'the main profile is now one of {alias_str}.  Please update '\
                    'your records manually.  Functionality of this object is '\
                    'reduced.'
             warn(text, UserWarning)
         else:
-            self._id_alias = []
+            self._alias = None
 
     def __str__(self):
         """Return a summary string."""
