@@ -3,10 +3,20 @@ Change Log
 
 .. toctree::
 
+2.7
+~~~~~
+
+2020-09-25
+
+* Introduce new exception: Scopus414Error.
+* In `AuthorRetrieval()`, add new property `.alias`.
+* In `AbstractRetrieval()`, add new properties `.subtype` and `.subtypedescription`.
+* Fix bug with kwds in all search classes accidentally not passed on requests.
+
 2.6.3
 ~~~~~
 
-2020-08-4
+2020-08-04
 
 * In `AbstractRetrieval()`, add new properties `.openaccess` and `.openaccessFlag`.
 * In `AuthorSearch().__str__`, fix bug with missing names.
