@@ -17,6 +17,9 @@ The following exceptions are defined:
 `pybliometrics.scopus.exception.Scopus404Error: NOT FOUND`
     The entity you are looking for does not exist.  Check that your identifier is still pointing to the item you are looking for.
 
+`pybliometrics.scopus.exception.Scopus414Error: TOO LARGE`
+    The query string you are using is too long.  Break it up in smaller pieces.
+
 .. _Scopus429Error:
 
 `pybliometrics.scopus.exception.Scopus429Error: QUOTA EXCEEDED`

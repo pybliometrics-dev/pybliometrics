@@ -36,6 +36,10 @@ class Scopus404Error(ScopusHtmlError):
     """Raised if a query yields a 404 error (Not Found for url)."""
 
 
+class Scopus414Error(ScopusHtmlError):
+    """Raised if a query yields a 414 error (Request-URI Too Large for url)."""
+
+
 class Scopus429Error(ScopusHtmlError):
     """Raised if a query yields a 429 error (Quota exceeded)."""
 
