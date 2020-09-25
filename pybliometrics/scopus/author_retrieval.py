@@ -39,7 +39,7 @@ class AuthorRetrieval(Retrieval):
 
     @property
     def alias(self):
-        """Possible alternative Scopus Author Profile IDs, if any."""
+        """Set of possible new Scopus Author Profile IDs in case the profile has been merged."""
         return self._alias
         
     @property
