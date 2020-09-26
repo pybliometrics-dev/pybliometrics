@@ -4,6 +4,7 @@ from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, check_integrity_params,\
     check_field_consistency, listify, make_search_summary
 
+import re
 
 class ScopusSearch(Search):
     @property
@@ -58,6 +59,8 @@ class ScopusSearch(Search):
                 # Extract information
                 surnames = _replace_none([d['surname'] for d in authors])
                 firstnames = _replace_none([d['given-name'] for d in authors])
+                surnames = [re.sub(";|,","",x) for x in surnames]
+                firstnames = [re.sub(";|,","",x) for x in firstnames]
                 info["auth_names"] = ";".join([", ".join([t[0], t[1]]) for t in
                                                zip(surnames, firstnames)])
                 info["auth_ids"] = ";".join([d['authid'] for d in authors])
