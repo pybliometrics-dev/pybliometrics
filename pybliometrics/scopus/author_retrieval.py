@@ -234,7 +234,7 @@ class AuthorRetrieval(Retrieval):
         except KeyError:  # Incomplete forward
             alias_json = listify(self._json['alias']['prism:url'])
             self._alias = [d['$'].split(':')[-1] for d in alias_json]
-            alias_str = ', '.join(self._id_alias)
+            alias_str = ', '.join(self._alias)
             text = f'Author profile with ID {author_id} has been merged and '\
                    f'the main profile is now one of {alias_str}.  Please update '\
                    'your records manually.  Functionality of this object is '\
