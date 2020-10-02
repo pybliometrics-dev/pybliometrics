@@ -9,17 +9,19 @@ class ScopusSearch(Search):
     @property
     def results(self):
         """A list of namedtuples in the form (eid doi pii pubmed_id title
-        subtype subtypeDescription creator afid affilname affiliation_city affiliation_country
-        author_count author_names author_ids author_afids coverDate
-        coverDisplayDate publicationName issn source_id eIssn aggregationType
-        volume issueIdentifier article_number pageRange description
-        authkeywords citedby_count openaccess fund_acr fund_no fund_sponsor).
+        subtype subtypeDescription creator afid affilname affiliation_city
+        affiliation_country author_count author_names author_ids author_afids
+        coverDate coverDisplayDate publicationName issn source_id eIssn
+        aggregationType volume issueIdentifier article_number pageRange
+        description authkeywords citedby_count openaccess fund_acr fund_no
+        fund_sponsor).
         Field definitions correspond to
-        https://dev.elsevier.com/guides/ScopusSearchViews.htm, except for
-        afid, affilname, affiliation_city, affiliation_country, author_count,
-        author_names, author_ids and author_afids:  These information are
-        joined on ";".  In case an author has multiple affiliations, they are
-        joined on "-" (e.g. Author1Aff;Author2Aff1-Author2Aff2).
+        https://dev.elsevier.com/guides/ScopusSearchViews.htm and return the
+        values as-is, except for afid, affilname, affiliation_city,
+        affiliation_country, author_names, author_ids and author_afids:  These
+        information are joined on ";".  In case an author has multiple
+        affiliations, they are joined on "-"
+        (e.g. Author1Aff;Author2Aff1-Author2Aff2).
 
         Raises
         ------
