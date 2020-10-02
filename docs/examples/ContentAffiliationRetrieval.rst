@@ -1,7 +1,7 @@
 Content Affiliation Retrieval
 -----------------------------
 
-:doc:`ContentAffiliationRetrieval() <../reference/pybliometrics.ContentAffiliationRetrieval>` implements the `Content Affiliation Retrieval API <https://api.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, like city, country, its members, and more.
+:doc:`ContentAffiliationRetrieval() <../reference/pybliometrics.ContentAffiliationRetrieval>` implements the `Content Affiliation Retrieval API <https://dev.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, like city, country, its members, and more.
 
 You initialize the class with Scopus' Affiliation ID:
 

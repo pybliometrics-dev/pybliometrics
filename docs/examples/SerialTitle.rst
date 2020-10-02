@@ -1,7 +1,7 @@
 Serial Title
 ------------
 
-:doc:`Serial Title() <../reference/pybliometrics.SerialTitle>` implements the `Serial Title API <https://api.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It provides basic information on registered serials (also called sources), like publisher and identifiers, but also metrics.
+:doc:`Serial Title() <../reference/pybliometrics.SerialTitle>` implements the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It provides basic information on registered serials (also called sources), like publisher and identifiers, but also metrics.
 
 You initialize the class with an ISSN or an E-ISSN (works with and without hyphen, but leading zeros are mandatory):
 

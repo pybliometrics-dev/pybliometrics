@@ -1,7 +1,7 @@
 Author Retrieval
 ----------------
 
-:doc:`AuthorRetrieval() <../reference/pybliometrics.AuthorRetrieval>` implements the `Author Retrieval API <https://api.elsevier.com/documentation/AuthorRetrievalAPI.wadl>`_.
+:doc:`AuthorRetrieval() <../reference/pybliometrics.AuthorRetrieval>` implements the `Author Retrieval API <https://dev.elsevier.com/documentation/AuthorRetrievalAPI.wadl>`_.
 
 This class is to interact with the entire author record in Scopus, using the author's Scopus ID (which can be passed as either an integer or a string):
 

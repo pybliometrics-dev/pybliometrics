@@ -1,7 +1,7 @@
 Abstract Retrieval
 ------------------
 
-:doc:`AbstractRetrieval() <../reference/pybliometrics.AbstractRetrieval>` implements the `Abstract Retrieval API <https://api.elsevier.com/documentation/AbstractRetrievalAPI.wadl>`_.
+:doc:`AbstractRetrieval() <../reference/pybliometrics.AbstractRetrieval>` implements the `Abstract Retrieval API <https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl>`_.
 
 It takes any identifier as main arguemnt: Most of the time it will be a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_, but DOI, Scopus ID (the last part of the EID), PubMed identifier or Publisher Item Identifier (PII) work as well. `AbstractRetrieval` tries to infer the class itself - to speed this up you can tell the ID type via `ID_type`.  Retrieving these results is not fast, so we cache them to speed up subsequent uses of the code.
 

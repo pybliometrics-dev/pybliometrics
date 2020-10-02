@@ -1,7 +1,7 @@
 Scopus Search
 -------------
 
-:doc:`ScopusSearch ()<../reference/pybliometrics.ScopusSearch>` implements the `Scopus Search API <https://api.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_.  It performs a query to search for articles and then retrieves the records of the query.
+:doc:`ScopusSearch ()<../reference/pybliometrics.ScopusSearch>` implements the `Scopus Search API <https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_.  It performs a query to search for articles and then retrieves the records of the query.
 
 The class is initialized with a search query.  Any query that works in the `Advanced Search on scopus.com <https://www.scopus.com/search/form.uri?display=advanced>`_ will work.  An invalid search query will result in an error.
 
