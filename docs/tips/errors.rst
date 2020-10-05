@@ -1,12 +1,16 @@
 Error messages
 ~~~~~~~~~~~~~~
 
-Since `pybliometrics` (formerly `scopus`) 0.2.0, an exception is raised when the download status is not ok.  This is to prevent faulty information (i.e. the error status and message) being saved as cached file.  With pybliometrics 1.3.0 these exceptions are of base class ScopusException.
+`pybliometrics` raises exceptions if download status is not ok.  In this case, no information gets cached.  To allow for error-specific handling, `pybliometrics` defines the following exceptions:
 
-The following exceptions are defined:
+`pybliometrics.scopus.exception.ScopusException`
+    Base class for the following exceptions.
 
 `pybliometrics.scopus.exception.ScopusQueryError`
     When a search query returns more results than specified or allowed (Scoups allows 5000 results maximum).  Change the query such that less than or equal to 5000 results are returned.
+
+`pybliometrics.scopus.exception.ScopusHtmlError`
+    Base class for the following exceptions raised through the requests package.
 
 `pybliometrics.scopus.exception.Scopus400Error: BAD REQUEST`
     Usually an invalid search query, such as a missing parenthesis.  Verify that your query works in `Advanced Search <https://www.scopus.com/search/form.uri?display=advanced>`_.
@@ -27,6 +31,9 @@ The following exceptions are defined:
 
 `pybliometrics.scopus.exception.Scopus500Error: INTERNAL SERVER ERROR`
     Formally, the server does not respond, for various reasons.  A common reason in searches is that you use a fieldname that does not exist.  Verify that your query works in `Advanced Search <https://www.scopus.com/search/form.uri?display=advanced>`_.
+
+`pybliometrics.scopus.exception.Scopus502Error: BAD GATEWAY`
+    Formally, the server does not respond, for various reasons.
 
 If queries break for other reasons, exceptions of type `requests.exceptions <http://docs.python-requests.org/en/master/api/#requests.RequestException>`_ are raised, such as:
 

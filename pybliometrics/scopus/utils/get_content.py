@@ -12,8 +12,9 @@ user_agent = 'pybliometrics-v' + '.'.join([str(e) for e in version_info[:3]])
 
 errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           403: exception.Scopus403Error, 404: exception.Scopus404Error,
-          414: exception.Scopus414Error, 429: exception.Scopus429Error,
-          500: exception.Scopus500Error}
+          413: exception.Scopus413Error, 414: exception.Scopus414Error,
+          429: exception.Scopus429Error, 500: exception.Scopus500Error,
+          502: exception.Scopus502Error}
 
 
 def get_content(url, params={}, *args, **kwds):
