@@ -194,6 +194,9 @@ class ScopusSearch(Search):
         if "cursor" in kwds:
             subscriber = kwds["cursor"]
             kwds.pop("cursor")
+        if "count" in kwds:
+            count = kwds["count"]
+            kwds.pop("count")
 
         # Query
         self.query = query
