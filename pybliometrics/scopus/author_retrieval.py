@@ -259,8 +259,8 @@ class AuthorRetrieval(Retrieval):
         namedtuples in the form
         (surname, given_name, id, areas, affiliation_id, name, city, country),
         where areas is a list of subject area codes joined by "; ".
-        Note: These information will not be cached and are slow for large
-        coauthor groups.
+        Note: Method retrieves information via individual queries which will
+        not be cached.  The Scopus API does returns 160 coauthors at most.
         """
         SIZE = 25
         # Get number of authors to search for
