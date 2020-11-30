@@ -55,7 +55,7 @@ class Base:
         # Compare age of file to test whether we refresh
         refresh, exists, mod_ts = _check_file_age(fname, refresh)
 
-        # Read or dowload eventually with caching
+        # Read or dowload, possibly with caching
         search_request = "query" in params
         if exists and not refresh:
             self._mdate = mod_ts
@@ -93,8 +93,8 @@ class Base:
                 else:
                     data = None
             else:
-                data = resp.text.encode('utf-8')
-                self._json = loads(data)
+                data = loads(resp.text.encode('utf-8'))
+                self._json = data
             # Set private variables
             self._mdate = time()
             self._header = header
@@ -189,6 +189,8 @@ def _write_json(fname, data):
     with open(fname, 'wb') as f:
         if isinstance(data, list):
             for item in data:
-                f.write(f'{dumps(item)}\n'.encode('utf-8'))
+                text = f"{dumps(item, separators=(',', ':'))}\n"
+                f.write(text.encode('utf-8'))
         else:
-            f.write(data)
+            text = f"{dumps(data, separators=(',', ':'))}\n"
+            f.write(text.encode('utf-8'))
