@@ -17,7 +17,7 @@ You can obtain basic information just by printing the object:
 
     >>> print(aff)
     University of Cape Town in Cape Town in South Africa,
-    has 12,463 connected authors and 68,181 connected documents as of 2020-07-11
+    has 12,463 associated author(s) and 68,181 associated document(s) as of 2020-07-11
 
 
 The object has a number of attributes but no methods.  For example, information regarding the affiliation itself:

@@ -149,6 +149,6 @@ class ContentAffiliationRetrieval(Retrieval):
         """Return a summary string."""
         date = self.get_cache_file_mdate().split()[0]
         s = f"{self.affiliation_name} in {self.city} in {self.country},\nhas "\
-            f"{int(self.author_count):,} connected authors and "\
-            f"{int(self.document_count):,} connected documents as of {date}"
+            f"{int(self.author_count):,} associated author(s) and "\
+            f"{int(self.document_count):,} associated document(s) as of {date}"
         return s

@@ -21,8 +21,8 @@ You can obtain basic information just by printing the object:
 
     >>> print(ab)
     John R. Kitchin: "Examples of effective data sharing in scientific publishing", ACS Catalysis, 5(6), pp. 3894-3899(2015). https://doi.org/10.1021/acscatal.5b00538.
-    11 citations as of 2020-07-07
-      Affiliations:
+    11 citation(s) as of 2020-07-07
+      Affiliation(s):
        Carnegie Mellon University
 
 

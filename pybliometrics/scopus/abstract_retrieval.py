@@ -677,7 +677,7 @@ class AbstractRetrieval(Retrieval):
                 a = self.authors[0]
                 authors = str(a.given_name) + ' ' + str(a.surname)
         else:
-            authors = "(No authors found)"
+            authors = "(No author found)"
         # All other information
         s = f'{authors}: "{self.title}", {self.publicationName}, {self.volume}'
         if self.issueIdentifier:
@@ -687,9 +687,9 @@ class AbstractRetrieval(Retrieval):
         s += f'({self.coverDate[:4]}).'
         if self.doi:
             s += f' https://doi.org/{self.doi}.\n'
-        s += f'{self.citedby_count} citations as of {date}'
+        s += f'{self.citedby_count} citation(s) as of {date}'
         if self.affiliation:
-            s += "\n  Affiliations:\n   "
+            s += "\n  Affiliation(s):\n   "
             s += '\n   '.join([aff.name for aff in self.affiliation])
         return s
 
