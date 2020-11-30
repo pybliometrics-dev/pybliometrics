@@ -19,7 +19,7 @@ def test_aggregation_type():
 
 
 def test_citescoreyearinfolist():
-    expected1 = [('2019', '2.4'), ('2020', '2.3')]
+    expected1 = [('2019', '2.4'), ('2020', '2.5')]
     assert_equal(sofwarex.citescoreyearinfolist, expected1)
     # assert_equal(isa.citescoreyearinfolist, None)
 
@@ -40,7 +40,7 @@ def test_oaallowsauthorpaid():
 
 
 def test_openaccess():
-    assert_equal(sofwarex.openaccess, '1')
+    assert_equal(sofwarex.openaccess, None)
     # assert_equal(isa.openaccess, None)
 
 
@@ -55,7 +55,7 @@ def test_openaccesstype():
 
 
 def test_openaccessarticle():
-    assert_equal(sofwarex.openaccessarticle, True)
+    assert_equal(sofwarex.openaccessarticle, None)
     # assert_equal(isa.openaccessarticle, None)
 
 

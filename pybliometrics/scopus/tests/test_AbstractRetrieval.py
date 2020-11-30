@@ -393,7 +393,7 @@ def test_references_ref():
         sourcetitle='Communications of the ACM', type='resolvedReference',
         publicationyear=None, volume='53', issue='4', first='50',
         last='58', text=None, fulltext=None, citedbycount='0',
-        authors_auid='35800975300; 35571093800; 57198081560; 7202236336; '\
+        authors_auid='35800975300; 35571093800; 57198081560; 57192787435; '\
             '7401788602; 25926395200; 56326032000; 7401930147; 26534952300; '\
             '7007009125; 15064891400',
         authors_affiliationid='60025038; 60025038; 60025038; 60025038; 60025038; '\
