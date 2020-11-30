@@ -17,8 +17,8 @@ You can obtain basic information just by printing the object:
 
     >>> print(au)
     Kitchin J. from Department of Chemical Engineering in United States,
-    published 101 document(s) since 1995 in 52 distinct source(s),
-    which were cited by 9,464 author(s) in 11,748 document(s) as of 2020-07-06
+    published 105 document(s) since 1995
+    which were cited by 10,428 author(s) in 12,934 document(s) as of 2020-11-30
 
 
 The object can access many bits of data about an author, including the number of papers, h-index, current affiliation, etc.  When a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ is returned, it can neatly be turned into a `pandas <https://pandas.pydata.org/>`_ DataFrame.
@@ -48,39 +48,40 @@ Bibliometric information:
 .. code-block:: python
 
     >>> au.citation_count
-    '7587'
+    '12934'
     >>> au.document_count
-    '99'
+    '105'
     >>> au.h_index
-    '27'
+    '3'
     >>> au.orcid
     '0000-0003-2625-9232'
     >>> au.publication_range
-    ('1995', '2018')
+    ('1995', '2020')
     >>> import pandas as pd
     >>> areas = pd.DataFrame(au.subject_areas)
     >>> areas.shape
-    (47, 3)
+    (49, 3)
     >>> areas.head()
-                             area abbreviation  code
-    0  Geochemistry and Petrology         EART  1906
-    1        Analytical Chemistry         CHEM  1602
-    2     Modeling and Simulation         MATH  2611
-    3             Safety Research         SOCI  3311
-    4               Biotechnology         BIOC  1305
+                                area abbreviation  code
+    0                Safety Research         SOCI  3311
+    1           Analytical Chemistry         CHEM  1602
+    2        Modeling and Simulation         MATH  2611
+    3        Materials Science (all)         MATE  2500
+    4  Colloid and Surface Chemistry         CENG  1505
     >>> au.classificationgroup
-    [('1906', '1'), ('1602', '1'), ('2611', '5'), ('3311', '2'),
-    ('1305', '4'), ('2304', '1'), ('2500', '11'), ('1604', '2'),
-    ('1505', '1'), ('1909', '1'), ('2207', '2'), ('2200', '2'),
-    ('1605', '4'), ('1706', '1'), ('1607', '1'), ('2504', '9'),
-    ('1303', '1'), ('2103', '3'), ('1508', '2'), ('3104', '20'),
-    ('2308', '2'), ('2209', '5'), ('2105', '1'), ('1311', '1'),
-    ('1606', '22'), ('1603', '3'), ('2305', '3'), ('2503', '1'),
-    ('3309', '1'), ('1500', '27'), ('2508', '13'), ('2100', '10'),
-    ('1600', '26'), ('2310', '2'), ('2208', '1'), ('2300', '1'),
-    ('1503', '20'), ('2102', '3'), ('1000', '1'), ('3110', '9'),
-    ('3107', '2'), ('2104', '2'), ('2505', '6'), ('1710', '5'),
-    ('2213', '5'), ('1502', '1'), ('3100', '9')]
+    [('3311', '4'), ('1602', '1'), ('2611', '5'), ('2500', '11'),
+     ('1505', '1'), ('1605', '4'), ('1303', '2'), ('2504', '10'),
+     ('1508', '3'), ('1706', '2'), ('1712', '1'), ('2209', '5'),
+     ('2105', '1'), ('1504', '2'), ('1500', '26'), ('3309', '1'),
+     ('1600', '28'), ('2508', '14'), ('2310', '2'), ('1503', '22'),
+     ('2300', '1'), ('2102', '3'), ('3107', '3'), ('1000', '1'),
+     ('3110', '9'), ('2213', '7'), ('2505', '6'), ('3100', '9'),
+     ('1906', '1'), ('1305', '3'), ('2304', '1'), ('1604', '2'),
+     ('1909', '1'), ('2207', '2'), ('2200', '2'), ('1607', '1'),
+     ('2103', '3'), ('2308', '2'), ('3104', '21'), ('1311', '1'),
+     ('1603', '3'), ('2305', '2'), ('1606', '24'), ('2503', '1'),
+     ('2100', '11'), ('2208', '1'), ('1502', '2'), ('2104', '2'),
+     ('1710', '5')]
 
 
 If you request data of a merged author profile, Scopus returns information belonging to that new profile.  pybliometrics however caches information using the old ID.  With property `.identifer` you can verify the validity of the provided Author ID.  When the provided ID belongs to a profile that has been merged, pybliometrics will throw a UserWarning (upon accessing the property `.identifer`) pointing to the ID of the new main profile.
@@ -107,7 +108,9 @@ Extensive information on current and former affiliations is provided as namedtup
 
 The affiliation ID to be used for the :doc:`ContentAffiliationRetrieval <../reference/pybliometrics.ContentAffiliationRetrieval>` class.
 
-There are a number of getter methods for convenience.  For example, you can obtain some basic information on co-authors as a list of namedtuples (query will not be cached):
+`pybliometrics` caches results to speed up subsequent analysis.  This information eventually becomes outdated.  To refresh the cached results if they exist, use the refresh parameter when initiating the class.  Set `refresh=True` or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `au.get_cache_file_mdate()` to get the date of last modification, and `au.get_cache_file_age()` the number of days since the last modification.
+
+There are a number of getter methods for convenience.  For example, you can obtain some basic information on co-authors as a list of namedtuples (query will not be cached and is always up-to-date):
 
 .. code-block:: python
 
@@ -120,67 +123,66 @@ There are a number of getter methods for convenience.  For example, you can obta
       dtype='object')
 
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `au.get_cache_file_mdate()` to get the date of last modification, and `au.get_cache_file_age()` the number of days since the last modification.
-
-Method `get_document_eids()` performs a search for the author's publications with :doc:`ScopusSearch <../reference/pybliometrics.ScopusSearch>` to ease interoperationability with other APIs:
+Method `get_documents()` is another convenience method to search for the author's publications via :doc:`ScopusSearch <../reference/pybliometrics.ScopusSearch>` (information will be cached):
 
 .. code-block:: python
 
-    >>> eids = pd.DataFrame(au.get_document_eids(refresh=False))
-    >>> eids.shape
-    (99, 19)
-    >>> eids.columns
-    Index(['eid', 'doi', 'pii', 'title', 'subtype', 'subtypeDescription', 'creator', 'authname',
-           'authid', 'coverDate', 'coverDisplayDate', 'publicationName', 'issn',
-           'source_id', 'aggregationType', 'volume', 'issueIdentifier',
-           'pageRange', 'citedby_count', 'openaccess'],
+    >>> docs = pd.DataFrame(au.get_documents(refresh=10))
+    >>> docs.shape
+    (105, 34)
+    >>> docs.columns
+    Index(['eid', 'doi', 'pii', 'pubmed_id', 'title', 'subtype',
+           'subtypeDescription', 'creator', 'afid', 'affilname',
+           'affiliation_city', 'affiliation_country', 'author_count',
+           'author_names', 'author_ids', 'author_afids', 'coverDate',
+           'coverDisplayDate', 'publicationName', 'issn', 'source_id', 'eIssn',
+           'aggregationType', 'volume', 'issueIdentifier', 'article_number',
+           'pageRange', 'description', 'authkeywords', 'citedby_count',
+           'openaccess', 'fund_acr', 'fund_no', 'fund_sponsor'],
           dtype='object')
-    >>> eids.head()
-                      eid                            doi    ...     citedby_count openaccess
-    0  2-s2.0-85044777111   10.1016/j.cattod.2018.03.045    ...                 0          0
-    1  2-s2.0-85041118154  10.1080/08927022.2017.1420185    ...                 1          0
-    2  2-s2.0-85040934644      10.1007/s11244-018-0899-0    ...                 4          0
-    3  2-s2.0-85031781417    10.1021/acs.jpclett.7b01974    ...                 1          0
-    4  2-s2.0-85021887490        10.1021/acs.cgd.7b00569    ...                 3          0
-
-    [5 rows x 19 columns]
 
 
 With some additional lines of code you can get the number of journal articles where the author is listed first:
 
 .. code-block:: python
 
-    >>> articles = eids[eids['aggregationType'] == 'Journal']
-    >>> first = articles[articles['authid'].str.startswith('7004212771')]
-    >>> list(first['eid'])
-    ['2-s2.0-85019169906', '2-s2.0-84971324241', '2-s2.0-84930349644',
-    '2-s2.0-84930616647', '2-s2.0-84866142469', '2-s2.0-67449106405',
-    '2-s2.0-40949100780', '2-s2.0-20544467859', '2-s2.0-13444307808',
-    '2-s2.0-2942640180', '2-s2.0-0141924604', '2-s2.0-0037368024']
+    >>> articles = docs[docs['aggregationType'] == 'Journal']
+    >>> first = articles[articles['author_ids'].str.startswith('7004212771')]
+    >>> first["eid"].tolist()
+    ['2-s2.0-85048443766', '2-s2.0-85019169906', '2-s2.0-84971324241',
+     '2-s2.0-84930349644', '2-s2.0-84930616647', '2-s2.0-84866142469',
+     '2-s2.0-67449106405', '2-s2.0-40949100780', '2-s2.0-20544467859',
+     '2-s2.0-13444307808', '2-s2.0-2942640180', '2-s2.0-0141924604',
+     '2-s2.0-0037368024']
 
 
 or you might be interested in the yearly number of publications:
 
 .. code-block:: python
 
-    >>> articles['year'] = articles['coverDate'].str[:4]
-    >>> articles['year'].value_counts()
+    >>> docs['year'] = docs['coverDate'].str[:4]
+    >>> docs['year'].value_counts()
     2015    12
+    2009    10
+    2014    10
+    2011    10
     2017     8
-    2016     8
-    2012     7
-    2009     7
-    2014     7
-    2010     5
+    2012     8
+    2016     7
+    2008     7
+    2010     6
     2004     4
-    2011     4
+    2018     4
     2013     4
+    2020     3
     2003     3
-    2018     3
-    2005     2
+    2005     3
+    2007     2
+    1995     1
     2006     1
     2002     1
-    2008     1
-    1995     1
+    2019     1
     Name: year, dtype: int64
 
+
+If you're just interested in the EIDs of the documents, use `au.get_document_eids()`.  This method makes use of the same data available for/through `au.get_documents()`.
