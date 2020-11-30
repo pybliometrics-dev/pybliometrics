@@ -3,8 +3,20 @@ Change Log
 
 .. toctree::
 
-2.7
+2.7.1
 ~~~~~
+
+2020-11-30
+
+* Always dump minified json.
+* Introduce new exceptions: Scopus413Error and Scopus502Error.
+* Change print dunder functions to allow for singleton counts.
+* In `ScopusSearch()`, respect 'count' argument when passed as keyword.
+* Update some documentation and fix internal links.
+* In `AuthorRetrieval()`, fix bug with private variable.
+
+2.7
+~~~
 
 2020-09-25
 
