@@ -85,7 +85,7 @@ class Base:
                     raise ScopusQueryError(text)
                 # Download results page-wise
                 if download:
-                    data = "".encode('utf-8')
+                    data = ""
                     if n:
                         data, header = _parse(res, n, url, params, verbose,
                                               *args, **kwds)
