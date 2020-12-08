@@ -3,6 +3,15 @@ Change Log
 
 .. toctree::
 
+2.7.2
+~~~~~
+
+2020-12-08
+
+* Fix bug with writing empty results of search classes.
+* In `AuthorRetrieval()`, allow for kwds to be passed on to the retrieval.
+* Update some documentation w.r.t. to differences between the API the website.
+
 2.7.1
 ~~~~~
 
