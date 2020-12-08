@@ -33,6 +33,9 @@ class AuthorRetrieval(Retrieval):
         Note: Affiliation information might be missing or mal-assigned even
         when it lookes correct in the web view.  In this case please request
         a correction.
+
+        Note: Unlike on their website, Scopus doesn't provide the periods
+        of affiliation.
         """
         path = ["author-profile", "affiliation-history", "affiliation"]
         return parse_affiliation(chained_get(self._json, path))
