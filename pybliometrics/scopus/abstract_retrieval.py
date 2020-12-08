@@ -593,7 +593,7 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._head, path)
 
     def __init__(self, identifier=None, refresh=False, view='META_ABS',
-                 id_type=None):
+                 id_type=None, **kwds):
         """Interaction with the Abstract Retrieval API.
 
         Parameters
@@ -618,6 +618,12 @@ class AbstractRetrieval(Retrieval):
             of META_ABS view and META_ABS includes all information of the
             META view.  For details see
             https://dev.elsevier.com/guides/AbstractRetrievalViews.htm.
+
+        kwds : key-value parings, optional
+            Keywords passed on as query parameters.  Must contain fields
+            and values listed mentioned in the API specification
+            (https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl),
+            such as "startref" or "refcount".
 
         Raises
         ------
@@ -651,7 +657,8 @@ class AbstractRetrieval(Retrieval):
 
         # Load json
         Retrieval.__init__(self, identifier=identifier, id_type=id_type,
-                           api='AbstractRetrieval', refresh=refresh, view=view)
+                           api='AbstractRetrieval', refresh=refresh,
+                           view=view, **kwds)
         self._json = self._json['abstracts-retrieval-response']
         self._head = chained_get(self._json, ["item", "bibrecord", "head"], {})
         conf_path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent']
