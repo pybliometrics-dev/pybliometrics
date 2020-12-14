@@ -187,6 +187,8 @@ def _write_json(fname, data):
     if data is None:
         return None
     with open(fname, 'wb') as f:
+        if not data:
+            return None
         if isinstance(data, list):
             for item in data:
                 text = f"{dumps(item, separators=(',', ':'))}\n"
