@@ -16,9 +16,13 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(plum)
-    Document with doi 10.1016/j.softx.2019.100263 has 105 citation(s) in category 'capture'
-    as of 2020-08-04, 3 citation(s) in category 'citation', 1 citation(s) in category
-    'mention', 42 citation(s) in category 'socialMedia', 4 citation(s) in category 'usage'
+    Document with doi 10.1016/j.softx.2019.100263 received:
+    - 105 citation(s) in category 'capture'
+    - 3 citation(s) in category 'citation'
+    - 1 citation(s) in category 'mention'
+    - 42 citation(s) in category 'socialMedia'
+    - 4 citation(s) in category 'usage'
+    as of 2020-08-04
 
 
 To each of the five categories, there is one property storing number and origin of the metrics in `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_.  If in a category there are no entries the property is simply `None`:
