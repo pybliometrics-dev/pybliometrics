@@ -10,7 +10,7 @@ You initialize the class with Scopus' Electronic Identifier (EID):
 .. code-block:: python
    
     >>> from pybliometrics.scopus import CitationOverview
-    >>> co = CitationOverview("2-s2.0-84930616647", start=2015, end=2017)
+    >>> co = CitationOverview("2-s2.0-85068268027", start=2019, end=2021)
 
 
 You can obtain basic information just by printing the object:
@@ -18,9 +18,9 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(co)
-    Document 'Examples of effective data sharing in scientific publishing' by Kitchin J.R.
-    published in 'ACS Catalysis' has the following citation trajectory as of 2020-07-07:
-        Before 2015 0; 2015: 0; 2016: 4; 2017: 2; After 2017: 3 times
+    Document 'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus' by Rose M.E., Rose M.E. and Kitchin J.R.
+    published in 'SoftwareX' has the following citation trajectory as of 2021-01-04:
+        Before 2019 0; 2019: 0; 2020: 6; 2021: 1; After 2021: 0 times
 
 
 
@@ -29,7 +29,7 @@ The most important information is stored in attribute `cc`, which is a list of t
 .. code-block:: python
 
     >>> co.cc
-    [(2015, '0'), (2016, '4'), (2017, '2')]
+    [(2019, '0'), (2020, '6'), (2021, '1')]
 
 
 Sometimes there are citations outside the specified year range, which you can get with `pcc` and `lcc`:
@@ -47,9 +47,9 @@ Attributes `rangeCount` and `rowTotal` give summaries.  `rangeCount` is the numb
 .. code-block:: python
 
     >>> co.rangeCount
-    '6'
+    '7'
     >>> co.rowTotal
-    '6'
+    '7'
 
 
 There are also author information stored as list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
@@ -57,8 +57,9 @@ There are also author information stored as list of `namedtuples <https://docs.p
 .. code-block:: python
 
     >>> co.authors
-    [Author(name='Kitchin J.R.', surname='Kitchin', initials='J.R.',
-    id='7004212771', url='http://api.elsevier.com/content/author/author_id/7004212771')]
+    [Author(name='Rose M.E.', surname='Rose', initials='M.E.', id='57209617104',
+     url='https://api.elsevier.com/content/author/author_id/57209617104'),
+     Author(name='Kitchin J.R.', surname='Kitchin', initials='J.R.', id='7004212771', url='https://api.elsevier.com/content/author/author_id/7004212771')]
     >>> auth_id = co.authors[0].id
     >>> auth_id
     '7004212771'
@@ -70,20 +71,20 @@ Apart from that, there are bibliographic information, too:
 .. code-block:: python
 
     >>> co.title
-    'Examples of effective data sharing in scientific publishing'
+    'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
     >>> co.publicationName
-    'ACS Catalysis'
+    'SoftwareX'
     >>> co.volume
-    '5'
+    '10'
     >>> co.issueIdentifier
-    '6'
+    None
     >>> co.startingPage
-    '3894'
+    None
     >>> co.endingPage
-    '3899'
+    None
     >>> co.citationType_long
-    'Review'
+    'Article'
     >>> co.doi
-    '10.1021/acscatal.5b00538'
+    '10.1016/j.softx.2019.100263'
 
 Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `co.get_cache_file_mdate()` to get the date of last modification, and `co.get_cache_file_age()` the number of days since the last modification.

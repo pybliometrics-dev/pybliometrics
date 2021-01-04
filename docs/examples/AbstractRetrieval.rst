@@ -12,7 +12,7 @@ You initialize the class with an ID that Scopus uses, e.g. the EID:
 .. code-block:: python
    
     >>> from pybliometrics.scopus import AbstractRetrieval
-    >>> ab = AbstractRetrieval("2-s2.0-84930616647", view='FULL')
+    >>> ab = AbstractRetrieval("2-s2.0-85068268027", view='FULL')
 
 
 You can obtain basic information just by printing the object:
@@ -20,9 +20,11 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(ab)
-    John R. Kitchin: "Examples of effective data sharing in scientific publishing", ACS Catalysis, 5(6), pp. 3894-3899(2015). https://doi.org/10.1021/acscatal.5b00538.
-    11 citation(s) as of 2020-07-07
+    Michael E. Rose and John R. Kitchin: "pybliometrics: Scriptable bibliometrics using
+    a Python interface to Scopus", SoftwareX, 10, (no pages found)(2019). https://doi.org/10.1016/j.softx.2019.100263.
+    7 citation(s) as of 2021-01-04
       Affiliation(s):
+       Max Planck Institute for Innovation and Competition
        Carnegie Mellon University
 
 
@@ -31,19 +33,19 @@ There are 52 attributes and 8 methods to interact with.  For example, to obtain 
 .. code-block:: python
 
     >>> ab.publicationName
-    'ACS Catalysis'
+    'SoftwareX'
     >>> ab.aggregationType
     'Journal'
     >>> ab.coverDate
-    '2015-06-05'
+    '2019-07-01'
     >>> ab.volume
-    '5'
+    '10'
     >>> ab.issueIdentifier
-    '6'
+    None
     >>> ab.pageRange
-    '3894-3899'
+    None
     >>> ab.doi
-    '10.1021/acscatal.5b00538'
+    '10.1016/j.softx.2019.100263'
     >>> ab.openaccessFlag
     True
 
@@ -53,12 +55,12 @@ Attributes `idxterms`, `subject_areas` and `authkeywords` (if provided) provide 
 .. code-block:: python
 
     >>> ab.idxterms
-    ['Authoring tool', 'Data generation', 'Data Sharing', 'Human-readable',
-    'Scientific publications', 'Traditional publishing']
+    ['Bibliometrics', 'Python', 'Python interfaces', 'Reproducibilities',
+    'Scientometrics', 'Scopus', 'Scopus database', 'User friendly interface']
     >>> ab.subject_areas
-    [Area(area='Catalysis', abbreviation='CENG', code='1503')]
+    [Area(area='Software', abbreviation='COMP', code='1712'), Area(area='Computer Science Applications', abbreviation='COMP', code='1706')]
     >>> ab.authkeywords
-    >>>
+    ['Bibliometrics', 'Python', 'Scientometrics', 'Scopus', 'Software']
 
 
 To obtain the total citation count (at the time the abstract was retrieved and cached):
@@ -74,12 +76,16 @@ You get the authors as a list of `namedtuples <https://docs.python.org/3/library
 .. code-block:: python
 
     >>> ab.authors
-    [Author(auid='7004212771', indexed_name='Kitchin J.R.',
-    surname='Kitchin', given_name='John R.', affiliation=['60027950'])]
+    [Author(auid='57209617104', indexed_name='Rose M.E.', surname='Rose',
+     given_name='Michael E.', affiliation=['60105007']),
+     Author(auid='7004212771', indexed_name='Kitchin J.R.', surname='Kitchin',
+     given_name='John R.', affiliation=['60027950'])]
+
     >>> import pandas as pd
     >>> print(pd.DataFrame(ab.authors))
-        auid  indexed_name  surname given_name affiliation
-     0  7004212771  Kitchin J.R.  Kitchin    John R.  [60027950]
+              auid  indexed_name  surname  given_name affiliation
+    0  57209617104     Rose M.E.     Rose  Michael E.  [60105007]
+    1   7004212771  Kitchin J.R.  Kitchin     John R.  [60027950]
 
 
 The same structure applies for the attributes `affiliation` and `authorgroup`:
@@ -87,14 +93,20 @@ The same structure applies for the attributes `affiliation` and `authorgroup`:
 .. code-block:: python
 
     >>> ab.affiliation
-    [Affiliation(id='60027950', name='Carnegie Mellon University',
-    city='Pittsburgh', country='United States')]
+    [Affiliation(id='60105007', name='Max Planck Institute for Innovation and Competition',
+     city='Munich', country='Germany'),
+     Affiliation(id='60027950', name='Carnegie Mellon University',
+     city='Pittsburgh', country='United States')]
+
     >>> ab.authorgroup
-    [Author(affiliation_id='60027950', dptid='110785688',
-    organization='Department of Chemical Engineering, Carnegie Mellon University',
-    city='Pittsburgh', postalcode='15213', addresspart='5000 Forbes Avenue',
-    country='United States', auid='7004212771', indexed_name='Kitchin J.',
-    surname='Kitchin', given_name='John R.')]
+    [Author(affiliation_id='60105007', dptid=None,
+    organization='Max Planck Institute for Innovation and Competition',
+    city=None, postalcode=None, addresspart=None, country='Germany',
+    auid='57209617104', indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
+    Author(affiliation_id='60027950', dptid='110785688',
+    organization='Carnegie Mellon University, Department of Chemical Engineering',
+    city=None, postalcode=None, addresspart=None, country='United States',
+    auid='7004212771', indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
 
 
 Keep in mind that Scopus might not perfectly/correctly pair authors and affiliations as per the original document, even if it looks so on the web view.  In this case please request corrections to be made in Scopus' API here `here <https://service.elsevier.com/app/contact/supporthub/scopuscontent/>`_.
@@ -104,18 +116,21 @@ available if you downloaded the article with 'FULL' as `view` parameter.
 
 .. code-block:: python
 
-    >>> ab.ref_count
-    '22'
+    >>> ab.refcount
+    '25'
     >>> refs = ab.references
-    >>> len(refs)
-    22
     >>> refs[0]
-    Reference(position='1', id='84881394200', doi=None, title=None,
-    authors='Hallenbeck, A.P.; Kitchin, J.R.', authors_auid=None,
-    authors_affiliationid=None, sourcetitle='Ind. Eng. Chem. Res.',
-    publicationyear='2013', volume=None, issue=None, first=None, last=None,
-    citedbycount=None, type=None, text=None, fulltext='Hallenbeck, A. P.;
-    Kitchin, J. R. Ind. Eng. Chem. Res. 2013, 52, 10788-10794 0.1021/ie400582a')
+    Reference(position='1', id='38949137710', doi='10.1007/978-94-007-7618-0˙310',
+    title='Comparison of PubMed, Scopus, Web of Science, and Google Scholar:
+    strengths and weaknesses',
+    authors='Falagas, M.E.; Pitsouni, E.I.; Malietzis, G.A.; Pappas, G.',
+    authors_auid=None, authors_affiliationid=None, sourcetitle='FASEB J',
+    publicationyear='2007', volume=None, issue=None, first=None, last=None,
+    citedbycount=None, type=None, text=None,fulltext='Falagas, M.E., Pitsouni,
+    E.I., Malietzis, G.A., Pappas, G., Comparison of PubMed, Scopus, Web of
+    Science, and Google Scholar: strengths and weaknesses. FASEB J 22:2 (2007),
+    338–342, 10.1007/978-94-007-7618-0˙310.')
+
     >>> df = pd.DataFrame(refs)
     >>> df.columns
     Index(['position', 'id', 'doi', 'title', 'authors', 'authors_auid',
@@ -123,15 +138,16 @@ available if you downloaded the article with 'FULL' as `view` parameter.
            'issue', 'first', 'last', 'citedbycount', 'type', 'text', 'fulltext'],
           dtype='object')
     >>> df['eid'] = '2-s2.0-' + df['id']
-    >>> list(df['eid'])
-    ['2-s2.0-84881394200', '2-s2.0-84896585411', '2-s2.0-84949115648',
-    '2-s2.0-84908637059', '2-s2.0-84901638552', '2-s2.0-84896380535',
-    '2-s2.0-84923164062', '2-s2.0-84923164062', '2-s2.0-84930667693',
-    '2-s2.0-79952591087', '2-s2.0-84923165709', '2-s2.0-0036572216',
-    '2-s2.0-84924117832', '2-s2.0-84930624433', '2-s2.0-79955561198',
-    '2-s2.0-84930642229', '2-s2.0-0010630518', '2-s2.0-84861337169',
-    '2-s2.0-34247481878', '2-s2.0-79958260504', '2-s2.0-58149108944',
-    '2-s2.0-84917679308']
+    >>> df['eid'].tolist()
+    ['2-s2.0-38949137710', '2-s2.0-84956635108', '2-s2.0-84954384742',
+     '2-s2.0-85054706190', '2-s2.0-84978682989', '2-s2.0-85047117387',
+     '2-s2.0-85068267813', '2-s2.0-84959420483', '2-s2.0-85041892797',
+     '2-s2.0-85019268211', '2-s2.0-85059309053', '2-s2.0-85033499871',
+     nan, '2-s2.0-85068268189', '2-s2.0-84958069531', '2-s2.0-84964429621',
+     '2-s2.0-84977619412', '2-s2.0-85068262994', nan, '2-s2.0-23744500479',
+     '2-s2.0-70349549313', nan, '2-s2.0-85042855814', '2-s2.0-85068258349',
+     '2-s2.0-84887264733']
+
 
 Setting `view="REF"` accesses the REF view of the article, which provides more information on the referenced items (but less on other attributes of the document):
 
@@ -139,15 +155,16 @@ Setting `view="REF"` accesses the REF view of the article, which provides more i
 
     >>> ab = AbstractRetrieval("2-s2.0-84930616647", view='REF')
     >>> ab.references[0]
-    Reference(position='1', id='84881394200', doi='10.1021/ie400582a',
-    title='Effects of O2 and SO2 on the capture capacity of a primary-amine
-    based polymeric CO2 sorbent', authors='Hallenbeck, Alexander P.; Kitchin,
-    John R.; Hallenbeck, Alexander P.; Kitchin, John R.',
-    authors_auid='55569145100; 7004212771; 55569145100; 7004212771',
-    authors_affiliationid='60090776; 60090776; 60027950; 60027950',
-    sourcetitle='Industrial and Engineering Chemistry Research',
-    publicationyear=None, volume='52', issue='31', first='10788', last='10794',
-    citedbycount='30', type='resolvedReference', text=None, fulltext=None)
+    Reference(position='1', id='38949137710', doi='10.1096/fj.07-9492LSF',
+    title='Comparison of PubMed, Scopus, Web of Science, and Google Scholar:
+    Strengths and weaknesses', authors='Falagas, Matthew E.; Pitsouni, Eleni I.;
+    Malietzis, George A.; Falagas, Matthew E.; Pappas, Georgios; Falagas, Matthew E.',
+    authors_auid='7003962139; 16240046300; 43761284000; 7003962139; 7102070422; 7003962139',
+    authors_affiliationid='60033272; 60033272; 60033272; 60015849; 60081865; 60033272',
+    sourcetitle='FASEB Journal', publicationyear=None, volume='22', issue='2', first='338',
+    last='342', citedbycount='1232', type='resolvedReference', text=None, fulltext=None)
+
+
 
 For conference proceedings, Scopus also collects information on the conference:
 
@@ -180,10 +197,12 @@ Some articles have information on funding, chemicals and genome banks:
     are gathered from the CNRT report “Ecomine BioTop”. Appendix A'
     >>> fund.chemicals
     [Chemical(source='esbd', chemical_name='calcium', cas_registry_number='7440-70-2;14092-94-5'),
-    Chemical(source='esbd', chemical_name='magnesium', cas_registry_number='7439-95-4')]
+     Chemical(source='esbd', chemical_name='magnesium', cas_registry_number='7439-95-4'),
+     Chemical(source='nlm', chemical_name='Fertilizers', cas_registry_number=None),
+     Chemical(source='nlm', chemical_name='Sewage', cas_registry_number=None),
+     Chemical(source='nlm', chemical_name='Soil', cas_registry_number=None)]
     >>> fund.sequencebank
-    [Sequencebank(name='GENBANK', sequence_number='MH150839:MH150870',
-    type='submitted')]
+    [Sequencebank(name='GENBANK', sequence_number='MH150839:MH150870', type='submitted')]
 
 
 You can print the abstract in a variety of formats, including LaTeX, bibtex, HTML, and RIS. For bibtex entries, the key is the first author's surname, the year, and the first and last name of the title:
@@ -191,27 +210,27 @@ You can print the abstract in a variety of formats, including LaTeX, bibtex, HTM
 .. code-block:: python
 
     >>> print(ab.get_bibtex())
-    @article{Kitchin2015ExamplesPublishing,
-      author = {John R. Kitchin},
-      title = {{Examples of effective data sharing in scientific publishing}},
-      journal = {ACS Catalysis},
-      year = {2015},
-      volume = {5},
-      number = {6},
-      pages = {3894-3899},
-      doi = {10.1021/acscatal.5b00538}}
+    @article{Rose2019Pybliometrics:Scopus,
+      author = {Michael E. Rose and John R. Kitchin},
+      title = {{pybliometrics: Scriptable bibliometrics using a Python interface to Scopus}},
+      journal = {SoftwareX},
+      year = {2019},
+      volume = {10},
+      number = {None},
+      pages = {-},
+      doi = {10.1016/j.softx.2019.100263}}
     >>> print(ab.get_ris())
     TY  - JOUR
-    TI  - Examples of effective data sharing in scientific publishing
-    JO  - ACS Catalysis
-    VL  - 5
-    DA  - 2015-06-05
-    PY  - 2015
-    SP  - 3894-3899
+    TI  - pybliometrics: Scriptable bibliometrics using a Python interface to Scopus
+    JO  - SoftwareX
+    VL  - 10
+    DA  - 2019-07-01
+    PY  - 2019
+    SP  - None
+    AU  - Rose M.E.
     AU  - Kitchin J.R.
-    DO  - 10.1021/acscatal.5b00538
-    UR  - https://doi.org/10.1021/acscatal.5b00538
-    IS  - 6
+    DO  - 10.1016/j.softx.2019.100263
+    UR  - https://doi.org/10.1016/j.softx.2019.100263
     ER  - 
 
 

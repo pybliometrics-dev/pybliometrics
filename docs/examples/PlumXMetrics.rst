@@ -17,12 +17,12 @@ You can obtain basic information just by printing the object:
 
     >>> print(plum)
     Document with doi 10.1016/j.softx.2019.100263 received:
-    - 105 citation(s) in category 'capture'
-    - 3 citation(s) in category 'citation'
+    - 104 citation(s) in category 'capture'
+    - 7 citation(s) in category 'citation'
     - 1 citation(s) in category 'mention'
     - 42 citation(s) in category 'socialMedia'
     - 4 citation(s) in category 'usage'
-    as of 2020-08-04
+    as of 2021-01-04
 
 
 To each of the five categories, there is one property storing number and origin of the metrics in `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_.  If in a category there are no entries the property is simply `None`:
@@ -30,11 +30,11 @@ To each of the five categories, there is one property storing number and origin 
 .. code-block:: python
 
     >>> >>> plum.capture
-    [Metric(name='READER_COUNT', total=100),
-     Metric(name='WATCHER_COUNT', total=3),
-     Metric(name='FORK_COUNT', total=2)]
+    [Metric(name='READER_COUNT', total=93),
+     Metric(name='WATCHER_COUNT', total=7),
+     Metric(name='FORK_COUNT', total=4)]
     >>> plum.citation
-    [Metric(name='Scopus', total=3)]
+    [Metric(name='Scopus', total=7)]
     >>> plum.mention
     [Metric(name='ALL_BLOG_COUNT', total=1)]
     >>> plum.social_media
@@ -43,16 +43,18 @@ To each of the five categories, there is one property storing number and origin 
     [Metric(name='LINK_OUTS', total=3),
      Metric(name='ABSTRACT_VIEWS', total=1)]
 
+
 Finally there is a property to total all metrics on an aggregated level:
 
 .. code-block:: python
 
     >>> plum.category_totals
-    [Category(name='capture', total=105),
-     Category(name='citation', total=3),
+    [Category(name='capture', total=104),
+     Category(name='citation', total=7),
      Category(name='mention', total=1),
      Category(name='socialMedia', total=42),
      Category(name='usage', total=4)]
+
 
 There are no bibliometric information such as title or author.
 
