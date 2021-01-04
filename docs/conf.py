@@ -29,8 +29,8 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 project = 'pybliometrics'
-author = 'John Kitchin and Michael E. Rose'
-copyright = ','.join(['2017-2020', author])
+author = 'Michael E. Rose and John Kitchin'
+copyright = '2017-2021 ' + author
 
 version = pybliometrics.__version__
 release = pybliometrics.__version__
