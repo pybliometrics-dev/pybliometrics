@@ -79,7 +79,7 @@ or the development version from the GitHub repository (requires git on your syst
 
 .. code-block:: bash
 
-    pip install git+git://github.com/pybliometrics-dev/pybliometrics
+    pip install git+https://github.com/pybliometrics-dev/pybliometrics
 
 .. installation-end
 
