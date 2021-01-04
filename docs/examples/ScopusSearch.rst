@@ -1,9 +1,9 @@
 Scopus Search
 -------------
 
-:doc:`ScopusSearch ()<../reference/pybliometrics.ScopusSearch>` implements the `Scopus Search API <https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_.  It performs a query to search for articles and then retrieves the records of the query.
+:doc:`ScopusSearch() <../reference/pybliometrics.ScopusSearch>` implements the `Scopus Search API <https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_.  It performs a query to search for articles and then retrieves the records of the query.
 
-The class is initialized with a search query.  Any query that works in the `Advanced Search on scopus.com <https://www.scopus.com/search/form.uri?display=advanced>`_ will work.  The only exception are "LIMIT-TO()", as this only affects the display of the results on scopus.com, but not the selection of results per se.  An invalid search query will result in an error.
+The class is initialized with a search query.  Any query that works in the `Advanced Search on scopus.com <https://www.scopus.com/search/form.uri?display=advanced>`_ will work.  There are but two exceptions to allowed keywords: "LIMIT-TO()", as this only affects the display of the results on scopus.com, but not the selection of results per se; and "INDEXTERMS()".  An invalid search query will result in some `error <../tips.html#error-messages>`_.
 
 .. code-block:: python
    
