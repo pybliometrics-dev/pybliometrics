@@ -99,14 +99,28 @@ class SerialTitle(Retrieval):
         (year, indicator)-tuple.  See
         https://www.scimagojr.com/journalrank.php.
         """
-        return _parse_list(self._entry, "SJR")
+        returnlist = _parse_list(self._entry, "SJR")
+        if returnlist == 'Not available':
+            return returnlist
+        else:
+            #in case remove duplicated first entry
+            if removeCurrMetricLineFlag(self):
+                returnlist = returnlist[1:]
+            return sorted(returnlist)
 
     @property
     def sniplist(self):
         """Source-Normalized Impact per Paper (SNIP) of the source.  See
         https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip.
         """
-        return _parse_list(self._entry, "SNIP")
+        returnlist = _parse_list(self._entry, "SNIP")
+        if returnlist == 'Not available':
+            return returnlist
+        else:
+            #in case remove duplicated first entry
+            if removeCurrMetricLineFlag(self):
+                returnlist = returnlist[1:]
+            return sorted(returnlist)
 
     @property
     def source_id(self):
@@ -129,7 +143,7 @@ class SerialTitle(Retrieval):
         """The title of the source."""
         return self._entry['dc:title']
 
-    def __init__(self, issn, refresh=False, view="ENHANCED"):
+    def __init__(self, issn, refresh=False, view="ENHANCED", date=None):
         """Interaction with the Serial Title API.
 
         Parameters
@@ -147,6 +161,12 @@ class SerialTitle(Retrieval):
             BASIC, STANDARD, ENHANCED.  For details see
             https://dev.elsevier.com/guides/SerialTitleViews.htm.
 
+        date : str (optional, default=None)
+            A string specifying a year or range of years (combining two
+            years with a hyphen) for which yearly metric data (SJR, SNIP,
+            yearly-data) should be looked up for. If date=None only the
+            most recent metric data values are provided.
+
         Examples
         --------
         See https://pybliometrics.readthedocs.io/en/stable/examples/SerialTitle.html.
@@ -163,7 +183,11 @@ class SerialTitle(Retrieval):
                              ', '.join(allowed_views))
         # Load json
         self._id = str(issn)
-        Retrieval.__init__(self, identifier=self._id, view=view,
+        self._date = date
+        #force refresh when date is specified
+        if date is not None:
+            refresh = True
+        Retrieval.__init__(self, identifier=self._id, view=view, date=date,
                            api='SerialTitle', refresh=refresh)
         self._json = self._json['serial-metadata-response']
         self._entry = self._json['entry'][0]
@@ -193,7 +217,22 @@ class SerialTitle(Retrieval):
 def _parse_list(d, list):
     """Auxiliary function to parse SNIP and SJR lists."""
     keyword = list + "List"
-    try:
-        return (d[keyword][list][0]['@year'], d[keyword][list][0]['$'])
-    except KeyError:
-        return None
+    if d[keyword] is None:
+        return 'Not available'
+    else:
+        return [ (r['@year'], r['$']) for r in d[keyword][list] ]
+
+def removeCurrMetricLineFlag(self):
+    """Auxiliaty function to determine whether the first
+       line containing duplicate current metric info should
+       be removed from SNIP and SJR lists."""
+    flag = False
+    if self._date is not None:
+        currMetricYear = int(self.citescoreyearinfolist[0][0])
+        if '-' in self._date:
+            lastyear = int(self._date.split("-")[1])
+        else:
+            lastyear = int(self._date)
+        if (lastyear >= currMetricYear):
+            flag = True
+    return flag
