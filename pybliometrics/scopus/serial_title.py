@@ -95,7 +95,7 @@ class SerialTitle(Retrieval):
 
     @property
     def sjrlist(self):
-        """The most recent SCImago Journal Rank (SJR) indicator as
+        """The SCImago Journal Rank (SJR) indicator as
         (year, indicator)-tuple.  See
         https://www.scimagojr.com/journalrank.php.
         """
@@ -189,7 +189,7 @@ class SerialTitle(Retrieval):
 
     def __str__(self):
         """Print a summary string."""
-        date = self.get_cache_file_mdate().split()[0]
+        dateCACHE = self.get_cache_file_mdate().split()[0]
         areas = [e.area for e in self.subject_area]
         if len(areas) == 1:
             areas = areas[0]
@@ -199,11 +199,11 @@ class SerialTitle(Retrieval):
             f"'{self.publisher}', is active in {areas}\n"
         metrics = []
         if self.sjrlist:
-            metrics.append(f"SJR ({self.sjrlist[0]}): ({self.sjrlist[1]})")
+            metrics.append(f"SJR: {self.sjrlist}")
         if self.sniplist:
-            metrics.append(f"SNIP ({self.sniplist[0]}): ({self.sniplist[1]})")
+            metrics.append(f"SNIP: {self.sniplist}")
         if metrics:
-            s += f"Metrics as of {date}:\n    " + ", ".join(metrics) + "\n"
+            s += f"Metrics as of {dateCACHE}:\n    " + "\n    ".join(metrics) + "\n"
         s += f"    ISSN: {self.issn or '-'}, E-ISSN: {self.eissn or '-'}, "\
              f"Scopus ID: {self.source_id}"
         return s
