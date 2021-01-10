@@ -103,9 +103,8 @@ class SerialTitle(Retrieval):
         if returnlist == 'Not available':
             return returnlist
         else:
-            #in case remove duplicated first entry
-            if removeCurrMetricLineFlag(self):
-                returnlist = returnlist[1:]
+            #in case remove duplicated entries using set
+            returnlist = list( set(returnlist) )
             return sorted(returnlist)
 
     @property
@@ -117,9 +116,8 @@ class SerialTitle(Retrieval):
         if returnlist == 'Not available':
             return returnlist
         else:
-            #in case remove duplicated first entry
-            if removeCurrMetricLineFlag(self):
-                returnlist = returnlist[1:]
+            #in case remove duplicated entries using set
+            returnlist = list( set(returnlist) )
             return sorted(returnlist)
 
     @property
@@ -222,17 +220,3 @@ def _parse_list(d, list):
     else:
         return [ (r['@year'], r['$']) for r in d[keyword][list] ]
 
-def removeCurrMetricLineFlag(self):
-    """Auxiliaty function to determine whether the first
-       line containing duplicate current metric info should
-       be removed from SNIP and SJR lists."""
-    flag = False
-    if self._date is not None:
-        currMetricYear = int(self.citescoreyearinfolist[0][0])
-        if '-' in self._date:
-            lastyear = int(self._date.split("-")[1])
-        else:
-            lastyear = int(self._date)
-        if (lastyear >= currMetricYear):
-            flag = True
-    return flag
