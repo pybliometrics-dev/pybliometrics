@@ -24,7 +24,7 @@ By default, after initial set-up (see below), the file will look like this:
         ZZZ
 
 
-where PPP refers to `~/` and XXX, YYYY and ZZZ refer to your API Keys, of which you can register 10 for your account.  To make pybliometrics replace a depleted key with a random one of the others, separate keys on a comma.  Multi-line statements are allowed as long they are indented.
+where PPP refers to `~/` and XXX, YYYY and ZZZ refer to your API Keys, of which you can register 10 for your Scopus account.  If you provide all of them (separated by a comma), pybliometrics automatically replaces a depleted key with a random one of the others.  If you edit the file manually, remember to indent multi-line statements.
 
 Simply edit this file to change the paths where `pybliometrics` should cache downloaded files (`pybliometrics` will create them if necessary)
 
@@ -38,21 +38,13 @@ If the configuration file does not exist, `pybliometrics` will prompt you to pro
     >>> pybliometrics.scopus.utils.create_config()
 
 
-There are two prompts: For your API Key(s) and your InstToken.  Most users only need to provide the API Key(s) and hit enter on the second prompt.  The corresponding part of the configuration file looks like this:
+There are two prompts: For your API Key(s) and your InstToken.  The InstToken enables or facilitates access from outside your institution network, and you request it from Elsevier's Integration Support.  If you don't use InstToken, hit enter on the second prompt.  The InstToken, if provided, is added to the Authentication block:
 
 .. code-block:: none
 
     [Authentication]
     APIKey = XXX, YYY, ZZZ
-
-
-If you have to use InstToken authentication, enter it in the second prompt.  The corresponding part in the configuration file will look like this:
-
-.. code-block:: none
-
-    [InstToken]
-    X-ELS-APIKey = XXX
-    X-ELS-Insttoken = PPP
+    InstToken = WWW
 
 
 If you need to use a proxy, please edit the file manually to include a section that looks like so:
