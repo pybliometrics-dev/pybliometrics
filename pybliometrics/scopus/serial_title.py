@@ -202,9 +202,13 @@ class SerialTitle(Retrieval):
             f"'{self.publisher}', is active in {areas}\n"
         metrics = []
         if self.sjrlist:
-            metrics.append(f"SJR: {self.sjrlist}")
+            metrics.append(f"SJR:  year value")
+            for rec in self.sjrlist:
+                metrics.append(f"      {rec[0]} {rec[1]}")
         if self.sniplist:
-            metrics.append(f"SNIP: {self.sniplist}")
+            metrics.append(f"SNIP: year value")
+            for rec in self.sniplist:
+                metrics.append(f"      {rec[0]} {rec[1]}")
         if metrics:
             s += f"Metrics as of {dateCACHE}:\n    " + "\n    ".join(metrics) + "\n"
         s += f"    ISSN: {self.issn or '-'}, E-ISSN: {self.eissn or '-'}, "\
