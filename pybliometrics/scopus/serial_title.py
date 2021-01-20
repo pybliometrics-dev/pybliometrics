@@ -99,26 +99,14 @@ class SerialTitle(Retrieval):
         (year, indicator)-tuple.  See
         https://www.scimagojr.com/journalrank.php.
         """
-        returnlist = _parse_list(self._entry, "SJR")
-        if returnlist == 'Not available':
-            return returnlist
-        else:
-            #in case remove duplicated entries using set
-            returnlist = list( set(returnlist) )
-            return sorted(returnlist)
+        return _parse_list(self._entry, "SJR")
 
     @property
     def sniplist(self):
         """Source-Normalized Impact per Paper (SNIP) of the source.  See
         https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip.
         """
-        returnlist = _parse_list(self._entry, "SNIP")
-        if returnlist == 'Not available':
-            return returnlist
-        else:
-            #in case remove duplicated entries using set
-            returnlist = list( set(returnlist) )
-            return sorted(returnlist)
+        return _parse_list(self._entry, "SNIP")
 
     @property
     def source_id(self):
@@ -216,11 +204,14 @@ class SerialTitle(Retrieval):
         return s
 
 
-def _parse_list(d, list):
+def _parse_list(d, listSTR):
     """Auxiliary function to parse SNIP and SJR lists."""
-    keyword = list + "List"
-    if d[keyword] is None:
-        return 'Not available'
-    else:
-        return [ (r['@year'], r['$']) for r in d[keyword][list] ]
-
+    keyword = listSTR + "List"
+    try:
+        #use list comprehension to retrieve indicator values
+        indlist = [(r['@year'], r['$']) for r in d[keyword][listSTR]]
+        #in case remove duplicated entries using set and sort
+        indlist = list(set(indlist))
+        return sorted(indlist)
+    except TypeError:
+        return None
