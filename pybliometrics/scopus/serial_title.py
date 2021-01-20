@@ -141,7 +141,7 @@ class SerialTitle(Retrieval):
         """The title of the source."""
         return self._entry['dc:title']
 
-    def __init__(self, issn, years=None, refresh=True, view="ENHANCED"):
+    def __init__(self, issn, years=None, refresh=False, view="ENHANCED"):
         """Interaction with the Serial Title API.
 
         Parameters
@@ -182,6 +182,9 @@ class SerialTitle(Retrieval):
         # Load json
         self._id = str(issn)
         self._years = years
+        # force refresh when years is specified
+        if years is not None:
+            refresh = True
         Retrieval.__init__(self, identifier=self._id, view=view, date=years,
                            api='SerialTitle', refresh=refresh)
         self._json = self._json['serial-metadata-response']
