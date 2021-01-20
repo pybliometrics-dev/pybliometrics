@@ -141,7 +141,7 @@ class SerialTitle(Retrieval):
         """The title of the source."""
         return self._entry['dc:title']
 
-    def __init__(self, issn, refresh=True, view="ENHANCED", date=None):
+    def __init__(self, issn, years=None, refresh=True, view="ENHANCED"):
         """Interaction with the Serial Title API.
 
         Parameters
@@ -159,10 +159,10 @@ class SerialTitle(Retrieval):
             BASIC, STANDARD, ENHANCED.  For details see
             https://dev.elsevier.com/guides/SerialTitleViews.htm.
 
-        date : str (optional, default=None)
+        years : str (optional, default=None)
             A string specifying a year or range of years (combining two
             years with a hyphen) for which yearly metric data (SJR, SNIP,
-            yearly-data) should be looked up for. If date=None only the
+            yearly-data) should be looked up for. If years=None only the
             most recent metric data values are provided.
 
         Examples
@@ -181,8 +181,8 @@ class SerialTitle(Retrieval):
                              ', '.join(allowed_views))
         # Load json
         self._id = str(issn)
-        self._date = date
-        Retrieval.__init__(self, identifier=self._id, view=view, date=date,
+        self._years = years
+        Retrieval.__init__(self, identifier=self._id, view=view, date=years,
                            api='SerialTitle', refresh=refresh)
         self._json = self._json['serial-metadata-response']
         self._entry = self._json['entry'][0]
