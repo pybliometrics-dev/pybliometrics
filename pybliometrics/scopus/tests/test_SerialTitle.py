@@ -8,103 +8,103 @@ from nose.tools import assert_equal, assert_true
 from pybliometrics.scopus import SerialTitle
 
 # SoftwareX
-sofwarex = SerialTitle("2352-7110", refresh=30)
-# ISA
-# isa = SerialTitle("0018-9219", refresh=30)
+sofwarex = SerialTitle("2352-7110", refresh=30, years="2019-2020")
+# OECD Economic Studies
+oecd = SerialTitle("0255-0822", refresh=30)
 
 
 def test_aggregation_type():
     assert_equal(sofwarex.aggregation_type, "journal")
-    # assert_equal(isa.aggregation_type, "conferenceproceeding")
+    assert_equal(oecd.aggregation_type, "journal")
 
 
 def test_citescoreyearinfolist():
-    expected1 = [('2019', '2.4'), ('2020', '2.5')]
+    expected1 = [('2019', '2.4'), ('2020', '2.6')]
     assert_equal(sofwarex.citescoreyearinfolist, expected1)
-    # assert_equal(isa.citescoreyearinfolist, None)
+    assert_equal(oecd.citescoreyearinfolist, None)
 
 
 def test_eissn():
     assert_equal(sofwarex.eissn, "2352-7110")
-    # assert_equal(isa.eissn, None)
+    assert_equal(oecd.eissn, "1609-7491")
 
 
 def test_issn():
     assert_equal(sofwarex.issn, None)
-    # assert_equal(isa.issn, "5617-1099")
+    assert_equal(oecd.issn, "0255-0822")
 
 
 def test_oaallowsauthorpaid():
     assert_equal(sofwarex.oaallowsauthorpaid, None)
-    # assert_equal(isa.oaallowsauthorpaid, None)
+    assert_equal(oecd.oaallowsauthorpaid, None)
 
 
 def test_openaccess():
     assert_equal(sofwarex.openaccess, None)
-    # assert_equal(isa.openaccess, None)
+    assert_equal(oecd.openaccess, None)
 
 
 def test_openaccessstartdate():
     assert_equal(sofwarex.openaccessstartdate, None)
-    # assert_equal(isa.openaccessstartdate, None)
+    assert_equal(oecd.openaccessstartdate, None)
 
 
 def test_openaccesstype():
     assert_equal(sofwarex.openaccesstype, None)
-    # assert_equal(isa.openaccesstype, None)
+    assert_equal(oecd.openaccesstype, None)
 
 
 def test_openaccessarticle():
     assert_equal(sofwarex.openaccessarticle, None)
-    # assert_equal(isa.openaccessarticle, None)
+    assert_equal(oecd.openaccessarticle, None)
 
 
 def test_openarchivearticle():
     assert_equal(sofwarex.openarchivearticle, None)
-    # assert_equal(isa.openarchivearticle, None)
+    assert_equal(oecd.openarchivearticle, None)
 
 
 def test_openaccesssponsorname():
     assert_equal(sofwarex.openaccesssponsorname, None)
-    # assert_equal(isa.openaccesssponsorname, None)
+    assert_equal(oecd.openaccesssponsorname, None)
 
 
 def test_openaccessuserlicense():
     assert_equal(sofwarex.openaccessuserlicense, None)
-    # assert_equal(isa.openaccessuserlicense, None)
+    assert_equal(oecd.openaccessuserlicense, None)
 
 
 def test_publisher():
     assert_equal(sofwarex.publisher, "Elsevier BV")
-    # assert_equal(isa.publisher, "Instrument Society of America")
+    assert_equal(oecd.publisher, "OECD")
 
 
 def test_scopus_source_link():
     expected1 = "https://www.scopus.com/source/sourceInfo.url?sourceId=21100422153"
     assert_equal(sofwarex.scopus_source_link, expected1)
-    # expected2 = "https://www.scopus.com/source/sourceInfo.url?sourceId=110387"
-    # assert_equal(isa.scopus_source_link, expected2)
+    expected2 = "https://www.scopus.com/source/sourceInfo.url?sourceId=24107"
+    assert_equal(oecd.scopus_source_link, expected2)
 
 
 def test_self_link():
     expected1 = "https://api.elsevier.com/content/serial/title/issn/23527110"
     assert_equal(sofwarex.self_link, expected1)
-    expected2 = "https://api.elsevier.com/content/serial/title/issn/56171099"
-    # assert_equal(isa.self_link, expected2)
+    expected2 = "https://api.elsevier.com/content/serial/title/issn/02550822"
+    assert_equal(oecd.self_link, expected2)
 
 def test_sjrlist():
-    assert_equal(sofwarex.sjrlist, ('2019', '0.445'))
-    # assert_equal(isa.sjrlist, ('2006', '0.101'))
+    assert_equal(sofwarex.sjrlist, [('2019', '0.445')])
+    assert_equal(oecd.sjrlist, [('1999', '2.723')])
 
 
 def test_sniplist():
-    assert_equal(sofwarex.sniplist, ('2019', '1.08'))
-    # assert_equal(isa.sniplist, ('2006', '0'))
+    assert_equal(sofwarex.sniplist, [('2019', '1.08')])
+    assert_equal(oecd.sniplist, None)
 
 
 def test_source_id():
     assert_equal(sofwarex.source_id, "21100422153")
-    # assert_equal(isa.source_id, "110387")
+    assert_equal(oecd.source_id, "24107")
 
 
 def test_subject_area():
@@ -114,13 +114,12 @@ def test_subject_area():
         area(area='Computer Science Applications', abbreviation='COMP', code='1706')
     ]
     assert_equal(sofwarex.subject_area, expected1)
-    # expected2 = [
-    #     area(area='Instrumentation', abbreviation='PHYS', code='3105'),
-    #     area(area='Condensed Matter Physics', abbreviation='PHYS', code='3104')
-    # ]
-    # assert_equal(isa.subject_area, expected2)
+    expected2 = [
+        area(area='Geography, Planning and Development', abbreviation='SOCI', code='3305')
+    ]
+    assert_equal(oecd.subject_area, expected2)
 
 
 def test_title():
     assert_equal(sofwarex.title, "SoftwareX")
-    # assert_equal(isa.title, "Annual ISA Analysis Division Symposium - Proceedings")
+    assert_equal(oecd.title, "OECD Economic Studies")
