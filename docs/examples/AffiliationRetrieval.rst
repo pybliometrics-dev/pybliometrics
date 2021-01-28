@@ -1,14 +1,14 @@
-Content Affiliation Retrieval
------------------------------
+Affiliation Retrieval
+---------------------
 
-:doc:`ContentAffiliationRetrieval() <../reference/pybliometrics.ContentAffiliationRetrieval>` implements the `Content Affiliation Retrieval API <https://dev.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, like city, country, its members, and more.
+:doc:`AffiliationRetrieval() <../reference/pybliometrics.AffiliationRetrieval>` implements the `Affiliation Retrieval API <https://dev.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, like city, country, its members, and more.
 
 You initialize the class with Scopus' Affiliation ID:
 
 .. code-block:: python
    
-    >>> from pybliometrics.scopus import ContentAffiliationRetrieval
-    >>> aff = ContentAffiliationRetrieval("60000356")
+    >>> from pybliometrics.scopus import AffiliationRetrieval
+    >>> aff = AffiliationRetrieval("60000356")
 
 
 You can obtain basic information just by printing the object:
@@ -60,9 +60,9 @@ Scopus also collects information on different names affiliated authors use for t
 
     >>> aff.name_variants
     [Variant(name='University Of Cape Town', doc_count='60095'),
-    Variant(name='Univ. Cape Town', doc_count='1659'),
-    Variant(name='Univ Of Cape Town', doc_count='772'),
-    Variant(name='Univ. Of Cape Town', doc_count='392')]
+     Variant(name='Univ. Cape Town', doc_count='1659'),
+     Variant(name='Univ Of Cape Town', doc_count='772'),
+     Variant(name='Univ. Of Cape Town', doc_count='392')]
 
 
 Using `pandas <https://pandas.pydata.org/>`_ you can easily turn this into a DataFrame:

@@ -20,7 +20,7 @@ pybliometrics provides one class per Scopus API Access Point (see https://dev.el
 .. autosummary::
 
    scopus.AbstractRetrieval
-   scopus.ContentAffiliationRetrieval
+   scopus.AffiliationRetrieval
    scopus.AuthorRetrieval
    scopus.AffiliationSearch
    scopus.AuthorSearch

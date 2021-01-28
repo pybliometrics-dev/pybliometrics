@@ -5,7 +5,7 @@ from pybliometrics.scopus.utils import chained_get, get_id, get_link,\
     parse_date_created
 
 
-class ContentAffiliationRetrieval(Retrieval):
+class AffiliationRetrieval(Retrieval):
     @property
     def address(self):
         """The address of the affiliation."""
@@ -117,7 +117,7 @@ class ContentAffiliationRetrieval(Retrieval):
         return self._json['coredata'].get('prism:url')
 
     def __init__(self, aff_id, refresh=False):
-        """Interaction with the Content Affiliation Retrieval API.
+        """Interaction with the Affiliation Retrieval API.
 
         Parameters
         ----------
@@ -132,7 +132,7 @@ class ContentAffiliationRetrieval(Retrieval):
 
         Examples
         --------
-        See https://pybliometrics.readthedocs.io/en/stable/examples/ContentAffiliationRetrieval.html.
+        See https://pybliometrics.readthedocs.io/en/stable/examples/AffiliationRetrieval.html.
 
         Notes
         -----
@@ -142,7 +142,7 @@ class ContentAffiliationRetrieval(Retrieval):
         # Load json
         aff_id = str(int(str(aff_id).split('-')[-1]))
         Retrieval.__init__(self, identifier=aff_id, view="STANDARD",
-                           refresh=refresh, api='ContentAffiliationRetrieval')
+                           refresh=refresh, api='AffiliationRetrieval')
         self._json = self._json['affiliation-retrieval-response']
 
     def __str__(self):
@@ -152,3 +152,12 @@ class ContentAffiliationRetrieval(Retrieval):
             f"{int(self.author_count):,} associated author(s) and "\
             f"{int(self.document_count):,} associated document(s) as of {date}"
         return s
+
+
+def ContentAffiliationRetrieval(*args, **kwargs):
+    from warnings import warn
+    text = "Class ContentAffiliationRetrieval() has been renamed to "\
+           "AffiliationRetrieval().  This class will be removed in "\
+           "pybliometrics 3.0."
+    warn(text, Warning, stacklevel=2)
+    return AffiliationRetrieval(*args, **kwargs)

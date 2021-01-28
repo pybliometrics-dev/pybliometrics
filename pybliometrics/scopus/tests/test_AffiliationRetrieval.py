@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Tests for `scopus.ContentAffiliationRetrieval` module."""
+"""Tests for `scopus.AffiliationRetrieval` module."""
 
 from nose.tools import assert_equal, assert_true
 
-from pybliometrics.scopus import ContentAffiliationRetrieval
+from pybliometrics.scopus import AffiliationRetrieval
 
 
-aff = ContentAffiliationRetrieval('60000356', refresh=30)
+aff = AffiliationRetrieval('60000356', refresh=30)
 
 
 def test_address():

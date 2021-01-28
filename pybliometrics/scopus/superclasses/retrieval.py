@@ -19,7 +19,7 @@ class Retrieval(Base):
         api : str
             The name of the Scopus API to be accessed.  Allowed values:
             AbstractRetrieval, AuthorRetrieval, CitationOverview,
-            ContentAffiliationRetrieval.
+            AffiliationRetrieval.
 
         refresh : bool or int
             Whether to refresh the cached file if it exists or not.  If int

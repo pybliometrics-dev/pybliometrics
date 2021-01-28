@@ -106,7 +106,7 @@ Extensive information on current and former affiliations is provided as namedtup
     org_domain='fhi.mpg.de', org_URL='https://www.fhi.mpg.de/')
 
 
-The affiliation ID to be used for the :doc:`ContentAffiliationRetrieval <../reference/pybliometrics.ContentAffiliationRetrieval>` class.
+The affiliation ID to be used for the :doc:`AffiliationRetrieval <../reference/pybliometrics.AffiliationRetrieval>` class.
 
 `pybliometrics` caches results to speed up subsequent analysis.  This information eventually becomes outdated.  To refresh the cached results if they exist, use the refresh parameter when initiating the class.  Set `refresh=True` or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `au.get_cache_file_mdate()` to get the date of last modification, and `au.get_cache_file_age()` the number of days since the last modification.
 

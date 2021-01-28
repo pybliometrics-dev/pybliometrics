@@ -16,8 +16,8 @@ Retrieval APIs
 
 .. toctree::
     examples/AbstractRetrieval.rst
+    examples/AffiliationRetrieval.rst
     examples/AuthorRetrieval.rst
-    examples/ContentAffiliationRetrieval.rst
 
 Metadata APIs
 ~~~~~~~~~~~~~
