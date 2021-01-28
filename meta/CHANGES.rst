@@ -3,6 +3,14 @@ Change Log
 
 .. toctree::
 
+2.8
+~~~
+
+* Class `ContentAffiliationRetrieval()` has been renamed to `AffiliationRetrieval()`; `ContentAffiliationRetrieval()` will remain until 3.0 but it will raise a Warning.
+* Add parameter `years` to `SerialTitle()`, to retrieve journal metrics for specific years.
+* Fix documentation on InstToken.
+* Fix bug with reading empty queries.
+
 2.7.2
 ~~~~~
 
