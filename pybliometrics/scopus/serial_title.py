@@ -95,15 +95,16 @@ class SerialTitle(Retrieval):
 
     @property
     def sjrlist(self):
-        """The SCImago Journal Rank (SJR) indicator as
-        (year, indicator)-tuple.  See
+        """The SCImago Journal Rank (SJR) indicator as list of
+        (year, indicator)-tuples.  See
         https://www.scimagojr.com/journalrank.php.
         """
         return _parse_list(self._entry, "SJR")
 
     @property
     def sniplist(self):
-        """Source-Normalized Impact per Paper (SNIP) of the source.  See
+        """The Source-Normalized Impact per Paper (SNIP) as list of
+        (year, indicator)-tuples.  See
         https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip.
         """
         return _parse_list(self._entry, "SNIP")
@@ -129,7 +130,7 @@ class SerialTitle(Retrieval):
         """The title of the source."""
         return self._entry['dc:title']
 
-    def __init__(self, issn, years=None, refresh=False, view="ENHANCED"):
+    def __init__(self, issn, refresh=False, view="ENHANCED", years=None):
         """Interaction with the Serial Title API.
 
         Parameters
@@ -150,8 +151,9 @@ class SerialTitle(Retrieval):
         years : str (optional, default=None)
             A string specifying a year or range of years (combining two
             years with a hyphen) for which yearly metric data (SJR, SNIP,
-            yearly-data) should be looked up for. If years=None only the
+            yearly-data) should be looked up for.  If None, only the
             most recent metric data values are provided.
+            Note: If not None, refresh will always be True.
 
         Examples
         --------
@@ -170,8 +172,8 @@ class SerialTitle(Retrieval):
         # Load json
         self._id = str(issn)
         self._years = years
-        # force refresh when years is specified
-        if years is not None:
+        # Force refresh when years is specified
+        if years:
             refresh = True
         Retrieval.__init__(self, identifier=self._id, view=view, date=years,
                            api='SerialTitle', refresh=refresh)
@@ -180,7 +182,7 @@ class SerialTitle(Retrieval):
 
     def __str__(self):
         """Print a summary string."""
-        dateCACHE = self.get_cache_file_mdate().split()[0]
+        date = self.get_cache_file_mdate().split()[0]
         areas = [e.area for e in self.subject_area]
         if len(areas) == 1:
             areas = areas[0]
@@ -198,20 +200,16 @@ class SerialTitle(Retrieval):
             for rec in self.sniplist:
                 metrics.append(f"      {rec[0]} {rec[1]}")
         if metrics:
-            s += f"Metrics as of {dateCACHE}:\n    " + "\n    ".join(metrics) + "\n"
+            s += f"Metrics as of {date}:\n    " + "\n    ".join(metrics) + "\n"
         s += f"    ISSN: {self.issn or '-'}, E-ISSN: {self.eissn or '-'}, "\
              f"Scopus ID: {self.source_id}"
         return s
 
 
-def _parse_list(d, listSTR):
+def _parse_list(d, metric):
     """Auxiliary function to parse SNIP and SJR lists."""
-    keyword = listSTR + "List"
     try:
-        #use list comprehension to retrieve indicator values
-        indlist = [(r['@year'], r['$']) for r in d[keyword][listSTR]]
-        #in case remove duplicated entries using set and sort
-        indlist = list(set(indlist))
-        return sorted(indlist)
-    except TypeError:
+        values = [(r['@year'], r['$']) for r in d[metric + "List"][metric]]
+        return sorted(set(values))
+    except (KeyError, TypeError):
         return None
