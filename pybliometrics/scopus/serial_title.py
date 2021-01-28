@@ -95,7 +95,7 @@ class SerialTitle(Retrieval):
 
     @property
     def sjrlist(self):
-        """The most recent SCImago Journal Rank (SJR) indicator as
+        """The SCImago Journal Rank (SJR) indicator as
         (year, indicator)-tuple.  See
         https://www.scimagojr.com/journalrank.php.
         """
@@ -129,7 +129,7 @@ class SerialTitle(Retrieval):
         """The title of the source."""
         return self._entry['dc:title']
 
-    def __init__(self, issn, refresh=False, view="ENHANCED"):
+    def __init__(self, issn, years=None, refresh=False, view="ENHANCED"):
         """Interaction with the Serial Title API.
 
         Parameters
@@ -147,6 +147,12 @@ class SerialTitle(Retrieval):
             BASIC, STANDARD, ENHANCED.  For details see
             https://dev.elsevier.com/guides/SerialTitleViews.htm.
 
+        years : str (optional, default=None)
+            A string specifying a year or range of years (combining two
+            years with a hyphen) for which yearly metric data (SJR, SNIP,
+            yearly-data) should be looked up for. If years=None only the
+            most recent metric data values are provided.
+
         Examples
         --------
         See https://pybliometrics.readthedocs.io/en/stable/examples/SerialTitle.html.
@@ -163,14 +169,18 @@ class SerialTitle(Retrieval):
                              ', '.join(allowed_views))
         # Load json
         self._id = str(issn)
-        Retrieval.__init__(self, identifier=self._id, view=view,
+        self._years = years
+        # force refresh when years is specified
+        if years is not None:
+            refresh = True
+        Retrieval.__init__(self, identifier=self._id, view=view, date=years,
                            api='SerialTitle', refresh=refresh)
         self._json = self._json['serial-metadata-response']
         self._entry = self._json['entry'][0]
 
     def __str__(self):
         """Print a summary string."""
-        date = self.get_cache_file_mdate().split()[0]
+        dateCACHE = self.get_cache_file_mdate().split()[0]
         areas = [e.area for e in self.subject_area]
         if len(areas) == 1:
             areas = areas[0]
@@ -180,20 +190,28 @@ class SerialTitle(Retrieval):
             f"'{self.publisher}', is active in {areas}\n"
         metrics = []
         if self.sjrlist:
-            metrics.append(f"SJR ({self.sjrlist[0]}): ({self.sjrlist[1]})")
+            metrics.append(f"SJR:  year value")
+            for rec in self.sjrlist:
+                metrics.append(f"      {rec[0]} {rec[1]}")
         if self.sniplist:
-            metrics.append(f"SNIP ({self.sniplist[0]}): ({self.sniplist[1]})")
+            metrics.append(f"SNIP: year value")
+            for rec in self.sniplist:
+                metrics.append(f"      {rec[0]} {rec[1]}")
         if metrics:
-            s += f"Metrics as of {date}:\n    " + ", ".join(metrics) + "\n"
+            s += f"Metrics as of {dateCACHE}:\n    " + "\n    ".join(metrics) + "\n"
         s += f"    ISSN: {self.issn or '-'}, E-ISSN: {self.eissn or '-'}, "\
              f"Scopus ID: {self.source_id}"
         return s
 
 
-def _parse_list(d, list):
+def _parse_list(d, listSTR):
     """Auxiliary function to parse SNIP and SJR lists."""
-    keyword = list + "List"
+    keyword = listSTR + "List"
     try:
-        return (d[keyword][list][0]['@year'], d[keyword][list][0]['$'])
-    except KeyError:
+        #use list comprehension to retrieve indicator values
+        indlist = [(r['@year'], r['$']) for r in d[keyword][listSTR]]
+        #in case remove duplicated entries using set and sort
+        indlist = list(set(indlist))
+        return sorted(indlist)
+    except TypeError:
         return None

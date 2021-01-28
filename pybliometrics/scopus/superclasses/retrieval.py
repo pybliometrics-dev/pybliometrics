@@ -34,9 +34,11 @@ class Retrieval(Base):
             Note: Will only take effect for the AbstractRetrieval API.
 
         date : str (optional, default=None)
-            A string combining two years with a hyphen for which citations
-            should be looked up for.
-            Note: Will only take effect for the CitationOverview API.
+            A string specifying a year or range of years (combining two
+            years with a hyphen) for which either citations or yearly
+            metric data (SJR, SNIP, yearly-data) should be looked up for.
+            Note: Will only take effect for the CitationOverview and
+            SerialTitle APIs.
 
         kwds : key-value parings, optional
             Keywords passed on to requests header.  Must contain fields
@@ -59,6 +61,8 @@ class Retrieval(Base):
         params = {'view': view, **kwds}
         if api == 'CitationOverview':
             params.update({'date': date, 'scopus_id': identifier.split('0-')[-1]})
+        if api == 'SerialTitle':
+            params.update({'date': date})
         url += identifier
 
         # Parse file contents
