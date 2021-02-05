@@ -133,7 +133,7 @@ class CitationOverview(Retrieval):
         """Volume for the abstract."""
         return self._citeInfoMatrix.get('volume')
 
-    def __init__(self, eid, start, end=datetime.now().year, refresh=False):
+    def __init__(self, eid, start, end=datetime.now().year, citation='', refresh=False):
         """Interaction witht the Citation Overview API.
 
         Parameters
@@ -147,6 +147,10 @@ class CitationOverview(Retrieval):
         end : str or int (optional, default=datetime.now().year)
             The last year for which the citation count should be loaded.
             Default is the current year.
+
+        citation : str (optional, default='')
+            Allows for the exclusion of self-citations.
+            The default behavior is to include all citations.
 
         refresh : bool or int (optional, default=False)
             Whether to refresh the cached file if it exists or not.  If int
@@ -167,12 +171,14 @@ class CitationOverview(Retrieval):
         # Variables
         self._start = int(start)
         self._end = int(end)
+        self._citation = citation
         view = "STANDARD"  # In case Scopus adds different views in future
 
         # Get file content
         date = f'{start}-{end}'
         Retrieval.__init__(self, eid, 'CitationOverview', refresh, view=view,
-                           date=date)
+                           date=date,
+                           citation=citation)
         self._data = self._json['abstract-citations-response']
 
         # citeInfoMatrix
@@ -191,7 +197,7 @@ class CitationOverview(Retrieval):
         if len(authors) > 1:
             authors[-1] = " and ".join([authors[-2], authors[-1]])
         s = f"Document '{self.title}' by {', '.join(authors)}\npublished in "\
-            f"'{self.publicationName}' has the following citation trajectory "\
+            f"'{self.publicationName}' has the following {self._citation} citation trajectory "\
             f"as of {date}:\n    Before {self._start} {self.pcc}; "\
             f"{'; '.join([f'{item[0]}: {item[1]}' for item in self.cc])}; "\
             f"After {self._end}: {self.lcc} times "

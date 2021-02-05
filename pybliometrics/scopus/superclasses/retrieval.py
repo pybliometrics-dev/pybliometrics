@@ -8,7 +8,7 @@ from pybliometrics.scopus.utils import RETRIEVAL_URL, get_folder
 
 class Retrieval(Base):
     def __init__(self, identifier, api, refresh, view, id_type=None,
-                 date=None, **kwds):
+                 date=None, citation=None, **kwds):
         """Class intended as superclass to perform retrievals.
 
         Parameters
@@ -40,6 +40,10 @@ class Retrieval(Base):
             Note: Will only take effect for the CitationOverview and
             SerialTitle APIs.
 
+        citation : str (optional, default=None)
+            Allows for the exclusion of self-citations.
+            The default behavior is to include all citations.
+
         kwds : key-value parings, optional
             Keywords passed on to requests header.  Must contain fields
             and values specified in the respective API specification.
@@ -60,7 +64,7 @@ class Retrieval(Base):
             url += id_type + "/"
         params = {'view': view, **kwds}
         if api == 'CitationOverview':
-            params.update({'date': date, 'scopus_id': identifier.split('0-')[-1]})
+            params.update({'date': date, 'scopus_id': identifier.split('0-')[-1], 'citation': citation})
         if api == 'SerialTitle':
             params.update({'date': date})
         url += identifier
