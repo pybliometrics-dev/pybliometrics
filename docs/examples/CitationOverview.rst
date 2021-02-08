@@ -3,14 +3,14 @@ Citation Overview
 
 :doc:`CitationOverview() <../reference/pybliometrics.CitationOverview>` implements the `Citations Overview API <https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key needs to be approved by Elsevier manually.  Please contact Scopus to do so.  Otherwise each request throws 403 errors.
 
-It takes a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_ as argument and additionally a starting year and an ending year for which yearly citations will be retrieved.  If no ending year is given, `CitationOverview()` will use the current year.  Retrieving these results is not fast, so we cache them to speed up subsequent uses of the data.
+It takes a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_ as argument, an optional citation argument to allow exclusion of books or self-citation and additionally a starting year and an ending year for which yearly citations will be retrieved.  If no ending year is given, `CitationOverview()` will use the current year.  Retrieving these results is not fast, so we cache them to speed up subsequent uses of the data.
 
 You initialize the class with Scopus' Electronic Identifier (EID):
 
 .. code-block:: python
    
     >>> from pybliometrics.scopus import CitationOverview
-    >>> co = CitationOverview("2-s2.0-85068268027", start=2019, end=2021)
+    >>> co = CitationOverview("2-s2.0-85068268027", start=2019, end=2021, citation="exclude-self")
 
 
 You can obtain basic information just by printing the object:
