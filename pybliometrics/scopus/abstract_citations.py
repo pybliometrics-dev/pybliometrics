@@ -203,8 +203,12 @@ class CitationOverview(Retrieval):
         authors = [a.name for a in self.authors]
         if len(authors) > 1:
             authors[-1] = " and ".join([authors[-2], authors[-1]])
+        cits_type = ''
+        cits_dict = {'exclude-self': 'self-citations', 'exclude-books': 'books'}
+        if not self._citation is None:
+            cits_type += f'without {cits_dict[self._citation]}'
         s = f"Document '{self.title}' by {', '.join(authors)}\npublished in "\
-            f"'{self.publicationName}' has the following {self._citation} citation trajectory "\
+            f"'{self.publicationName}' has the following citation trajectory {cits_type} "\
             f"as of {date}:\n    Before {self._start} {self.pcc}; "\
             f"{'; '.join([f'{item[0]}: {item[1]}' for item in self.cc])}; "\
             f"After {self._end}: {self.lcc} times "
