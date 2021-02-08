@@ -43,6 +43,8 @@ class Retrieval(Base):
         citation : str (optional, default=None)
             Allows for the exclusion of self-citations.
             The default behavior is to include all citations.
+            Allowed values: None, exclude-self, exclude-books
+            Note: Will only take effect for the CitationOverview
 
         kwds : key-value parings, optional
             Keywords passed on to requests header.  Must contain fields

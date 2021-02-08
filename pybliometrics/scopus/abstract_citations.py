@@ -133,7 +133,7 @@ class CitationOverview(Retrieval):
         """Volume for the abstract."""
         return self._citeInfoMatrix.get('volume')
 
-    def __init__(self, eid, start, end=datetime.now().year, citation='', refresh=False):
+    def __init__(self, eid, start, end=datetime.now().year, citation=None, refresh=False):
         """Interaction witht the Citation Overview API.
 
         Parameters
@@ -148,9 +148,10 @@ class CitationOverview(Retrieval):
             The last year for which the citation count should be loaded.
             Default is the current year.
 
-        citation : str (optional, default='')
+        citation : str (optional, default=None)
             Allows for the exclusion of self-citations.
             The default behavior is to include all citations.
+            Allowed values: None, exclude-self, exclude-books
 
         refresh : bool or int (optional, default=False)
             Whether to refresh the cached file if it exists or not.  If int
@@ -168,6 +169,12 @@ class CitationOverview(Retrieval):
 
         Your API Key needs to be approved by Elsevier to access this API.
         """
+        # Checks
+        allowed_citation = ('exclude-self', 'exclude-books')
+        if citation not in allowed_citation and not citation is None:
+            raise ValueError('citation parameter must be one of ' +
+                             ', '.join(allowed_citation))
+
         # Variables
         self._start = int(start)
         self._end = int(end)
