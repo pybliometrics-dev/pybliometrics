@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 from pybliometrics.scopus.superclasses import Retrieval
-from pybliometrics.scopus.utils import get_link
+from pybliometrics.scopus.utils import check_parameter_value, get_link
 
 
 class SerialTitle(Retrieval):
@@ -165,10 +165,7 @@ class SerialTitle(Retrieval):
         where `path` is specified in `~/.scopus/config.ini`.
         """
         # Checks
-        allowed_views = ('BASIC', 'STANDARD', 'ENHANCED')
-        if view not in allowed_views:
-            raise ValueError('view parameter must be one of ' +
-                             ', '.join(allowed_views))
+        check_parameter_value(view, ('BASIC', 'STANDARD', 'ENHANCED'), "view")
         # Load json
         self._id = str(issn)
         self._years = years

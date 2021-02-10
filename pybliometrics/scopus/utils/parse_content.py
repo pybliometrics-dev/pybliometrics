@@ -42,13 +42,6 @@ def check_integrity(tuples, fields, action):
             warn(msg)
 
 
-def check_integrity_params(action, allowed=("warn", "raise")):
-    """Verify that the passed integrity action parameters valid ones."""
-    if action not in allowed:
-        msg = 'integrity_action parameter must be one of ' + ', '.join(allowed)
-        raise ValueError(msg)
-
-
 def check_field_consistency(needles, haystack):
     """Raise ValueError if elements of a list are not present in a string."""
     wrong = set(needles) - set(haystack.split())

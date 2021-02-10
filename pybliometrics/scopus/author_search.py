@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 from pybliometrics.scopus.superclasses import Search
-from pybliometrics.scopus.utils import check_integrity, check_integrity_params,\
+from pybliometrics.scopus.utils import check_integrity, check_parameter_value,\
     check_field_consistency, listify, make_search_summary
 
 
@@ -108,7 +108,7 @@ class AuthorSearch(Search):
         the md5-hashed version of `query`.
         """
         # Checks
-        check_integrity_params(integrity_action)
+        check_parameter_value(integrity_action, ("warn", "raise"), "integrity_action")
 
         # Query
         self.query = query

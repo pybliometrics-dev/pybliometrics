@@ -1,8 +1,8 @@
 from collections import namedtuple
 
 from pybliometrics.scopus.superclasses import Search
-from pybliometrics.scopus.utils import check_integrity,\
-    check_integrity_params, check_field_consistency, make_search_summary
+from pybliometrics.scopus.utils import check_integrity, check_parameter_value,\
+    check_field_consistency, make_search_summary
 
 
 class AffiliationSearch(Search):
@@ -98,8 +98,8 @@ class AffiliationSearch(Search):
         where  `path` is specified in `~/.scopus/config.ini` and fname is
         the md5-hashed version of `query`.
         """
-        # Checks
-        check_integrity_params(integrity_action)
+        # Check
+        check_parameter_value(integrity_action, ("warn", "raise"), "integrity_action")
 
         # Query
         self.query = query

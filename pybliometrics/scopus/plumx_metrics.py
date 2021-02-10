@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 from pybliometrics.scopus.superclasses import Retrieval
+from pybliometrics.scopus.utils import check_parameter_value
 
 
 class PlumXMetrics(Retrieval):
@@ -154,20 +155,18 @@ class PlumXMetrics(Retrieval):
         The directory for cached results is `{path}/ENHANCED/{identifier}`,
         where `path` is specified in `~/.scopus/config.ini`.
         """
-        allowed_ids = ('airitiDocId', 'arxivId', 'cabiAbstractId',
-                       'citeulikeId', 'digitalMeasuresArtifactId', 'doi',
-                       'elsevierId', 'elsevierPii', 'facebookCountUrlId',
-                       'figshareArticleId', 'githubRepoId', 'isbn',
-                       'lccn', 'medwaveId', 'nctId',
-                       'oclc', 'pittEprintDscholarId', 'pmcid',
-                       'pmid', 'redditId', 'repecHandle',
-                       'repoUrl', 'scieloId', 'sdEid',
-                       'slideshareUrlId', 'smithsonianPddrId', 'soundcloudTrackId',
-                       'ssrnId', 'urlId', 'usPatentApplicationId',
-                       'usPatentPublicationId', 'vimeoVideoId', 'youtubeVideoId')
-        if id_type not in allowed_ids:
-            raise ValueError('Id type must be one of: ' +
-                             ', '.join(allowed_ids))
+        allowed = ('airitiDocId', 'arxivId', 'cabiAbstractId',
+                   'citeulikeId', 'digitalMeasuresArtifactId', 'doi',
+                   'elsevierId', 'elsevierPii', 'facebookCountUrlId',
+                   'figshareArticleId', 'githubRepoId', 'isbn',
+                   'lccn', 'medwaveId', 'nctId',
+                   'oclc', 'pittEprintDscholarId', 'pmcid',
+                   'pmid', 'redditId', 'repecHandle',
+                   'repoUrl', 'scieloId', 'sdEid',
+                   'slideshareUrlId', 'smithsonianPddrId', 'soundcloudTrackId',
+                   'ssrnId', 'urlId', 'usPatentApplicationId',
+                   'usPatentPublicationId', 'vimeoVideoId', 'youtubeVideoId')
+        check_parameter_value(id_type, allowed, "id_type")
         self.id_type = id_type
         self.identifier = identifier
         Retrieval.__init__(self, identifier=identifier, id_type=id_type,

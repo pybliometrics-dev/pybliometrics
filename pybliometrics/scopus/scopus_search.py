@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 from pybliometrics.scopus.superclasses import Search
-from pybliometrics.scopus.utils import check_integrity, check_integrity_params,\
+from pybliometrics.scopus.utils import check_integrity, check_parameter_value,\
     check_field_consistency, listify, make_search_summary
 
 
@@ -176,11 +176,9 @@ class ScopusSearch(Search):
         the md5-hashed version of `query`.
         """
         # Checks
-        allowed_views = ('STANDARD', 'COMPLETE')
-        if view and view not in allowed_views:
-            msg = 'view parameter must be one of ' + ', '.join(allowed_views)
-            raise ValueError(msg)
-        check_integrity_params(integrity_action)
+        if view:
+            check_parameter_value(view, ('STANDARD', 'COMPLETE'), "view")
+        check_parameter_value(integrity_action, ("warn", "raise"), "integrity_action")
 
         # Parameters
         if not view:

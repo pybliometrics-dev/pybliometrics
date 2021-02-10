@@ -52,14 +52,9 @@ class Retrieval(Base):
 
         Raises
         ------
-        ValueError
+        KeyError
             If the api parameter or view parameter is an invalid entry.
         """
-        # Checks
-        if api not in RETRIEVAL_URL:
-            raise ValueError('api parameter must be one of ' +
-                             ', '.join(RETRIEVAL_URL.keys()))
-
         # Construct parameters
         url = RETRIEVAL_URL[api]
         if api in ("AbstractRetrieval", "PlumXMetrics"):

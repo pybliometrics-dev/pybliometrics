@@ -2,6 +2,7 @@ from collections import namedtuple
 from datetime import datetime
 
 from pybliometrics.scopus.superclasses import Retrieval
+from pybliometrics.scopus.utils import check_parameter_value
 
 
 class CitationOverview(Retrieval):
@@ -170,10 +171,9 @@ class CitationOverview(Retrieval):
         Your API Key needs to be approved by Elsevier to access this API.
         """
         # Checks
-        allowed_citation = ('exclude-self', 'exclude-books')
-        if citation not in allowed_citation and not citation is None:
-            raise ValueError('citation parameter must be one of ' +
-                             ', '.join(allowed_citation))
+        if citation:
+            allowed = ('exclude-self', 'exclude-books')
+            check_parameter_value(citation, allowed, "citation")
 
         # Variables
         self._start = int(start)
@@ -206,7 +206,7 @@ class CitationOverview(Retrieval):
         cits_type = ''
         cits_dict = {'exclude-self': 'self-citations', 'exclude-books': 'books'}
         if not self._citation is None:
-            cits_type += f'without {cits_dict[self._citation]}'
+            cits_type = f'without {cits_dict[self._citation]}'
         s = f"Document '{self.title}' by {', '.join(authors)}\npublished in "\
             f"'{self.publicationName}' has the following citation trajectory {cits_type} "\
             f"as of {date}:\n    Before {self._start} {self.pcc}; "\

@@ -1,8 +1,8 @@
 from collections import namedtuple
 
 from pybliometrics.scopus.superclasses import Retrieval
-from pybliometrics.scopus.utils import chained_get, get_id, detect_id_type,\
-    get_link, listify
+from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
+    get_id, detect_id_type, get_link, listify
 
 
 class AbstractRetrieval(Retrieval):
@@ -639,21 +639,16 @@ class AbstractRetrieval(Retrieval):
         -----
         The directory for cached results is `{path}/{view}/{identifier}`,
         where `path` is specified in `~/.scopus/config.ini`.  In case
-        `identifier` is a DOI,, an underscore replaces the forward slash.
+        `identifier` is a DOI, an underscore replaces the forward slash.
         """
         # Checks
         identifier = str(identifier)
-        allowed_views = ('META', 'META_ABS', 'REF', 'FULL')
-        if view not in allowed_views:
-            raise ValueError('view parameter must be one of ' +
-                             ', '.join(allowed_views))
+        check_parameter_value(view, ('META', 'META_ABS', 'REF', 'FULL'), "view")
         if id_type is None:
             id_type = detect_id_type(identifier)
         else:
-            allowed_id_types = ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi')
-            if id_type not in allowed_id_types:
-                raise ValueError('id_type parameter must be one of ' +
-                                 ', '.join(allowed_id_types))
+            allowed_id_types =  ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi')
+            check_parameter_value(id_type, allowed_id_types, "id_type")
 
         # Load json
         Retrieval.__init__(self, identifier=identifier, id_type=id_type,
