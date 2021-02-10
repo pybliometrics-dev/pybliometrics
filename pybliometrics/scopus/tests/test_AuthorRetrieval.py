@@ -123,7 +123,7 @@ def test_h_index():
 def test_historical_identifier():
     expected = ['35787230500', '36488127000', '54974425600', '55004143700',
                 '55004143800', '57057263700', '56641032000', '36747787600',
-                '57206217299']
+                '57206217299', '57219840256']
     assert_equal(au.historical_identifier, expected)
 
 

@@ -8,7 +8,7 @@ from nose.tools import assert_equal, assert_true
 from pybliometrics.scopus import AuthorSearch
 
 s1 = AuthorSearch('authlast(selten) and authfirst(reinhard)', refresh=30)
-s2 = AuthorSearch('authlast(selten)', download=False)
+s2 = AuthorSearch('authlast(selten)', download=False, refresh=True)
 
 
 def test_authors():
