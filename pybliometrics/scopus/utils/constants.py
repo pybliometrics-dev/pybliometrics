@@ -11,7 +11,8 @@ DEFAULT_PATHS = {
     'ScopusSearch': expanduser('~/.scopus/scopus_search'),
     'SerialSearch': expanduser('~/.scopus/serial_search'),
     'SerialTitle': expanduser('~/.scopus/serial_title'),
-    'PlumXMetrics': expanduser('~/.scopus/plumx')
+    'PlumXMetrics': expanduser('~/.scopus/plumx'),
+    'SubjectClass': expanduser('~/.scopus/subject_class')
 }
 
 # URL prefix and suffixes for retrieval classes
@@ -22,7 +23,7 @@ RETRIEVAL_URL = {
     'AuthorRetrieval': RETRIEVAL_BASE + 'author/author_id/',
     'CitationOverview': RETRIEVAL_BASE + 'abstract/citations/',
     'SerialTitle': RETRIEVAL_BASE + 'serial/title/issn/',
-    'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/'
+    'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
 }
 
 # URL prefix and suffixes for search classes
@@ -31,5 +32,6 @@ SEARCH_URL = {
     'AffiliationSearch': SEARCH_BASE + 'affiliation',
     'AuthorSearch': SEARCH_BASE + 'author',
     'ScopusSearch': SEARCH_BASE + 'scopus',
-    'SerialSearch': RETRIEVAL_BASE + 'serial/title'
+    'SerialSearch': RETRIEVAL_BASE + 'serial/title',
+    'SubjectClass': RETRIEVAL_BASE + 'subject/scopus'
 }

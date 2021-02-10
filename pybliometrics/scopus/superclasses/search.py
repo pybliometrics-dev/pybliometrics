@@ -20,7 +20,8 @@ class Search(Base):
 
         api : str
             The name of the Scopus API to be accessed.  Allowed values:
-            AffiliationSearch, AuthorSearch, ScopusSearch.
+            AffiliationSearch, AuthorSearch, ScopusSearch, SerialSearch,
+            SubjectClass
 
         refresh : bool or int
             Whether to refresh the cached file if it exists or not.  If int
