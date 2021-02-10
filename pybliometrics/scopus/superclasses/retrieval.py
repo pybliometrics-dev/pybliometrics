@@ -41,10 +41,9 @@ class Retrieval(Base):
             SerialTitle APIs.
 
         citation : str (optional, default=None)
-            Allows for the exclusion of self-citations.
-            The default behavior is to include all citations.
-            Allowed values: None, exclude-self, exclude-books
-            Note: Will only take effect for the CitationOverview
+            Allows for the exclusion of self-citations or those by books.
+            If None, will count all citations.
+            Note: Will only take effect for the CitationOverview API.
 
         kwds : key-value parings, optional
             Keywords passed on to requests header.  Must contain fields
@@ -53,7 +52,7 @@ class Retrieval(Base):
         Raises
         ------
         KeyError
-            If the api parameter or view parameter is an invalid entry.
+            If the api parameter is an invalid entry.
         """
         # Construct parameters
         url = RETRIEVAL_URL[api]

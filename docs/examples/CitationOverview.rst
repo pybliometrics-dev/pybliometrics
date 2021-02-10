@@ -10,7 +10,7 @@ You initialize the class with Scopus' Electronic Identifier (EID):
 .. code-block:: python
    
     >>> from pybliometrics.scopus import CitationOverview
-    >>> co = CitationOverview("2-s2.0-85068268027", start=2019, end=2021, citation="exclude-self")
+    >>> co = CitationOverview("2-s2.0-85068268027", start=2019, end=2021)
 
 
 You can obtain basic information just by printing the object:
@@ -18,8 +18,10 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(co)
-    Document 'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus' by Rose M.E., Rose M.E. and Kitchin J.R.
-    published in 'SoftwareX' has the following citation trajectory as of 2021-01-04:
+    Document 'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
+    by Rose M.E., Rose M.E. and Kitchin J.R.
+    published in 'SoftwareX' has the following citation trajectory as
+    of 2021-01-04:
         Before 2019 0; 2019: 0; 2020: 6; 2021: 1; After 2021: 0 times
 
 
@@ -51,6 +53,28 @@ Attributes `rangeCount` and `rowTotal` give summaries.  `rangeCount` is the numb
     >>> co.rowTotal
     '7'
 
+Using parameter `citation`, one can exclude self-citations or citations by books. However, if the data has been downloaded and cached, these counts will not take effect! Therefore make wise use of `refresh=True`!
+
+.. code-block:: python
+
+    >>> co_self = CitationOverview("2-s2.0-85068268027", start=2019, end=2021,
+                                   citation="exclude-self", refresh=True)
+    >>> print(co_self)
+    Document 'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
+    by Rose M.E., Rose M.E. and Kitchin J.R.
+    published in 'SoftwareX' has the following citation trajectory
+    excluding self-citations as of 2021-02-10:
+        Before 2019 0; 2019: 0; 2020: 6; 2021: 1; After 2021: 0 times
+
+    >>> co_books = CitationOverview("2-s2.0-85068268027", start=2019, end=2021,
+                                    citation="exclude-books", refresh=True)
+    >>> print(co_books)
+    Document 'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
+    by Rose M.E., Rose M.E. and Kitchin J.R.
+    published in 'SoftwareX' has the following citation trajectory
+    excluding citations from books as of 2021-02-10:
+        Before 2019 0; 2019: 0; 2020: 6; 2021: 1; After 2021: 0 times
+
 
 There are also author information stored as list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
 
@@ -58,15 +82,16 @@ There are also author information stored as list of `namedtuples <https://docs.p
 
     >>> co.authors
     [Author(name='Rose M.E.', surname='Rose', initials='M.E.', id='57209617104',
-     url='https://api.elsevier.com/content/author/author_id/57209617104'),
-     Author(name='Kitchin J.R.', surname='Kitchin', initials='J.R.', id='7004212771', url='https://api.elsevier.com/content/author/author_id/7004212771')]
+            url='https://api.elsevier.com/content/author/author_id/57209617104'),
+     Author(name='Kitchin J.R.', surname='Kitchin', initials='J.R.', id='7004212771',
+            url='https://api.elsevier.com/content/author/author_id/7004212771')]
     >>> auth_id = co.authors[0].id
     >>> auth_id
     '7004212771'
 
 Object `auth_id` can for example be used with :doc:`AuthorRetrieval() <../reference/pybliometrics.AuthorRetrieval>`.
 
-Apart from that, there are bibliographic information, too:
+Finally, there are bibliographic information, too:
 
 .. code-block:: python
 
@@ -87,4 +112,4 @@ Apart from that, there are bibliographic information, too:
     >>> co.doi
     '10.1016/j.softx.2019.100263'
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `co.get_cache_file_mdate()` to get the date of last modification, and `co.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to speed up subsequent analysis.  This information may become outdated, and will not change if you set certain restrictions (e.g. via the `citation` parameter)!  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `co.get_cache_file_mdate()` to get the date of last modification, and `co.get_cache_file_age()` the number of days since the last modification.

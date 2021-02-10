@@ -150,8 +150,8 @@ class CitationOverview(Retrieval):
             Default is the current year.
 
         citation : str (optional, default=None)
-            Allows for the exclusion of self-citations.
-            The default behavior is to include all citations.
+            Allows for the exclusion of self-citations or those by books.
+            If None, will count all citations.
             Allowed values: None, exclude-self, exclude-books
 
         refresh : bool or int (optional, default=False)
