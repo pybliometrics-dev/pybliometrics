@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Tests for `scopus.SubjectClass` module."""
+"""Tests for `scopus.SubjectClassifications` module."""
 
 from nose.tools import assert_equal, assert_true
 
-from pybliometrics.scopus import SubjectClass
+from pybliometrics.scopus import SubjectClassifications
 
 
 # Search by words in subject description
-sub1 = SubjectClass({'description': 'Physics'}, refresh=30)
+sub1 = SubjectClassifications({'description': 'Physics'}, refresh=30)
 # Search by subject code
-sub2 = SubjectClass({'code': '2613'}, refresh=30)
+sub2 = SubjectClassifications({'code': '2613'}, refresh=30)
 # Search by words in subject detail
-sub3 = SubjectClass({'detail': 'Processes'}, refresh=30)
+sub3 = SubjectClassifications({'detail': 'Processes'}, refresh=30)
 # Search by subject abbreviation
-sub4 = SubjectClass({'abbrev': 'MATH'}, refresh=30)
+sub4 = SubjectClassifications({'abbrev': 'MATH'}, refresh=30)
 # Search by multiple criteria
-sub5 = SubjectClass({'description': 'Engineering', 'detail': 'Fluid'}, refresh=30)
+sub5 = SubjectClassifications({'description': 'Engineering', 'detail': 'Fluid'}, refresh=30)
 # Search by multiple criteria, subset returned fields
-sub6 = SubjectClass({'detail': 'Analysis', 'description': 'Mathematics'},
-                    fields=['description', 'detail'], refresh=30)
+sub6 = SubjectClassifications({'detail': 'Analysis', 'description': 'Mathematics'},
+                              fields=['description', 'detail'], refresh=30)
 
 
 def test_results_desc():

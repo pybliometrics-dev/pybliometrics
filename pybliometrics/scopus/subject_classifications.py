@@ -4,7 +4,7 @@ from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import chained_get, make_search_summary
 
 
-class SubjectClass(Search):
+class SubjectClassifications(Search):
     @property
     def results(self):
         """A list of namedtuples representing results of subject classifications
@@ -88,7 +88,8 @@ class SubjectClass(Search):
         # Query
         query['field'] = ','.join(self.fields)
         self.query = str(query)
-        Search.__init__(self, query=query, api='SubjectClass', refresh=refresh)
+        Search.__init__(self, query=query, api='SubjectClassifications',
+                        refresh=refresh)
         path = ['subject-classifications', 'subject-classification']
         self._n = len(chained_get(self._json, path, []))
 

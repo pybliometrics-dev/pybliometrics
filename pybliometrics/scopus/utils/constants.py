@@ -12,7 +12,7 @@ DEFAULT_PATHS = {
     'SerialSearch': expanduser('~/.scopus/serial_search'),
     'SerialTitle': expanduser('~/.scopus/serial_title'),
     'PlumXMetrics': expanduser('~/.scopus/plumx'),
-    'SubjectClass': expanduser('~/.scopus/subject_class')
+    'SubjectClassifications': expanduser('~/.scopus/subject_classification')
 }
 
 # URL prefix and suffixes for retrieval classes
@@ -33,5 +33,5 @@ SEARCH_URL = {
     'AuthorSearch': SEARCH_BASE + 'author',
     'ScopusSearch': SEARCH_BASE + 'scopus',
     'SerialSearch': RETRIEVAL_BASE + 'serial/title',
-    'SubjectClass': RETRIEVAL_BASE + 'subject/scopus'
+    'SubjectClassifications': RETRIEVAL_BASE + 'subject/scopus'
 }
