@@ -66,7 +66,7 @@ class SerialSearch(Search):
         view : str (optional, default="ENHANCED")
             The view of the file that should be downloaded.  Allowed values:
             STANDARD, ENHANCED, CITESCORE.  For details see
-            https://dev.elsevier.com/guides/SerialTitleViews.htm.
+            https://dev.elsevier.com/sc_serial_title_views.html.
 
         Raises
         ------

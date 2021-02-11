@@ -617,7 +617,7 @@ class AbstractRetrieval(Retrieval):
             META, META_ABS, REF, FULL, where FULL includes all information
             of META_ABS view and META_ABS includes all information of the
             META view.  For details see
-            https://dev.elsevier.com/guides/AbstractRetrievalViews.htm.
+            https://dev.elsevier.com/sc_abstract_retrieval_views.html.
 
         kwds : key-value parings, optional
             Keywords passed on as query parameters.  Must contain fields

@@ -125,7 +125,7 @@ class ScopusSearch(Search):
 
         view : str (optional, default=None)
             Which view to use for the query, see
-            https://dev.elsevier.com/guides/ScopusSearchViews.htm.
+            https://dev.elsevier.com/sc_search_views.html.
             Allowed values: STANDARD, COMPLETE.  If None, defaults to
             COMPLETE if subscriber=True and to STANDARD if subscriber=False.
 

@@ -146,7 +146,7 @@ class SerialTitle(Retrieval):
         view : str (optional, default="ENHANCED")
             The view of the file that should be downloaded.  Allowed values:
             BASIC, STANDARD, ENHANCED.  For details see
-            https://dev.elsevier.com/guides/SerialTitleViews.htm.
+            https://dev.elsevier.com/sc_serial_title_views.html.
 
         years : str (optional, default=None)
             A string specifying a year or range of years (combining two
