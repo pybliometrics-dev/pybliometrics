@@ -6,7 +6,7 @@ Affiliation Search
 The class is initialized with a search query which you can read about in `Affiliation Search Guide <https://dev.elsevier.com/tips/AffiliationSearchTips.htm>`_.  An invalid search query will result in an error.
 
 .. code-block:: python
-   
+
     >>> from pybliometrics.scopus import AffiliationSearch
     >>> query = "AFFIL(Max Planck Institute for Innovation and Competition Munich)"
     >>> s = AffiliationSearch(query)
@@ -28,8 +28,8 @@ The class mostly serves to provide a list of `namedtuples <https://docs.python.o
 
     >>> s.affiliations
     [Affiliation(eid='10-s2.0-60105007', name='Max Planck Institute for Innovation and Competition',
-    variant='Max Planck Institute For Innovation And Competition',
-    documents='307', city='Munich', country='Germany', parent='0')]
+     variant='Max Planck Institute For Innovation And Competition',
+     documents='307', city='Munich', country='Germany', parent='0')]
 
 
 It's easy to work with namedtuples: using `pandas <https://pandas.pydata.org/>`_ for example you can quickly turn the results into a DataFrame:
@@ -53,7 +53,7 @@ Downloaded results are cached to speed up subsequent analysis.  This information
 You can get the number of results using the `.get_results_size()` method, even before you download the results:
 
 .. code-block:: python
-   
+
     >>> query = "AFFIL(Max Planck Institute)"
     >>> s = AffiliationSearch(query, download=False)
     >>> s.get_results_size()
@@ -63,7 +63,7 @@ You can get the number of results using the `.get_results_size()` method, even b
 There are sometimes missing information in the returned results although it exists in the Scopus database.  For example, the EID may be missing, even though every element always has an EID.  This is not a bug of `pybliometrics`.  Instead it is somehow related to a problem in the download process from the Scopus database.  To check for completeness of specific fields, use parameter `integrity_fields`, which accepts any iterable.  Using parameter `integrity_action` you can choose between two actions on what to do if the integrity check fails: Set `integrity_action="warn"` to issue a UserWarning, or set `integrity_action="raise"` to raise an AttributeError.
 
 .. code-block:: python
-   
+
     >>> s = AffiliationSearch(query, integrity_fields=["eid"], integrity_action="warn")
 
 

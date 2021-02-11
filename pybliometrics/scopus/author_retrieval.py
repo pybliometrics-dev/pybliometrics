@@ -219,7 +219,7 @@ class AuthorRetrieval(Retrieval):
 
         Examples
         --------
-        See https://pybliometrics.readthedocs.io/en/stable/examples/AuthorRetrieval.html
+        See https://pybliometrics.readthedocs.io/en/stable/examples/AuthorRetrieval.html.
 
         Notes
         -----

@@ -21,11 +21,13 @@ pybliometrics provides one class per Scopus API Access Point (see https://dev.el
 
    scopus.AbstractRetrieval
    scopus.AffiliationRetrieval
-   scopus.AuthorRetrieval
    scopus.AffiliationSearch
+   scopus.AuthorRetrieval
    scopus.AuthorSearch
-   scopus.ScopusSearch
    scopus.CitationOverview
+   scopus.PlumXMetrics
+   scopus.ScopusSearch
+   scopus.SerialSearch
    scopus.SerialTitle
    scopus.SubjectClassifications
 

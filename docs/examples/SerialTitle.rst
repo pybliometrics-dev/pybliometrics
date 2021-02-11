@@ -1,12 +1,12 @@
 Serial Title
 ------------
 
-:doc:`Serial Title() <../reference/pybliometrics.SerialTitle>` implements the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It provides basic information on registered serials (also called sources), like publisher and identifiers, but also metrics.
+:doc:`SerialTitle() <../reference/pybliometrics.SerialTitle>` implements the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It provides basic information on registered serials (also called sources), like publisher and identifiers, but also metrics.
 
 You initialize the class with an ISSN or an E-ISSN (works with and without hyphen, but leading zeros are mandatory):
 
 .. code-block:: python
-   
+
     >>> from pybliometrics.scopus import SerialTitle
     >>> source = SerialTitle("00368075")
 
@@ -15,7 +15,7 @@ There is an optional parameter, `years`.  By default, `SerialTitle()` retrieves 
 
 
 .. code-block:: python
-   
+
     >>> from pybliometrics.scopus import SerialTitle
     >>> source = SerialTitle("00368075", years="2017-2019")
 

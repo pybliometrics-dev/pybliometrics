@@ -8,7 +8,7 @@ It takes a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Gettin
 You initialize the class with Scopus' Electronic Identifier (EID):
 
 .. code-block:: python
-   
+
     >>> from pybliometrics.scopus import CitationOverview
     >>> co = CitationOverview("2-s2.0-85068268027", start=2019, end=2021)
 
@@ -82,9 +82,9 @@ There are also author information stored as list of `namedtuples <https://docs.p
 
     >>> co.authors
     [Author(name='Rose M.E.', surname='Rose', initials='M.E.', id='57209617104',
-            url='https://api.elsevier.com/content/author/author_id/57209617104'),
+     url='https://api.elsevier.com/content/author/author_id/57209617104'),
      Author(name='Kitchin J.R.', surname='Kitchin', initials='J.R.', id='7004212771',
-            url='https://api.elsevier.com/content/author/author_id/7004212771')]
+     url='https://api.elsevier.com/content/author/author_id/7004212771')]
     >>> auth_id = co.authors[0].id
     >>> auth_id
     '7004212771'

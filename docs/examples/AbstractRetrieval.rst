@@ -10,7 +10,7 @@ The Abstract Retrieval API allows a differing information depth via `views <http
 You initialize the class with an ID that Scopus uses, e.g. the EID:
 
 .. code-block:: python
-   
+
     >>> from pybliometrics.scopus import AbstractRetrieval
     >>> ab = AbstractRetrieval("2-s2.0-85068268027", view='FULL')
 
@@ -56,9 +56,10 @@ Attributes `idxterms`, `subject_areas` and `authkeywords` (if provided) provide 
 
     >>> ab.idxterms
     ['Bibliometrics', 'Python', 'Python interfaces', 'Reproducibilities',
-    'Scientometrics', 'Scopus', 'Scopus database', 'User friendly interface']
+     'Scientometrics', 'Scopus', 'Scopus database', 'User friendly interface']
     >>> ab.subject_areas
-    [Area(area='Software', abbreviation='COMP', code='1712'), Area(area='Computer Science Applications', abbreviation='COMP', code='1706')]
+    [Area(area='Software', abbreviation='COMP', code='1712'),
+     Area(area='Computer Science Applications', abbreviation='COMP', code='1706')]
     >>> ab.authkeywords
     ['Bibliometrics', 'Python', 'Scientometrics', 'Scopus', 'Software']
 
@@ -100,13 +101,13 @@ The same structure applies for the attributes `affiliation` and `authorgroup`:
 
     >>> ab.authorgroup
     [Author(affiliation_id='60105007', dptid=None,
-    organization='Max Planck Institute for Innovation and Competition',
-    city=None, postalcode=None, addresspart=None, country='Germany',
-    auid='57209617104', indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
-    Author(affiliation_id='60027950', dptid='110785688',
-    organization='Carnegie Mellon University, Department of Chemical Engineering',
-    city=None, postalcode=None, addresspart=None, country='United States',
-    auid='7004212771', indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
+     organization='Max Planck Institute for Innovation and Competition',
+     city=None, postalcode=None, addresspart=None, country='Germany',
+     auid='57209617104', indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
+     Author(affiliation_id='60027950', dptid='110785688',
+     organization='Carnegie Mellon University, Department of Chemical Engineering',
+     city=None, postalcode=None, addresspart=None, country='United States',
+     auid='7004212771', indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
 
 
 Keep in mind that Scopus might not perfectly/correctly pair authors and affiliations as per the original document, even if it looks so on the web view.  In this case please request corrections to be made in Scopus' API here `here <https://service.elsevier.com/app/contact/supporthub/scopuscontent/>`_.
@@ -190,7 +191,7 @@ Some articles have information on funding, chemicals and genome banks:
     >>> fund = AbstractRetrieval("2-s2.0-85053478849", view="FULL")
     >>> fund.funding
     [Funding(agency=None, string='CNRT “Nickel et son Environnement',
-    id=None, acronym=None, country=None)]
+     id=None, acronym=None, country=None)]
     >> fund.funding_text
     'The authors gratefully acknowledge CNRT “Nickel et son Environnement” for
     providing the financial support. The results reported in this publication
@@ -231,7 +232,7 @@ You can print the abstract in a variety of formats, including LaTeX, bibtex, HTM
     AU  - Kitchin J.R.
     DO  - 10.1016/j.softx.2019.100263
     UR  - https://doi.org/10.1016/j.softx.2019.100263
-    ER  - 
+    ER  -
 
 
 Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to get the date of last modification, and `ab.get_cache_file_age()` the number of days since the last modification.

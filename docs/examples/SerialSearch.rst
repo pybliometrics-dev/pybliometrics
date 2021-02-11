@@ -6,7 +6,7 @@ Serial Search
 The class is initialized with a search query dictionary.  Its keys are limited to the following set: "title", "issn", "pub", "subj", "subjCode", "content", and "oa".  No more than 200 results can be returned.
 
 .. code-block:: python
-   
+
     >>> from pybliometrics.scopus import SerialSearch
     >>> s = SerialSearch(query={"title": "SoftwareX"})
 
@@ -36,14 +36,14 @@ The class' main attribute `results` returns a list of `OrderedDict <https://docs
     >>> df = pd.DataFrame(pd.DataFrame(s.results))
     >>> df.columns
     Index(['title', 'publisher', 'coverageStartYear', 'coverageEndYear',
-       'aggregationType', 'source-id', 'eIssn', 'openaccess',
-       'openaccessArticle', 'subject_area_codes',
-       ...
-       'publicationCount_2019', 'citeCountSCE_2019', 'zeroCitesSCE_2019',
-       'zeroCitesPercentSCE_2019', 'revPercent_2019', 'publicationCount_2020',
-       'citeCountSCE_2020', 'zeroCitesSCE_2020', 'zeroCitesPercentSCE_2020',
-       'revPercent_2020'],
-      dtype='object', length=142)
+           'aggregationType', 'source-id', 'eIssn', 'openaccess',
+           'openaccessArticle', 'subject_area_codes',
+           ...
+           'publicationCount_2019', 'citeCountSCE_2019', 'zeroCitesSCE_2019',
+           'zeroCitesPercentSCE_2019', 'revPercent_2019', 'publicationCount_2020',
+           'citeCountSCE_2020', 'zeroCitesSCE_2020', 'zeroCitesPercentSCE_2020',
+           'revPercent_2020'],
+          dtype='object', length=142)
     >>> pd.set_option('display.max_columns', None)
     >>> df.iloc[:,:16]
        title    publisher coverageStartYear coverageEndYear aggregationType  \

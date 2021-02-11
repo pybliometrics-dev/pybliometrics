@@ -6,7 +6,7 @@ Author Retrieval
 This class is to interact with the entire author record in Scopus, using the author's Scopus ID (which can be passed as either an integer or a string):
 
 .. code-block:: python
-   
+
     >>> from pybliometrics.scopus import AuthorRetrieval
     >>> au = AuthorRetrieval(7004212771)
 
@@ -36,9 +36,12 @@ Information on names:
     >>> au.initials
     'J.R.'
     >>> au.name_variants
-    [Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin', given_name='John R.', doc_count='81'),
-    Variant(indexed_name='Kitchin J.', initials='J.', surname='Kitchin', given_name='John', doc_count='10'),
-    Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin', given_name='J. R.', doc_count='8')]
+    [Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin',
+     given_name='John R.', doc_count='81'),
+     Variant(indexed_name='Kitchin J.', initials='J.', surname='Kitchin',
+     given_name='John', doc_count='10'),
+     Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin',
+     given_name='J. R.', doc_count='8')]
     >>> au.eid
     '9-s2.0-7004212771'
 
@@ -92,10 +95,10 @@ Extensive information on current and former affiliations is provided as namedtup
 
     >>> au.affiliation_current
     [Affiliation(id='110785688', parent='60027950', type='dept', relationship='author',
-    afdispname=None, preferred_name='Department of Chemical Engineering',
-    parent_preferred_name='Carnegie Mellon University', country_code='usa',
-    country='United States', address_part='5000 Forbes Avenue', city='Pittsburgh',
-    state='PA', postal_code='15213-3890', org_domain='cmu.edu', org_URL='https://www.cmu.edu/')]
+     afdispname=None, preferred_name='Department of Chemical Engineering',
+     parent_preferred_name='Carnegie Mellon University', country_code='usa',
+     country='United States', address_part='5000 Forbes Avenue', city='Pittsburgh',
+     state='PA', postal_code='15213-3890', org_domain='cmu.edu', org_URL='https://www.cmu.edu/')]
     >>> len(au.affiliation_history)
     15
     >>> au.affiliation_history[9]
@@ -120,7 +123,7 @@ There are a number of getter methods for convenience.  For example, you can obta
     >>> coauthors.columns
     Index(['surname', 'given_name', 'id', 'areas', 'affiliation_id',
            'name', 'city', 'country'],
-      dtype='object')
+          dtype='object')
 
 
 Method `get_documents()` is another convenience method to search for the author's publications via :doc:`ScopusSearch <../reference/pybliometrics.ScopusSearch>` (information will be cached):

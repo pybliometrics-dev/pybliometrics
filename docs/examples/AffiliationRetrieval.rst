@@ -6,7 +6,7 @@ Affiliation Retrieval
 You initialize the class with Scopus' Affiliation ID:
 
 .. code-block:: python
-   
+
     >>> from pybliometrics.scopus import AffiliationRetrieval
     >>> aff = AffiliationRetrieval("60000356")
 

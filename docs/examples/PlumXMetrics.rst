@@ -6,7 +6,7 @@ PlumX Metrics
 You initialize the class with the identifier of a document and its type:
 
 .. code-block:: python
-   
+
     >>> from pybliometrics.scopus import PlumXMetrics
     >>> plum = PlumXMetrics("10.1016/j.softx.2019.100263", id_type='doi')
 
