@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 from pybliometrics.scopus.superclasses import Search
+from pybliometrics.scopus.utils import chained_get, make_search_summary
 
 
 class SubjectClass(Search):
@@ -88,3 +89,10 @@ class SubjectClass(Search):
         query['field'] = ','.join(self.fields)
         self.query = str(query)
         Search.__init__(self, query=query, api='SubjectClass', refresh=refresh)
+        path = ['subject-classifications', 'subject-classification']
+        self._n = len(chained_get(self._json, path, []))
+
+    def __str__(self):
+        """Print a summary string."""
+        areas = [r.code for r in self.results]
+        return make_search_summary(self, "subject area", areas)
