@@ -42,9 +42,11 @@ class AuthorRetrieval(Retrieval):
 
     @property
     def alias(self):
-        """Set of possible new Scopus Author Profile IDs in case the profile has been merged."""
+        """Set of possible new Scopus Author Profile IDs in case the profile
+        has been merged.
+        """
         return self._alias
-        
+
     @property
     def citation_count(self):
         """Total number of citing items."""

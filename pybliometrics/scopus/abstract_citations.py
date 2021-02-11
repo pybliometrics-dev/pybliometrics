@@ -134,7 +134,8 @@ class CitationOverview(Retrieval):
         """Volume for the abstract."""
         return self._citeInfoMatrix.get('volume')
 
-    def __init__(self, eid, start, end=datetime.now().year, citation=None, refresh=False):
+    def __init__(self, eid, start, end=datetime.now().year, citation=None,
+                 refresh=False):
         """Interaction witht the Citation Overview API.
 
         Parameters
@@ -184,8 +185,7 @@ class CitationOverview(Retrieval):
         # Get file content
         date = f'{start}-{end}'
         Retrieval.__init__(self, eid, 'CitationOverview', refresh, view=view,
-                           date=date,
-                           citation=citation)
+                           date=date, citation=citation)
         self._data = self._json['abstract-citations-response']
 
         # citeInfoMatrix

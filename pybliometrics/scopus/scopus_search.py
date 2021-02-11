@@ -178,7 +178,8 @@ class ScopusSearch(Search):
         # Checks
         if view:
             check_parameter_value(view, ('STANDARD', 'COMPLETE'), "view")
-        check_parameter_value(integrity_action, ("warn", "raise"), "integrity_action")
+        allowed = ("warn", "raise")
+        check_parameter_value(integrity_action, allowed, "integrity_action")
 
         # Parameters
         if not view:

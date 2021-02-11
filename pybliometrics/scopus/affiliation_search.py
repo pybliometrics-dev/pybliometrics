@@ -99,7 +99,8 @@ class AffiliationSearch(Search):
         the md5-hashed version of `query`.
         """
         # Check
-        check_parameter_value(integrity_action, ("warn", "raise"), "integrity_action")
+        allowed = ("warn", "raise")
+        check_parameter_value(integrity_action, allowed, "integrity_action")
 
         # Query
         self.query = query

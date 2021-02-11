@@ -25,7 +25,7 @@ class PlumXMetrics(Retrieval):
                           total=item.get('total'))
                 out.append(new)
         return out or None
-    
+
     @property
     def capture(self):
         """A list of namedtuples representing metrics in Captures category:
@@ -40,10 +40,10 @@ class PlumXMetrics(Retrieval):
         categories = self._json.get('count_categories', [])
         mention_metrics = _category_metrics('capture', categories)
         return _list_metrics_totals(mention_metrics) or None
-    
+
     @property
     def citation(self):
-        """A list of namedtuples representing citation counts from 
+        """A list of namedtuples representing citation counts from
         different sources.
         Note: Can be empty.
         For details and list of possible sources see
@@ -57,7 +57,7 @@ class PlumXMetrics(Retrieval):
                 if item.get('sources'):
                     source_metrics += item.get('sources')
         return _list_metrics_totals(source_metrics) or None
-    
+
     @property
     def mention(self):
         """A list of namedtuples representing metrics in Mentions category:
@@ -70,7 +70,7 @@ class PlumXMetrics(Retrieval):
         categories = self._json.get('count_categories', [])
         mention_metrics = _category_metrics('mention', categories)
         return _list_metrics_totals(mention_metrics) or None
-    
+
     @property
     def social_media(self):
         """A list of namedtuples representing social media metrics:
@@ -83,7 +83,7 @@ class PlumXMetrics(Retrieval):
         categories = self._json.get('count_categories', [])
         social_metrics = _category_metrics('socialMedia', categories)
         return _list_metrics_totals(social_metrics) or None
-    
+
     @property
     def usage(self):
         """A list of namedtuples representing Usage category metrics:
@@ -96,7 +96,7 @@ class PlumXMetrics(Retrieval):
         categories = self._json.get('count_categories', [])
         usage_metrics = _category_metrics('usage', categories)
         return _list_metrics_totals(usage_metrics) or None
-    
+
     def __init__(self, identifier, id_type, refresh=False):
         """Interaction with the PlumX Metrics API.
 
@@ -159,10 +159,9 @@ class PlumXMetrics(Retrieval):
                    'citeulikeId', 'digitalMeasuresArtifactId', 'doi',
                    'elsevierId', 'elsevierPii', 'facebookCountUrlId',
                    'figshareArticleId', 'githubRepoId', 'isbn',
-                   'lccn', 'medwaveId', 'nctId',
-                   'oclc', 'pittEprintDscholarId', 'pmcid',
-                   'pmid', 'redditId', 'repecHandle',
-                   'repoUrl', 'scieloId', 'sdEid',
+                   'lccn', 'medwaveId', 'nctId', 'oclc',
+                   'pittEprintDscholarId', 'pmcid', 'pmid', 'redditId',
+                   'repecHandle', 'repoUrl', 'scieloId', 'sdEid',
                    'slideshareUrlId', 'smithsonianPddrId', 'soundcloudTrackId',
                    'ssrnId', 'urlId', 'usPatentApplicationId',
                    'usPatentPublicationId', 'vimeoVideoId', 'youtubeVideoId')
@@ -207,4 +206,3 @@ def _list_metrics_totals(metric_counts):
         new = capture(name=v[0], total=v[1])
         out.append(new)
     return out
-

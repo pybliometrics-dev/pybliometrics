@@ -108,7 +108,8 @@ class AuthorSearch(Search):
         the md5-hashed version of `query`.
         """
         # Checks
-        check_parameter_value(integrity_action, ("warn", "raise"), "integrity_action")
+        allowed = ("warn", "raise")
+        check_parameter_value(integrity_action, allowed, "integrity_action")
 
         # Query
         self.query = query
@@ -120,8 +121,8 @@ class AuthorSearch(Search):
 
     def __str__(self):
         """Print a summary string."""
-        names = [f'{n["preferred-name"].get("surname", "?")}, '\
-                 f'{n["preferred-name"].get("given-name", "?")}; '\
-                 f'{n["dc:identifier"]} ({int(n["document-count"]):,} document(s))'\
+        names = [f'{n["preferred-name"].get("surname", "?")}, '
+                 f'{n["preferred-name"].get("given-name", "?")}; '
+                 f'{n["dc:identifier"]} ({int(n["document-count"]):,} document(s))'
                  for n in self._json]
         return make_search_summary(self, "author", names)

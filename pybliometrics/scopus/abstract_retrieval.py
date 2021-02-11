@@ -110,8 +110,8 @@ class AbstractRetrieval(Retrieval):
             else:
                 aff = None
             new = auth(auid=item['@auid'], surname=item.get('ce:surname'),
-                indexed_name=item.get('ce:indexed-name'), affiliation=aff,
-                given_name=chained_get(item, ['preferred-name', 'ce:given-name']))
+                       indexed_name=item.get('ce:indexed-name'), affiliation=aff,
+                       given_name=chained_get(item, ['preferred-name', 'ce:given-name']))
             out.append(new)
         return out or None
 
@@ -647,7 +647,7 @@ class AbstractRetrieval(Retrieval):
         if id_type is None:
             id_type = detect_id_type(identifier)
         else:
-            allowed_id_types =  ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi')
+            allowed_id_types = ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi')
             check_parameter_value(id_type, allowed_id_types, "id_type")
 
         # Load json
@@ -721,16 +721,13 @@ class AbstractRetrieval(Retrieval):
         else:
             pages = '-'
         # All information
-        bib = "@article{{{key},\n  author = {{{auth}}},\n  title = "\
-              "{{{{{title}}}}},\n  journal = {{{jour}}},\n  year = "\
-              "{{{year}}},\n  volume = {{{vol}}},\n  number = {{{number}}},"\
-              "\n  pages = {{{pages}}}".format(
-                key=key, auth=authors, title=self.title, year=year,
-                jour=self.publicationName, vol=self.volume,
-                number=self.issueIdentifier, pages=pages)
+        bib = f"@article{{{key},\n  author = {{{authors}}},\n  title = "\
+              f"{{{{{self.title}}}}},\n  journal = {{{self.publicationName}}},"\
+              f"\n  year = {{{year}}},\n  volume = {{{self.volume}}},\n  "\
+              f"number = {{{self.issueIdentifier}}},\n  pages = {{{pages}}}"
         # DOI
         if self.doi:
-            bib += ",\n  doi = {{{}}}".format(self.doi)
+            bib += f",\n  doi = {{{self.doi}}}"
         bib += "}"
         return bib
 
@@ -751,11 +748,11 @@ class AbstractRetrieval(Retrieval):
         else:
             a = self.authors[0]
             authors = au_link.format(a.auid, a.given_name + ' ' + a.surname)
-        title = u'<a href="{}">{}</a>'.format(self.scopus_link, self.title)
+        title = f'<a href="{self.scopus_link}">{self.title}</a>'
         if self.volume and self.issueIdentifier:
-            volissue = u'<b>{}({})</b>'.format(self.volume, self.issueIdentifier)
+            volissue = f'<b>{self.volume}({self.issueIdentifier})</b>'
         elif self.volume:
-            volissue = u'<b>{}</b>'.format(self.volume)
+            volissue = f'<b>{self.volume}</b>'
         else:
             volissue = 'no volume'
         jlink = '<a href="https://www.scopus.com/source/sourceInfo.url'\
@@ -846,7 +843,7 @@ def _parse_pages(self, unicode=False):
     else:
         pages = '(no pages found)'
     if unicode:
-        pages = u'{}'.format(pages)
+        pages = f'{pages}'
     return pages
 
 

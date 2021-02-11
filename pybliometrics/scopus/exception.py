@@ -37,7 +37,9 @@ class Scopus404Error(ScopusHtmlError):
 
 
 class Scopus413Error(ScopusHtmlError):
-    """Raised if a query yields a 413 error (Request Entity Too Large for url)."""
+    """Raised if a query yields a 413 error (Request Entity Too
+    Large for url).
+    """
 
 
 class Scopus414Error(ScopusHtmlError):
@@ -52,6 +54,7 @@ class Scopus500Error(ScopusHtmlError):
     """Raised if a query yields a 500 error (Internal Server Error
     for url).
     """
+
 
 class Scopus502Error(ScopusHtmlError):
     """Raised if a query yields a 502 error (Bad gateway for url)."""

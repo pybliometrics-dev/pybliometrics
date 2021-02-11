@@ -11,4 +11,3 @@ from pybliometrics.scopus.scopus_search import *
 from pybliometrics.scopus.serial_search import *
 from pybliometrics.scopus.serial_title import *
 from pybliometrics.scopus.subj_class import *
-

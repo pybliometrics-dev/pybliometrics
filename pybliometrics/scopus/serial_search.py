@@ -9,7 +9,8 @@ class SerialSearch(Search):
     def results(self):
         """A list of OrderedDicts representing results of serial search. The
         number of keys may vary from one search result to another depending
-        on the length of yearly data. Note: can be empty.
+        on the length of yearly data.
+        Note: Can be empty.
         """
         out = []
         search_results = self._json['serial-metadata-response'].get('entry', [])
@@ -56,7 +57,7 @@ class SerialSearch(Search):
             'issn', 'pub', 'subj', 'subjCode', 'content', 'oa'.  For
             examples on possible values, please refer to
             https://dev.elsevier.com/documentation/SerialTitleAPI.wadl#d1e22.
-        
+
         refresh : bool or int (optional, default=False)
             Whether to refresh the cached file if it exists or not.  If int
             is passed, cached file will be refreshed if the number of days
@@ -110,35 +111,35 @@ class SerialSearch(Search):
 
 def _merge_subject_data(subject_area_data):
     """Auxiliary function to collect and concatenate subject area data into string.
-    
+
     Returns tuple of strings for subject area names, subject area codes and
     subject area abbreviations deliminated by ';'.
     """
-    codes = set([j.get('@code') for j in subject_area_data if j.get('@code')])
-    abbrevs = set([j.get('@abbrev')
-                   for j in subject_area_data
-                   if j.get('@abbrev')])
-    names = set([j.get('$')
-                 for j in subject_area_data
-                 if j.get('$')])
-    return (';'.join(codes), ';'.join(abbrevs), ';'.join(names))
+    codes = set([j.get('@code') for j in subject_area_data])
+    abbrevs = set([j.get('@abbrev') for j in subject_area_data])
+    names = set([j.get('$') for j in subject_area_data])
+    return (';'.join(filter(None, codes)),
+            ';'.join(filter(None, abbrevs)),
+            ';'.join(filter(None, names)))
 
 
 def _retrieve_links(link_data):
     """Auxiliary function to collect data on links.
-    
+
     Returns list of lists in the form of [linkname, link].
     """
     out = []
     for l in link_data:
-        if l.get('@ref'):
+        try:
             out.append([l['@ref'], l.get('@href')])
+        except KeyError:
+            continue
     return out or None
 
 
 def _retrieve_yearly_data(yearly_data):
     """Auxiliary function to collect yearly data.
-    
+
     Returns list of lists in the form [mergedstatname, stat], where
     mergedstatname - dictionary key joined with associated period.
     """
@@ -146,35 +147,30 @@ def _retrieve_yearly_data(yearly_data):
     for t in yearly_data:
         for key in t:
             if key not in ('@year', '@_fa'):
-                out.append([key + '_' + str(t.get('@year')), t[key]])
+                out.append([f"{key}_{t['@year']}", t[key]])
     return out or None
 
 
 def _retrieve_cite_scores(cite_score_data):
     """Auxiliary function to collect citescore data.
-    
+
     Returns list of lists in the form [mergedstatname, stat], where
     mergedstatname - dictionary key joined with associated period.
     """
     out = []
-    if cite_score_data.get('citeScoreTracker'):
-        tracker_year = ('citeScoreTracker'
-                        + '_'
-                        + str(cite_score_data.get('citeScoreTrackerYear')))
-        tracker_val = cite_score_data['citeScoreTracker']
-        out.append([tracker_year, tracker_val])
-    if cite_score_data.get('citeScoreCurrentMetric'):
-        metric_year = ('citeScoreCurrentMetric'
-                       + '_'
-                       + str(cite_score_data.get('citeScoreCurrentMetricYear')))
-        metric_val = cite_score_data.get('citeScoreCurrentMetric')
-        out.append([metric_year, metric_val])
+    for key in ("citeScoreTracker", "citeScoreCurrentMetric"):
+        try:
+            year = f"{key}_{cite_score_data[key + 'Year']}"
+            val = cite_score_data[key]
+            out.append([year, val])
+        except KeyError:
+            pass
     return out or None
 
 
 def _retrieve_source_rankings(source_data):
     """Auxiliary function to collect SNIP and SJR data.
-    
+
     Returns list of lists in the form [mergedstatname, stat],
     where mergedstatname - dictionary key joined with associated period
     """
@@ -182,7 +178,5 @@ def _retrieve_source_rankings(source_data):
     for key in source_data:
         stats = source_data[key]
         for t in stats:
-            stat_name = str(key + '_' + t.get('@year'))
-            stat_val = t.get('$')
-            out.append([stat_name, stat_val])
+            out.append([f"{key}_['@year']", t['$']])
     return out or None
