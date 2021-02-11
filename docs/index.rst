@@ -27,6 +27,7 @@ pybliometrics provides one class per Scopus API Access Point (see https://dev.el
    scopus.ScopusSearch
    scopus.CitationOverview
    scopus.SerialTitle
+   scopus.SubjectClassifications
 
 ========
 Citation

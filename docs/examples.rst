@@ -27,5 +27,6 @@ Metadata APIs
     examples/PlumXMetrics.rst
     examples/SerialSearch.rst
     examples/SerialTitle.rst
+    examples/SubjectClassifications.rst
 
-One other Metadata API, the Subject Classifications, is not implemented yet.
+One other Metadata API, the Citations Count Metadata API, is not implemented yet.

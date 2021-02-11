@@ -62,6 +62,10 @@ class SubjectClassifications(Search):
         TypeError
             If returned fields are not passed in an iterable container.
 
+        Examples
+        --------
+        See https://pybliometrics.readthedocs.io/en/stable/examples/SubjectClassifications.html.
+
         Notes
         -----
         The directory for cached results is `{path}/STANDARD/{fname}`,
