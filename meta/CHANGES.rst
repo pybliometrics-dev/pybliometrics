@@ -3,8 +3,19 @@ Change Log
 
 .. toctree::
 
+2.9
+~~~
+
+2021-02-11
+
+* New slass `SubjectClassifications()` to interact with the Subject Classifications API.
+* In `CitationOverview()`, add optional parameter `citation` to allow for exlusion of self-citations or those of books.
+* Fix links in class docstrings.
+
 2.8
 ~~~
+
+2021-01-28
 
 * Class `ContentAffiliationRetrieval()` has been renamed to `AffiliationRetrieval()`; `ContentAffiliationRetrieval()` will remain until 3.0 but it will raise a Warning.
 * Add parameter `years` to `SerialTitle()`, to retrieve journal metrics for specific years.
