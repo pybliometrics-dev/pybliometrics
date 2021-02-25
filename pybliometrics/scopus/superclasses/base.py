@@ -5,7 +5,8 @@ from os.path import getmtime
 from time import localtime, strftime, time
 
 from pybliometrics.scopus.exception import ScopusQueryError
-from pybliometrics.scopus.utils import get_content, print_progress
+from pybliometrics.scopus.utils import get_content
+from tqdm import tqdm
 
 
 class Base:
@@ -159,11 +160,11 @@ def _parse(res, n, url, params, verbose, *args, **kwds):
         start = params["start"]
     _json = res.get('search-results', {}).get('entry', [])
     if verbose:
-        chunk = 1
         # Roundup + 1 for the final iteration
-        chunks = int(n/params['count']) + (n % params['count'] > 0) + 1
         print(f'Downloading results for query "{params["query"]}":')
-        print_progress(chunk, chunks)
+        n_chunks = int(n/params['count']) + (n % params['count'] > 0) + 1
+        pbar = tqdm(total=n_chunks)
+        pbar.update(1)
     # Download the remaining information in chunks
     while n > 0:
         n -= params["count"]
@@ -177,8 +178,9 @@ def _parse(res, n, url, params, verbose, *args, **kwds):
         res = resp.json()
         _json.extend(res.get('search-results', {}).get('entry', []))
         if verbose:
-            chunk += 1
-            print_progress(chunk, chunks)
+            pbar.update(1)
+    if verbose:
+        pbar.close()
     return _json, resp.headers
 
 
