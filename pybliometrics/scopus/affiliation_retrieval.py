@@ -1,8 +1,8 @@
 from collections import namedtuple
 
 from pybliometrics.scopus.superclasses import Retrieval
-from pybliometrics.scopus.utils import chained_get, get_id, get_link,\
-    parse_date_created
+from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
+    get_id, get_link, parse_date_created
 
 
 class AffiliationRetrieval(Retrieval):
@@ -34,7 +34,10 @@ class AffiliationRetrieval(Retrieval):
     @property
     def date_created(self):
         """Date the Scopus record was created."""
-        return parse_date_created(self._json['institution-profile'])
+        try:
+            return parse_date_created(self._profile)
+        except KeyError:
+            return None
 
     @property
     def document_count(self):
@@ -64,24 +67,25 @@ class AffiliationRetrieval(Retrieval):
 
     @property
     def org_domain(self):
-        """Internet domain of the affiliation."""
-        return self._json['institution-profile'].get('org-domain')
+        """Internet domain of the affiliation.  Requires the STANDARD view."""
+        return self._profile.get('org-domain')
 
     @property
     def org_type(self):
-        """Type of the affiliation (only present if profile is org profile)."""
-        return self._json['institution-profile'].get('org-type')
+        """Type of the affiliation.  Requires the STANDARD view and only
+        present if profile is org profile.
+        """
+        return self._profile.get('org-type')
 
     @property
     def org_URL(self):
-        """Website of the affiliation."""
-        return self._json['institution-profile'].get('org-URL')
+        """Website of the affiliation.  Requires the STANDARD view."""
+        return self._profile.get('org-URL')
 
     @property
     def postal_code(self):
-        """The postal code of the affiliation."""
-        path = ['institution-profile', 'address', 'postal-code']
-        return chained_get(self._json, path)
+        """The postal code of the affiliation.  Requires the STANDARD view."""
+        return chained_get(self._profile, ['address', 'postal-code'])
 
     @property
     def scopus_affiliation_link(self):
@@ -101,22 +105,23 @@ class AffiliationRetrieval(Retrieval):
     @property
     def state(self):
         """The state (country's administrative sububunit)
-        of the affiliation.
+        of the affiliation.   Requires the STANDARD view.
         """
-        path = ['institution-profile', 'address', 'state']
-        return chained_get(self._json, path)
+        return chained_get(self._profile, ['address', 'state'])
 
     @property
     def sort_name(self):
-        """The name of the affiliation used for sorting."""
-        return self._json['institution-profile'].get('sort-name')
+        """The name of the affiliation used for sorting.  Requires the
+        STANDARD view.
+        """
+        return self._profile.get('sort-name')
 
     @property
     def url(self):
         """URL to the affiliation's API page."""
         return self._json['coredata'].get('prism:url')
 
-    def __init__(self, aff_id, refresh=False):
+    def __init__(self, aff_id, refresh=False, view="STANDARD"):
         """Interaction with the Affiliation Retrieval API.
 
         Parameters
@@ -130,20 +135,32 @@ class AffiliationRetrieval(Retrieval):
             is passed, cached file will be refreshed if the number of days
             since last modification exceeds that value.
 
+        view : str (optional, default=STANDARD)
+            The view of the file that should be downloaded.  Allowed values:
+            LIGHT, STANDARD, where STANDARD includes all information of the
+            LIGHT view.  For details see
+            https://dev.elsevier.com/sc_affil_retrieval_views.html.
+            Note: Neither the BASIC view nor DOCUMENTS or AUTHORS views are
+            active, although documented.
+
         Examples
         --------
         See https://pybliometrics.readthedocs.io/en/stable/examples/AffiliationRetrieval.html.
 
         Notes
         -----
-        The directory for cached results is `{path}/STANDARD/{aff_id}`,
+        The directory for cached results is `{path}/{view}/{aff_id}`,
         where `path` is specified in `~/.scopus/config.ini`.
         """
+        # Checks
+        check_parameter_value(view, ('LIGHT', 'STANDARD'), "view")
+
         # Load json
         aff_id = str(int(str(aff_id).split('-')[-1]))
-        Retrieval.__init__(self, identifier=aff_id, view="STANDARD",
+        Retrieval.__init__(self, identifier=aff_id, view=view,
                            refresh=refresh, api='AffiliationRetrieval')
         self._json = self._json['affiliation-retrieval-response']
+        self._profile = self._json.get("institution-profile", {})
 
     def __str__(self):
         """Return a summary string."""
