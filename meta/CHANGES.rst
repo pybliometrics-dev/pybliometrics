@@ -3,6 +3,15 @@ Change Log
 
 .. toctree::
 
+2.9.1
+~~~~~
+
+2021-02-25
+
+* Allow for the LIGHT view in `AffiliationRetrieval()` to retrieve fewer information.
+* Allow for the METRICS, LIGHT and STANDARD views in `AuthorRetrieval()` to retrieve fewer information.
+* In `AuthorRetrieval().h_index` and `AuthorRetrieval().coauthor_count`, return None instead of 0 as default value.
+
 2.9
 ~~~
 
