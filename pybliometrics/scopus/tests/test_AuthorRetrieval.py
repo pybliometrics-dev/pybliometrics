@@ -85,8 +85,8 @@ def test_classificationgroup():
 
 
 def test_coauthor_count():
-    assert_equal(light.coauthor_count, "0")
-    assert_equal(standard.coauthor_count, "0")
+    assert_equal(light.coauthor_count, None)
+    assert_equal(standard.coauthor_count, None)
     expected = "175"
     assert_true(metrics.coauthor_count >= expected)
     assert_true(enhanced.coauthor_count >= expected)
@@ -165,8 +165,8 @@ def test_get_document_eids():
 
 
 def test_h_index():
-    assert_equal(light.h_index, '0')
-    assert_equal(standard.h_index, '0')
+    assert_equal(light.h_index, None)
+    assert_equal(standard.h_index, None)
     expected = '34'
     assert_true(metrics.h_index >= expected)
     assert_true(enhanced.h_index >= expected)

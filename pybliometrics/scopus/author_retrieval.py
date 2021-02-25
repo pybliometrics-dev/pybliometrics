@@ -60,7 +60,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def coauthor_count(self):
         """Total number of coauthors."""
-        return self._json.get('coauthor-count', '0')
+        return self._json.get('coauthor-count')
 
     @property
     def classificationgroup(self):
@@ -104,7 +104,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def h_index(self):
         """The author's h-index."""
-        return self._json.get('h-index', '0')
+        return self._json.get('h-index')
 
     @property
     def historical_identifier(self):
