@@ -6,8 +6,8 @@ from json import loads
 from .author_search import AuthorSearch
 from .scopus_search import ScopusSearch
 from pybliometrics.scopus.superclasses import Retrieval
-from pybliometrics.scopus.utils import chained_get, get_content, get_link,\
-    listify, parse_affiliation, parse_date_created
+from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
+    get_content, get_link, listify, parse_affiliation, parse_date_created
 
 
 class AuthorRetrieval(Retrieval):
@@ -21,8 +21,8 @@ class AuthorRetrieval(Retrieval):
         when it lookes correct in the web view.  In this case please request
         a correction.
         """
-        path = ["author-profile", "affiliation-current", "affiliation"]
-        return parse_affiliation(chained_get(self._json, path))
+        affs = chained_get(self._profile, ["affiliation-current", "affiliation"])
+        return parse_affiliation(affs)
 
     @property
     def affiliation_history(self):
@@ -37,8 +37,8 @@ class AuthorRetrieval(Retrieval):
         Note: Unlike on their website, Scopus doesn't provide the periods
         of affiliation.
         """
-        path = ["author-profile", "affiliation-history", "affiliation"]
-        return parse_affiliation(chained_get(self._json, path))
+        affs = chained_get(self._profile, ["affiliation-history", "affiliation"])
+        return parse_affiliation(affs)
 
     @property
     def alias(self):
@@ -65,10 +65,9 @@ class AuthorRetrieval(Retrieval):
     @property
     def classificationgroup(self):
         """List with (subject group ID, number of documents)-tuples."""
-        path = ['author-profile', 'classificationgroup', 'classifications',
-                'classification']
+        path = ['classificationgroup', 'classifications', 'classification']
         out = [(item['$'], item['@frequency']) for item in
-               listify(chained_get(self._json, path, []))]
+               listify(chained_get(self._profile, path, []))]
         return out or None
 
     @property
@@ -79,7 +78,10 @@ class AuthorRetrieval(Retrieval):
     @property
     def date_created(self):
         """Date the Scopus record was created."""
-        return parse_date_created(self._json['author-profile'])
+        try:
+            return parse_date_created(self._profile)
+        except KeyError:
+            return None
 
     @property
     def document_count(self):
@@ -92,13 +94,12 @@ class AuthorRetrieval(Retrieval):
         pybliometrics will throw a warning informing the user about
         author profile merges.
         """
-        return self._json['coredata']['eid']
+        return self._json['coredata'].get('eid')
 
     @property
     def given_name(self):
         """Author's preferred given name."""
-        path = ['author-profile', 'preferred-name', 'given-name']
-        return chained_get(self._json, path)
+        return chained_get(self._profile, ['preferred-name', 'given-name'])
 
     @property
     def h_index(self):
@@ -125,14 +126,12 @@ class AuthorRetrieval(Retrieval):
     @property
     def indexed_name(self):
         """Author's name as indexed by Scopus."""
-        path = ['author-profile', 'preferred-name', 'indexed-name']
-        return chained_get(self._json, path)
+        return chained_get(self._profile, ['preferred-name', 'indexed-name'])
 
     @property
     def initials(self):
         """Author's preferred initials."""
-        path = ['author-profile', 'preferred-name', 'initials']
-        return chained_get(self._json, path)
+        return chained_get(self._profile, ['preferred-name', 'initials'])
 
     @property
     def name_variants(self):
@@ -141,11 +140,10 @@ class AuthorRetrieval(Retrieval):
         """
         fields = 'indexed_name initials surname given_name doc_count'
         variant = namedtuple('Variant', fields)
-        path = ['author-profile', 'name-variant']
         out = [variant(indexed_name=var['indexed-name'], surname=var['surname'],
                        doc_count=var.get('@doc-count'), initials=var['initials'],
                        given_name=var.get('given-name'))
-               for var in listify(chained_get(self._json, path, []))]
+               for var in listify(self._profile.get('name-variant', []))]
         return out or None
 
     @property
@@ -156,9 +154,11 @@ class AuthorRetrieval(Retrieval):
     @property
     def publication_range(self):
         """Tuple containing years of first and last publication."""
-        r = self._json['author-profile']['publication-range']
-        return (r['@start'], r['@end'])
-        return self._json['coredata'].get('orcid')
+        r = self._profile.get('publication-range')
+        try:
+            return (r['@start'], r['@end'])
+        except TypeError:
+            return None
 
     @property
     def scopus_author_link(self):
@@ -178,7 +178,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def status(self):
         """The status of the author profile."""
-        return chained_get(self._json, ["author-profile", "status"])
+        return self._profile.get("status")
 
     @property
     def subject_areas(self):
@@ -195,15 +195,14 @@ class AuthorRetrieval(Retrieval):
     @property
     def surname(self):
         """Author's preferred surname."""
-        path = ['author-profile', 'preferred-name', 'surname']
-        return chained_get(self._json, path)
+        return chained_get(self._profile, ['preferred-name', 'surname'])
 
     @property
     def url(self):
         """URL to the author's API page."""
         return self._json['coredata']['prism:url']
 
-    def __init__(self, author_id, refresh=False):
+    def __init__(self, author_id, refresh=False, view="ENHANCED"):
         """Interaction with the Author Retrieval API.
 
         Parameters
@@ -217,6 +216,15 @@ class AuthorRetrieval(Retrieval):
             is passed, cached file will be refreshed if the number of days
             since last modification exceeds that value.
 
+        view : str (optional, default=META_ABS)
+            The view of the file that should be downloaded.  Allowed values:
+            METRICS, LIGHT, STANDARD, ENHANCED, where STANDARD includes all
+            information of LIGHT view and ENHANCED includes all information of
+            any view.  For details see
+            https://dev.elsevier.com/sc_author_retrieval_views.html.
+            Note: Neither the BASIC nor the DOCUMENTS view are not active,
+            although documented.
+
         Examples
         --------
         See https://pybliometrics.readthedocs.io/en/stable/examples/AuthorRetrieval.html.
@@ -227,13 +235,15 @@ class AuthorRetrieval(Retrieval):
         where `path` is specified in `~/.scopus/config.ini` and `author_id`
         is stripped of an eventually leading `'9-s2.0-'`.
         """
+        # Checks
+        allowed_views = ('METRICS', 'LIGHT', 'STANDARD', 'ENHANCED')
+        check_parameter_value(view, allowed_views, "view")
+
         # Load json
-        view = "ENHANCED"  # In case Scopus adds different views in future
         self._id = str(int(str(author_id).split('-')[-1]))
         Retrieval.__init__(self, identifier=self._id, api='AuthorRetrieval',
                            refresh=refresh, view=view)
         self._json = self._json['author-retrieval-response']
-        # Checks
         try:
             self._json = self._json[0]
         except KeyError:  # Incomplete forward
@@ -247,6 +257,7 @@ class AuthorRetrieval(Retrieval):
             warn(text, UserWarning)
         else:
             self._alias = None
+        self._profile = self._json.get("author-profile", {})
 
     def __str__(self):
         """Return a summary string."""
@@ -265,11 +276,13 @@ class AuthorRetrieval(Retrieval):
         (surname, given_name, id, areas, affiliation_id, name, city, country),
         where areas is a list of subject area codes joined by "; ".
         Note: Method retrieves information via individual queries which will
-        not be cached.  The Scopus API does returns 160 coauthors at most.
+        not be cached.  The Scopus API returns 160 coauthors at most.
         """
         SIZE = 25
         # Get number of authors to search for
         url = self.coauthor_link
+        if not url:
+            return None
         res = get_content(url=url)
         data = loads(res.text)['search-results']
         N = int(data.get('opensearch:totalResults', 0))
