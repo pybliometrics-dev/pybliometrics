@@ -46,7 +46,7 @@ It's easy to work with namedtuples: Using `pandas <https://pandas.pydata.org/>`_
 .. code-block:: python
 
     >>> import pandas as pd
-    >>> print(pd.DataFrame(s.authors)
+    >>> print(pd.DataFrame(s.authors))
                      eid surname initials givenname       affiliation documents  \
     0  9-s2.0-6602907525  Selten       R.  Reinhard  Universitat Bonn        73
 
