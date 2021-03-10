@@ -212,7 +212,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def correspondence(self):
-        """List of namedtuple representing the authors to whom correspondence
+        """List of namedtuples representing the authors to whom correspondence
         should be addressed, in the form (surname, initials, organization,
         country, city_group). Multiple organziations are joined on semicolon.
         """
