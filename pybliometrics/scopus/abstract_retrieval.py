@@ -212,29 +212,30 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def correspondence(self):
-        """namedtuple representing the author to whom correspondence should
-        be addressed, in the form
-        (surname, initials, organization, country, city_group).  Multiple
-        organziations are joined on semicolon.
+        """List of namedtuple representing the authors to whom correspondence
+        should be addressed, in the form (surname, initials, organization,
+        country, city_group). Multiple organziations are joined on semicolon.
         """
         fields = 'surname initials organization country city_group'
         auth = namedtuple('Correspondence', fields)
-        corr = self._head.get('correspondence')
-        if corr is None:
-            return None
-        aff = corr.get('affiliation', {})
-        try:
-            org = aff['organization']
+        items = listify(self._head.get('correspondence', []))
+        out = []
+        for item in items:
+            aff = item.get('affiliation', {})
             try:
-                org = org['$']
-            except TypeError:  # Multiple names given
-                org = "; ".join([d['$'] for d in org])
-        except KeyError:
-            org = None
-        return auth(surname=corr.get('person', {}).get('ce:surname'),
-                    initials=corr.get('person', {}).get('ce:initials'),
-                    organization=org, country=aff.get('country'),
-                    city_group=aff.get('city-group'))
+                org = aff['organization']
+                try:
+                    org = org['$']
+                except TypeError:  # Multiple names given
+                    org = "; ".join([d['$'] for d in org])
+            except KeyError:
+                org = None
+            new = auth(surname=item.get('person', {}).get('ce:surname'),
+                       initials=item.get('person', {}).get('ce:initials'),
+                       organization=org, country=aff.get('country'),
+                       city_group=aff.get('city-group'))
+            out.append(new)
+        return out or None
 
     @property
     def coverDate(self):
