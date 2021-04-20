@@ -27,10 +27,10 @@ Error messages
 .. _Scopus429Error:
 
 `pybliometrics.scopus.exception.Scopus429Error: QUOTA EXCEEDED`
-    Your provided API key's weekly allowance of 5000 requests (for standard views) is depleted.  If you use multiple keys, this means all your keys are depleted.
+    Your provided API key's weekly quota has been depleted.  If you provided multiple keys in your :doc:`configuration file <../configuration>`, this means all your keys are depleted.  In this case, wait up to week until your API key's quota has been reset.
 
 `pybliometrics.scopus.exception.Scopus500Error: INTERNAL SERVER ERROR`
-    Formally, the server does not respond, for various reasons.  A common reason in searches is that you use a fieldname that does not exist.  Verify that your query works in `Advanced Search <https://www.scopus.com/search/form.uri?display=advanced>`_.
+    Formally, the server does not respond, for various reasons.  A common reason in searches is that you use a fieldname that does not exist.  Verify that your query works in Scopus' `Advanced Search <https://www.scopus.com/search/form.uri?display=advanced>`_.
 
 `pybliometrics.scopus.exception.Scopus502Error: BAD GATEWAY`
     Formally, the server does not respond, for various reasons.

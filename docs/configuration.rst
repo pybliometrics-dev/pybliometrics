@@ -24,7 +24,7 @@ By default, after initial set-up (see below), the file will look like this:
         ZZZ
 
 
-where PPP refers to `~/` and XXX, YYYY and ZZZ refer to your API Keys, of which you can register 10 for your Scopus account.  If you provide all of them (separated by a comma), pybliometrics automatically replaces a depleted key with a random one of the others.  If you edit the file manually, remember to indent multi-line statements.
+where PPP refers to `~/` and XXX, YYYY and ZZZ refer to your API Keys, of which you can register 10 for your Scopus account.  If you provide all of them (separated by a comma), pybliometrics automatically replaces a depleted key with a random one of the others, until all of them are depleted.  If you edit the file manually, remember to indent multi-line statements.
 
 Simply edit this file to change the paths where `pybliometrics` should cache downloaded files (`pybliometrics` will create them if necessary)
 
