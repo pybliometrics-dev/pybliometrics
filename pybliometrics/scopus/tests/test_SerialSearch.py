@@ -30,7 +30,7 @@ def test_results_issn():
 
 
 def test_results_pub():
-    assert_equal(len(ser3.results), 6)
+    assert_equal(len(ser3.results), 5)
     assert_equal(ser3.results[0]['title'], 'African Finance Journal')
 
 

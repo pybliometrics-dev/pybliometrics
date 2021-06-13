@@ -38,7 +38,7 @@ def test_get_results_size():
 
 
 def test_results_author():
-    recieved = s_au.results[-1]
+    received = s_au.results[-1]
     expected = doc(eid='2-s2.0-26444452434', doi='10.1016/0014-2921(92)90085-B',
         pii='001429219290085B', pubmed_id=None, title='Economists as policymakers: A round-table discussion. Introduction',
         subtype='ar', subtypeDescription='Article', creator='Draghi M.',
@@ -50,12 +50,12 @@ def test_results_author():
         issueIdentifier='2-3', article_number=None, pageRange='307-309',
         description=None, authkeywords=None, citedby_count='0', openaccess='0',
         fund_acr=None, fund_no='undefined', fund_sponsor=None)
-    assert_true(int(recieved.citedby_count) > 0)
-    assert_equal(recieved._replace(citedby_count="0"), expected)
+    assert_true(int(received.citedby_count) > 0)
+    assert_equal(received._replace(citedby_count="0"), expected)
 
 
 def test_results_journal():
-    recieved = s_j.results[-1]
+    received = s_j.results[-1]
     abstract = 'This paper investigates the determinants of R&D investment '\
         'at the national level with an emphasis on the roles of patent '\
         'rights protection, international technology transfer through trade '\
@@ -86,9 +86,10 @@ def test_results_journal():
         eIssn=None, aggregationType='Journal', volume='39', issueIdentifier='1',
         article_number=None, pageRange='103-116', description=abstract,
         authkeywords=keywords, citedby_count='0', openaccess='0',
-        fund_acr=None, fund_no='undefined', fund_sponsor=None)
-    assert_true(int(recieved.citedby_count) > 50)
-    assert_equal(recieved._replace(citedby_count="0"), expected)
+        fund_acr='MOST', fund_no='NSC94-2415-H-194-001',
+        fund_sponsor='Ministry of Science and Technology, Taiwan')
+    assert_true(int(received.citedby_count) > 60)
+    assert_equal(received._replace(citedby_count="0"), expected)
 
 
 def test_results_empty():

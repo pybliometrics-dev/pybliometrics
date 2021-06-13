@@ -162,7 +162,7 @@ def test_correspondence():
     expected2 = corr(surname='Boukas', initials='E.K.',
         organization='Ecole Polytechnique de Montreal', country='Canada',
         city_group='Montreal')
-    assert_equal(ab2.correspondence, expected2)
+    assert_equal(ab2.correspondence[0], expected2)
     assert_equal(ab3.correspondence, None)
     assert_equal(ab8.correspondence, None)
 
@@ -264,7 +264,7 @@ def test_get_html():
         'https://www.scopus.com/authid/detail.url?origin=AuthorProfile&'\
         'authorId=16430389100">Gwen Ortmeyer</a> and <a href="https://'\
         'www.scopus.com/authid/detail.url?origin=AuthorProfile&authorId='\
-        '55613241349">N. Craig Smith</a>, <a href="https://www.scopus.com/'\
+        '55613241342">N. Craig Smith</a>, <a href="https://www.scopus.com/'\
         'inward/record.uri?partnerID=HzOxMe3b&scp=0001270077&origin=inward">'\
         'Fairness in consumer pricing</a>, <a href="https://www.scopus.com/'\
         'source/sourceInfo.url?sourceId=130073">Journal of Consumer Policy'\

@@ -19,7 +19,7 @@ def test_aggregation_type():
 
 
 def test_citescoreyearinfolist():
-    expected1 = [('2019', '2.4'), ('2020', '2.6')]
+    expected1 = [('2020', '2.8'), ('2021', '2.7')]
     assert_equal(sofwarex.citescoreyearinfolist, expected1)
     assert_equal(oecd.citescoreyearinfolist, None)
 
@@ -40,7 +40,7 @@ def test_oaallowsauthorpaid():
 
 
 def test_openaccess():
-    assert_equal(sofwarex.openaccess, None)
+    assert_equal(sofwarex.openaccess, '1')
     assert_equal(oecd.openaccess, None)
 
 
@@ -55,7 +55,7 @@ def test_openaccesstype():
 
 
 def test_openaccessarticle():
-    assert_equal(sofwarex.openaccessarticle, None)
+    assert_equal(sofwarex.openaccessarticle, True)
     assert_equal(oecd.openaccessarticle, None)
 
 
@@ -93,12 +93,12 @@ def test_self_link():
     assert_equal(oecd.self_link, expected2)
 
 def test_sjrlist():
-    assert_equal(sofwarex.sjrlist, [('2019', '0.445')])
+    assert_equal(sofwarex.sjrlist, [('2019', '0.445'), ('2020', '0.528')])
     assert_equal(oecd.sjrlist, [('1999', '2.723')])
 
 
 def test_sniplist():
-    assert_equal(sofwarex.sniplist, [('2019', '1.08')])
+    assert_equal(sofwarex.sniplist, [('2019', '1.013'), ('2020', '1.093')])
     assert_equal(oecd.sniplist, None)
 
 
