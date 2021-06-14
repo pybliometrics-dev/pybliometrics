@@ -1,7 +1,6 @@
 """Base class object for superclasses."""
 
 from json import dumps, loads
-from os.path import getmtime
 from time import localtime, strftime, time
 
 from pybliometrics.scopus.exception import ScopusQueryError
@@ -16,8 +15,8 @@ class Base:
 
         Parameters
         ----------
-        fname : str
-            The filename (including path) of the cache object.
+        fname : PosixPath or WindowsPath
+            The filename as Path() object.
 
         refresh : bool or int
             Whether to refresh the cached file if it exists or not.  If int
@@ -54,19 +53,18 @@ class Base:
             If `refresh` is neither boolean nor numeric.
         """
         # Compare age of file to test whether we refresh
-        refresh, exists, mod_ts = _check_file_age(fname, refresh)
+        refresh, mod_ts = _check_file_age(fname, refresh)
 
         # Read or dowload, possibly with caching
         search_request = "query" in params
-        if exists and not refresh:
+        if fname.exists() and not refresh:
             self._mdate = mod_ts
             if search_request:
-                with open(fname, 'rb') as f:
-                    self._json = [loads(line) for line in f.readlines()]
+                self._json = [loads(line) for line in
+                              fname.read_text().split("\n") if line]
                 self._n = len(self._json)
             else:
-                with open(fname, 'rb') as f:
-                    self._json = loads(f.read().decode('utf-8'))
+                self._json = loads(fname.read_text())
         else:
             resp = get_content(url, params, *args, **kwds)
             header = resp.headers
@@ -94,13 +92,17 @@ class Base:
                 else:
                     data = None
             else:
-                data = loads(resp.text.encode('utf-8'))
+                data = loads(resp.text)
                 self._json = data
             # Set private variables
             self._mdate = time()
             self._header = header
             # Finally write data
-            _write_json(fname, data)
+            data = data or ""
+            if not search_request:
+                data = [data]
+            text = [dumps(item, separators=(',', ':')) for item in data]
+            fname.write_text("\n".join(text))
 
     def get_cache_file_age(self):
         """Return the age of the cached file in days."""
@@ -133,10 +135,8 @@ class Base:
 
 def _check_file_age(fname, refresh):
     """Check whether a file needs to be refreshed based on its age."""
-    exists = None
     try:
-        mod_ts = getmtime(fname)
-        exists = True
+        mod_ts = fname.stat().st_mtime
         if not isinstance(refresh, bool):
             diff = time() - mod_ts
             days = int(diff / 86400) + 1
@@ -147,10 +147,9 @@ def _check_file_age(fname, refresh):
                 raise ValueError(msg)
             refresh = allowed_age < days
     except FileNotFoundError:
-        exists = False
         refresh = True
         mod_ts = None
-    return refresh, exists, mod_ts
+    return refresh, mod_ts
 
 
 def _parse(res, n, url, params, verbose, *args, **kwds):
@@ -182,19 +181,3 @@ def _parse(res, n, url, params, verbose, *args, **kwds):
     if verbose:
         pbar.close()
     return _json, resp.headers
-
-
-def _write_json(fname, data):
-    """Auxiliary function to write json to a file."""
-    if data is None:
-        return None
-    with open(fname, 'wb') as f:
-        if not data:
-            return None
-        if isinstance(data, list):
-            for item in data:
-                text = f"{dumps(item, separators=(',', ':'))}\n"
-                f.write(text.encode('utf-8'))
-        else:
-            text = f"{dumps(data, separators=(',', ':'))}\n"
-            f.write(text.encode('utf-8'))

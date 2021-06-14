@@ -4,7 +4,6 @@ import requests
 
 from pybliometrics.scopus import exception
 from pybliometrics.scopus.utils import CONFIG_FILE, DEFAULT_PATHS, config
-from pybliometrics.scopus.utils.create_config import create_config
 from pybliometrics import version_info
 
 # Define user agent string for HTTP requests
@@ -137,16 +136,20 @@ def get_folder(api, view):
     eventually create the folder.
     """
     from configparser import NoOptionError
+    from pathlib import Path
+
+    from pybliometrics.scopus.utils.create_config import create_config
+
     if not config.has_section('Directories'):
         create_config()
     try:
-        folder = config.get('Directories', api)
+        parent = Path(config.get('Directories', api))
     except NoOptionError:
-        folder = DEFAULT_PATHS[api]
-        config.set('Directories', api, folder)
+        parent = DEFAULT_PATHS[api]
+        config.set('Directories', api, str(parent))
+        CONFIG_FILE.write_text(config)
         with open(CONFIG_FILE, 'w') as f:
             config.write(f)
-    folder = os.path.join(folder, view or '')
-    if not os.path.exists(folder):
-        os.makedirs(folder)
+    folder = parent/view
+    folder.mkdir(parents=True, exist_ok=True)
     return folder

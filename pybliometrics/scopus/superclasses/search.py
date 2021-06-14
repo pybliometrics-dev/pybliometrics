@@ -1,7 +1,6 @@
 """Superclass to access all Scopus search APIs and dump the results."""
 
 from hashlib import md5
-from os.path import join
 
 from pybliometrics.scopus.superclasses import Base
 from pybliometrics.scopus.utils import SEARCH_URL, get_folder
@@ -68,8 +67,7 @@ class Search(Base):
         else:
             params['query'] = query
             name = query
-        fname = md5(name.encode('utf8')).hexdigest()
-        qfile = join(get_folder(api, view), fname)
+        qfile = get_folder(api, view)/md5(name.encode('utf8')).hexdigest()
         if cursor:
             params.update({'cursor': '*'})
         else:

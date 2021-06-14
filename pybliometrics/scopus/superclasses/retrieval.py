@@ -1,7 +1,5 @@
 """Superclass to access all Scopus retrieval APIs and dump the results."""
 
-from os.path import join
-
 from pybliometrics.scopus.superclasses import Base
 from pybliometrics.scopus.utils import RETRIEVAL_URL, get_folder
 
@@ -60,13 +58,14 @@ class Retrieval(Base):
             url += id_type + "/"
         params = {'view': view, **kwds}
         if api == 'CitationOverview':
-            params.update({'date': date, 'scopus_id': identifier.split('0-')[-1], 'citation': citation})
+            params.update({'date': date, 'scopus_id': identifier.split('0-')[-1],
+                           'citation': citation})
         if api == 'SerialTitle':
             params.update({'date': date})
         url += identifier
 
         # Parse file contents
-        qfile = join(get_folder(api, view), identifier.replace('/', '_'))
+        qfile = get_folder(api, view)/identifier.replace('/', '_')
         Base.__init__(self, qfile, refresh, params=params, url=url)
         # print(self._json)
         self._view = view

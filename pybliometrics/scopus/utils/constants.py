@@ -1,18 +1,19 @@
-from os.path import expanduser
+from pathlib import Path
 
 # Paths for cached files
+BASE_PATH = Path.home()/".scopus"
 DEFAULT_PATHS = {
-    'AbstractRetrieval': expanduser('~/.scopus/abstract_retrieval'),
-    'AffiliationRetrieval': expanduser('~/.scopus/affiliation_retrieval'),
-    'AffiliationSearch': expanduser('~/.scopus/affiliation_search'),
-    'AuthorRetrieval': expanduser('~/.scopus/author_retrieval'),
-    'AuthorSearch': expanduser('~/.scopus/author_search'),
-    'CitationOverview': expanduser('~/.scopus/citation_overview'),
-    'ScopusSearch': expanduser('~/.scopus/scopus_search'),
-    'SerialSearch': expanduser('~/.scopus/serial_search'),
-    'SerialTitle': expanduser('~/.scopus/serial_title'),
-    'PlumXMetrics': expanduser('~/.scopus/plumx'),
-    'SubjectClassifications': expanduser('~/.scopus/subject_classification')
+    'AbstractRetrieval': BASE_PATH/'abstract_retrieval',
+    'AffiliationRetrieval': BASE_PATH/'affiliation_retrieval',
+    'AffiliationSearch': BASE_PATH/'affiliation_search',
+    'AuthorRetrieval': BASE_PATH/'author_retrieval',
+    'AuthorSearch': BASE_PATH/'author_search',
+    'CitationOverview': BASE_PATH/'citation_overview',
+    'ScopusSearch': BASE_PATH/'scopus_search',
+    'SerialSearch': BASE_PATH/'serial_search',
+    'SerialTitle': BASE_PATH/'serial_title',
+    'PlumXMetrics': BASE_PATH/'plumx',
+    'SubjectClassifications': BASE_PATH/'subject_classification'
 }
 
 # URL prefix and suffixes for retrieval classes
