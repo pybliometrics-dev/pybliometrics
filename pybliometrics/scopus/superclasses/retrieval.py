@@ -1,7 +1,7 @@
 """Superclass to access all Scopus retrieval APIs and dump the results."""
 
 from pybliometrics.scopus.superclasses import Base
-from pybliometrics.scopus.utils import get_folder, RETRIEVAL_URL
+from pybliometrics.scopus.utils import get_folder, URLS
 
 
 class Retrieval(Base):
@@ -53,7 +53,7 @@ class Retrieval(Base):
             If the api parameter is an invalid entry.
         """
         # Construct parameters
-        url = RETRIEVAL_URL[api]
+        url = URLS[api]
         if api in ("AbstractRetrieval", "PlumXMetrics"):
             url += id_type + "/"
         params = {'view': view, **kwds}

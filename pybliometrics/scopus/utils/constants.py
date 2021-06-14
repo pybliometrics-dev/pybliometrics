@@ -19,23 +19,19 @@ DEFAULT_PATHS = {
     'SubjectClassifications': BASE_PATH/'subject_classification'
 }
 
-# URL prefix and suffixes for retrieval classes
+# URLs for all classes
 RETRIEVAL_BASE = 'https://api.elsevier.com/content/'
-RETRIEVAL_URL = {
+SEARCH_BASE = 'https://api.elsevier.com/content/search/'
+URLS = {
     'AbstractRetrieval': RETRIEVAL_BASE + 'abstract/',
     'AffiliationRetrieval': RETRIEVAL_BASE + 'affiliation/affiliation_id/',
-    'AuthorRetrieval': RETRIEVAL_BASE + 'author/author_id/',
-    'CitationOverview': RETRIEVAL_BASE + 'abstract/citations/',
-    'SerialTitle': RETRIEVAL_BASE + 'serial/title/issn/',
-    'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
-}
-
-# URL prefix and suffixes for search classes
-SEARCH_BASE = 'https://api.elsevier.com/content/search/'
-SEARCH_URL = {
     'AffiliationSearch': SEARCH_BASE + 'affiliation',
+    'AuthorRetrieval': RETRIEVAL_BASE + 'author/author_id/',
     'AuthorSearch': SEARCH_BASE + 'author',
+    'CitationOverview': RETRIEVAL_BASE + 'abstract/citations/',
     'ScopusSearch': SEARCH_BASE + 'scopus',
     'SerialSearch': RETRIEVAL_BASE + 'serial/title',
-    'SubjectClassifications': RETRIEVAL_BASE + 'subject/scopus'
+    'SerialTitle': RETRIEVAL_BASE + 'serial/title/issn/',
+    'SubjectClassifications': RETRIEVAL_BASE + 'subject/scopus',
+    'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/'
 }

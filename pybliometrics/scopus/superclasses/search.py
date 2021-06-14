@@ -3,7 +3,7 @@
 from hashlib import md5
 
 from pybliometrics.scopus.superclasses import Base
-from pybliometrics.scopus.utils import get_folder, SEARCH_URL
+from pybliometrics.scopus.utils import get_folder, URLS
 
 
 class Search(Base):
@@ -72,7 +72,7 @@ class Search(Base):
             params.update({'cursor': '*'})
         else:
             params.update({'start': 0})
-        Base.__init__(self, qfile, refresh, params=params, url=SEARCH_URL[api],
+        Base.__init__(self, qfile, refresh, params=params, url=URLS[api],
                       download=download, max_entries=max_entries, verbose=verbose)
         # Set query parameters
         self._view = view
