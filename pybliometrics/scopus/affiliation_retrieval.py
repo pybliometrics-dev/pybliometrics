@@ -143,10 +143,6 @@ class AffiliationRetrieval(Retrieval):
             Note: Neither the BASIC view nor DOCUMENTS or AUTHORS views are
             active, although documented.
 
-        Examples
-        --------
-        See https://pybliometrics.readthedocs.io/en/stable/examples/AffiliationRetrieval.html.
-
         Notes
         -----
         The directory for cached results is `{path}/{view}/{aff_id}`,

@@ -225,10 +225,6 @@ class AuthorRetrieval(Retrieval):
             Note: Neither the BASIC nor the DOCUMENTS view are not active,
             although documented.
 
-        Examples
-        --------
-        See https://pybliometrics.readthedocs.io/en/stable/examples/AuthorRetrieval.html.
-
         Notes
         -----
         The directory for cached results is `{path}/ENHANCED/{author_id}`,

@@ -1,11 +1,23 @@
-Citation Overview
------------------
+pybliometrics.scopus.CitationOverview
+=====================================
 
-:doc:`CitationOverview() <../reference/pybliometrics.CitationOverview>` implements the `Citations Overview API <https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key needs to be approved by Elsevier manually.  Please contact Scopus to do so.  Otherwise each request throws 403 errors.
+`CitationOverview()` implements the `Citations Overview API <https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key needs to be approved by Elsevier manually.  Please contact Scopus to do so.  Otherwise each request throws 403 errors.
 
-It takes a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_ as argument, an optional citation argument to allow exclusion of books or self-citation and additionally a starting year and an ending year for which yearly citations will be retrieved.  If no ending year is given, `CitationOverview()` will use the current year.  Retrieving these results is not fast, so we cache them to speed up subsequent uses of the data.
+.. currentmodule:: pybliometrics.scopus
 
-You initialize the class with Scopus' Electronic Identifier (EID):
+Documentation
+-------------
+
+.. autoclass:: CitationOverview
+   :members:
+   :inherited-members:
+
+Examples
+--------
+
+It takes a Scopus Electronic Identifier (EID) as argument, an optional citation argument to allow exclusion of books or self-citation and additionally a starting year and an ending year for which yearly citations will be retrieved.  If no ending year is given, `CitationOverview()` will use the current year.
+
+You initialize the class with the Scopus EID:
 
 .. code-block:: python
 
@@ -89,7 +101,7 @@ There are also author information stored as list of `namedtuples <https://docs.p
     >>> auth_id
     '7004212771'
 
-Object `auth_id` can for example be used with :doc:`AuthorRetrieval() <../reference/pybliometrics.AuthorRetrieval>`.
+Object `auth_id` can for example be used with :doc:`AuthorRetrieval() <../classes/AuthorRetrieval>`.
 
 Finally, there are bibliographic information, too:
 

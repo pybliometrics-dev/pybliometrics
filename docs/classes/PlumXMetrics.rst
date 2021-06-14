@@ -1,7 +1,19 @@
-PlumX Metrics
+pybliometrics.scopus.PlumXMetrics
+=================================
+
+`PlumXMetrics()` implements the `PlumX Metrics API <https://dev.elsevier.com/documentation/PlumXMetricsAPI.wadl>`_.  It provides metrics in five categories: captures, citations, usage, mentions, and social media (`background information <https://plumanalytics.com/learn/about-metrics/>`_).  It works for 33 different types of media.
+
+.. currentmodule:: pybliometrics.scopus
+
+Documentation
 -------------
 
-:doc:`PlumXMetrics() <../reference/pybliometrics.PlumXMetrics>` implements the `PlumX Metrics API <https://dev.elsevier.com/documentation/PlumXMetricsAPI.wadl>`_.  It provides metrics in five categories: captures, citations, usage, mentions, and social media (`background information <https://plumanalytics.com/learn/about-metrics/>`_).  It works for 33 different types of media.
+.. autoclass:: PlumXMetrics
+   :members:
+   :inherited-members:
+
+Examples
+--------
 
 You initialize the class with the identifier of a document and its type:
 

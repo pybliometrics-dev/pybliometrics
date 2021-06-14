@@ -1,7 +1,19 @@
-Affiliation Search
-------------------
+pybliometrics.scopus.AffiliationSearch
+======================================
 
-:doc:`AffiliationSearch() <../reference/pybliometrics.AffiliationSearch>` implements the `Affiliation Search API <https://dev.elsevier.com/documentation/AffiliationSearchAPI.wadl>`_.  It performs a query to search for affiliations and then retrieves the records of the query.
+`AffiliationSearch()` implements the `Affiliation Search API <https://dev.elsevier.com/documentation/AffiliationSearchAPI.wadl>`_.  It performs a query to search for affiliations and then retrieves the records of the query.
+
+.. currentmodule:: pybliometrics.scopus
+
+Documentation
+-------------
+
+.. autoclass:: AffiliationSearch
+   :members:
+   :inherited-members:
+
+Examples
+--------
 
 The class is initialized with a search query which you can read about in `Affiliation Search Guide <https://dev.elsevier.com/tips/AffiliationSearchTips.htm>`_.  An invalid search query will result in an error.
 
@@ -22,7 +34,7 @@ You can obtain a search summary just by printing the object:
         Max Planck Institute for Innovation and Competition
 
 
-The class mostly serves to provide a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing information about the affiliation.  One of them is the affiliation ID which you can use for the :doc:`AffiliationRetrieval <../reference/pybliometrics.AffiliationRetrieval>` class:
+The class mostly serves to provide a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing information about the affiliation.  One of them is the affiliation ID which you can use for the :doc:`AffiliationRetrieval <../classes/AffiliationRetrieval>` class:
 
 .. code-block:: python
 

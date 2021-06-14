@@ -1,7 +1,19 @@
-Subject Classifications
------------------------
+pybliometrics.scopus.SubjectClassifications
+===========================================
 
-:doc:`SubjectClassifications() <../reference/pybliometrics.SubjectClassifications>` implements the `Subject Classifications API <https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl>`_.  It allows for retrieval-like query for All Science Journal Classification (ASJC) subjects/areas.
+`SubjectClassifications()` implements the `Subject Classifications API <https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl>`_.  It allows for retrieval-like query for All Science Journal Classification (ASJC) subjects/areas.
+
+.. currentmodule:: pybliometrics.scopus
+
+Documentation
+-------------
+
+.. autoclass:: SubjectClassifications
+   :members:
+   :inherited-members:
+
+Examples
+--------
 
 You initialize the class with a query `dict`.  It contains the "description" (general classification of the subject), "code" (the ASJC code), "detail" (detailed name of the subject), "abbrev" (abbreviation of general classification of subject) or a combination of those:
 

@@ -1,9 +1,21 @@
-Author Retrieval
-----------------
+pybliometrics.scopus.AuthorRetrieval
+====================================
 
-:doc:`AuthorRetrieval() <../reference/pybliometrics.AuthorRetrieval>` implements the `Author Retrieval API <https://dev.elsevier.com/documentation/AuthorRetrievalAPI.wadl>`_.
+`AuthorRetrieval()` implements the `Author Retrieval API <https://dev.elsevier.com/documentation/AuthorRetrievalAPI.wadl>`_. It contains an entire author record as per Scopus.
 
-This class is to interact with the entire author record in Scopus, using the author's Scopus ID (which can be passed as either an integer or a string):
+.. currentmodule:: pybliometrics.scopus
+
+Documentation
+-------------
+
+.. autoclass:: AuthorRetrieval
+   :members:
+   :inherited-members:
+
+Examples
+--------
+
+You initiate the class with the author's Scopus ID, which can be passed as either an integer or a string:
 
 .. code-block:: python
 
@@ -109,7 +121,7 @@ Extensive information on current and former affiliations is provided as namedtup
     org_domain='fhi.mpg.de', org_URL='https://www.fhi.mpg.de/')
 
 
-The affiliation ID to be used for the :doc:`AffiliationRetrieval <../reference/pybliometrics.AffiliationRetrieval>` class.
+The affiliation ID to be used for the :doc:`AffiliationRetrieval <../classes/AffiliationRetrieval>` class.
 
 `pybliometrics` caches results to speed up subsequent analysis.  This information eventually becomes outdated.  To refresh the cached results if they exist, use the refresh parameter when initiating the class.  Set `refresh=True` or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `au.get_cache_file_mdate()` to get the date of last modification, and `au.get_cache_file_age()` the number of days since the last modification.
 
@@ -126,7 +138,7 @@ There are a number of getter methods for convenience.  For example, you can obta
           dtype='object')
 
 
-Method `get_documents()` is another convenience method to search for the author's publications via :doc:`ScopusSearch <../reference/pybliometrics.ScopusSearch>` (information will be cached):
+Method `get_documents()` is another convenience method to search for the author's publications via :doc:`ScopusSearch <../classes/ScopusSearch>` (information will be cached):
 
 .. code-block:: python
 

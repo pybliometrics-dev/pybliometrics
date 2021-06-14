@@ -1,7 +1,19 @@
-Affiliation Retrieval
----------------------
+pybliometrics.scopus.AffiliationRetrieval
+=========================================
 
-:doc:`AffiliationRetrieval() <../reference/pybliometrics.AffiliationRetrieval>` implements the `Affiliation Retrieval API <https://dev.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, like city, country, its members, and more.
+`AffiliationRetrieval()` implements the `Affiliation Retrieval API <https://dev.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, like city, country, its members, and more.
+
+.. currentmodule:: pybliometrics.scopus
+
+Documentation
+-------------
+
+.. autoclass:: AffiliationRetrieval
+   :members:
+   :inherited-members:
+
+Examples
+--------
 
 You initialize the class with Scopus' Affiliation ID:
 

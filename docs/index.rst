@@ -54,9 +54,8 @@ Indices and tables
    :maxdepth: 3
    :hidden:
 
-   examples
+   classes
    tips
-   reference
    configuration
    changelog
    authors

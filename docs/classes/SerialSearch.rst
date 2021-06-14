@@ -1,7 +1,19 @@
-Serial Search
+pybliometrics.scopus.SerialSearch
+=================================
+
+`SerialSearch()` implements the search of the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It performs a search for serial sources (journal, tradejournal, conferenceproceeding, bookseries) by title, ISSN, publisher, subject or source type.
+
+.. currentmodule:: pybliometrics.scopus
+
+Documentation
 -------------
 
-:doc:`SerialSearch() <../reference/pybliometrics.SerialSearch>` implements the search of the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It performs a search for serial sources (journal, tradejournal, conferenceproceeding, bookseries) by title, ISSN, publisher, subject or source type.
+.. autoclass:: SerialSearch
+   :members:
+   :inherited-members:
+
+Examples
+--------
 
 The class is initialized with a search query dictionary.  Its keys are limited to the following set: "title", "issn", "pub", "subj", "subjCode", "content", and "oa".  No more than 200 results can be returned.
 

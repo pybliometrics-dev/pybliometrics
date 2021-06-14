@@ -1,7 +1,19 @@
-Scopus Search
+pybliometrics.scopus.ScopusSearch
+=================================
+
+`ScopusSearch()` implements the `Scopus Search API <https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_.  It performs a query to search for articles and then retrieves the records of the query.
+
+.. currentmodule:: pybliometrics.scopus
+
+Documentation
 -------------
 
-:doc:`ScopusSearch() <../reference/pybliometrics.ScopusSearch>` implements the `Scopus Search API <https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl>`_.  It performs a query to search for articles and then retrieves the records of the query.
+.. autoclass:: ScopusSearch
+   :members:
+   :inherited-members:
+
+Examples
+--------
 
 The class is initialized with a search query.  Any query that works in the `Advanced Search on scopus.com <https://www.scopus.com/search/form.uri?display=advanced>`_ will work.  There are but two exceptions to allowed keywords: "LIMIT-TO()", as this only affects the display of the results on scopus.com, but not the selection of results per se; and "INDEXTERMS()".  An invalid search query will result in some `error <../tips.html#error-messages>`_.
 
@@ -172,7 +184,7 @@ The class' main attribute `results` returns a list of `namedtuples <https://docs
 
 Keep in mind that no more than 100 authors are included in the search results.
 
-The EIDs of documents can be used for the :doc:`AbstractRetrieval() <../reference/pybliometrics.AbstractRetrieval>` class and the Scopus Author IDs in column "authid" for the :doc:`AuthorRetrieval() <../reference/pybliometrics.AuthorRetrieval>` class.
+The EIDs of documents can be used for the :doc:`AbstractRetrieval() <../classes/AbstractRetrieval>` class and the Scopus Author IDs in column "authid" for the :doc:`AuthorRetrieval() <../classes/AuthorRetrieval>` class.
 
 Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `s.get_cache_file_mdate()` to get the date of last modification, and `s.get_cache_file_age()` the number of days since the last modification.
 

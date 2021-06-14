@@ -155,10 +155,6 @@ class SerialTitle(Retrieval):
             most recent metric data values are provided.
             Note: If not None, refresh will always be True.
 
-        Examples
-        --------
-        See https://pybliometrics.readthedocs.io/en/stable/examples/SerialTitle.html.
-
         Notes
         -----
         The directory for cached results is `{path}/{view}/{source_id}`,
