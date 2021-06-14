@@ -162,7 +162,7 @@ class SerialTitle(Retrieval):
         Notes
         -----
         The directory for cached results is `{path}/{view}/{source_id}`,
-        where `path` is specified in `~/.scopus/config.ini`.
+        where `path` is specified in your configuration file.
         """
         # Checks
         check_parameter_value(view, ('BASIC', 'STANDARD', 'ENHANCED'), "view")

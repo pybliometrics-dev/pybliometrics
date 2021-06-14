@@ -3,28 +3,29 @@ Configuration
 
 config.ini
 ~~~~~~~~~~
-`pybliometrics` stores values it needs for operation in a config file `~/.scopus/config.ini`.  It saves credentials as well as directory names for folders that store cached files.  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
+`pybliometrics` stores values it needs for operation in a config file.  That file is either in `~/.pybliometrics/config.ini` or in `~/.pybliometrics/config.ini` (if you started using pybliometrics before version 3.x).  It saves credentials as well as directory names for folders that store cached files.  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
 
 By default, after initial set-up (see below), the file will look like this:
 
 .. code-block:: none
 
     [Directories]
-    AbstractRetrieval = PPP/.scopus/abstract_retrieval
-    AffiliationSearch = PPP/.scopus/affiliation_search
-    AuthorRetrieval = PPP/.scopus/author_retrieval
-    AuthorSearch = PPP/.scopus/author_search
-    CitationOverview = PPP/.scopus/citation_overview
-    ContentAffiliationRetrieval = PPP/.scopus/affiliation_retrieval
-    ScopusSearch = PPP/.scopus/scopus_search
-    SerialTitle = PPP/.scopus/serial_title
+    AbstractRetrieval = PPP/.pybliometrics/Scopus/abstract_retrieval
+    AffiliationSearch = PPP/.pybliometrics/Scopusaffiliation_search
+    AuthorRetrieval = PPP/.pybliometrics/Scopusauthor_retrieval
+    AuthorSearch = PPP/.pybliometrics/Scopusauthor_search
+    CitationOverview = PPP/.pybliometrics/Scopuscitation_overview
+    ContentAffiliationRetrieval = PPP/.pybliometrics/Scopusaffiliation_retrieval
+    ScopusSearch = PPP/.pybliometrics/Scopusscopus_search
+    SerialTitle = PPP/.pybliometrics/Scopusserial_title
 
     [Authentication]
-    APIKey = XXX, YYYY,
+    APIKey = XXX,
+        YYYY,
         ZZZ
 
 
-where PPP refers to `~/` and XXX, YYYY and ZZZ refer to your API Keys, of which you can register 10 for your Scopus account.  If you provide all of them (separated by a comma), pybliometrics automatically replaces a depleted key with a random one of the others, until all of them are depleted.  If you edit the file manually, remember to indent multi-line statements.
+where PPP refers to `~/`, and XXX, YYYY and ZZZ refer to your API Keys, of which you can register 10 for your Scopus account.  If you provide all of them (separated by a comma), pybliometrics automatically replaces a depleted key with a random one of the others while running, until all of them are depleted.  If you edit the file manually, remember to indent multi-line statements.
 
 Simply edit this file to change the paths where `pybliometrics` should cache downloaded files (`pybliometrics` will create them if necessary)
 

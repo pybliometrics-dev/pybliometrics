@@ -1,7 +1,10 @@
 from pathlib import Path
 
 # Paths for cached files
-BASE_PATH = Path.home()/".scopus"
+if (Path.home()/".scopus").exists():
+    BASE_PATH = Path.home()/".scopus"
+else:
+    BASE_PATH = Path.home()/".pybliometrics"/"Scopus"
 DEFAULT_PATHS = {
     'AbstractRetrieval': BASE_PATH/'abstract_retrieval',
     'AffiliationRetrieval': BASE_PATH/'affiliation_retrieval',

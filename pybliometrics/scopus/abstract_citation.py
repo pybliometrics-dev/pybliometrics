@@ -167,7 +167,7 @@ class CitationOverview(Retrieval):
         Notes
         -----
         The directory for cached results is `{path}/STANDARD/{eid}`,
-        where `path` is specified in `~/.scopus/config.ini`.
+        where `path` is specified in your configuration file.
 
         Your API Key needs to be approved by Elsevier to access this API.
         """

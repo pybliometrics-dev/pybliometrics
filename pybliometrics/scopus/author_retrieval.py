@@ -232,7 +232,7 @@ class AuthorRetrieval(Retrieval):
         Notes
         -----
         The directory for cached results is `{path}/ENHANCED/{author_id}`,
-        where `path` is specified in `~/.scopus/config.ini` and `author_id`
+        where `path` is specified in your configuration file, and `author_id`
         is stripped of an eventually leading `'9-s2.0-'`.
         """
         # Checks

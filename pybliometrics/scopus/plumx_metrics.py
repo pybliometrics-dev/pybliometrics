@@ -153,7 +153,7 @@ class PlumXMetrics(Retrieval):
         Notes
         -----
         The directory for cached results is `{path}/ENHANCED/{identifier}`,
-        where `path` is specified in `~/.scopus/config.ini`.
+        where `path` is specified in your configuration file.
         """
         allowed = ('airitiDocId', 'arxivId', 'cabiAbstractId',
                    'citeulikeId', 'digitalMeasuresArtifactId', 'doi',

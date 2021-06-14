@@ -639,7 +639,7 @@ class AbstractRetrieval(Retrieval):
         Notes
         -----
         The directory for cached results is `{path}/{view}/{identifier}`,
-        where `path` is specified in `~/.scopus/config.ini`.  In case
+        where `path` is specified in your configuration file.  In case
         `identifier` is a DOI, an underscore replaces the forward slash.
         """
         # Checks

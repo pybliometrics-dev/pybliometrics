@@ -69,7 +69,7 @@ class SubjectClassifications(Search):
         Notes
         -----
         The directory for cached results is `{path}/STANDARD/{fname}`,
-        where `path` is specified in `~/.scopus/config.ini` and fname is
+        where `path` is specified in your configuration file, and `fname` is
         the md5-hashed version of `query` dict turned into string in format
         of 'key=value' delimited by '&'.
         """
