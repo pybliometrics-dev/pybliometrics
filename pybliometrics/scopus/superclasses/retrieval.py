@@ -1,7 +1,7 @@
 """Superclass to access all Scopus retrieval APIs and dump the results."""
 
 from pybliometrics.scopus.superclasses import Base
-from pybliometrics.scopus.utils import RETRIEVAL_URL, get_folder
+from pybliometrics.scopus.utils import get_folder, RETRIEVAL_URL
 
 
 class Retrieval(Base):

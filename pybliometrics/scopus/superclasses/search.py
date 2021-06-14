@@ -3,7 +3,7 @@
 from hashlib import md5
 
 from pybliometrics.scopus.superclasses import Base
-from pybliometrics.scopus.utils import SEARCH_URL, get_folder
+from pybliometrics.scopus.utils import get_folder, SEARCH_URL
 
 
 class Search(Base):

@@ -10,10 +10,16 @@ else:
     else:
         CONFIG_FILE = Path.home()/".pybliometrics"/"config.ini"
 
+# Read config file
 try:
     config = configparser.ConfigParser()
     config.optionxform = str
     config.read(CONFIG_FILE)
+    # Parse keys with fixture for RTFD.io
+    try:
+        KEYS = [k.strip() for k in config.get('Authentication', 'APIKey').split(",")]
+    except configparser.NoSectionError:
+        pass
 except FileNotFoundError:
     import warnings
     text = "pybliometrics did not find a configuration file.  Please issue "\

@@ -2,9 +2,9 @@ import os
 
 import requests
 
-from pybliometrics.scopus import exception
-from pybliometrics.scopus.utils import CONFIG_FILE, DEFAULT_PATHS, config
 from pybliometrics import version_info
+from pybliometrics.scopus import exception
+from pybliometrics.scopus.utils.startup import config
 
 # Define user agent string for HTTP requests
 user_agent = 'pybliometrics-v' + '.'.join([str(e) for e in version_info[:3]])
@@ -50,9 +50,10 @@ def get_content(url, params={}, *args, **kwds):
 
     from simplejson import JSONDecodeError
 
+    from pybliometrics.scopus.utils import CONFIG_FILE, DEFAULT_PATHS, KEYS
+
     # Set header, params and proxy
-    keys = config.get('Authentication', 'APIKey').split(",")
-    header = {'X-ELS-APIKey': keys[0].strip(),
+    header = {'X-ELS-APIKey': KEYS[0],
               'Accept': 'application/json',
               'User-Agent': user_agent}
     if config.has_option('Authentication', 'InstToken'):
@@ -65,12 +66,11 @@ def get_content(url, params={}, *args, **kwds):
     resp = requests.get(url, headers=header, proxies=proxies, params=params)
     while resp.status_code == 429:
         try:
-            keys.pop(0)  # Remove current key
-            shuffle(keys)
-            header['X-ELS-APIKey'] = keys[0].strip()
+            KEYS.pop(0)  # Remove current key
+            shuffle(KEYS)
+            header['X-ELS-APIKey'] = KEYS[0].strip()
             resp = requests.get(url, headers=header, proxies=proxies,
                                 params=params)
-            config['Authentication']['APIKey'] = ",".join(list(keys))
         except IndexError:  # All keys depleted
             break
 
