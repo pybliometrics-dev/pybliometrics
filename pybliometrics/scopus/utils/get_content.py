@@ -16,13 +16,16 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           502: exception.Scopus502Error}
 
 
-def get_content(url, params={}, *args, **kwds):
+def get_content(url, api, params={}, *args, **kwds):
     """Helper function to download a file and return its content.
 
     Parameters
     ----------
-    url : string
+    url : str
         The URL to be parsed.
+
+    api : str
+        The Scopus API to be accessed.
 
     params : dict (optional)
         Dictionary containing query parameters.  For required keys
@@ -47,10 +50,13 @@ def get_content(url, params={}, *args, **kwds):
         The content of the file, which needs to be serialized.
     """
     from random import shuffle
+    from time import sleep, time
 
     from simplejson import JSONDecodeError
 
-    from pybliometrics.scopus.utils import CONFIG_FILE, DEFAULT_PATHS, KEYS
+    from pybliometrics.scopus.utils import CONFIG_FILE, DEFAULT_PATHS,\
+        RATELIMITS, KEYS
+    from pybliometrics.scopus.utils.startup import _throttling_params
 
     # Set header, params and proxy
     header = {'X-ELS-APIKey': KEYS[0],
@@ -61,6 +67,13 @@ def get_content(url, params={}, *args, **kwds):
         header['X-ELS-Insttoken'] = token
     params.update(**kwds)
     proxies = dict(config._sections.get("Proxy", {}))
+
+    # Eventually wait bc of throttling
+    if len(_throttling_params[api]) == _throttling_params[api].maxlen:
+        try:
+            sleep(1 - (time() - _throttling_params[api][0]))
+        except ValueError:
+            pass
 
     # Perform request, eventually replacing the current key
     resp = requests.get(url, headers=header, proxies=proxies, params=params)
@@ -73,6 +86,7 @@ def get_content(url, params={}, *args, **kwds):
                                 params=params)
         except IndexError:  # All keys depleted
             break
+    _throttling_params[api].append(time())
 
     # Eventually raise error, if possible with supplied error message
     try:

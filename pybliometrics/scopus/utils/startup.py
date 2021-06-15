@@ -1,6 +1,9 @@
 import configparser
+from collections import deque
 from os import environ
 from pathlib import Path
+
+from pybliometrics.scopus.utils.constants import RATELIMITS
 
 if 'PYB_CONFIG_FILE' in environ:
     CONFIG_FILE = environ['PYB_CONFIG_FILE']
@@ -27,3 +30,6 @@ except FileNotFoundError:
           "which guides you through the generation of the configuration "\
           "file or read https://pybliometrics.readthedocs.io/en/stable/configuration.html."
     warnings.warn(text, UserWarning)
+
+# Throttling params
+_throttling_params = {k: deque(maxlen=v) for k, v in RATELIMITS.items() if v}

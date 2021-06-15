@@ -35,3 +35,18 @@ URLS = {
     'SubjectClassifications': RETRIEVAL_BASE + 'subject/scopus',
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/'
 }
+
+# Throttling limits (in queries per second)
+RATELIMITS = {
+    'AbstractRetrieval': 9,
+    'AffiliationRetrieval': 9,
+    'AffiliationSearch': 6,
+    'AuthorRetrieval': 3,
+    'AuthorSearch': 2,
+    'CitationOverview': 4,
+    'ScopusSearch': 9,
+    'SerialSearch': 6,
+    'SerialTitle': 6,
+    'PlumXMetrics': 6,
+    'SubjectClassifications': None
+}

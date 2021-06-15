@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 
 class Base:
-    def __init__(self, fname, refresh, params, url, download=None,
+    def __init__(self, fname, refresh, params, url, api, download=None,
                  max_entries=None, verbose=False, *args, **kwds):
         """Class intended as base class for superclasses.
 
@@ -28,6 +28,9 @@ class Base:
 
         url : str
             The URL to be accessed.
+
+        api : str
+            The Scopus API to be accessed.
 
         download : bool (optional, default=None)
             Whether to download the query or not.  Has no effect for
@@ -66,7 +69,7 @@ class Base:
             else:
                 self._json = loads(fname.read_text())
         else:
-            resp = get_content(url, params, *args, **kwds)
+            resp = get_content(url, api, params, *args, **kwds)
             header = resp.headers
             if search_request:
                 # Get number of results
@@ -86,8 +89,8 @@ class Base:
                 if download:
                     data = ""
                     if n:
-                        data, header = _parse(res, n, url, params, verbose,
-                                              *args, **kwds)
+                        data, header = _parse(res, n, url, api, params,
+                                              verbose, *args, **kwds)
                         self._json = data
                 else:
                     data = None
@@ -152,7 +155,7 @@ def _check_file_age(fname, refresh):
     return refresh, mod_ts
 
 
-def _parse(res, n, url, params, verbose, *args, **kwds):
+def _parse(res, n, url, api, params, verbose, *args, **kwds):
     """Auxiliary function to download results and parse json."""
     cursor = "cursor" in params
     if not cursor:
@@ -173,7 +176,7 @@ def _parse(res, n, url, params, verbose, *args, **kwds):
         else:
             start += params["count"]
             params.update({'start': start})
-        resp = get_content(url, params, *args, **kwds)
+        resp = get_content(url, api, params, *args, **kwds)
         res = resp.json()
         _json.extend(res.get('search-results', {}).get('entry', []))
         if verbose:

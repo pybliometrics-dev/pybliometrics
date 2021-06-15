@@ -66,6 +66,6 @@ class Retrieval(Base):
 
         # Parse file contents
         qfile = get_folder(api, view)/identifier.replace('/', '_')
-        Base.__init__(self, qfile, refresh, params=params, url=url)
+        Base.__init__(self, qfile, refresh, params=params, url=url, api=api)
         # print(self._json)
         self._view = view
