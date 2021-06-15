@@ -72,7 +72,7 @@ def get_content(url, api, params={}, *args, **kwds):
     if len(_throttling_params[api]) == _throttling_params[api].maxlen:
         try:
             sleep(1 - (time() - _throttling_params[api][0]))
-        except ValueError:
+        except (IndexError, ValueError):
             pass
 
     # Perform request, eventually replacing the current key

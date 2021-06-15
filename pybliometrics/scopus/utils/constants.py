@@ -36,7 +36,7 @@ URLS = {
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/'
 }
 
-# Throttling limits (in queries per second)
+# Throttling limits (in queries per second) // 0 = no limit
 RATELIMITS = {
     'AbstractRetrieval': 9,
     'AffiliationRetrieval': 9,
@@ -48,5 +48,5 @@ RATELIMITS = {
     'SerialSearch': 6,
     'SerialTitle': 6,
     'PlumXMetrics': 6,
-    'SubjectClassifications': None
+    'SubjectClassifications': 0
 }

@@ -32,4 +32,4 @@ except FileNotFoundError:
     warnings.warn(text, UserWarning)
 
 # Throttling params
-_throttling_params = {k: deque(maxlen=v) for k, v in RATELIMITS.items() if v}
+_throttling_params = {k: deque(maxlen=v) for k, v in RATELIMITS.items()}
