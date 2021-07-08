@@ -162,7 +162,7 @@ class CitationOverview(Retrieval):
 
         Notes
         -----
-        The directory for cached results is `{path}/STANDARD/{eid}`,
+        The directory for cached results is `{path}/STANDARD/{eid}{citation}`,
         where `path` is specified in your configuration file.
 
         Your API Key needs to be augmented by Elsevier's Scopus

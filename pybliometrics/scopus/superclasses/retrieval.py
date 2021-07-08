@@ -54,18 +54,20 @@ class Retrieval(Base):
         """
         # Construct parameters
         url = URLS[api]
+        stem = identifier.replace('/', '_')
         if api in ("AbstractRetrieval", "PlumXMetrics"):
             url += id_type + "/"
         params = {'view': view, **kwds}
         if api == 'CitationOverview':
             params.update({'date': date, 'scopus_id': identifier.split('0-')[-1],
                            'citation': citation})
+            stem = stem + citation or ""
         if api == 'SerialTitle':
             params.update({'date': date})
         url += identifier
 
         # Parse file contents
-        qfile = get_folder(api, view)/identifier.replace('/', '_')
+        qfile = get_folder(api, view)/stem
         Base.__init__(self, qfile, refresh, params=params, url=url, api=api)
         # print(self._json)
         self._view = view
