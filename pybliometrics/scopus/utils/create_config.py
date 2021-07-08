@@ -7,23 +7,24 @@ def create_config():
     if not CONFIG_FILE.exists():
         # Set directories
         config.add_section('Directories')
-        for key, value in DEFAULT_PATHS.items():
-            config.set('Directories', key, value)
+        for api, path in DEFAULT_PATHS.items():
+            config.set('Directories', api, str(path))
         # Set authentication
         config.add_section('Authentication')
         prompt_key = "Please enter your API Key(s), obtained from "\
                      "http://dev.elsevier.com/myapikey.html.  Separate "\
-                     "multiple keys using a comma:\n"
+                     "multiple keys by comma:\n"
         key = input(prompt_key)
         config.set('Authentication', 'APIKey', key)
         prompt_token = "API Keys are sufficient for most users.  If you "\
-                       "have to use Authtoken authentication, please enter "\
-                       "the token now, otherwise press Enter:\n"
+                       "have an InstToken, please enter the token now;"\
+                       "otherwise just press Enter:\n"
         token = input(prompt_token)
         if token:
             config.set('Authentication', 'InstToken', token)
         # Write out
-        CONFIG_FILE.write_text(f)
+        with open(CONFIG_FILE, "w") as ouf:
+            config.write(ouf)
         print(f"Configuration file successfully created at {CONFIG_FILE}\n"
               "For details see https://pybliometrics.rtfd.io/en/stable/configuration.html.")
     else:

@@ -55,8 +55,8 @@ def get_content(url, api, params={}, *args, **kwds):
     from simplejson import JSONDecodeError
 
     from pybliometrics.scopus.utils import CONFIG_FILE, DEFAULT_PATHS,\
-        RATELIMITS, KEYS
-    from pybliometrics.scopus.utils.startup import _throttling_params
+        RATELIMITS
+    from pybliometrics.scopus.utils.startup import _throttling_params, KEYS
 
     # Set header, params and proxy
     header = {'X-ELS-APIKey': KEYS[0],
@@ -152,6 +152,7 @@ def get_folder(api, view):
     from configparser import NoOptionError
     from pathlib import Path
 
+    from pybliometrics.scopus.utils import CONFIG_FILE, DEFAULT_PATHS
     from pybliometrics.scopus.utils.create_config import create_config
 
     if not config.has_section('Directories'):
@@ -161,9 +162,8 @@ def get_folder(api, view):
     except NoOptionError:
         parent = DEFAULT_PATHS[api]
         config.set('Directories', api, str(parent))
-        CONFIG_FILE.write_text(config)
-        with open(CONFIG_FILE, 'w') as f:
-            config.write(f)
+        with open(CONFIG_FILE, 'w') as ouf:
+            config.write(ouf)
     folder = parent/view
     folder.mkdir(parents=True, exist_ok=True)
     return folder
