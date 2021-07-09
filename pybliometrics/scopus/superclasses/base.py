@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 
 class Base:
-    def __init__(self, params, url, api, download=None, max_entries=None,
+    def __init__(self, params, url, api, download=True, max_entries=None,
                  verbose=False, *args, **kwds):
         """Class intended as base class for superclasses.
 
@@ -24,7 +24,7 @@ class Base:
         api : str
             The Scopus API to be accessed.
 
-        download : bool (optional, default=None)
+        download : bool (optional, default=True)
             Whether to download the query or not.  Has no effect for
             retrieval requests.
 
@@ -57,7 +57,7 @@ class Base:
         # Compare age of file to test whether we refresh
         self._refresh, mod_ts = _check_file_age(self)
 
-        # Read or dowload, possibly with caching
+        # Read or download, possibly with caching
         fname = self._cache_file_path
         search_request = "query" in params
         if fname.exists() and not self._refresh:
@@ -100,12 +100,12 @@ class Base:
             # Set private variables
             self._mdate = time()
             self._header = header
-            # Finally write data
-            data = data or ""
+            # Finally write data unless download=False
             if not search_request:
                 data = [data]
-            text = [dumps(item, separators=(',', ':')) for item in data]
-            fname.write_text("\n".join(text))
+            if download:
+                text = [dumps(item, separators=(',', ':')) for item in data]
+                fname.write_text("\n".join(text))
 
     def get_cache_file_age(self):
         """Return the age of the cached file in days."""
