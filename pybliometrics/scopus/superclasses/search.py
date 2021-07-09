@@ -45,9 +45,6 @@ class Search(Base):
 
         Raises
         ------
-        ScopusQueryError
-            If the number of search results exceeds max_entries.
-
         ValueError
             If the api parameter is an invalid entry.
         """

@@ -42,7 +42,7 @@ class Base:
         Raises
         ------
         ScopusQueryError
-            If `self._refresh` is neither boolean nor numeric.
+            If the number of search results exceeds max_entries.
 
         ValueError
             If `self._refresh` is neither boolean nor numeric.
