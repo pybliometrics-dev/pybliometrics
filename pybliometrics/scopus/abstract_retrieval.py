@@ -648,9 +648,10 @@ class AbstractRetrieval(Retrieval):
             check_parameter_value(id_type, allowed_id_types, "id_type")
 
         # Load json
+        self._view = view
+        self._refresh = refresh
         Retrieval.__init__(self, identifier=identifier, id_type=id_type,
-                           api='AbstractRetrieval', refresh=refresh,
-                           view=view, **kwds)
+                           api='AbstractRetrieval', **kwds)
         self._json = self._json['abstracts-retrieval-response']
         self._head = chained_get(self._json, ["item", "bibrecord", "head"], {})
         conf_path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent']

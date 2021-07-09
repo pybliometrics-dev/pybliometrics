@@ -84,7 +84,7 @@ def make_search_summary(self, keyword, results, joiner="\n    "):
     else:
         appendix = ""
         verb = "has"
-    s = f"Search '{self.query}' yielded {self._n:,} "\
+    s = f"Search '{self._query}' yielded {self._n:,} "\
         f"{keyword}{appendix} as of {date}"
     if results:
         s += ":" + joiner + joiner.join(results)

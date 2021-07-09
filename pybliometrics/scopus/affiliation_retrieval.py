@@ -152,9 +152,10 @@ class AffiliationRetrieval(Retrieval):
         check_parameter_value(view, ('LIGHT', 'STANDARD'), "view")
 
         # Load json
+        self._view = view
+        self._refresh = refresh
         aff_id = str(int(str(aff_id).split('-')[-1]))
-        Retrieval.__init__(self, identifier=aff_id, view=view,
-                           refresh=refresh, api='AffiliationRetrieval')
+        Retrieval.__init__(self, identifier=aff_id, api='AffiliationRetrieval')
         self._json = self._json['affiliation-retrieval-response']
         self._profile = self._json.get("institution-profile", {})
 

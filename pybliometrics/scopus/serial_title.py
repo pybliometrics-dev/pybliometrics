@@ -162,14 +162,20 @@ class SerialTitle(Retrieval):
         """
         # Checks
         check_parameter_value(view, ('BASIC', 'STANDARD', 'ENHANCED'), "view")
-        # Load json
-        self._id = str(issn)
-        self._years = years
+        self._view = view
+
         # Force refresh when years is specified
         if years:
             refresh = True
-        Retrieval.__init__(self, identifier=self._id, view=view, date=years,
-                           api='SerialTitle', refresh=refresh)
+        self._refresh = refresh
+
+        # Load json
+        self._id = str(issn)
+        self._years = years
+        Retrieval.__init__(self, identifier=self._id, date=years,
+                           api='SerialTitle')
+
+        # Parse json
         self._json = self._json['serial-metadata-response']
         self._entry = self._json['entry'][0]
 

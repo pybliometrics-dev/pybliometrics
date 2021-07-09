@@ -9,20 +9,12 @@ from tqdm import tqdm
 
 
 class Base:
-    def __init__(self, fname, refresh, params, url, api, download=None,
-                 max_entries=None, verbose=False, *args, **kwds):
+    def __init__(self, params, url, api, download=None, max_entries=None,
+                 verbose=False, *args, **kwds):
         """Class intended as base class for superclasses.
 
         Parameters
         ----------
-        fname : PosixPath or WindowsPath
-            The filename as Path() object.
-
-        refresh : bool or int
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
-
         params : dict
             Dictionary used as header during the API request.
 
@@ -50,17 +42,18 @@ class Base:
         Raises
         ------
         ScopusQueryError
-            If `refresh` is neither boolean nor numeric.
+            If `self._refresh` is neither boolean nor numeric.
 
         ValueError
-            If `refresh` is neither boolean nor numeric.
+            If `self._refresh` is neither boolean nor numeric.
         """
+        fname = self._cache_file_path
         # Compare age of file to test whether we refresh
-        refresh, mod_ts = _check_file_age(fname, refresh)
+        self._refresh, mod_ts = _check_file_age(self)
 
         # Read or dowload, possibly with caching
         search_request = "query" in params
-        if fname.exists() and not refresh:
+        if fname.exists() and not self._refresh:
             self._mdate = mod_ts
             if search_request:
                 self._json = [loads(line) for line in
@@ -136,15 +129,16 @@ class Base:
             return None
 
 
-def _check_file_age(fname, refresh):
-    """Check whether a file needs to be refreshed based on its age."""
+def _check_file_age(self):
+    """Whether a file needs to be refreshed based on its age."""
+    refresh = self._refresh
     try:
-        mod_ts = fname.stat().st_mtime
+        mod_ts = self._cache_file_path.stat().st_mtime
         if not isinstance(refresh, bool):
             diff = time() - mod_ts
             days = int(diff / 86400) + 1
             try:
-                allowed_age = int(refresh)
+                allowed_age = int(self._refresh)
             except ValueError:
                 msg = "Parameter refresh needs to be numeric or boolean."
                 raise ValueError(msg)

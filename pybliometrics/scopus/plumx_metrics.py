@@ -151,6 +151,7 @@ class PlumXMetrics(Retrieval):
         The directory for cached results is `{path}/ENHANCED/{identifier}`,
         where `path` is specified in your configuration file.
         """
+        # Checks
         allowed = ('airitiDocId', 'arxivId', 'cabiAbstractId',
                    'citeulikeId', 'digitalMeasuresArtifactId', 'doi',
                    'elsevierId', 'elsevierPii', 'facebookCountUrlId',
@@ -162,14 +163,18 @@ class PlumXMetrics(Retrieval):
                    'ssrnId', 'urlId', 'usPatentApplicationId',
                    'usPatentPublicationId', 'vimeoVideoId', 'youtubeVideoId')
         check_parameter_value(id_type, allowed, "id_type")
-        self.id_type = id_type
-        self.identifier = identifier
+        self._id_type = id_type
+        self._identifier = identifier
+
+        # Load json
+        self._refresh = refresh
+        self._view = 'ENHANCED'
         Retrieval.__init__(self, identifier=identifier, id_type=id_type,
-                           api='PlumXMetrics', refresh=refresh, view='ENHANCED')
+                           api='PlumXMetrics')
 
     def __str__(self):
         """Print a summary string."""
-        s = f"Document with {self.id_type} {self.identifier} received:\n- "
+        s = f"Document with {self._id_type} {self._identifier} received:\n- "
         cats = [f"{c.total:,} citation(s) in category '{c.name}'"
                 for c in self.category_totals]
         s += "\n- ".join(cats)

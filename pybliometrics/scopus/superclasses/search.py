@@ -7,9 +7,8 @@ from pybliometrics.scopus.utils import get_folder, URLS
 
 
 class Search(Base):
-    def __init__(self, query, api, refresh, view='STANDARD', count=200,
-                 max_entries=5000, cursor=False, download=True,
-                 verbose=False, **kwds):
+    def __init__(self, query, api, count=200, max_entries=5000, cursor=False,
+                 download=True, verbose=False, **kwds):
         """Class intended as superclass to perform a search query.
 
         Parameters
@@ -21,14 +20,6 @@ class Search(Base):
             The name of the Scopus API to be accessed.  Allowed values:
             AffiliationSearch, AuthorSearch, ScopusSearch, SerialSearch,
             SubjectClass
-
-        refresh : bool or int
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
-
-        view : str
-            The view of the file that should be downloaded.
 
         count : int (optional, default=200)
             The number of entries to be displayed at once.  A smaller number
@@ -60,23 +51,26 @@ class Search(Base):
         ValueError
             If the api parameter is an invalid entry.
         """
-        params = {'count': count, 'view': view, **kwds}
+        # Construct query parameters
+        params = {'count': count, 'view': self._view, **kwds}
         if isinstance(query, dict):
             params.update(query)
             name = "&".join(["=".join(t) for t in zip(query.keys(), query.values())])
         else:
             params['query'] = query
             name = query
-        qfile = get_folder(api, view)/md5(name.encode('utf8')).hexdigest()
         if cursor:
             params.update({'cursor': '*'})
         else:
             params.update({'start': 0})
-        Base.__init__(self, qfile, refresh, params=params, url=URLS[api],
-                      api=api, download=download, max_entries=max_entries,
-                      verbose=verbose)
-        # Set query parameters
-        self._view = view
+
+        # Construct cache file path
+        stem = md5(name.encode('utf8')).hexdigest()
+        self._cache_file_path = get_folder(api, self._view)/stem
+
+        # Init
+        Base.__init__(self, params=params, url=URLS[api], download=download,
+                      api=api, max_entries=max_entries, verbose=verbose)
 
     def get_results_size(self):
         """Return the number of results (works even if download=False)."""

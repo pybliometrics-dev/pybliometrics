@@ -94,9 +94,10 @@ class SerialSearch(Search):
         check_parameter_value(view, ('STANDARD', 'ENHANCED', 'CITESCORE'), "view")
 
         # Query
-        self.query = str(query)
-        Search.__init__(self, query=query, api='SerialSearch',
-                        refresh=refresh, view=view)
+        self._query = str(query)
+        self._refresh = refresh
+        self._view = view
+        Search.__init__(self, query=query, api='SerialSearch')
         self._n = len(self._json['serial-metadata-response'].get('entry', []))
 
     def __str__(self):

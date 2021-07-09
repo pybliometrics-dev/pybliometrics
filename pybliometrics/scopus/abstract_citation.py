@@ -177,12 +177,13 @@ class CitationOverview(Retrieval):
         self._start = int(start)
         self._end = int(end)
         self._citation = citation
-        view = "STANDARD"  # In case Scopus adds different views in future
+        self._refresh = refresh
+        self._view = "STANDARD"
 
         # Get file content
         date = f'{start}-{end}'
-        Retrieval.__init__(self, eid, 'CitationOverview', refresh, view=view,
-                           date=date, citation=citation)
+        Retrieval.__init__(self, eid, api='CitationOverview', date=date,
+                           citation=citation)
         self._data = self._json['abstract-citations-response']
 
         # citeInfoMatrix

@@ -25,7 +25,7 @@ class AffiliationSearch(Search):
         # Initiate namedtuple with ordered list of fields
         fields = 'eid name variant documents city country parent'
         aff = namedtuple('Affiliation', fields)
-        check_field_consistency(self.integrity, fields)
+        check_field_consistency(self._integrity, fields)
         # Parse elements one-by-one
         out = []
         for item in self._json:
@@ -38,7 +38,7 @@ class AffiliationSearch(Search):
                       parent=item.get('parent-affiliation-id'))
             out.append(new)
         # Finalize
-        check_integrity(out, self.integrity, self.action)
+        check_integrity(out, self._integrity, self._action)
         return out or None
 
     def __init__(self, query, refresh=False, download=True, count=200,
@@ -99,12 +99,13 @@ class AffiliationSearch(Search):
         check_parameter_value(integrity_action, allowed, "integrity_action")
 
         # Query
-        self.query = query
+        self._action = integrity_action
+        self._integrity = integrity_fields or []
+        self._query = query
+        self._refresh = refresh
+        self._view = "STANDARD"
         Search.__init__(self, query=query, api="AffiliationSearch",
-                        refresh=refresh, count=count, download=download,
-                        verbose=verbose, view="STANDARD")
-        self.integrity = integrity_fields or []
-        self.action = integrity_action
+                        count=count, download=download, verbose=verbose)
 
     def __str__(self):
         """Return a summary string."""

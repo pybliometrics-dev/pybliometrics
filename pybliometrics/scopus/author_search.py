@@ -26,7 +26,7 @@ class AuthorSearch(Search):
         fields = 'eid surname initials givenname affiliation documents '\
                  'affiliation_id city country areas'
         auth = namedtuple('Author', fields)
-        check_field_consistency(self.integrity, fields)
+        check_field_consistency(self._integrity, fields)
         # Parse elements one-by-one
         out = []
         for item in self._json:
@@ -46,7 +46,7 @@ class AuthorSearch(Search):
                        country=aff.get('affiliation-country'))
             out.append(new)
         # Finalize
-        check_integrity(out, self.integrity, self.action)
+        check_integrity(out, self._integrity, self._action)
         return out or None
 
     def __init__(self, query, refresh=False, count=200, download=True,
@@ -108,12 +108,13 @@ class AuthorSearch(Search):
         check_parameter_value(integrity_action, allowed, "integrity_action")
 
         # Query
-        self.query = query
-        Search.__init__(self, query=query, refresh=refresh, view="STANDARD",
-                        api='AuthorSearch', count=count, download=download,
-                        verbose=verbose)
-        self.integrity = integrity_fields or []
-        self.action = integrity_action
+        self._action = integrity_action
+        self._integrity = integrity_fields or []
+        self._query = query
+        self._refresh = refresh
+        self._view = "STANDARD"
+        Search.__init__(self, query=query, api='AuthorSearch', count=count,
+                        download=download, verbose=verbose)
 
     def __str__(self):
         """Print a summary string."""

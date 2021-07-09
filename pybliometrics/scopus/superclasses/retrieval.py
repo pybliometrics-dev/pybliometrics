@@ -5,8 +5,7 @@ from pybliometrics.scopus.utils import get_folder, URLS
 
 
 class Retrieval(Base):
-    def __init__(self, identifier, api, refresh, view, id_type=None,
-                 date=None, citation=None, **kwds):
+    def __init__(self, identifier, api, id_type=None, date=None, **kwds):
         """Class intended as superclass to perform retrievals.
 
         Parameters
@@ -19,14 +18,6 @@ class Retrieval(Base):
             AbstractRetrieval, AuthorRetrieval, CitationOverview,
             AffiliationRetrieval.
 
-        refresh : bool or int
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
-
-        view : str
-            The view of the file that should be downloaded.
-
         id_type : str (optional, default=None)
             The type of used ID.
             Note: Will only take effect for the AbstractRetrieval API.
@@ -37,11 +28,6 @@ class Retrieval(Base):
             metric data (SJR, SNIP, yearly-data) should be looked up for.
             Note: Will only take effect for the CitationOverview and
             SerialTitle APIs.
-
-        citation : str (optional, default=None)
-            Allows for the exclusion of self-citations or those by books.
-            If None, will count all citations.
-            Note: Will only take effect for the CitationOverview API.
 
         kwds : key-value parings, optional
             Keywords passed on to requests header.  Must contain fields
@@ -57,17 +43,15 @@ class Retrieval(Base):
         stem = identifier.replace('/', '_')
         if api in ("AbstractRetrieval", "PlumXMetrics"):
             url += id_type + "/"
-        params = {'view': view, **kwds}
+        params = {'view': self._view, **kwds}
         if api == 'CitationOverview':
-            params.update({'date': date, 'scopus_id': identifier.split('0-')[-1],
-                           'citation': citation})
-            stem = stem + citation or ""
+            params.update({'date': date, 'citation': self._citation,
+                           'scopus_id': identifier.split('0-')[-1]})
+            stem += self._citation or ""
         if api == 'SerialTitle':
             params.update({'date': date})
         url += identifier
 
         # Parse file contents
-        qfile = get_folder(api, view)/stem
-        Base.__init__(self, qfile, refresh, params=params, url=url, api=api)
-        # print(self._json)
-        self._view = view
+        self._cache_file_path = get_folder(api, self._view)/stem
+        Base.__init__(self, params=params, url=url, api=api)

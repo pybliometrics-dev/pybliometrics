@@ -43,7 +43,7 @@ class ScopusSearch(Search):
                  'pageRange description authkeywords citedby_count '\
                  'openaccess fund_acr fund_no fund_sponsor'
         doc = namedtuple('Document', fields)
-        check_field_consistency(self.integrity, fields)
+        check_field_consistency(self._integrity, fields)
         # Parse elements one-by-one
         out = []
         for item in self._json:
@@ -99,7 +99,7 @@ class ScopusSearch(Search):
                       fund_acr=item.get('fund-acr'), pubmed_id=item.get('pubmed-id'))
             out.append(new)
         # Finalize
-        check_integrity(out, self.integrity, self.action)
+        check_integrity(out, self._integrity, self._action)
         return out or None
 
     def __init__(self, query, refresh=False, subscriber=True, view=None,
@@ -194,12 +194,14 @@ class ScopusSearch(Search):
             kwds.pop("count")
 
         # Query
-        self.query = query
-        Search.__init__(self, query=query, api='ScopusSearch', refresh=refresh,
-                        count=count, cursor=subscriber, view=view,
-                        download=download, verbose=verbose, **kwds)
-        self.integrity = integrity_fields or []
-        self.action = integrity_action
+        self._action = integrity_action
+        self._integrity = integrity_fields or []
+        self._refresh = refresh
+        self._query = query
+        self._view = view
+        Search.__init__(self, query=query, api='ScopusSearch', count=count,
+                        cursor=subscriber, download=download,
+                        verbose=verbose, **kwds)
 
     def __str__(self):
         """Print a summary string."""
