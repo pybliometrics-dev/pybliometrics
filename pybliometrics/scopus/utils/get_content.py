@@ -164,6 +164,9 @@ def get_folder(api, view):
         config.set('Directories', api, str(parent))
         with open(CONFIG_FILE, 'w') as ouf:
             config.write(ouf)
-    folder = parent/view
+    try:
+        folder = parent/view
+    except TypeError:
+        folder = parent
     folder.mkdir(parents=True, exist_ok=True)
     return folder

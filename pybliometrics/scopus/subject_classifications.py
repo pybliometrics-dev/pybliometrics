@@ -64,7 +64,7 @@ class SubjectClassifications(Search):
 
         Notes
         -----
-        The directory for cached results is `{path}/STANDARD/{fname}`,
+        The directory for cached results is `{path}/{fname}`,
         where `path` is specified in your configuration file, and `fname` is
         the md5-hashed version of `query` dict turned into string in format
         of 'key=value' delimited by '&'.
@@ -89,7 +89,7 @@ class SubjectClassifications(Search):
         query['field'] = ','.join(self.fields)
         self._refresh = refresh
         self._query = str(query)
-        self._view = 'STANDARD'
+        self._view = None
         Search.__init__(self, query=query, api='SubjectClassifications')
         path = ['subject-classifications', 'subject-classification']
         self._n = len(chained_get(self._json, path, []))
