@@ -47,11 +47,18 @@ class Base:
         ValueError
             If `self._refresh` is neither boolean nor numeric.
         """
-        fname = self._cache_file_path
+        # Checks
+        try:
+            _ = int(self._refresh)
+        except ValueError:
+            msg = "Parameter refresh needs to be numeric or boolean."
+            raise ValueError(msg)
+
         # Compare age of file to test whether we refresh
         self._refresh, mod_ts = _check_file_age(self)
 
         # Read or dowload, possibly with caching
+        fname = self._cache_file_path
         search_request = "query" in params
         if fname.exists() and not self._refresh:
             self._mdate = mod_ts
@@ -137,11 +144,7 @@ def _check_file_age(self):
         if not isinstance(refresh, bool):
             diff = time() - mod_ts
             days = int(diff / 86400) + 1
-            try:
-                allowed_age = int(self._refresh)
-            except ValueError:
-                msg = "Parameter refresh needs to be numeric or boolean."
-                raise ValueError(msg)
+            allowed_age = int(self._refresh)
             refresh = allowed_age < days
     except FileNotFoundError:
         refresh = True
