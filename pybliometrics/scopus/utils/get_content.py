@@ -1,5 +1,3 @@
-import os
-
 import requests
 
 from pybliometrics import version_info
@@ -16,7 +14,7 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           502: exception.Scopus502Error}
 
 
-def get_content(url, api, params={}, *args, **kwds):
+def get_content(url, api, params={}, **kwds):
     """Helper function to download a file and return its content.
 
     Parameters
@@ -32,7 +30,7 @@ def get_content(url, api, params={}, *args, **kwds):
         and accepted values see e.g.
         https://api.elsevier.com/documentation/AuthorRetrievalAPI.wadl
 
-    *args, **kwds : key-value parings, optional
+    **kwds : key-value parings, optional
         Keywords passed on to as query parameters.  Must contain fields
         and values specified in the respective API specification.
 
@@ -54,8 +52,6 @@ def get_content(url, api, params={}, *args, **kwds):
 
     from simplejson import JSONDecodeError
 
-    from pybliometrics.scopus.utils import CONFIG_FILE, DEFAULT_PATHS,\
-        RATELIMITS
     from pybliometrics.scopus.utils.startup import _throttling_params, KEYS
 
     # Set header, params and proxy
@@ -123,18 +119,14 @@ def detect_id_type(sid):
     work with both types, consider specifying the ID type manually.
     """
     sid = str(sid)
-    try:
-        isnumeric = sid.isnumeric()
-    except AttributeError:  # Python2
-        isnumeric = unicode(sid, 'utf-8').isnumeric()
-    if not isnumeric:
+    if not sid.isnumeric():
         if sid.startswith('1-s2.0-') or sid.startswith('2-s2.0-'):
             id_type = 'eid'
         elif '/' in sid or "." in sid:
             id_type = 'doi'
         elif 16 <= len(sid) <= 17:
             id_type = 'pii'
-    elif isnumeric:
+    else:
         if len(sid) < 10:
             id_type = 'pubmed_id'
         else:

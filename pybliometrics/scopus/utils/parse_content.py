@@ -122,6 +122,6 @@ def parse_date_created(dct):
     """Helper function to parse date-created from profile."""
     date = dct['date-created']
     if date:
-        return (int(date['@year']), int(date['@month']), int(date['@day']))
+        return int(date['@year']), int(date['@month']), int(date['@day'])
     else:
-        return (None, None, None)
+        return None, None, None

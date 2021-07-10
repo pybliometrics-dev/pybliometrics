@@ -156,7 +156,7 @@ class AuthorRetrieval(Retrieval):
         """Tuple containing years of first and last publication."""
         r = self._profile.get('publication-range')
         try:
-            return (r['@start'], r['@end'])
+            return r['@start'], r['@end']
         except TypeError:
             return None
 

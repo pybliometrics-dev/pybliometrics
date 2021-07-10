@@ -59,7 +59,6 @@ class AffiliationRetrieval(Retrieval):
         """A list of namedtuples representing variants of the affiliation name
         with number of documents referring to this variant.
         """
-        out = []
         variant = namedtuple('Variant', 'name doc_count')
         path = ['name-variants', 'name-variant']
         return [variant(name=var['$'], doc_count=var.get('@doc-count'))

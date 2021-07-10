@@ -82,7 +82,7 @@ class Base:
                 if cursor_false and n > max_entries:
                     # Stop if there are too many results
                     text = (f'Found {n} matches. Set max_entries to a higher '
-                            f'number, change your query ({query}) or set '
+                            f'number, change your query ({self._query}) or set '
                             'subscription=True')
                     raise ScopusQueryError(text)
                 # Download results page-wise
@@ -97,12 +97,11 @@ class Base:
             else:
                 data = loads(resp.text)
                 self._json = data
+                data = [data]
             # Set private variables
             self._mdate = time()
             self._header = header
             # Finally write data unless download=False
-            if not search_request:
-                data = [data]
             if download:
                 text = [dumps(item, separators=(',', ':')) for item in data]
                 fname.write_text("\n".join(text))

@@ -233,4 +233,4 @@ def _join(item, key, sep=";"):
 
 def _replace_none(lst, repl=""):
     """Auxiliary function to replace None's with another value."""
-    return ['' if v is None else v for v in lst]
+    return [repl if v is None else v for v in lst]

@@ -126,9 +126,9 @@ def _retrieve_links(link_data):
     Returns list of lists in the form of [linkname, link].
     """
     out = []
-    for l in link_data:
+    for sl in link_data:
         try:
-            out.append([l['@ref'], l.get('@href')])
+            out.append([sl['@ref'], sl.get('@href')])
         except KeyError:
             continue
     return out or None
