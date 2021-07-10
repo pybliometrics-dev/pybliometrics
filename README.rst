@@ -57,8 +57,8 @@ Example
      postal_code='80539', org_domain=None, org_URL='http://www.ip.mpg.de/')]
     >>> 
     >>> # Affiliation information
-    >>> from pybliometrics.scopus import ContentAffiliationRetrieval
-    >>> aff1 = ContentAffiliationRetrieval(au1.affiliation_current[0].id)
+    >>> from pybliometrics.scopus import AffiliationRetrieval
+    >>> aff1 = AffiliationRetrieval(au1.affiliation_current[0].id)
     >>> aff1.author_count
     '72'
 

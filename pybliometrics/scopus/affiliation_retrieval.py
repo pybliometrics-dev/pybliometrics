@@ -165,12 +165,3 @@ class AffiliationRetrieval(Retrieval):
             f"{int(self.author_count):,} associated author(s) and "\
             f"{int(self.document_count):,} associated document(s) as of {date}"
         return s
-
-
-def ContentAffiliationRetrieval(*args, **kwargs):
-    from warnings import warn
-    text = "Class ContentAffiliationRetrieval() has been renamed to "\
-           "AffiliationRetrieval().  This class will be removed in "\
-           "pybliometrics 3.0."
-    warn(text, Warning, stacklevel=2)
-    return AffiliationRetrieval(*args, **kwargs)
