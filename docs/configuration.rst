@@ -11,13 +11,13 @@ By default, after initial set-up (see below), the file will look like this:
 
     [Directories]
     AbstractRetrieval = PPP/.pybliometrics/Scopus/abstract_retrieval
-    AffiliationSearch = PPP/.pybliometrics/Scopusaffiliation_search
-    AuthorRetrieval = PPP/.pybliometrics/Scopusauthor_retrieval
-    AuthorSearch = PPP/.pybliometrics/Scopusauthor_search
-    CitationOverview = PPP/.pybliometrics/Scopuscitation_overview
-    ContentAffiliationRetrieval = PPP/.pybliometrics/Scopusaffiliation_retrieval
-    ScopusSearch = PPP/.pybliometrics/Scopusscopus_search
-    SerialTitle = PPP/.pybliometrics/Scopusserial_title
+    AffiliationSearch = PPP/.pybliometrics/Scopus/affiliation_search
+    AuthorRetrieval = PPP/.pybliometrics/Scopus/author_retrieval
+    AuthorSearch = PPP/.pybliometrics/Scopus/author_search
+    CitationOverview = PPP/.pybliometrics/Scopus/citation_overview
+    AffiliationRetrieval = PPP/.pybliometrics/Scopus/affiliation_retrieval
+    ScopusSearch = PPP/.pybliometrics/Scopus/scopus_search
+    SerialTitle = PPP/.pybliometrics/Scopus/serial_title
 
     [Authentication]
     APIKey = XXX,

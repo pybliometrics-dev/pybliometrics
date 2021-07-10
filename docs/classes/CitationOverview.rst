@@ -1,7 +1,7 @@
 pybliometrics.scopus.CitationOverview
 =====================================
 
-`CitationOverview()` implements the `Citations Overview API <https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key needs to be approved by Elsevier manually.  Please contact Scopus to do so.  Otherwise each request throws 403 errors.
+`CitationOverview()` implements the `Citation Overview API <https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key needs to be approved by Elsevier manually.  Please contact Scopus to do so.  Otherwise each request throws 403 errors.
 
 .. currentmodule:: pybliometrics.scopus
 
