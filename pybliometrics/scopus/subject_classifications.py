@@ -1,4 +1,5 @@
 from collections import namedtuple
+from typing import Dict, List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import chained_get, make_search_summary
@@ -6,13 +7,12 @@ from pybliometrics.scopus.utils import chained_get, make_search_summary
 
 class SubjectClassifications(Search):
     @property
-    def results(self):
+    def results(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing results of subject classifications
         search.
 
         The number of fields of namedtuples are specified during class
         initialization.
-        Note: can be empty if no results are found.
         """
         out = []
         subj = namedtuple('Subject', self.fields)
@@ -33,26 +33,24 @@ class SubjectClassifications(Search):
                 out.append(subj(**result))
         return out or None
 
-    def __init__(self, query, fields=None, refresh=False):
+    def __init__(self,
+                 query: Dict,
+                 fields: Union[List[str], Tuple[str, ...]] = None,
+                 refresh: Union[bool, int] = False
+                 ) -> None:
         """Interaction with the Subject Classifications Scopus API.
 
-        Parameters
-        ----------
-        query: dict
-            Query parameters and corresponding fields. Allowed keys 'code',
-            'abbrev', 'description', 'detail'. For more details on search fields
-            please refer to
-            https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl#d1e199.
-
-        fields : iterable (optional, default=None)
-            The fields to return when calling search results. Allowed values:
-            'code', 'abbrev', 'description', 'detail'.  For details see
-            https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl#d1e199.
-
-        refresh : bool or int (optional, default=False)
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
+        :param query: Query parameters and corresponding fields. Allowed keys
+                      'code', 'abbrev', 'description', 'detail'. For more
+                      details on search fields please refer to
+                      https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl#d1e199.
+        :param fields: The fields to return when calling search results.
+                       Allowed values: 'code', 'abbrev', 'description',
+                       'detail'.  For details see
+                       https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl#d1e199.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
 
         Raises
         ------

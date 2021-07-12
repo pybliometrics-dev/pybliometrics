@@ -1,4 +1,5 @@
 from collections import namedtuple
+from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import check_parameter_value, get_link
@@ -6,12 +7,12 @@ from pybliometrics.scopus.utils import check_parameter_value, get_link
 
 class SerialTitle(Retrieval):
     @property
-    def aggregation_type(self):
+    def aggregation_type(self) -> str:
         """The type of the source."""
         return self._entry['prism:aggregationType']
 
     @property
-    def citescoreyearinfolist(self):
+    def citescoreyearinfolist(self) -> Optional[List[Tuple[str, str]]]:
         """A list of two tuples of the form (year, cite-score).  The first
         tuple represents the current cite-score, the second tuple
         represents the tracker cite-score."""
@@ -24,22 +25,22 @@ class SerialTitle(Retrieval):
         return [current, tracker]
 
     @property
-    def eissn(self):
+    def eissn(self) -> Optional[str]:
         """The electronic ISSN of the source."""
         return self._entry.get('prism:eIssn')
 
     @property
-    def issn(self):
+    def issn(self) -> Optional[str]:
         """The ISSN of the source."""
         return self._entry.get('prism:issn')
 
     @property
-    def oaallowsauthorpaid(self):
+    def oaallowsauthorpaid(self) -> Optional[str]:
         """Whether under the Open-Access policy authors are allowed to pay."""
         return self._entry.get('oaAllowsAuthorPaid')
 
     @property
-    def openaccess(self):
+    def openaccess(self) -> Optional[str]:
         """Open Access status (0 or 1)."""
         return self._entry.get('openaccess')
 
@@ -49,52 +50,52 @@ class SerialTitle(Retrieval):
         return self._entry.get('openaccessStartDate')
 
     @property
-    def openaccesstype(self):
+    def openaccesstype(self) -> Optional[str]:
         """Open Archive status (full or partial)."""
         return self._entry.get('openaccessType')
 
     @property
-    def openaccessarticle(self):
-        """Open Access status (boolean)."""
+    def openaccessarticle(self) -> Optional[bool]:
+        """Open Access status."""
         return self._entry.get('openaccessArticle')
 
     @property
-    def openarchivearticle(self):
-        """Open Archive status (boolean)."""
+    def openarchivearticle(self) -> Optional[bool]:
+        """Open Archive status."""
         return self._entry.get('openArchiveArticle')
 
     @property
-    def openaccesssponsorname(self):
+    def openaccesssponsorname(self) -> Optional[str]:
         """The name of the Open Access sponsor."""
         return self._entry.get('openaccessSponsorName')
 
     @property
-    def openaccesssponsortype(self):
+    def openaccesssponsortype(self) -> Optional[str]:
         """The type of the Open Access sponsor."""
         return self._entry.get('openaccessSponsorType')
 
     @property
-    def openaccessuserlicense(self):
+    def openaccessuserlicense(self) -> Optional[str]:
         """The User license."""
         return self._entry.get('openaccessUserLicense')
 
     @property
-    def publisher(self):
+    def publisher(self) -> str:
         """The publisher of the source."""
         return self._entry['dc:publisher']
 
     @property
-    def scopus_source_link(self):
+    def scopus_source_link(self) -> str:
         """URL to info site on scopus.com."""
         return get_link(self._entry, 0, ["link"])
 
     @property
-    def self_link(self):
+    def self_link(self) -> str:
         """URL to the source's API page."""
         return get_link(self._json, 0, ["link"])
 
     @property
-    def sjrlist(self):
+    def sjrlist(self) -> Optional[List[Tuple[str, str]]]:
         """The SCImago Journal Rank (SJR) indicator as list of
         (year, indicator)-tuples.  See
         https://www.scimagojr.com/journalrank.php.
@@ -102,7 +103,7 @@ class SerialTitle(Retrieval):
         return _parse_list(self._entry, "SJR")
 
     @property
-    def sniplist(self):
+    def sniplist(self) -> Optional[List[Tuple[str, str]]]:
         """The Source-Normalized Impact per Paper (SNIP) as list of
         (year, indicator)-tuples.  See
         https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip.
@@ -110,12 +111,12 @@ class SerialTitle(Retrieval):
         return _parse_list(self._entry, "SNIP")
 
     @property
-    def source_id(self):
+    def source_id(self) -> str:
         """The Scopus ID of the source."""
         return self._entry['source-id']
 
     @property
-    def subject_area(self):
+    def subject_area(self) -> Optional[List[NamedTuple]]:
         """List of named tuples of subject areas in the form
         (area, abbreviation, code) of the source.
         """
@@ -126,34 +127,30 @@ class SerialTitle(Retrieval):
         return areas or None
 
     @property
-    def title(self):
+    def title(self) -> str:
         """The title of the source."""
         return self._entry['dc:title']
 
-    def __init__(self, issn, refresh=False, view="ENHANCED", years=None):
+    def __init__(self,
+                 issn: Union[int, str],
+                 refresh: Union[bool, int] = False,
+                 view: str = "ENHANCED",
+                 years: str = None
+                 ) -> None:
         """Interaction with the Serial Title API.
 
-        Parameters
-        ----------
-        issn : str or int
-            The ISSN or the E-ISSN of the source.
-
-        refresh : bool or int (optional, default=False)
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
-
-        view : str (optional, default="ENHANCED")
-            The view of the file that should be downloaded.  Allowed values:
-            BASIC, STANDARD, ENHANCED.  For details see
-            https://dev.elsevier.com/sc_serial_title_views.html.
-
-        years : str (optional, default=None)
-            A string specifying a year or range of years (combining two
-            years with a hyphen) for which yearly metric data (SJR, SNIP,
-            yearly-data) should be looked up for.  If None, only the
-            most recent metric data values are provided.
-            Note: If not None, refresh will always be True.
+        :param issn: The ISSN or the E-ISSN of the source.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
+        :param view: The view of the file that should be downloaded.  Allowed
+                     values: BASIC, STANDARD, ENHANCED.  For details see
+                     https://dev.elsevier.com/sc_serial_title_views.html.
+        :param years: A string specifying a year or range of years (combining
+                      two years with a hyphen) for which yearly metric data
+                      (SJR, SNIP, yearly-data) should be looked up for.  If
+                      None, only the most recent metric data values are
+                      provided. Note: If not None, refresh will always be True.
 
         Notes
         -----

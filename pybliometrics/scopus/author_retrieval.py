@@ -1,5 +1,6 @@
 from collections import namedtuple
 from warnings import warn
+from typing import List, NamedTuple, Optional, Tuple, Union
 
 from json import loads
 
@@ -12,7 +13,7 @@ from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
 
 class AuthorRetrieval(Retrieval):
     @property
-    def affiliation_current(self):
+    def affiliation_current(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the authors's current
         affiliation(s), in the form (id parent type relationship afdispname
         preferred_name parent_preferred_name country_code country address_part
@@ -25,7 +26,7 @@ class AuthorRetrieval(Retrieval):
         return parse_affiliation(affs)
 
     @property
-    def affiliation_history(self):
+    def affiliation_history(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the authors's historical
         affiliation(s), in the form (id parent type relationship afdispname
         preferred_name parent_preferred_name country_code country address_part
@@ -41,29 +42,24 @@ class AuthorRetrieval(Retrieval):
         return parse_affiliation(affs)
 
     @property
-    def alias(self):
-        """Set of possible new Scopus Author Profile IDs in case the profile
+    def alias(self) -> Optional[List[str]]:
+        """List of possible new Scopus Author Profile IDs in case the profile
         has been merged.
         """
         return self._alias
 
     @property
-    def citation_count(self):
+    def citation_count(self) -> str:
         """Total number of citing items."""
         return self._json['coredata'].get('citation-count', '0')
 
     @property
-    def cited_by_count(self):
+    def cited_by_count(self) -> str:
         """Total number of citing authors."""
         return self._json['coredata'].get('cited-by-count', '0')
 
     @property
-    def coauthor_count(self):
-        """Total number of coauthors."""
-        return self._json.get('coauthor-count')
-
-    @property
-    def classificationgroup(self):
+    def classificationgroup(self) -> Optional[List[Tuple[str, str]]]:
         """List with (subject group ID, number of documents)-tuples."""
         path = ['classificationgroup', 'classifications', 'classification']
         out = [(item['$'], item['@frequency']) for item in
@@ -71,12 +67,17 @@ class AuthorRetrieval(Retrieval):
         return out or None
 
     @property
-    def coauthor_link(self):
+    def coauthor_count(self) -> str:
+        """Total number of coauthors."""
+        return self._json.get('coauthor-count')
+
+    @property
+    def coauthor_link(self) -> Optional[str]:
         """URL to Scopus API search page for coauthors."""
         return get_link(self._json, 3)
 
     @property
-    def date_created(self):
+    def date_created(self) -> Optional[Tuple[int, int, int]]:
         """Date the Scopus record was created."""
         try:
             return parse_date_created(self._profile)
@@ -84,12 +85,12 @@ class AuthorRetrieval(Retrieval):
             return None
 
     @property
-    def document_count(self):
+    def document_count(self) -> str:
         """Number of documents authored (excludes book chapters and notes)."""
         return self._json['coredata'].get('document-count', '0')
 
     @property
-    def eid(self):
+    def eid(self) -> Optional[str]:
         """The EID of the author.  If it differs from the one provided,
         pybliometrics will throw a warning informing the user about
         author profile merges.
@@ -97,23 +98,23 @@ class AuthorRetrieval(Retrieval):
         return self._json['coredata'].get('eid')
 
     @property
-    def given_name(self):
+    def given_name(self) -> Optional[str]:
         """Author's preferred given name."""
         return chained_get(self._profile, ['preferred-name', 'given-name'])
 
     @property
-    def h_index(self):
+    def h_index(self) -> Optional[str]:
         """The author's h-index."""
         return self._json.get('h-index')
 
     @property
-    def historical_identifier(self):
+    def historical_identifier(self) -> Optional[List[str]]:
         """Scopus IDs of previous profiles now compromising this profile."""
         hist = chained_get(self._json, ["coredata", 'historical-identifier'], [])
         return [d['$'].split(":")[-1] for d in hist] or None
 
     @property
-    def identifier(self):
+    def identifier(self) -> str:
         """The author's ID.  Might differ from the one provided."""
         ident = self._json['coredata']['dc:identifier'].split(":")[-1]
         if ident != self._id:
@@ -124,17 +125,17 @@ class AuthorRetrieval(Retrieval):
         return ident
 
     @property
-    def indexed_name(self):
+    def indexed_name(self) -> Optional[str]:
         """Author's name as indexed by Scopus."""
         return chained_get(self._profile, ['preferred-name', 'indexed-name'])
 
     @property
-    def initials(self):
+    def initials(self) -> Optional[str]:
         """Author's preferred initials."""
         return chained_get(self._profile, ['preferred-name', 'initials'])
 
     @property
-    def name_variants(self):
+    def name_variants(self) -> Optional[List[NamedTuple]]:
         """List of named tuples containing variants of the author name with
         number of documents published with that variant.
         """
@@ -147,12 +148,12 @@ class AuthorRetrieval(Retrieval):
         return out or None
 
     @property
-    def orcid(self):
+    def orcid(self) -> Optional[str]:
         """The author's ORCID."""
         return self._json['coredata'].get('orcid')
 
     @property
-    def publication_range(self):
+    def publication_range(self) -> Optional[Tuple[str, str]]:
         """Tuple containing years of first and last publication."""
         r = self._profile.get('publication-range')
         try:
@@ -161,27 +162,27 @@ class AuthorRetrieval(Retrieval):
             return None
 
     @property
-    def scopus_author_link(self):
+    def scopus_author_link(self) -> Optional[str]:
         """Link to the Scopus web view of the author."""
         return get_link(self._json, 1)
 
     @property
-    def search_link(self):
+    def search_link(self) -> Optional[str]:
         """URL to the API page listing documents of the author."""
         return get_link(self._json, 2)
 
     @property
-    def self_link(self):
+    def self_link(self) -> Optional[str]:
         """Link to the author's API page."""
         return get_link(self._json, 0)
 
     @property
-    def status(self):
+    def status(self) -> Optional[str]:
         """The status of the author profile."""
         return self._profile.get("status")
 
     @property
-    def subject_areas(self):
+    def subject_areas(self) -> Optional[List[NamedTuple]]:
         """List of named tuples of subject areas in the form
         (area, abbreviation, code) of author's publication.
         """
@@ -193,37 +194,33 @@ class AuthorRetrieval(Retrieval):
         return areas or None
 
     @property
-    def surname(self):
+    def surname(self) -> Optional[str]:
         """Author's preferred surname."""
         return chained_get(self._profile, ['preferred-name', 'surname'])
 
     @property
-    def url(self):
+    def url(self) -> Optional[str]:
         """URL to the author's API page."""
         return self._json['coredata']['prism:url']
 
-    def __init__(self, author_id, refresh=False, view="ENHANCED"):
+    def __init__(self,
+                 author_id: Union[int, str],
+                 refresh: Union[bool, int] = False,
+                 view: str = "ENHANCED"
+                 ) -> None:
         """Interaction with the Author Retrieval API.
 
-        Parameters
-        ----------
-        author_id : str or int
-            The ID of the author to search for.  Optionally expressed
-            as an Elsevier EID (i.e., in the form 9-s2.0-nnnnnnnn).
-
-        refresh : bool or int (optional, default=False)
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
-
-        view : str (optional, default=META_ABS)
-            The view of the file that should be downloaded.  Allowed values:
-            METRICS, LIGHT, STANDARD, ENHANCED, where STANDARD includes all
-            information of LIGHT view and ENHANCED includes all information of
-            any view.  For details see
-            https://dev.elsevier.com/sc_author_retrieval_views.html.
-            Note: Neither the BASIC nor the DOCUMENTS view are not active,
-            although documented.
+        :param author_id: The ID or the EID of the author.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
+        :param view: The view of the file that should be downloaded.  Allowed
+                     values: METRICS, LIGHT, STANDARD, ENHANCED, where STANDARD
+                     includes all information of LIGHT view and ENHANCED
+                     includes all information of any view.  For details see
+                     https://dev.elsevier.com/sc_author_retrieval_views.html.
+                     Note: Neither the BASIC nor the DOCUMENTS view are active,
+                     although documented.
 
         Notes
         -----
@@ -269,7 +266,7 @@ class AuthorRetrieval(Retrieval):
             f"{int(self.citation_count):,} document(s) as of {date}"
         return s
 
-    def get_coauthors(self):
+    def get_coauthors(self) -> Optional[List[NamedTuple]]:
         """Retrieves basic information about co-authors as a list of
         namedtuples in the form
         (surname, given_name, id, areas, affiliation_id, name, city, country),
@@ -314,17 +311,15 @@ class AuthorRetrieval(Retrieval):
             start += SIZE
         return coauthors or None
 
-    def get_documents(self, subtypes=None, **kwds):
+    def get_documents(self,
+                      subtypes: List[str] = None,
+                      **kwds: str
+                      ) -> Optional[List[NamedTuple]]:
         """Return list of the author's publications using a ScopusSearch()
         query, where publications may fit specified set of document subtypes.
 
-        Parameters
-        ----------
-        subtypes : list of str (optional, default=None)
-            The type of documents that should be returned.
-
-        **kwds : dict-like
-            Parameters to be passed on to ScopusSearch().
+        :param subtypes: The type of documents that should be returned.
+        :param kwds: Parameters to be passed on to ScopusSearch().
 
         Returns
         -------
@@ -337,28 +332,31 @@ class AuthorRetrieval(Retrieval):
         else:
             return s.results
 
-    def get_document_eids(self, *args, **kwds):
+    def get_document_eids(self, *args: str, **kwds: str) -> List[Optional[str]]:
         """Return list of EIDs of the author's publications using
         a ScopusSearch() query.
+
+        :param args: Parameters to be passed on to AuthorSearch().
+        :param kwds: Parameters to be passed on to AuthorSearch().
         """
         s = ScopusSearch(f'AU-ID({self.identifier})', *args, **kwds)
         return s.get_eids()
 
-    def estimate_uniqueness(self, query=None, *args, **kwds):
+    def estimate_uniqueness(self,
+                            query: str = None,
+                            *args: str,
+                            **kwds: str) -> int:
         """Estimate how unqiue a profile is by get the number of
         matches of an AuthorSearch for this person.
 
-        Parameters
-        ----------
-        query : str (optional, default=None)
-            The query string to perform to search for authors.  If empty,
-            the query is of form "AUTHLAST() AND AUTHFIRST()" with the
-            corresponding information included.  Provided queries may include
-            "SUBJAREA()" OR "AF-ID() AND SUBJAREA()".  For details see
-            https://dev.elsevier.com/tips/AuthorSearchTips.htm.
-
-        args, kwds : key-value pairings
-            Parameters to be passed on to AuthorSearch().
+        :param query: The query string to perform to search for authors.  If
+                      `None`, the query is of form "AUTHLAST() AND AUTHFIRST()"
+                      with the corresponding information included.  Provided
+                      queries may include "SUBJAREA()" OR "AF-ID() AND
+                      SUBJAREA()".  For details see
+                      https://dev.elsevier.com/tips/AuthorSearchTips.htm.
+        :param args: Parameters to be passed on to AuthorSearch().
+        :param kwds: Parameters to be passed on to AuthorSearch().
 
         Returns
         -------

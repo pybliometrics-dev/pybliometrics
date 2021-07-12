@@ -1,5 +1,6 @@
 from collections import namedtuple
 from datetime import datetime
+from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import check_parameter_value
@@ -7,7 +8,7 @@ from pybliometrics.scopus.utils import check_parameter_value
 
 class CitationOverview(Retrieval):
     @property
-    def authors(self):
+    def authors(self) -> List[NamedTuple]:
         """A list of namedtuples storing author information,
         where each namedtuple corresponds to one author.
         The information in each namedtuple is (name surname initials id url).
@@ -26,7 +27,7 @@ class CitationOverview(Retrieval):
         return out or None
 
     @property
-    def cc(self):
+    def cc(self) -> List[Tuple]:
         """List of tuples of yearly number of citations
         for specified years."""
         _years = range(self._start, self._end+1)
@@ -36,32 +37,32 @@ class CitationOverview(Retrieval):
             return list(zip(_years, [0]*len(_years)))
 
     @property
-    def citationType_long(self):
+    def citationType_long(self) -> str:
         """Type (long version) of the abstract (e.g. article, review)."""
         return self._citeInfoMatrix.get('citationType', {}).get('$')
 
     @property
-    def citationType_short(self):
+    def citationType_short(self) -> str:
         """Type (short version) of the abstract (e.g. ar, re)."""
         return self._citeInfoMatrix.get('citationType', {}).get('@code')
 
     @property
-    def doi(self):
+    def doi(self) -> Optional[str]:
         """Document Object Identifier (DOI) of the abstract."""
         return self._identifierlegend.get('doi')
 
     @property
-    def endingPage(self):
+    def endingPage(self) -> Optional[str]:
         """Ending page."""
         return self._citeInfoMatrix.get('endingPage')
 
     @property
-    def h_index(self):
+    def h_index(self) -> str:
         """h-index of ciations of the abstract (according to Scopus)."""
         return self._data['h-index']
 
     @property
-    def issn(self):
+    def issn(self) -> Optional[Union[str, Tuple[str, str]]]:
         """ISSN of the publisher.
         Note: If E-ISSN is known to Scopus, this returns both
         ISSN and E-ISSN in random order separated by blank space.
@@ -69,96 +70,91 @@ class CitationOverview(Retrieval):
         return self._citeInfoMatrix.get('issn')
 
     @property
-    def issueIdentifier(self):
+    def issueIdentifier(self) -> Optional[str]:
         """Issue number for abstract."""
         return self._citeInfoMatrix.get('issueIdentifier')
 
     @property
-    def lcc(self):
+    def lcc(self) -> str:
         """Number of citations the abstract received
         after the specified end year.
         """
         return self._citeInfoMatrix.get('lcc')
 
     @property
-    def pcc(self):
+    def pcc(self) -> str:
         """Number of citations the abstract received
         before the specified start year.
         """
         return self._citeInfoMatrix.get('pcc')
 
     @property
-    def pii(self):
+    def pii(self) -> Optional[str]:
         """The Publication Item Identifier (PII) of the abstract."""
         return self._identifierlegend.get('pii')
 
     @property
-    def publicationName(self):
+    def publicationName(self) -> str:
         """Name of source the abstract is published in (e.g. the Journal)."""
         return self._citeInfoMatrix.get('publicationName')
 
     @property
-    def scopus_id(self):
+    def scopus_id(self) -> str:
         """The Scopus ID of the abstract.  It is the second part of an EID.
         The Scopus ID might differ from the one provided.
         """
         return self._identifierlegend.get('scopus_id')
 
     @property
-    def startingPage(self):
+    def startingPage(self) -> Optional[str]:
         """Starting page."""
         return self._citeInfoMatrix.get('startingPage')
 
     @property
-    def rangeCount(self):
+    def rangeCount(self) -> Optional[str]:
         """Number of citations for specified years."""
         return self._citeInfoMatrix.get('rangeCount')
 
     @property
-    def rowTotal(self):
+    def rowTotal(self) -> Optional[str]:
         """Number of citations (specified and omitted years)."""
         return self._citeInfoMatrix.get('rowTotal')
 
     @property
-    def title(self):
+    def title(self) -> str:
         """Abstract title."""
         return self._citeInfoMatrix.get('title')
 
     @property
-    def url(self):
+    def url(self) -> str:
         """URL to Citation Overview API view of the abstract."""
         return self._citeInfoMatrix.get('url')
 
     @property
-    def volume(self):
+    def volume(self) -> Optional[str]:
         """Volume for the abstract."""
         return self._citeInfoMatrix.get('volume')
 
-    def __init__(self, eid, start, end=datetime.now().year, citation=None,
-                 refresh=False):
+    def __init__(self,
+                 eid: str,
+                 start: Union[int, str],
+                 end: Union[int, str] = datetime.now().year,
+                 citation: Optional[str] = None,
+                 refresh: Union[bool, int] = False
+                 ) -> None:
         """Interaction witht the Citation Overview API.
 
-        Parameters
-        ----------
-        eid : str
-            The EID of the abstract.
-
-        start : str or int
-            The first year for which the citation count should be loaded
-
-        end : str or int (optional, default=datetime.now().year)
-            The last year for which the citation count should be loaded.
-            Default is the current year.
-
-        citation : str (optional, default=None)
-            Allows for the exclusion of self-citations or those by books.
-            If None, will count all citations.
-            Allowed values: None, exclude-self, exclude-books
-
-        refresh : bool or int (optional, default=False)
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
+        :param eid: The EID of the abstract.
+        :param start: The first year for which the citation count should
+                      be loaded.
+        :param end: The last year for which the citation count should be
+                    loaded. Defaults to the current year.
+        :param citation: Allows for the exclusion of self-citations or those by books.
+                         If `None`, will count all citations.
+                         Allowed values: None, exclude-self, exclude-books
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
 
         Notes
         -----

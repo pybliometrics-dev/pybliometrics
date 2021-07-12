@@ -1,4 +1,5 @@
 from collections import namedtuple
+from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, check_parameter_value,\
@@ -7,14 +8,14 @@ from pybliometrics.scopus.utils import check_integrity, check_parameter_value,\
 
 class AffiliationSearch(Search):
     @property
-    def affiliations(self):
+    def affiliations(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples storing affiliation information,
         where each namedtuple corresponds to one affiliation.
         The information in each namedtuple is (eid name variant documents city
         country parent).
 
-        All entries are strings or None.  variant combines variants of names
-        with a semicolon.
+        All entries are strings or None.  Field "variant" combines variants
+        of names with a semicolon.
 
         Raises
         ------
@@ -41,44 +42,39 @@ class AffiliationSearch(Search):
         check_integrity(out, self._integrity, self._action)
         return out or None
 
-    def __init__(self, query, refresh=False, download=True, count=200,
-                 integrity_fields=None, integrity_action="raise",
-                 verbose=False):
+    def __init__(self,
+                 query: str,
+                 refresh: Union[bool, int] = False,
+                 download: bool = True,
+                 count: int = 200,
+                 integrity_fields: Union[List[str], Tuple[str, ...]] = None,
+                 integrity_action: str = "raise",
+                 verbose: bool = False
+                 ) -> None:
         """Interaction with the Affiliation Search API.
 
-        Parameters
-        ----------
-        query : str
-            A string of the query, e.g. "af-id(60021784)".
-
-        refresh : bool or int (optional, default=False)
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
-
-        count : int (optional, default=200)
-            The number of entries to be displayed at once.  A smaller number
-            means more queries with each query having less results.
-
-        download : bool (optional, default=True)
-            Whether to download results (if they have not been cached).
-
-        integrity_fields : None or iterable (default=None)
-            Iterable of field names whose completeness should be checked.
-            ScopusSearch will perform the action specified in
-            `integrity_action` if elements in these fields are missing.  This
-            helps avoiding idiosynchratically missing elements that should
-            always be present, such as the EID or the name.
-
-        integrity_action : str (optional, default="raise")
-            What to do in case integrity of provided fields cannot be
-            verified.  Possible actions:
-            - "raise": Raise an AttributeError
-            - "warn": Raise a UserWarning
-
-        verbose : bool (optional, default=False)
-            Whether to print a downloading progress bar to terminal. Has no
-            effect for download=False.
+        :param query: A string of the query.  For allowed fields and values see
+                      https://dev.elsevier.com/sc_affil_search_tips.html.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
+        :param count: The number of entries to be displayed at once.  A smaller
+                      number means more queries with each query having
+                      fewer results.
+        :param download: Whether to download results (if they have not been
+                         cached).
+        :param integrity_fields: Names of fields whose completeness should
+                                 be checked.  AffiliationSearch will perform
+                                 the action specified in `integrity_action`
+                                 if elements in these fields are missing.
+                                 This helps avoiding idiosynchratically missing
+                                 elements that should always be present
+                                 (e.g. EID or name).
+        :param integrity_action: What to do in case integrity of provided fields
+                                 cannot be verified.  Possible actions:
+                                 - "raise": Raise an AttributeError
+                                 - "warn": Raise a UserWarning
+        :param verbose: Whether to print a download progress bar.
 
         Raises
         ------

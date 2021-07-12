@@ -1,4 +1,5 @@
 from collections import namedtuple
+from typing import List, NamedTuple, Optional, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import check_parameter_value
@@ -6,15 +7,14 @@ from pybliometrics.scopus.utils import check_parameter_value
 
 class PlumXMetrics(Retrieval):
     @property
-    def category_totals(self):
+    def category_totals(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing total metrics as categorized
         by PlumX Metrics in the form (capture, citation, mention, socialMedia,
         usage).
-        Note: Can be empty. Specific categories can be absent depending on
-        existence of data and applicability of metrics to document type. For
-        Citation category a maximum citation count across sources is shown.
-        For details on PlumX Metrics categories see
-        https://plumanalytics.com/learn/about-metrics/
+
+        Note: For Citation category a maximum citation count across sources is
+        shown.  For details on PlumX Metrics categories see
+        https://plumanalytics.com/learn/about-metrics/.
         """
         out = []
         fields = 'name total'
@@ -27,27 +27,23 @@ class PlumXMetrics(Retrieval):
         return out or None
 
     @property
-    def capture(self):
-        """A list of namedtuples representing metrics in Captures category:
-        metrics that track when end users bookmark, favorite, become a reader,
-        become a watcher, etc, i.e. metrics that indicate that someone wants
-        to come back to the work.
-        Note: Can be empty. Specific metrics can be absent depending on
-        existence of data and applicability of metrics to document type.
-        For details on Capture metrics see
-        https://plumanalytics.com/learn/about-metrics/capture-metrics/
+    def capture(self) -> Optional[List[NamedTuple]]:
+        """A list of namedtuples representing metrics in the Captures category.
+
+        Note: For details on Capture metrics see
+        https://plumanalytics.com/learn/about-metrics/capture-metrics/.
         """
         categories = self._json.get('count_categories', [])
         mention_metrics = _category_metrics('capture', categories)
         return _list_metrics_totals(mention_metrics) or None
 
     @property
-    def citation(self):
+    def citation(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing citation counts from
         different sources.
-        Note: Can be empty.
-        For details and list of possible sources see
-        https://plumanalytics.com/learn/about-metrics/citation-metrics/
+
+        Note: For details on Citation metrics see
+        https://plumanalytics.com/learn/about-metrics/citation-metrics/.
         """
         categories = self._json.get('count_categories', [])
         citation_metrics = _category_metrics('citation', categories)
@@ -59,92 +55,83 @@ class PlumXMetrics(Retrieval):
         return _list_metrics_totals(source_metrics) or None
 
     @property
-    def mention(self):
-        """A list of namedtuples representing metrics in Mentions category:
-        metrics that measure engagement with research.
-        Note: Can be empty. Specific metrics can be absent depending on
-        existence of data and applicability of metrics to document type.
-        For details on Mention metrics see
-        https://plumanalytics.com/learn/about-metrics/mention-metrics/
+    def mention(self) -> Optional[List[NamedTuple]]:
+        """A list of namedtuples representing metrics in Mentions category.
+
+        Note: For details on Mention metrics see
+        https://plumanalytics.com/learn/about-metrics/mention-metrics/.
         """
         categories = self._json.get('count_categories', [])
         mention_metrics = _category_metrics('mention', categories)
         return _list_metrics_totals(mention_metrics) or None
 
     @property
-    def social_media(self):
-        """A list of namedtuples representing social media metrics:
-        metrics on promotion of research.
-        Note: Can be empty. Specific metrics can be absent depending on
-        existence of data and applicability of metrics to document type.
-        For details on social media metrics see
-        https://plumanalytics.com/learn/about-metrics/social-media-metrics/
+    def social_media(self) -> Optional[List[NamedTuple]]:
+        """A list of namedtuples representing social media metrics.
+
+        Note: For details on Social Media metrics see
+        https://plumanalytics.com/learn/about-metrics/social-media-metrics/.
         """
         categories = self._json.get('count_categories', [])
         social_metrics = _category_metrics('socialMedia', categories)
         return _list_metrics_totals(social_metrics) or None
 
     @property
-    def usage(self):
-        """A list of namedtuples representing Usage category metrics:
-        metrics that capture interaction with and usage of research.
-        Note: Can be empty. Specific metrics can be absent depending on
-        existence of data and applicability of metrics to document type.
-        For details on Usage metrics see
-        https://plumanalytics.com/learn/about-metrics/usage-metrics/
+    def usage(self) -> Optional[List[NamedTuple]]:
+        """A list of namedtuples representing Usage category metrics.
+
+        Note: For details on Usage metrics see
+        https://plumanalytics.com/learn/about-metrics/usage-metrics/.
         """
         categories = self._json.get('count_categories', [])
         usage_metrics = _category_metrics('usage', categories)
         return _list_metrics_totals(usage_metrics) or None
 
-    def __init__(self, identifier, id_type, refresh=False):
+    def __init__(self,
+                 identifier: str,
+                 id_type: str,
+                 refresh: Union[bool, int] = False
+                 ) -> None:
         """Interaction with the PlumX Metrics API.
 
-        Parameters
-        ----------
-        identifier : str
-            The identifier of a document.
-
-        id_type: str
-            The type of used ID. Allowed values are:
-                - 'airitiDocId'
-                - 'arxivId'
-                - 'cabiAbstractId'
-                - 'citeulikeId'
-                - 'digitalMeasuresArtifactId'
-                - 'doi'
-                - 'elsevierId'
-                - 'elsevierPii'
-                - 'facebookCountUrlId'
-                - 'figshareArticleId'
-                - 'githubRepoId'
-                - 'isbn'
-                - 'lccn'
-                - 'medwaveId'
-                - 'nctId'
-                - 'oclc'
-                - 'pittEprintDscholarId'
-                - 'pmcid'
-                - 'pmid'
-                - 'redditId'
-                - 'repecHandle'
-                - 'repoUrl'
-                - 'scieloId'
-                - 'sdEid'
-                - 'slideshareUrlId'
-                - 'smithsonianPddrId'
-                - 'soundcloudTrackId'
-                - 'ssrnId'
-                - 'urlId'
-                - 'usPatentApplicationId'
-                - 'usPatentPublicationId'
-                - 'vimeoVideoId'
-                - 'youtubeVideoId'
-
-        refresh : bool or int (optional, default=False)
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
+        :param identifier: The identifier of a document.
+        :param id_type: The type of used ID. Allowed values are:
+                        - 'airitiDocId'
+                        - 'arxivId'
+                        - 'cabiAbstractId'
+                        - 'citeulikeId'
+                        - 'digitalMeasuresArtifactId'
+                        - 'doi'
+                        - 'elsevierId'
+                        - 'elsevierPii'
+                        - 'facebookCountUrlId'
+                        - 'figshareArticleId'
+                        - 'githubRepoId'
+                        - 'isbn'
+                        - 'lccn'
+                        - 'medwaveId'
+                        - 'nctId'
+                        - 'oclc'
+                        - 'pittEprintDscholarId'
+                        - 'pmcid'
+                        - 'pmid'
+                        - 'redditId'
+                        - 'repecHandle'
+                        - 'repoUrl'
+                        - 'scieloId'
+                        - 'sdEid'
+                        - 'slideshareUrlId'
+                        - 'smithsonianPddrId'
+                        - 'soundcloudTrackId'
+                        - 'ssrnId'
+                        - 'urlId'
+                        - 'usPatentApplicationId'
+                        - 'usPatentPublicationId'
+                        - 'vimeoVideoId'
+                        - 'youtubeVideoId'
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
 
         Notes
         -----

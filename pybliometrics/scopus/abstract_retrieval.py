@@ -1,4 +1,5 @@
 from collections import namedtuple
+from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
@@ -7,17 +8,16 @@ from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
 
 class AbstractRetrieval(Retrieval):
     @property
-    def abstract(self):
+    def abstract(self) -> Optional[str]:
         """The abstract of a document.
         Note: If this is empty, try property description instead.
         """
         return self._head.get('abstracts')
 
     @property
-    def affiliation(self):
+    def affiliation(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing listed affiliations in
         the form (id, name, city, country).
-        Note: Might be empty.
         """
         out = []
         aff = namedtuple('Affiliation', 'id name city country')
@@ -30,12 +30,12 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def aggregationType(self):
+    def aggregationType(self) -> str:
         """Aggregation type of source the document is published in."""
         return chained_get(self._json, ['coredata', 'prism:aggregationType'])
 
     @property
-    def authkeywords(self):
+    def authkeywords(self) -> Optional[List[str]]:
         """List of author-provided keywords of the document."""
         keywords = self._json.get('authkeywords')
         if not keywords:
@@ -47,7 +47,7 @@ class AbstractRetrieval(Retrieval):
                 return [keywords['author-keyword']['$']]
 
     @property
-    def authorgroup(self):
+    def authorgroup(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the article's authors organized
         by affiliation, in the form (affiliation_id, dptid, organization,
         city, postalcode, addresspart, country, auid, indexed_name,
@@ -92,7 +92,7 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def authors(self):
+    def authors(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the article's authors, in the
         form (auid, indexed_name, surname, given_name, affiliation_id,
         affiliation, city, country).
@@ -116,7 +116,7 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def citedby_count(self):
+    def citedby_count(self) -> Optional[int]:
         """Number of articles citing the document."""
         cites = chained_get(self._json, ['coredata', 'citedby-count'])
         if cites:
@@ -124,12 +124,12 @@ class AbstractRetrieval(Retrieval):
         return cites
 
     @property
-    def citedby_link(self):
+    def citedby_link(self) -> str:
         """URL to Scopus page listing citing documents."""
         return get_link(self._json, 2)
 
     @property
-    def chemicals(self):
+    def chemicals(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples representing chemical entities in the form
         (source, chemical_name, cas_registry_number).  In case multiple
         numbers given, they are joined on ";".
@@ -152,12 +152,12 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def confcode(self):
+    def confcode(self) -> Optional[str]:
         """Code of the conference the document belong to."""
         return self._confevent.get('confcode')
 
     @property
-    def confdate(self):
+    def confdate(self) -> Optional[Tuple[Tuple[int, int], Tuple[int, int]]]:
         """Date range of the conference the document belongs to represented
         by two tuples in the form (YYYY, MM, DD).
         """
@@ -171,17 +171,17 @@ class AbstractRetrieval(Retrieval):
             return None
 
     @property
-    def conflocation(self):
+    def conflocation(self) -> Optional[str]:
         """Location of the conference the document belongs to."""
         return chained_get(self._confevent, ['conflocation', 'city-group'])
 
     @property
-    def confname(self):
+    def confname(self) -> Optional[str]:
         """Name of the conference the document belongs to."""
         return self._confevent.get('confname')
 
     @property
-    def confsponsor(self):
+    def confsponsor(self) -> Optional[Union[List[str], str]]:
         """Sponsor(s) of the conference the document belongs to."""
         path = ['confsponsors', 'confsponsor']
         sponsors = chained_get(self._confevent, path, [])
@@ -192,7 +192,7 @@ class AbstractRetrieval(Retrieval):
         return sponsors
 
     @property
-    def contributor_group(self):
+    def contributor_group(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples representing contributors compiled by Scopus,
         in the form (given_name, initials, surname, indexed_name, role).
         """
@@ -211,7 +211,7 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def correspondence(self):
+    def correspondence(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples representing the authors to whom correspondence
         should be addressed, in the form (surname, initials, organization,
         country, city_group). Multiple organziations are joined on semicolon.
@@ -238,29 +238,29 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def coverDate(self):
+    def coverDate(self) -> str:
         """The date of the cover the document is in."""
         return chained_get(self._json, ['coredata', 'prism:coverDate'])
 
     @property
-    def description(self):
+    def description(self) -> Optional[str]:
         """Return the description of a record.
         Note: If this is empty, try property abstract instead.
         """
         return chained_get(self._json, ['coredata', 'dc:description'])
 
     @property
-    def doi(self):
+    def doi(self) -> Optional[str]:
         """DOI of the document."""
         return chained_get(self._json, ['coredata', 'prism:doi'])
 
     @property
-    def eid(self):
+    def eid(self) -> str:
         """EID of the document."""
         return chained_get(self._json, ['coredata', 'eid'])
 
     @property
-    def endingPage(self):
+    def endingPage(self) -> Optional[str]:
         """Ending page. If this is empty, try .pageRange instead."""
         # Try coredata first, fall back to head afterwards
         ending = chained_get(self._json, ['coredata', 'prism:endingPage'])
@@ -270,7 +270,7 @@ class AbstractRetrieval(Retrieval):
         return ending
 
     @property
-    def funding(self):
+    def funding(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples parsed funding information in the form
         (agency string id acronym country).
         """
@@ -288,14 +288,14 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def funding_text(self):
+    def funding_text(self) -> Optional[str]:
         """The raw text from which Scopus derives funding information."""
         path = ['item', 'xocs:meta', 'xocs:funding-list', 'xocs:funding-text']
         return chained_get(self._json, path)
 
     @property
-    def isbn(self):
-        """ISBNs belonging to publicationName as tuple of variying length,
+    def isbn(self) -> Optional[Tuple[str, ...]]:
+        """ISBNs Optional[str] to publicationName as tuple of variying length,
         (e.g. ISBN-10 or ISBN-13)."""
         isbns = listify(chained_get(self._head, ['source', 'isbn'], []))
         if len(isbns) == 0:
@@ -304,7 +304,7 @@ class AbstractRetrieval(Retrieval):
             return tuple((i['$'] for i in isbns))
 
     @property
-    def issn(self):
+    def issn(self) -> Optional[str]:
         """ISSN belonging to the publicationName.
         Note: If E-ISSN is known to Scopus, this returns both
         ISSN and E-ISSN in random order separated by blank space.
@@ -312,12 +312,12 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'prism:issn'])
 
     @property
-    def identifier(self):
+    def identifier(self) -> str:
         """ID of the document (same as EID without "2-s2.0-")."""
         return get_id(self._json)
 
     @property
-    def idxterms(self):
+    def idxterms(self) -> Optional[List[str]]:
         """List of index terms (these are just one category of those
         Scopus provides in the web version)
         ."""
@@ -331,27 +331,27 @@ class AbstractRetrieval(Retrieval):
             return None
 
     @property
-    def issueIdentifier(self):
+    def issueIdentifier(self) -> Optional[str]:
         """Number of the issue the document was published in."""
         return chained_get(self._json, ['coredata', 'prism:issueIdentifier'])
 
     @property
-    def issuetitle(self):
+    def issuetitle(self) -> Optional[str]:
         """Title of the issue the document was published in."""
         return chained_get(self._head, ['source', 'issuetitle'])
 
     @property
-    def language(self):
+    def language(self) -> Optional[str]:
         """Language of the article."""
         return chained_get(self._json, ['language', '@xml:lang'])
 
     @property
-    def openaccess(self):
+    def openaccess(self) -> Optional[str]:
         """The openaccess status encoded in single digits."""
         return chained_get(self._json, ['coredata', 'openaccess'])
 
     @property
-    def openaccessFlag(self):
+    def openaccessFlag(self) -> Optional[bool]:
         """Whether the document is available via open access or not."""
         flag = chained_get(self._json, ['coredata', 'openaccessFlag'])
         if flag:
@@ -359,7 +359,7 @@ class AbstractRetrieval(Retrieval):
         return flag
 
     @property
-    def pageRange(self):
+    def pageRange(self) -> Optional[str]:
         """Page range.  If this is empty, try .startingPage and
         .endingPage instead.
         """
@@ -370,17 +370,17 @@ class AbstractRetrieval(Retrieval):
         return pages
 
     @property
-    def pii(self):
+    def pii(self) -> Optional[str]:
         """The PII (Publisher Item Identifier) of the document."""
         return chained_get(self._json, ['coredata', 'pii'])
 
     @property
-    def publicationName(self):
+    def publicationName(self) -> Optional[str]:
         """Name of source the document is published in."""
         return chained_get(self._json, ['coredata', 'prism:publicationName'])
 
     @property
-    def publisher(self):
+    def publisher(self) -> Optional[str]:
         """Name of the publisher of the document.
         Note: Information provided in the FULL view of the article might be
         more complete.
@@ -393,17 +393,17 @@ class AbstractRetrieval(Retrieval):
             return full
 
     @property
-    def publisheraddress(self):
+    def publisheraddress(self) -> Optional[str]:
         """Name of the publisher of the document."""
         return chained_get(self._head, ['source', 'publisher', 'publisheraddress'])
 
     @property
-    def pubmed_id(self):
+    def pubmed_id(self) -> Optional[str]:
         """The PubMed ID of the document."""
         return chained_get(self._json, ['coredata', 'pubmed-id'])
 
     @property
-    def refcount(self):
+    def refcount(self) -> Optional[str]:
         """Number of references of an article.
         Note: Requires either the FULL view or REF view.
         """
@@ -413,7 +413,7 @@ class AbstractRetrieval(Retrieval):
             return self._ref.get('@refcount')
 
     @property
-    def references(self):
+    def references(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples representing references listed in the document,
         in the form (position, id, doi, title, authors, authors_auid,
         authors_affiliationid, sourcetitle, publicationyear, volume, issue,
@@ -490,17 +490,17 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def scopus_link(self):
+    def scopus_link(self) -> str:
         """URL to the document page on Scopus."""
         return get_link(self._json, 1)
 
     @property
-    def self_link(self):
+    def self_link(self) -> str:
         """URL to Scopus API page of this document."""
         return get_link(self._json, 0)
 
     @property
-    def sequencebank(self):
+    def sequencebank(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples representing biological entities defined or
         mentioned in the text, in the form (name, sequence_number, type).
         """
@@ -517,26 +517,26 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def source_id(self):
+    def source_id(self) -> Optional[str]:
         """Scopus source ID of the document."""
         return chained_get(self._json, ['coredata', 'source-id'])
 
     @property
-    def sourcetitle_abbreviation(self):
+    def sourcetitle_abbreviation(self) -> Optional[str]:
         """Abbreviation of the source the document is published in.
         Note: Requires the FULL view of the article.
         """
         return self._head.get('source', {}).get('sourcetitle-abbrev')
 
     @property
-    def srctype(self):
+    def srctype(self) -> Optional[str]:
         """Aggregation type of source the document is published in (short
         version of aggregationType).
         """
         return chained_get(self._json, ['coredata', 'srctype'])
 
     @property
-    def startingPage(self):
+    def startingPage(self) -> Optional[str]:
         """Starting page.  If this is empty, try .pageRange instead."""
         # Try coredata first, fall back to bibrecord afterwards
         starting = chained_get(self._json, ['coredata', 'prism:startingPage'])
@@ -546,7 +546,7 @@ class AbstractRetrieval(Retrieval):
         return starting
 
     @property
-    def subject_areas(self):
+    def subject_areas(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples containing subject areas of the article
         in the form (area abbreviation code).
         Note: Requires the FULL view of the article.
@@ -559,72 +559,65 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def subtype(self):
+    def subtype(self) -> str:
         """Type of the document.  Refer to the Scopus Content Coverage Guide
         for a list of possible values.  Short version of subtypedescription.
         """
         return chained_get(self._json, ['coredata', 'subtype']) or None
 
     @property
-    def subtypedescription(self):
+    def subtypedescription(self) -> str:
         """Type of the document.  Refer to the Scopus Content Coverage Guide
         for a list of possible values.  Long version of subtype.
         """
         return chained_get(self._json, ['coredata', 'subtypeDescription']) or None
 
     @property
-    def title(self):
+    def title(self) -> Optional[str]:
         """Title of the document."""
         return chained_get(self._json, ['coredata', 'dc:title'])
 
     @property
-    def url(self):
+    def url(self) -> Optional[str]:
         """URL to the API view of the document."""
         return chained_get(self._json, ['coredata', 'prism:url'])
 
     @property
-    def volume(self):
+    def volume(self) -> Optional[str]:
         """Volume for the document."""
         return chained_get(self._json, ['coredata', 'prism:volume'])
 
     @property
-    def website(self):
+    def website(self) -> str:
         """Website of publisher."""
         path = ['source', 'website', 'ce:e-address', '$']
         return chained_get(self._head, path)
 
-    def __init__(self, identifier=None, refresh=False, view='META_ABS',
-                 id_type=None, **kwds):
+    def __init__(self,
+                 identifier: Union[int, str] = None,
+                 refresh: Union[bool, int] = False,
+                 view: str = 'META_ABS',
+                 id_type: str = None,
+                 **kwds: str
+                 ) -> None:
         """Interaction with the Abstract Retrieval API.
 
-        Parameters
-        ----------
-        identifier : str or int
-            The identifier of a document.  Can be the Scopus EID, the Scopus
-            ID, the PII, the Pubmed-ID or the DOI.
-
-        refresh : bool or int (optional, default=False)
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
-
-        id_type: str (optional, default=None)
-            The type of used ID. Allowed values: None, 'eid', 'pii',
-            'scopus_id', 'pubmed_id', 'doi'.  If the value is None, the
-            function tries to infer the ID type itself.
-
-        view : str (optional, default=META_ABS)
-            The view of the file that should be downloaded.  Allowed values:
-            META, META_ABS, REF, FULL, where FULL includes all information
-            of META_ABS view and META_ABS includes all information of the
-            META view.  For details see
-            https://dev.elsevier.com/sc_abstract_retrieval_views.html.
-
-        kwds : key-value parings, optional
-            Keywords passed on as query parameters.  Must contain fields
-            and values listed mentioned in the API specification
-            (https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl),
-            such as "startref" or "refcount".
+        :param identifier: The identifier of a document.  Can be the Scopus EID
+                           , the Scopus ID, the PII, the Pubmed-ID or the DOI.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
+        :param id_type: The type of used ID. Allowed values: None, 'eid', 'pii',
+                        'scopus_id', 'pubmed_id', 'doi'.  If the value is None,
+                        the function tries to infer the ID type itself.
+        :param view: The view of the file that should be downloaded.  Allowed
+                     values: META, META_ABS, REF, FULL, where FULL includes all
+                     information of META_ABS view and META_ABS includes all
+                     information of the META view.  For details see
+                     https://dev.elsevier.com/sc_abstract_retrieval_views.html.
+        :param kwds: Keywords passed on as query parameters.  Must contain
+                     fields and values listed in the API specification at
+                     https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl.
 
         Raises
         ------
@@ -693,7 +686,7 @@ class AbstractRetrieval(Retrieval):
             s += '\n   '.join([aff.name for aff in self.affiliation])
         return s
 
-    def get_bibtex(self):
+    def get_bibtex(self) -> str:
         """Bibliographic entry in BibTeX format.
 
         Raises
@@ -729,7 +722,7 @@ class AbstractRetrieval(Retrieval):
         bib += "}"
         return bib
 
-    def get_html(self):
+    def get_html(self) -> str:
         """Bibliographic entry in html format."""
         # Author links
         au_link = ('<a href="https://www.scopus.com/authid/detail.url'
@@ -761,7 +754,7 @@ class AbstractRetrieval(Retrieval):
             s += f' <a href="https://doi.org/{self.doi}">doi:{self.doi}</a>.'
         return s
 
-    def get_latex(self):
+    def get_latex(self) -> str:
         """Bibliographic entry in LaTeX format."""
         if len(self.authors) > 1:
             authors = _list_authors(self.authors)
@@ -781,7 +774,7 @@ class AbstractRetrieval(Retrieval):
         s += f'\\href{{{self.scopus_link}}}{{scopus:{self.eid}}}.'
         return s
 
-    def get_ris(self):
+    def get_ris(self) -> str:
         """Bibliographic entry in RIS (Research Information System Format)
         format for journal articles.
 

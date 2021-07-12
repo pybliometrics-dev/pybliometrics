@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from typing import Dict, List, Optional, Union
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_parameter_value, make_search_summary
@@ -6,11 +7,10 @@ from pybliometrics.scopus.utils import check_parameter_value, make_search_summar
 
 class SerialSearch(Search):
     @property
-    def results(self):
+    def results(self) -> Optional[List[Dict[str, str]]]:
         """A list of OrderedDicts representing results of serial search. The
         number of keys may vary from one search result to another depending
         on the length of yearly data.
-        Note: Can be empty.
         """
         out = []
         search_results = self._json['serial-metadata-response'].get('entry', [])
@@ -47,26 +47,23 @@ class SerialSearch(Search):
                 out.append(obs)
         return out or None
 
-    def __init__(self, query, refresh=False, view='ENHANCED'):
+    def __init__(self,
+                 query: Dict,
+                 refresh: Union[bool, int] = False,
+                 view: str = 'ENHANCED'
+                 ) -> None:
         """Interaction with the Serial Title API.
 
-        Parameters
-        ----------
-        query: dict
-            Query parameters and corresponding fields. Allowed keys 'title',
-            'issn', 'pub', 'subj', 'subjCode', 'content', 'oa'.  For
-            examples on possible values, please refer to
-            https://dev.elsevier.com/documentation/SerialTitleAPI.wadl#d1e22.
-
-        refresh : bool or int (optional, default=False)
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
-
-        view : str (optional, default="ENHANCED")
-            The view of the file that should be downloaded.  Allowed values:
-            STANDARD, ENHANCED, CITESCORE.  For details see
-            https://dev.elsevier.com/sc_serial_title_views.html.
+        :param query:  Query parameters and corresponding fields. Allowed keys
+                      'title', 'issn', 'pub', 'subj', 'subjCode', 'content',
+                      'oa'.  For examples on possible values, please refer to
+                      https://dev.elsevier.com/documentation/SerialTitleAPI.wadl#d1e22.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
+        :param view: The view of the file that should be downloaded.  Allowed
+                     values: STANDARD, ENHANCED, CITESCORE.  For details see
+                     https://dev.elsevier.com/sc_serial_title_views.html.
 
         Raises
         ------

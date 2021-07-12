@@ -1,4 +1,5 @@
 from collections import namedtuple
+from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
@@ -7,32 +8,32 @@ from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
 
 class AffiliationRetrieval(Retrieval):
     @property
-    def address(self):
+    def address(self) -> Optional[str]:
         """The address of the affiliation."""
         return self._json.get('address')
 
     @property
-    def affiliation_name(self):
+    def affiliation_name(self) -> str:
         """The name of the affiliation."""
         return self._json.get('affiliation-name')
 
     @property
-    def author_count(self):
+    def author_count(self) -> str:
         """Number of authors associated with the affiliation."""
         return self._json['coredata'].get('author-count')
 
     @property
-    def city(self):
+    def city(self) -> Optional[str]:
         """The city of the affiliation."""
         return self._json.get('city')
 
     @property
-    def country(self):
+    def country(self) -> Optional[str]:
         """The country of the affiliation."""
         return self._json.get('country')
 
     @property
-    def date_created(self):
+    def date_created(self) -> Optional[Tuple[int, int, int]]:
         """Date the Scopus record was created."""
         try:
             return parse_date_created(self._profile)
@@ -40,22 +41,22 @@ class AffiliationRetrieval(Retrieval):
             return None
 
     @property
-    def document_count(self):
+    def document_count(self) -> str:
         """Number of documents for the affiliation."""
         return self._json['coredata'].get('document-count')
 
     @property
-    def eid(self):
+    def eid(self) -> str:
         """The EID of the affiliation."""
         return self._json['coredata']['eid']
 
     @property
-    def identifier(self):
+    def identifier(self) -> str:
         """The Scopus ID of the affiliation."""
         return get_id(self._json)
 
     @property
-    def name_variants(self):
+    def name_variants(self) -> List[NamedTuple]:
         """A list of namedtuples representing variants of the affiliation name
         with number of documents referring to this variant.
         """
@@ -65,82 +66,78 @@ class AffiliationRetrieval(Retrieval):
                 for var in chained_get(self._json, path, [])]
 
     @property
-    def org_domain(self):
+    def org_domain(self) -> Optional[str]:
         """Internet domain of the affiliation.  Requires the STANDARD view."""
         return self._profile.get('org-domain')
 
     @property
-    def org_type(self):
+    def org_type(self) -> Optional[str]:
         """Type of the affiliation.  Requires the STANDARD view and only
         present if profile is org profile.
         """
         return self._profile.get('org-type')
 
     @property
-    def org_URL(self):
+    def org_URL(self) -> Optional[str]:
         """Website of the affiliation.  Requires the STANDARD view."""
         return self._profile.get('org-URL')
 
     @property
-    def postal_code(self):
+    def postal_code(self) -> Optional[str]:
         """The postal code of the affiliation.  Requires the STANDARD view."""
         return chained_get(self._profile, ['address', 'postal-code'])
 
     @property
-    def scopus_affiliation_link(self):
+    def scopus_affiliation_link(self) -> str:
         """Link to the Scopus web view of the affiliation."""
         return get_link(self._json, 2)
 
     @property
-    def self_link(self):
+    def self_link(self) -> str:
         """Link to the affiliation's API page."""
         return get_link(self._json, 0)
 
     @property
-    def search_link(self):
+    def search_link(self) -> str:
         """URL to the API page listing documents of the affiliation."""
         return get_link(self._json, 1)
 
     @property
-    def state(self):
+    def state(self) -> Optional[str]:
         """The state (country's administrative sububunit)
         of the affiliation.   Requires the STANDARD view.
         """
         return chained_get(self._profile, ['address', 'state'])
 
     @property
-    def sort_name(self):
+    def sort_name(self) -> Optional[str]:
         """The name of the affiliation used for sorting.  Requires the
         STANDARD view.
         """
         return self._profile.get('sort-name')
 
     @property
-    def url(self):
+    def url(self) -> str:
         """URL to the affiliation's API page."""
         return self._json['coredata'].get('prism:url')
 
-    def __init__(self, aff_id, refresh=False, view="STANDARD"):
+    def __init__(self,
+                 aff_id: Union[int, str],
+                 refresh: Union[bool, int] = False,
+                 view: str = "STANDARD"
+                 ) -> None:
         """Interaction with the Affiliation Retrieval API.
 
-        Parameters
-        ----------
-        aff_id : str or int
-            The Scopus Affiliation ID.  Optionally expressed
-            as an Elsevier EID (i.e., in the form 10-s2.0-nnnnnnnn).
-
-        refresh : bool or int (optional, default=False)
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
-
-        view : str (optional, default=STANDARD)
-            The view of the file that should be downloaded.  Allowed values:
-            LIGHT, STANDARD, where STANDARD includes all information of the
-            LIGHT view.  For details see
-            https://dev.elsevier.com/sc_affil_retrieval_views.html.
-            Note: Neither the BASIC view nor DOCUMENTS or AUTHORS views are
-            active, although documented.
+        :param aff_id: Scopus ID or EID of the affiliation profile.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
+        :param view: The view of the file that should be downloaded.  Allowed
+                     values: LIGHT, STANDARD, where STANDARD includes all
+                     information of the LIGHT view.  For details see
+                     https://dev.elsevier.com/sc_affil_retrieval_views.html.
+                     Note: Neither the BASIC view nor DOCUMENTS or AUTHORS
+                     views are active, although documented.
 
         Notes
         -----

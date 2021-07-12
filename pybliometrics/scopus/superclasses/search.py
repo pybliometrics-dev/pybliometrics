@@ -7,41 +7,37 @@ from pybliometrics.scopus.utils import get_folder, URLS
 
 
 class Search(Base):
-    def __init__(self, query, api, count=200, max_entries=5000, cursor=False,
-                 download=True, verbose=False, **kwds):
+    def __init__(self,
+                 query: str,
+                 api: str,
+                 count: int = 200,
+                 max_entries: int = 5000,
+                 cursor: bool = False,
+                 download: bool = True,
+                 verbose: bool = False,
+                 **kwds: str
+                 ) -> None:
         """Class intended as superclass to perform a search query.
 
-        Parameters
-        ----------
-        query : str
-            A string of the query.
-
-        api : str
-            The name of the Scopus API to be accessed.  Allowed values:
-            AffiliationSearch, AuthorSearch, ScopusSearch, SerialSearch,
-            SubjectClass
-
-        count : int (optional, default=200)
-            The number of entries to be displayed at once.  A smaller number
-            means more queries with each query having less results.
-
-        max_entries : int (optional, default=5000)
-            Raise error when the number of results is beyond this number.
-            To skip this check, set `max_entries` to `None`. Has no
-            effect if cursor=True.
-
-        cursor : str (optional, default=False)
-            Whether to use the cursor in order to iterate over all search
-            results without limit on the number of the results.  In contrast
-            to `start` parameter, the `cursor` parameter does not allow users
-            to obtain partial results.
-
-        download : bool (optional, default=True)
-            Whether to download results (if they have not been cached) or not.
-
-        kwds : key-value parings, optional
-            Keywords passed on to requests header.  Must contain fields
-            and values specified in the respective API specification.
+        : param query : A string of the query.
+        : param api: The name of the Scopus API to be accessed.  Allowed values:
+                     AffiliationSearch, AuthorSearch, ScopusSearch,
+                     SerialSearch, SubjectClass.
+        :param count: The number of entries to be displayed at once.  A smaller
+                      number means more queries with each query having
+                      fewer results.
+        :param max_entries: Raise error when the number of results is beyond
+                            this number.  To skip this check, set `max_entries`
+                            to `None`. Has no effect if cursor=True.
+        :param cursor: Whether to use the cursor in order to iterate over all
+                      search results without limit on the number of the results.
+                      In contrast to `start` parameter, the `cursor` parameter
+                      does not allow users to obtain partial results.
+        :param download: Whether to download results (if they have not been
+                         cached) or not.
+        :param verbose: Whether to print a download progress bar.
+        :param kwds: Keywords passed on to requests header.  Must contain
+                     fields and values specified in the respective API specification.
 
         Raises
         ------
@@ -69,6 +65,6 @@ class Search(Base):
         Base.__init__(self, params=params, url=URLS[api], download=download,
                       api=api, max_entries=max_entries, verbose=verbose)
 
-    def get_results_size(self):
+    def get_results_size(self) -> int:
         """Return the number of results (works even if download=False)."""
         return self._n

@@ -1,4 +1,5 @@
 from collections import namedtuple
+from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, check_parameter_value,\
@@ -7,7 +8,7 @@ from pybliometrics.scopus.utils import check_integrity, check_parameter_value,\
 
 class ScopusSearch(Search):
     @property
-    def results(self):
+    def results(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples in the form (eid doi pii pubmed_id title
         subtype subtypeDescription creator afid affilname affiliation_city
         affiliation_country author_count author_names author_ids author_afids
@@ -102,59 +103,52 @@ class ScopusSearch(Search):
         check_integrity(out, self._integrity, self._action)
         return out or None
 
-    def __init__(self, query, refresh=False, subscriber=True, view=None,
-                 download=True, integrity_fields=None,
-                 integrity_action="raise", verbose=False, **kwds):
+    def __init__(self,
+                 query: str,
+                 refresh: Union[bool, int] = False,
+                 subscriber: bool = True,
+                 view: str = None,
+                 download: bool = True,
+                 integrity_fields: Union[List[str], Tuple[str, ...]] = None,
+                 integrity_action: str = "raise",
+                 verbose: bool = False,
+                 **kwds: str
+                 ) -> None:
         """Interaction with the Scopus Search API.
 
-        Parameters
-        ----------
-        query : str
-            A string of the query.
-
-        refresh : bool or int (optional, default=False)
-            Whether to refresh the cached file if it exists or not.  If int
-            is passed, cached file will be refreshed if the number of days
-            since last modification exceeds that value.
-
-        subscriber : bool (optional, default=True)
-            Whether the user accesses Scopus with a subscription or not.
-            For subscribers, Scopus's cursor navigation will be used.
-            Sets the number of entries in each query iteration to the maximum
-            number allowed by the corresponding view.
-
-        view : str (optional, default=None)
-            Which view to use for the query, see
-            https://dev.elsevier.com/sc_search_views.html.
-            Allowed values: STANDARD, COMPLETE.  If None, defaults to
-            COMPLETE if subscriber=True and to STANDARD if subscriber=False.
-
-        download : bool (optional, default=True)
-            Whether to download results (if they have not been cached).
-
-        integrity_fields : None or iterable (default=None)
-            Iterable of field names whose completeness should be checked.
-            ScopusSearch will perform the action specified in
-            `integrity_action` if elements in these fields are missing.  This
-            helps avoiding idiosynchratically missing elements that should
-            always be present, such as the EID or the source ID.
-
-        integrity_action : str (optional, default="raise")
-            What to do in case integrity of provided fields cannot be
-            verified.  Possible actions:
-            - "raise": Raise an AttributeError
-            - "warn": Raise a UserWarning
-
-        verbose : bool (optional, default=False)
-            Whether to print a downloading progress bar to terminal.
-            Has no effect for download=False or when query file is
-            in cache.
-
-        kwds : key-value parings, optional
-            Keywords passed on as query parameters.  Must contain fields
-            and values listed mentioned in the API specification
-            (https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl),
-            such as "field" or "date".
+        :param query: A string of the query as used in the Advanced Search
+                     on scopus.com.  All fields except "INDEXTERMS()" and
+                     "LIMIT-TO()" work.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
+        :param subscriber: Whether you access Scopus with a subscription or not.
+                           For subscribers, Scopus's cursor navigation will be
+                           used.  Sets the number of entries in each query
+                           iteration to the maximum number allowed by the
+                           corresponding view.
+        :param view: Which view to use for the query, see
+                     https://dev.elsevier.com/sc_search_views.html.
+                     Allowed values: STANDARD, COMPLETE.  If None, defaults to
+                     COMPLETE if `subscriber=True` and to STANDARD if
+                     `subscriber=False`.
+        :param download: Whether to download results (if they have not been
+                         cached).
+        :param integrity_fields: Names of fields whose completeness should
+                                 be checked.  ScopusSearch will perform the
+                                 action specified in `integrity_action` if
+                                 elements in these fields are missing.  This
+                                 helps avoiding idiosynchratically missing
+                                 elements that should always be present
+                                 (e.g., EID or source ID).
+        :param integrity_action: What to do in case integrity of provided fields
+                                 cannot be verified.  Possible actions:
+                                 - "raise": Raise an AttributeError
+                                 - "warn": Raise a UserWarning
+        :param verbose: Whether to print a download progress bar.
+        :param kwds: Keywords passed on as query parameters.  Must contain
+                     fields and values mentioned in the API specification at
+                     https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl.
 
         Raises
         ------

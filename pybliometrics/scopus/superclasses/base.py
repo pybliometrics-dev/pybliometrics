@@ -2,6 +2,7 @@
 
 from json import dumps, loads
 from time import localtime, strftime, time
+from typing import Dict, Optional
 
 from pybliometrics.scopus.exception import ScopusQueryError
 from pybliometrics.scopus.utils import get_content
@@ -9,35 +10,27 @@ from tqdm import tqdm
 
 
 class Base:
-    def __init__(self, params, url, api, download=True, max_entries=None,
-                 verbose=False, *args, **kwds):
+    def __init__(self,
+                 params: Dict,
+                 url: str,
+                 api: str,
+                 download: bool = True,
+                 max_entries: int = None,
+                 verbose: bool = False,
+                 *args: str, **kwds: str
+                 ) -> None:
         """Class intended as base class for superclasses.
 
-        Parameters
-        ----------
-        params : dict
-            Dictionary used as header during the API request.
-
-        url : str
-            The URL to be accessed.
-
-        api : str
-            The Scopus API to be accessed.
-
-        download : bool (optional, default=True)
-            Whether to download the query or not.  Has no effect for
-            retrieval requests.
-
-        max_entries : int (optional, default=None)
-            Raise error when the number of results is beyond this number.
-            Has no effect for retrieval requests.
-
-        verbose : bool (optional, default=False)
-            Whether to print a progress bar for multip-page requests.
-
-        *args, **kwds
-            Arguments and key-value pairings to be passed on
-            to `get_content()`.
+        :param params: Dictionary used as header during the API request.
+        :param url: The URL to be accessed.
+        :param api: The Scopus API to be accessed.
+        :param  download: Whether to download the query or not.  Has no effect
+                          for retrieval requests.
+        :param max_entries: Raise error when the number of results is beyond
+                            this number.  Has no effect for retrieval requests.
+        :param verbose: Whether to print a download progress bar.
+        :param args: Keywords passed on `get_content()`
+        :param kwds: Keywords passed on `get_content()`
 
         Raises
         ------
@@ -106,16 +99,16 @@ class Base:
                 text = [dumps(item, separators=(',', ':')) for item in data]
                 fname.write_text("\n".join(text))
 
-    def get_cache_file_age(self):
+    def get_cache_file_age(self) -> int:
         """Return the age of the cached file in days."""
         diff = time() - self._mdate
         return int(diff / 86400)
 
-    def get_cache_file_mdate(self):
+    def get_cache_file_mdate(self) -> str:
         """Return the modification date of the cached file."""
         return strftime('%Y-%m-%d %H:%M:%S', localtime(self._mdate))
 
-    def get_key_remaining_quota(self):
+    def get_key_remaining_quota(self) -> Optional[str]:
         """Return number of remaining requests for the current key and the
         current API (relative on last actual request).
         """
@@ -124,7 +117,7 @@ class Base:
         except AttributeError:
             return None
 
-    def get_key_reset_time(self):
+    def get_key_reset_time(self) -> Optional[str]:
         """Return time when current key is reset (relative on last
         actual request).
         """

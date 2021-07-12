@@ -15,7 +15,6 @@ sys.path.insert(0, project_root)
 import pybliometrics
 
 # General configuration
-needs_sphinx = '1.3'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
@@ -23,7 +22,9 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
-    'sphinx.ext.viewcode']
+    'sphinx.ext.viewcode',
+    'sphinx_autodoc_typehints',
+    'sphinx_autodoc_defaultargs']
 
 templates_path = ['_templates']
 source_suffix = '.rst'
@@ -68,6 +69,16 @@ autoclass_content = 'both'
 
 # Option to group members of classes
 autodoc_member_order = 'bysource'
+
+# Type hints
+autodoc_typehints = "description"
+napoleon_use_param = True
+typehints_document_rtype = False
+rst_prolog = """
+.. |default| raw:: html
+
+    <div class="default-value-section">""" + \
+    ' <span class="default-value-label">Default:</span>'
 
 # -- Options for LaTeX output ---------------------------------------------
 latex_elements = {
