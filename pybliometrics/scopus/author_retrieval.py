@@ -286,7 +286,7 @@ class AuthorRetrieval(Retrieval):
         fields = 'surname given_name id areas affiliation_id name city country'
         coauth = namedtuple('Coauthor', fields)
         coauthors = []
-        # Iterate over search results in chunks of 25 results
+        # Iterate over search results in chunks of `SIZE` results
         count = SIZE
         start = 0
         while start < N:
@@ -313,18 +313,14 @@ class AuthorRetrieval(Retrieval):
 
     def get_documents(self,
                       subtypes: List[str] = None,
-                      **kwds: str
+                      *args: str, **kwds: str
                       ) -> Optional[List[NamedTuple]]:
         """Return list of the author's publications using a ScopusSearch()
         query, where publications may fit specified set of document subtypes.
 
         :param subtypes: The type of documents that should be returned.
+        :param args: Parameters to be passed on to ScopusSearch().
         :param kwds: Parameters to be passed on to ScopusSearch().
-
-        Returns
-        -------
-        results : list of namedtuple
-            The same type of results returned from any ScopusSearch().
         """
         s = ScopusSearch(f'AU-ID({self.identifier})', **kwds)
         if subtypes:
@@ -332,12 +328,14 @@ class AuthorRetrieval(Retrieval):
         else:
             return s.results
 
-    def get_document_eids(self, *args: str, **kwds: str) -> List[Optional[str]]:
+    def get_document_eids(self,
+                          *args: str, **kwds: str
+                          ) -> Optional[List[str]]:
         """Return list of EIDs of the author's publications using
         a ScopusSearch() query.
 
-        :param args: Parameters to be passed on to AuthorSearch().
-        :param kwds: Parameters to be passed on to AuthorSearch().
+        :param args: Parameters to be passed on to ScopusSearch().
+        :param kwds: Parameters to be passed on to ScopusSearch().
         """
         s = ScopusSearch(f'AU-ID({self.identifier})', *args, **kwds)
         return s.get_eids()
@@ -345,9 +343,10 @@ class AuthorRetrieval(Retrieval):
     def estimate_uniqueness(self,
                             query: str = None,
                             *args: str,
-                            **kwds: str) -> int:
-        """Estimate how unqiue a profile is by get the number of
-        matches of an AuthorSearch for this person.
+                            **kwds: str
+                            ) -> int:
+        """Return the number of Scopus author profiles similar to this profile
+        via calls with AuthorSearch().
 
         :param query: The query string to perform to search for authors.  If
                       `None`, the query is of form "AUTHLAST() AND AUTHFIRST()"
@@ -357,13 +356,8 @@ class AuthorRetrieval(Retrieval):
                       https://dev.elsevier.com/tips/AuthorSearchTips.htm.
         :param args: Parameters to be passed on to AuthorSearch().
         :param kwds: Parameters to be passed on to AuthorSearch().
-
-        Returns
-        -------
-        n : int
-            The number of matches of the query.
         """
         if not query:
             query = f"AUTHLAST({self.surname}) AND AUTHFIRST({self.given_name})"
-        s = AuthorSearch(query, **kwds)
+        s = AuthorSearch(query, *args, **kwds)
         return s.get_results_size()
