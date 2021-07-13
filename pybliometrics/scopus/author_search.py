@@ -53,11 +53,11 @@ class AuthorSearch(Search):
     def __init__(self,
                  query: str,
                  refresh: Union[bool, int] = False,
-                 count: int = 200,
+                 verbose: bool = False,
                  download: bool = True,
                  integrity_fields: Union[List[str], Tuple[str, ...]] = None,
                  integrity_action: str = "raise",
-                 verbose: bool = False
+                 count: int = 200
                  ) -> None:
         """Interaction with the Author Search API.
 
@@ -66,11 +66,9 @@ class AuthorSearch(Search):
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
-        :param count: The number of entries to be displayed at once.  A smaller
-                      number means more queries with each query having
-                      fewer results.
         :param download: Whether to download results (if they have not been
                          cached).
+        :param verbose: Whether to print a download progress bar.
         :param integrity_fields: Names of fields whose completeness should
                                  be checked.  ScopusSearch will perform the
                                  action specified in `integrity_action` if
@@ -82,7 +80,9 @@ class AuthorSearch(Search):
                                  cannot be verified.  Possible actions:
                                  - "raise": Raise an AttributeError
                                  - "warn": Raise a UserWarning
-        :param verbose: Whether to print a download progress bar.
+        :param count: The number of entries to be displayed at once.  A smaller
+                      number means more queries with each query having
+                      fewer results.
 
         Raises
         ------

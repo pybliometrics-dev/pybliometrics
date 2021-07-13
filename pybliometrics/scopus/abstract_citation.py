@@ -139,8 +139,8 @@ class CitationOverview(Retrieval):
                  eid: str,
                  start: Union[int, str],
                  end: Union[int, str] = datetime.now().year,
-                 citation: Optional[str] = None,
-                 refresh: Union[bool, int] = False
+                 refresh: Union[bool, int] = False,
+                 citation: Optional[str] = None
                  ) -> None:
         """Interaction witht the Citation Overview API.
 
@@ -149,12 +149,12 @@ class CitationOverview(Retrieval):
                       be loaded.
         :param end: The last year for which the citation count should be
                     loaded. Defaults to the current year.
-        :param citation: Allows for the exclusion of self-citations or those by books.
-                         If `None`, will count all citations.
-                         Allowed values: None, exclude-self, exclude-books
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
+        :param citation: Allows for the exclusion of self-citations or those by books.
+                         If `None`, will count all citations.
+                         Allowed values: None, exclude-self, exclude-books
 
         Notes
         -----

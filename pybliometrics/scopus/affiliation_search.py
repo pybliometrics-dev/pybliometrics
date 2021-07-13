@@ -45,11 +45,11 @@ class AffiliationSearch(Search):
     def __init__(self,
                  query: str,
                  refresh: Union[bool, int] = False,
+                 verbose: bool = False,
                  download: bool = True,
-                 count: int = 200,
                  integrity_fields: Union[List[str], Tuple[str, ...]] = None,
                  integrity_action: str = "raise",
-                 verbose: bool = False
+                 count: int = 200
                  ) -> None:
         """Interaction with the Affiliation Search API.
 
@@ -58,9 +58,7 @@ class AffiliationSearch(Search):
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
-        :param count: The number of entries to be displayed at once.  A smaller
-                      number means more queries with each query having
-                      fewer results.
+        :param verbose: Whether to print a download progress bar.
         :param download: Whether to download results (if they have not been
                          cached).
         :param integrity_fields: Names of fields whose completeness should
@@ -74,7 +72,9 @@ class AffiliationSearch(Search):
                                  cannot be verified.  Possible actions:
                                  - "raise": Raise an AttributeError
                                  - "warn": Raise a UserWarning
-        :param verbose: Whether to print a download progress bar.
+        :param count: The number of entries to be displayed at once.  A smaller
+                      number means more queries with each query having
+                      fewer results.
 
         Raises
         ------

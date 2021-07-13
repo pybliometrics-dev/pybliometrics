@@ -35,8 +35,8 @@ class SubjectClassifications(Search):
 
     def __init__(self,
                  query: Dict,
-                 fields: Union[List[str], Tuple[str, ...]] = None,
-                 refresh: Union[bool, int] = False
+                 refresh: Union[bool, int] = False,
+                 fields: Union[List[str], Tuple[str, ...]] = None
                  ) -> None:
         """Interaction with the Subject Classifications Scopus API.
 
@@ -44,13 +44,13 @@ class SubjectClassifications(Search):
                       'code', 'abbrev', 'description', 'detail'. For more
                       details on search fields please refer to
                       https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl#d1e199.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
         :param fields: The fields to return when calling search results.
                        Allowed values: 'code', 'abbrev', 'description',
                        'detail'.  For details see
                        https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl#d1e199.
-        :param refresh: Whether to refresh the cached file if it exists or not.
-                        If int is passed, cached file will be refreshed if the
-                        number of days since last modification exceeds that value.
 
         Raises
         ------

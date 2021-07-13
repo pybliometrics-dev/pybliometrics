@@ -106,12 +106,12 @@ class ScopusSearch(Search):
     def __init__(self,
                  query: str,
                  refresh: Union[bool, int] = False,
-                 subscriber: bool = True,
                  view: str = None,
+                 verbose: bool = False,
                  download: bool = True,
                  integrity_fields: Union[List[str], Tuple[str, ...]] = None,
                  integrity_action: str = "raise",
-                 verbose: bool = False,
+                 subscriber: bool = True,
                  **kwds: str
                  ) -> None:
         """Interaction with the Scopus Search API.
@@ -122,16 +122,12 @@ class ScopusSearch(Search):
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
-        :param subscriber: Whether you access Scopus with a subscription or not.
-                           For subscribers, Scopus's cursor navigation will be
-                           used.  Sets the number of entries in each query
-                           iteration to the maximum number allowed by the
-                           corresponding view.
         :param view: Which view to use for the query, see
                      https://dev.elsevier.com/sc_search_views.html.
                      Allowed values: STANDARD, COMPLETE.  If None, defaults to
                      COMPLETE if `subscriber=True` and to STANDARD if
                      `subscriber=False`.
+        :param verbose: Whether to print a download progress bar.
         :param download: Whether to download results (if they have not been
                          cached).
         :param integrity_fields: Names of fields whose completeness should
@@ -145,7 +141,11 @@ class ScopusSearch(Search):
                                  cannot be verified.  Possible actions:
                                  - "raise": Raise an AttributeError
                                  - "warn": Raise a UserWarning
-        :param verbose: Whether to print a download progress bar.
+        :param subscriber: Whether you access Scopus with a subscription or not.
+                           For subscribers, Scopus's cursor navigation will be
+                           used.  Sets the number of entries in each query
+                           iteration to the maximum number allowed by the
+                           corresponding view.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl.
