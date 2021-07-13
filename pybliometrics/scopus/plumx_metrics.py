@@ -12,19 +12,11 @@ class PlumXMetrics(Retrieval):
         by PlumX Metrics in the form (capture, citation, mention, socialMedia,
         usage).
 
-        Note: For Citation category a maximum citation count across sources is
-        shown.  For details on PlumX Metrics categories see
+        Note: For Citation category a maximum citation count across sources
+        is shown.  For details on PlumX Metrics categories see
         https://plumanalytics.com/learn/about-metrics/.
         """
-        out = []
-        fields = 'name total'
-        cat = namedtuple('Category', fields)
-        for item in self._json.get('count_categories', []):
-            if item.get('name') and item.get('total'):
-                new = cat(name=item.get('name'),
-                          total=item.get('total'))
-                out.append(new)
-        return out or None
+        return _format_as_namedtuple_list(self._count_categories, "Category") or None
 
     @property
     def capture(self) -> Optional[List[NamedTuple]]:
@@ -33,9 +25,8 @@ class PlumXMetrics(Retrieval):
         Note: For details on Capture metrics see
         https://plumanalytics.com/learn/about-metrics/capture-metrics/.
         """
-        categories = self._json.get('count_categories', [])
-        mention_metrics = _category_metrics('capture', categories)
-        return _list_metrics_totals(mention_metrics) or None
+        metrics = _get_category_metrics('capture', self._count_categories)
+        return _format_as_namedtuple_list(metrics) or None
 
     @property
     def citation(self) -> Optional[List[NamedTuple]]:
@@ -45,14 +36,11 @@ class PlumXMetrics(Retrieval):
         Note: For details on Citation metrics see
         https://plumanalytics.com/learn/about-metrics/citation-metrics/.
         """
-        categories = self._json.get('count_categories', [])
-        citation_metrics = _category_metrics('citation', categories)
-        source_metrics = []
-        if citation_metrics:
-            for item in citation_metrics:
-                if item.get('sources'):
-                    source_metrics += item.get('sources')
-        return _list_metrics_totals(source_metrics) or None
+        metrics = []
+        for item in _get_category_metrics('citation', self._count_categories):
+            if item.get('sources'):
+                metrics += item['sources']
+        return _format_as_namedtuple_list(metrics) or None
 
     @property
     def mention(self) -> Optional[List[NamedTuple]]:
@@ -61,9 +49,8 @@ class PlumXMetrics(Retrieval):
         Note: For details on Mention metrics see
         https://plumanalytics.com/learn/about-metrics/mention-metrics/.
         """
-        categories = self._json.get('count_categories', [])
-        mention_metrics = _category_metrics('mention', categories)
-        return _list_metrics_totals(mention_metrics) or None
+        metrics = _get_category_metrics('mention', self._count_categories)
+        return _format_as_namedtuple_list(metrics) or None
 
     @property
     def social_media(self) -> Optional[List[NamedTuple]]:
@@ -72,9 +59,8 @@ class PlumXMetrics(Retrieval):
         Note: For details on Social Media metrics see
         https://plumanalytics.com/learn/about-metrics/social-media-metrics/.
         """
-        categories = self._json.get('count_categories', [])
-        social_metrics = _category_metrics('socialMedia', categories)
-        return _list_metrics_totals(social_metrics) or None
+        metrics = _get_category_metrics('socialMedia', self._count_categories)
+        return _format_as_namedtuple_list(metrics) or None
 
     @property
     def usage(self) -> Optional[List[NamedTuple]]:
@@ -83,9 +69,8 @@ class PlumXMetrics(Retrieval):
         Note: For details on Usage metrics see
         https://plumanalytics.com/learn/about-metrics/usage-metrics/.
         """
-        categories = self._json.get('count_categories', [])
-        usage_metrics = _category_metrics('usage', categories)
-        return _list_metrics_totals(usage_metrics) or None
+        metrics = _get_category_metrics('usage', self._count_categories)
+        return _format_as_namedtuple_list(metrics) or None
 
     def __init__(self,
                  identifier: str,
@@ -158,6 +143,7 @@ class PlumXMetrics(Retrieval):
         self._view = 'ENHANCED'
         Retrieval.__init__(self, identifier=identifier, id_type=id_type,
                            api='PlumXMetrics')
+        self._count_categories = self._json.get('count_categories', [])
 
     def __str__(self):
         """Print a summary string."""
@@ -169,28 +155,19 @@ class PlumXMetrics(Retrieval):
         return s
 
 
-def _category_metrics(category_name, categories_list):
+def _format_as_namedtuple_list(metric_counts, tuple_name='Metric'):
+    """Formats list of dicts of metrics into list of namedtuples in the
+    form (name, total).
+    """
+    metric = namedtuple(tuple_name, 'name total')
+    return [metric(name=t['name'], total=t['total']) for t in metric_counts]
+
+
+def _get_category_metrics(cat_name, cat_list):
     """Auxiliary function returning all available metrics in a single
-    category as a list of dicts
+    category as a list of dicts.
     """
-    cat_counts = []
-    for item in categories_list:
-        if item.get('name') == category_name:
-            cat_counts += item.get('count_types', [])
-    return cat_counts
-
-
-def _list_metrics_totals(metric_counts):
-    """Formats list of dicts of metrics into list of namedtuples in form
-    (name, total)
-    """
-    out = []
-    # Metric names and associated counts if either is not None
-    values = [[m.get('name'), m.get('total')] for m in metric_counts
-              if m.get('name') and m.get('total')]
-    fields = 'name total'
-    capture = namedtuple('Metric', fields)
-    for v in values:
-        new = capture(name=v[0], total=v[1])
-        out.append(new)
-    return out
+    for e in cat_list:
+        if e['name'] == cat_name:
+            return e['count_types']
+    return []
