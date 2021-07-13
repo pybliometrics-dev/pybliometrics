@@ -58,6 +58,13 @@ def test_affiliation_history():
         assert_true(expected in received)
 
 
+def test_alias():
+    assert_equal(metrics.alias, None)
+    assert_equal(light.alias, None)
+    assert_equal(standard.alias, None)
+    assert_equal(enhanced.alias, None)
+
+
 def test_citation_count():
     expected = '13600'
     assert_true(metrics.citation_count >= expected)

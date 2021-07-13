@@ -12,8 +12,8 @@ standard = AffiliationRetrieval('60000356', refresh=30, view="STANDARD")
 
 
 def test_address():
-    assert_equal(light.address, 'Private Bag X3, Rondebosch')
-    assert_equal(standard.address, 'Private Bag X3, Rondebosch')
+    assert_equal(light.address, 'Private Bag X3')
+    assert_equal(standard.address, 'Private Bag X3')
 
 
 def test_affiliation_name():
