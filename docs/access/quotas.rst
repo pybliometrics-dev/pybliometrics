@@ -5,6 +5,6 @@ Each API key has a certain usage limit for different Scopus APIs. See https://de
 
 One week after the first usage, Scopus resets the key.
 
-`pybliometrics` will use all the keys provided in the :doc:`configuration file <../configuration>` when one key exceeded its quota for the given API. You can associate to 10 keys with your Scopus account, so be sure to put all of them in the config.ini.
+`pybliometrics` will use all the keys provided in the :doc:`configuration file <../configuration>` when one key exceeded its quota for the given API. Be sure to put all keys in the config.ini.
 
 When the last key has been depleted as well, `pybliometrics` throws an a :ref:`pybliometrics.scopus.exception.Scopus429Error <Scopus429Error>`. In this case you need to restart the application one week after it has been started.

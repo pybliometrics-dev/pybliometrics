@@ -55,8 +55,9 @@ Indices and tables
    :hidden:
 
    classes
-   tips
+   access
    configuration
+   tips
    changelog
    authors
    contributing
