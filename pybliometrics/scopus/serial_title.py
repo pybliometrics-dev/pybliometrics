@@ -2,7 +2,8 @@ from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
-from pybliometrics.scopus.utils import check_parameter_value, get_link
+from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
+    get_link
 
 
 class SerialTitle(Retrieval):
@@ -12,7 +13,7 @@ class SerialTitle(Retrieval):
         return self._entry['prism:aggregationType']
 
     @property
-    def citescoreyearinfolist(self) -> Optional[List[Tuple[str, str]]]:
+    def citescoreyearinfolist(self) -> Optional[List[Tuple[int, float]]]:
         """A list of two tuples of the form (year, cite-score).  The first
         tuple represents the current cite-score, the second tuple
         represents the tracker cite-score."""
@@ -20,8 +21,10 @@ class SerialTitle(Retrieval):
             d = self._entry['citeScoreYearInfoList']
         except KeyError:
             return None
-        current = (d['citeScoreCurrentMetricYear'], d['citeScoreCurrentMetric'])
-        tracker = (d['citeScoreTrackerYear'], d['citeScoreTracker'])
+        current = (int(d['citeScoreCurrentMetricYear']),
+                   float(d['citeScoreCurrentMetric']))
+        tracker = (int(d['citeScoreTrackerYear']),
+                   float(d['citeScoreTracker']))
         return [current, tracker]
 
     @property
@@ -40,9 +43,9 @@ class SerialTitle(Retrieval):
         return self._entry.get('oaAllowsAuthorPaid')
 
     @property
-    def openaccess(self) -> Optional[str]:
+    def openaccess(self) -> Optional[int]:
         """Open Access status (0 or 1)."""
-        return self._entry.get('openaccess')
+        return chained_get(self._entry, ['openaccess'], integer=True)
 
     @property
     def openaccessstartdate(self):
@@ -95,7 +98,7 @@ class SerialTitle(Retrieval):
         return get_link(self._json, 0, ["link"])
 
     @property
-    def sjrlist(self) -> Optional[List[Tuple[str, str]]]:
+    def sjrlist(self) -> Optional[List[Tuple[int, float]]]:
         """The SCImago Journal Rank (SJR) indicator as list of
         (year, indicator)-tuples.  See
         https://www.scimagojr.com/journalrank.php.
@@ -103,7 +106,7 @@ class SerialTitle(Retrieval):
         return _parse_list(self._entry, "SJR")
 
     @property
-    def sniplist(self) -> Optional[List[Tuple[str, str]]]:
+    def sniplist(self) -> Optional[List[Tuple[int, float]]]:
         """The Source-Normalized Impact per Paper (SNIP) as list of
         (year, indicator)-tuples.  See
         https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip.
@@ -111,9 +114,9 @@ class SerialTitle(Retrieval):
         return _parse_list(self._entry, "SNIP")
 
     @property
-    def source_id(self) -> str:
+    def source_id(self) -> int:
         """The Scopus ID of the source."""
-        return self._entry['source-id']
+        return int(self._entry['source-id'])
 
     @property
     def subject_area(self) -> Optional[List[NamedTuple]]:
@@ -121,7 +124,7 @@ class SerialTitle(Retrieval):
         (area, abbreviation, code) of the source.
         """
         area = namedtuple('Subjectarea', 'area abbreviation code')
-        areas = [area(area=item['$'], code=item['@code'],
+        areas = [area(area=item['$'], code=int(item['@code']),
                       abbreviation=item['@abbrev'])
                  for item in self._entry["subject-area"]]
         return areas or None
@@ -205,7 +208,8 @@ class SerialTitle(Retrieval):
 def _parse_list(d, metric):
     """Auxiliary function to parse SNIP and SJR lists."""
     try:
-        values = [(r['@year'], r['$']) for r in d[metric + "List"][metric]]
+        values = [(int(r['@year']), float(r['$'])) for r
+                  in d[metric + "List"][metric]]
         return sorted(set(values))
     except (KeyError, TypeError):
         return None

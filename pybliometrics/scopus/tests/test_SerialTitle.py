@@ -19,7 +19,7 @@ def test_aggregation_type():
 
 
 def test_citescoreyearinfolist():
-    expected1 = [('2020', '2.8'), ('2021', '2.9')]
+    expected1 = [(2020, 2.8), (2021, 2.9)]
     assert_equal(sofwarex.citescoreyearinfolist, expected1)
     assert_equal(oecd.citescoreyearinfolist, None)
 
@@ -40,7 +40,7 @@ def test_oaallowsauthorpaid():
 
 
 def test_openaccess():
-    assert_equal(sofwarex.openaccess, '1')
+    assert_equal(sofwarex.openaccess, 1)
     assert_equal(oecd.openaccess, None)
 
 
@@ -93,29 +93,29 @@ def test_self_link():
     assert_equal(oecd.self_link, expected2)
 
 def test_sjrlist():
-    assert_equal(sofwarex.sjrlist, [('2019', '0.445'), ('2020', '0.528')])
-    assert_equal(oecd.sjrlist, [('1999', '2.723')])
+    assert_equal(sofwarex.sjrlist, [(2019, 0.445), (2020, 0.528)])
+    assert_equal(oecd.sjrlist, [(1999, 2.723)])
 
 
 def test_sniplist():
-    assert_equal(sofwarex.sniplist, [('2019', '1.013'), ('2020', '1.093')])
+    assert_equal(sofwarex.sniplist, [(2019, 1.013), (2020, 1.093)])
     assert_equal(oecd.sniplist, None)
 
 
 def test_source_id():
-    assert_equal(sofwarex.source_id, "21100422153")
-    assert_equal(oecd.source_id, "24107")
+    assert_equal(sofwarex.source_id, 21100422153)
+    assert_equal(oecd.source_id, 24107)
 
 
 def test_subject_area():
     area = namedtuple('Subjectarea', 'area abbreviation code')
     expected1 = [
-        area(area='Software', abbreviation='COMP', code='1712'),
-        area(area='Computer Science Applications', abbreviation='COMP', code='1706')
+        area(area='Software', abbreviation='COMP', code=1712),
+        area(area='Computer Science Applications', abbreviation='COMP', code=1706)
     ]
     assert_equal(sofwarex.subject_area, expected1)
     expected2 = [
-        area(area='Geography, Planning and Development', abbreviation='SOCI', code='3305')
+        area(area='Geography, Planning and Development', abbreviation='SOCI', code=3305)
     ]
     assert_equal(oecd.subject_area, expected2)
 

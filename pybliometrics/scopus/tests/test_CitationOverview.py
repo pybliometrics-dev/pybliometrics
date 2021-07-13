@@ -15,13 +15,12 @@ def test_authors():
     Author = namedtuple('Author', 'name surname initials id url')
     url = 'https://api.elsevier.com/content/author/author_id/7004212771'
     expected = [Author(name='Kitchin J.R.', surname='Kitchin',
-                initials='J.R.', id='7004212771',
-                url=url)]
+                initials='J.R.', id='7004212771', url=url)]
     assert_equal(co.authors, expected)
 
 
 def test_cc():
-    assert_equal(co.cc, [(2015, '0'), (2016, '4'), (2017, '2'), (2018, '2')])
+    assert_equal(co.cc, [(2015, 0), (2016, 4), (2017, 2), (2018, 2)])
 
 
 def test_citationType_long():
@@ -41,7 +40,7 @@ def test_endingPage():
 
 
 def test_h_index():
-    assert_equal(co.h_index, '1')
+    assert_equal(co.h_index, 1)
 
 
 def test_issn():
@@ -53,11 +52,11 @@ def test_issueIdentifier():
 
 
 def test_lcc():
-    assert_true(int(co.lcc) >= 0)
+    assert_true(co.lcc >= 0)
 
 
 def test_pcc():
-    assert_equal(co.pcc, '0')
+    assert_equal(co.pcc, 0)
 
 
 def test_pii():
@@ -69,15 +68,15 @@ def test_publicationName():
 
 
 def test_rangeCount():
-    assert_true(int(co.rangeCount) >= 7)
+    assert_true(co.rangeCount >= 7)
 
 
 def test_rowTotal():
-    assert_true(int(co.rowTotal) >= 7)
+    assert_true(co.rowTotal >= 7)
 
 
 def test_scopus_id():
-    assert_equal(co.scopus_id, '84930616647')
+    assert_equal(co.scopus_id, 84930616647)
 
 
 def test_startingPage():

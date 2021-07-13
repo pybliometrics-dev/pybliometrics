@@ -49,14 +49,14 @@ class AuthorRetrieval(Retrieval):
         return self._alias
 
     @property
-    def citation_count(self) -> str:
+    def citation_count(self) -> int:
         """Total number of citing items."""
-        return self._json['coredata'].get('citation-count', '0')
+        return int(self._json['coredata']['citation-count'])
 
     @property
-    def cited_by_count(self) -> str:
+    def cited_by_count(self) -> int:
         """Total number of citing authors."""
-        return self._json['coredata'].get('cited-by-count', '0')
+        return int(self._json['coredata']['cited-by-count'])
 
     @property
     def classificationgroup(self) -> Optional[List[Tuple[str, str]]]:
@@ -67,9 +67,9 @@ class AuthorRetrieval(Retrieval):
         return out or None
 
     @property
-    def coauthor_count(self) -> str:
+    def coauthor_count(self) -> Optional[int]:
         """Total number of coauthors."""
-        return self._json.get('coauthor-count')
+        return chained_get(self._json, ['coauthor-count'], integer=True)
 
     @property
     def coauthor_link(self) -> Optional[str]:
@@ -85,9 +85,9 @@ class AuthorRetrieval(Retrieval):
             return None
 
     @property
-    def document_count(self) -> str:
+    def document_count(self) -> int:
         """Number of documents authored (excludes book chapters and notes)."""
-        return self._json['coredata'].get('document-count', '0')
+        return int(self._json['coredata']['document-count'])
 
     @property
     def eid(self) -> Optional[str]:
@@ -105,18 +105,18 @@ class AuthorRetrieval(Retrieval):
     @property
     def h_index(self) -> Optional[str]:
         """The author's h-index."""
-        return self._json.get('h-index')
+        return chained_get(self._json, ['h-index'], integer=True)
 
     @property
-    def historical_identifier(self) -> Optional[List[str]]:
+    def historical_identifier(self) -> Optional[List[int]]:
         """Scopus IDs of previous profiles now compromising this profile."""
         hist = chained_get(self._json, ["coredata", 'historical-identifier'], [])
-        return [d['$'].split(":")[-1] for d in hist] or None
+        return [int(d['$'].split(":")[-1]) for d in hist] or None
 
     @property
-    def identifier(self) -> str:
+    def identifier(self) -> int:
         """The author's ID.  Might differ from the one provided."""
-        ident = self._json['coredata']['dc:identifier'].split(":")[-1]
+        ident = int(self._json['coredata']['dc:identifier'].split(":")[-1])
         if ident != self._id:
             text = f"Profile with ID {self._id} has been merged and the new "\
                    f"ID is {ident}.  Please update your records manually.  "\
@@ -153,11 +153,11 @@ class AuthorRetrieval(Retrieval):
         return self._json['coredata'].get('orcid')
 
     @property
-    def publication_range(self) -> Optional[Tuple[str, str]]:
+    def publication_range(self) -> Optional[Tuple[int, int]]:
         """Tuple containing years of first and last publication."""
         r = self._profile.get('publication-range')
         try:
-            return r['@start'], r['@end']
+            return int(r['@start']), int(r['@end'])
         except TypeError:
             return None
 
@@ -188,7 +188,7 @@ class AuthorRetrieval(Retrieval):
         """
         path = ['subject-areas', 'subject-area']
         area = namedtuple('Subjectarea', 'area abbreviation code')
-        areas = [area(area=item['$'], code=item['@code'],
+        areas = [area(area=item['$'], code=int(item['@code']),
                       abbreviation=item['@abbrev'])
                  for item in chained_get(self._json, path, [])]
         return areas or None

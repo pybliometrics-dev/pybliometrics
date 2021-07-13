@@ -27,14 +27,14 @@ class CitationOverview(Retrieval):
         return out or None
 
     @property
-    def cc(self) -> List[Tuple]:
-        """List of tuples of yearly number of citations
-        for specified years."""
+    def cc(self) -> List[Tuple[int, int]]:
+        """List of tuples of yearly number of citations for specified years."""
         _years = range(self._start, self._end+1)
         try:
-            return list(zip(_years, [d.get('$') for d in self._citeInfoMatrix['cc']]))
+            cites = [int(d['$']) for d in self._citeInfoMatrix['cc']]
         except AttributeError:  # No citations
-            return list(zip(_years, [0]*len(_years)))
+            cites = [0]*len(_years)
+        return list(zip(_years, cites))
 
     @property
     def citationType_long(self) -> str:
@@ -57,9 +57,9 @@ class CitationOverview(Retrieval):
         return self._citeInfoMatrix.get('endingPage')
 
     @property
-    def h_index(self) -> str:
-        """h-index of ciations of the abstract (according to Scopus)."""
-        return self._data['h-index']
+    def h_index(self) -> int:
+        """h-index of ciations of the document."""
+        return int(self._data['h-index'])
 
     @property
     def issn(self) -> Optional[Union[str, Tuple[str, str]]]:
@@ -75,18 +75,16 @@ class CitationOverview(Retrieval):
         return self._citeInfoMatrix.get('issueIdentifier')
 
     @property
-    def lcc(self) -> str:
-        """Number of citations the abstract received
-        after the specified end year.
+    def lcc(self) -> int:
+        """Number of citations after the specified end year.
         """
-        return self._citeInfoMatrix.get('lcc')
+        return int(self._citeInfoMatrix.get('lcc'))
 
     @property
-    def pcc(self) -> str:
-        """Number of citations the abstract received
-        before the specified start year.
+    def pcc(self) -> int:
+        """Number of citations before the specified start year.
         """
-        return self._citeInfoMatrix.get('pcc')
+        return int(self._citeInfoMatrix.get('pcc'))
 
     @property
     def pii(self) -> Optional[str]:
@@ -99,26 +97,26 @@ class CitationOverview(Retrieval):
         return self._citeInfoMatrix.get('publicationName')
 
     @property
-    def scopus_id(self) -> str:
-        """The Scopus ID of the abstract.  It is the second part of an EID.
-        The Scopus ID might differ from the one provided.
+    def rangeCount(self) -> int:
+        """Number of citations for specified years."""
+        return int(self._citeInfoMatrix.get('rangeCount'))
+
+    @property
+    def rowTotal(self) -> int:
+        """Number of citations (specified and omitted years)."""
+        return int(self._citeInfoMatrix.get('rowTotal'))
+
+    @property
+    def scopus_id(self) -> int:
+        """The Scopus ID of the abstract.  Might differ from the
+        one provided.
         """
-        return self._identifierlegend.get('scopus_id')
+        return int(self._identifierlegend.get('scopus_id'))
 
     @property
     def startingPage(self) -> Optional[str]:
         """Starting page."""
         return self._citeInfoMatrix.get('startingPage')
-
-    @property
-    def rangeCount(self) -> Optional[str]:
-        """Number of citations for specified years."""
-        return self._citeInfoMatrix.get('rangeCount')
-
-    @property
-    def rowTotal(self) -> Optional[str]:
-        """Number of citations (specified and omitted years)."""
-        return self._citeInfoMatrix.get('rowTotal')
 
     @property
     def title(self) -> str:

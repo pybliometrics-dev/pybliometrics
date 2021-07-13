@@ -118,10 +118,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def citedby_count(self) -> Optional[int]:
         """Number of articles citing the document."""
-        cites = chained_get(self._json, ['coredata', 'citedby-count'])
-        if cites:
-            cites = int(cites)
-        return cites
+        return chained_get(self._json, ['coredata', 'citedby-count'], integer=True)
 
     @property
     def citedby_link(self) -> str:
@@ -312,7 +309,7 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'prism:issn'])
 
     @property
-    def identifier(self) -> str:
+    def identifier(self) -> int:
         """ID of the document (same as EID without "2-s2.0-")."""
         return get_id(self._json)
 
@@ -346,9 +343,9 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['language', '@xml:lang'])
 
     @property
-    def openaccess(self) -> Optional[str]:
+    def openaccess(self) -> Optional[int]:
         """The openaccess status encoded in single digits."""
-        return chained_get(self._json, ['coredata', 'openaccess'])
+        return chained_get(self._json, ['coredata', 'openaccess'], integer=True)
 
     @property
     def openaccessFlag(self) -> Optional[bool]:
@@ -398,19 +395,22 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._head, ['source', 'publisher', 'publisheraddress'])
 
     @property
-    def pubmed_id(self) -> Optional[str]:
+    def pubmed_id(self) -> Optional[int]:
         """The PubMed ID of the document."""
-        return chained_get(self._json, ['coredata', 'pubmed-id'])
+        return chained_get(self._json, ['coredata', 'pubmed-id'], integer=True)
 
     @property
-    def refcount(self) -> Optional[str]:
+    def refcount(self) -> Optional[int]:
         """Number of references of an article.
         Note: Requires either the FULL view or REF view.
         """
         try:  # REF view
-            return self._ref['@total-references']
+            return int(self._ref['@total-references'])
         except KeyError:  # FULL view
-            return self._ref.get('@refcount')
+            try:
+                return int(self._ref['@refcount'])
+            except KeyError:
+                return None
 
     @property
     def references(self) -> Optional[List[NamedTuple]]:
@@ -517,9 +517,9 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def source_id(self) -> Optional[str]:
+    def source_id(self) -> Optional[int]:
         """Scopus source ID of the document."""
-        return chained_get(self._json, ['coredata', 'source-id'])
+        return chained_get(self._json, ['coredata', 'source-id'], integer=True)
 
     @property
     def sourcetitle_abbreviation(self) -> Optional[str]:

@@ -286,7 +286,7 @@ def test_issn():
 
 
 def test_identifier():
-    assert_equal(ab1.identifier, '84930616647')
+    assert_equal(ab1.identifier, 84930616647)
     assert_equal(ab8.identifier, None)
 
 
@@ -314,9 +314,9 @@ def test_language():
 
 
 def test_openaccess():
-    assert_equal(ab5.openaccess, "2")
-    assert_equal(ab6.openaccess, "1")
-    assert_equal(ab7.openaccess, "0")
+    assert_equal(ab5.openaccess, 2)
+    assert_equal(ab6.openaccess, 1)
+    assert_equal(ab7.openaccess, 0)
     assert_equal(ab8.openaccess, None)
 
 
@@ -354,13 +354,13 @@ def test_publisheraddress():
 
 
 def test_pubmed_id():
-    assert_equal(ab6.pubmed_id, '29284752')
+    assert_equal(ab6.pubmed_id, 29284752)
     assert_equal(ab7.pubmed_id, None)
 
 
 def test_refcount():
-    assert_equal(ab4.refcount, '18')
-    assert_equal(ab8.refcount, '48')
+    assert_equal(ab4.refcount, 18)
+    assert_equal(ab8.refcount, 48)
 
 
 def test_references_full():
@@ -427,7 +427,7 @@ def test_sequencebank():
 
 
 def test_source_id():
-    assert_equal(ab1.source_id, '19700188320')
+    assert_equal(ab1.source_id, 19700188320)
     assert_equal(ab8.source_id, None)
 
 

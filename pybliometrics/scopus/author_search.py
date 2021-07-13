@@ -40,7 +40,7 @@ class AuthorSearch(Search):
             new = auth(eid=item.get('eid'), initials=name.get('initials'),
                        surname=name.get('surname'), areas="; ".join(areas),
                        givenname=name.get('given-name'),
-                       documents=item.get('document-count', '0'),
+                       documents=int(item['document-count']),
                        affiliation=aff.get('affiliation-name'),
                        affiliation_id=aff.get('affiliation-id'),
                        city=aff.get('affiliation-city'),

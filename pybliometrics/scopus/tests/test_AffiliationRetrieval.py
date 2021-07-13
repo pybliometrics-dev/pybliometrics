@@ -22,7 +22,7 @@ def test_affiliation_name():
 
 
 def test_author_count():
-    expected = '12900'
+    expected = 12900
     assert_true(light.author_count >= expected)
     assert_true(standard.author_count >= expected)
 
@@ -43,7 +43,7 @@ def test_date_created():
 
 
 def test_document_count():
-    expected = '73581'
+    expected = 73581
     assert_true(light.document_count >= expected)
     assert_true(standard.document_count >= expected)
 
@@ -54,8 +54,8 @@ def test_eid():
 
 
 def test_identifier():
-    assert_equal(light.identifier, '60000356')
-    assert_equal(standard.identifier, '60000356')
+    assert_equal(light.identifier, 60000356)
+    assert_equal(standard.identifier, 60000356)
 
 
 def test_name_variants():

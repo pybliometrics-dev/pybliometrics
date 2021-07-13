@@ -2,9 +2,9 @@ from collections import namedtuple
 from warnings import warn
 
 
-def chained_get(container, path, default=None):
+def chained_get(container, path, default=None, integer=False):
     """Helper function to perform a series of .get() methods on a dictionary
-    and return a default object type in the end.
+    or return the `default`.
 
     Parameters
     ----------
@@ -17,13 +17,25 @@ def chained_get(container, path, default=None):
     default : any (optional, default=None)
         The object type that should be returned if the search yields
         no result.
+
+    integer : bool (optiona, default=False)
+        Whether to attempt a conversion to type integer or not.
     """
-    for key in path:
-        try:
-            container = container[key]
-        except (AttributeError, KeyError, TypeError):
-            return default
-    return container
+    from functools import reduce
+
+    # Obtain value via reduce
+    try:
+        val = reduce(lambda c, k: c.get(k, default), path, container)
+    except (AttributeError, TypeError):
+        val = default
+
+    if not integer:
+        return val
+    # Attempt integer conversion
+    try:
+        return int(val)
+    except (TypeError, ValueError):
+        return val
 
 
 def check_integrity(tuples, fields, action):
@@ -51,10 +63,13 @@ def check_field_consistency(needles, haystack):
         raise ValueError(msg)
 
 
-def get_id(s):
+def get_id(s, integer=True):
     """Helper function to return the Scopus ID at a fixed position."""
     path = ['coredata', 'dc:identifier']
-    return chained_get(s, path, "").split(':')[-1] or None
+    try:
+        return int(chained_get(s, path, "").split(':')[-1])
+    except ValueError:
+        return None
 
 
 def get_link(dct, idx, path=['coredata', 'link']):

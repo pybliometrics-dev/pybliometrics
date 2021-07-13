@@ -66,7 +66,7 @@ def test_alias():
 
 
 def test_citation_count():
-    expected = '13600'
+    expected = 13600
     assert_true(metrics.citation_count >= expected)
     assert_true(light.citation_count >= expected)
     assert_true(standard.citation_count >= expected)
@@ -74,7 +74,7 @@ def test_citation_count():
 
 
 def test_cited_by_count():
-    expected = '10900'
+    expected = 10900
     assert_true(metrics.cited_by_count >= expected)
     assert_true(light.cited_by_count >= expected)
     assert_true(standard.cited_by_count >= expected)
@@ -94,7 +94,7 @@ def test_classificationgroup():
 def test_coauthor_count():
     assert_equal(light.coauthor_count, None)
     assert_equal(standard.coauthor_count, None)
-    expected = "175"
+    expected = 175
     assert_true(metrics.coauthor_count >= expected)
     assert_true(enhanced.coauthor_count >= expected)
 
@@ -115,7 +115,7 @@ def test_date_created():
 
 
 def test_document_count():
-    expected = "106"
+    expected = 106
     assert_true(light.document_count >= expected)
     assert_true(standard.document_count >= expected)
     assert_true(metrics.document_count >= expected)
@@ -174,7 +174,7 @@ def test_get_document_eids():
 def test_h_index():
     assert_equal(light.h_index, None)
     assert_equal(standard.h_index, None)
-    expected = '34'
+    expected = 34
     assert_true(metrics.h_index >= expected)
     assert_true(enhanced.h_index >= expected)
 
@@ -183,14 +183,14 @@ def test_historical_identifier():
     assert_equal(metrics.historical_identifier, None)
     assert_equal(light.historical_identifier, None)
     assert_equal(standard.historical_identifier, None)
-    expected = ['35787230500', '36488127000', '54974425600', '55004143700',
-                '55004143800', '57057263700', '56641032000', '36747787600',
-                '57206217299', '57219840256']
+    expected = [35787230500, 36488127000, 54974425600, 55004143700,
+                55004143800, 57057263700, 56641032000, 36747787600,
+                57206217299, 57219840256]
     assert_equal(enhanced.historical_identifier, expected)
 
 
 def test_identifier():
-    expected = "7004212771"
+    expected = 7004212771
     assert_equal(metrics.identifier, expected)
     assert_equal(light.identifier, expected)
     assert_equal(standard.identifier, expected)
@@ -233,8 +233,8 @@ def test_publication_range():
     assert_equal(metrics.publication_range, None)
     assert_equal(light.publication_range, None)
     for a in (standard, enhanced):
-        assert_equal(a.publication_range[0], '1995')
-        assert_true(a.publication_range[1] >= '2021')
+        assert_equal(a.publication_range[0], 1995)
+        assert_true(a.publication_range[1] >= 2021)
 
 
 def test_scopus_author_link():
@@ -312,4 +312,4 @@ def test_warning_with_forwarding():
         assert_equal(len(w), 1)
         assert_true(issubclass(w[-1].category, UserWarning))
         assert_true("57191449583" in str(w[-1].message))
-    assert_equal(auth_id, '36854449200')
+    assert_equal(auth_id, 36854449200)

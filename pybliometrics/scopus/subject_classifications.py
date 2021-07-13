@@ -8,17 +8,13 @@ from pybliometrics.scopus.utils import chained_get, make_search_summary
 class SubjectClassifications(Search):
     @property
     def results(self) -> Optional[List[NamedTuple]]:
-        """A list of namedtuples representing results of subject classifications
-        search.
-
-        The number of fields of namedtuples are specified during class
-        initialization.
+        """A list of namedtuples representing results of subject
+        classifications search in the form (code, description, detail, abbrev).
         """
         out = []
+        path = ['subject-classifications', 'subject-classification']
+        search_results = chained_get(self._json, path, [])
         subj = namedtuple('Subject', self.fields)
-        search_results = self._json['subject-classifications'].get(
-                'subject-classification', []
-                )
         if isinstance(search_results, dict):
             for field_name in self.fields:
                 if field_name not in search_results:

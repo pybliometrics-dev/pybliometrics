@@ -18,9 +18,9 @@ class AffiliationRetrieval(Retrieval):
         return self._json.get('affiliation-name')
 
     @property
-    def author_count(self) -> str:
+    def author_count(self) -> int:
         """Number of authors associated with the affiliation."""
-        return self._json['coredata'].get('author-count')
+        return int(self._json['coredata']['author-count'])
 
     @property
     def city(self) -> Optional[str]:
@@ -41,9 +41,9 @@ class AffiliationRetrieval(Retrieval):
             return None
 
     @property
-    def document_count(self) -> str:
+    def document_count(self) -> int:
         """Number of documents for the affiliation."""
-        return self._json['coredata'].get('document-count')
+        return int(self._json['coredata']['document-count'])
 
     @property
     def eid(self) -> str:
@@ -51,7 +51,7 @@ class AffiliationRetrieval(Retrieval):
         return self._json['coredata']['eid']
 
     @property
-    def identifier(self) -> str:
+    def identifier(self) -> int:
         """The Scopus ID of the affiliation."""
         return get_id(self._json)
 

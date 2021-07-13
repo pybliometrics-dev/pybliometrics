@@ -48,10 +48,10 @@ def test_results_author():
         publicationName='European Economic Review', issn='00142921',
         source_id='20749', eIssn=None, aggregationType='Journal', volume='36',
         issueIdentifier='2-3', article_number=None, pageRange='307-309',
-        description=None, authkeywords=None, citedby_count='0', openaccess='0',
+        description=None, authkeywords=None, citedby_count=0, openaccess=0,
         fund_acr=None, fund_no='undefined', fund_sponsor=None)
     assert_true(int(received.citedby_count) > 0)
-    assert_equal(received._replace(citedby_count="0"), expected)
+    assert_equal(received._replace(citedby_count=0), expected)
 
 
 def test_results_journal():
@@ -85,11 +85,11 @@ def test_results_journal():
         publicationName='Research Policy', issn='00487333', source_id='22900',
         eIssn=None, aggregationType='Journal', volume='39', issueIdentifier='1',
         article_number=None, pageRange='103-116', description=abstract,
-        authkeywords=keywords, citedby_count='0', openaccess='0',
+        authkeywords=keywords, citedby_count=0, openaccess=0,
         fund_acr='MOST', fund_no='NSC94-2415-H-194-001',
         fund_sponsor='Ministry of Science and Technology, Taiwan')
     assert_true(int(received.citedby_count) > 60)
-    assert_equal(received._replace(citedby_count="0"), expected)
+    assert_equal(received._replace(citedby_count=0), expected)
 
 
 def test_results_empty():
