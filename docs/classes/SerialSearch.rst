@@ -4,6 +4,8 @@ pybliometrics.scopus.SerialSearch
 `SerialSearch()` implements the search of the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It performs a search for serial sources (journal, tradejournal, conferenceproceeding, bookseries) by title, ISSN, publisher, subject or source type.
 
 .. currentmodule:: pybliometrics.scopus
+.. contents:: Table of Contents
+    :local:
 
 Documentation
 -------------

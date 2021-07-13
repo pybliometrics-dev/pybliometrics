@@ -4,6 +4,8 @@ pybliometrics.scopus.AffiliationSearch
 `AffiliationSearch()` implements the `Affiliation Search API <https://dev.elsevier.com/documentation/AffiliationSearchAPI.wadl>`_.  It performs a query to search for affiliations and then retrieves the records of the query.
 
 .. currentmodule:: pybliometrics.scopus
+.. contents:: Table of Contents
+    :local:
 
 Documentation
 -------------

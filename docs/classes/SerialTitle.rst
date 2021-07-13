@@ -4,6 +4,8 @@ pybliometrics.scopus.SerialTitle
 `SerialTitle()` implements the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It provides basic information on registered serials (also called sources), like publisher and identifiers, but also metrics.
 
 .. currentmodule:: pybliometrics.scopus
+.. contents:: Table of Contents
+    :local:
 
 Documentation
 -------------

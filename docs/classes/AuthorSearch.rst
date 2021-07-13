@@ -4,6 +4,8 @@ pybliometrics.scopus.AuthorSearch
 `AuthorSearch()` implements the `Author Search API <https://dev.elsevier.com/documentation/AuthorSearchAPI.wadl>`_.  It performs a query to search for authors and then retrieves the records of the query.
 
 .. currentmodule:: pybliometrics.scopus
+.. contents:: Table of Contents
+    :local:
 
 Documentation
 -------------

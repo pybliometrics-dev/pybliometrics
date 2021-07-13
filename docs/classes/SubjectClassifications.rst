@@ -4,6 +4,8 @@ pybliometrics.scopus.SubjectClassifications
 `SubjectClassifications()` implements the `Subject Classifications API <https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl>`_.  It allows for retrieval-like query for All Science Journal Classification (ASJC) subjects/areas.
 
 .. currentmodule:: pybliometrics.scopus
+.. contents:: Table of Contents
+    :local:
 
 Documentation
 -------------

@@ -4,6 +4,8 @@ pybliometrics.scopus.AuthorRetrieval
 `AuthorRetrieval()` implements the `Author Retrieval API <https://dev.elsevier.com/documentation/AuthorRetrievalAPI.wadl>`_. It contains an entire author record as per Scopus.
 
 .. currentmodule:: pybliometrics.scopus
+.. contents:: Table of Contents
+    :local:
 
 Documentation
 -------------
