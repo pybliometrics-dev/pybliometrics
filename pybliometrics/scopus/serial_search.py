@@ -72,8 +72,7 @@ class SerialSearch(Search):
             non-subscribers the number of search results exceeds 5000.
 
         ValueError
-            If view parameter is not one of allowed ones or if query contains
-            invalid fields.
+            If parameter `view` is not one of the allowed values.
 
         Notes
         -----

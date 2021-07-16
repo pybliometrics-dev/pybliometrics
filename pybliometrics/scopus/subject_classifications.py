@@ -55,7 +55,8 @@ class SubjectClassifications(Search):
         Raises
         ------
         ValueError
-            If query or return fields contain invalid fields.
+            If parameter `query` or paramter `fields` is not one of the
+            allowed values.
 
         TypeError
             If returned fields are not passed in an iterable container.

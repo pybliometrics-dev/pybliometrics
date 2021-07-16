@@ -94,7 +94,7 @@ class AuthorSearch(Search):
             If the number of search results exceeds 5000.
 
         ValueError
-            If the integrity_action parameter is not one of the allowed ones.
+            If parameter `integrity_action` is not one of the allowed values.
 
         Notes
         -----

@@ -157,6 +157,11 @@ class CitationOverview(Retrieval):
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl.
 
+        Raises
+        -----
+        ValueError
+            If parameter `citation` is not one of the allowed values.
+
         Notes
         -----
         The directory for cached results is `{path}/STANDARD/{eid}{citation}`,
