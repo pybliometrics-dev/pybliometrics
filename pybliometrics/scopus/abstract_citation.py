@@ -153,6 +153,9 @@ class CitationOverview(Retrieval):
         :param citation: Allows for the exclusion of self-citations or those by books.
                          If `None`, will count all citations.
                          Allowed values: None, exclude-self, exclude-books
+        :param kwds: Keywords passed on as query parameters.  Must contain
+                     fields and values mentioned in the API specification at
+                     https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl.
 
         Notes
         -----
@@ -177,7 +180,7 @@ class CitationOverview(Retrieval):
         # Get file content
         date = f'{start}-{end}'
         Retrieval.__init__(self, eid, api='CitationOverview', date=date,
-                           citation=citation)
+                           citation=citation, **kwds)
         self._data = self._json['abstract-citations-response']
 
         # citeInfoMatrix

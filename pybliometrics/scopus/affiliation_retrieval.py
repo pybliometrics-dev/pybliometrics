@@ -124,7 +124,8 @@ class AffiliationRetrieval(Retrieval):
     def __init__(self,
                  aff_id: Union[int, str],
                  refresh: Union[bool, int] = False,
-                 view: str = "STANDARD"
+                 view: str = "STANDARD",
+                 **kwds: str
                  ) -> None:
         """Interaction with the Affiliation Retrieval API.
 
@@ -138,6 +139,9 @@ class AffiliationRetrieval(Retrieval):
                      https://dev.elsevier.com/sc_affil_retrieval_views.html.
                      Note: Neither the BASIC view nor DOCUMENTS or AUTHORS
                      views are active, although documented.
+        :param kwds: Keywords passed on as query parameters.  Must contain
+                     fields and values mentioned in the API specification at
+                     https://dev.elsevier.com/documentation/AffiliationRetrievalAPI.wadl.
 
         Notes
         -----
@@ -151,7 +155,7 @@ class AffiliationRetrieval(Retrieval):
         self._view = view
         self._refresh = refresh
         aff_id = str(int(str(aff_id).split('-')[-1]))
-        Retrieval.__init__(self, identifier=aff_id, api='AffiliationRetrieval')
+        Retrieval.__init__(self, aff_id, api='AffiliationRetrieval', **kwds)
         self._json = self._json['affiliation-retrieval-response']
         self._profile = self._json.get("institution-profile", {})
 

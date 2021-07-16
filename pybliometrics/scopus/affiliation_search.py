@@ -49,7 +49,8 @@ class AffiliationSearch(Search):
                  download: bool = True,
                  integrity_fields: Union[List[str], Tuple[str, ...]] = None,
                  integrity_action: str = "raise",
-                 count: int = 200
+                 count: int = 200,
+                 **kwds
                  ) -> None:
         """Interaction with the Affiliation Search API.
 
@@ -75,6 +76,9 @@ class AffiliationSearch(Search):
         :param count: The number of entries to be displayed at once.  A smaller
                       number means more queries with each query having
                       fewer results.
+        :param kwds: Keywords passed on as query parameters.  Must contain
+                     fields and values mentioned in the API specification at
+                     https://dev.elsevier.com/documentation/AffiliationSearchAPI.wadl.
 
         Raises
         ------
@@ -101,7 +105,7 @@ class AffiliationSearch(Search):
         self._refresh = refresh
         self._view = "STANDARD"
         Search.__init__(self, query=query, api="AffiliationSearch",
-                        count=count, download=download, verbose=verbose)
+                        count=count, download=download, verbose=verbose, **kwds)
 
     def __str__(self):
         """Return a summary string."""

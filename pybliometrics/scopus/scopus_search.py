@@ -148,7 +148,7 @@ class ScopusSearch(Search):
                            corresponding view.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
-                     https://dev.elsevier.com/documentation/SCOPUSSearchAPI.wadl.
+                     https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl.
 
         Raises
         ------

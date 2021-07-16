@@ -32,7 +32,8 @@ class SubjectClassifications(Search):
     def __init__(self,
                  query: Dict,
                  refresh: Union[bool, int] = False,
-                 fields: Union[List[str], Tuple[str, ...]] = None
+                 fields: Union[List[str], Tuple[str, ...]] = None,
+                 **kwds: str
                  ) -> None:
         """Interaction with the Subject Classifications Scopus API.
 
@@ -47,6 +48,9 @@ class SubjectClassifications(Search):
                        Allowed values: 'code', 'abbrev', 'description',
                        'detail'.  For details see
                        https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl#d1e199.
+        :param kwds: Keywords passed on as query parameters.  Must contain
+                     fields and values mentioned in the API specification at
+                     https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl.
 
         Raises
         ------
@@ -84,7 +88,7 @@ class SubjectClassifications(Search):
         self._refresh = refresh
         self._query = str(query)
         self._view = None
-        Search.__init__(self, query=query, api='SubjectClassifications')
+        Search.__init__(self, query=query, api='SubjectClassifications', **kwds)
         path = ['subject-classifications', 'subject-classification']
         self._n = len(chained_get(self._json, path, []))
 

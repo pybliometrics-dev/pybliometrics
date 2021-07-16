@@ -57,7 +57,8 @@ class AuthorSearch(Search):
                  download: bool = True,
                  integrity_fields: Union[List[str], Tuple[str, ...]] = None,
                  integrity_action: str = "raise",
-                 count: int = 200
+                 count: int = 200,
+                 **kwds
                  ) -> None:
         """Interaction with the Author Search API.
 
@@ -83,6 +84,9 @@ class AuthorSearch(Search):
         :param count: The number of entries to be displayed at once.  A smaller
                       number means more queries with each query having
                       fewer results.
+        :param kwds: Keywords passed on as query parameters.  Must contain
+                     fields and values mentioned in the API specification at
+                     https://dev.elsevier.com/documentation/AuthorSearchAPI.wadl.
 
         Raises
         ------
@@ -109,7 +113,7 @@ class AuthorSearch(Search):
         self._refresh = refresh
         self._view = "STANDARD"
         Search.__init__(self, query=query, api='AuthorSearch', count=count,
-                        download=download, verbose=verbose)
+                        download=download, verbose=verbose, **kwds)
 
     def __str__(self):
         """Print a summary string."""
