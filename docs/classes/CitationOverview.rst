@@ -47,24 +47,31 @@ The most important information is stored in attribute `cc`, which is a list of o
      [(2019, 2), (2020, 2), (2021, 1)]]
 
 
-Sometimes there are citations outside the specified year range, which you can get with `pcc` (previous citation count) and `lcc` (later citation count):
+Attributes `pcc`, `rangeCount`, `lcc` and `rowTotal` give citation summaries by document.  `pcc` is the count of citations before the specified year, `rangeCount` the count of citations for the specified years, and `lcc` the count of citations after the specified year.  For the sum (i.e., the total number of citations by document) use `rowTotal`
 
 .. code-block:: python
 
     >>> co.pcc
     [0, 8]
+    >>> co.rangeCount
+    [16, 5]
     >>> co.lcc
     [0, 0]
+    >>> co.rowTotal
+    [16, 13]
 
 
-Attributes `rangeCount` and `rowTotal` give summaries.  `rangeCount` is the number of citations received within the specified years, while `rowTotal` additionally includes omitted years (hence it is the total number of citations).
+Attribute `columnTotal` gives the total number of yearly citations for all documents combined, which `rangeColumnTotal` summarizes.  Finally `grandTotal` is the total number of citations for all documents combined.
 
 .. code-block:: python
 
-    >>> co.rangeCount
-    [16, 5]
-    >>> co.rowTotal
-    [16, 13]
+    >>> co.columnTotal
+    [2, 8, 11]
+    >>> co.rangeColumnTotal
+    21
+    >>> co.grandTotal
+    29
+
 
 Using parameter `citation`, one can exclude self-citations or citations by books. However, if the data has been downloaded and cached, these counts will not take effect! Therefore make wise use of `refresh=True`!
 
@@ -82,6 +89,7 @@ Using parameter `citation`, one can exclude self-citations or citations by books
     2 document(s) has/have the following total citation count
     excluding citations from books as of 2021-07-17:
         16; 13
+
 
 There are also author information stored as list of lists of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
 
@@ -114,6 +122,7 @@ Finally, there are bibliographic information, too:
     [None, '6']
     >>> co.citationType_long
     ['Article', 'Review']
+
 
 Using `pandas <https://pandas.pydata.org/>`_, you can turn the citation counts into a DataFrame like so:
 

@@ -40,6 +40,11 @@ def test_citationType_short():
     assert_equal(co_doi.citationType_short, ['ar'])
 
 
+def test_columnTotal():
+    assert_equal(co_eid.columnTotal, [4, 2, 2, 2, 8])
+    assert_equal(co_doi.columnTotal, [0, 0, 0, 0, 6])
+
+
 def test_doi():
     expected = ['10.1016/j.softx.2019.100263', '10.1021/acscatal.5b00538']
     assert_equal(co_eid.doi, expected)
@@ -49,6 +54,11 @@ def test_doi():
 def test_endingPage():
     assert_equal(co_eid.endingPage, [None, '3899'])
     assert_equal(co_doi.endingPage, None)
+
+
+def test_grandTotal():
+    assert_true(co_eid.grandTotal >= 29)
+    assert_true(co_doi.grandTotal >= 16)
 
 
 def test_h_index():
@@ -65,6 +75,11 @@ def test_issn():
 def test_issueIdentifier():
     assert_equal(co_eid.issueIdentifier, [None, '6'])
     assert_equal(co_doi.issueIdentifier, None)
+
+
+def test_laterColumnTotal():
+    assert_equal(co_eid.laterColumnTotal, 11)
+    assert_equal(co_doi.laterColumnTotal, 10)
 
 
 def test_lcc():
@@ -84,10 +99,20 @@ def test_pii():
     assert_equal(co_doi.pii, [expected[0]])
 
 
+def prevColumnTotal():
+    assert_equal(co_eid.prevColumnTotal, 0)
+    assert_equal(co_doi.prevColumnTotal, 0)
+
+
 def test_publicationName():
     expected = ['SoftwareX', 'ACS Catalysis']
     assert_equal(co_eid.publicationName, expected)
     assert_equal(co_doi.publicationName, [expected[0]])
+
+
+def test_rangeColumnTotal():
+    assert_equal(co_eid.rangeColumnTotal, 18)
+    assert_equal(co_doi.rangeColumnTotal, 6)
 
 
 def test_rangeCount():

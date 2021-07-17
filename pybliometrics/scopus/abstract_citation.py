@@ -1,9 +1,7 @@
 from collections import namedtuple
 from datetime import datetime
-from itertools import chain
 from hashlib import md5
 from typing import List, NamedTuple, Optional, Tuple, Union
-from warnings import warn
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value
@@ -63,6 +61,11 @@ class CitationOverview(Retrieval):
         return _maybe_return_list(out)
 
     @property
+    def columnTotal(self) -> int:
+        """The yearly number of citations for all documents combined."""
+        return [int(d["$"]) for d in self._citeCountHeader["columnTotal"]]
+
+    @property
     def doi(self) -> Optional[List[str]]:
         """Document Object Identifier (DOI) of the documents."""
         out = [e.get('doi') for e in self._identifierlegend]
@@ -73,6 +76,11 @@ class CitationOverview(Retrieval):
         """Ending pages of the documents."""
         out = [e.get('endingPage') for e in self._citeInfoMatrix]
         return _maybe_return_list(out)
+
+    @property
+    def grandTotal(self) -> int:
+        """The total number of citations of all documents together."""
+        return int(self._citeCountHeader["grandTotal"])
 
     @property
     def h_index(self) -> int:
@@ -95,6 +103,13 @@ class CitationOverview(Retrieval):
         return _maybe_return_list(out)
 
     @property
+    def laterColumnTotal(self) -> int:
+        """The total number of citations for all years after the end
+        year for all documents combined.
+        """
+        return int(self._citeCountHeader["laterColumnTotal"])
+
+    @property
     def lcc(self) -> List[int]:
         """Number of citations after the end year of each document."""
         return [int(m['lcc']) for m in self._citeInfoMatrix]
@@ -111,10 +126,24 @@ class CitationOverview(Retrieval):
         return _maybe_return_list(out)
 
     @property
+    def prevColumnTotal(self) -> int:
+        """The total number of citations for all years before the start
+        year for all documents combined.
+        """
+        return int(self._citeCountHeader["prevColumnTotal"])
+
+    @property
     def publicationName(self) -> Optional[List[Optional[str]]]:
         """Name of source the documents are published in (e.g. the Journal)."""
         out = [e.get('publicationName') for e in self._citeInfoMatrix]
         return _maybe_return_list(out)
+
+    @property
+    def rangeColumnTotal(self) -> int:
+        """The total number of citations for all specified years for all
+        documents combined.
+        """
+        return int(self._citeCountHeader["rangeColumnTotal"])
 
     @property
     def rangeCount(self) -> List[int]:
@@ -250,8 +279,8 @@ class CitationOverview(Retrieval):
         # identifier-legend
         identifier = self._data['identifier-legend']['identifier']
         self._identifierlegend = [_parse_dict(e) for e in identifier]
-        # citeColumnTotalXML
-        self._citeColumnTotalXML = self._data['citeColumnTotalXML']  # not used
+        # citeCountHeader
+        self._citeCountHeader = self._data['citeColumnTotalXML']["citeCountHeader"]
 
     def __str__(self):
         """Return a summary string."""
