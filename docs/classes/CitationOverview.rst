@@ -1,7 +1,7 @@
 pybliometrics.scopus.CitationOverview
 =====================================
 
-`CitationOverview()` implements the `Citation Overview API <https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key needs to be approved by Elsevier manually.  Please contact Scopus to do so.  Otherwise each request throws 403 errors.
+`CitationOverview()` implements the `Citation Overview API <https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key needs to be approved by Elsevier manually.  Please contact Scopus to do so.  Otherwise each request throws a 403 error.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -17,14 +17,15 @@ Documentation
 Examples
 --------
 
-It takes a Scopus Electronic Identifier (EID) as argument, an optional citation argument to allow exclusion of books or self-citation and additionally a starting year and an ending year for which yearly citations will be retrieved.  If no ending year is given, `CitationOverview()` will use the current year.
+The class can download yearly citation counts for up to 25 documents at once.  Simply provide a list of either the Scopus identifiers, the DOIs, the PIIs or the pubmed IDs and specify the identifier type in `id_type`.  The API needs to know for which years you want to retrieve yearly citation counts.  Therefore you need to set the year from which on `CitationOverview()` will return yearly citation counts (e.g., the publication year).  If no ending year is given, `CitationOverview()` will use the current year.  Optionally you can exclude citations by books or self-citation via `exclude`.
 
-You initialize the class with the Scopus EID:
+You initialize the class with a list of identifiers:
 
 .. code-block:: python
 
     >>> from pybliometrics.scopus import CitationOverview
-    >>> co = CitationOverview("2-s2.0-85068268027", start=2019, end=2021)
+    >>> identifier = ["85068268027", "84930616647"]
+    >>> co = CitationOverview(identifier, start=2019, end=2021)
 
 
 You can obtain basic information just by printing the object:
@@ -32,29 +33,28 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(co)
-    Document 'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
-    by Rose M.E., Rose M.E. and Kitchin J.R. published in 'SoftwareX' has the following
-    citation trajectory as of 2021-07-17:
-    Before 2019 0; 2019: 0; 2020: 6; 2021: 10; After 2021: 0 times:
+    2 document(s) has/have the following total citation count
+    as of 2021-07-17:
+        16; 13
 
 
-
-The most important information is stored in attribute `cc`, which is a list of tuples storing year-wise citations to the article:
+The most important information is stored in attribute `cc`, which is a list of of list of tuples storing year-wise citations to the article.  Each list corresponds to one document, in the order specified when initating the class:
 
 .. code-block:: python
 
     >>> co.cc
-    [(2019, '0'), (2020, '6'), (2021, '10')]
+    [[(2019, 0), (2020, 6), (2021, 10)],
+     [(2019, 2), (2020, 2), (2021, 1)]]
 
 
-Sometimes there are citations outside the specified year range, which you can get with `pcc` and `lcc`:
+Sometimes there are citations outside the specified year range, which you can get with `pcc` (previous citation count) and `lcc` (later citation count):
 
 .. code-block:: python
 
     >>> co.pcc
-    0
+    [0, 8]
     >>> co.lcc
-    0
+    [0, 0]
 
 
 Attributes `rangeCount` and `rowTotal` give summaries.  `rangeCount` is the number of citations received within the specified years, while `rowTotal` additionally includes omitted years (hence it is the total number of citations).
@@ -62,65 +62,70 @@ Attributes `rangeCount` and `rowTotal` give summaries.  `rangeCount` is the numb
 .. code-block:: python
 
     >>> co.rangeCount
-    '16'
+    [16, 5]
     >>> co.rowTotal
-    '16'
+    [16, 13]
 
 Using parameter `citation`, one can exclude self-citations or citations by books. However, if the data has been downloaded and cached, these counts will not take effect! Therefore make wise use of `refresh=True`!
 
 .. code-block:: python
 
-    >>> co_self = CitationOverview("2-s2.0-85068268027", start=2019, end=2021,
+    >>> co_self = CitationOverview(identifier, start=2019, end=2021,
                                    citation="exclude-self")
     >>> print(co_self)
-    Document 'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
-    by Rose M.E., Rose M.E. and Kitchin J.R. published in 'SoftwareX' has the following
-    citation trajectory excluding self-citations as of 2021-07-17:
-    Before 2019 0; 2019: 0; 2020: 6; 2021: 8; After 2021: 0 times
-
-    >>> co_books = CitationOverview("2-s2.0-85068268027", start=2019, end=2021,
+    2 document(s) has/have the following total citation count
+    excluding self-citations as of 2021-07-17:
+        14; 11
+    >>> co_books = CitationOverview(identifier, start=2019, end=2021,
                                     citation="exclude-books")
     >>> print(co_books)
-    Document 'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
-    by Rose M.E., Rose M.E. and Kitchin J.R. published in 'SoftwareX' has the following
-    citation trajectory excluding citations from books as of 2021-07-17:
-    Before 2019 0; 2019: 0; 2020: 6; 2021: 10; After 2021: 0 times
+    2 document(s) has/have the following total citation count
+    excluding citations from books as of 2021-07-17:
+        16; 13
 
-
-There are also author information stored as list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
+There are also author information stored as list of lists of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
 
 .. code-block:: python
 
-    >>> co.authors
+    >>> co.authors[0]
     [Author(name='Rose M.E.', surname='Rose', initials='M.E.', id='57209617104',
-     url='https://api.elsevier.com/content/author/author_id/57209617104'),
+            url='https://api.elsevier.com/content/author/author_id/57209617104'),
      Author(name='Kitchin J.R.', surname='Kitchin', initials='J.R.', id='7004212771',
-     url='https://api.elsevier.com/content/author/author_id/7004212771')]
-    >>> auth_id = co.authors[0].id
-    >>> auth_id
-    '7004212771'
+            url='https://api.elsevier.com/content/author/author_id/7004212771')]
+    >>> co.authors[1]
+    [Author(name='Kitchin J.R.', surname='Kitchin', initials='J.R.', id='7004212771',
+            url='https://api.elsevier.com/content/author/author_id/7004212771')]
 
-Object `auth_id` can for example be used with :doc:`AuthorRetrieval() <../classes/AuthorRetrieval>`.
+
+Via `co.authors[0][0].id` one can for instance obtain further author information via the :doc:`AuthorRetrieval() <../classes/AuthorRetrieval>` class.
 
 Finally, there are bibliographic information, too:
 
 .. code-block:: python
 
     >>> co.title
-    'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
+    ['pybliometrics: Scriptable bibliometrics using a Python interface to Scopus',
+     'Examples of effective data sharing in scientific publishing']
     >>> co.publicationName
-    'SoftwareX'
+    ['SoftwareX', 'ACS Catalysis']
     >>> co.volume
-    '10'
+    ['10', '5']
     >>> co.issueIdentifier
-    None
-    >>> co.startingPage
-    None
-    >>> co.endingPage
-    None
+    [None, '6']
     >>> co.citationType_long
-    'Article'
-    >>> co.doi
-    '10.1016/j.softx.2019.100263'
+    ['Article', 'Review']
+
+Using `pandas <https://pandas.pydata.org/>`_, you can turn the citation counts into a DataFrame like so:
+
+.. code-block:: python
+
+    >>> import pandas as pd
+    >>> df = pd.concat([pd.Series(dict(x)) for x in co.cc], axis=1).T
+    >>> df.index = co.scopus_id
+    >>> print(df)
+                 2019  2020  2021
+    85068268027     0     6    10
+    84930616647     2     2     1
+
 
 Downloaded results are cached to speed up subsequent analysis.  This information may become outdated, and will not change if you set certain restrictions (e.g. via the `citation` parameter)!  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `co.get_cache_file_mdate()` to get the date of last modification, and `co.get_cache_file_age()` the number of days since the last modification.

@@ -34,15 +34,15 @@ class Retrieval(Base):
         url = URLS[api]
         if api in ("AbstractRetrieval", "PlumXMetrics"):
             url += id_type + "/"
-        url += identifier
-
-        # Construct cache file name and header
-        stem = identifier.replace('/', '_')
-        params = {'view': self._view, **kwds}
         if api == 'CitationOverview':
-            params.update({'scopus_id': identifier.split('0-')[-1]})
-            stem += self._citation or ""
+            stem = identifier.replace("/", "")
+            if self._citation:
+                identifier += "-" + self._citation
+        else:
+            url += identifier
+            stem = identifier.replace('/', '_')
         self._cache_file_path = get_folder(api, self._view)/stem
 
         # Parse file contents
+        params = {'view': self._view, **kwds}
         Base.__init__(self, params=params, url=url, api=api)

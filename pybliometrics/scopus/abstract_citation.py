@@ -1,157 +1,193 @@
 from collections import namedtuple
 from datetime import datetime
+from itertools import chain
+from hashlib import md5
 from typing import List, NamedTuple, Optional, Tuple, Union
+from warnings import warn
 
 from pybliometrics.scopus.superclasses import Retrieval
-from pybliometrics.scopus.utils import check_parameter_value
+from pybliometrics.scopus.utils import chained_get, check_parameter_value
 
 
 class CitationOverview(Retrieval):
     @property
-    def authors(self) -> List[NamedTuple]:
-        """A list of namedtuples storing author information,
-        where each namedtuple corresponds to one author.
+    def authors(self) -> Optional[List[Optional[List[Optional[NamedTuple]]]]]:
+        """A list of lists of namedtuples storing author information,
+        where each namedtuple corresponds to one author and each sub-list to
+        one document.
         The information in each namedtuple is (name surname initials id url).
         All entries are strings.
         """
-        out = []
+        outer = []
         order = 'name surname initials id url'
         auth = namedtuple('Author', order)
-        for author in self._citeInfoMatrix.get('author'):
-            author = {k.split(":", 1)[-1]: v for k, v in author.items()}
-            new = auth(name=author.get('index-name'), id=author.get('authid'),
-                       surname=author.get('surname'),
-                       initials=author.get('initials'),
-                       url=author.get('author-url'))
-            out.append(new)
-        return out or None
+        for doc in self._citeInfoMatrix:
+            inner = []
+            for author in doc.get('author', []):
+                author = {k.split(":", 1)[-1]: v for k, v in author.items()}
+                new = auth(name=author.get('index-name'), id=author['authid'],
+                           surname=author.get('surname'),
+                           initials=author.get('initials'),
+                           url=author.get('author-url'))
+                inner.append(new)
+            outer.append(inner or None)
+        return _maybe_return_list(outer)
 
     @property
-    def cc(self) -> List[Tuple[int, int]]:
-        """List of tuples of yearly number of citations for specified years."""
+    def cc(self) -> List[List[Tuple[int, int]]]:
+        """List of lists of tuples of yearly number of citations for specified
+        years, where each sub-list corresponds to one document.
+        """
         _years = range(self._start, self._end+1)
-        try:
-            cites = [int(d['$']) for d in self._citeInfoMatrix['cc']]
-        except AttributeError:  # No citations
-            cites = [0]*len(_years)
-        return list(zip(_years, cites))
+        outer = []
+        for doc in self._citeInfoMatrix:
+            try:
+                cites = [int(d['$']) for d in doc['cc']]
+            except AttributeError:  # No citations
+                cites = [0]*len(_years)
+            outer.append(list(zip(_years, cites)))
+        return _maybe_return_list(outer)
 
     @property
-    def citationType_long(self) -> str:
-        """Type (long version) of the abstract (e.g. article, review)."""
-        return self._citeInfoMatrix.get('citationType', {}).get('$')
+    def citationType_long(self) -> Optional[List[str]]:
+        """Type (long version) of the documents (e.g. article, review)."""
+        path = ["citationType", "$"]
+        out = [chained_get(e, path) for e in self._citeInfoMatrix]
+        return _maybe_return_list(out)
 
     @property
-    def citationType_short(self) -> str:
-        """Type (short version) of the abstract (e.g. ar, re)."""
-        return self._citeInfoMatrix.get('citationType', {}).get('@code')
+    def citationType_short(self) -> Optional[List[str]]:
+        """Type (short version) of the documents (e.g. ar, re)."""
+        path = ["citationType", "@code"]
+        out = [chained_get(e, path) for e in self._citeInfoMatrix]
+        return _maybe_return_list(out)
 
     @property
-    def doi(self) -> Optional[str]:
-        """Document Object Identifier (DOI) of the abstract."""
-        return self._identifierlegend.get('doi')
+    def doi(self) -> Optional[List[str]]:
+        """Document Object Identifier (DOI) of the documents."""
+        out = [e.get('doi') for e in self._identifierlegend]
+        return _maybe_return_list(out)
 
     @property
-    def endingPage(self) -> Optional[str]:
-        """Ending page."""
-        return self._citeInfoMatrix.get('endingPage')
+    def endingPage(self) -> Optional[List[str]]:
+        """Ending pages of the documents."""
+        out = [e.get('endingPage') for e in self._citeInfoMatrix]
+        return _maybe_return_list(out)
 
     @property
     def h_index(self) -> int:
-        """h-index of ciations of the document."""
+        """Combined h-index of citations of all the documents."""
         return int(self._data['h-index'])
 
     @property
-    def issn(self) -> Optional[Union[str, Tuple[str, str]]]:
-        """ISSN of the publisher.
+    def issn(self) -> Optional[List[Optional[Union[str, Tuple[str, str]]]]]:
+        """ISSN of the publishers of the documents.
         Note: If E-ISSN is known to Scopus, this returns both
         ISSN and E-ISSN in random order separated by blank space.
         """
-        return self._citeInfoMatrix.get('issn')
+        out = [e.get('issn') for e in self._citeInfoMatrix]
+        return _maybe_return_list(out)
 
     @property
-    def issueIdentifier(self) -> Optional[str]:
-        """Issue number for abstract."""
-        return self._citeInfoMatrix.get('issueIdentifier')
+    def issueIdentifier(self) -> Optional[List[Optional[str]]]:
+        """Issue numbers of the documents."""
+        out = [e.get('issueIdentifier') for e in self._citeInfoMatrix]
+        return _maybe_return_list(out)
 
     @property
-    def lcc(self) -> int:
-        """Number of citations after the specified end year.
-        """
-        return int(self._citeInfoMatrix.get('lcc'))
+    def lcc(self) -> List[int]:
+        """Number of citations after the end year of each document."""
+        return [int(m['lcc']) for m in self._citeInfoMatrix]
 
     @property
     def pcc(self) -> int:
-        """Number of citations before the specified start year.
+        """Number of citations before the start year."""
+        return [int(m['pcc']) for m in self._citeInfoMatrix]
+
+    @property
+    def pii(self) -> Optional[List[Optional[str]]]:
+        """The Publication Item Identifier (PII) of the documents."""
+        out = [e.get('pii') for e in self._identifierlegend]
+        return _maybe_return_list(out)
+
+    @property
+    def publicationName(self) -> Optional[List[Optional[str]]]:
+        """Name of source the documents are published in (e.g. the Journal)."""
+        out = [e.get('publicationName') for e in self._citeInfoMatrix]
+        return _maybe_return_list(out)
+
+    @property
+    def rangeCount(self) -> List[int]:
+        """Number of citations for the specified years for each document."""
+        return [int(e['rangeCount']) for e in self._citeInfoMatrix]
+
+    @property
+    def rowTotal(self) -> List[int]:
+        """Total number of citations (specified and omitted years) for each
+        document.
         """
-        return int(self._citeInfoMatrix.get('pcc'))
+        return [int(e['rowTotal']) for e in self._citeInfoMatrix]
 
     @property
-    def pii(self) -> Optional[str]:
-        """The Publication Item Identifier (PII) of the abstract."""
-        return self._identifierlegend.get('pii')
-
-    @property
-    def publicationName(self) -> str:
-        """Name of source the abstract is published in (e.g. the Journal)."""
-        return self._citeInfoMatrix.get('publicationName')
-
-    @property
-    def rangeCount(self) -> int:
-        """Number of citations for specified years."""
-        return int(self._citeInfoMatrix.get('rangeCount'))
-
-    @property
-    def rowTotal(self) -> int:
-        """Number of citations (specified and omitted years)."""
-        return int(self._citeInfoMatrix.get('rowTotal'))
-
-    @property
-    def scopus_id(self) -> int:
-        """The Scopus ID of the abstract.  Might differ from the
-        one provided.
+    def scopus_id(self) -> List[int]:
+        """The Scopus ID(s) of the documents.  Might differ from the
+        ones provided.
         """
-        return int(self._identifierlegend.get('scopus_id'))
+        return [int(e['scopus_id']) for e in self._identifierlegend]
 
     @property
-    def startingPage(self) -> Optional[str]:
+    def startingPage(self) -> Optional[List[Optional[str]]]:
         """Starting page."""
-        return self._citeInfoMatrix.get('startingPage')
+        out = [e.get('startingPage') for e in self._citeInfoMatrix]
+        return _maybe_return_list(out)
 
     @property
-    def title(self) -> str:
-        """Abstract title."""
-        return self._citeInfoMatrix.get('title')
+    def title(self) -> List[str]:
+        """Titles of each document."""
+        return [e["title"] for e in self._citeInfoMatrix]
 
     @property
-    def url(self) -> str:
-        """URL to Citation Overview API view of the abstract."""
-        return self._citeInfoMatrix.get('url')
+    def url(self) -> List[str]:
+        """URL(s) to Citation Overview API view of each document."""
+        return [e["url"] for e in self._citeInfoMatrix]
 
     @property
     def volume(self) -> Optional[str]:
         """Volume for the abstract."""
-        return self._citeInfoMatrix.get('volume')
+        out = [e.get('volume') for e in self._citeInfoMatrix]
+        return _maybe_return_list(out)
 
     def __init__(self,
-                 eid: str,
+                 identifier: List[Union[int, str]],
                  start: Union[int, str],
                  end: Union[int, str] = datetime.now().year,
+                 id_type: str = "scopus_id",
+                 eid: str = None,
                  refresh: Union[bool, int] = False,
-                 citation: Optional[str] = None
+                 citation: Optional[str] = None,
+                 **kwds: str
                  ) -> None:
         """Interaction witht the Citation Overview API.
 
-        :param eid: The EID of the abstract.
+        :param identifier: Up to 25 identifiers for which  to look up
+                           citations.  Must be Scopus IDs, DOIs, PIIs or
+                           Pubmed IDs.
         :param start: The first year for which the citation count should
                       be loaded.
         :param end: The last year for which the citation count should be
                     loaded. Defaults to the current year.
+        :param id_type: The type of the IDs provided in `identifier`.  Must be
+                        one of "scopus_id", "doi", "pii", "pubmed_id".
+        :param eid: (deprecated) The Scopus ID of the abstract - will be
+                    removed in a future release: Instead use param `scopus_id`
+                    after stripping the part until the second hyphen.  If you
+                    use this parameter, it will be converted to `scopus_id`
+                    instead.
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
-        :param citation: Allows for the exclusion of self-citations or those by books.
-                         If `None`, will count all citations.
+        :param citation: Allows for the exclusion of self-citations or those
+                         by books.  If `None`, will count all citations.
                          Allowed values: None, exclude-self, exclude-books
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
@@ -160,22 +196,40 @@ class CitationOverview(Retrieval):
         Raises
         -----
         ValueError
-            If parameter `citation` is not one of the allowed values.
+            If parameter `identifier` contains fewer than 1 or more than
+            25 elements.
+
+        ValueError
+            If parameter `id_type` or parameter `citation` is not one of
+            the allowed values.
 
         Notes
         -----
-        The directory for cached results is `{path}/STANDARD/{eid}{citation}`,
-        where `path` is specified in your configuration file.
+        The directory for cached results is `{path}/STANDARD/{id}-{citation}`,
+        where `path` is specified in your configuration file, and `id` the
+        md5-hashed version of a string joining `identifier` on underscore.
 
         Your API Key needs to be augmented by Elsevier's Scopus
         Integration Team to access this API.
         """
         # Checks
+        allowed = ('scopus_id', 'doi', 'pii', 'pubmed_id')
+        check_parameter_value(id_type, allowed, "id_type")
         if citation:
             allowed = ('exclude-self', 'exclude-books')
             check_parameter_value(citation, allowed, "citation")
+        if eid or not isinstance(identifier, list):
+            msg = "Parameter `eid` is deprecated and will be removed in a "\
+                  "future release.  Instead, provide the corresponding "\
+                  "Scopus ID via parameter `identifier` as a list, and set "\
+                  "`id_type='scopus_id'`."
+            warn(msg, FutureWarning)
+        if len(identifier) < 0 or len(identifier) > 25:
+            msg = "Provide at least 1 and at most than 25 identifiers"
+            raise ValueError(msg)
 
         # Variables
+        identifier = [str(i) for i in identifier]
         self._start = int(start)
         self._end = int(end)
         self._citation = citation
@@ -184,16 +238,18 @@ class CitationOverview(Retrieval):
 
         # Get file content
         date = f'{start}-{end}'
-        Retrieval.__init__(self, eid, api='CitationOverview', date=date,
+        kwds.update({id_type: identifier})
+        stem = md5("_".join(identifier).encode('utf8')).hexdigest()
+        Retrieval.__init__(self, stem, api='CitationOverview', date=date,
                            citation=citation, **kwds)
         self._data = self._json['abstract-citations-response']
 
         # citeInfoMatrix
-        m = self._data['citeInfoMatrix']['citeInfoMatrixXML']['citationMatrix']['citeInfo'][0]
-        self._citeInfoMatrix = _parse_dict(m)
+        matrix = self._data['citeInfoMatrix']['citeInfoMatrixXML']['citationMatrix']['citeInfo']
+        self._citeInfoMatrix = [_parse_dict(e) for e in matrix]
         # identifier-legend
-        l = self._data['identifier-legend']['identifier'][0]
-        self._identifierlegend = _parse_dict(l)
+        identifier = self._data['identifier-legend']['identifier']
+        self._identifierlegend = [_parse_dict(e) for e in identifier]
         # citeColumnTotalXML
         self._citeColumnTotalXML = self._data['citeColumnTotalXML']  # not used
 
@@ -202,18 +258,21 @@ class CitationOverview(Retrieval):
         cits_dict = {'exclude-self': 'excluding self-citations',
                      'exclude-books': 'excluding citations from books'}
         date = self.get_cache_file_mdate().split()[0]
-        authors = [a.name for a in self.authors]
-        if len(authors) > 1:
-            authors[-1] = " and ".join([authors[-2], authors[-1]])
         cits_type = f'{cits_dict.get(self._citation, "")}'
-        s = f"Document '{self.title}' by {', '.join(authors)}\npublished in "\
-            f"'{self.publicationName}' has the following citation trajectory "\
-            f"{cits_type} as of {date}:\n    Before {self._start} {self.pcc}; "\
-            f"{'; '.join([f'{item[0]}: {item[1]}' for item in self.cc])}; "\
-            f"After {self._end}: {self.lcc} times "
+        s = f"{len(self.scopus_id)} document(s) has/have the following "\
+            f"total citation count{cits_type} as of {date}:\n    "\
+            f"{'; '.join([str(n) for n in self.rowTotal])}"
         return s
 
 
 def _parse_dict(dct):
     """Auxiliary function to change the keys of a dictionary."""
     return {k.split(":", 1)[-1]: v for k, v in dct.items()}
+
+
+def _maybe_return_list(lst):
+    """Return `lst` unless all of its elements are empty."""
+    if all(e is None for e in lst):
+        return None
+    else:
+        return lst
