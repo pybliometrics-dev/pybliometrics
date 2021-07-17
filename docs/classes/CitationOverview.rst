@@ -33,10 +33,9 @@ You can obtain basic information just by printing the object:
 
     >>> print(co)
     Document 'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
-    by Rose M.E., Rose M.E. and Kitchin J.R.
-    published in 'SoftwareX' has the following citation trajectory as
-    of 2021-01-04:
-        Before 2019 0; 2019: 0; 2020: 6; 2021: 1; After 2021: 0 times
+    by Rose M.E., Rose M.E. and Kitchin J.R. published in 'SoftwareX' has the following
+    citation trajectory as of 2021-07-17:
+    Before 2019 0; 2019: 0; 2020: 6; 2021: 10; After 2021: 0 times:
 
 
 
@@ -45,7 +44,7 @@ The most important information is stored in attribute `cc`, which is a list of t
 .. code-block:: python
 
     >>> co.cc
-    [(2019, '0'), (2020, '6'), (2021, '1')]
+    [(2019, '0'), (2020, '6'), (2021, '10')]
 
 
 Sometimes there are citations outside the specified year range, which you can get with `pcc` and `lcc`:
@@ -63,31 +62,29 @@ Attributes `rangeCount` and `rowTotal` give summaries.  `rangeCount` is the numb
 .. code-block:: python
 
     >>> co.rangeCount
-    '7'
+    '16'
     >>> co.rowTotal
-    '7'
+    '16'
 
 Using parameter `citation`, one can exclude self-citations or citations by books. However, if the data has been downloaded and cached, these counts will not take effect! Therefore make wise use of `refresh=True`!
 
 .. code-block:: python
 
     >>> co_self = CitationOverview("2-s2.0-85068268027", start=2019, end=2021,
-                                   citation="exclude-self", refresh=True)
+                                   citation="exclude-self")
     >>> print(co_self)
     Document 'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
-    by Rose M.E., Rose M.E. and Kitchin J.R.
-    published in 'SoftwareX' has the following citation trajectory
-    excluding self-citations as of 2021-02-10:
-        Before 2019 0; 2019: 0; 2020: 6; 2021: 1; After 2021: 0 times
+    by Rose M.E., Rose M.E. and Kitchin J.R. published in 'SoftwareX' has the following
+    citation trajectory excluding self-citations as of 2021-07-17:
+    Before 2019 0; 2019: 0; 2020: 6; 2021: 8; After 2021: 0 times
 
     >>> co_books = CitationOverview("2-s2.0-85068268027", start=2019, end=2021,
-                                    citation="exclude-books", refresh=True)
+                                    citation="exclude-books")
     >>> print(co_books)
     Document 'pybliometrics: Scriptable bibliometrics using a Python interface to Scopus'
-    by Rose M.E., Rose M.E. and Kitchin J.R.
-    published in 'SoftwareX' has the following citation trajectory
-    excluding citations from books as of 2021-02-10:
-        Before 2019 0; 2019: 0; 2020: 6; 2021: 1; After 2021: 0 times
+    by Rose M.E., Rose M.E. and Kitchin J.R. published in 'SoftwareX' has the following
+    citation trajectory excluding citations from books as of 2021-07-17:
+    Before 2019 0; 2019: 0; 2020: 6; 2021: 10; After 2021: 0 times
 
 
 There are also author information stored as list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:

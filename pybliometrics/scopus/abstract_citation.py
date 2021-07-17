@@ -199,13 +199,13 @@ class CitationOverview(Retrieval):
 
     def __str__(self):
         """Return a summary string."""
-        cits_dict = {'exclude-self': 'self-citations',
-                     'exclude-books': 'citations from books'}
+        cits_dict = {'exclude-self': 'excluding self-citations',
+                     'exclude-books': 'excluding citations from books'}
         date = self.get_cache_file_mdate().split()[0]
         authors = [a.name for a in self.authors]
         if len(authors) > 1:
             authors[-1] = " and ".join([authors[-2], authors[-1]])
-        cits_type = f'excluding {cits_dict.get(self._citation, "")}'
+        cits_type = f'{cits_dict.get(self._citation, "")}'
         s = f"Document '{self.title}' by {', '.join(authors)}\npublished in "\
             f"'{self.publicationName}' has the following citation trajectory "\
             f"{cits_type} as of {date}:\n    Before {self._start} {self.pcc}; "\
