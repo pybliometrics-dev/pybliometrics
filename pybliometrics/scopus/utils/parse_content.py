@@ -2,7 +2,7 @@ from collections import namedtuple
 from warnings import warn
 
 
-def chained_get(container, path, default=None, integer=False):
+def chained_get(container, path, default=None):
     """Helper function to perform a series of .get() methods on a dictionary
     or return the `default`.
 
@@ -17,25 +17,14 @@ def chained_get(container, path, default=None, integer=False):
     default : any (optional, default=None)
         The object type that should be returned if the search yields
         no result.
-
-    integer : bool (optiona, default=False)
-        Whether to attempt a conversion to type integer or not.
     """
     from functools import reduce
 
     # Obtain value via reduce
     try:
-        val = reduce(lambda c, k: c.get(k, default), path, container)
+        return reduce(lambda c, k: c.get(k, default), path, container)
     except (AttributeError, TypeError):
-        val = default
-
-    if not integer:
-        return val
-    # Attempt integer conversion
-    try:
-        return int(val)
-    except (TypeError, ValueError):
-        return val
+        return default
 
 
 def check_integrity(tuples, fields, action):
@@ -88,6 +77,14 @@ def listify(element):
         return element
     else:
         return [element]
+
+
+def make_int_if_possible(val):
+    """Attempt a conversion to int type."""
+    try:
+        return int(val)
+    except TypeError:
+        return val
 
 
 def make_search_summary(self, keyword, results, joiner="\n    "):

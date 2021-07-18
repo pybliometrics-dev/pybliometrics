@@ -8,7 +8,8 @@ from .author_search import AuthorSearch
 from .scopus_search import ScopusSearch
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
-    get_content, get_link, listify, parse_affiliation, parse_date_created
+    get_content, get_link, listify, make_int_if_possible, parse_affiliation,\
+    parse_date_created
 
 
 class AuthorRetrieval(Retrieval):
@@ -69,7 +70,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def coauthor_count(self) -> Optional[int]:
         """Total number of coauthors."""
-        return chained_get(self._json, ['coauthor-count'], integer=True)
+        return make_int_if_possible(chained_get(self._json, ['coauthor-count']))
 
     @property
     def coauthor_link(self) -> Optional[str]:
@@ -105,7 +106,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def h_index(self) -> Optional[str]:
         """The author's h-index."""
-        return chained_get(self._json, ['h-index'], integer=True)
+        return make_int_if_possible(chained_get(self._json, ['h-index']))
 
     @property
     def historical_identifier(self) -> Optional[List[int]]:

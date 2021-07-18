@@ -3,7 +3,7 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
-    get_link
+    get_link, make_int_if_possible
 
 
 class SerialTitle(Retrieval):
@@ -45,7 +45,7 @@ class SerialTitle(Retrieval):
     @property
     def openaccess(self) -> Optional[int]:
         """Open Access status (0 or 1)."""
-        return chained_get(self._entry, ['openaccess'], integer=True)
+        return make_int_if_possible(chained_get(self._entry, ['openaccess']))
 
     @property
     def openaccessstartdate(self):

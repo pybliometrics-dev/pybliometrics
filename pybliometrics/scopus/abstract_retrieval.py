@@ -3,7 +3,7 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
-    get_id, detect_id_type, get_link, listify
+    get_id, detect_id_type, get_link, listify, make_int_if_possible
 
 
 class AbstractRetrieval(Retrieval):
@@ -68,14 +68,8 @@ class AbstractRetrieval(Retrieval):
                 continue
             # Affiliation information
             aff = item.get('affiliation', {})
-            try:
-                aff_id = int(aff["@afid"])
-            except KeyError:
-                aff_id = None
-            try:
-                dep_id = int(aff["@dptid"])
-            except KeyError:
-                dep_id = None
+            aff_id = make_int_if_possible(aff.get("@afid"))
+            dep_id = make_int_if_possible(aff.get("@dptid"))
             org = _get_org(aff)
             # Author information (might relate to collaborations)
             authors = listify(item.get('author', item.get('collaboration', [])))
@@ -121,7 +115,8 @@ class AbstractRetrieval(Retrieval):
     @property
     def citedby_count(self) -> Optional[int]:
         """Number of articles citing the document."""
-        return chained_get(self._json, ['coredata', 'citedby-count'], integer=True)
+        path = ['coredata', 'citedby-count']
+        return make_int_if_possible(chained_get(self._json, path))
 
     @property
     def citedby_link(self) -> str:
@@ -154,10 +149,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def confcode(self) -> Optional[int]:
         """Code of the conference the document belongs to."""
-        try:
-            return int(self._confevent['confcode'])
-        except KeyError:
-            return None
+        return make_int_if_possible(self._confevent.get('confcode'))
 
     @property
     def confdate(self) -> Optional[Tuple[Tuple[int, int], Tuple[int, int]]]:
@@ -351,7 +343,8 @@ class AbstractRetrieval(Retrieval):
     @property
     def openaccess(self) -> Optional[int]:
         """The openaccess status encoded in single digits."""
-        return chained_get(self._json, ['coredata', 'openaccess'], integer=True)
+        path = ['coredata', 'openaccess']
+        return make_int_if_possible(chained_get(self._json, path))
 
     @property
     def openaccessFlag(self) -> Optional[bool]:
@@ -403,7 +396,8 @@ class AbstractRetrieval(Retrieval):
     @property
     def pubmed_id(self) -> Optional[int]:
         """The PubMed ID of the document."""
-        return chained_get(self._json, ['coredata', 'pubmed-id'], integer=True)
+        path = ['coredata', 'pubmed-id']
+        return make_int_if_possible(chained_get(self._json, path))
 
     @property
     def refcount(self) -> Optional[int]:
@@ -525,7 +519,8 @@ class AbstractRetrieval(Retrieval):
     @property
     def source_id(self) -> Optional[int]:
         """Scopus source ID of the document."""
-        return chained_get(self._json, ['coredata', 'source-id'], integer=True)
+        path = ['coredata', 'source-id']
+        return make_int_if_possible(chained_get(self._json, path))
 
     @property
     def sourcetitle_abbreviation(self) -> Optional[str]:
