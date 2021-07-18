@@ -108,6 +108,11 @@ def test_state():
     assert_equal(standard.state, 'Western Cape')
 
 
+def test_status():
+    assert_equal(light.status, None)
+    assert_equal(standard.status, "update")
+
+
 def sort_name():
     assert_equal(light.sort_name, None)
     assert_equal(standard.sort_name, 'Cape Town, University of')

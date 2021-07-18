@@ -110,6 +110,10 @@ class AffiliationRetrieval(Retrieval):
         return chained_get(self._profile, ['address', 'state'])
 
     @property
+    def status(self) -> Optional[str]:
+        return self._profile.get("status")
+
+    @property
     def sort_name(self) -> Optional[str]:
         """The name of the affiliation used for sorting.  Requires the
         STANDARD view.
