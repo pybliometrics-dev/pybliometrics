@@ -83,7 +83,9 @@ class AffiliationSearch(Search):
         Raises
         ------
         ScopusQueryError
-            If the number of search results exceeds 5000.
+            If the number of search results exceeds 5000, which is the API's
+            maximum number of results returned.  The error prevents the
+            download attempt and avoids making use of your API key.
 
         ValueError
             If parameter `integrity_action` is not one of the allowed values.

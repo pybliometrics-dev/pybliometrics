@@ -50,3 +50,6 @@ RATELIMITS = {
     'PlumXMetrics': 6,
     'SubjectClassifications': 0
 }
+
+# Other API restrictions
+SEARCH_MAX_ENTRIES = 5_000

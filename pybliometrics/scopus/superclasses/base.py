@@ -5,7 +5,7 @@ from time import localtime, strftime, time
 from typing import Dict, Optional
 
 from pybliometrics.scopus.exception import ScopusQueryError
-from pybliometrics.scopus.utils import get_content
+from pybliometrics.scopus.utils import get_content, SEARCH_MAX_ENTRIES
 from tqdm import tqdm
 
 
@@ -15,7 +15,6 @@ class Base:
                  url: str,
                  api: str,
                  download: bool = True,
-                 max_entries: int = None,
                  verbose: bool = False,
                  *args: str, **kwds: str
                  ) -> None:
@@ -24,19 +23,14 @@ class Base:
         :param params: Dictionary used as header during the API request.
         :param url: The URL to be accessed.
         :param api: The Scopus API to be accessed.
-        :param  download: Whether to download the query or not.  Has no effect
-                          for retrieval requests.
-        :param max_entries: Raise error when the number of results is beyond
-                            this number.  Has no effect for retrieval requests.
+        :param download: Whether to download the query or not.  Has no effect
+                         for retrieval requests.
         :param verbose: Whether to print a download progress bar.
         :param args: Keywords passed on `get_content()`
         :param kwds: Keywords passed on `get_content()`
 
         Raises
         ------
-        ScopusQueryError
-            If the number of search results exceeds max_entries.
-
         ValueError
             If `self._refresh` is neither boolean nor numeric.
         """
@@ -72,11 +66,11 @@ class Base:
                 self._json = []
                 # Results size check
                 cursor_false = "cursor" in params and not params["cursor"]
-                if cursor_false and n > max_entries:
+                if cursor_false and n > SEARCH_MAX_ENTRIES:
                     # Stop if there are too many results
-                    text = (f'Found {n} matches. Set max_entries to a higher '
-                            f'number, change your query ({self._query}) or set '
-                            'subscription=True')
+                    text = f'Found {n} matches.  The query fails to return '\
+                           f'more than {SEARCH_MAX_ENTRIES} entries.  Change '\
+                           'your query such that it returns fewer entries.'
                     raise ScopusQueryError(text)
                 # Download results page-wise
                 if download:

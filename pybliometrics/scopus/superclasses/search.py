@@ -11,7 +11,6 @@ class Search(Base):
                  query: str,
                  api: str,
                  count: int = 200,
-                 max_entries: int = 5000,
                  cursor: bool = False,
                  download: bool = True,
                  verbose: bool = False,
@@ -19,16 +18,13 @@ class Search(Base):
                  ) -> None:
         """Class intended as superclass to perform a search query.
 
-        : param query : A string of the query.
-        : param api: The name of the Scopus API to be accessed.  Allowed values:
-                     AffiliationSearch, AuthorSearch, ScopusSearch,
-                     SerialSearch, SubjectClass.
+        :param query : A string of the query.
+        :param api: The name of the Scopus API to be accessed.  Allowed values:
+                    AffiliationSearch, AuthorSearch, ScopusSearch,
+                    SerialSearch, SubjectClass.
         :param count: The number of entries to be displayed at once.  A smaller
                       number means more queries with each query having
                       fewer results.
-        :param max_entries: Raise error when the number of results is beyond
-                            this number.  To skip this check, set `max_entries`
-                            to `None`. Has no effect if cursor=True.
         :param cursor: Whether to use the cursor in order to iterate over all
                       search results without limit on the number of the results.
                       In contrast to `start` parameter, the `cursor` parameter
@@ -63,7 +59,7 @@ class Search(Base):
 
         # Init
         Base.__init__(self, params=params, url=URLS[api], download=download,
-                      api=api, max_entries=max_entries, verbose=verbose)
+                      api=api, verbose=verbose)
 
     def get_results_size(self) -> int:
         """Return the number of results (works even if download=False)."""
