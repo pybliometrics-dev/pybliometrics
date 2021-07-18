@@ -35,7 +35,7 @@ You can obtain basic information just by printing the object:
     >>> print(ab)
     Michael E. Rose and John R. Kitchin: "pybliometrics: Scriptable bibliometrics using
     a Python interface to Scopus", SoftwareX, 10, (no pages found)(2019). https://doi.org/10.1016/j.softx.2019.100263.
-    7 citation(s) as of 2021-01-04
+    12 citation(s) as of 2021-04-27
       Affiliation(s):
        Max Planck Institute for Innovation and Competition
        Carnegie Mellon University
@@ -108,9 +108,9 @@ The same structure applies for the attributes `affiliation` and `authorgroup`:
 
     >>> ab.affiliation
     [Affiliation(id='60105007', name='Max Planck Institute for Innovation and Competition',
-     city='Munich', country='Germany'),
+                 city='Munich', country='Germany'),
      Affiliation(id='60027950', name='Carnegie Mellon University',
-     city='Pittsburgh', country='United States')]
+                 city='Pittsburgh', country='United States')]
 
     >>> ab.authorgroup
     [Author(affiliation_id='60105007', dptid=None,
@@ -131,7 +131,7 @@ available if you downloaded the article with 'FULL' as `view` parameter.
 .. code-block:: python
 
     >>> ab.refcount
-    '25'
+    25
     >>> refs = ab.references
     >>> refs[0]
     Reference(position='1', id='38949137710', doi='10.1007/978-94-007-7618-0˙310',
@@ -167,8 +167,8 @@ Setting `view="REF"` accesses the REF view of the article, which provides more i
 
 .. code-block:: python
 
-    >>> ab = AbstractRetrieval("2-s2.0-84930616647", view='REF')
-    >>> ab.references[0]
+    >>> ab_ref = AbstractRetrieval("2-s2.0-85068268027", view='REF')
+    >>> ab_ref.references[0]
     Reference(position='1', id='38949137710', doi='10.1096/fj.07-9492LSF',
     title='Comparison of PubMed, Scopus, Web of Science, and Google Scholar:
     Strengths and weaknesses', authors='Falagas, Matthew E.; Pitsouni, Eleni I.;
@@ -201,21 +201,21 @@ Some articles have information on funding, chemicals and genome banks:
 
 .. code-block:: python
 
-    >>> fund = AbstractRetrieval("2-s2.0-85053478849", view="FULL")
-    >>> fund.funding
+    >>> ab_fund = AbstractRetrieval("2-s2.0-85053478849", view="FULL")
+    >>> ab_fund.funding
     [Funding(agency=None, string='CNRT “Nickel et son Environnement',
      id=None, acronym=None, country=None)]
-    >> fund.funding_text
+    >> ab_fund.funding_text
     'The authors gratefully acknowledge CNRT “Nickel et son Environnement” for
     providing the financial support. The results reported in this publication
-    are gathered from the CNRT report “Ecomine BioTop”. Appendix A'
-    >>> fund.chemicals
+    are gathered from the CNRT report “Ecomine BioTop”.'
+    >>> ab_fund.chemicals
     [Chemical(source='esbd', chemical_name='calcium', cas_registry_number='7440-70-2;14092-94-5'),
      Chemical(source='esbd', chemical_name='magnesium', cas_registry_number='7439-95-4'),
      Chemical(source='nlm', chemical_name='Fertilizers', cas_registry_number=None),
      Chemical(source='nlm', chemical_name='Sewage', cas_registry_number=None),
      Chemical(source='nlm', chemical_name='Soil', cas_registry_number=None)]
-    >>> fund.sequencebank
+    >>> ab_fund.sequencebank
     [Sequencebank(name='GENBANK', sequence_number='MH150839:MH150870', type='submitted')]
 
 

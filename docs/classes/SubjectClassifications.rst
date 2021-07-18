@@ -48,6 +48,7 @@ You can obtain basic information just by printing the object:
         2613
         2614
 
+
 The class has only one method - `SubjectClass.results` - which returns a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_.  By default, the API returns description, code, detail and abbreviation of each found subject, which is also reflected in the fields of `namedtuples` of `SubjectClass().results`.  You can specify the fields to be returned in the search results (e.g. only codes of subjects).
 
 .. code-block:: python

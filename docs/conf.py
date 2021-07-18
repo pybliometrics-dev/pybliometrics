@@ -60,7 +60,7 @@ html_sidebars = {
     ]
 }
 
-html_static_path = ['_static']
+html_static_path = []
 
 # Options for HTMLHelp output
 html_show_sourcelink = True

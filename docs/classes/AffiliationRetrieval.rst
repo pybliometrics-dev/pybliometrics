@@ -22,7 +22,7 @@ You initialize the class with Scopus' Affiliation ID:
 .. code-block:: python
 
     >>> from pybliometrics.scopus import AffiliationRetrieval
-    >>> aff = AffiliationRetrieval("60000356")
+    >>> aff = AffiliationRetrieval(60000356)
 
 
 You can obtain basic information just by printing the object:
@@ -31,7 +31,7 @@ You can obtain basic information just by printing the object:
 
     >>> print(aff)
     University of Cape Town in Cape Town in South Africa,
-    has 12,463 associated author(s) and 68,181 associated document(s) as of 2020-07-11
+    has 13,033 associated author(s) and 75,695 associated document(s) as of 2021-07-12
 
 
 The object has a number of attributes but no methods.  For example, information regarding the affiliation itself:
@@ -63,9 +63,9 @@ There are meta information, too:
 .. code-block:: python
 
     >>> aff.author_count
-    '10951'
+    13033
     >>> aff.document_count
-    '53312'
+    75695
 
 
 Scopus also collects information on different names affiliated authors use for this affiliation, which `pybliometrics` returns as list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:

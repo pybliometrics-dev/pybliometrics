@@ -73,7 +73,7 @@ Attribute `columnTotal` gives the total number of yearly citations for all docum
     29
 
 
-Using parameter `citation`, one can exclude self-citations or citations by books. However, if the data has been downloaded and cached, these counts will not take effect! Therefore make wise use of `refresh=True`!
+Using parameter `citation`, one can exclude self-citations or citations by books:
 
 .. code-block:: python
 

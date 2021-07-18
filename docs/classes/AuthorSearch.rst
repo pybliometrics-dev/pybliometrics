@@ -30,9 +30,9 @@ You can obtain a search summary just by printing the object:
 .. code-block:: python
 
     >>> print(s)
-    Search 'AUTHLAST(Selten) and AUTHFIRST(Reinhard)' yielded 2 authors as of 2020-04-15:
-        Selten, Reinhard
-        Selten, Reinhard
+    Search 'AUTHLAST(Selten) and AUTHFIRST(Reinhard)' yielded 2 authors as of 2020-07-13:
+        Selten, Reinhard; AUTHOR_ID:6602907525 (74 document(s))
+        Selten, Reinhard; AUTHOR_ID:57213632570 (1 document(s))
 
 
 To know the the number of results use the `.get_results_size()` method, even before you download the results:
@@ -41,18 +41,18 @@ To know the the number of results use the `.get_results_size()` method, even bef
 
     >>> other = AuthorSearch("AUTHLAST(Selten)", download=False)
     >>> other.get_results_size()
-    25
+    27
 
 
-The class mostly serves to provide a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the :doc:`AuthorRetrieval <../classes/AuthorRetrieval>` class, and corresponding information:
+The class mostly provides a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the :doc:`AuthorRetrieval <../classes/AuthorRetrieval>` class, and corresponding information:
 
 .. code-block:: python
 
-    >>> s.authors
+    >>> s.authors[0]
     [Author(eid='9-s2.0-6602907525', surname='Selten', initials='R.',
-     givenname='Reinhard', affiliation='Universitat Bonn', documents='73',
+     givenname='Reinhard', affiliation='Universitat Bonn', documents=74,
      affiliation_id='60007493', city='Bonn', country='Germany',
-     areas='ECON (71); MATH (19); BUSI (15)')]
+     areas='ECON (73); MATH (19); BUSI (16)')]
 
 
 It's easy to work with namedtuples: Using `pandas <https://pandas.pydata.org/>`_, you can quickly turn the results set into a DataFrame:
@@ -60,12 +60,19 @@ It's easy to work with namedtuples: Using `pandas <https://pandas.pydata.org/>`_
 .. code-block:: python
 
     >>> import pandas as pd
+    >>> pd.set_option('display.max_columns', None)
     >>> print(pd.DataFrame(s.authors))
-                     eid surname initials givenname       affiliation documents  \
-    0  9-s2.0-6602907525  Selten       R.  Reinhard  Universitat Bonn        73
+                      eid surname initials givenname  \
+    0   9-s2.0-6602907525  Selten       R.  Reinhard   
+    1  9-s2.0-57213632570  Selten       R.  Reinhard   
 
-      affiliation_id  city  country                            areas
-    0       60007493  Bonn  Germany  ECON (71); MATH (19); BUSI (15)
+                         affiliation  documents affiliation_id     city  country  \
+    0               Universität Bonn         74       60007493     Bonn  Germany   
+    1  Southwest Jiaotong University          1       60010421  Chengdu    China   
+
+                                 areas  
+    0  ECON (73); MATH (19); BUSI (16)  
+    1                         COMP (3)
 
 
 Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `s.get_cache_file_mdate()` to get the date of last modification, and `s.get_cache_file_age()` the number of days since the last modification.

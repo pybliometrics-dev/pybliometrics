@@ -31,8 +31,8 @@ You can obtain basic information just by printing the object:
 
     >>> print(au)
     Kitchin J. from Department of Chemical Engineering in United States,
-    published 105 document(s) since 1995
-    which were cited by 10,428 author(s) in 12,934 document(s) as of 2020-11-30
+    published 108 document(s) since 1995
+    which were cited by 11,980 author(s) in 14,861 document(s) as of 2021-07-14
 
 
 The object can access many bits of data about an author, including the number of papers, h-index, current affiliation, etc.  When a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ is returned, it can neatly be turned into a `pandas <https://pandas.pydata.org/>`_ DataFrame.
@@ -51,11 +51,11 @@ Information on names:
     'J.R.'
     >>> au.name_variants
     [Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin',
-     given_name='John R.', doc_count='81'),
+     given_name='John R.', doc_count=90),
      Variant(indexed_name='Kitchin J.', initials='J.', surname='Kitchin',
-     given_name='John', doc_count='10'),
+     given_name='John', doc_count=11),
      Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin',
-     given_name='J. R.', doc_count='8')]
+     given_name='J. R.', doc_count=8)]
     >>> au.eid
     '9-s2.0-7004212771'
 
@@ -65,15 +65,15 @@ Bibliometric information:
 .. code-block:: python
 
     >>> au.citation_count
-    '12934'
+    14861
     >>> au.document_count
-    '105'
+    108
     >>> au.h_index
-    '3'
+    34
     >>> au.orcid
     '0000-0003-2625-9232'
     >>> au.publication_range
-    ('1995', '2020')
+    (1995, 2021)
     >>> import pandas as pd
     >>> areas = pd.DataFrame(au.subject_areas)
     >>> areas.shape
@@ -114,8 +114,8 @@ Extensive information on current and former affiliations is provided as namedtup
      country='United States', address_part='5000 Forbes Avenue', city='Pittsburgh',
      state='PA', postal_code='15213-3890', org_domain='cmu.edu', org_URL='https://www.cmu.edu/')]
     >>> len(au.affiliation_history)
-    15
-    >>> au.affiliation_history[9]
+    16
+    >>> au.affiliation_history[10]
     Affiliation(id='60008644', parent=None, type='parent', relationship='author',
     afdispname=None, preferred_name='Fritz Haber Institute of the Max Planck Society',
     parent_preferred_name=None, country_code='deu', country='Germany',
@@ -146,7 +146,7 @@ Method `get_documents()` is another convenience method to search for the author'
 
     >>> docs = pd.DataFrame(au.get_documents(refresh=10))
     >>> docs.shape
-    (105, 34)
+    (108, 34)
     >>> docs.columns
     Index(['eid', 'doi', 'pii', 'pubmed_id', 'title', 'subtype',
            'subtypeDescription', 'creator', 'afid', 'affilname',
@@ -178,27 +178,28 @@ or you might be interested in the yearly number of publications:
 .. code-block:: python
 
     >>> docs['year'] = docs['coverDate'].str[:4]
-    >>> docs['year'].value_counts()
-    2015    12
-    2009    10
-    2014    10
-    2011    10
-    2017     8
-    2012     8
-    2016     7
-    2008     7
-    2010     6
-    2004     4
-    2018     4
-    2013     4
-    2020     3
-    2003     3
-    2005     3
-    2007     2
+    >>> docs['year'].value_counts().sort_index()
     1995     1
-    2006     1
     2002     1
-    2019     1
+    2003     3
+    2004     4
+    2005     3
+    2006     1
+    2007     2
+    2008     7
+    2009    10
+    2010     6
+    2011    10
+    2012     8
+    2013     4
+    2014    10
+    2015    12
+    2016     7
+    2017     8
+    2018     4
+    2019     2
+    2020     2
+    2021     3
     Name: year, dtype: int64
 
 

@@ -30,7 +30,7 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(s)
-    Search '{'title': 'SoftwareX'}' yielded 1 source as of 2020-07-07:
+    Search '{'title': 'SoftwareX'}' yielded 1 source as of 2021-07-14:
         SoftwareX
 
 
@@ -48,6 +48,8 @@ The class' main attribute `results` returns a list of `OrderedDict <https://docs
 
     >>> import pandas as pd
     >>> df = pd.DataFrame(pd.DataFrame(s.results))
+    >>> df.shape
+    (1, 147)
     >>> df.columns
     Index(['title', 'publisher', 'coverageStartYear', 'coverageEndYear',
            'aggregationType', 'source-id', 'eIssn', 'openaccess',
