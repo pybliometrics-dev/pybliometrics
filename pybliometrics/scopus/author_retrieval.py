@@ -279,7 +279,7 @@ class AuthorRetrieval(Retrieval):
         url = self.coauthor_link
         if not url:
             return None
-        res = get_content(url=url)
+        res = get_content(url, api="AuthorSearch")
         data = loads(res.text)['search-results']
         N = int(data.get('opensearch:totalResults', 0))
         # Store information in namedtuples
@@ -290,8 +290,8 @@ class AuthorRetrieval(Retrieval):
         count = SIZE
         start = 0
         while start < N:
-            params = {'start': start, 'count': count}
-            res = get_content(url=url, params=params, accept='json')
+            params = {'start': start, 'count': count, 'accept': 'json'}
+            res = get_content(url, api="AuthorSearch", params=params)
             data = loads(res.text)['search-results'].get('entry', [])
             # Extract information for each coauthor
             for entry in data:
@@ -302,7 +302,7 @@ class AuthorRetrieval(Retrieval):
                     areas = [entry['subject-area']['$']]
                 new = coauth(surname=entry['preferred-name']['surname'],
                     given_name=entry['preferred-name'].get('given-name'),
-                    id=entry['dc:identifier'].split(':')[-1],
+                    id=int(entry['dc:identifier'].split(':')[-1]),
                     areas='; '.join(areas), name=aff.get('affiliation-name'),
                     affiliation_id=aff.get('affiliation-id'),
                     city=aff.get('affiliation-city'),
