@@ -3,6 +3,33 @@ Change Log
 
 .. toctree::
 
+3.0
+~~~
+
+2012-07-18
+
+* Implement throttling as per Scopus' definition.
+* Enable type hints.
+* Revamp documentation: Document all classes with examples on the same page in the new section "Classes"; Add new section "Access" using subsections previously listed under "Tips".
+* For the following properties, type str changed to numeric type (either as scalar or within a container): `AbstractRetrieval().authorgroup.affiliation_id`, `AbstractRetrieval().authorgroup.dep_id` and `AbstractRetrieval().authorgroup.auid`, `AbstractRetrieval().authors.id`, `AbstractRetrieval().authors.auid`, `AbstractRetrieval().citedby_count`, `AbstractRetrieval().confcode` `AbstractRetrieval().identifier`, `AbstractRetrieval().openaccess`, `AbstractRetrieval().pubmed_id`, `AbstractRetrieval().source_id`, `AbstractRetrieval().subject_areas.code` `AffiliationRetrieval().author_count`, `AffiliationRetrieval().document_count`, `AffiliationRetrieval().identifier`, `AffiliationRetrieval().name_variants.doc_count`, `AffiliationSearch().affiliations.documents`, `AuthorRetrieval().affiliation_current.id` and `AuthorRetrieval().affiliation_current.parent`, `AuthorRetrieval().affiliation_history.id` and `AuthorRetrieval().affiliation_history.parent`, `AuthorRetrieval().citation_count`, `AuthorRetrieval().cited_by_count`, `AuthorRetrieval().classificationgroup`, `AuthorRetrieval().coauthor_count`, `AuthorRetrieval().document_count`, `AuthorRetrieval().historical_identifier`, `AuthorRetrieval().identifier`, `AuthorRetrieval().subject_areas.code`, `AuthorSearch().authors.documents`, `ScopusSearch().results.citedby_count` and `ScopusSearch().results.openaccess`, `SerialTitle().citescoreyearinfolist`, `SerialTitle().sjrlist`, `SerialTitle().sniplist`, `SerialTitle().source_id`, `SerialTitle().subject_area.code`.
+* The type of `AbstractRetrieval().authors.affiliation` is now a string joining all affiliation IDs on ";".
+* In `AffiliationSearch()` and `AuthorSearch()`, parameter `count` is deprecated and will be removed in a future release.  There is no substitute.
+* In `AbstractRetrieval()`, property `.correspondence` is now a list.
+* In `CitationOverview()`, parameter `eid` is deprecated and will be removed in a future release.  Instead, the class now accepts a list of up to 25 identifiers (Scopus ID, DOI, PII or Pubmed ID) and returns individual citation trajectories for each of the documents.
+* In `CitationOverview()`, all current properties now return lists, except for `.h_index`, which remains int.
+* In `CitationOverview()`, add new properties `.columnTotal`, `.grandTotal`, `.laterColumnTotal`, `prevColumnTotal`, `.rangeColumnTotal`.
+* In `CitationOverview()`, change the cache file name to md5-hash of the used identifiers plus the citation type information (e.g., when self-citations are excluded).
+* In `AffiliationRetrieval()`, add property `.status`.
+* In `SubjectClassifications()`, the default cache file path now goes without the folder "STANDARD".
+* The default folder for the configuration file become `.pybliometrics` instead of `.scopus`, but if `.scopus` exists, `pybliometrics` will use this folder.  New installations will only use `.pybliometrics`.  The default path for the cache file folders has become `.pybliometrics/Scopus/`.
+* Allow for kwds to be passed on in the following classes: `AffiliationRetrieval()`, `AffiliationSearch()`, `AuthorSearch()`, `CitationOverview()`, `SubjectClassifications()`.
+* For search classes, change error message when the search result size exceeds 5k.  The possiblity to change this number has been removed.
+* In all classes, raise ValueError if parameter `refresh` is neither int nor bool.
+* In all classes, harmonize error message documentation and order of parameters.
+* Require `tqdm` package to print progress bars.
+* Class `ContentAffiliationRetrieval()` has been removed.
+* Fix bug that cached an empty file when `download=False` using any Search class.
+
 2.9.1
 ~~~~~
 
