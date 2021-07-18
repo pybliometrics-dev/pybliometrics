@@ -155,6 +155,12 @@ class SerialTitle(Retrieval):
                       None, only the most recent metric data values are
                       provided. Note: If not None, refresh will always be True.
 
+        Raises
+        ------
+        ValueError
+            If any of the parameters `refresh` or `view` is not
+            one of the allowed values.
+
         Notes
         -----
         The directory for cached results is `{path}/{view}/{source_id}`,

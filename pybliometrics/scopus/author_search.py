@@ -96,7 +96,8 @@ class AuthorSearch(Search):
             download attempt and avoids making use of your API key.
 
         ValueError
-            If parameter `integrity_action` is not one of the allowed values.
+            If any of the parameters `integrity_action` or `refresh` is not
+            one of the allowed values.
 
         Notes
         -----

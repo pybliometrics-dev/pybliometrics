@@ -54,12 +54,12 @@ class SubjectClassifications(Search):
 
         Raises
         ------
-        ValueError
-            If parameter `query` or paramter `fields` is not one of the
-            allowed values.
-
         TypeError
             If returned fields are not passed in an iterable container.
+
+        ValueError
+            If any of the parameters `fields`, `refresh` or `query` is not
+            one of the allowed values.
 
         Notes
         -----

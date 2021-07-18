@@ -229,8 +229,8 @@ class CitationOverview(Retrieval):
             25 elements.
 
         ValueError
-            If parameter `id_type` or parameter `citation` is not one of
-            the allowed values.
+            If any of the parameters `citation`, `id_type` or `refresh` is not
+            one of the allowed values.
 
         Notes
         -----

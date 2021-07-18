@@ -147,6 +147,12 @@ class AffiliationRetrieval(Retrieval):
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/AffiliationRetrievalAPI.wadl.
 
+        Raises
+        ------
+        ValueError
+            If any of the parameters `refresh` or `view` is not
+            one of the allowed values.
+
         Notes
         -----
         The directory for cached results is `{path}/{view}/{aff_id}`,

@@ -156,8 +156,8 @@ class ScopusSearch(Search):
             For non-subscribers, if the number of search results exceeds 5000.
 
         ValueError
-            If parameter `view` or parameter `integrity_action` is not one of
-            the allowed values.
+            If any of the parameters `integrity_action`, `refresh` or `view`
+            is not one of the allowed values.
 
         Notes
         -----

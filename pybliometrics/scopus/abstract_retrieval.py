@@ -623,8 +623,8 @@ class AbstractRetrieval(Retrieval):
         Raises
         ------
         ValueError
-            If parameter `id_type` or parameter `view` is not one of the
-            allowed values.
+            If any of the parameters `id_type`, `refresh` or `view` is not
+            one of the allowed values.
 
         Notes
         -----

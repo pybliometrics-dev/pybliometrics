@@ -119,6 +119,11 @@ class PlumXMetrics(Retrieval):
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
 
+        Raises
+        ------
+        ValueError
+            If the parameter `refresh` is not one of the allowed values.
+
         Notes
         -----
         The directory for cached results is `{path}/ENHANCED/{identifier}`,

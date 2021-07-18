@@ -223,6 +223,12 @@ class AuthorRetrieval(Retrieval):
                      Note: Neither the BASIC nor the DOCUMENTS view are active,
                      although documented.
 
+        Raises
+        ------
+        ValueError
+            If any of the parameters `refresh` or `view` is not
+            one of the allowed values.
+
         Notes
         -----
         The directory for cached results is `{path}/ENHANCED/{author_id}`,
