@@ -116,13 +116,13 @@ class AuthorRetrieval(Retrieval):
     @property
     def identifier(self) -> int:
         """The author's ID.  Might differ from the one provided."""
-        ident = int(self._json['coredata']['dc:identifier'].split(":")[-1])
+        ident = self._json['coredata']['dc:identifier'].split(":")[-1]
         if ident != self._id:
             text = f"Profile with ID {self._id} has been merged and the new "\
                    f"ID is {ident}.  Please update your records manually.  "\
                    "Files have been cached with the old ID."
             warn(text, UserWarning)
-        return ident
+        return int(ident)
 
     @property
     def indexed_name(self) -> Optional[str]:
@@ -233,7 +233,7 @@ class AuthorRetrieval(Retrieval):
         check_parameter_value(view, allowed_views, "view")
 
         # Load json
-        self._id = str(int(str(author_id).split('-')[-1]))
+        self._id = str(author_id).split('-')[-1]
         self._view = view
         self._refresh = refresh
         Retrieval.__init__(self, identifier=self._id, api='AuthorRetrieval')
