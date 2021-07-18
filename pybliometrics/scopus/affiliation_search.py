@@ -73,9 +73,9 @@ class AffiliationSearch(Search):
                                  cannot be verified.  Possible actions:
                                  - "raise": Raise an AttributeError
                                  - "warn": Raise a UserWarning
-        :param count: The number of entries to be displayed at once.  A smaller
-                      number means more queries with each query having
-                      fewer results.
+        :param count: (deprecated) The number of entries to be displayed at
+                      once.  A smaller number means more queries with each
+                      query having fewer results.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/AffiliationSearchAPI.wadl.
@@ -97,6 +97,10 @@ class AffiliationSearch(Search):
         # Check
         allowed = ("warn", "raise")
         check_parameter_value(integrity_action, allowed, "integrity_action")
+        if count != 200:
+            msg = "Parameter `count` is deprecated and will be removed in a "\
+                  "future release.  There will be no substitute."
+            warn(msg, FutureWarning)
 
         # Query
         self._action = integrity_action
