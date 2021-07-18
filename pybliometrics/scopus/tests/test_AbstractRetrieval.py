@@ -79,7 +79,7 @@ def test_authors():
     auth = namedtuple('Author', fields)
     expected = [auth(auid=7004212771, indexed_name='Kitchin J.R.',
                 surname='Kitchin', given_name='John R.',
-                affiliation_id=['60027950'])]
+                affiliation_id='60027950')]
     assert_equal(ab1.authors, expected)
     assert_equal(ab8.authors, None)
 

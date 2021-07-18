@@ -91,15 +91,15 @@ You get the authors as a list of `namedtuples <https://docs.python.org/3/library
 
     >>> ab.authors
     [Author(auid=57209617104, indexed_name='Rose M.E.', surname='Rose',
-     given_name='Michael E.', affiliation=['60105007']),
+     given_name='Michael E.', affiliation='60105007'),
      Author(auid=7004212771, indexed_name='Kitchin J.R.', surname='Kitchin',
-     given_name='John R.', affiliation=['60027950'])]
+     given_name='John R.', affiliation='60027950')]
 
     >>> import pandas as pd
     >>> print(pd.DataFrame(ab.authors))
               auid  indexed_name  surname  given_name affiliation
-    0  57209617104     Rose M.E.     Rose  Michael E.  [60105007]
-    1   7004212771  Kitchin J.R.  Kitchin     John R.  [60027950]
+    0  57209617104     Rose M.E.     Rose  Michael E.  60105007
+    1   7004212771  Kitchin J.R.  Kitchin     John R.  60027950
 
 
 The same structure applies for the attributes `affiliation` and `authorgroup`:

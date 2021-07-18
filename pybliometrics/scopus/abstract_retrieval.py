@@ -97,8 +97,8 @@ class AbstractRetrieval(Retrieval):
     @property
     def authors(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the article's authors, in the
-        form (auid, indexed_name, surname, given_name, affiliation_id,
-        affiliation, city, country).
+        form (auid, indexed_name, surname, given_name, affiliation).  In case
+        multiple affiliation IDs are given, they are joined on ";".
         Note: The affiliation referred to here is what Scopus' algorithm
         determined as the main affiliation.  Property `authorgroup` provides
         all affiliations.
@@ -107,10 +107,10 @@ class AbstractRetrieval(Retrieval):
         fields = 'auid indexed_name surname given_name affiliation'
         auth = namedtuple('Author', fields)
         for item in chained_get(self._json, ['authors', 'author'], []):
-            affs = [a for a in listify(item.get('affiliation')) if a]
-            if affs:
-                aff = [aff.get('@id') for aff in affs]
-            else:
+            affs = [a for a in listify(item.get('affiliation')) if a] or None
+            try:
+                aff = ";".join([aff.get('@id') for aff in affs])
+            except TypeError:
                 aff = None
             new = auth(auid=int(item['@auid']), surname=item.get('ce:surname'),
                        indexed_name=item.get('ce:indexed-name'), affiliation=aff,
