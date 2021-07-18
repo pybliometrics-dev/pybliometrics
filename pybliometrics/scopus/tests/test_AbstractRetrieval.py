@@ -40,7 +40,7 @@ def test_abstract():
 
 def test_affiliation():
     aff = namedtuple('Affiliation', 'id name city country')
-    expected = [aff(id='60027950', name='Carnegie Mellon University',
+    expected = [aff(id=60027950, name='Carnegie Mellon University',
                     city='Pittsburgh', country='United States')]
     assert_equal(ab1.affiliation, expected)
     assert_equal(ab3.affiliation, None)
@@ -65,10 +65,10 @@ def test_authorgroup():
     fields = 'affiliation_id dptid organization city postalcode '\
              'addresspart country auid indexed_name surname given_name'
     auth = namedtuple('Author', fields)
-    expected = [auth(affiliation_id='60027950', dptid='110785688',
+    expected = [auth(affiliation_id=60027950, dptid=110785688,
         organization='Department of Chemical Engineering, Carnegie Mellon University',
         city='Pittsburgh', postalcode='15213', addresspart='5000 Forbes Avenue',
-        country='United States', auid='7004212771',
+        country='United States', auid=7004212771,
         indexed_name='Kitchin J.', surname='Kitchin', given_name='John R.')]
     assert_equal(ab1.authorgroup, expected)
     assert_equal(ab8.authorgroup, None)
@@ -77,7 +77,7 @@ def test_authorgroup():
 def test_authors():
     fields = 'auid indexed_name surname given_name affiliation_id'
     auth = namedtuple('Author', fields)
-    expected = [auth(auid='7004212771', indexed_name='Kitchin J.R.',
+    expected = [auth(auid=7004212771, indexed_name='Kitchin J.R.',
                 surname='Kitchin', given_name='John R.',
                 affiliation_id=['60027950'])]
     assert_equal(ab1.authors, expected)
@@ -110,7 +110,7 @@ def test_chemials():
 
 
 def test_confcode():
-    assert_equal(ab2.confcode, '44367')
+    assert_equal(ab2.confcode, 44367)
     assert_equal(ab8.confcode, None)
 
 
@@ -449,8 +449,8 @@ def test_startingPage():
 
 def test_subject_areas():
     area = namedtuple('Area', 'area abbreviation code')
-    expected = [area(area='Catalysis', abbreviation='CENG', code='1503'),
-                area(area='Chemistry (all)', abbreviation='CHEM', code='1600')]
+    expected = [area(area='Catalysis', abbreviation='CENG', code=1503),
+                area(area='Chemistry (all)', abbreviation='CHEM', code=1600)]
     assert_equal(ab1.subject_areas, expected)
     assert_equal(ab8.subject_areas, None)
 

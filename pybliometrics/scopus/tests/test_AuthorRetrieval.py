@@ -23,7 +23,7 @@ def test_affiliation_current():
             'parent_preferred_name country_code country address_part city '\
             'state postal_code org_domain org_URL'
     aff = namedtuple('Affiliation', order)
-    expected = aff(id='110785688', parent='60027950', type='dept',
+    expected = aff(id=110785688, parent=60027950, type='dept',
         relationship='author', afdispname=None, country='United States',
         preferred_name='Department of Chemical Engineering',
         parent_preferred_name='Carnegie Mellon University', country_code='usa',
@@ -44,7 +44,7 @@ def test_affiliation_history():
             'parent_preferred_name country_code country address_part city '\
             'state postal_code org_domain org_URL'
     aff = namedtuple('Affiliation', order)
-    expected = aff(id='60008644', parent=None, type='parent',
+    expected = aff(id=60008644, parent=None, type='parent',
         relationship='author', afdispname=None,
         preferred_name='Fritz Haber Institute of the Max Planck Society',
         parent_preferred_name=None, country_code='deu', country='Germany',
@@ -88,7 +88,7 @@ def test_classificationgroup():
         received = a.classificationgroup
         assert_true(isinstance(received, list))
         assert_true(len(received) > 0)
-        assert_true(('1906', '1') in received)  # frequency might differ
+        assert_true((1906, 1) in received)  # frequency might differ
 
 
 def test_coauthor_count():
@@ -153,8 +153,8 @@ def get_coauthors():
     assert_true(len(received) > 155)
     fields = 'surname given_name id areas affiliation_id name city country'
     coauth = namedtuple('Coauthor', fields)
-    expected = coauth(surname='Rose', given_name='Michael E.', id='57209617104',
-        areas='Computer Science (all)', affiliation_id='60105007',
+    expected = coauth(surname='Rose', given_name='Michael E.', id=57209617104,
+        areas='Computer Science (all)', affiliation_id=60105007,
         name='Max-Planck-Institut für Innovation und Wettbewerb',
         city='Munich', country='Germany')
     assert_true(expected in received)

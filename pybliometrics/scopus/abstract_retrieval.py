@@ -23,7 +23,7 @@ class AbstractRetrieval(Retrieval):
         aff = namedtuple('Affiliation', 'id name city country')
         affs = listify(self._json.get('affiliation', []))
         for item in affs:
-            new = aff(id=item.get('@id'), name=item.get('affilname'),
+            new = aff(id=int(item['@id']), name=item.get('affilname'),
                       city=item.get('affiliation-city'),
                       country=item.get('affiliation-country'))
             out.append(new)
@@ -69,10 +69,13 @@ class AbstractRetrieval(Retrieval):
             # Affiliation information
             aff = item.get('affiliation', {})
             try:
-                aff_ids = listify(aff['affiliation-id'])
-                aff_id = ", ".join([a["@afid"] for a in aff_ids])
+                aff_id = int(aff["@afid"])
             except KeyError:
-                aff_id = aff.get("@afid")
+                aff_id = None
+            try:
+                dep_id = int(aff["@dptid"])
+            except KeyError:
+                dep_id = None
             org = _get_org(aff)
             # Author information (might relate to collaborations)
             authors = listify(item.get('author', item.get('collaboration', [])))
@@ -82,10 +85,10 @@ class AbstractRetrieval(Retrieval):
                 except KeyError:  # Collaboration
                     given = au.get('ce:text')
                 new = auth(affiliation_id=aff_id, organization=org,
-                           city=aff.get('city'), dptid=aff.get("@dptid"),
+                           city=aff.get('city'), dptid=dep_id,
                            postalcode=aff.get('postal-code'),
                            addresspart=aff.get('address-part'),
-                           country=aff.get('country'), auid=au.get('@auid'),
+                           country=aff.get('country'), auid=int(au['@auid']),
                            surname=au.get('ce:surname'), given_name=given,
                            indexed_name=chained_get(au, index_path))
                 out.append(new)
@@ -109,7 +112,7 @@ class AbstractRetrieval(Retrieval):
                 aff = [aff.get('@id') for aff in affs]
             else:
                 aff = None
-            new = auth(auid=item['@auid'], surname=item.get('ce:surname'),
+            new = auth(auid=int(item['@auid']), surname=item.get('ce:surname'),
                        indexed_name=item.get('ce:indexed-name'), affiliation=aff,
                        given_name=chained_get(item, ['preferred-name', 'ce:given-name']))
             out.append(new)
@@ -149,9 +152,12 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def confcode(self) -> Optional[str]:
-        """Code of the conference the document belong to."""
-        return self._confevent.get('confcode')
+    def confcode(self) -> Optional[int]:
+        """Code of the conference the document belongs to."""
+        try:
+            return int(self._confevent['confcode'])
+        except KeyError:
+            return None
 
     @property
     def confdate(self) -> Optional[Tuple[Tuple[int, int], Tuple[int, int]]]:
@@ -554,7 +560,7 @@ class AbstractRetrieval(Retrieval):
         area = namedtuple('Area', 'area abbreviation code')
         path = ['subject-areas', 'subject-area']
         out = [area(area=item['$'], abbreviation=item['@abbrev'],
-                    code=item['@code'])
+                    code=int(item['@code']))
                for item in listify(chained_get(self._json, path, []))]
         return out or None
 

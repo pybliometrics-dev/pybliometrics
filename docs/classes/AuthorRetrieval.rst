@@ -108,7 +108,7 @@ Extensive information on current and former affiliations is provided as namedtup
 .. code-block:: python
 
     >>> au.affiliation_current
-    [Affiliation(id='110785688', parent='60027950', type='dept', relationship='author',
+    [Affiliation(id=110785688, parent=60027950, type='dept', relationship='author',
      afdispname=None, preferred_name='Department of Chemical Engineering',
      parent_preferred_name='Carnegie Mellon University', country_code='usa',
      country='United States', address_part='5000 Forbes Avenue', city='Pittsburgh',
@@ -116,7 +116,7 @@ Extensive information on current and former affiliations is provided as namedtup
     >>> len(au.affiliation_history)
     16
     >>> au.affiliation_history[10]
-    Affiliation(id='60008644', parent=None, type='parent', relationship='author',
+    Affiliation(id=60008644, parent=None, type='parent', relationship='author',
     afdispname=None, preferred_name='Fritz Haber Institute of the Max Planck Society',
     parent_preferred_name=None, country_code='deu', country='Germany',
     address_part='Faradayweg 4-6', city='Berlin', state=None, postal_code='14195',

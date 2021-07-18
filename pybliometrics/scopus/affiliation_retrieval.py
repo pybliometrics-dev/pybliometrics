@@ -62,7 +62,7 @@ class AffiliationRetrieval(Retrieval):
         """
         variant = namedtuple('Variant', 'name doc_count')
         path = ['name-variants', 'name-variant']
-        return [variant(name=var['$'], doc_count=var.get('@doc-count'))
+        return [variant(name=var['$'], doc_count=int(var['@doc-count']))
                 for var in chained_get(self._json, path, [])]
 
     @property

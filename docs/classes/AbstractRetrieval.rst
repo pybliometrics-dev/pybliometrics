@@ -71,8 +71,8 @@ Attributes `idxterms`, `subject_areas` and `authkeywords` (if provided) provide 
     ['Bibliometrics', 'Python', 'Python interfaces', 'Reproducibilities',
      'Scientometrics', 'Scopus', 'Scopus database', 'User friendly interface']
     >>> ab.subject_areas
-    [Area(area='Software', abbreviation='COMP', code='1712'),
-     Area(area='Computer Science Applications', abbreviation='COMP', code='1706')]
+    [Area(area='Software', abbreviation='COMP', code=1712),
+     Area(area='Computer Science Applications', abbreviation='COMP', code=1706)]
     >>> ab.authkeywords
     ['Bibliometrics', 'Python', 'Scientometrics', 'Scopus', 'Software']
 
@@ -90,9 +90,9 @@ You get the authors as a list of `namedtuples <https://docs.python.org/3/library
 .. code-block:: python
 
     >>> ab.authors
-    [Author(auid='57209617104', indexed_name='Rose M.E.', surname='Rose',
+    [Author(auid=57209617104, indexed_name='Rose M.E.', surname='Rose',
      given_name='Michael E.', affiliation=['60105007']),
-     Author(auid='7004212771', indexed_name='Kitchin J.R.', surname='Kitchin',
+     Author(auid=7004212771, indexed_name='Kitchin J.R.', surname='Kitchin',
      given_name='John R.', affiliation=['60027950'])]
 
     >>> import pandas as pd
@@ -107,20 +107,20 @@ The same structure applies for the attributes `affiliation` and `authorgroup`:
 .. code-block:: python
 
     >>> ab.affiliation
-    [Affiliation(id='60105007', name='Max Planck Institute for Innovation and Competition',
+    [Affiliation(id=60105007, name='Max Planck Institute for Innovation and Competition',
                  city='Munich', country='Germany'),
-     Affiliation(id='60027950', name='Carnegie Mellon University',
+     Affiliation(id=60027950, name='Carnegie Mellon University',
                  city='Pittsburgh', country='United States')]
 
     >>> ab.authorgroup
-    [Author(affiliation_id='60105007', dptid=None,
+    [Author(affiliation_id=60105007, dptid=None,
      organization='Max Planck Institute for Innovation and Competition',
      city=None, postalcode=None, addresspart=None, country='Germany',
-     auid='57209617104', indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
-     Author(affiliation_id='60027950', dptid='110785688',
+     auid=57209617104, indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
+     Author(affiliation_id=60027950, dptid=110785688,
      organization='Carnegie Mellon University, Department of Chemical Engineering',
      city=None, postalcode=None, addresspart=None, country='United States',
-     auid='7004212771', indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
+     auid=7004212771, indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
 
 
 Keep in mind that Scopus might not perfectly/correctly pair authors and affiliations as per the original document, even if it looks so on the web view.  In this case please request corrections to be made in Scopus' API here `here <https://service.elsevier.com/app/contact/supporthub/scopuscontent/>`_.

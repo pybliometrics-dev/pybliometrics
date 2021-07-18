@@ -73,10 +73,10 @@ Scopus also collects information on different names affiliated authors use for t
 .. code-block:: python
 
     >>> aff.name_variants
-    [Variant(name='University Of Cape Town', doc_count='60095'),
-     Variant(name='Univ. Cape Town', doc_count='1659'),
-     Variant(name='Univ Of Cape Town', doc_count='772'),
-     Variant(name='Univ. Of Cape Town', doc_count='392')]
+    [Variant(name='University Of Cape Town', doc_count=60095),
+     Variant(name='Univ. Cape Town', doc_count=1659),
+     Variant(name='Univ Of Cape Town', doc_count=772),
+     Variant(name='Univ. Of Cape Town', doc_count=392)]
 
 
 Using `pandas <https://pandas.pydata.org/>`_ you can easily turn this into a DataFrame:

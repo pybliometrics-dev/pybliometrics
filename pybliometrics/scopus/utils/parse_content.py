@@ -120,7 +120,11 @@ def parse_affiliation(affs):
             continue
         doc = item.get('ip-doc', {}) or {}
         address = doc.get('address', {}) or {}
-        new = aff(id=item.get('@affiliation-id'), parent=item.get('@parent'),
+        try:
+            parent = int(item['@parent'])
+        except KeyError:
+            parent = None
+        new = aff(id=int(item['@affiliation-id']), parent=parent,
             type=doc.get('@type'), relationship=doc.get('@relationship'),
             afdispname=doc.get('@afdispname'),
             preferred_name=doc.get('preferred-name', {}).get('$'),

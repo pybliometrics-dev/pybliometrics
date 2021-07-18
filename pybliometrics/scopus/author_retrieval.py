@@ -59,10 +59,10 @@ class AuthorRetrieval(Retrieval):
         return int(self._json['coredata']['cited-by-count'])
 
     @property
-    def classificationgroup(self) -> Optional[List[Tuple[str, str]]]:
+    def classificationgroup(self) -> Optional[List[Tuple[int, int]]]:
         """List with (subject group ID, number of documents)-tuples."""
         path = ['classificationgroup', 'classifications', 'classification']
-        out = [(item['$'], item['@frequency']) for item in
+        out = [(int(item['$']), int(item['@frequency'])) for item in
                listify(chained_get(self._profile, path, []))]
         return out or None
 
