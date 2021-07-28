@@ -2,6 +2,7 @@ from collections import namedtuple
 from datetime import datetime
 from hashlib import md5
 from typing import List, NamedTuple, Optional, Tuple, Union
+from warnings import warn
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value
