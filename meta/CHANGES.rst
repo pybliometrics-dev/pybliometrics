@@ -3,10 +3,19 @@ Change Log
 
 .. toctree::
 
+3.0.1
+~~~~~
+
+2021-08-01
+
+* Fix bug with generation of configuration file.
+* Fix bug with all search classes not testing the number of results before downloading.
+* Fix bug with deprecation warning of `CitationOverview()`.
+
 3.0
 ~~~
 
-2012-07-18
+2021-07-18
 
 * Implement throttling as per Scopus' definition.
 * Enable type hints.
