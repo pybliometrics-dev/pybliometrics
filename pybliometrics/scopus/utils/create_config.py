@@ -23,6 +23,7 @@ def create_config():
         if token:
             config.set('Authentication', 'InstToken', token)
         # Write out
+        CONFIG_FILE.parent.mkdir(parents=True, exist_ok=True)
         with open(CONFIG_FILE, "w") as ouf:
             config.write(ouf)
         print(f"Configuration file successfully created at {CONFIG_FILE}\n"
