@@ -65,8 +65,7 @@ class Base:
                 self._n = n
                 self._json = []
                 # Results size check
-                cursor_exists = "cursor" in params and params["cursor"]
-                if not cursor_exists and n > SEARCH_MAX_ENTRIES:
+                if params.get("cursor") is None and n > SEARCH_MAX_ENTRIES:
                     # Stop if there are too many results
                     text = f'Found {n} matches.  The query fails to return '\
                            f'more than {SEARCH_MAX_ENTRIES} entries.  Change '\
