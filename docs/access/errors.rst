@@ -21,6 +21,9 @@ Error messages
 `pybliometrics.scopus.exception.Scopus404Error: NOT FOUND`
     The entity you are looking for does not exist.  Check that your identifier is still pointing to the item you are looking for.
 
+`pybliometrics.scopus.exception.Scopus413Error`
+    The request entity is too large to be processed by the web server.  Try a less complex query.
+
 `pybliometrics.scopus.exception.Scopus414Error: TOO LARGE`
     The query string you are using is too long.  Break it up in smaller pieces.
 

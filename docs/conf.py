@@ -59,7 +59,7 @@ html_sidebars = {
         'searchbox.html',
     ]
 }
-
+html_css_files = ['custom.css']
 html_static_path = []
 
 # Options for HTMLHelp output
