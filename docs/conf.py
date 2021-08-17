@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import sys
 import os
@@ -26,7 +25,6 @@ extensions = [
     'sphinx_autodoc_typehints',
     'sphinx_autodoc_defaultargs']
 
-templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 project = 'pybliometrics'
@@ -59,8 +57,8 @@ html_sidebars = {
         'searchbox.html',
     ]
 }
+html_static_path = ['_static']
 html_css_files = ['custom.css']
-html_static_path = []
 
 # Options for HTMLHelp output
 html_show_sourcelink = True
