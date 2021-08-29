@@ -82,3 +82,6 @@ There are sometimes missing information in the returned results although it exis
 .. code-block:: python
 
     >>> s = AuthorSearch("AUTHLAST(Selten)", integrity_fields=["eid"], integrity_action="warn")
+
+
+If you search for authors by institution, note that searching by affiliation profile ID and affiliaton name behave differently.  Search by affiliation name, i.e. `AFFIL(Max Planck Institute for Innovation and Competition)`), finds all authors *ever* affiliated with the Max Planck Institute for Innovation and Competition, whereas search by affiliation profile ID, i.e. `AF-ID(60105007)`, finds researchers whose latest affiliation includes the Max Planck Institute for Innovation and Competition.
