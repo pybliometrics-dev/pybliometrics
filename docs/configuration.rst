@@ -3,7 +3,7 @@ Configuration
 
 config.ini
 ~~~~~~~~~~
-`pybliometrics` stores values it needs for operation in a config file.  That file is either in `~/.pybliometrics/config.ini` or in `~/.pybliometrics/config.ini` (if you started using pybliometrics before version 3.x).  It saves credentials as well as directory names for folders that store cached files.  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
+`pybliometrics` stores values it needs for operation in a config file.  That file is either in `~/.pybliometrics/config.ini` or in `~/.scopus/config.ini` (if you started using pybliometrics before version 3.x, in which case you can safely rename the folder).  It saves credentials as well as directory names for folders that store cached files.  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
 
 By default, after initial set-up (see below), the file will look like this:
 
