@@ -269,14 +269,24 @@ class AbstractRetrieval(Retrieval):
         """List of namedtuples parsed funding information in the form
         (agency string id acronym country).
         """
+
+        def _funding_id(f_dict: dict) -> list:
+            funding_id = []
+            if isinstance(f_dict.get('xocs:funding-id'), str):  # single
+                funding_id = [f_dict.get('xocs:funding-id')]
+            elif isinstance(f_dict.get('xocs:funding-id'), list):  # multiple
+                funding_id = [v['$'] for v in f_dict.get('xocs:funding-id')]
+            return funding_id
+
         path = ['item', 'xocs:meta', 'xocs:funding-list', 'xocs:funding']
         funds = listify(chained_get(self._json, path, []))
         out = []
-        fund = namedtuple('Funding', 'agency string id acronym country')
+        fund = namedtuple('Funding', 'agency string id funding_id acronym country')
         for item in funds:
             new = fund(agency=item.get('xocs:funding-agency'),
                 string=item.get('xocs:funding-agency-matched-string'),
                 id=item.get('xocs:funding-agency-id'),
+                funding_id=_funding_id(item),
                 acronym=item.get('xocs:funding-agency-acronym'),
                 country=item.get('xocs:funding-agency-country'))
             out.append(new)
