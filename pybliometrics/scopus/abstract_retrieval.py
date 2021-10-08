@@ -271,12 +271,14 @@ class AbstractRetrieval(Retrieval):
         """
 
         def _funding_id(f_dict: dict) -> list:
-            funding_id = []
-            if isinstance(f_dict.get('xocs:funding-id'), str):  # single
-                funding_id = [f_dict.get('xocs:funding-id')]
-            elif isinstance(f_dict.get('xocs:funding-id'), list):  # multiple
-                funding_id = [v['$'] for v in f_dict.get('xocs:funding-id')]
-            return funding_id
+            funding_get = f_dict.get('xocs:funding-id')
+            try:
+                return [v['$'] for v in funding_get]  # multiple
+            except TypeError:
+                if funding_get is None:
+                    return []  # No data
+                else:
+                    return [funding_get]  # single
 
         path = ['item', 'xocs:meta', 'xocs:funding-list', 'xocs:funding']
         funds = listify(chained_get(self._json, path, []))
