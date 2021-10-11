@@ -206,10 +206,12 @@ def test_funding():
     received = ab6.funding
     assert_true(isinstance(received, list))
     assert_equal(len(received), 5)
-    fund = namedtuple('Funding', 'agency string id acronym country')
-    expected6 = fund(agency='Deutsche Forschungsgemeinschaft',
+    fund = namedtuple('Funding', 'agency string agency_id funding_id, acronym country')
+    expected6 = fund(
+        agency='Deutsche Forschungsgemeinschaft',
         string='German Research Foundation', acronym='DFG',
-        id='http://data.elsevier.com/vocabulary/SciValFunders/501100001659',
+        agency_id='http://data.elsevier.com/vocabulary/SciValFunders/501100001659',
+        funding_id=['SFB685'],
         country='http://sws.geonames.org/2921044/')
     assert_true(expected6 in received)
     assert_equal(ab5.funding, None)
