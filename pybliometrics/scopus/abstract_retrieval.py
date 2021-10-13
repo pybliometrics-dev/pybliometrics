@@ -271,14 +271,11 @@ class AbstractRetrieval(Retrieval):
         """
 
         def _funding_id(f_dict: dict) -> list:
-            funding_get = f_dict.get('xocs:funding-id')
+            funding_get = f_dict.get('xocs:funding-id', [])
             try:
                 return [v['$'] for v in funding_get]  # multiple
             except TypeError:
-                if funding_get is None:
-                    return []  # No data
-                else:
-                    return [funding_get]  # single
+                return [funding_get]  # single
 
         path = ['item', 'xocs:meta', 'xocs:funding-list', 'xocs:funding']
         funds = listify(chained_get(self._json, path, []))
