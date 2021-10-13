@@ -204,7 +204,7 @@ Some articles have information on funding, chemicals and genome banks:
     >>> ab_fund = AbstractRetrieval("2-s2.0-85053478849", view="FULL")
     >>> ab_fund.funding
     [Funding(agency=None, string='CNRT “Nickel et son Environnement',
-     id=None, acronym=None, country=None)]
+     agency_id=None, funding_id=None, acronym=None, country=None)]
     >> ab_fund.funding_text
     'The authors gratefully acknowledge CNRT “Nickel et son Environnement” for
     providing the financial support. The results reported in this publication
