@@ -273,7 +273,7 @@ class AbstractRetrieval(Retrieval):
         def _funding_id(f_dict: dict) -> list:
             funding_get = f_dict.get('xocs:funding-id', [])
             try:
-                return [v['$'] for v in funding_get]  # multiple
+                return [v['$'] for v in funding_get] or None  # multiple or empty
             except TypeError:
                 return [funding_get]  # single
 
