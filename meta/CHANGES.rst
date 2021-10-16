@@ -3,6 +3,16 @@ Change Log
 
 .. toctree::
 
+3.1.0
+~~~~~
+
+2021-10-16
+
+* In `AbstractRetrieval().funding`, rename field "id" to "agency_id", add field "funding_id" and change order.
+* Introduce new exception Scopus504Error and document Scopus413Error.
+* Better document `SerialTitle()` w.r.t. to journal metrics.
+* Correct document of where to find the cache folder since pybliometrics 3.x.
+
 3.0.1
 ~~~~~
 
