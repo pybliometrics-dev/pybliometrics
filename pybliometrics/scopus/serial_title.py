@@ -16,7 +16,8 @@ class SerialTitle(Retrieval):
     def citescoreyearinfolist(self) -> Optional[List[Tuple[int, float]]]:
         """A list of two tuples of the form (year, cite-score).  The first
         tuple represents the current cite-score, the second tuple
-        represents the tracker cite-score."""
+        represents the tracker cite-score.  See
+        https://service.elsevier.com/app/answers/detail/a_id/30562/supporthub/scopus/."""
         try:
             d = self._entry['citeScoreYearInfoList']
         except KeyError:

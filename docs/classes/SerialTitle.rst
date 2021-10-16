@@ -24,6 +24,19 @@ You initialize the class with an ISSN or an E-ISSN (works with and without hyphe
     >>> from pybliometrics.scopus import SerialTitle
     >>> source = SerialTitle("00368075")
 
+You can obtain basic information just by printing the object:
+
+.. code-block:: python
+
+    >>> print(source_y)
+    'Science', journal published by 'American Association for the
+    Advancement of Science', is active in Multidisciplinary
+    Metrics as of 2021-10-16:
+        SJR:  year value
+              2020 12.556
+        SNIP: year value
+              2020 7.789
+        ISSN: 0036-8075, E-ISSN: 1095-9203, Scopus ID: 23571
 
 The object has a number of attributes but no methods.  For example, information regarding the source itself:
 
@@ -41,36 +54,25 @@ The object has a number of attributes but no methods.  For example, information 
     23571
 
 
-By default, `SerialTitle()` retrieves only the most recent metrics.  If you provide a year or a range of years via the opotional parameter `years`, `SerialTitle()` will retrieve information for these years:
+Most importantly, it provides three metrics: the CiteScore (see `here <https://service.elsevier.com/app/answers/detail/a_id/30562/supporthub/scopus/>`_ for further information), the SCImago Journal Rank indicator (see `here <https://www.scimagojr.com/journalrank.php>`_), and the Source Normalized Impact Factor (SNIP; see `here <https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip>`_).  The information is stored in lists of 2-element tuples with the first element indicating the year the metric was evaluated.
+
+.. code-block:: python
+
+    >>> source.citescoreyearinfolist
+    [(2020, 46.8), (2021, 51.9)]
+    >>> source.sjrlist
+    [(2020, 12.556)]
+    >>> source.sniplist
+    [(2020, 7.789)]
+
+
+By default, `SerialTitle()` retrieves only the most recent metrics.  If you provide a year or a range of years via the optional parameter `years`, `SerialTitle()` will retrieve information for these years (except for the CiteScore):
 
 .. code-block:: python
 
     >>> source_y = SerialTitle("00368075", years="2017-2019")
-
-
-You can obtain basic information just by printing the object:
-
-.. code-block:: python
-
-    >>> print(source_y)
-    'Science', journal published by 'American Association for the
-    Advancement of Science', is active in Multidisciplinary
-    Metrics as of 2021-07-18:
-        SJR:  year value
-              2017 14.142
-              2018 13.251
-              2019 13.11
-        SNIP: year value
-              2017 7.409
-              2018 7.584
-              2019 7.535
-        ISSN: 0036-8075, E-ISSN: 1095-9203, Scopus ID: 23571
-
-
-Perhaps most importantly the SCImago Journal Rank (SJR) indicator and the Source-normalized Impact per Paper (SNIP).  The information is stored in lists of 2-element tuples with the first element indicating the year the metric was evaluated.
-
-.. code-block:: python
-
+    >>> source_y.citescoreyearinfolist
+    [(2020, 46.8), (2021, 51.9)]
     >>> source_y.sjrlist
     [(2017, 14.142), (2018, 13.251), (2019, 13.11)]
     >>> source_y.sniplist
