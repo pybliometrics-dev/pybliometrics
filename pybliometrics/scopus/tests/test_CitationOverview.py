@@ -78,8 +78,8 @@ def test_issueIdentifier():
 
 
 def test_laterColumnTotal():
-    assert_equal(co_eid.laterColumnTotal, 11)
-    assert_equal(co_doi.laterColumnTotal, 10)
+    assert_true(co_eid.laterColumnTotal >= 18)
+    assert_true(co_doi.laterColumnTotal >= 16)
 
 
 def test_lcc():

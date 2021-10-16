@@ -22,7 +22,7 @@ def test_affiliation_name():
 
 
 def test_author_count():
-    expected = 12900
+    expected = 12800
     assert_true(light.author_count >= expected)
     assert_true(standard.author_count >= expected)
 

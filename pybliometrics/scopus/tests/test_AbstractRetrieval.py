@@ -206,11 +206,11 @@ def test_funding():
     received = ab6.funding
     assert_true(isinstance(received, list))
     assert_equal(len(received), 5)
-    fund = namedtuple('Funding', 'agency string agency_id funding_id, acronym country')
+    fund = namedtuple('Funding', 'agency agency_id string funding_id acronym country')
     expected6 = fund(
         agency='Deutsche Forschungsgemeinschaft',
-        string='German Research Foundation', acronym='DFG',
         agency_id='http://data.elsevier.com/vocabulary/SciValFunders/501100001659',
+        string='German Research Foundation', acronym='DFG',
         funding_id=['SFB685'],
         country='http://sws.geonames.org/2921044/')
     assert_true(expected6 in received)
@@ -266,7 +266,7 @@ def test_get_html():
         'https://www.scopus.com/authid/detail.url?origin=AuthorProfile&'\
         'authorId=16430389100">Gwen Ortmeyer</a> and <a href="https://'\
         'www.scopus.com/authid/detail.url?origin=AuthorProfile&authorId='\
-        '55613241342">N. Craig Smith</a>, <a href="https://www.scopus.com/'\
+        '57225963896">N. Craig Smith</a>, <a href="https://www.scopus.com/'\
         'inward/record.uri?partnerID=HzOxMe3b&scp=0001270077&origin=inward">'\
         'Fairness in consumer pricing</a>, <a href="https://www.scopus.com/'\
         'source/sourceInfo.url?sourceId=130073">Journal of Consumer Policy'\
