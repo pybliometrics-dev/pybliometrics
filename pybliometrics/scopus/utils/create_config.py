@@ -1,9 +1,16 @@
+from typing import List, Optional
+
 from pybliometrics.scopus.utils.constants import DEFAULT_PATHS
 from pybliometrics.scopus.utils.startup import config, CONFIG_FILE
 
 
-def create_config():
-    """Initiates process to generate configuration file."""
+def create_config(keys: Optional[List[str]] = None):
+    """Initiates process to generate configuration file.
+
+    :param keys: If you provide a list of keys, pybliometrics will skip the
+                 prompt.  It will also not ask for InstToken.  This is
+                 intended for workflows using CI, not for general use.
+    """
     if not CONFIG_FILE.exists():
         # Set directories
         config.add_section('Directories')
@@ -11,15 +18,21 @@ def create_config():
             config.set('Directories', api, str(path))
         # Set authentication
         config.add_section('Authentication')
-        prompt_key = "Please enter your API Key(s), obtained from "\
-                     "http://dev.elsevier.com/myapikey.html.  Separate "\
-                     "multiple keys by comma:\n"
-        key = input(prompt_key)
+        if keys:
+            if not isinstance(keys, list):
+                raise ValueError("Parameter `keys` must be a list.")
+            key = ", ".join(keys)
+            token = None
+        else:
+            prompt_key = "Please enter your API Key(s), obtained from "\
+                         "http://dev.elsevier.com/myapikey.html.  Separate "\
+                         "multiple keys by comma:\n"
+            key = input(prompt_key)
+            prompt_token = "API Keys are sufficient for most users.  If you "\
+                           "have an InstToken, please enter the token now;"\
+                           "otherwise just press Enter:\n"
+            token = input(prompt_token)
         config.set('Authentication', 'APIKey', key)
-        prompt_token = "API Keys are sufficient for most users.  If you "\
-                       "have an InstToken, please enter the token now;"\
-                       "otherwise just press Enter:\n"
-        token = input(prompt_token)
         if token:
             config.set('Authentication', 'InstToken', token)
         # Write out
