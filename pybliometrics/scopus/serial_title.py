@@ -13,19 +13,24 @@ class SerialTitle(Retrieval):
         return self._entry['prism:aggregationType']
 
     @property
-    def citescoreyearinfolist(self) -> Optional[List[Tuple[int, float]]]:
+    def citescoreyearinfolist(self) -> Optional[List[Tuple[int, float, None]]]:
         """A list of two tuples of the form (year, cite-score).  The first
         tuple represents the current cite-score, the second tuple
-        represents the tracker cite-score.  See
-        https://service.elsevier.com/app/answers/detail/a_id/30562/supporthub/scopus/."""
+        represents the tracker cite-score.  For discontinued sources, there 
+        is no tracker cite-score, and the second tuple is (None, None).  See
+        https://service.elsevier.com/app/answers/detail/a_id/30562/supporthub/scopus/.
+        """
         try:
             d = self._entry['citeScoreYearInfoList']
         except KeyError:
             return None
         current = (int(d['citeScoreCurrentMetricYear']),
                    float(d['citeScoreCurrentMetric']))
-        tracker = (int(d['citeScoreTrackerYear']),
-                   float(d['citeScoreTracker']))
+        tracker = (d['citeScoreTrackerYear'], d['citeScoreTracker'])
+        try:
+            tracker = (int(tracker[0]), float(tracker[1]))
+        except TypeError:
+            pass
         return [current, tracker]
 
     @property
