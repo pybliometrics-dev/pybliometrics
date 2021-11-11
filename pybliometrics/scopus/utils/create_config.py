@@ -4,12 +4,16 @@ from pybliometrics.scopus.utils.constants import DEFAULT_PATHS
 from pybliometrics.scopus.utils.startup import config, CONFIG_FILE
 
 
-def create_config(keys: Optional[List[str]] = None):
+def create_config(keys: Optional[List[str]] = None,
+                  insttoken: Optional[str] = None
+                  ):
     """Initiates process to generate configuration file.
 
     :param keys: If you provide a list of keys, pybliometrics will skip the
                  prompt.  It will also not ask for InstToken.  This is
                  intended for workflows using CI, not for general use.
+    :param insttoken: An InstToken to be used alongside the key(s).  Will only
+                      be used if `keys` is not empty.
     """
     if not CONFIG_FILE.exists():
         # Set directories
@@ -22,7 +26,7 @@ def create_config(keys: Optional[List[str]] = None):
             if not isinstance(keys, list):
                 raise ValueError("Parameter `keys` must be a list.")
             key = ", ".join(keys)
-            token = None
+            token = insttoken
         else:
             prompt_key = "Please enter your API Key(s), obtained from "\
                          "http://dev.elsevier.com/myapikey.html.  Separate "\
