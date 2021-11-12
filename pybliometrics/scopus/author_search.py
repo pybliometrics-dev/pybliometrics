@@ -11,7 +11,7 @@ class AuthorSearch(Search):
     def authors(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples storing author information,
         where each namedtuple corresponds to one author.
-        The information in each namedtuple is (eid surname initials givenname
+        The information in each namedtuple is (eid orcid surname initials givenname
         documents affiliation affiliation_id city country areas).
 
         All entries are strings or None.  Areas combines abbreviated subject
@@ -24,7 +24,7 @@ class AuthorSearch(Search):
             actual field names (listed above).
         """
         # Initiate namedtuple with ordered list of fields
-        fields = 'eid surname initials givenname affiliation documents '\
+        fields = 'eid orcid surname initials givenname affiliation documents '\
                  'affiliation_id city country areas'
         auth = namedtuple('Author', fields)
         check_field_consistency(self._integrity, fields)
@@ -37,8 +37,11 @@ class AuthorSearch(Search):
                               [{'@abbrev': '', '@frequency': ''}])
             areas = [f"{d.get('@abbrev', '')} ({d.get('@frequency', '')})"
                      for d in listify(fields)]
-            new = auth(eid=item.get('eid'), initials=name.get('initials'),
-                       surname=name.get('surname'), areas="; ".join(areas),
+            new = auth(eid=item.get('eid'),
+                       orcid=item.get('orcid'),
+                       initials=name.get('initials'),
+                       surname=name.get('surname'),
+                       areas="; ".join(areas),
                        givenname=name.get('given-name'),
                        documents=int(item['document-count']),
                        affiliation=aff.get('affiliation-name'),

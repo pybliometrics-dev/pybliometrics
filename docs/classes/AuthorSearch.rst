@@ -30,7 +30,7 @@ You can obtain a search summary just by printing the object:
 .. code-block:: python
 
     >>> print(s)
-    Search 'AUTHLAST(Selten) and AUTHFIRST(Reinhard)' yielded 2 authors as of 2020-07-13:
+    Search 'AUTHLAST(Selten) and AUTHFIRST(Reinhard)' yielded 2 authors as of 2021-11-12:
         Selten, Reinhard; AUTHOR_ID:6602907525 (74 document(s))
         Selten, Reinhard; AUTHOR_ID:57213632570 (1 document(s))
 
@@ -41,7 +41,7 @@ To know the the number of results use the `.get_results_size()` method, even bef
 
     >>> other = AuthorSearch("AUTHLAST(Selten)", download=False)
     >>> other.get_results_size()
-    27
+    29
 
 
 The class mostly provides a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the :doc:`AuthorRetrieval <../classes/AuthorRetrieval>` class, and corresponding information:
@@ -49,7 +49,7 @@ The class mostly provides a list of `namedtuples <https://docs.python.org/3/libr
 .. code-block:: python
 
     >>> s.authors[0]
-    [Author(eid='9-s2.0-6602907525', surname='Selten', initials='R.',
+    [Author(eid='9-s2.0-6602907525', orcid=None, surname='Selten', initials='R.',
      givenname='Reinhard', affiliation='Universitat Bonn', documents=74,
      affiliation_id='60007493', city='Bonn', country='Germany',
      areas='ECON (73); MATH (19); BUSI (16)')]
@@ -62,9 +62,9 @@ It's easy to work with namedtuples: Using `pandas <https://pandas.pydata.org/>`_
     >>> import pandas as pd
     >>> pd.set_option('display.max_columns', None)
     >>> print(pd.DataFrame(s.authors))
-                      eid surname initials givenname  \
-    0   9-s2.0-6602907525  Selten       R.  Reinhard   
-    1  9-s2.0-57213632570  Selten       R.  Reinhard   
+                      eid orcid surname initials givenname  \
+    0   9-s2.0-6602907525  None Selten       R.  Reinhard
+    1  9-s2.0-57213632570  None Selten       R.  Reinhard
 
                          affiliation  documents affiliation_id     city  country  \
     0               Universität Bonn         74       60007493     Bonn  Germany   
