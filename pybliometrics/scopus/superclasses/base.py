@@ -46,7 +46,6 @@ class Base:
 
         # Read or download, possibly with caching
         fname = self._cache_file_path
-        print(fname)
         search_request = "query" in params
         if fname.exists() and not self._refresh:
             self._mdate = mod_ts
