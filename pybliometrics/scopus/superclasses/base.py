@@ -46,6 +46,7 @@ class Base:
 
         # Read or download, possibly with caching
         fname = self._cache_file_path
+        print(fname)
         search_request = "query" in params
         if fname.exists() and not self._refresh:
             self._mdate = mod_ts
@@ -115,7 +116,7 @@ class Base:
         actual request).
         """
         try:
-            date = int(self._header['X-RateLimit-Reset'])/1000
+            date = int(self._header['X-RateLimit-Reset'])
             return strftime('%Y-%m-%d %H:%M:%S', localtime(date))
         except AttributeError:
             return None
