@@ -116,11 +116,11 @@ The same structure applies for the attributes `affiliation` and `authorgroup`:
     [Author(affiliation_id=60105007, dptid=None,
      organization='Max Planck Institute for Innovation and Competition',
      city=None, postalcode=None, addresspart=None, country='Germany',
-     auid=57209617104, indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
+     auid=57209617104, orcid=None, indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
      Author(affiliation_id=60027950, dptid=110785688,
      organization='Carnegie Mellon University, Department of Chemical Engineering',
      city=None, postalcode=None, addresspart=None, country='United States',
-     auid=7004212771, indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
+     auid=7004212771, orcid=None, indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
 
 
 Keep in mind that Scopus might not perfectly/correctly pair authors and affiliations as per the original document, even if it looks so on the web view.  In this case please request corrections to be made in Scopus' API here `here <https://service.elsevier.com/app/contact/supporthub/scopuscontent/>`_.
