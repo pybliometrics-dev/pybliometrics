@@ -50,11 +50,11 @@ class AbstractRetrieval(Retrieval):
     def authorgroup(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the article's authors organized
         by affiliation, in the form (affiliation_id, dptid, organization,
-        city, postalcode, addresspart, country, auid, indexed_name,
+        city, postalcode, addresspart, country, auid, orcid, indexed_name,
         surname, given_name).
         If "given_name" is not present, fall back to initials.
         Note: Affiliation information might be missing or mal-assigned even
-        when it lookes correct in the web view.  In this case please request
+        when it looks correct in the web view.  In this case please request
         a correction.
         """
         out = []
