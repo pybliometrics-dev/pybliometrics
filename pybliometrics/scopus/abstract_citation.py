@@ -148,7 +148,9 @@ class CitationOverview(Retrieval):
 
     @property
     def rangeCount(self) -> List[int]:
-        """Number of citations for the specified years for each document."""
+        """Total citation count over the specified year range for
+        each document.
+        """
         return [int(e['rangeCount']) for e in self._citeInfoMatrix]
 
     @property
