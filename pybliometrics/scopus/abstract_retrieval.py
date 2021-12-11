@@ -50,16 +50,16 @@ class AbstractRetrieval(Retrieval):
     def authorgroup(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the article's authors organized
         by affiliation, in the form (affiliation_id, dptid, organization,
-        city, postalcode, addresspart, country, auid, indexed_name,
+        city, postalcode, addresspart, country, auid, orcid, indexed_name,
         surname, given_name).
         If "given_name" is not present, fall back to initials.
         Note: Affiliation information might be missing or mal-assigned even
-        when it lookes correct in the web view.  In this case please request
+        when it looks correct in the web view.  In this case please request
         a correction.
         """
         out = []
         fields = 'affiliation_id dptid organization city postalcode '\
-                 'addresspart country auid indexed_name surname given_name'
+                 'addresspart country auid orcid indexed_name surname given_name'
         auth = namedtuple('Author', fields)
         items = listify(self._head.get('author-group', []))
         index_path = ['preferred-name', 'ce:indexed-name']
@@ -83,6 +83,7 @@ class AbstractRetrieval(Retrieval):
                            postalcode=aff.get('postal-code'),
                            addresspart=aff.get('address-part'),
                            country=aff.get('country'), auid=int(au['@auid']),
+                           orcid=au.get('@orcid'),
                            surname=au.get('ce:surname'), given_name=given,
                            indexed_name=chained_get(au, index_path))
                 out.append(new)
