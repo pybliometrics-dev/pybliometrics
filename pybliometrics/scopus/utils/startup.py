@@ -6,7 +6,7 @@ from pathlib import Path
 from pybliometrics.scopus.utils.constants import RATELIMITS
 
 if 'PYB_CONFIG_FILE' in environ:
-    CONFIG_FILE = environ['PYB_CONFIG_FILE']
+    CONFIG_FILE = Path(environ['PYB_CONFIG_FILE'])
 else:
     if (Path.home()/".scopus").exists():
         CONFIG_FILE = Path.home()/".scopus"/"config.ini"
