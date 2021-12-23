@@ -3,7 +3,7 @@ Configuration
 
 config.ini
 ~~~~~~~~~~
-`pybliometrics` stores values it needs for operation in a config file.  That file is either in `~/.pybliometrics/config.ini` or in `~/.scopus/config.ini` (if you started using pybliometrics before version 3.x, in which case you can safely rename the folder).  It saves credentials as well as directory names for folders that store cached files.  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
+`pybliometrics` stores values it needs for operation in a config file.  That file is either in `~/.pybliometrics/config.ini` or in `~/.scopus/config.ini` (if you started using pybliometrics before version 3.x).  It saves credentials as well as directory names for folders that store cached files.  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
 
 By default, after initial set-up (see below), the file will look like this:
 
@@ -25,9 +25,11 @@ By default, after initial set-up (see below), the file will look like this:
         ZZZ
 
 
-where PPP refers to `~/`, and XXX, YYYY and ZZZ refer to your API Keys, of which you can register 10 for your Scopus account.  If you provide all of them (separated by a comma), pybliometrics automatically replaces a depleted key with a random one of the others while running, until all of them are depleted.  If you edit the file manually, remember to indent multi-line statements.
+where PPP refers to `~/`, and XXX, YYYY and ZZZ refer to your API Keys, of which you can register 10 for your Scopus account.  If you provide all of them (separated by a comma), pybliometrics automatically replaces a depleted key with a random one of the others while running, until all of them are depleted.
 
-Simply edit this file to change the paths where `pybliometrics` should cache downloaded files (`pybliometrics` will create them if necessary)
+Simply edit this file to change the paths where `pybliometrics` should cache downloaded files (`pybliometrics` will create them if necessary).  Remember to indent multi-line statements.
+
+Under `pybliometrics` 2.x and before, the default paths used to be `PPP/.scopus/abstract_retrieval`.  You can safely rename the cache folder `.scopus` to `.pybliometrics` (on Windows machines, rename to `.pybliometrics.`), but remember to change the paths in the configuration file, too.
 
 Set-up
 ~~~~~~
