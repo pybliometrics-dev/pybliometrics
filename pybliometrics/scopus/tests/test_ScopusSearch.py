@@ -13,7 +13,8 @@ order = 'eid doi pii pubmed_id title subtype subtypeDescription creator '\
         'author_names author_ids author_afids coverDate coverDisplayDate '\
         'publicationName issn source_id eIssn aggregationType volume '\
         'issueIdentifier article_number pageRange description authkeywords '\
-        'citedby_count openaccess fund_acr fund_no fund_sponsor'
+        'citedby_count openaccess freetoread freetoreadLabel fund_acr '\
+        'fund_no fund_sponsor'
 doc = namedtuple('Document', order)
 
 # Set to refresh=False because of citation count
@@ -41,7 +42,8 @@ def test_get_results_size():
 def test_results_author():
     received = s_au.results[-1]
     expected = doc(eid='2-s2.0-26444452434', doi='10.1016/0014-2921(92)90085-B',
-        pii='001429219290085B', pubmed_id=None, title='Economists as policymakers: A round-table discussion. Introduction',
+        pii='001429219290085B', pubmed_id=None,
+        title='Economists as policymakers: A round-table discussion. Introduction',
         subtype='ar', subtypeDescription='Article', creator='Draghi M.',
         afid=None, affilname=None, affiliation_city=None, affiliation_country=None,
         author_count='1', author_names='Draghi, Mario', author_ids='24320488600',
@@ -50,7 +52,8 @@ def test_results_author():
         source_id='20749', eIssn=None, aggregationType='Journal', volume='36',
         issueIdentifier='2-3', article_number=None, pageRange='307-309',
         description=None, authkeywords=None, citedby_count=0, openaccess=0,
-        fund_acr=None, fund_no='undefined', fund_sponsor=None)
+        freetoread=None, freetoreadLabel=None, fund_acr=None,
+        fund_no='undefined', fund_sponsor=None)
     assert_true(int(received.citedby_count) > 0)
     assert_equal(received._replace(citedby_count=0), expected)
 
@@ -86,8 +89,8 @@ def test_results_journal():
         publicationName='Research Policy', issn='00487333', source_id='22900',
         eIssn=None, aggregationType='Journal', volume='39', issueIdentifier='1',
         article_number=None, pageRange='103-116', description=abstract,
-        authkeywords=keywords, citedby_count=0, openaccess=0,
-        fund_acr='MOST', fund_no='NSC94-2415-H-194-001',
+        authkeywords=keywords, citedby_count=0, openaccess=0, freetoread=None,
+        freetoreadLabel=None, fund_acr='MOST', fund_no='NSC94-2415-H-194-001',
         fund_sponsor='Ministry of Science and Technology, Taiwan')
     assert_true(int(received.citedby_count) > 60)
     assert_equal(received._replace(citedby_count=0), expected)

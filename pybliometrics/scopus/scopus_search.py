@@ -2,8 +2,8 @@ from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Search
-from pybliometrics.scopus.utils import check_integrity, check_parameter_value,\
-    check_field_consistency, listify, make_search_summary
+from pybliometrics.scopus.utils import check_integrity, chained_get,\
+    check_parameter_value, check_field_consistency, listify, make_search_summary
 
 
 class ScopusSearch(Search):
@@ -14,8 +14,8 @@ class ScopusSearch(Search):
         affiliation_country author_count author_names author_ids author_afids
         coverDate coverDisplayDate publicationName issn source_id eIssn
         aggregationType volume issueIdentifier article_number pageRange
-        description authkeywords citedby_count openaccess fund_acr fund_no
-        fund_sponsor).
+        description authkeywords citedby_count openaccess freetoread
+        freetoreadLabel fund_acr fund_no fund_sponsor).
         Field definitions correspond to
         https://dev.elsevier.com/guides/ScopusSearchViews.htm and return the
         values as-is, except for afid, affilname, affiliation_city,
@@ -36,13 +36,13 @@ class ScopusSearch(Search):
         deduplicated.
         """
         # Initiate namedtuple with ordered list of fields
-        fields = 'eid doi pii pubmed_id title subtype subtypeDescription creator ' \
-                 'afid affilname affiliation_city affiliation_country author_count ' \
-                 'author_names author_ids author_afids coverDate '\
+        fields = 'eid doi pii pubmed_id title subtype subtypeDescription ' \
+                 'creator afid affilname affiliation_city affiliation_country ' \
+                 'author_count author_names author_ids author_afids coverDate '\
                  'coverDisplayDate publicationName issn source_id eIssn '\
                  'aggregationType volume issueIdentifier article_number '\
                  'pageRange description authkeywords citedby_count '\
-                 'openaccess fund_acr fund_no fund_sponsor'
+                 'openaccess freetoread freetoreadLabel fund_acr fund_no fund_sponsor'
         doc = namedtuple('Document', fields)
         check_field_consistency(self._integrity, fields)
         # Parse elements one-by-one
@@ -74,6 +74,9 @@ class ScopusSearch(Search):
             date = item.get('prism:coverDate')
             if isinstance(date, list):
                 date = date[0].get('$')
+            default = [None, {"$": None}]
+            freetoread = chained_get(item, ["freetoread", "value"], default)
+            freetoreadLabel = chained_get(item, ["freetoreadLabel", "value"], default)
             new = doc(article_number=item.get('article-number'),
                       title=item.get('dc:title'), fund_no=item.get('fund-no'),
                       fund_sponsor=item.get('fund-sponsor'),
@@ -92,7 +95,10 @@ class ScopusSearch(Search):
                       author_afids=info.get("auth_afid"),
                       affiliation_country=info.get("aff_country"),
                       citedby_count=int(item['citedby-count']),
-                      openaccess=int(item['openaccess']), eIssn=item.get('prism:eIssn'),
+                      openaccess=int(item['openaccess']),
+                      freetoread=freetoread[-1]["$"],
+                      freetoreadLabel=freetoreadLabel[-1]["$"],
+                      eIssn=item.get('prism:eIssn'),
                       author_count=item.get('author-count', {}).get('$'),
                       affiliation_city=info.get("aff_city"), afid=info.get("afid"),
                       description=item.get('dc:description'), pii=item.get('pii'),
