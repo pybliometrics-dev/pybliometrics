@@ -63,6 +63,12 @@ def get_content(url, api, params={}, **kwds):
         header['X-ELS-Insttoken'] = token
     params.update(**kwds)
     proxies = dict(config._sections.get("Proxy", {}))
+    
+    auth = None
+    proxies_auth = dict(config._sections.get("ProxyAuth", {}))
+    if proxies_auth and "type" in proxies_auth and proxies_auth["type"]=="Digest":
+        from requests_digest_proxy import HTTPProxyDigestAuth
+        auth = HTTPProxyDigestAuth(proxies_auth["username"], proxies_auth["password"])
 
     # Eventually wait bc of throttling
     if len(_throttling_params[api]) == _throttling_params[api].maxlen:
@@ -72,7 +78,7 @@ def get_content(url, api, params={}, **kwds):
             pass
 
     # Perform request, eventually replacing the current key
-    resp = requests.get(url, headers=header, proxies=proxies, params=params)
+    resp = requests.get(url, headers=header, proxies=proxies, params=params, auth=auth)
     while resp.status_code == 429:
         try:
             KEYS.pop(0)  # Remove current key
