@@ -1,3 +1,4 @@
+from os import environ
 from pathlib import Path
 
 # Paths for cached files
@@ -18,6 +19,15 @@ DEFAULT_PATHS = {
     'PlumXMetrics': BASE_PATH/'plumx',
     'SubjectClassifications': BASE_PATH/'subject_classification'
 }
+
+# Configuration file location
+if 'PYB_CONFIG_FILE' in environ:
+    CONFIG_FILE = Path(environ['PYB_CONFIG_FILE'])
+else:
+    if (Path.home()/".scopus").exists():
+        CONFIG_FILE = Path.home()/".scopus"/"config.ini"
+    else:
+        CONFIG_FILE = Path.home()/".pybliometrics"/"config.ini"
 
 # URLs for all classes
 RETRIEVAL_BASE = 'https://api.elsevier.com/content/'
