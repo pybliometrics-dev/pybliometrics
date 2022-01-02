@@ -68,14 +68,16 @@ In case you build `pybliometrics` using CI or on a server where prompts aren't p
 Runtime
 ~~~~~~~
 
-You can easily inspect or change configuration values at runtime.  Simply import the config beforehand and assign new values to the keys as if the config was a dictionary:
+You can easily inspect configuration values at runtime, and even set some during execution.  Simply import the config beforehand and assign new values to the keys as if the config was a dictionary:
 
 .. code-block:: python
 
     from pybliometrics.scopus.utils import config
-    
-    print(config['Authentication']['APIKey'])
-    config['Proxy']['ftp'] = 'socks5://localhost:8080'
+
+    print(config['Authentication']['APIKey'])  # Show keys
+    config['Proxy']['ftp'] = 'socks5://localhost:8080'  # Redefine proxy
+
+Setting the keys at runtime is however not possible.
 
 
 Custom location
