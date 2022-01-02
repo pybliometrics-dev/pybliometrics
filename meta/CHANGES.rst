@@ -3,6 +3,21 @@ Change Log
 
 .. toctree::
 
+3.2.0
+~~~~~
+
+2022-01-02
+
+* In `ScopusSearch().results`, add fields "freetoread" and "freetoreadlabel".
+* In `AbstractRetrieval().authorgroup`, add field "orcid".
+* In `AuthorSearch().authors`, add field "orcid".
+* In `create_config()`, add parameters "keys" and "instoken" for usage in workflows under CI.
+* Adapt timestamp to Scopus changes in `.get_key_reset_time()` method.
+* Improve documentation w.r.t. to the configuration file.
+* Fix bug with generation of configuration file.
+* Fix bug with custom location of configuration file.
+* Fix bug in `SerialTitle().citescoreinfolist` for discontinued sources.
+
 3.1.0
 ~~~~~
 
