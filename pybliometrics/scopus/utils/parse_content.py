@@ -61,6 +61,16 @@ def get_id(s, integer=True):
         return None
 
 
+def get_freetoread(item, path, default):
+    """Helper function to return freetoread information from search results."""
+    text = chained_get(item, path, default)
+    try:
+        text = text[-1]["$"]
+    except TypeError:
+        pass
+    return text
+
+
 def get_link(dct, idx, path=['coredata', 'link']):
     """Helper function to return the link at position `idx` from coredata."""
     links = chained_get(dct, path, [{}])

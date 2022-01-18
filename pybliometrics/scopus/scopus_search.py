@@ -3,7 +3,8 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, chained_get,\
-    check_parameter_value, check_field_consistency, listify, make_search_summary
+    check_parameter_value, check_field_consistency, get_freetoread, listify,\
+    make_search_summary
 
 
 class ScopusSearch(Search):
@@ -75,8 +76,8 @@ class ScopusSearch(Search):
             if isinstance(date, list):
                 date = date[0].get('$')
             default = [None, {"$": None}]
-            freetoread = chained_get(item, ["freetoread", "value"], default)
-            freetoreadLabel = chained_get(item, ["freetoreadLabel", "value"], default)
+            freetoread = get_freetoread(item, ["freetoread", "value"], default)
+            freetoreadLabel = get_freetoread(item, ["freetoreadLabel", "value"], default)
             new = doc(article_number=item.get('article-number'),
                       title=item.get('dc:title'), fund_no=item.get('fund-no'),
                       fund_sponsor=item.get('fund-sponsor'),
@@ -96,8 +97,7 @@ class ScopusSearch(Search):
                       affiliation_country=info.get("aff_country"),
                       citedby_count=int(item['citedby-count']),
                       openaccess=int(item['openaccess']),
-                      freetoread=freetoread[-1]["$"],
-                      freetoreadLabel=freetoreadLabel[-1]["$"],
+                      freetoread=freetoread, freetoreadLabel=freetoreadLabel,
                       eIssn=item.get('prism:eIssn'),
                       author_count=item.get('author-count', {}).get('$'),
                       affiliation_city=info.get("aff_city"), afid=info.get("afid"),
