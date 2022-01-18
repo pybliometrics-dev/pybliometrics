@@ -1,0 +1,876 @@
+CHANGES
+=======
+
+* Provide freetoread and freetoreadLabel (close #223)
+* Update test values
+* Be more specific about renaming (close #230)
+* Fix bug with custom config file location (close #228)
+* Add ORCiD ID in AbstractRetrieval (close #217)
+* Make docstring clearer for CitationOverview.rangeCount (close #207)
+* Remove unwanted print() function
+* Fix timestamp (close #219)
+* Provide ORCiD in AuthorSearch (close #214)
+* Allow for insttoken parameter in create\_config() (#213)
+* Fix bug with citescoreyearinfolist for discontinued sources (close #215)
+* Optional parameter for API keys in .create\_config() (close #213)
+
+3.1.0
+-----
+
+* Changes in 3.1.0
+* Update test values
+* Better document journal metrics
+* New error class: Scopus504Error
+* Update docs for .funding, change order of fields (#210)
+* Add funding\_id to .funding property and rename id to agency\_id
+* Document difference in AF-ID() and AFFIL()
+* Fix documentation re cache folder (close #201)
+* Folder \_static
+* Document 413 error
+
+3.0.1
+-----
+
+* Changes in 3.0.1
+* Create parent directories for config file if they do not exist (close #199)
+* Simplify condition expression using dict.get()
+* Update frontpage example
+* Fix bug with Search classes not testing the number of results
+* Add forgotten import
+
+3.0
+---
+
+* Changes in 3.0
+* Document ValueError due to wrong value of refresh and maybe others
+* Raise error when result size > 5k and remove max\_entries parameter from Search()
+* Deprecate count parameter in AffiliationSearch() and AuthorSearch()
+* Make \_get\_category\_metrics() obsolete
+* New function make\_int\_if\_possible()
+* Specifiy API access point in AuthorRetrieval().get\_coauthors()
+* Make AbstractRetrieval().authors.affiliation a str
+* Turn more properties and fields into numeric type
+* Update all documentation of classes
+* Use str author\_id internally
+* New property AffiliationRetrieval().status
+* Five new parameters for CitationOverview()
+* Refactor CitationOverview() to accept lists of identifiers (#76)
+* Grammar fix for \_\_str\_\_
+* Rely on kwds for passing header parameters
+* Document and apply ValueErrors consistently
+* Allow for kwds in various classes
+* New section in documentation on Access to Scopus
+* Return numeric values whenever possible (#122)
+* Improve original methods of AuthorRetrieval()
+* Refactor PlumXMetrics()
+* Harmonize order of parameters
+* Add test for AuthorRetrieval().alias; Fix AffiliationRetrieval().address
+* TOC for each class
+* Enable type hints and parameter annotation for all public functions, methods and attributes
+* Remove ContentAffiliationRetrieval()
+* Few fixes to the documentation
+* General code cleanup
+* Bugfix: Do not touch file when download=False
+* Describe reason for exception correctly
+* For SubjectClassifications(), do not use default view
+* Make value check for refresh more transparent
+* Make parameters available as private variables; New private variable .\_cache\_file\_path
+* Citation overview file to respect citation type
+* Fix various bugs related to the configuration file
+* Deal with APIs that do not throttle
+* Implement throttling (close #191)
+* Parse keys from config only once
+* Put examples and reference on same page
+* Expand docs on Integration Team
+* Use .pybliometrics as default folder, unless .scopus exists
+* Use pathlib.Path() throughout
+* Update/Correct all tests
+* More extensive documentation for keys and quotas (#191)
+* Close parenthesis in AuthorSearch.rst
+* Turn AbstractRetrieval.correspondece into a list
+* Use tqdm instead of print\_progress()
+
+2.9.1
+-----
+
+* Changes in 2.9.1
+* Return None instead of 0 as default
+* Allow for METRICS, LIGHT and STANDARD view in AuthorRetrieval()
+* Allow for LIGHT view in AffiliationRetrieval()
+
+2.9
+---
+
+* Changes in 2.9
+* Update some links in docstrings
+* Format documentation
+* Document SubjectClassifications() with examples
+* Rename two modules and one class
+* \_\_str\_\_ for SubjectClass()
+* General code improvement and cleanup (PEP8)
+* More documentation for CitationOverview()
+* Refactor CitationOverview().\_\_str\_\_
+* Outsource function to verify str parameter values
+* Update test value
+* New class for Subject Classifications API (#183)
+* Add optional parameter citation (#182)
+
+2.8
+---
+
+* Changes in 2.8
+* ContentAffiliationRetrieval() -> AffiliationRetrieval()
+* Document new years-feature of SerialTitle()
+* Update/Extend SerialTitle() tests
+* Finalize years feature (close #179)
+* Add capability to retrieve old SJR and SNIP lists (#179, #180)
+* Fix documentation on InstToken (#155)
+* (c) 2021
+* Use pybliometrics publication as examples
+* Listify PlumXMetrics().\_\_str\_\_
+* INDEXTERMS() restricted as well
+* Recommend git+https for installation
+* For empty queries, save empty files
+
+2.7.2
+-----
+
+* Changes in 2.7.2
+* Allow for kwds in AbstractRetrieval (close #154)
+* Note on missing periods of affiliation (#177)
+* Fix bug with empty results being json dumped (close #178)
+* LIMIT-TO() not valid query parameter (close #171)
+
+2.7.1
+-----
+
+* Changes in 2.7.1
+* Allow for singular in \_\_str\_\_
+* Always write minified json
+* Update test values
+* Fix typo in config generation process
+* Fix/Update AuthorRetrieval example (close #176)
+* Specify documentation on get\_coauthors()
+* Brought the kwds 'count' argument to the surface in ScopusSearch (#173)
+* Add section on support
+* Better documentation for exceptions; New exception 413 and 502
+* Correct documentation for ScopusSearch fields (close #169)
+* Fix links in examples (close #166)
+* Fix but with wrong internal variable
+
+2.7
+---
+
+* Changes in 2.7
+* Introduce Scopus414Error
+* New property .alias for merged author profiles
+* Add properties subtype and subtypedescription
+* Update test values
+* Add default issue template
+* Refer to SO for how to-questions
+* adding additionally provided parameters into account for the search paramters (#157)
+
+2.6.3
+-----
+
+* Changes in 2.6.3
+* Properties .openaccess and .openaccessFlag
+* Correct and update PlumX example
+* Bring str dunder uptodate with class members
+* Avoid saving cache file for download=False
+* Make str dunder more robust and more verbose
+* Use more robust way to parse pages
+
+2.6.2
+-----
+
+* Changes in 2.6.2
+* Fix bug with duplicate entries in multi-page search results with cursors
+* Journal history information has been removed
+
+2.6.1
+-----
+
+* Changes in 2.6.1
+* Tighter linebreaks
+* Add date of information to \_\_str\_\_; add \_\_str\_\_ to SerialSearch()
+* Fix bug with missing journal history information
+* Use internal function \_write\_json()
+* Fix bug of missing header with empty results
+
+2.6
+---
+
+* Changes in 2.6
+* Section Examples with link to webpage in each docstring
+* Reverse order of members of classes
+* Methods for key reset and remaining quota (close #129)
+* Use full item in \_join()
+* Link to Scopus' API Key settings
+* Support multiple keys in config.ini and replace depleted keys
+* Account for TypeError; Add empty string for missing affiliation information (close #151)
+* Update/Refactor tests
+* Fix typos
+* Changing config at runtime (close #148)
+* Docs: Fix links, merged profiles, typos
+
+2.5
+---
+
+* Changes in 2.5
+* Allow for custom location of configuration file (close #146)
+* Document SerialSearch()
+* Define \_n for SerialSearch
+* Restrict to search-specific fields
+* Split tests
+* Simplify fields/keys
+* Formatting changes to the documentation
+* Implement Serial Title API search
+* Fix #145 re get\_coauthors()
+* Add progress bar
+* Fix example on integrity fields
+* Add Scopus403Error
+* Fix typo in error message
+* Require simplejson
+
+2.4
+---
+
+* Changes in 2.4
+* printing the object
+* make\_search\_summary() \_\_str\_\_ for search classes
+* Raise error in case of faulty json as well
+* Remove special treatment of Python2
+* Use f-string notation, fix \_\_str\_\_, end Python3.5
+* Documentation for new class
+* Allow all ID Types for PlumXMetrics (#142)
+* Update config if path doesn't exist
+* Rename module classes to superclasses
+* Implement class to interact with PlumX Metrics API
+* Use try-except instead of if-else
+
+2.3.2
+-----
+
+* Changes in 2.3.2
+* Upper case search; Update value
+* args in estimate\_uniqueness()
+* Return mod\_ts from \_check\_file\_age()
+
+2.3.1
+-----
+
+* Changes in 2.3.1
+* Harmonize class docstrings
+* Outsource \_check\_file\_age() function; Add error to docstring
+* Reduce complexity; expand message
+* Reorder tips and expand section on Updates
+* Refactor get\_documents(), get\_document\_eids(), estimate\_uniqueness(); Improve documentation
+* Refactor parsing of reference json, split reference test, fix documentation
+* Simplify confdate
+* Refactor \_select\_by\_idtype()
+* New function check\_integrity\_params()
+* Test for get\_coauthors(), return None instead of empty list
+* Harmonize documentation re refresh parameter and caching directory
+* Align example with new class behavior (fix #138)
+
+2.3
+---
+
+* Changes in 2.3
+* Make parse\_affiliations more robust
+* affiliation\_current and affiliation\_history as namedtuples
+* Use namedtuple documentation of python 3
+* Document new refreshing possibilities
+* Refresh test objects after 30 days
+* End support for Python 2.7, support Python 3.8 and 3.9
+* Introduce Base class and allow for refreshing based on cached file age
+* Add configuration link to Tips
+* Update tests, replace one test object
+* Shorter doc strings
+* Better version of key cycling (close #134)
+* Allow printing the object in the absence of authors
+* Make config order unambiguous (#135)
+* Document config.ini better (close #132)
+* Fix typo (#131)
+
+2.2.2
+-----
+
+* Changes in 2.2.2
+* UserWarning for affiliation\_current and affiliation\_history
+* Refactor cache\_file()
+* Return None as confdate instead of list with tuples with Nones
+* Treat EIDs leading with 1-s2.0- as such; update docs
+* Return None if idxterms is empty list
+* Finalize test for subtypeDescription
+* Implement subtypeDescription in ScopusSearch (close #119)
+* Simplify example
+* Update and correct configuration guide
+
+2.2.1
+-----
+
+* Changes in 2.2.1
+* Enhance documentation for AuthorRetrieval().get\_documents()
+* Return None if journal metrics are absent
+* Add user agent string (#121)
+* Correct path for exceptions in docs (#120)
+* Fix links in citation suggestion
+
+2.2
+---
+
+* Changes in 2.2
+* Add newlines around directives
+* Some fixes in the tests
+* Document integrity checks
+* Shorten/Correct examples
+* Use .get() for all fields in Search classes and provide optional integerity checks with varying action (fix #115, close #111)
+* Update/Refactor/Expand documentation
+* Progress bar for search classes (#116)
+* Fix bug with None in author-group list
+* Fix link to paper pdf
+
+2.1.3
+-----
+
+* Changes in 2.1.3
+* DOI can also exist w/o slash
+* Repair docu link in config warning (follow-up to 4e948499) (#109)
+* fixing reference to fname instead of CONFIG\_FILE that causes bug when starting up for the first time (#108)
+
+2.1.2
+-----
+
+* Changes in 2.1.2
+* Fix problems with kwds (fix #107, close #106)
+* pybliometrics is stable, not beta
+* Fix bug with duplicte volume/issue information in Scopus
+* Update tests
+* Set params to empty dict as None is the wrong type
+* Update license, replace working paper with published paper
+
+2.1.1
+-----
+
+* Changes in 2.1.1
+* How to programmatically change the API key (#101)
+* Better explain idxterms
+* Properties pubmed\_id and pii for AbstractRetrieval
+* Refactor parsing of lists
+* Use get\_link() in SerialTitle
+* Check not necessary for internal classes
+* Fix semantic version string
+
+2.1
+---
+
+* Changes in 2.1
+* Rename to pybliometrics
+* Has to be empty list, not None
+
+2.0.1
+-----
+
+* Changes in 2.0.1
+* Set internal json to None if it wasn't downloaded
+* Also raise Scopus.Exception when json doesn't exist
+* Make journal\_history more robust to missing entries (fix #102)
+* Create hidden folder if necessary
+* Add missing import
+* Fix bug occurring in Python2
+* Fix docstrings
+* Update docs on AbstractRerieval
+* Add field type in .references
+* For REF view, parse refcount and references in alternative way
+* Make AbstractRetrieval robust to different views; test for REF view explicitly
+* Add view as private property
+
+2.0
+---
+
+* Changes in 2.0
+* Add method to estimate an author's uniqueness
+* Use detailed error message for ScopusErrors (close #94)
+* Make view in Retrieval() mandatory and define view for AuthorRetrieval() in author\_retrieval module
+* Apply PEP8, clean up, remove unused imports
+* Cache files in sub-folders according to the view (close #99)
+* Remove parameter accept from get\_content() and always use json instead
+* Remove deprecated modules
+* Remove deprecated attribute EIDS
+* Remove deprecated parameter EID
+* Make refresh the first parameter after query/retrievval params
+* Remove overdue deprecated parameters
+* Tips: Change order and add section for KeyError
+
+1.6.1
+-----
+
+* Changes in 1.6.1
+* Join organization strings
+* Attempt to solve issue of missing py-modindex.html
+* Link to proper classes
+* Documentation on the proxy
+* Making available the use of proxies (#98)
+* Iterate over items, not keys()
+* Import exists (close #97)
+
+1.6
+---
+
+* Changes in 1.6
+* Remove deprecated parameter
+* Outsource folder retrieval and creation
+* Create folders when needed, not during config creation
+* Module for constants
+* Fix number in test
+* Create SerialTitle class (close #79)
+* Use different example how to get a valid query
+* Fix documentation
+* Add authors and contribution guide to index
+* Document inherited methods and properties
+* authorgroup: rename city-group to city, add postalcode, addresspart and dptid
+* Fix bug with missing affiliation-id key
+* Code simplification
+* Fix order of parameters
+* Return possibility to not download and method to retrieve results size (close #89)
+* Fix bug with test
+* Pass arguments to base classes explicitly
+* Outsource parsing to auxiliary function
+
+1.5
+---
+
+* Changes in 1.5
+* Update tests, make some time-invariant
+* Perform check only if view is given
+* Deprecate parameters max\_entries and start
+* Do not test again for valid views in Search()
+* Deprecate start parameter (close #93)
+* Fix broken string
+* Rework search params in ScopusSearch (#95)
+* Raise TooManyResultsError if cursor is False
+* Improve documentation, e.g. on cursor
+* fix spelling of cursor param (#96)
+* Add cursor parameter to ScopusSearch()
+* Handle cases where multiple affiliation IDs are given in one entry
+* New properties: status and historical\_identifier
+* Semantic fixes (alphabetic ordering, full stops)
+* kwds are query parameters, not header parameters
+* Insert citation dunder string
+* Implement kwds for ScopusSearch
+* Update/Correct tests
+* Put deprecated modules in own folder
+* Bugfix for reference containing auhtor-list = None; bugfix in references test case with REF view (#90)
+* Fix three bugs related to non-standard information of references; Update/Fix documentation on references; Join all lists
+* Explain better how the API key is stored (#88)
+* Add REF view to references method (#82)
+* Fix variable name in \_\_str\_\_ (fix #83)
+
+1.4.3
+-----
+
+* Changes in 1.4.3
+* Fix bug with empty value in language key
+* matplotlib needs to be in requirements until scopus\_reports is present
+* Fix typo and redundant entries in documentation
+
+1.4.2
+-----
+
+* Changes in 1.4.2
+* Fix bug with missing title
+* Fix bug with missing author information
+* Add TypeError to chained\_get()
+* Update license
+
+1.4.1
+-----
+
+* Changes in 1.4.1
+* Add \_\_str\_\_ for CitationOverview
+* Clean up and add citation suggestion
+* Outsource class reports to scopusreport
+* Update year
+* Fix error code
+* Update documentation
+
+1.4
+---
+
+* Changes in 1.4
+* Add badges for downloads and maintainability
+* Streamline documentation for maintainability
+* Move function detect\_id\_type to get\_content module
+* Outsource formatting of author names
+* Use helper function to parse date-created
+* Simplify code
+* Use get\_link function to extract links
+* Allow for STANDARD view with more results per query (#76)
+* Update tests
+* Simplify and order code
+* Return None when results set is empty
+* Use helper function for chained get
+* Fix bug due to missing cas-registry-number
+* Use auxiliary function listify()
+* Remove outdated notes
+* Implement new fields and rename some fields
+* Add missing imports
+* Make documentation more precise
+* Fix forgotten variable
+* Write empty file if there are no results
+* Use number of results from first query (#77); simplify code
+* Update journal tests
+
+1.3.1
+-----
+
+* Changes in 1.3.1
+* Update tests and add new test to ScopusSearch; remove tests for deprecated classes
+* Fix bug of no search results returning
+* Open cached search files in binary mode
+* Only join elements when they are not None
+
+1.3
+---
+
+* Changes in 1.3
+* Join affiliation string only for non-strings
+* Add forgotten retrieval class
+* Fix/Update tests
+* Refactor some properties
+* Cope with subject-area or given-name possibly not being set. (#74)
+* Join affiliation substrings for lists too
+* Implement convenience method .get\_documents()
+* Return None rather than empty list for affiliation\_history
+* Format/Correct documention; Add example on funding, chemicals and sequencebanks
+* Cope with journal-history being unpopulated (#75)
+* Implement Retrieval() superclass for all retrieval and content classes
+* Correct 421 error to 429 error
+* Refactor Search() and all search classes
+* Update documentation
+* Remove redundant link
+* Implement own exceptions
+* Update installation information
+* Fix bug with missing openaccess flag
+
+1.2
+---
+
+* Changes in 1.2
+* Correct tests involving number comparison when number is a string
+* Clean up
+* Make parameter EID deprecated in favor of identifier
+* Return None if confsponsor is empty
+* New properties: chemicals, contributor\_group, funding, funding\_text, isbn, sequencebank
+* Fix bug with list in coverDate
+* Return None rather than empty dict
+* Fix bug du to missing titles
+* Fix bug with affiliations without authors and without IDs
+* Expand documentation for AbstractRetrieval
+* Enabled abstract retrieval by different types of Scopus ID (#71)
+* Fix bug with duplicate authors and parse afid
+* Implement UserWarnings if provided ID is outdated
+
+1.1
+---
+
+* Changes in 1.1
+* config generation in separate function, not on import
+* Update setup.cfg
+
+1.0
+---
+
+* Changes in 1.0
+* Write migration guide
+* Update docs: configuration, installation, copyright
+* Update test file
+* Rename setup.py to avoid clashes with nose
+* Fix various bugs in new classes
+* Fix invalid escape sequence
+* Save absolute directories in config.ini
+* Insert DeprecationWarnings in old classes
+* Outsource config reading and setup in separate utils script
+* Use warnings rather than raise()
+* Rename scripts to comply with API URL
+* Fix bug due to test object
+* Use config for directory defaults
+* Use config.ini to store authentication info
+* Documentation and examples for new classes
+* Fix/Improve documentation strings
+* Fix bug in get\_coauthors()
+* Test for AbstractRetrieval
+* New class: AbstractRetrieval
+* Make internal objects underscore\_objects and sort methods
+* Update/Clean up test files
+* Use get\_eids() from ScopusSearch
+* Rewrite test for ScopusSearch
+* Rewrite class ScopusSearch
+* Generalize to include view parameter and harmonize object names
+* Test for AuthorRetrieval
+* New class: AuthorRetrieval
+* Test for ContentAffiliationRetrieval
+* New class: ContentAffiliationRetrieval
+* Use another example in documentation
+* Use itertext() to skip children in elements with text
+
+0.10
+----
+
+* Changes in 0.10
+* Add properties citedby\_url and scopus\_url and remove underscore properties
+* Fix property citedby\_url and remove underscore properties
+* New tip section on affiliations
+* Add property state and remove underscore properties
+* Refactor generating abstracts lists into a separate get\_journal\_abstract
+
+0.9
+---
+
+* Changes in 0.9
+* Update test values
+* ScopusAffiliation to accept EID
+* Docs for AffiliationSearch
+* Implement test for AffiliationSearch
+* New class AffiliationSearch
+* Outsource search facility to class
+* Parse authkeywords from abstracts (#68)
+* Fix one-field bug
+
+0.8
+---
+
+* Changes in 0.8
+* Fix links and use Sphinx' autodoc function more
+* Docs for AuthorSearch
+* Provide test files for AuthorSearch class
+* Drop fields parameter and return document count and subject areas
+* Make documentation for ScopusAuthor more precise
+* Added a ScopusAuthorSearch class for the search\_author api entrypoint. (#65)
+* Fix bug while reading journal abbrevation
+* Expand documentation for view parameter (close #66)
+
+0.7
+---
+
+* Changes in 0.6 and 0.7
+* Code cleanup and bugfixes
+* Documentation for .ndocuments (#63)
+* Documentation for config and InstToken authentication
+* download() accepts InstToken from config
+* https in ScopusAbstract
+* Use https wherever possible
+* Link DOIs to preferred resolver
+* Fix AttributeError when there are no total citations
+* Update docs (close #61) and examples (close #60), fix broken URLs
+
+0.6
+---
+
+* Documentation for CitationOverview class
+* Tests for CitationOverview
+* Implement abstract citations class (#9)
+* Update tips and examples, link to to tips in CONTRIBUTING, link to contributors in CONTRIBUTORS
+* Update to reflect change in namespace definition
+* Fix bug with multiple ISSNs given; Add link to author page
+
+0.5
+---
+
+* Changes in 0.5
+* Update examples
+* New property: publication\_history
+* New property: subject\_areas
+* Correct test number
+* Implement Tips page
+* Specify/Format some docstrings
+* Namespace update; implement new affiliation information
+* Update generated stubs
+* Reorganise Navigation and introductory text
+
+0.4.4
+-----
+
+* Changes in 0.4.4
+* README as .rst to render on PyPi; remove examples to avoid installation errors
+* Use unicode strings throughout scopus\_api.py (fix #48)
+
+0.4.3
+-----
+
+* Update ScopusAbstract to reflect changes in the namespace definition
+
+0.4.2
+-----
+
+* Changes in 0.4.2
+* Return None rather than returning TypErrors
+* Take API Key loading out of \_\_init\_\_; fix #45 with python version detection
+* Take API Key loading out of \_\_init\_\_; fix #45 with python version detection
+* Update docs for hash version of filename
+* Hash mechanism for search filenames in cache (#40)
+
+0.4.1
+-----
+
+* Remove unwanted print() statement
+
+0.4
+---
+
+* Changes in 0.4.0
+* New property: citation\_count
+* User prompt to define key
+* Load MY\_API\_KEY on startup
+* Separate refresh parameter for ScopusAffiliation
+* Include class members automatically, remove classes from navigation
+
+0.3.1
+-----
+
+* Update ScopusAbstract to reflect change in API
+* Reverse signs
+* Change alabaster options and mock import \_tkinter
+* add requirements.txt
+
+0.3
+---
+
+* Changes in 0.3.0
+* Change description and update installation instructions
+* Use pbr for versionizing
+* Provide test files for all classes
+* Refactor .ris and .bibtex, raise ValueError, change LaTeX key
+* New properties: api\_url, date\_created, org\_type, org\_domain, org\_url
+* Improve docstrings
+* Cleanup: remove unused attribute query
+* Implement API updates
+* Use affiliation\_id from results
+* Fix #33 (Problems with unicode)
+* Correct path to abstract
+
+0.2.1
+-----
+
+* Version 0.2.1
+* Fix #29 (problems related to view='META')
+* Adding changelog
+* Improve several docstrings
+* Use valid affiliations only
+* ~Fixed references retrival in ScopusAbstract.\_\_init\_\_
+* fix bug where only xml string was read
+* Use internal variables for \_\_str\_\_ generation
+* Fix/Format docstrings
+* Use author\_id from results
+* fix bug where only xml string was read
+* Fix for issue #32 where the abstract was not being returned
+* Harmonize docstring
+* Write examples for each class
+* linkfix
+* Add reference.rst
+* Use sphinx-autogen to generate stubs
+* Linkfix in CONTRIBUTING
+* Use autosummary to document classes
+* Outcomment lines to include other modules
+* Harmonize docstring
+* Write examples for each class
+* linkfix
+* Add reference.rst
+* Use sphinx-autogen to generate stubs
+* Linkfix in CONTRIBUTING
+* Use autosummary to document classes
+* Outcomment lines to include other modules
+* Make items parsing more robust
+
+0.2
+---
+
+* version bump for update to PyPi
+* Fix property subjectAreas
+* Specify utils folder in packages
+* Add new proprties
+* Outsource and refactor helper functions
+* update to figure
+* updates to readme's to check the new additions
+* change xml to self.xml
+* Add the internal classes back
+* change exception to print a warning
+* Reduce README.org
+* Update docstrings
+* Ignore sphinx build files
+* Revamp documentation pages
+* Move docs folder
+* Add AUTHORS and CONTRIBUTING
+* Use refresh parameter in calls of get\_document\_eids()
+* Add property for srctype
+* Remove redundant classes
+* Sort imports, remove superfluous indents
+* Remove old code and superfluous indents
+* Add property for srctype
+* Sort imports, shorter variable names, remove superfluous indents
+* Sort imports, shorter variable names, remove superfluous indents
+* Shorter variable names, remove superfluous indents
+* Specify Exception message
+* Streamline get\_encoded\_text()
+* Use built-in .raise\_for\_status()
+* Outsource file IO for retrieval queries
+* Fix bug with too many classifications entries
+* Use identifier from xml
+* changed name of jupyter notebook
+* Attempt to fix issue #12
+* Smal bug fixes
+* addes get started jupyter notebook
+* Update readme for references in ScopusAbstract
+* Load references in ScopusAbstract
+* refresh parameter for ScopusSearch() and ScopusAbstract()
+* add number to exception
+* add py2.7 compatibility
+* Implement n\_yearly\_publications()
+* Add refresh parameter in all ScopusAbstract calls
+* Allow False in ScopusAbstract download
+* add default empty list to dictionary call
+* fix space typo
+* fix bug in return value
+* update readme
+* update readme to show results, minor update to report
+* add exports to readme block
+* fix py2/3 in init. fix typo in affiliation
+* fix some py2/3 compatibility issues
+* make file writing compatible with py2 and 3
+* add refresh logic, and update write for issue #1
+* print top 20 authors
+* return int of cite count
+* update examples
+* update doc with autosummary
+* add documented properties
+* add documented properties
+* add doucmented properties
+* add hindex initialization
+* mostly change triple ''' to """, also change variables to semi-private with \_
+* py3 update
+* add documented properties
+* new index
+* change max entries
+* rm unneeded import, fix long string
+* update doc strings
+* add readthe docs
+* docs
+* fix bug in what is sorted
+* add checks for no IF
+* add exclude affiliation
+* add install note
+* first commit
+* reminder note on pypi
+* add a script
+* fix some issues with empty results
+* add a note
+* clean up init
+* get ready for first push to github
+* Initial commit
+
+0.1
+---
+
+* initial commit for Python3
