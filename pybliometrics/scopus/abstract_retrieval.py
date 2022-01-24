@@ -78,11 +78,15 @@ class AbstractRetrieval(Retrieval):
                     given = au.get('ce:given-name', au['ce:initials'])
                 except KeyError:  # Collaboration
                     given = au.get('ce:text')
+                try:
+                    auid = int(au.get('@auid'))
+                except TypeError:
+                    auid = None
                 new = auth(affiliation_id=aff_id, organization=org,
                            city=aff.get('city'), dptid=dep_id,
                            postalcode=aff.get('postal-code'),
                            addresspart=aff.get('address-part'),
-                           country=aff.get('country'), auid=int(au['@auid']),
+                           country=aff.get('country'), auid=auid,
                            orcid=au.get('@orcid'),
                            surname=au.get('ce:surname'), given_name=given,
                            indexed_name=chained_get(au, index_path))
