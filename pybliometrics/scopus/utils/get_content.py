@@ -55,6 +55,8 @@ def get_content(url, api, params={}, **kwds):
     from pybliometrics.scopus.utils.startup import _throttling_params, KEYS
 
     # Set header, params and proxy
+    if len(KEYS) == 0:
+        raise errors[429]
     header = {'X-ELS-APIKey': KEYS[0],
               'Accept': 'application/json',
               'User-Agent': user_agent}
