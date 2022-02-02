@@ -58,8 +58,9 @@ class AbstractRetrieval(Retrieval):
         a correction.
         """
         out = []
-        fields = 'affiliation_id dptid organization city postalcode '\
-                 'addresspart country auid orcid indexed_name surname given_name'
+        fields = 'affiliation_id dptid organization city postalcode ' \
+                 'addresspart country auid orcid indexed_name surname given_name ' \
+                 'collaboration_instance_id collaboration_index_name'
         auth = namedtuple('Author', fields)
         items = listify(self._head.get('author-group', []))
         index_path = ['preferred-name', 'ce:indexed-name']
@@ -89,7 +90,9 @@ class AbstractRetrieval(Retrieval):
                            country=aff.get('country'), auid=auid,
                            orcid=au.get('@orcid'),
                            surname=au.get('ce:surname'), given_name=given,
-                           indexed_name=chained_get(au, index_path))
+                           indexed_name=chained_get(au, index_path),
+                           collaboration_instance_id=au.get('@collaboration-instance-id'),
+                           collaboration_index_name=au.get('ce:indexed-name'))
                 out.append(new)
         return out or None
 
