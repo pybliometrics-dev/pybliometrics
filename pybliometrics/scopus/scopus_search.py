@@ -38,12 +38,13 @@ class ScopusSearch(Search):
         """
         # Initiate namedtuple with ordered list of fields
         fields = 'eid doi pii pubmed_id title subtype subtypeDescription ' \
-                 'creator afid affilname affiliation_city affiliation_country ' \
-                 'author_count author_names author_ids author_afids coverDate '\
-                 'coverDisplayDate publicationName issn source_id eIssn '\
-                 'aggregationType volume issueIdentifier article_number '\
-                 'pageRange description authkeywords citedby_count '\
-                 'openaccess freetoread freetoreadLabel fund_acr fund_no fund_sponsor'
+                 'creator afid affilname affiliation_city ' \
+                 'affiliation_country author_count author_names author_ids '\
+                 'author_afids coverDate coverDisplayDate publicationName '\
+                 'issn source_id eIssn aggregationType volume '\
+                 'issueIdentifier article_number pageRange description '\
+                 'authkeywords citedby_count openaccess freetoread '\
+                 'freetoreadLabel fund_acr fund_no fund_sponsor'
         doc = namedtuple('Document', fields)
         check_field_consistency(self._integrity, fields)
         # Parse elements one-by-one
@@ -69,7 +70,10 @@ class ScopusSearch(Search):
                 for auth in authors:
                     aff = listify(_deduplicate(auth.get('afid', [])))
                     affs.append('-'.join([d['$'] for d in aff]))
-                info["auth_afid"] = (';'.join(affs) or None)
+                if [a for a in affs if a]:
+                    info["auth_afid"] = ';'.join(affs)
+                else:
+                    info["auth_afid"] = None
             except KeyError:
                 pass
             date = item.get('prism:coverDate')
