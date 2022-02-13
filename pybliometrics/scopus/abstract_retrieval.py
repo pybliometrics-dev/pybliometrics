@@ -50,19 +50,33 @@ class AbstractRetrieval(Retrieval):
     def authorgroup(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the article's authors organized
         by affiliation, in the form (affiliation_id, dptid, organization,
-        city, postalcode, addresspart, country, auid, orcid, indexed_name,
-        surname, given_name).
+        city, postalcode, addresspart, country, collaboration, auid, orcid,
+        indexed_name, surname, given_name).
         If "given_name" is not present, fall back to initials.
         Note: Affiliation information might be missing or mal-assigned even
         when it looks correct in the web view.  In this case please request
-        a correction.
+        a correction.  It is generally missing for collaborations.
         """
-        out = []
+        # Information can be one of three forms:
+        # 1. A dict with one key (author) or two keys (affiliation and author)
+        # 2. A list of dicts with as in 1, one for each affiliation (incl. missing)
+        # 3. A list of two dicts with one key each (author and collaboration)
+        # Initialization
         fields = 'affiliation_id dptid organization city postalcode '\
-                 'addresspart country auid orcid indexed_name surname given_name'
+                 'addresspart country collaboration auid orcid indexed_name '\
+                 'surname given_name'
         auth = namedtuple('Author', fields)
         items = listify(self._head.get('author-group', []))
         index_path = ['preferred-name', 'ce:indexed-name']
+        # Check for collaboration
+        keys = [k for x in items for k in list(x.keys())]
+        try:
+            collab_idx = keys.index("collaboration")
+            collaboration = items.pop(collab_idx)['collaboration']
+        except ValueError:
+            collaboration = {'ce:indexed-name': None}
+        # Iterate through each author-affiliation combination
+        out = []
         for item in items:
             if not item:
                 continue
@@ -78,13 +92,18 @@ class AbstractRetrieval(Retrieval):
                     given = au.get('ce:given-name', au['ce:initials'])
                 except KeyError:  # Collaboration
                     given = au.get('ce:text')
-                new = auth(affiliation_id=aff_id, organization=org,
-                           city=aff.get('city'), dptid=dep_id,
+                new = auth(affiliation_id=aff_id,
+                           organization=org,
+                           city=aff.get('city'),
+                           dptid=dep_id,
                            postalcode=aff.get('postal-code'),
                            addresspart=aff.get('address-part'),
-                           country=aff.get('country'), auid=int(au['@auid']),
+                           country=aff.get('country'),
+                           collaboration=collaboration.get('ce:indexed-name'),
+                           auid=int(au['@auid']),
                            orcid=au.get('@orcid'),
-                           surname=au.get('ce:surname'), given_name=given,
+                           surname=au.get('ce:surname'),
+                           given_name=given,
                            indexed_name=chained_get(au, index_path))
                 out.append(new)
         return out or None

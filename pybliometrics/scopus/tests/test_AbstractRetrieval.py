@@ -23,6 +23,8 @@ ab6 = AbstractRetrieval("2-s2.0-85040230676", view="FULL", refresh=30)
 ab7 = AbstractRetrieval("2-s2.0-85050253030", view="FULL", refresh=30)
 # REF view
 ab8 = AbstractRetrieval("2-s2.0-84951753303", view="REF", refresh=30)
+# Collaboration
+ab9 = AbstractRetrieval("2-s2.0-85097473741", view="FULL", refresh=30)
 
 
 def test_abstract():
@@ -62,16 +64,22 @@ def test_authkeywords():
 
 
 def test_authorgroup():
-    fields = 'affiliation_id dptid organization city postalcode '\
-             'addresspart country auid orcid indexed_name surname given_name'
+    fields = 'affiliation_id dptid organization city postalcode addresspart '\
+             'country collaboration auid orcid indexed_name surname given_name'
     auth = namedtuple('Author', fields)
     expected = [auth(affiliation_id=60027950, dptid=110785688,
         organization='Department of Chemical Engineering, Carnegie Mellon University',
         city='Pittsburgh', postalcode='15213', addresspart='5000 Forbes Avenue',
-        country='United States', auid=7004212771, orcid=None,
+        country='United States', collaboration=None, auid=7004212771, orcid=None,
         indexed_name='Kitchin J.', surname='Kitchin', given_name='John R.')]
     assert_equal(ab1.authorgroup, expected)
     assert_equal(ab8.authorgroup, None)
+    expected = auth(affiliation_id=None, dptid=None, organization=None,
+        city=None, postalcode=None, addresspart=None, country=None,
+        collaboration='J-PARC-HI Collaboration', auid=7403019450, orcid=None,
+        indexed_name='Ahn J.K.', surname='Ahn', given_name='J.K.')
+    assert_equal(ab9.authorgroup[0], expected)
+
 
 
 def test_authors():
@@ -455,6 +463,9 @@ def test_subject_areas():
                 area(area='Chemistry (all)', abbreviation='CHEM', code=1600)]
     assert_equal(ab1.subject_areas, expected)
     assert_equal(ab8.subject_areas, None)
+    expected = [area(area='Nuclear and High Energy Physics',
+                     abbreviation='PHYS', code=3106)]
+    assert_equal(ab9.subject_areas, expected)
 
 
 def test_subtype():
