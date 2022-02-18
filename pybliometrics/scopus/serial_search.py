@@ -50,7 +50,8 @@ class SerialSearch(Search):
     def __init__(self,
                  query: Dict,
                  refresh: Union[bool, int] = False,
-                 view: str = 'ENHANCED'
+                 view: str = 'ENHANCED',
+                 **kwds: str
                  ) -> None:
         """Interaction with the Serial Title API.
 
@@ -64,6 +65,9 @@ class SerialSearch(Search):
         :param view: The view of the file that should be downloaded.  Allowed
                      values: STANDARD, ENHANCED, CITESCORE.  For details see
                      https://dev.elsevier.com/sc_serial_title_views.html.
+        :param kwds: Keywords passed on as query parameters.  Must contain
+                     fields and values listed in the API specification at
+                     https://dev.elsevier.com/documentation/SerialTitleAPI.wadl.
 
         Raises
         ------
@@ -94,7 +98,7 @@ class SerialSearch(Search):
         self._query = str(query)
         self._refresh = refresh
         self._view = view
-        Search.__init__(self, query=query, api='SerialSearch')
+        Search.__init__(self, query=query, api='SerialSearch', **kwds)
         self._n = len(self._json['serial-metadata-response'].get('entry', []))
 
     def __str__(self):

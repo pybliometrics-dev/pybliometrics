@@ -51,7 +51,8 @@ class Search(Base):
         if cursor:
             params.update({'cursor': '*'})
         else:
-            params.update({'start': 0})
+            if "start" not in params:
+                params['start'] = 0
 
         # Construct cache file path
         stem = md5(name.encode('utf8')).hexdigest()

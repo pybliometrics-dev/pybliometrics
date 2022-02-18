@@ -144,7 +144,8 @@ class SerialTitle(Retrieval):
                  issn: Union[int, str],
                  refresh: Union[bool, int] = False,
                  view: str = "ENHANCED",
-                 years: str = None
+                 years: str = None,
+                 **kwds: str
                  ) -> None:
         """Interaction with the Serial Title API.
 
@@ -160,6 +161,9 @@ class SerialTitle(Retrieval):
                       (SJR, SNIP, yearly-data) should be looked up for.  If
                       None, only the most recent metric data values are
                       provided. Note: If not None, refresh will always be True.
+        :param kwds: Keywords passed on as query parameters.  Must contain
+                     fields and values mentioned in the API specification at
+                     https://dev.elsevier.com/documentation/SerialTitleAPI.wadl.
 
         Raises
         ------
@@ -185,7 +189,7 @@ class SerialTitle(Retrieval):
         self._id = str(issn)
         self._years = years
         Retrieval.__init__(self, identifier=self._id, date=years,
-                           api='SerialTitle')
+                           api='SerialTitle', **kwds)
 
         # Parse json
         self._json = self._json['serial-metadata-response']

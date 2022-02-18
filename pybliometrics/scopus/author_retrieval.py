@@ -207,7 +207,8 @@ class AuthorRetrieval(Retrieval):
     def __init__(self,
                  author_id: Union[int, str],
                  refresh: Union[bool, int] = False,
-                 view: str = "ENHANCED"
+                 view: str = "ENHANCED",
+                 **kwds: str
                  ) -> None:
         """Interaction with the Author Retrieval API.
 
@@ -222,6 +223,9 @@ class AuthorRetrieval(Retrieval):
                      https://dev.elsevier.com/sc_author_retrieval_views.html.
                      Note: Neither the BASIC nor the DOCUMENTS view are active,
                      although documented.
+        :param kwds: Keywords passed on as query parameters.  Must contain
+                     fields and values mentioned in the API specification at
+                     https://dev.elsevier.com/documentation/AuthorRetrievalAPI.wadl.
 
         Raises
         ------
@@ -243,7 +247,8 @@ class AuthorRetrieval(Retrieval):
         self._id = str(author_id).split('-')[-1]
         self._view = view
         self._refresh = refresh
-        Retrieval.__init__(self, identifier=self._id, api='AuthorRetrieval')
+        Retrieval.__init__(self, identifier=self._id,
+                           api='AuthorRetrieval', **kwds)
 
         # Parse json
         self._json = self._json['author-retrieval-response']

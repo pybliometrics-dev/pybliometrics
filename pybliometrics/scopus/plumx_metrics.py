@@ -76,7 +76,8 @@ class PlumXMetrics(Retrieval):
     def __init__(self,
                  identifier: str,
                  id_type: str,
-                 refresh: Union[bool, int] = False
+                 refresh: Union[bool, int] = False,
+                 **kwds: str
                  ) -> None:
         """Interaction with the PlumX Metrics API.
 
@@ -118,6 +119,9 @@ class PlumXMetrics(Retrieval):
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
+        :param kwds: Keywords passed on as query parameters.  Must contain
+                     fields and values mentioned in the API specification at
+                     https://dev.elsevier.com/documentation/PlumXMetricsAPI.wadl.
 
         Raises
         ------
@@ -148,7 +152,7 @@ class PlumXMetrics(Retrieval):
         self._refresh = refresh
         self._view = 'ENHANCED'
         Retrieval.__init__(self, identifier=identifier, id_type=id_type,
-                           api='PlumXMetrics')
+                           api='PlumXMetrics', **kwds)
         cats = self._json.get('count_categories', [])
         self._count_categories = {d["name"]: d['count_types'] for d in cats}
 

@@ -50,7 +50,7 @@ class AffiliationSearch(Search):
                  integrity_fields: Union[List[str], Tuple[str, ...]] = None,
                  integrity_action: str = "raise",
                  count: int = 200,
-                 **kwds
+                 **kwds: str
                  ) -> None:
         """Interaction with the Affiliation Search API.
 
