@@ -70,10 +70,9 @@ class AbstractRetrieval(Retrieval):
         index_path = ['preferred-name', 'ce:indexed-name']
         # Check for collaboration
         keys = [k for x in items for k in list(x.keys())]
-        try:
-            collab_idx = keys.index("collaboration")
-            collaboration = items.pop(collab_idx)['collaboration']
-        except ValueError:
+        if "collaboration" in keys:
+            collaboration = items.pop(-1)['collaboration']
+        else:
             collaboration = {'ce:indexed-name': None}
         # Iterate through each author-affiliation combination
         out = []
