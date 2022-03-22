@@ -13,7 +13,7 @@ Option 1 is easy and the most common.
 
 Option 2 might require you to additionally set a proxy.  You can do so in the :doc:`configuration file <../configuration>`.
 
-Option 3 is rare.  If you have an InstToken, please provide it during the setup when `pybliometrics` prompts you for it. Alternatively, add it to the :doc:`configuration file <../configuration>` manually.  You may also set the InstToken via `InstToken="XYZ"` in any class. This is the preferred solution if you possess multiple keys.
+Option 3 is rare.  If you have an InstToken, please provide it during the setup when `pybliometrics` prompts you for it. Alternatively, add it to the :doc:`configuration file <../configuration>` manually.  You may also set the InstToken via `insttoken="XYZ"` in any class. This is the preferred solution if you possess multiple keys.
 
 There are only three Scopus APIs that you can access without your institution subscribing to it: The Abstract Retrieval API, the Scopus Search API and the Subject Classifications API.
 

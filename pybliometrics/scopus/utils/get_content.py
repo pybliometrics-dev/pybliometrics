@@ -66,10 +66,10 @@ def get_content(url, api, params=None, **kwds):
     proxies = dict(config._sections.get("Proxy", {}))
 
     # Replace credentials if provided
-    if "APIKey" in params:
-        header['X-ELS-APIKey'] = params.pop("APIKey")
-    if "InstToken" in params:
-        header['X-ELS-Insttoken'] = params.pop("InstToken")
+    if "apikey" in params:
+        header['X-ELS-APIKey'] = params.pop("apikey")
+    if "insttoken" in params:
+        header['X-ELS-Insttoken'] = params.pop("insttoken")
 
     # Eventually wait bc of throttling
     if len(_throttling_params[api]) == _throttling_params[api].maxlen:
