@@ -14,7 +14,7 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           502: exception.Scopus502Error}
 
 
-def get_content(url, api, params={}, **kwds):
+def get_content(url, api, params=None, **kwds):
     """Helper function to download a file and return its content.
 
     Parameters
@@ -61,8 +61,15 @@ def get_content(url, api, params={}, **kwds):
     if config.has_option('Authentication', 'InstToken'):
         token = config.get('Authentication', 'InstToken')
         header['X-ELS-Insttoken'] = token
+    params = params or {}
     params.update(**kwds)
     proxies = dict(config._sections.get("Proxy", {}))
+
+    # Replace credentials if provided
+    if "APIKey" in params:
+        header['X-ELS-APIKey'] = params.pop("APIKey")
+    if "InstToken" in params:
+        header['X-ELS-Insttoken'] = params.pop("InstToken")
 
     # Eventually wait bc of throttling
     if len(_throttling_params[api]) == _throttling_params[api].maxlen:
