@@ -191,6 +191,11 @@ def test_coverDate():
     assert_equal(ab8.coverDate, None)
 
 
+def test_date_created():
+    assert_equal(ab8.date_created, None)
+    assert_equal(ab9.date_created, (2021, 9, 14))
+
+
 def test_description():
     expected = 'In this paper we propose a Bayesian analysis of seasonal '\
                'unit roots in quarterly observed time series. Seasonal unit '\

@@ -3,7 +3,8 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
-    get_id, detect_id_type, get_link, listify, make_int_if_possible
+    get_id, detect_id_type, get_link, listify, make_int_if_possible,\
+    parse_date_created
 
 
 class AbstractRetrieval(Retrieval):
@@ -267,6 +268,18 @@ class AbstractRetrieval(Retrieval):
     def coverDate(self) -> str:
         """The date of the cover the document is in."""
         return chained_get(self._json, ['coredata', 'prism:coverDate'])
+
+    @property
+    def date_created(self) -> Optional[Tuple[int, int, int]]:
+        """Return the description of a record.
+        Note: If this is empty, try property abstract instead.
+        """
+        path = ["item", "bibrecord", "item-info", "history"]
+        d = chained_get(self._json, path, {})
+        try:
+            return parse_date_created(d)
+        except KeyError:
+            return None
 
     @property
     def description(self) -> Optional[str]:
