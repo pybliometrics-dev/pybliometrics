@@ -3,6 +3,19 @@ Change Log
 
 .. toctree::
 
+3.3.0
+~~~~~
+
+2022-03-22
+
+* Add support for Python 3.10.
+* Allow for arbitrary keywords in all classes.
+* Allow for individual API key and InstToken when initiating any class (via paramters `apikey` and `insttoken`), which overrides the values retrieved form the configuration file.
+* In `AbstractRetrieval()`, add new properties `copyright`, `copyright_type` and `date_created`.
+In `ScopusSearch().auth_afid`, return None instead of empty list when there are no affiliation information.
+* Fix bug with `AbstractRetrieval().authorgroup` for collaborations.
+* In `ScopusSearch()`, fix bug with properties `.freetoread` and `.freetoreadLabel` resulting from non-standard format.
+
 3.2.0
 ~~~~~
 
