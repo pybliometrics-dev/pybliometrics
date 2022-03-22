@@ -225,6 +225,18 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
+    def copyright(self) -> str:
+        """The copyright statement of the document."""
+        path = ['item', 'bibrecord', 'item-info', 'copyright', '$']
+        return chained_get(self._json, path)
+
+    @property
+    def copyright_type(self) -> str:
+        """The copyright holder of the document."""
+        path = ['item', 'bibrecord', 'item-info', 'copyright', '@type']
+        return chained_get(self._json, path)
+
+    @property
     def correspondence(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples representing the authors to whom correspondence
         should be addressed, in the form (surname, initials, organization,

@@ -164,6 +164,17 @@ def test_contributor_group():
     assert_equal(ab8.contributor_group, None)
 
 
+def test_copyright():
+    assert_equal(ab8.copyright, None)
+    expected = "Copyright 2021 Elsevier B.V., All rights reserved."
+    assert_equal(ab9.copyright, expected)
+
+
+def test_copyright_type():
+    assert_equal(ab8.copyright_type, None)
+    assert_equal(ab9.copyright_type, "Elsevier")
+
+
 def test_correspondence():
     fields = 'surname initials organization country city_group'
     corr = namedtuple('Correspondence', fields)
