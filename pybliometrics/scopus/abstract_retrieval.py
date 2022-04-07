@@ -491,8 +491,8 @@ class AbstractRetrieval(Retrieval):
         Note: Requires either the FULL view or REF view.
         Might be empty even if refcount is positive.  Specific fields can
         be empty.
-        Author lists (authors, authors_auid, authors_affiliationid) may contain
-        duplicates but None's have been filtered out.
+        The lists `authors` and `authors_auid` may contain duplicates because of
+        the 1:1 pairing with the list `authors_affiliationid`.
         """
         out = []
         fields = 'position id doi title authors authors_auid '\

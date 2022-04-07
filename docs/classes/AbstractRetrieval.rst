@@ -33,9 +33,8 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(ab)
-    Michael E. Rose and John R. Kitchin: "pybliometrics: Scriptable bibliometrics using
-    a Python interface to Scopus", SoftwareX, 10, (no pages found)(2019). https://doi.org/10.1016/j.softx.2019.100263.
-    12 citation(s) as of 2021-04-27
+    Michael E. Rose and John R. Kitchin: "pybliometrics: Scriptable bibliometrics using a Python interface to Scopus", SoftwareX, 10, (no pages found)(2019). https://doi.org/10.1016/j.softx.2019.100263.
+    34 citation(s) as of 2022-04-07
       Affiliation(s):
        Max Planck Institute for Innovation and Competition
        Carnegie Mellon University
@@ -82,7 +81,7 @@ To obtain the total citation count (at the time the abstract was retrieved and c
 .. code-block:: python
 
     >>> ab.citedby_count
-    7
+    34
 
 
 You get the authors as a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_, which pair conveniently with `pandas <https://pandas.pydata.org/>`_:
@@ -91,9 +90,9 @@ You get the authors as a list of `namedtuples <https://docs.python.org/3/library
 
     >>> ab.authors
     [Author(auid=57209617104, indexed_name='Rose M.E.', surname='Rose',
-     given_name='Michael E.', affiliation='60105007'),
+            given_name='Michael E.', affiliation='60105007'),
      Author(auid=7004212771, indexed_name='Kitchin J.R.', surname='Kitchin',
-     given_name='John R.', affiliation='60027950')]
+            given_name='John R.', affiliation='60027950')]
 
     >>> import pandas as pd
     >>> print(pd.DataFrame(ab.authors))
@@ -114,13 +113,16 @@ The same structure applies for the attributes `affiliation` and `authorgroup`:
 
     >>> ab.authorgroup
     [Author(affiliation_id=60105007, dptid=None,
-     organization='Max Planck Institute for Innovation and Competition',
-     city=None, postalcode=None, addresspart=None, country='Germany',
-     auid=57209617104, orcid=None, indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
+            organization='Max Planck Institute for Innovation and Competition',
+            city=None, postalcode=None, addresspart=None, country='Germany',
+            collaboration=None, auid=57209617104, orcid=None,
+            indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
      Author(affiliation_id=60027950, dptid=110785688,
-     organization='Carnegie Mellon University, Department of Chemical Engineering',
-     city=None, postalcode=None, addresspart=None, country='United States',
-     auid=7004212771, orcid=None, indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
+            organization='Carnegie Mellon University, Department of Chemical Engineering',
+            city=None, postalcode=None, addresspart=None, country='United States',
+            collaboration=None, auid=7004212771, orcid=None,
+            indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
+
 
 
 Keep in mind that Scopus might not perfectly/correctly pair authors and affiliations as per the original document, even if it looks so on the web view.  In this case please request corrections to be made in Scopus' API here `here <https://service.elsevier.com/app/contact/supporthub/scopuscontent/>`_.
@@ -135,21 +137,22 @@ available if you downloaded the article with 'FULL' as `view` parameter.
     >>> refs = ab.references
     >>> refs[0]
     Reference(position='1', id='38949137710', doi='10.1007/978-94-007-7618-0˙310',
-    title='Comparison of PubMed, Scopus, Web of Science, and Google Scholar:
-    strengths and weaknesses',
-    authors='Falagas, M.E.; Pitsouni, E.I.; Malietzis, G.A.; Pappas, G.',
-    authors_auid=None, authors_affiliationid=None, sourcetitle='FASEB J',
-    publicationyear='2007', coverDate=None, volume=None, issue=None,
-    first=None, last=None, citedbycount=None, type=None,
-    fulltext='Falagas, M.E., Pitsouni, E.I., Malietzis, G.A., Pappas, G.,
-    Comparison of PubMed, Scopus, Web of Science, and Google Scholar: strengths
-    and weaknesses. FASEB J 22:2 (2007), 338–342, 10.1007/978-94-007-7618-0˙310.')
+              title='Comparison of PubMed, Scopus, Web of Science, and Google Scholar:
+                     strengths and weaknesses',
+              authors='Falagas, M.E.; Pitsouni, E.I.; Malietzis, G.A.; Pappas, G.',
+              authors_auid=None, authors_affiliationid=None, sourcetitle='FASEB J',
+              publicationyear='2007', coverDate=None, volume=None, issue=None,
+              first=None, last=None, citedbycount=None, type=None,
+              fulltext='Falagas, M.E., Pitsouni, E.I., Malietzis, G.A., Pappas, G.,
+                        Comparison of PubMed, Scopus, Web of Science, and Google
+                        Scholar: strengths and weaknesses. FASEB J 22:2 (2007),
+                        338–342, 10.1007/978-94-007-7618-0˙310.')
 
     >>> df = pd.DataFrame(refs)
     >>> df.columns
     Index(['position', 'id', 'doi', 'title', 'authors', 'authors_auid',
-           'authors_affiliationid', 'sourcetitle', 'publicationyear', 'volume',
-           'issue', 'first', 'last', 'citedbycount', 'type', 'text', 'fulltext'],
+           'authors_affiliationid', 'sourcetitle', 'publicationyear', 'coverDate',
+           'volume', 'issue', 'first', 'last', 'citedbycount', 'type', 'fulltext'],
           dtype='object')
     >>> df['eid'] = '2-s2.0-' + df['id']
     >>> df['eid'].tolist()
@@ -170,16 +173,18 @@ Setting `view="REF"` accesses the REF view of the article, which provides more i
     >>> ab_ref = AbstractRetrieval("2-s2.0-85068268027", view='REF')
     >>> ab_ref.references[0]
     Reference(position='1', id='38949137710', doi='10.1096/fj.07-9492LSF',
-    title='Comparison of PubMed, Scopus, Web of Science, and Google Scholar:
-    Strengths and weaknesses', authors='Falagas, Matthew E.; Pitsouni, Eleni I.;
-    Malietzis, George A.; Falagas, Matthew E.; Pappas, Georgios; Falagas, Matthew E.',
-    authors_auid='7003962139; 16240046300; 43761284000; 7003962139; 7102070422; 7003962139',
-    authors_affiliationid='60033272; 60033272; 60033272; 60015849; 60081865; 60033272',
-    sourcetitle='FASEB Journal', publicationyear=None, coverDate='2008-02-01',
-    volume='22', issue='2', first='338', last='342', citedbycount='1232',
-    type='resolvedReference', fulltext=None)
+              title='Comparison of PubMed, Scopus, Web of Science, and Google Scholar:
+                      Strengths and weaknesses',
+               authors='Falagas, Matthew E.; Pitsouni, Eleni I.; Malietzis, George A.;
+                        Falagas, Matthew E.; Pappas, Georgios',
+               authors_auid='7003962139; 16240046300; 43761284000; 7003962139; 7102070422',
+               authors_affiliationid='60033272; 60033272; 60033272; 60015849; 60081865',
+               sourcetitle='FASEB Journal', publicationyear=None, coverDate='2008-02-01',
+               volume='22', issue='2', first='338', last='342', citedbycount='1676',
+               type='resolvedReference', fulltext=None)
 
 
+The list of authors contains duplicate because of the 1:1 pairing with the authors' affiliation IDs.  In above example, 7003962139 is affiliated with 60033272 and with 60015849.  Authors are therefore grouped by affiliation ID.
 
 For conference proceedings, Scopus also collects information on the conference:
 
@@ -211,8 +216,10 @@ Some articles have information on funding, chemicals and genome banks:
     providing the financial support. The results reported in this publication
     are gathered from the CNRT report “Ecomine BioTop”.'
     >>> ab_fund.chemicals
-    [Chemical(source='esbd', chemical_name='calcium', cas_registry_number='7440-70-2;14092-94-5'),
-     Chemical(source='esbd', chemical_name='magnesium', cas_registry_number='7439-95-4'),
+    [Chemical(source='esbd', chemical_name='calcium',
+              cas_registry_number='7440-70-2;14092-94-5'),
+     Chemical(source='esbd', chemical_name='magnesium',
+              cas_registry_number='7439-95-4'),
      Chemical(source='nlm', chemical_name='Fertilizers', cas_registry_number=None),
      Chemical(source='nlm', chemical_name='Sewage', cas_registry_number=None),
      Chemical(source='nlm', chemical_name='Soil', cas_registry_number=None)]
