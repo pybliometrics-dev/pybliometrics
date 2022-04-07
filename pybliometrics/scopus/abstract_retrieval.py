@@ -470,8 +470,9 @@ class AbstractRetrieval(Retrieval):
     def references(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples representing references listed in the document,
         in the form (position, id, doi, title, authors, authors_auid,
-        authors_affiliationid, sourcetitle, publicationyear, volume, issue,
-        first, last, citedbycount, type, text, fulltext).
+        authors_affiliationid, sourcetitle, publicationyear, coverDate, volume,
+        issue, first, last, citedbycount, type, text, fulltext).
+
         `position` is the number at which the reference appears in the
         document, `id` is the Scopus ID of the referenced document (EID
         without the "2-s2.0-"), `authors` is a string of the names of the
@@ -479,13 +480,14 @@ class AbstractRetrieval(Retrieval):
         `authors_auid` is a string of the author IDs joined on "; ",
         `authors_affiliationid` is a string of the authors' affiliation IDs
         joined on "; ", `sourcetitle` is the name of the source (e.g. the
-        journal), `publicationyear` is the year of the publication as a string,
-        `volume` and `issue`, are strings referring to the volume and issue,
-        `first` and `last` refer to the page range, `citedbycount` is a string
-        for the total number of citations of the cited item, `type` describes
-        the parsing status of the reference (resolved or not), `text` is
-        Scopus-provided information on the publication, `fulltext` is the text
-        the authors used for the reference.
+        journal), `publicationyear` is the year of the publication as string
+        (FULL view only), `coverDate` is the date of the publication as string
+        (REF view only), `volume` and `issue`, are strings referring to the
+        volume and issue, `first` and `last` refer to the page range,
+        `citedbycount` the total number of citations of the cited item (REF
+        view only), `type` describes the parsing status of the reference
+        (resolved or not), `text` is information on the publication,
+        `fulltext` is the text the authors used for the reference.
 
         Note: Requires either the FULL view or REF view.
         Might be empty even if refcount is positive.  Specific fields can
@@ -495,8 +497,8 @@ class AbstractRetrieval(Retrieval):
         """
         out = []
         fields = 'position id doi title authors authors_auid '\
-                 'authors_affiliationid sourcetitle publicationyear volume '\
-                 'issue first last citedbycount type text fulltext'
+                 'authors_affiliationid sourcetitle publicationyear coverDate '\
+                 'volume issue first last citedbycount type text fulltext'
         ref = namedtuple('Reference', fields)
         items = listify(self._ref.get("reference", []))
         for item in items:
@@ -534,6 +536,7 @@ class AbstractRetrieval(Retrieval):
                 title=info.get('ref-title', {}).get('ref-titletext', info.get('title')),
                 sourcetitle=info.get('ref-sourcetitle', info.get('sourcetitle')),
                 publicationyear=info.get('ref-publicationyear', {}).get('@first'),
+                coverDate=info.get('prism:coverDate'),
                 volume=volis.get('@volume'), issue=volis.get('@issue'),
                 first=volisspag.get('pagerange', {}).get('@first'),
                 last=volisspag.get('pagerange', {}).get('@last'),

@@ -139,11 +139,11 @@ available if you downloaded the article with 'FULL' as `view` parameter.
     strengths and weaknesses',
     authors='Falagas, M.E.; Pitsouni, E.I.; Malietzis, G.A.; Pappas, G.',
     authors_auid=None, authors_affiliationid=None, sourcetitle='FASEB J',
-    publicationyear='2007', volume=None, issue=None, first=None, last=None,
-    citedbycount=None, type=None, text=None,fulltext='Falagas, M.E., Pitsouni,
-    E.I., Malietzis, G.A., Pappas, G., Comparison of PubMed, Scopus, Web of
-    Science, and Google Scholar: strengths and weaknesses. FASEB J 22:2 (2007),
-    338–342, 10.1007/978-94-007-7618-0˙310.')
+    publicationyear='2007', coverDate=None, volume=None, issue=None,
+    first=None, last=None, citedbycount=None, type=None, text=None,
+    fulltext='Falagas, M.E., Pitsouni, E.I., Malietzis, G.A., Pappas, G.,
+    Comparison of PubMed, Scopus, Web of Science, and Google Scholar: strengths
+    and weaknesses. FASEB J 22:2 (2007), 338–342, 10.1007/978-94-007-7618-0˙310.')
 
     >>> df = pd.DataFrame(refs)
     >>> df.columns
@@ -175,8 +175,9 @@ Setting `view="REF"` accesses the REF view of the article, which provides more i
     Malietzis, George A.; Falagas, Matthew E.; Pappas, Georgios; Falagas, Matthew E.',
     authors_auid='7003962139; 16240046300; 43761284000; 7003962139; 7102070422; 7003962139',
     authors_affiliationid='60033272; 60033272; 60033272; 60015849; 60081865; 60033272',
-    sourcetitle='FASEB Journal', publicationyear=None, volume='22', issue='2', first='338',
-    last='342', citedbycount='1232', type='resolvedReference', text=None, fulltext=None)
+    sourcetitle='FASEB Journal', publicationyear=None, coverDate='2008-02-01',
+    volume='22', issue='2', first='338', last='342', citedbycount='1232',
+    type='resolvedReference', text=None, fulltext=None)
 
 
 
