@@ -3,8 +3,8 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, chained_get,\
-    check_parameter_value, check_field_consistency, get_freetoread, listify,\
-    make_search_summary
+    check_parameter_value, check_field_consistency, deduplicate,\
+    get_freetoread, listify, make_search_summary
 
 
 class ScopusSearch(Search):
@@ -59,7 +59,7 @@ class ScopusSearch(Search):
             # Parse authors
             try:
                 # Deduplicate list of authors
-                authors = _deduplicate(item['author'])
+                authors = deduplicate(item['author'])
                 # Extract information
                 surnames = _replace_none([d['surname'] for d in authors])
                 firstnames = _replace_none([d['given-name'] for d in authors])
@@ -68,7 +68,7 @@ class ScopusSearch(Search):
                 info["auth_ids"] = ";".join([d['authid'] for d in authors])
                 affs = []
                 for auth in authors:
-                    aff = listify(_deduplicate(auth.get('afid', [])))
+                    aff = listify(deduplicate(auth.get('afid', [])))
                     affs.append('-'.join([d['$'] for d in aff]))
                 if [a for a in affs if a]:
                     info["auth_afid"] = ';'.join(affs)
@@ -214,15 +214,6 @@ class ScopusSearch(Search):
     def get_eids(self):
         """EIDs of retrieved documents."""
         return [d['eid'] for d in self._json]
-
-
-def _deduplicate(lst):
-    """Auxiliary function to deduplicate lst."""
-    out = []
-    for i in lst:
-        if i not in out:
-            out.append(i)
-    return out
 
 
 def _join(item, key, sep=";"):

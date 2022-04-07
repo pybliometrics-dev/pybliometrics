@@ -1,4 +1,5 @@
 from collections import namedtuple
+from functools import reduce
 from warnings import warn
 
 
@@ -18,8 +19,6 @@ def chained_get(container, path, default=None):
         The object type that should be returned if the search yields
         no result.
     """
-    from functools import reduce
-
     # Obtain value via reduce
     try:
         return reduce(lambda c, k: c.get(k, default), path, container)
@@ -50,6 +49,13 @@ def check_field_consistency(needles, haystack):
         msg = f"Element(s) '{', '.join(sorted(wrong))}' not allowed in "\
               "parameter integrity_fields"
         raise ValueError(msg)
+
+
+def deduplicate(lst):
+    """Auxiliary function to deduplicate a list while preserving its order."""
+    new = reduce(lambda x, y: x + y if y[0] not in x else x,
+                 map(lambda x: [x], lst))
+    return new
 
 
 def get_id(s, integer=True):

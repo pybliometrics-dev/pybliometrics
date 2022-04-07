@@ -3,8 +3,8 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
-    get_id, detect_id_type, get_link, listify, make_int_if_possible,\
-    parse_date_created
+    deduplicate, get_id, detect_id_type, get_link, listify,\
+    make_int_if_possible, parse_date_created
 
 
 class AbstractRetrieval(Retrieval):
@@ -520,6 +520,7 @@ class AbstractRetrieval(Retrieval):
                 scopus_id = _select_by_idtype(ids, id_type='SGR')
             except KeyError:  # REF view parsing
                 auth = (info.get('author-list') or {}).get('author', [])
+                auth = deduplicate(auth)
                 authors = [', '.join(filter(None, [d.get('ce:surname'),
                                                    d.get('ce:given-name')]))
                            for d in auth]
