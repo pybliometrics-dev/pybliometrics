@@ -34,7 +34,7 @@ def test_category_totals():
     m4_expected = ['citation', 'mention', 'socialMedia']
     assert_equal(m4_received, m4_expected)
     m6_received = sorted([c.name  for c in m6.category_totals])
-    m6_expected = ['capture', 'mention', 'socialMedia', 'usage']
+    m6_expected = ['capture', 'citation', 'mention', 'socialMedia', 'usage']
     assert_equal(m6_received, m6_expected)
     m7_received = sorted([c.name  for c in m7.category_totals])
     m7_expected = ['mention', 'socialMedia', 'usage']
@@ -60,10 +60,10 @@ def test_capture():
 
 
 def test_citation():
-    assert_equal(m6.citation, None)
+    assert_equal(m3.citation, None)
     assert_equal(m7.citation, None)
     expected = {'name', 'total'}
-    for plumx in (m1, m2, m4, m5):
+    for plumx in (m1, m2, m4, m5, m6):
         assert_true(isinstance(plumx.citation, list))
         assert_true(len(plumx.citation) > 0)
         m_fields = set(field for ntup in plumx.citation for field in ntup._fields)

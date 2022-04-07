@@ -19,7 +19,7 @@ def test_aggregation_type():
 
 
 def test_citescoreyearinfolist():
-    expected1 = [(2020, 2.8), (2021, 3.9)]
+    expected1 = [(2020, 2.8), (2021, 4.0)]
     assert_equal(sofwarex.citescoreyearinfolist, expected1)
     assert_equal(oecd.citescoreyearinfolist, None)
 
