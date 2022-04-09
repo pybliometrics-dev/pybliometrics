@@ -54,7 +54,8 @@ def check_field_consistency(needles, haystack):
 def deduplicate(lst):
     """Auxiliary function to deduplicate a list while preserving its order."""
     new = reduce(lambda x, y: x + y if y[0] not in x else x,
-                 map(lambda x: [x], lst))
+                 map(lambda x: [x], lst),
+                 [])
     return new
 
 
