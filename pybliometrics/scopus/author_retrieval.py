@@ -8,8 +8,8 @@ from .author_search import AuthorSearch
 from .scopus_search import ScopusSearch
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
-    get_content, get_link, listify, make_int_if_possible, parse_affiliation,\
-    parse_date_created
+    filter_digits, get_content, get_link, listify, make_int_if_possible, parse_affiliation,\
+    parse_date_created 
 
 
 class AuthorRetrieval(Retrieval):
@@ -63,8 +63,8 @@ class AuthorRetrieval(Retrieval):
     def classificationgroup(self) -> Optional[List[Tuple[int, int]]]:
         """List with (subject group ID, number of documents)-tuples."""
         path = ['classificationgroup', 'classifications', 'classification']
-        out = [(int(item['$']), int(item['@frequency'])) for item in
-               listify(chained_get(self._profile, path, []))]
+        out = [(int(filter_digits(item['$'])), int(filter_digits(item['@frequency']))) for item in
+           listify(chained_get(self._profile, path, []))]
         return out or None
 
     @property
