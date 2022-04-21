@@ -55,9 +55,13 @@ def get_content(url, api, params=None, **kwds):
     from pybliometrics.scopus.utils.startup import _throttling_params, KEYS
 
     # Set header, params and proxy
-    header = {'X-ELS-APIKey': KEYS[0],
+    try:
+        header = {'X-ELS-APIKey': KEYS[0],
               'Accept': 'application/json',
               'User-Agent': user_agent}
+    except IndexError:
+        raise errors[429]
+
     if config.has_option('Authentication', 'InstToken'):
         token = config.get('Authentication', 'InstToken')
         header['X-ELS-Insttoken'] = token
