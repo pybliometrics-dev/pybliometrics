@@ -36,6 +36,10 @@ class Scopus404Error(ScopusHtmlError):
     """Raised if a query yields a 404 error (Not Found for url)."""
 
 
+class Scopus407Error(ScopusHtmlError):
+    """Raised if a query yields a 407 error (Proxy Authentication Required)."""
+
+
 class Scopus413Error(ScopusHtmlError):
     """Raised if a query yields a 413 error (Request Entity Too
     Large for url).
