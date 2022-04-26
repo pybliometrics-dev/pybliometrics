@@ -13,6 +13,8 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           414: exception.Scopus414Error, 429: exception.Scopus429Error, 
           500: exception.Scopus500Error, 502: exception.Scopus502Error}
 
+session = requests.Session()
+rtimeout = 20
 
 def get_content(url, api, params=None, **kwds):
     """Helper function to download a file and return its content.
@@ -83,14 +85,14 @@ def get_content(url, api, params=None, **kwds):
             pass
 
     # Perform request, eventually replacing the current key
-    resp = requests.get(url, headers=header, proxies=proxies, params=params)
+    resp = session.get(url, headers=header, proxies=proxies, params=params, timeout=rtimeout)
     while resp.status_code == 429:
         try:
             KEYS.pop(0)  # Remove current key
             shuffle(KEYS)
             header['X-ELS-APIKey'] = KEYS[0].strip()
-            resp = requests.get(url, headers=header, proxies=proxies,
-                                params=params)
+            resp = session.get(url, headers=header, proxies=proxies,
+                                params=params, timeout=rtimeout)
         except IndexError:  # All keys depleted
             break
     _throttling_params[api].append(time())
