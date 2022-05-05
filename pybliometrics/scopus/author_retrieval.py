@@ -328,11 +328,14 @@ class AuthorRetrieval(Retrieval):
                       *args: str, **kwds: str
                       ) -> Optional[List[NamedTuple]]:
         """Return list of the author's publications using a ScopusSearch()
-        query, where publications may fit specified set of document subtypes.
+        query, where publications may fit a specified set of document subtypes.
 
         :param subtypes: The type of documents that should be returned.
         :param args: Parameters to be passed on to ScopusSearch().
         :param kwds: Parameters to be passed on to ScopusSearch().
+
+        Note: To update these results, use `refresh`; the class' `refresh`
+        parameter is not used here.
         """
         s = ScopusSearch(f'AU-ID({self.identifier})', **kwds)
         if subtypes:
@@ -348,6 +351,9 @@ class AuthorRetrieval(Retrieval):
 
         :param args: Parameters to be passed on to ScopusSearch().
         :param kwds: Parameters to be passed on to ScopusSearch().
+
+        Note: To update these results, use `refresh`; the class' `refresh`
+        parameter is not used here.
         """
         s = ScopusSearch(f'AU-ID({self.identifier})', *args, **kwds)
         return s.get_eids()
