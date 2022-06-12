@@ -1,4 +1,5 @@
 import requests
+import configparser
 
 from pybliometrics import version_info
 from pybliometrics.scopus import exception
@@ -14,7 +15,6 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           500: exception.Scopus500Error, 502: exception.Scopus502Error}
 
 session = requests.Session()
-rtimeout = 20
 
 def get_content(url, api, params=None, **kwds):
     """Helper function to download a file and return its content.
@@ -83,6 +83,9 @@ def get_content(url, api, params=None, **kwds):
             sleep(1 - (time() - _throttling_params[api][0]))
         except (IndexError, ValueError):
             pass
+    
+    # Get timeout for get
+    rtimeout = config.getint(configparser.DEFAULTSECT, "timeout", fallback=20)
 
     # Perform request, eventually replacing the current key
     resp = session.get(url, headers=header, proxies=proxies, params=params, timeout=rtimeout)
