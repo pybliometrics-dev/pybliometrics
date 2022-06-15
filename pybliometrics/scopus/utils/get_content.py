@@ -1,5 +1,4 @@
 import requests
-import configparser
 
 from pybliometrics import version_info
 from pybliometrics.scopus import exception
@@ -84,18 +83,17 @@ def get_content(url, api, params=None, **kwds):
         except (IndexError, ValueError):
             pass
     
-    # Get timeout for get
-    rtimeout = config.getint(configparser.DEFAULTSECT, "timeout", fallback=20)
-
     # Perform request, eventually replacing the current key
-    resp = session.get(url, headers=header, proxies=proxies, params=params, timeout=rtimeout)
+    timeout = config.getint("Requests", "Timeout", fallback=20)
+    resp = session.get(url, headers=header, proxies=proxies, params=params,
+                      timeout=timeout)
     while resp.status_code == 429:
         try:
             KEYS.pop(0)  # Remove current key
             shuffle(KEYS)
             header['X-ELS-APIKey'] = KEYS[0].strip()
             resp = session.get(url, headers=header, proxies=proxies,
-                                params=params, timeout=rtimeout)
+                               params=params, timeout=timeout)
         except IndexError:  # All keys depleted
             break
     _throttling_params[api].append(time())

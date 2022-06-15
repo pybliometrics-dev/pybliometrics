@@ -24,10 +24,15 @@ By default, after initial set-up (see below), the file will look like this:
         YYYY,
         ZZZ
 
+    [Requests]
+    Timeout = 20
 
-where PPP refers to `~/`, and XXX, YYYY and ZZZ refer to your API Keys, of which you can register 10 for your Scopus account.  If you provide all of them (separated by a comma), pybliometrics automatically replaces a depleted key with a random one of the others while running, until all of them are depleted.
 
-Simply edit this file to change the paths where `pybliometrics` should cache downloaded files (`pybliometrics` will create them if necessary).  Remember to indent multi-line statements.
+Section `[Directories]` contains the paths where `pybliometrics` should cache downloaded files.  `pybliometrics` will create them if necessary.
+
+Section `[Authentication]` contains the API Keys which you obtain from http://dev.elsevier.com/myapikey.html.  If you provide multiple (separated by a comma), `pybliometrics` automatically replaces a depleted key with another one at random at runtime until all of them are depleted.
+
+Simply edit this file using a simple text editor; changes will take effect the next time you start pybliometrics.  Remember to indent multi-line statements.
 
 Under `pybliometrics` 2.x and before, the default paths used to be `PPP/.scopus/abstract_retrieval`.  You can safely rename the cache folder `.scopus` to `.pybliometrics` (on Windows machines, rename to `.pybliometrics.`), but remember to change the paths in the configuration file, too.
 

@@ -19,9 +19,6 @@ def create_config(keys: Optional[List[str]] = None,
     config.optionxform = str
     print(f"Creating config file at {CONFIG_FILE} with default paths...")
 
-    # Set default values
-    config.set(configparser.DEFAULTSECT, 'timeout', '20')
-
     # Set directories
     config.add_section('Directories')
     for api, path in DEFAULT_PATHS.items():
@@ -46,6 +43,10 @@ def create_config(keys: Optional[List[str]] = None,
     config.set('Authentication', 'APIKey', key)
     if token:
         config.set('Authentication', 'InstToken', token)
+
+    # Set default values
+    config.add_section('Requests')
+    config.set('Requests', 'Timeout', '20')
 
     # Write out
     CONFIG_FILE.parent.mkdir(parents=True, exist_ok=True)
