@@ -3,6 +3,17 @@ Change Log
 
 .. toctree::
 
+3.4.0
+~~~~~
+
+2022-06-15
+
+* Implement requests timeout via configuration file (default: 20 seconds).
+* Introduce new exception Scopus407Error.
+* In `AbstractRetrieval().references`, add new field "coverDate" and remove field "text".
+* In `AbstractRetrieval().references`, deduplicate list of authors.
+* Fix bug in `AuthorRetrieval().classificationgroup` with non-digits.
+
 3.3.0
 ~~~~~
 
