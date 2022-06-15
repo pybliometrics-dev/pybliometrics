@@ -18,6 +18,10 @@ def create_config(keys: Optional[List[str]] = None,
     config = configparser.ConfigParser()
     config.optionxform = str
     print(f"Creating config file at {CONFIG_FILE} with default paths...")
+
+    # Set default values
+    config.set(configparser.DEFAULTSECT, 'timeout', '20')
+
     # Set directories
     config.add_section('Directories')
     for api, path in DEFAULT_PATHS.items():
