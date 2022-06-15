@@ -12,7 +12,7 @@ Change Log
 * Allow for arbitrary keywords in all classes.
 * Allow for individual API key and InstToken when initiating any class (via paramters `apikey` and `insttoken`), which overrides the values retrieved form the configuration file.
 * In `AbstractRetrieval()`, add new properties `copyright`, `copyright_type` and `date_created`.
-In `ScopusSearch().auth_afid`, return None instead of empty list when there are no affiliation information.
+* In `ScopusSearch().auth_afid`, return `None` instead of empty list when there are no affiliation information.
 * Fix bug with `AbstractRetrieval().authorgroup` for collaborations.
 * In `ScopusSearch()`, fix bug with properties `.freetoread` and `.freetoreadLabel` resulting from non-standard format.
 
@@ -37,7 +37,7 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 2021-10-16
 
 * In `AbstractRetrieval().funding`, rename field "id" to "agency_id", add field "funding_id" and change order.
-* Introduce new exception Scopus504Error and document Scopus413Error.
+* Introduce new exceptions Scopus504Error and document Scopus413Error.
 * Better document `SerialTitle()` w.r.t. to journal metrics.
 * Correct document of where to find the cache folder since pybliometrics 3.x.
 
@@ -84,14 +84,14 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 
 * Allow for the LIGHT view in `AffiliationRetrieval()` to retrieve fewer information.
 * Allow for the METRICS, LIGHT and STANDARD views in `AuthorRetrieval()` to retrieve fewer information.
-* In `AuthorRetrieval().h_index` and `AuthorRetrieval().coauthor_count`, return None instead of 0 as default value.
+* In `AuthorRetrieval().h_index` and `AuthorRetrieval().coauthor_count`, return `None` instead of 0 as default value.
 
 2.9
 ~~~
 
 2021-02-11
 
-* New slass `SubjectClassifications()` to interact with the Subject Classifications API.
+* New class `SubjectClassifications()` to interact with the Subject Classifications API.
 * In `CitationOverview()`, add optional parameter `citation` to allow for exlusion of self-citations or those of books.
 * Fix links in class docstrings.
 
@@ -112,7 +112,7 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 
 * Fix bug with writing empty results of search classes.
 * In `AuthorRetrieval()`, allow for kwds to be passed on to the retrieval.
-* Update some documentation w.r.t. to differences between the API the website.
+* Update some documentation w.r.t. to differences between the API and the website.
 
 2.7.1
 ~~~~~
@@ -144,7 +144,7 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 * In `AbstractRetrieval()`, add new properties `.openaccess` and `.openaccessFlag`.
 * In `AuthorSearch().__str__`, fix bug with missing names.
 * In `AuthorRetrieval().__str__`, fix bug with already removed property `.journal-history`.
-* For all search classes, do not create an empty file when download=False.
+* For all search classes, do not create an empty file when `download=False`.
 
 2.6.2
 ~~~~~
@@ -190,7 +190,7 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 
 2020-04-15
 
-* PlumXMetrics class to access the PlumX Metrics API.
+* `PlumXMetrics()` class to access the PlumX Metrics API.
 * Fix and update the str dunder functions of all classes.
 * Fix bug with raising a ScopusException when the resulting json is malformatted.
 
@@ -207,7 +207,7 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 
 2020-03-29
 
-* In `AuthorRetrieval().get_coauthors()`, return None instead of empty list when there are no coauthors.
+* In `AuthorRetrieval().get_coauthors()`, return `None` instead of empty list when there are no coauthors.
 * Improve warning and error messages.
 * Improve all documentation.
 
@@ -314,7 +314,7 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 2019-05-14
 
 * Add support for proxies.
-* In `AbstractRetrieval.correspondence`, turn values into proper strings.
+* In `AbstractRetrieval().correspondence`, turn values into proper strings.
 * Fix bug when creating the config file.
 
 1.6
@@ -325,9 +325,9 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 * `SerialTitle()` class to access the Serial Title API.
 * In all search classes, add method `.get_results_size()` to return the number of matches.
 * In all search classes, add boolean parameter `download` to not download the results (but get the number of matches anyways).
-* In `AbstractRetrieval().authogroup`, rename field "city-group" to "city" and add new fields: "dptid", "postalcode", "addresspart".
+* In `AbstractRetrieval().authorgroup`, rename field "city-group" to "city" and add new fields: "dptid", "postalcode", "addresspart".
 * In `AbstractRetrieval().authorgroup`, fix bug with missing affiliation information.
-* In all search classes, remove deprecated paramter `start`.
+* In all search classes, remove deprecated parameter `start`.
 
 1.5
 ~~~
@@ -378,8 +378,8 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 
 * Use number of results from first search query rather than from separate query.
 * Write empty file if search is empty.
-* In `ScopusSearch().results`, add new fields: affilname, affiliation_city, affiliation_country, article_number, author_count, authkeywords, eIssn, description, fund_acr, fund_no, fund_sponsor, pubmed_id.
-* In `ScopusSearch().results`, rename the following fields: names to author_names, authid to author_ids, afid to author_afids.
+* In `ScopusSearch().results`, add new fields: "affilname", "affiliation_city", "affiliation_country", "article_number", "author_count", "authkeywords", "eIssn", "description", "fund_acr", "fund_no", "fund_sponsor", "pubmed_id".
+* In `ScopusSearch().results`, rename the following fields: "names" to "author_names", "authid" to "author_ids", "afid" to "author_afids".
 * In `ScopusSearch()`, add parameter view to specify the view and number of entries per query run.
 * In `AbstractRetrieval().affiliation`, `AbstractRetrieval().authorgroup`, `AbstractRetrieval().authors`, `AbstractRetrieval().subject_areas`, `AffiliationSearch().affiliations`, `AuthorRetrieval().classificationgroup`, `AuthorRetrieval().journal_history`, `AuthorRetrieval().name_variants`, `AuthorSearch().authors`, `CitationOverview().authors` and `ScopusSearch().results` return `None` if the result list is empty, instead of an empty list.
 * In `AbstractRetrieval().chemicals`, fix bug with missing values for cas-registry-number.
@@ -395,14 +395,14 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 * Extend tests for `ScopusSearch()`.
 * Fix bug with zero search results.
 * Open cached search files in binary mode.
-* Fix bug in `AbstractRetrieval()` with missing affiliation names in .authorgroup.
+* Fix bug in `AbstractRetrieval()` with missing affiliation names in `.authorgroup`.
 
 1.3
 ~~~
 
 2018-12-04
 
-* Fix bugs related to empty values or missing keys in `AuthorRetrieval()` (.affiliation_history, .get_coauthors(), .journal_history, .name_variant, referred_name, .subject_area) and in `ScopusSearch()` (.results).
+* Fix bugs related to empty values or missing keys in `AuthorRetrieval()` (`.affiliation_history`, `.get_coauthors()`, `.journal_history`, `.name_variant`, `preferred_name`, `.subject_area`) and in `ScopusSearch()` (`.results`).
 * Introduce `Retrieval()` superclass for all retrieval and content classes.
 * Refactor `Search()` superclass and all search classes internally.
 * Implement scopus-specific exceptions.
@@ -449,7 +449,7 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 * In `ScopusAuthor()`, refactor generating abstracts lists into `get_journal_abstract()`.
 * New properties for `ScopusAbstract()`: `citedby_url` and `scopus_url`.
 * New property for `ScopusAffiliation()`: `state`.
-* Correct property citedby_url from `ScopusAuthor()`.
+* Correct property `citedby_url` from `ScopusAuthor()`.
 * In all retrieval classes, remove underscore properties.
 
 0.9
@@ -525,14 +525,14 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 
 2017-08-20
 
-* Remove unwanted print() statement.
+* Remove unwanted `print()` statement.
 
 0.4
 ~~~
 
 2017-08-20
 
-* Use refresh_affiliation parameter in ScopusAuthor.
+* Use `refresh_affiliation` parameter in `ScopusAuthor()`.
 * Improve background service to load user's API key.
 * Ask user for API key if it can't be found.
 * New property for `ScopusAbstract()`: `citation_count`.
@@ -555,7 +555,7 @@ In `ScopusSearch().auth_afid`, return None instead of empty list when there are 
 * Raise ValueError in `ScopusAbstract()` if .bibtex or .ris is called on an item whose aggregationType is not Journal.
 * Improved docstrings for `ScopusAbstract()`.
 * New properties for `ScopusAffiliation()`: `api_url`, `date_created`, `org_type`, `org_domain`, `org_url`.
-* In ScopusAffiliation, the `affiliation_id` returns the Scopus Affiliation ID from the result rather than the used aff_id.
+* In `ScopusAffiliation()`, the `affiliation_id` returns the Scopus Affiliation ID from the result rather than the used aff_id.
 
 0.2.1
 ~~~~~
