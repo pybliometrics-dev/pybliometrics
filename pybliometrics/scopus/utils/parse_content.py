@@ -2,9 +2,11 @@ from collections import namedtuple
 from functools import reduce
 from warnings import warn
 
+
 def filter_digits(s):
     """Helper function to remove non-digits characters from a string."""
     return "".join(filter(str.isdigit, s))
+
 
 def chained_get(container, path, default=None):
     """Helper function to perform a series of .get() methods on a dictionary
@@ -88,6 +90,11 @@ def get_link(dct, idx, path=['coredata', 'link']):
         return links[idx].get('@href')
     except IndexError:
         return None
+
+
+def html_unescape(s:str): 
+        from html import unescape
+        return unescape(s) if s else None
 
 
 def listify(element):
