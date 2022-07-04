@@ -8,8 +8,8 @@ from .author_search import AuthorSearch
 from .scopus_search import ScopusSearch
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
-    filter_digits, get_content, get_link, listify, make_int_if_possible, parse_affiliation,\
-    parse_date_created 
+    filter_digits, get_content, get_link, html_unescape, listify, make_int_if_possible,\
+    parse_affiliation, parse_date_created
 
 
 class AuthorRetrieval(Retrieval):
@@ -101,7 +101,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def given_name(self) -> Optional[str]:
         """Author's preferred given name."""
-        return chained_get(self._profile, ['preferred-name', 'given-name'])
+        return html_unescape(chained_get(self._profile, ['preferred-name', 'given-name']))
 
     @property
     def h_index(self) -> Optional[str]:
@@ -128,12 +128,12 @@ class AuthorRetrieval(Retrieval):
     @property
     def indexed_name(self) -> Optional[str]:
         """Author's name as indexed by Scopus."""
-        return chained_get(self._profile, ['preferred-name', 'indexed-name'])
+        return html_unescape(chained_get(self._profile, ['preferred-name', 'indexed-name']))
 
     @property
     def initials(self) -> Optional[str]:
         """Author's preferred initials."""
-        return chained_get(self._profile, ['preferred-name', 'initials'])
+        return html_unescape(chained_get(self._profile, ['preferred-name', 'initials']))
 
     @property
     def name_variants(self) -> Optional[List[NamedTuple]]:
@@ -142,9 +142,9 @@ class AuthorRetrieval(Retrieval):
         """
         fields = 'indexed_name initials surname given_name doc_count'
         variant = namedtuple('Variant', fields)
-        out = [variant(indexed_name=var['indexed-name'], surname=var['surname'],
-                       doc_count=var.get('@doc-count'), initials=var['initials'],
-                       given_name=var.get('given-name'))
+        out = [variant(indexed_name=html_unescape(var['indexed-name']), surname=html_unescape(var['surname']),
+                       doc_count=var.get('@doc-count'), initials=html_unescape(var['initials']),
+                       given_name=html_unescape(var.get('given-name')))
                for var in listify(self._profile.get('name-variant', []))]
         return out or None
 
@@ -197,7 +197,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def surname(self) -> Optional[str]:
         """Author's preferred surname."""
-        return chained_get(self._profile, ['preferred-name', 'surname'])
+        return html_unescape(chained_get(self._profile, ['preferred-name', 'surname']))
 
     @property
     def url(self) -> Optional[str]:
