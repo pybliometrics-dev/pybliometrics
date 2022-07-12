@@ -41,6 +41,9 @@ Error messages
 `pybliometrics.scopus.exception.Scopus504Error: GATEWAY TIMEOUT`
     Formally, the server does not respond despite several attempts.  This may happen for various reasons; usually it helps to wait few seconds before the next query.
 
+`pybliometrics.scopus.exception.Scopus524Error: SERVER ERROR`
+    Formally, the server does not respond despite several attempts.
+
 If queries break for other reasons, exceptions of type `requests.exceptions <http://docs.python-requests.org/en/master/api/#requests.RequestException>`_ are raised, such as:
 
 `requests.exceptions.TooManyRedirects: Exceeded 30 redirects.`

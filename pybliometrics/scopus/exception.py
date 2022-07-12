@@ -66,3 +66,7 @@ class Scopus502Error(ScopusHtmlError):
 
 class Scopus504Error(ScopusHtmlError):
     """Raised if a query yields a 504 error (Gateway Time-out for url)."""
+
+
+class Scopus524Error(ScopusHtmlError):
+    """Raised if a query yields a 524 error (Server error for url)."""
