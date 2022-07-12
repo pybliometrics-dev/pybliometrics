@@ -1,16 +1,16 @@
 Error messages
 ~~~~~~~~~~~~~~
 
-`pybliometrics` raises exceptions if download status is not ok.  In this case, no information gets cached.  To allow for error-specific handling, `pybliometrics` defines the following exceptions:
+`pybliometrics` raises exceptions if the download status is not ok.  To allow for error-specific handling, `pybliometrics` defines the following exceptions:
 
 `pybliometrics.scopus.exception.ScopusException`
     Base class for the following exceptions.
 
 `pybliometrics.scopus.exception.ScopusQueryError`
-    When a search query returns more results than specified or allowed (Scoups allows 5000 results maximum).  Change the query such that less than or equal to 5000 results are returned.
+    When a search query returns more results than specified or allowed (Scopus allows 5000 results maximum).  Change the query such that less than or equal to 5000 results are returned.
 
 `pybliometrics.scopus.exception.ScopusHtmlError`
-    Base class for the following exceptions raised through the requests package.
+    Base class for the following exceptions raised through the `requests` package.
 
 `pybliometrics.scopus.exception.Scopus400Error: BAD REQUEST`
     Usually an invalid search query, such as a missing parenthesis.  Verify that your query works in `Advanced Search <https://www.scopus.com/search/form.uri?display=advanced>`_.
@@ -39,7 +39,7 @@ Error messages
     Formally, the server does not respond, for various reasons.
 
 `pybliometrics.scopus.exception.Scopus504Error: GATEWAY TIMEOUT`
-    Formally, the server does not respond despite several attempts.  This can have for various reasons; usually it helps to wait few seconds before the next query.
+    Formally, the server does not respond despite several attempts.  This may happen for various reasons; usually it helps to wait few seconds before the next query.
 
 If queries break for other reasons, exceptions of type `requests.exceptions <http://docs.python-requests.org/en/master/api/#requests.RequestException>`_ are raised, such as:
 
