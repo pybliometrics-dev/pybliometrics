@@ -11,7 +11,8 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           403: exception.Scopus403Error, 404: exception.Scopus404Error,
           407: exception.Scopus407Error, 413: exception.Scopus413Error, 
           414: exception.Scopus414Error, 429: exception.Scopus429Error, 
-          500: exception.Scopus500Error, 502: exception.Scopus502Error}
+          500: exception.Scopus500Error, 502: exception.Scopus502Error,
+          504: exception.Scopus504Error, 524: exception.Scopus524Error}
 
 session = requests.Session()
 

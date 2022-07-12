@@ -54,19 +54,23 @@ class Scopus429Error(ScopusHtmlError):
     """Raised if a query yields a 429 error (Quota exceeded)."""
 
 
-class Scopus500Error(ScopusHtmlError):
+class ScopusServerError(ScopusHtmlError):
+    """Wrapper for Server related exceptions (code 5xx)."""
+
+
+class Scopus500Error(ScopusServerError):
     """Raised if a query yields a 500 error (Internal Server Error
     for url).
     """
 
 
-class Scopus502Error(ScopusHtmlError):
+class Scopus502Error(ScopusServerError):
     """Raised if a query yields a 502 error (Bad gateway for url)."""
 
 
-class Scopus504Error(ScopusHtmlError):
+class Scopus504Error(ScopusServerError):
     """Raised if a query yields a 504 error (Gateway Time-out for url)."""
 
 
-class Scopus524Error(ScopusHtmlError):
+class Scopus524Error(ScopusServerError):
     """Raised if a query yields a 524 error (Server error for url)."""
