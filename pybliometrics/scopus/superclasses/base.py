@@ -1,6 +1,7 @@
 """Base class object for superclasses."""
 
 from json import dumps, loads
+from math import ceil
 from time import localtime, strftime, time
 from typing import Dict, Optional
 
@@ -63,21 +64,39 @@ class Base:
                 res = resp.json()
                 n = int(res['search-results'].get('opensearch:totalResults', 0))
                 self._n = n
-                self._json = []
                 # Results size check
-                if params.get("cursor") is None and n > SEARCH_MAX_ENTRIES:
+                cursor_exists = "cursor" in params
+                if not cursor_exists and n > SEARCH_MAX_ENTRIES:
                     # Stop if there are too many results
-                    text = f'Found {n} matches.  The query fails to return '\
+                    text = f'Found {n:,} matches.  The query fails to return '\
                            f'more than {SEARCH_MAX_ENTRIES} entries.  Change '\
                            'your query such that it returns fewer entries.'
                     raise ScopusQueryError(text)
+                self._json = []
                 # Download results page-wise
                 if download:
-                    data = ""
-                    if n:
-                        data, header = _parse(res, n, url, api, params,
-                                              verbose, *args, **kwds)
-                        self._json = data
+                    data = res.get('search-results', {}).get('entry', [])
+                    if not n:
+                        data = ""
+                    if not cursor_exists:
+                        start = params["start"]
+                    # Download the remaining information in chunks
+                    if verbose:
+                        print(f'Downloading results for query "{params["query"]}":')
+                    n_chunks = ceil(n/params['count'])
+                    for i in tqdm(range(1, n_chunks), disable=not verbose,
+                                  initial=1, total=n_chunks):
+                        if cursor_exists:
+                            cursor = res['search-results']['cursor']['@next']
+                            params.update({'cursor': cursor})
+                        else:
+                            start += params["count"]
+                            params.update({'start': start})
+                        resp = get_content(url, api, params, *args, **kwds)
+                        res = resp.json()
+                        data.extend(res.get('search-results', {}).get('entry', []))
+                    header = resp.headers  # Use header of final call
+                    self._json = data
                 else:
                     data = None
             else:
@@ -135,34 +154,3 @@ def _check_file_age(self):
         refresh = True
         mod_ts = None
     return refresh, mod_ts
-
-
-def _parse(res, n, url, api, params, verbose, *args, **kwds):
-    """Auxiliary function to download results and parse json."""
-    cursor = "cursor" in params
-    if not cursor:
-        start = params["start"]
-    _json = res.get('search-results', {}).get('entry', [])
-    if verbose:
-        # Roundup + 1 for the final iteration
-        print(f'Downloading results for query "{params["query"]}":')
-        n_chunks = int(n/params['count']) + (n % params['count'] > 0) + 1
-        pbar = tqdm(total=n_chunks)
-        pbar.update(1)
-    # Download the remaining information in chunks
-    while n > 0:
-        n -= params["count"]
-        if cursor:
-            pointer = res['search-results']['cursor'].get('@next')
-            params.update({'cursor': pointer})
-        else:
-            start += params["count"]
-            params.update({'start': start})
-        resp = get_content(url, api, params, *args, **kwds)
-        res = resp.json()
-        _json.extend(res.get('search-results', {}).get('entry', []))
-        if verbose:
-            pbar.update(1)
-    if verbose:
-        pbar.close()
-    return _json, resp.headers

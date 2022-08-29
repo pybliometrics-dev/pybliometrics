@@ -59,8 +59,8 @@ def get_content(url, api, params=None, **kwds):
     # Set header, params and proxy
     try:
         header = {'X-ELS-APIKey': KEYS[0],
-              'Accept': 'application/json',
-              'User-Agent': user_agent}
+                  'Accept': 'application/json',
+                  'User-Agent': user_agent}
     except IndexError:
         raise errors[429]
 
