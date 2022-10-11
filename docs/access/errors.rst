@@ -11,7 +11,7 @@ Error message hierarchy
 
       * `pybliometrics.scopus.exception.Scopus400Error: BAD REQUEST`: Usually an invalid search query, such as a missing parenthesis.  Verify that your query works in `Advanced Search <https://www.scopus.com/search/form.uri?display=advanced>`_.
 
-      * `pybliometrics.scopus.exception.Scopus401Error: UNAUTHORIZED`: Either the provided key is not correct, in which case you should change it in `~/.scopus/config.ini`, or you are outside the network that provides you access to the Scopus database (e.g. your university network).  Remember that you need both to access Scopus.
+      * `pybliometrics.scopus.exception.Scopus401Error: UNAUTHORIZED`: Either the provided key is not correct, in which case you should change it in your :doc:`configuration file <../configuration>`, or you are outside the network that provides you access to the Scopus database (e.g. your university network).  Remember that you need both to access Scopus.
 
       * `pybliometrics.scopus.exception.Scopus404Error: NOT FOUND`: The entity you are looking for does not exist.  Check that your identifier is still pointing to the item you are looking for.
 
