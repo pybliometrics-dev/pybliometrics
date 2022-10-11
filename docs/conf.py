@@ -34,7 +34,7 @@ copyright = '2017-2021 ' + author
 version = pybliometrics.__version__
 release = pybliometrics.__version__
 
-language = None
+language = 'en'
 
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
