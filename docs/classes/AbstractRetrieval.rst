@@ -142,7 +142,7 @@ available if you downloaded the article with 'FULL' as `view` parameter.
               authors='Falagas, M.E.; Pitsouni, E.I.; Malietzis, G.A.; Pappas, G.',
               authors_auid=None, authors_affiliationid=None, sourcetitle='FASEB J',
               publicationyear='2007', coverDate=None, volume=None, issue=None,
-              first=None, last=None, citedbycount=None, type=None,
+              first=None, last=None, citedbycount=None, type=None, text=None,
               fulltext='Falagas, M.E., Pitsouni, E.I., Malietzis, G.A., Pappas, G.,
                         Comparison of PubMed, Scopus, Web of Science, and Google
                         Scholar: strengths and weaknesses. FASEB J 22:2 (2007),
@@ -181,7 +181,7 @@ Setting `view="REF"` accesses the REF view of the article, which provides more i
                authors_affiliationid='60033272; 60033272; 60033272; 60015849; 60081865',
                sourcetitle='FASEB Journal', publicationyear=None, coverDate='2008-02-01',
                volume='22', issue='2', first='338', last='342', citedbycount='1676',
-               type='resolvedReference', fulltext=None)
+               type='resolvedReference', text=None, fulltext=None)
 
 
 The list of authors contains duplicate because of the 1:1 pairing with the authors' affiliation IDs.  In above example, 7003962139 is affiliated with 60033272 and with 60015849.  Authors are therefore grouped by affiliation ID.

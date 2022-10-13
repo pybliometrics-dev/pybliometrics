@@ -391,14 +391,14 @@ def test_refcount():
 
 def test_references_full():
     fields = 'position id doi title authors authors_auid authors_affiliationid '\
-             'sourcetitle publicationyear volume issue first last citedbycount '\
-             'type text fulltext'
+             'sourcetitle publicationyear coverDate volume issue first last '\
+             'citedbycount type text fulltext'
     ref = namedtuple('Reference', fields)
     fulltext1 = 'Implementing Reproducible Research; Stodden, V.; Leisch, '\
                 'F.; Peng, R. D., Eds., Chapman and Hall/CRC: London, 2014.'
     expected1 = ref(position='22', id='85055586929', doi=None, title=None,
         authors='Stodden, V.; Leisch, F.; Peng, R.D.', authors_auid=None,
-        authors_affiliationid=None, fulltext=fulltext1,
+        authors_affiliationid=None, fulltext=fulltext1, coverDate=None,
         sourcetitle='Implementing Reproducible Research', type=None,
         publicationyear='2014', volume=None, issue=None, first=None,
         last=None, citedbycount=None, text='Eds. Chapman and Hall/CRC: London.')
@@ -408,8 +408,8 @@ def test_references_full():
 
 def test_references_ref():
     fields = 'position id doi title authors authors_auid authors_affiliationid '\
-             'sourcetitle publicationyear volume issue first last citedbycount '\
-             'type text fulltext'
+             'sourcetitle publicationyear coverDate volume issue first last '\
+             'citedbycount type text fulltext'
     ref = namedtuple('Reference', fields)
     authors8 = 'Armbrust, Michael; Fox, Armando; Griffith, Rean; Joseph, '\
         'Anthony D.; Katz, Randy; Konwinski, Andy; Lee, Gunho; '\
@@ -417,8 +417,8 @@ def test_references_ref():
     expected8 = ref(position='1', id='77950347409', authors=authors8,
         doi='10.1145/1721654.1721672', title='A view of cloud computing',
         sourcetitle='Communications of the ACM', type='resolvedReference',
-        publicationyear=None, volume='53', issue='4', first='50',
-        last='58', text=None, fulltext=None, citedbycount='0',
+        publicationyear=None, volume='53', issue='4', first='50', last='58',
+        text=None, fulltext=None, citedbycount='0', coverDate='2010-04-01',
         authors_auid='35800975300; 35571093800; 57198081560; 57192787435; '\
             '7401788602; 25926395200; 56326032000; 7401930147; 26534952300; '\
             '7007009125; 15064891400',

@@ -471,7 +471,7 @@ class AbstractRetrieval(Retrieval):
         """List of namedtuples representing references listed in the document,
         in the form (position, id, doi, title, authors, authors_auid,
         authors_affiliationid, sourcetitle, publicationyear, coverDate, volume,
-        issue, first, last, citedbycount, type, fulltext).
+        issue, first, last, citedbycount, type, text, fulltext).
 
         `position` is the number at which the reference appears in the
         document, `id` is the Scopus ID of the referenced document (EID
@@ -486,7 +486,8 @@ class AbstractRetrieval(Retrieval):
         volume and issue, `first` and `last` refer to the page range,
         `citedbycount` the total number of citations of the cited item (REF
         view only), `type` describes the parsing status of the reference
-        (resolved or not), `fulltext` is the string in the publication.
+        (resolved or not), `text` is information on the publication,
+        `fulltext` is the text the authors used for the reference.
 
         Note: Requires either the FULL view or REF view.
         Might be empty even if refcount is positive.  Specific fields can
@@ -497,7 +498,7 @@ class AbstractRetrieval(Retrieval):
         out = []
         fields = 'position id doi title authors authors_auid '\
                  'authors_affiliationid sourcetitle publicationyear coverDate '\
-                 'volume issue first last citedbycount type fulltext'
+                 'volume issue first last citedbycount type text fulltext'
         ref = namedtuple('Reference', fields)
         items = listify(self._ref.get("reference", []))
         for item in items:
@@ -541,6 +542,7 @@ class AbstractRetrieval(Retrieval):
                 first=volisspag.get('pagerange', {}).get('@first'),
                 last=volisspag.get('pagerange', {}).get('@last'),
                 citedbycount=info.get('citedby-count'), type=info.get('type'),
+                text=info.get('ref-text'),
                 fulltext=item.get('ref-fulltext'))
             out.append(new)
         return out or None
