@@ -25,7 +25,7 @@ def test_authors():
 
 def test_cc():
     expected0 = [(2016, 0), (2017, 0), (2018, 0), (2019, 0), (2020, 6)]
-    expected1 = [(2016, 4), (2017, 2), (2018, 2), (2019, 2), (2020, 2)]
+    expected1 = [(2016, 4), (2017, 2), (2018, 3), (2019, 2), (2020, 2)]
     assert_equal(co_eid.cc, [expected0, expected1])
     assert_equal(co_doi.cc, [expected0])
 
@@ -41,7 +41,7 @@ def test_citationType_short():
 
 
 def test_columnTotal():
-    assert_equal(co_eid.columnTotal, [4, 2, 2, 2, 8])
+    assert_equal(co_eid.columnTotal, [4, 2, 3, 2, 8])
     assert_equal(co_doi.columnTotal, [0, 0, 0, 0, 6])
 
 
@@ -111,7 +111,7 @@ def test_publicationName():
 
 
 def test_rangeColumnTotal():
-    assert_equal(co_eid.rangeColumnTotal, 18)
+    assert_equal(co_eid.rangeColumnTotal, 19)
     assert_equal(co_doi.rangeColumnTotal, 6)
 
 
