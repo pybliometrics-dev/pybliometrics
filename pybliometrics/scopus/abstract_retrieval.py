@@ -509,16 +509,16 @@ class AbstractRetrieval(Retrieval):
             if isinstance(volis, list):
                 volis = volis[0]
             # Parse author information
-            try:  # FULL view parsing
-                auth = listify(item['ref-info']['ref-authors']['author'])
-                authors = [', '.join([d['ce:surname'], d['ce:initials']])
+            if self._view == 'FULL':  # FULL view parsing
+                auth = listify(info.get('ref-authors', {}).get('author', []))
+                authors = [', '.join(filter(None, [d.get('ce:surname'), d.get('ce:initials')]))
                            for d in auth]
                 auids = None
                 affids = None
-                ids = listify(info['refd-itemidlist']['itemid'])
+                ids = listify(info.get('refd-itemidlist', {}).get('itemid', []))
                 doi = _select_by_idtype(ids, id_type='DOI')
                 scopus_id = _select_by_idtype(ids, id_type='SGR')
-            except KeyError:  # REF view parsing
+            else:  # REF view parsing
                 auth = (info.get('author-list') or {}).get('author', [])
                 auth = deduplicate(auth)
                 authors = [', '.join(filter(None, [d.get('ce:surname'),
