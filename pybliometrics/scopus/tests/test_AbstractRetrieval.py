@@ -402,8 +402,15 @@ def test_references_full():
         sourcetitle='Implementing Reproducible Research', type=None,
         publicationyear='2014', volume=None, issue=None, first=None,
         last=None, citedbycount=None, text='Eds. Chapman and Hall/CRC: London.')
+    expected7 = ref(position='1', id='85050215448', doi=None, title=None,
+        authors='', authors_auid=None, authors_affiliationid=None,
+        sourcetitle=None, publicationyear=None, coverDate=None, volume=None,
+        issue=None, first=None, last=None, citedbycount=None, type=None,
+        text='accessed 27 June 2017',
+        fulltext='www. hexoskin. com, accessed 27 June 2017')
     assert_equal(ab1.references[-1], expected1)
     assert_equal(ab2.references, None)
+    assert_equal(ab7.references[0], expected7)
 
 
 def test_references_ref():

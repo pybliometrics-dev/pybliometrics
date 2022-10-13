@@ -512,11 +512,12 @@ class AbstractRetrieval(Retrieval):
             # Parse author information
             if self._view == 'FULL':  # FULL view parsing
                 auth = listify(info.get('ref-authors', {}).get('author', []))
-                authors = [', '.join(filter(None, [d.get('ce:surname'), d.get('ce:initials')]))
+                authors = [', '.join(filter(None, [d.get('ce:surname'),
+                                                   d.get('ce:initials')]))
                            for d in auth]
                 auids = None
                 affids = None
-                ids = listify(info.get('refd-itemidlist', {}).get('itemid', []))
+                ids = listify(info['refd-itemidlist']['itemid'])
                 doi = _select_by_idtype(ids, id_type='DOI')
                 scopus_id = _select_by_idtype(ids, id_type='SGR')
             else:  # REF view parsing
