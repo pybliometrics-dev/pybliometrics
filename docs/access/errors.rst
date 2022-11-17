@@ -31,8 +31,6 @@ Error message hierarchy
 
          * `pybliometrics.scopus.exception.Scopus504Error: GATEWAY TIMEOUT`: The server did not get a timely response form another service.
 
-         * `pybliometrics.scopus.exception.Scopus524Error: A TIMEOUT OCCURRED`: Cloudflare service did not receive a timely response from the Server.
-
 If queries break for other reasons, exceptions of type `requests.exceptions <https://requests.readthedocs.io/en/latest/api/?highlight=exceptions#exceptions>`_ are raised, such as:
 
 `requests.exceptions.TooManyRedirects: Exceeded 30 redirects.`
