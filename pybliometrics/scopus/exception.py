@@ -1,13 +1,28 @@
 """Base exceptions and classes for pybliometrics.scopus."""
 
+import warnings
+
+warnings.filterwarnings("default", category=DeprecationWarning)
+
+
+def deprecated(cls):
+    original_init = cls.__init__
+    def __init__(self, *args, **kwargs):
+        msg = f"{cls.__name__} is deprecated and will be removed in the next "\
+              "release. Please use ScopusServerError instead"
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        original_init(self, *args, **kwargs)
+    cls.__init__ = __init__
+    return cls
+
 
 # Base classes
 class ScopusException(Exception):
-    """Base class for exceptions in scopus."""
+    """Base class for exceptions in pybliometrics."""
 
 
 class ScopusError(ScopusException):
-    """Exception for a serious error in scopus."""
+    """Exception for a serious error in pybliometrics."""
 
 
 # Query errors
@@ -58,15 +73,16 @@ class ScopusServerError(ScopusHtmlError):
     """Wrapper for Server related exceptions (code 5xx)."""
 
 
+@deprecated
 class Scopus500Error(ScopusServerError):
     """Raised if a query yields a 500 error (Internal Server Error
     for url).
     """
 
-
+@deprecated
 class Scopus502Error(ScopusServerError):
     """Raised if a query yields a 502 error (Bad gateway for url)."""
 
-
+@deprecated
 class Scopus504Error(ScopusServerError):
     """Raised if a query yields a 504 error (Gateway Time-out for url)."""

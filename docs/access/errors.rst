@@ -23,13 +23,7 @@ Error message hierarchy
 
       * `pybliometrics.scopus.exception.Scopus429Error: QUOTA EXCEEDED`: Your provided API key's weekly quota has been depleted.  If you provided multiple keys in your :doc:`configuration file <../configuration>`, this means all your keys are depleted.  In this case, wait up to week until your API key's quota has been reset.
 
-      * `pybliometrics.scopus.exception.ScopusServerError`: General exception related to all Server-related exceptions defined below.  This may happen for various reasons (the internet is a noisy medium); usually it helps to wait few seconds before the next query.  Server errors are also raised if in searches you use a fieldname that does not exist.  Verify that your query works in Scopus' `Advanced Search <https://www.scopus.com/search/form.uri?display=advanced>`_.
-
-         * `pybliometrics.scopus.exception.Scopus500Error: INTERNAL SERVER ERROR`: Unspecific or unexpected Server errors.
-
-         * `pybliometrics.scopus.exception.Scopus502Error: BAD GATEWAY`: The server could not establish a connection to another service.
-
-         * `pybliometrics.scopus.exception.Scopus504Error: GATEWAY TIMEOUT`: The server did not get a timely response form another service.
+      * `pybliometrics.scopus.exception.ScopusServerError`: General exception related to all Server-related exceptions defined below.  This may happen for various reasons (the internet is a noisy medium); usually it helps to wait few seconds before the next query.  Server errors are also raised if in searches you use a fieldname that does not exist.  Verify that your query works in Scopus' `Advanced Search <https://www.scopus.com/search/form.uri?display=advanced>`_.  Previously `pybliometrics` used more finegrained exceptions in the 5xx space, namely "Scopus500Error", "Scopus502Error" and "Scopus504Error".  These are deprecated, use "ScopusServerError" instead.
 
 If queries break for other reasons, exceptions of type `requests.exceptions <https://requests.readthedocs.io/en/latest/api/?highlight=exceptions#exceptions>`_ are raised, such as:
 
