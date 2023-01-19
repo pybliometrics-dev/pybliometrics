@@ -29,7 +29,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 project = 'pybliometrics'
 author = 'Michael E. Rose and John Kitchin'
-copyright = '2017-2021 ' + author
+copyright = '2017-2023 ' + author
 
 version = pybliometrics.__version__
 release = pybliometrics.__version__

@@ -4,7 +4,7 @@ from pathlib import Path
 # Paths for cached files
 if (Path.home()/".scopus").exists():
     BASE_PATH = Path.home()/".scopus"
-elif (Path.home()/".pybliometrics"/"Scopus").exists:
+elif (Path.home()/".pybliometrics"/"Scopus").exists():
     BASE_PATH = Path.home()/".pybliometrics"/"Scopus"
 else:
     BASE_PATH = Path.home()/".cache"/"pybliometrics"/"Scopus"
@@ -28,7 +28,7 @@ if 'PYB_CONFIG_FILE' in environ:
 else:
     if (Path.home()/".scopus").exists():
         CONFIG_FILE = Path.home()/".scopus"/"config.ini"
-    elif (Path.home()/".pybliometrics"/"config.ini").exist():
+    elif (Path.home()/".pybliometrics"/"config.ini").exists():
         CONFIG_FILE = Path.home()/".pybliometrics"/"config.ini"
     else:
         CONFIG_FILE = Path.home()/".config"/"pybliometrics.cfg"
