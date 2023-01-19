@@ -38,13 +38,7 @@ Under `pybliometrics` 2.x and before, the default paths used to be `PPP/.scopus/
 
 Set-up
 ~~~~~~
-If the configuration file does not exist, `pybliometrics` will prompt you to provide the configuration values.  To enforce the process yourself, issue the command
-
-.. code-block:: python
-
-    >>> import pybliometrics
-    >>> pybliometrics.scopus.utils.create_config()
-
+If the configuration file does not exist, `pybliometrics` will prompt you to provide the configuration values.
 
 There are two consecutive prompts: For your API Key(s) and your InstToken.  The InstToken enables or facilitates access from outside your institution network, and you request it from Elsevier's Integration Support.  If you don't use InstToken, hit enter on the second prompt.  The InstToken, if provided, is added to the Authentication block:
 
@@ -65,9 +59,9 @@ If you need to use a proxy, please edit the file manually to include a section t
     https = socks5://127.0.0.1:1234
 
 
-The presence of this information will make use of the proxy.  Be sure to remove the block when you don't want to use a proxy.
+The presence of this information will make use of the proxy.  Be sure to remove or comment out the block when you don't want to use a proxy.
 
-In case you build `pybliometrics` using CI or on a server where prompts aren't possible, you can provide a single optional parameter to `create_config()`.  The parameter must be a list of keys.  When this parameter is used, there will be no prompts.
+In case you build `pybliometrics` using CI or on a server where prompts aren't possible, you can provide a single optional parameter to `create_config()`.  The parameter must be a list of keys.  When this parameter is used, there will be no prompts.  Note that this only works to overwrite the existing config.ini.
 
 
 Runtime
