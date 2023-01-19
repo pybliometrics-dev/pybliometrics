@@ -1,9 +1,9 @@
 Configuration
 -------------
 
-config.ini
-~~~~~~~~~~
-`pybliometrics` stores values it needs for operation in a config file.  That file is either in `~/.pybliometrics/config.ini` or in `~/.scopus/config.ini` (if you started using pybliometrics before version 3.x).  It saves credentials as well as directory names for folders that store cached files.  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
+pybliometrics.cfg
+~~~~~~~~~~~~~~~~~
+`pybliometrics` stores values it needs for operation in a configuration file called `pybliometrics.cfg`.  The config file saves credentials as well as directory names for folders that store downloaded results. It is located at `~/.config/` (if you started with versions older than 3.5, the file was called `config.ini` and located either in `~/.pybliometrics/` or in `~/.scopus/`, but you can safely move and rename the file).  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
 
 By default, after initial set-up (see below), the file will look like this:
 
@@ -28,7 +28,7 @@ By default, after initial set-up (see below), the file will look like this:
     Timeout = 20
 
 
-Section `[Directories]` contains the paths where `pybliometrics` should cache downloaded files.  `pybliometrics` will create them if necessary.
+Section `[Directories]` contains the paths where `pybliometrics` should store (cache) downloaded files.  `pybliometrics` will create them if necessary.
 
 Section `[Authentication]` contains the API Keys which you obtain from http://dev.elsevier.com/myapikey.html.  If you provide multiple (separated by a comma), `pybliometrics` automatically replaces a depleted key with another one at random at runtime until all of them are depleted.
 
@@ -61,7 +61,7 @@ If you need to use a proxy, please edit the file manually to include a section t
 
 The presence of this information will make use of the proxy.  Be sure to remove or comment out the block when you don't want to use a proxy.
 
-In case you build `pybliometrics` using CI or on a server where prompts aren't possible, you can provide a single optional parameter to `create_config()`.  The parameter must be a list of keys.  When this parameter is used, there will be no prompts.  Note that this only works to overwrite the existing config.ini.
+In case you build `pybliometrics` using CI or on a server where prompts aren't possible, you can provide a single optional parameter to `create_config()`.  The parameter must be a list of keys.  When this parameter is used, there will be no prompts.  Note that this only works to overwrite the existing configuration file.
 
 
 Runtime
@@ -88,6 +88,6 @@ If you prefer to have the configuration file somewhere else, you can `pybliometr
 
     import os
 
-    os.environ['PYB_CONFIG_FILE'] = "C:/Custom/Location/config.ini"
+    os.environ['PYB_CONFIG_FILE'] = "C:/Custom/Location/pybliometrics.cfg"
 
     import pybliometrics

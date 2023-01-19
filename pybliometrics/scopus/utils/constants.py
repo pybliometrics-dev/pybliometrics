@@ -4,8 +4,10 @@ from pathlib import Path
 # Paths for cached files
 if (Path.home()/".scopus").exists():
     BASE_PATH = Path.home()/".scopus"
-else:
+elif (Path.home()/".pybliometrics"/"Scopus").exists:
     BASE_PATH = Path.home()/".pybliometrics"/"Scopus"
+else:
+    BASE_PATH = Path.home()/".cache"/"pybliometrics"/"Scopus"
 DEFAULT_PATHS = {
     'AbstractRetrieval': BASE_PATH/'abstract_retrieval',
     'AffiliationRetrieval': BASE_PATH/'affiliation_retrieval',
@@ -26,8 +28,10 @@ if 'PYB_CONFIG_FILE' in environ:
 else:
     if (Path.home()/".scopus").exists():
         CONFIG_FILE = Path.home()/".scopus"/"config.ini"
-    else:
+    elif (Path.home()/".pybliometrics"/"config.ini").exist():
         CONFIG_FILE = Path.home()/".pybliometrics"/"config.ini"
+    else:
+        CONFIG_FILE = Path.home()/".config"/"pybliometrics.cfg"
 
 # URLs for all classes
 RETRIEVAL_BASE = 'https://api.elsevier.com/content/'
