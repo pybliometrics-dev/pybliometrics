@@ -8,7 +8,8 @@ from nose.tools import assert_equal, assert_true
 from pybliometrics.scopus import SerialTitle
 
 # SoftwareX
-sofwarex = SerialTitle("2352-7110", refresh=30, years="2019-2020")
+# sofwarex = SerialTitle("2352-7110", refresh=30, years="2019-2020")
+sofwarex = SerialTitle("2352-7110", refresh=30)
 # OECD Economic Studies
 oecd = SerialTitle("0255-0822", refresh=30)
 
@@ -123,3 +124,16 @@ def test_subject_area():
 def test_title():
     assert_equal(sofwarex.title, "SoftwareX")
     assert_equal(oecd.title, "OECD Economic Studies")
+
+
+def test_yearly_data():
+    assert_true(type(sofwarex.yearly_data) == list)
+    assert_equal(len(sofwarex.yearly_data), 2)
+    assert_equal([d.year for d in sofwarex.yearly_data], ["2019", "2020"])
+    fields = 'year publicationcount revpercent zerocitessce '\
+             'zerocitespercentsce citecountsce'
+    dat = namedtuple('Yearlydata', fields)
+    expected2_1996 = dat(year='1996', publicationcount='4', revpercent='0.0',
+                         zerocitessce='0', zerocitespercentsce='0',
+                         citecountsce='33')
+    assert_equal(oecd.yearly_data[0], expected2_1996)

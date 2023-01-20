@@ -28,15 +28,15 @@ You can obtain basic information just by printing the object:
 
 .. code-block:: python
 
-    >>> print(source_y)
-    'Science', journal published by 'American Association for the
-    Advancement of Science', is active in Multidisciplinary
-    Metrics as of 2021-10-16:
+    >>> print(source)
+    'Science', journal published by 'American Association for the Advancement of Science', is active in Multidisciplinary and Medicine (all)
+    Metrics as of 2023-01-20:
         SJR:  year value
-              2020 12.556
+              2021 14.589
         SNIP: year value
-              2020 7.789
+              2021 9.116
         ISSN: 0036-8075, E-ISSN: 1095-9203, Scopus ID: 23571
+
 
 The object has a number of attributes but no methods.  For example, information regarding the source itself:
 
@@ -59,14 +59,33 @@ Most importantly, it provides three metrics: the CiteScore (see `here <https://s
 .. code-block:: python
 
     >>> source.citescoreyearinfolist
-    [(2020, 46.8), (2021, 51.9)]
+    [(2021, 57.8), (2022, 57.3)]
     >>> source.sjrlist
-    [(2020, 12.556)]
+    [(2021, 14.589)]
     >>> source.sniplist
-    [(2020, 7.789)]
+    [(2021, 9.116)]
 
 
-By default, `SerialTitle()` retrieves only the most recent metrics.  If you provide a year or a range of years via the optional parameter `years`, `SerialTitle()` will retrieve information for these years (except for the CiteScore):
+The only longer time series is provide in paramter `yearly_data`. It contains the number of documents published in this year, the share of review articles thereof, the number and share of not-cited documents, and the number of distinct documents that were cited in this year.
+
+
+.. code-block:: python
+
+    >>> source.yearly_data[-1]
+    Yearlydata(year='2023', publicationcount='0', revpercent='0.0',
+               zerocitessce='0', zerocitespercentsce=None, citecountsce='30145')
+    >>> yearly_data = pd.DataFrame(source.yearly_data)
+    >>> yearly_data.head()
+       year publicationcount revpercent zerocitessce   zerocitespercentsce citecountsce
+    0  1996             2395       4.97          661  27.59916492693110647       235827
+    1  1997             2833       6.28          905  31.94493469819978821       243424
+    2  1998             2816       4.69          857  30.43323863636363637       253990
+    3  1999             2373       6.28          535  22.54530130636325327       275584
+    4  2000             2401        7.0          462  19.24198250728862974       293437
+
+
+
+By default, `SerialTitle()` retrieves only the most recent metrics while yearly data is availble from 1996 onwards.  If you provide a year or a range of years via the optional parameter `years`, `SerialTitle()` will retrieve information for these years (except for the CiteScore):
 
 .. code-block:: python
 

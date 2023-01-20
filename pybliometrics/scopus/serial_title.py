@@ -140,6 +140,29 @@ class SerialTitle(Retrieval):
         """The title of the source."""
         return self._entry['dc:title']
 
+    @property
+    def yearly_data(self) -> Optional[List[NamedTuple]]:
+        """Yearly citation information as a list of namedtuples in the
+        form (year, publicationcount, revpercent, zerocitessce,
+        zerocitespercentsce, citecountsce).  That's the number of documents
+        published in this year, the share of review articles thereof, the
+        number and share of not-cited documents, and the number of distinct
+        documents that were cited in this year.
+        """
+        try:
+            data = self._entry['yearly-data']["info"]
+        except KeyError:
+            return None
+        fields = 'year publicationcount revpercent zerocitessce '\
+                 'zerocitespercentsce citecountsce'
+        dat = namedtuple('Yearlydata', fields)
+        data = [dat(year=d['@year'],citecountsce=d['citeCountSCE'],
+                    publicationcount=d['publicationCount'],
+                    revpercent=d['revPercent'], zerocitessce=d['zeroCitesSCE'],
+                    zerocitespercentsce=d['zeroCitesPercentSCE'])
+                for d in data]
+        return data or None
+
     def __init__(self,
                  issn: Union[int, str],
                  refresh: Union[bool, int] = False,
