@@ -19,7 +19,7 @@ def test_aggregation_type():
 
 
 def test_citescoreyearinfolist():
-    expected1 = [(2021, 4.1), (2022, 4.6)]
+    expected1 = [(2021, 4.1), (2022, 4.9)]
     assert_equal(sofwarex.citescoreyearinfolist, expected1)
     assert_equal(oecd.citescoreyearinfolist, None)
 
@@ -110,8 +110,8 @@ def test_source_id():
 def test_subject_area():
     area = namedtuple('Subjectarea', 'area abbreviation code')
     expected1 = [
-        area(area='Software', abbreviation='COMP', code=1712),
-        area(area='Computer Science Applications', abbreviation='COMP', code=1706)
+        area(area='Computer Science Applications', abbreviation='COMP', code=1706),
+        area(area='Software', abbreviation='COMP', code=1712)
     ]
     assert_equal(sofwarex.subject_area, expected1)
     expected2 = [
