@@ -177,8 +177,8 @@ class SerialTitle(Retrieval):
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param view: The view of the file that should be downloaded.  Allowed
-                     values: BASIC, STANDARD, ENHANCED.  For details see
-                     https://dev.elsevier.com/sc_serial_title_views.html.
+                     values: STANDARD, ENHANCED, CITESCORE.  For details
+                     see https://dev.elsevier.com/sc_serial_title_views.html.
         :param years: A string specifying a year or range of years (combining
                       two years with a hyphen) for which yearly metric data
                       (SJR, SNIP, yearly-data) should be looked up for.  If
@@ -200,7 +200,8 @@ class SerialTitle(Retrieval):
         where `path` is specified in your configuration file.
         """
         # Checks
-        check_parameter_value(view, ('BASIC', 'STANDARD', 'ENHANCED'), "view")
+        views = ('STANDARD', 'ENHANCED', 'CITESCORE')
+        check_parameter_value(view, views, "view")
         self._view = view
 
         # Force refresh when years is specified
