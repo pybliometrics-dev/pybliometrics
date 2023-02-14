@@ -1,3 +1,39 @@
 [build-system]
-requires = ["pbr>=5.7.0","setuptools>=42.2"]
-build-backend = "pbr.build"
+requires = ["setuptools>=61.2", "pbr>=5.7.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pybliometrics"
+authors = [{name = "'John Kitchin and Michael E. Rose", email = "Michael.Ernst.Rose@gmail.com"}]
+maintainers = [{name = "Michael E. Rose", email = "Michael.Ernst.Rose@gmail.com"}]
+description = "Python-based API-Wrapper to access Scopus"
+readme = "README.rst"
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+keywords = ["scopus"]
+dynamic = ["version", "dependencies"]
+
+[project.urls]
+Homepage = "https://github.com/pybliometrics-dev/pybliometrics"
+"Bug Tracker" = "https://github.com/pybliometrics-dev/pybliometrics/issues"
+"Documentation (stable)" = "https://pybliometrics.readthedocs.io/en/stable/"
+"Documentation (latest)" = "https://pybliometrics.readthedocs.io/en/latest/"
+
+[tool.distutils.bdist_wheel]
+universal = 1
+
+[tool.setuptools]
+include-package-data = false
