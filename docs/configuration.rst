@@ -3,7 +3,7 @@ Configuration
 
 pybliometrics.cfg
 ~~~~~~~~~~~~~~~~~
-`pybliometrics` stores values it needs for operation in a configuration file called `pybliometrics.cfg`.  The config file saves credentials as well as directory names for folders that store downloaded results. It is located at `~/.config/` (if you started with versions older than 3.5, the file was called `config.ini` and located either in `~/.pybliometrics/` or in `~/.scopus/`, but you can safely move and rename the file).  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
+`pybliometrics` stores values it needs for operation in a configuration file called `pybliometrics.cfg`.  The config file saves credentials as well as directory names for folders that store downloaded results.
 
 By default, after initial set-up (see below), the file will look like this:
 
@@ -36,9 +36,10 @@ Simply edit this file using a simple text editor; changes will take effect the n
 
 Under `pybliometrics` 2.x and before, the default paths used to be `PPP/.scopus/abstract_retrieval`.  You can safely rename the cache folder `.scopus` to `.pybliometrics` (on Windows machines, rename to `.pybliometrics.`), but remember to change the paths in the configuration file, too.
 
+
 Set-up
 ~~~~~~
-If the configuration file does not exist, `pybliometrics` will prompt you to provide the configuration values.
+If the configuration file does not exist, `pybliometrics` will prompt you to provide the configuration values on first import.
 
 There are two consecutive prompts: For your API Key(s) and your InstToken.  The InstToken enables or facilitates access from outside your institution network, and you request it from Elsevier's Integration Support.  If you don't use InstToken, hit enter on the second prompt.  The InstToken, if provided, is added to the Authentication block:
 
@@ -79,10 +80,25 @@ You can easily inspect configuration values at runtime, and even set some during
 Setting the keys at runtime is however not possible.
 
 
+Default location
+~~~~~~~~~~~~~~~~
+For recent and new installations, the configuration file is located at `~/.config/`.  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
+
+If you started with versions older than 3.5, the file was called `config.ini` and located either in `~/.pybliometrics/` or (for very old installations) in `~/.scopus/`. You can safely move and rename the file.  The location `~/.config/pybliometics.cfg` always takes precedence.
+
+To see the location of the configuration file your current `pybliometrics` instance is using, execute this:
+
+.. code-block:: python
+
+    import pybliometrics
+
+    pybliometrics.scopus.utils.constants.CONFIG_FILE
+
+
 Custom location
 ~~~~~~~~~~~~~~~
 
-If you prefer to have the configuration file somewhere else, you can `pybliometrics` tell where to look for it.  You will need the `environment facility <https://docs.python.org/3/library/os.html#file-names-command-line-arguments-and-environment-variables>`_ of the base package `os`.  For this to take effect you need to set the environ *before* importing pybliometrics.  `pybliometrics` uses the "PYB_CONFIG_FILE" keyword:
+If you prefer to have the configuration file somewhere else, you can tell `pybliometrics` where to look for it.  You will need the `environment facility <https://docs.python.org/3/library/os.html#file-names-command-line-arguments-and-environment-variables>`_ of the base package `os`.  For this to take effect you need to set the environ *before* importing pybliometrics.  `pybliometrics` uses the "PYB_CONFIG_FILE" keyword:
 
 .. code-block:: python
 
