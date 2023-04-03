@@ -47,6 +47,7 @@ def create_config(keys: Optional[List[str]] = None,
     # Set default values
     config.add_section('Requests')
     config.set('Requests', 'Timeout', '20')
+    config.set('Requests', 'Retries', '5')
 
     # Write out
     CONFIG_FILE.parent.mkdir(parents=True, exist_ok=True)

@@ -29,3 +29,5 @@ If queries break for other reasons, exceptions of type `requests.exceptions <htt
 
 `requests.exceptions.TooManyRedirects: Exceeded 30 redirects.`
     The entity you are looking for was not properly merged with another one entity in the sense that it is not forwarding.  Happens rarely when Scopus Author profiles are merged.  May also occur less often with Abstract EIDs and Affiliation IDs.
+
+`pybliometrics` will retry to establish the connection a few times on typical server-side errors.  How often is specified in your :doc:`configuration file <../configuration>`, section "Requests" value "Retries" (if none is given, `pybliometrics` makes 5 attempts).

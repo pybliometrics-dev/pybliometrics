@@ -26,6 +26,7 @@ By default, after initial set-up (see below), the file will look like this:
 
     [Requests]
     Timeout = 20
+    Retries = 5
 
 
 Section `[Directories]` contains the paths where `pybliometrics` should store (cache) downloaded files.  `pybliometrics` will create them if necessary.

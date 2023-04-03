@@ -1,4 +1,6 @@
-import requests
+from requests import Session
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
 
 from pybliometrics import version_info
 from pybliometrics.scopus import exception
@@ -10,11 +12,15 @@ user_agent = 'pybliometrics-v' + '.'.join([str(e) for e in version_info[:3]])
 errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           403: exception.Scopus403Error, 404: exception.Scopus404Error,
           407: exception.Scopus407Error, 413: exception.Scopus413Error, 
-          414: exception.Scopus414Error, 429: exception.Scopus429Error, 
-          500: exception.Scopus500Error, 502: exception.Scopus502Error,
-          504: exception.Scopus504Error}
+          414: exception.Scopus414Error, 429: exception.Scopus429Error}
 
-session = requests.Session()
+_retries = config.getint("Requests", "Retries", fallback=5)
+retry = Retry(total=_retries, status_forcelist=[500, 501, 502, 503, 504, 524],
+              backoff_factor=0.1)
+adapter = HTTPAdapter(max_retries=retry)
+session = Session()
+session.mount('http://', adapter)
+session.mount('https://', adapter)
 
 def get_content(url, api, params=None, **kwds):
     """Helper function to download a file and return its content.
