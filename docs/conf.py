@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
-
 import sys
 import os
-from importlib.metadata import version
+from datetime import date
 
 sys.path.append(os.path.join(os.path.abspath(os.pardir)))
 autodoc_mock_imports = ["_tkinter"]
@@ -11,8 +9,6 @@ cwd = os.getcwd()
 project_root = os.path.dirname(cwd)
 sys.path.insert(0, os.path.abspath('source'))
 sys.path.insert(0, project_root)
-
-import pybliometrics
 
 # General configuration
 extensions = [
@@ -30,7 +26,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 project = 'pybliometrics'
 author = 'Michael E. Rose and John Kitchin'
-copyright = '2017-2023 ' + author
+copyright = f"2017-{date.today().year} {author}"
+
+from importlib.metadata import version
 
 release = version('pybliometrics')
 version = '.'.join(release.split('.')[:2])
