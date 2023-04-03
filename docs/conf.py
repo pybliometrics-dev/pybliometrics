@@ -2,6 +2,7 @@
 
 import sys
 import os
+from importlib.metadata import version
 
 sys.path.append(os.path.join(os.path.abspath(os.pardir)))
 autodoc_mock_imports = ["_tkinter"]
@@ -31,8 +32,8 @@ project = 'pybliometrics'
 author = 'Michael E. Rose and John Kitchin'
 copyright = '2017-2023 ' + author
 
-version = pybliometrics.__version__
-release = pybliometrics.__version__
+release = version('pybliometrics')
+version = '.'.join(release.split('.')[:2])
 
 language = 'en'
 
