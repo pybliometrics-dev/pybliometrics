@@ -3,6 +3,23 @@ Change Log
 
 .. toctree::
 
+3.5.0
+~~~~~
+
+2023-03-XX
+
+* Introduce ScopusServerError to replace all Scopus5XXErrors.
+* Change default location of configuration file and results cache to comply with XDG.
+* Automatically retry connection on most common 5xx errors.
+* Update documentation w.r.t. to configuration.
+* In `SerialTitle()`, add new property "yearly_data".
+* In `SerialTitle()`, allow for view "CITESCORE", remove view "BASIC".
+* In `AbstractRetrieval().references`, add field "text" again.
+* Fig bug with inconsistent reference parsing in `AbstractRetrieval()`.
+* Fig bug causing one excess search query for all search classes.
+* Fix bug caused by non-ASCII characters in results.
+* Switch to `setuptools_scm` instead of `pbr` for distribution and replace `setup.cfg` and `setup.py` by `pyproject.toml`.
+
 3.4.0
 ~~~~~
 
