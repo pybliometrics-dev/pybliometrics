@@ -3,7 +3,7 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
-    get_link, make_int_if_possible
+    get_link, make_float_if_possible, make_int_if_possible
 
 
 class SerialTitle(Retrieval):
@@ -156,10 +156,11 @@ class SerialTitle(Retrieval):
         fields = 'year publicationcount revpercent zerocitessce '\
                  'zerocitespercentsce citecountsce'
         dat = namedtuple('Yearlydata', fields)
-        data = [dat(year=d['@year'],citecountsce=d['citeCountSCE'],
-                    publicationcount=d['publicationCount'],
-                    revpercent=d['revPercent'], zerocitessce=d['zeroCitesSCE'],
-                    zerocitespercentsce=d['zeroCitesPercentSCE'])
+        data = [dat(year=int(d['@year']), citecountsce=int(d['citeCountSCE']),
+                    publicationcount=int(d['publicationCount']),
+                    revpercent=make_float_if_possible(d['revPercent']),
+                    zerocitessce=int(d['zeroCitesSCE']),
+                    zerocitespercentsce=make_float_if_possible(d['zeroCitesPercentSCE']))
                 for d in data]
         return data or None
 

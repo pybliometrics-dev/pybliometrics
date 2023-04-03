@@ -106,6 +106,14 @@ def listify(element):
         return [element]
 
 
+def make_float_if_possible(val):
+    """Attempt a conversion to float type."""
+    try:
+        return float(val)
+    except TypeError:
+        return val
+
+
 def make_int_if_possible(val):
     """Attempt a conversion to int type."""
     try:

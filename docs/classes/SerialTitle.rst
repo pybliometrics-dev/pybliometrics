@@ -30,7 +30,7 @@ You can obtain basic information just by printing the object:
 
     >>> print(source)
     'Science', journal published by 'American Association for the Advancement of Science', is active in Multidisciplinary and Medicine (all)
-    Metrics as of 2023-01-20:
+    Metrics as of 2023-04-03:
         SJR:  year value
               2021 14.589
         SNIP: year value
@@ -72,16 +72,16 @@ The only longer time series is provide in paramter `yearly_data`. It contains th
 .. code-block:: python
 
     >>> source.yearly_data[-1]
-    Yearlydata(year='2023', publicationcount='0', revpercent='0.0',
-               zerocitessce='0', zerocitespercentsce=None, citecountsce='30145')
+    Yearlydata(year=2023, publicationcount=0, revpercent=0.0,
+               zerocitessce=0, zerocitespercentsce=None, citecountsce=30145)
     >>> yearly_data = pd.DataFrame(source.yearly_data)
     >>> yearly_data.head()
-       year publicationcount revpercent zerocitessce   zerocitespercentsce citecountsce
-    0  1996             2395       4.97          661  27.59916492693110647       235827
-    1  1997             2833       6.28          905  31.94493469819978821       243424
-    2  1998             2816       4.69          857  30.43323863636363637       253990
-    3  1999             2373       6.28          535  22.54530130636325327       275584
-    4  2000             2401        7.0          462  19.24198250728862974       293437
+       year  publicationcount  revpercent  zerocitessce  zerocitespercentsce  citecountsce
+    0  1996              2395        4.97           661            27.599165        235971
+    1  1997              2833        6.28           905            31.944935        243521
+    2  1998              2816        4.69           855            30.362216        253994
+    3  1999              2373        6.28           534            22.503161        275590
+    4  2000              2401        7.00           462            19.241983        293442
 
 
 

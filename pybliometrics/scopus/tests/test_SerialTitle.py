@@ -132,10 +132,10 @@ def test_yearly_data():
     fields = 'year publicationcount revpercent zerocitessce '\
              'zerocitespercentsce citecountsce'
     dat = namedtuple('Yearlydata', fields)
-    expected1_2020 = dat(year='2020', publicationcount='163', revpercent='0.0',
-        zerocitessce='16', zerocitespercentsce='9.815950920245398774',
-        citecountsce='2554')
+    expected1_2020 = dat(year=2020, publicationcount=163, revpercent=0.0,
+        zerocitessce=16, zerocitespercentsce=9.815950920245398774,
+        citecountsce=2554)
     assert_equal(sofwarex.yearly_data[24], expected1_2020)
-    expected2_1996 = dat(year='1996', publicationcount='4', revpercent='0.0',
-        zerocitessce='0', zerocitespercentsce='0', citecountsce='33')
+    expected2_1996 = dat(year=1996, publicationcount=4, revpercent=0.0,
+        zerocitessce=0, zerocitespercentsce=0, citecountsce=33)
     assert_equal(oecd.yearly_data[0], expected2_1996)
