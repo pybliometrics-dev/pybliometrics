@@ -37,7 +37,9 @@ universal = 1
 
 [tool.setuptools]
 include-package-data = false
-packages = ["pybliometrics"]
+
+[tool.setuptools.packages.find]
+include = ["pybliometrics", "pybliometrics.*"]
 
 [tool.setuptools_scm]
 
