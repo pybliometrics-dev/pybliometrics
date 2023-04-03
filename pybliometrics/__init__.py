@@ -1,8 +1,6 @@
-from pbr.version import VersionInfo
+from importlib.metadata import version
 
-_v = VersionInfo('pybliometrics').semantic_version()
-__version__ = _v.release_string()
-version_info = _v.version_tuple()
+__version__ = version("pybliometrics")
 
 __citation__ = 'Rose, Michael E. and John R. Kitchin: "pybliometrics: '\
     'Scriptable bibliometrics using a Python interface to Scopus", SoftwareX '\
