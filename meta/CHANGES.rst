@@ -6,7 +6,7 @@ Change Log
 3.5.0
 ~~~~~
 
-2023-03-XX
+2023-04-03
 
 * Introduce ScopusServerError to replace all Scopus5XXErrors.
 * Change default location of configuration file and results cache to comply with XDG.
