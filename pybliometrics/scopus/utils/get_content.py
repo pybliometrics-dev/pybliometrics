@@ -2,12 +2,12 @@ from requests import Session
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 
-from pybliometrics import version_info
+from pybliometrics import __version__
 from pybliometrics.scopus import exception
 from pybliometrics.scopus.utils.startup import config
 
 # Define user agent string for HTTP requests
-user_agent = 'pybliometrics-v' + '.'.join([str(e) for e in version_info[:3]])
+user_agent = 'pybliometrics-v' + __version__
 
 errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           403: exception.Scopus403Error, 404: exception.Scopus404Error,
