@@ -1,3 +1,4 @@
+pbr
 sphinx==3.4.3
 sphinx_autodoc_typehints==1.12.0
 sphinx_autodoc_defaultargs==0.1.2
