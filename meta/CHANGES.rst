@@ -3,6 +3,14 @@ Change Log
 
 .. toctree::
 
+3.5.1
+~~~~~
+
+2023-04-04
+
+* Fix bug related to installation files.
+* Use `importlib` to generate version (except for Sphinx).
+
 3.5.0
 ~~~~~
 
