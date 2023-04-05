@@ -28,10 +28,9 @@ project = 'pybliometrics'
 author = 'Michael E. Rose and John Kitchin'
 copyright = f"2017-{date.today().year} {author}"
 
-from pbr.version import VersionInfo
+import pybliometrics
 
-_v = VersionInfo('pybliometrics').semantic_version()
-version = _v.release_string()
+version = pybliometrics.__version__
 
 language = 'en'
 
