@@ -9,6 +9,12 @@ maintainers = [{name = "Michael E. Rose", email = "Michael.Ernst.Rose@gmail.com"
 description = "Python-based API-Wrapper to access Scopus"
 readme = "README.rst"
 license = {text = "MIT"}
+dependencies = [
+    "requests",
+    "urllib3",
+    "simplejson",
+    "tqdm"
+]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
