@@ -11,8 +11,8 @@ readme = "README.rst"
 license = {text = "MIT"}
 dependencies = [
     "requests",
+    "tqdm",
     "urllib3",
-    "tqdm"
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -29,7 +29,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Information Analysis",
 ]
 keywords = ["scopus"]
-dynamic = ["version", "dependencies"]
+dynamic = ["version"]
 
 [project.urls]
 Homepage = "https://github.com/pybliometrics-dev/pybliometrics"
