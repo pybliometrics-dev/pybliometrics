@@ -58,8 +58,6 @@ def get_content(url, api, params=None, **kwds):
     from random import shuffle
     from time import sleep, time
 
-    from simplejson import JSONDecodeError
-
     from pybliometrics.scopus.utils.startup import _throttling_params, KEYS
 
     # Set header, params and proxy
@@ -110,7 +108,7 @@ def get_content(url, api, params=None, **kwds):
         error_type = errors[resp.status_code]
         try:
             reason = resp.json()['service-error']['status']['statusText']
-        except (JSONDecodeError, KeyError):
+        except KeyError:
             try:
                 reason = resp.json()['message']
             except:

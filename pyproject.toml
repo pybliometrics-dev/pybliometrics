@@ -12,7 +12,6 @@ license = {text = "MIT"}
 dependencies = [
     "requests",
     "urllib3",
-    "simplejson",
     "tqdm"
 ]
 classifiers = [
