@@ -11,8 +11,8 @@ readme = "README.rst"
 license = {text = "MIT"}
 dependencies = [
     "requests",
-    "urllib3",
-    "tqdm"
+    "tqdm",
+    "urllib3"
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
