@@ -3,6 +3,14 @@ Change Log
 
 .. toctree::
 
+3.5.2
+~~~~~
+
+2023-04-22
+
+* Drop simpleJSON code and dependency.
+* Fix bug related to wrong dependency declaration.
+
 3.5.1
 ~~~~~
 
