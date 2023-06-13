@@ -353,12 +353,26 @@ class AbstractRetrieval(Retrieval):
             return tuple((i['$'] for i in isbns))
 
     @property
-    def issn(self) -> Optional[str]:
-        """ISSN belonging to the publicationName.
-        Note: If E-ISSN is known to Scopus, this returns both
-        ISSN and E-ISSN in random order separated by blank space.
+    def issn(self) -> Optional[List[Tuple[str, str]]]:
+        """List of namedtuples Optional[List[Tuple[str, str]]] in the form 
+        (issn, type).
+        Note: The ISSN type is only available in the FULL view.  As a fallback, 
+        the ISSN and E-ISSN values will be returned in random order as tuples 
+        in the same form where type = None.
         """
-        return chained_get(self._json, ['coredata', 'prism:issn'])
+        full = chained_get(self._head, ['source', 'issn'])
+        fields = 'issn type'
+        issn = namedtuple('ISSN', fields)
+        # Return information from the FULL view, fall back to other views
+        if full is None:
+            issns = chained_get(self._json, ['coredata', 'prism:issn'])
+            try:
+                return list(issn(i, None) for i in issns.split(' '))
+            except AttributeError: # issn is None
+                return issns
+        else:
+            issns = listify(full)
+            return list(issn(i['$'], i['@type']) for i in issns)
 
     @property
     def identifier(self) -> int:
