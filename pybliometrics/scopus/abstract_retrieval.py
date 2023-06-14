@@ -299,7 +299,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def endingPage(self) -> Optional[str]:
-        """Ending page. If this is empty, try `.pageRange` instead."""
+        """Ending page. If this is empty, try `pageRange` property instead."""
         # Try coredata first, fall back to head afterwards
         ending = chained_get(self._json, ['coredata', 'prism:endingPage'])
         if not ending:
@@ -409,7 +409,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def pageRange(self) -> Optional[str]:
-        """Page range.  If this is empty, try `.startingPage` and
+        """Page range.  If this is empty, try `startingPage` property and
         .endingPage instead.
         """
         # Try data from coredata first, fall back to head afterwards
@@ -596,7 +596,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def startingPage(self) -> Optional[str]:
-        """Starting page.  If this is empty, try `.pageRange` instead."""
+        """Starting page.  If this is empty, try `pageRange` property instead."""
         # Try coredata first, fall back to bibrecord afterwards
         starting = chained_get(self._json, ['coredata', 'prism:startingPage'])
         if not starting:
