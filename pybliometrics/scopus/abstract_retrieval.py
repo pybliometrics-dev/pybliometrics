@@ -11,7 +11,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def abstract(self) -> Optional[str]:
         """The abstract of a document.
-        Note: If this is empty, try property description instead.
+        Note: If this is empty, try `description` property instead.
         """
         return self._head.get('abstracts')
 
@@ -271,8 +271,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def date_created(self) -> Optional[Tuple[int, int, int]]:
-        """Return the description of a record.
-        Note: If this is empty, try property abstract instead.
+        """Return the `date_created` of a record.
         """
         path = ["item", "bibrecord", "item-info", "history"]
         d = chained_get(self._json, path, {})
@@ -284,7 +283,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def description(self) -> Optional[str]:
         """Return the description of a record.
-        Note: If this is empty, try property abstract instead.
+        Note: If this is empty, try `abstract` property instead.
         """
         return chained_get(self._json, ['coredata', 'dc:description'])
 
@@ -300,7 +299,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def endingPage(self) -> Optional[str]:
-        """Ending page. If this is empty, try .pageRange instead."""
+        """Ending page. If this is empty, try `.pageRange` instead."""
         # Try coredata first, fall back to head afterwards
         ending = chained_get(self._json, ['coredata', 'prism:endingPage'])
         if not ending:
@@ -410,7 +409,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def pageRange(self) -> Optional[str]:
-        """Page range.  If this is empty, try .startingPage and
+        """Page range.  If this is empty, try `.startingPage` and
         .endingPage instead.
         """
         # Try data from coredata first, fall back to head afterwards
@@ -597,7 +596,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def startingPage(self) -> Optional[str]:
-        """Starting page.  If this is empty, try .pageRange instead."""
+        """Starting page.  If this is empty, try `.pageRange` instead."""
         # Try coredata first, fall back to bibrecord afterwards
         starting = chained_get(self._json, ['coredata', 'prism:startingPage'])
         if not starting:
