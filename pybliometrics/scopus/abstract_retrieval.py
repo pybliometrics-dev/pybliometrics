@@ -409,8 +409,8 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def pageRange(self) -> Optional[str]:
-        """Page range.  If this is empty, try `startingPage` property and
-        .endingPage instead.
+        """Page range.  If this is empty, try `startingPage` and
+        `endingPage` properties instead.
         """
         # Try data from coredata first, fall back to head afterwards
         pages = chained_get(self._json, ['coredata', 'prism:pageRange'])
