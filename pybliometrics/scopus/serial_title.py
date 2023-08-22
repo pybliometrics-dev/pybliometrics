@@ -22,15 +22,16 @@ class SerialTitle(Retrieval):
         """
         try:
             d = self._entry['citeScoreYearInfoList']
-        except KeyError:
+            current = (int(d['citeScoreCurrentMetricYear']),
+                    float(d['citeScoreCurrentMetric']))
+        except (KeyError, TypeError):
             return None
-        current = (int(d['citeScoreCurrentMetricYear']),
-                   float(d['citeScoreCurrentMetric']))
-        tracker = (d['citeScoreTrackerYear'], d['citeScoreTracker'])
+        
         try:
+            tracker = (d['citeScoreTrackerYear'], d['citeScoreTracker'])
             tracker = (int(tracker[0]), float(tracker[1]))
-        except TypeError:
-            pass
+        except (KeyError, TypeError):
+            tracker = (None, None)
         return [current, tracker]
 
     @property
