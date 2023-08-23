@@ -15,22 +15,32 @@ class SerialTitle(Retrieval):
     @property
     def citescoreyearinfolist(self) -> Optional[List[Tuple[int, float, None]]]:
         """A list of two tuples of the form (year, cite-score).  The first
-        tuple represents the current cite-score, the second tuple
+        tuple represents the current cite-score, the second tuple, if present,
         represents the tracker cite-score.  For discontinued sources, there 
-        is no tracker cite-score, and the second tuple is (None, None).  See
+        is no tracker cite-score, and the second tuple is just None.  See
         https://service.elsevier.com/app/answers/detail/a_id/30562/supporthub/scopus/.
         """
+        def create_tuple(d, mode):
+            t = [d[f'citeScore{mode}Year'], d[f'citeScore{mode}']]
+            try:
+                t[0] = int(t[0])
+            except TypeError:  # year empty
+                return None
+            t[1] = float(t[1]) if t[1] else t[1]
+            return tuple(t)
+
         try:
             d = self._entry['citeScoreYearInfoList']
         except KeyError:
             return None
-        current = (int(d['citeScoreCurrentMetricYear']),
-                   float(d['citeScoreCurrentMetric']))
-        tracker = (d['citeScoreTrackerYear'], d['citeScoreTracker'])
         try:
-            tracker = (int(tracker[0]), float(tracker[1]))
-        except TypeError:
-            pass
+            current = create_tuple(d, "CurrentMetric")
+        except KeyError:
+            current = None
+        try:
+            tracker = create_tuple(d, "CurrentTracker")
+        except KeyError:
+            tracker = None
         return [current, tracker]
 
     @property
