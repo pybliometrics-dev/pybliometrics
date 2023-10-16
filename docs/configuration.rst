@@ -56,9 +56,8 @@ If you need to use a proxy, please edit the file manually to include a section t
 .. code-block:: none
 
     [Proxy]
-    ftp = socks5://127.0.0.1:1234
-    http = socks5://127.0.0.1:1234
-    https = socks5://127.0.0.1:1234
+    http = http://127.0.0.1:1234
+    https = https://127.0.0.1:1234
 
 
 The presence of this information will make use of the proxy.  Be sure to remove or comment out the block when you don't want to use a proxy.
@@ -76,7 +75,7 @@ You can easily inspect configuration values at runtime, and even set some during
     from pybliometrics.scopus.utils import config
 
     print(config['Authentication']['APIKey'])  # Show keys
-    config['Proxy']['ftp'] = 'socks5://localhost:8080'  # Redefine proxy
+    config['Proxy']['https'] = 'https://127.0.0.1:1234'  # Redefine proxy
 
 Setting the keys at runtime is however not possible.
 
