@@ -25,8 +25,6 @@ ab7 = AbstractRetrieval("2-s2.0-85050253030", view="FULL", refresh=30)
 ab8 = AbstractRetrieval("2-s2.0-84951753303", view="REF", refresh=30)
 # Collaboration
 ab9 = AbstractRetrieval("2-s2.0-85097473741", view="FULL", refresh=30)
-# ISSN Fallback
-ab10 = AbstractRetrieval("2-s2.0-85144468231", view="META", refresh=30)
 
 
 def test_abstract():
@@ -308,21 +306,13 @@ def test_isbn():
 
 
 def test_issn():
-    issn = namedtuple('ISSN', 'issn type')
-    assert_equal(ab1.issn, issn('21555435', 'print'))
-    received1 = ab3.issn
-    assert_true(isinstance(received1, list))
-    expected1 = issn('03425843', 'print')
-    expected2 = issn('15730700', 'electronic')
-    assert_true(expected1 in received1)
-    assert_true(expected2 in received1)
+    issn = namedtuple('ISSN', 'print electronic')
+    expected1 = issn(print='21555435', electronic=None)
+    assert_equal(ab1.issn, expected1)
+    expected3 = issn(print='03425843', electronic='15730700')
+    assert_equal(ab3.issn, expected3)
     assert_equal(ab5.issn, None)
     assert_equal(ab8.issn, None)
-    received2 = ab10.issn
-    expected3 = issn('24739537', None)
-    expected4 = issn('24739529', None)
-    assert_true(expected3 in received2)
-    assert_true(expected4 in received2)
 
 
 def test_identifier():

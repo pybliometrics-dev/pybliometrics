@@ -1,4 +1,4 @@
-from collections import namedtuple
+from collections import defaultdict, namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
@@ -352,26 +352,39 @@ class AbstractRetrieval(Retrieval):
             return tuple((i['$'] for i in isbns))
 
     @property
-    def issn(self) -> Optional[List[Tuple[str, str]]]:
-        """List of namedtuples Optional[List[Tuple[str, str]]] in the form 
-        (issn, type).
-        Note: The ISSN type is only available in the FULL view.  As a fallback, 
-        the ISSN and E-ISSN values will be returned in random order as tuples 
-        in the same form where type = None.
+    def issn(self) -> Optional[NamedTuple]:
+        """Namedtuple in the form (print electronic).
+        Note: If the source has an E-ISSN, the META view will return None.
+        Use FULL view instead.
         """
-        full = chained_get(self._head, ['source', 'issn'])
-        fields = 'issn type'
-        issn = namedtuple('ISSN', fields)
-        # Return information from the FULL view, fall back to other views
-        if full is None:
-            issns = chained_get(self._json, ['coredata', 'prism:issn'])
+        container = defaultdict(lambda: None)
+        # Parse information from head (from FULL view)
+        info = listify(chained_get(self._head, ['source', 'issn'], []))
+        for t in info:
             try:
-                return list(issn(i, None) for i in issns.split(' '))
-            except AttributeError: # issn is None
-                return issns
+                container[t["@type"]] = t["$"]
+            except TypeError:
+                container["print"] = t
+        # Parse information from coredata as fallback
+        fallback = chained_get(self._json, ['coredata', 'prism:issn'])
+        if fallback and len(container) < 2:
+            parts = fallback.split()
+            if len(parts) == 2:
+                if len(container) == 1:
+                    for n, o in (("electronic", "print"), ("print", "electronic")):
+                        if n not in container:
+                            container[n] = [p for p in parts if p != container[o]]
+                else:
+                    # no way to find out which is which
+                    pass
+            else:
+                container["print"] = parts[0]
+        # Finalize
+        issns = namedtuple('ISSN', 'print electronic', defaults=(None, None))
+        if not container:
+            return None
         else:
-            issns = listify(full)
-            return list(issn(i['$'], i['@type']) for i in issns)
+            return issns(**container)
 
     @property
     def identifier(self) -> int:
