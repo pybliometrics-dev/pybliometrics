@@ -134,12 +134,6 @@ class CitationOverview(Retrieval):
         return int(self._citeCountHeader["prevColumnTotal"])
 
     @property
-    def publicationName(self) -> Optional[List[Optional[str]]]:
-        """Name of source the documents are published in (e.g. the Journal)."""
-        out = [e.get('publicationName') for e in self._citeInfoMatrix]
-        return _maybe_return_list(out)
-
-    @property
     def rangeColumnTotal(self) -> int:
         """The total number of citations for all specified years for all
         documents combined.
@@ -166,6 +160,12 @@ class CitationOverview(Retrieval):
         ones provided.
         """
         return [int(e['scopus_id']) for e in self._identifierlegend]
+
+    @property
+    def sortTitle(self) -> Optional[List[Optional[str]]]:
+        """Name of source the documents are published in (e.g. the Journal)."""
+        out = [e.get('sortTitle') for e in self._citeInfoMatrix]
+        return _maybe_return_list(out)
 
     @property
     def startingPage(self) -> Optional[List[Optional[str]]]:

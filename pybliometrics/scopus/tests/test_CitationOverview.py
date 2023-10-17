@@ -104,12 +104,6 @@ def prevColumnTotal():
     assert_equal(co_doi.prevColumnTotal, 0)
 
 
-def test_publicationName():
-    expected = ['SoftwareX', 'ACS Catalysis']
-    assert_equal(co_eid.publicationName, expected)
-    assert_equal(co_doi.publicationName, [expected[0]])
-
-
 def test_rangeColumnTotal():
     assert_equal(co_eid.rangeColumnTotal, 19)
     assert_equal(co_doi.rangeColumnTotal, 6)
@@ -136,6 +130,12 @@ def test_scopus_id():
 def test_startingPage():
     assert_equal(co_eid.startingPage, [None, '3894'])
     assert_equal(co_doi.startingPage, None)
+
+
+def test_sortTitle():
+    expected = ['SoftwareX', 'ACS Catalysis']
+    assert_equal(co_eid.sortTitle, expected)
+    assert_equal(co_doi.sortTitle, [expected[0]])
 
 
 def test_title():
