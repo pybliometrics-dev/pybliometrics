@@ -20,7 +20,7 @@ def test_aggregation_type():
 
 
 def test_citescoreyearinfolist():
-    expected1 = [(2021, 4.1), (2022, 5.0)]
+    expected1 = [(2022, 5.1), None]
     assert_equal(sofwarex.citescoreyearinfolist, expected1)
     assert_equal(oecd.citescoreyearinfolist, None)
 
@@ -94,12 +94,12 @@ def test_self_link():
     assert_equal(oecd.self_link, expected2)
 
 def test_sjrlist():
-    assert_equal(sofwarex.sjrlist, [(2021, 0.644)])
+    assert_equal(sofwarex.sjrlist, [(2022, 0.574)])
     assert_equal(oecd.sjrlist, [(1999, 2.723)])
 
 
 def test_sniplist():
-    assert_equal(sofwarex.sniplist, [(2021, 1.458)])
+    assert_equal(sofwarex.sniplist, [(2022, 1.426)])
     assert_equal(oecd.sniplist, None)
 
 
@@ -111,8 +111,8 @@ def test_source_id():
 def test_subject_area():
     area = namedtuple('Subjectarea', 'area abbreviation code')
     expected1 = [
-        area(area='Computer Science Applications', abbreviation='COMP', code=1706),
-        area(area='Software', abbreviation='COMP', code=1712)
+        area(area='Software', abbreviation='COMP', code=1712),
+        area(area='Computer Science Applications', abbreviation='COMP', code=1706)
     ]
     assert_equal(sofwarex.subject_area, expected1)
     expected2 = [
@@ -132,9 +132,9 @@ def test_yearly_data():
     fields = 'year publicationcount revpercent zerocitessce '\
              'zerocitespercentsce citecountsce'
     dat = namedtuple('Yearlydata', fields)
-    expected1_2020 = dat(year=2020, publicationcount=163, revpercent=0.0,
-        zerocitessce=16, zerocitespercentsce=9.815950920245398774,
-        citecountsce=2554)
+    expected1_2020 = dat(year=2020, publicationcount=164, revpercent=0.0,
+        zerocitessce=10, zerocitespercentsce=6.097560975609756,
+        citecountsce=2567)
     assert_equal(sofwarex.yearly_data[24], expected1_2020)
     expected2_1996 = dat(year=1996, publicationcount=4, revpercent=0.0,
         zerocitessce=0, zerocitespercentsce=0, citecountsce=33)
