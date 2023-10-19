@@ -14,7 +14,7 @@ class CitationOverview(Retrieval):
         """A list of lists of namedtuples storing author information,
         where each namedtuple corresponds to one author and each sub-list to
         one document.
-        The information in each namedtuple is (name surname initials id url).
+        The information in each namedtuple is `(name surname initials id url)`.
         All entries are strings.
         """
         outer = []
@@ -24,7 +24,8 @@ class CitationOverview(Retrieval):
             inner = []
             for author in doc.get('author', []):
                 author = {k.split(":", 1)[-1]: v for k, v in author.items()}
-                new = auth(name=author.get('index-name'), id=author['authid'],
+                new = auth(name=author.get('index-name'),
+                           id=author['authid'],
                            surname=author.get('surname'),
                            initials=author.get('initials'),
                            url=author.get('author-url'))
@@ -199,9 +200,9 @@ class CitationOverview(Retrieval):
                  citation: Optional[str] = None,
                  **kwds: str
                  ) -> None:
-        """Interaction witht the Citation Overview API.
+        """Interaction with the Citation Overview API.
 
-        :param identifier: Up to 25 identifiers for which  to look up
+        :param identifier: Up to 25 identifiers for which to look up
                            citations.  Must be Scopus IDs, DOIs, PIIs or
                            Pubmed IDs.
         :param start: The first year for which the citation count should
@@ -209,7 +210,7 @@ class CitationOverview(Retrieval):
         :param end: The last year for which the citation count should be
                     loaded. Defaults to the current year.
         :param id_type: The type of the IDs provided in `identifier`.  Must be
-                        one of "scopus_id", "doi", "pii", "pubmed_id".
+                        one of `"scopus_id", "doi", "pii", "pubmed_id"`.
         :param eid: (deprecated) The Scopus ID of the abstract - will be
                     removed in a future release: Instead use param `scopus_id`
                     after stripping the part until the second hyphen.  If you
@@ -220,7 +221,7 @@ class CitationOverview(Retrieval):
                         number of days since last modification exceeds that value.
         :param citation: Allows for the exclusion of self-citations or those
                          by books.  If `None`, will count all citations.
-                         Allowed values: None, exclude-self, exclude-books
+                         Allowed values: `None, exclude-self, exclude-books`
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl.
