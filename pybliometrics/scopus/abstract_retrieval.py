@@ -112,7 +112,7 @@ class AbstractRetrieval(Retrieval):
     def authors(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the article's authors, in the
         form `(auid, indexed_name, surname, given_name, affiliation)`.  In case
-        multiple affiliation IDs are given, they are joined on ";".
+        multiple affiliation IDs are given, they are joined on `";"`.
         Note: The affiliation referred to here is what Scopus' algorithm
         determined as the main affiliation.  Property `authorgroup` provides
         all affiliations.
