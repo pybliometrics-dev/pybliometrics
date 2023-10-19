@@ -9,7 +9,7 @@ class SubjectClassifications(Search):
     @property
     def results(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing results of subject
-        classifications search in the form (code, description, detail, abbrev).
+        classifications search in the form `(code, description, detail, abbrev)`.
         """
         out = []
         path = ['subject-classifications', 'subject-classification']
@@ -38,15 +38,15 @@ class SubjectClassifications(Search):
         """Interaction with the Subject Classifications Scopus API.
 
         :param query: Query parameters and corresponding fields. Allowed keys
-                      'code', 'abbrev', 'description', 'detail'. For more
+                      `'code'`, `'abbrev'`, `'description'`, `'detail'`. For more
                       details on search fields please refer to
                       https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl#d1e199.
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param fields: The fields to return when calling search results.
-                       Allowed values: 'code', 'abbrev', 'description',
-                       'detail'.  For details see
+                       Allowed values: `'code'`, `'abbrev'`, `'description'`,
+                       `'detail'`.  For details see
                        https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl#d1e199.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
@@ -66,7 +66,7 @@ class SubjectClassifications(Search):
         The directory for cached results is `{path}/{fname}`,
         where `path` is specified in your configuration file, and `fname` is
         the md5-hashed version of `query` dict turned into string in format
-        of 'key=value' delimited by '&'.
+        of `'key=value'` delimited by `'&'`.
         """
         # Checks
         allowed_query_keys = ('code', 'description', 'detail', 'abbrev')
