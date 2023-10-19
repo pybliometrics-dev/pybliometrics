@@ -57,7 +57,7 @@ class AffiliationRetrieval(Retrieval):
 
     @property
     def name_variants(self) -> List[NamedTuple]:
-        """A list of namedtuples representing variants of the affiliation name
+        """A list of namedtuples representing variants of the `affiliation_name`
         with number of documents referring to this variant.
         """
         variant = namedtuple('Variant', 'name doc_count')
@@ -73,7 +73,7 @@ class AffiliationRetrieval(Retrieval):
     @property
     def org_type(self) -> Optional[str]:
         """Type of the affiliation.  Requires the STANDARD view and only
-        present if profile is org profile.
+        present if `profile` is `org profile`.
         """
         return self._profile.get('org-type')
 
@@ -138,10 +138,10 @@ class AffiliationRetrieval(Retrieval):
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param view: The view of the file that should be downloaded.  Allowed
-                     values: LIGHT, STANDARD, where STANDARD includes all
-                     information of the LIGHT view.  For details see
+                     values: `LIGHT`, `STANDARD`, where `STANDARD` includes all
+                     information of the `LIGHT` view.  For details see
                      https://dev.elsevier.com/sc_affil_retrieval_views.html.
-                     Note: Neither the BASIC view nor DOCUMENTS or AUTHORS
+                     Note: Neither the `BASIC` view nor `DOCUMENTS` or `AUTHORS`
                      views are active, although documented.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
