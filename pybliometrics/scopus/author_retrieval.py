@@ -16,9 +16,9 @@ class AuthorRetrieval(Retrieval):
     @property
     def affiliation_current(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the authors's current
-        affiliation(s), in the form (id parent type relationship afdispname
+        affiliation(s), in the form `(id parent type relationship afdispname
         preferred_name parent_preferred_name country_code country address_part
-        city state postal_code org_domain org_URL).
+        city state postal_code org_domain org_URL)`.
         Note: Affiliation information might be missing or mal-assigned even
         when it lookes correct in the web view.  In this case please request
         a correction.
@@ -29,9 +29,9 @@ class AuthorRetrieval(Retrieval):
     @property
     def affiliation_history(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the authors's historical
-        affiliation(s), in the form (id parent type relationship afdispname
+        affiliation(s), in the form `(id parent type relationship afdispname
         preferred_name parent_preferred_name country_code country address_part
-        city state postal_code org_domain org_URL).
+        city state postal_code org_domain org_URL)`.
         Note: Affiliation information might be missing or mal-assigned even
         when it lookes correct in the web view.  In this case please request
         a correction.
@@ -61,7 +61,7 @@ class AuthorRetrieval(Retrieval):
 
     @property
     def classificationgroup(self) -> Optional[List[Tuple[int, int]]]:
-        """List with (subject group ID, number of documents)-tuples."""
+        """List with tuples with form`(subject group ID, number of documents)`."""
         path = ['classificationgroup', 'classifications', 'classification']
         out = [(int(filter_digits(item['$'])), int(filter_digits(item['@frequency']))) for item in
            listify(chained_get(self._profile, path, []))]
@@ -185,7 +185,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def subject_areas(self) -> Optional[List[NamedTuple]]:
         """List of named tuples of subject areas in the form
-        (area, abbreviation, code) of author's publication.
+        `(area, abbreviation, code)` of author's publication.
         """
         path = ['subject-areas', 'subject-area']
         area = namedtuple('Subjectarea', 'area abbreviation code')
@@ -217,11 +217,11 @@ class AuthorRetrieval(Retrieval):
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param view: The view of the file that should be downloaded.  Allowed
-                     values: METRICS, LIGHT, STANDARD, ENHANCED, where STANDARD
-                     includes all information of LIGHT view and ENHANCED
+                     values: `METRICS`, `LIGHT`, `STANDARD`, `ENHANCED`, where `STANDARD`
+                     includes all information of `LIGHT` view and `ENHANCED`
                      includes all information of any view.  For details see
                      https://dev.elsevier.com/sc_author_retrieval_views.html.
-                     Note: Neither the BASIC nor the DOCUMENTS view are active,
+                     Note: Neither the `BASIC` nor the `DOCUMENTS` view are active,
                      although documented.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
@@ -281,8 +281,8 @@ class AuthorRetrieval(Retrieval):
     def get_coauthors(self) -> Optional[List[NamedTuple]]:
         """Retrieves basic information about co-authors as a list of
         namedtuples in the form
-        (surname, given_name, id, areas, affiliation_id, name, city, country),
-        where areas is a list of subject area codes joined by "; ".
+        `(surname, given_name, id, areas, affiliation_id, name, city, country)`,
+        where areas is a list of subject area codes joined by `"; "`.
         Note: Method retrieves information via individual queries which will
         not be cached.  The Scopus API returns 160 coauthors at most.
         """
@@ -327,12 +327,12 @@ class AuthorRetrieval(Retrieval):
                       subtypes: List[str] = None,
                       *args: str, **kwds: str
                       ) -> Optional[List[NamedTuple]]:
-        """Return list of the author's publications using a ScopusSearch()
+        """Return list of the author's publications using a `ScopusSearch()`
         query, where publications may fit a specified set of document subtypes.
 
         :param subtypes: The type of documents that should be returned.
-        :param args: Parameters to be passed on to ScopusSearch().
-        :param kwds: Parameters to be passed on to ScopusSearch().
+        :param args: Parameters to be passed on to `ScopusSearch()`.
+        :param kwds: Parameters to be passed on to `ScopusSearch()`.
 
         Note: To update these results, use `refresh`; the class' `refresh`
         parameter is not used here.
@@ -349,8 +349,8 @@ class AuthorRetrieval(Retrieval):
         """Return list of EIDs of the author's publications using
         a ScopusSearch() query.
 
-        :param args: Parameters to be passed on to ScopusSearch().
-        :param kwds: Parameters to be passed on to ScopusSearch().
+        :param args: Parameters to be passed on to `ScopusSearch()`.
+        :param kwds: Parameters to be passed on to `ScopusSearch()`.
 
         Note: To update these results, use `refresh`; the class' `refresh`
         parameter is not used here.
@@ -364,16 +364,16 @@ class AuthorRetrieval(Retrieval):
                             **kwds: str
                             ) -> int:
         """Return the number of Scopus author profiles similar to this profile
-        via calls with AuthorSearch().
+        via calls with `AuthorSearch()`.
 
         :param query: The query string to perform to search for authors.  If
-                      `None`, the query is of form "AUTHLAST() AND AUTHFIRST()"
+                      `None`, the query is of form `"AUTHLAST() AND AUTHFIRST()"`
                       with the corresponding information included.  Provided
-                      queries may include "SUBJAREA()" OR "AF-ID() AND
-                      SUBJAREA()".  For details see
+                      queries may include `"SUBJAREA()" OR "AF-ID() AND
+                      SUBJAREA()"`.  For details see
                       https://dev.elsevier.com/tips/AuthorSearchTips.htm.
-        :param args: Parameters to be passed on to AuthorSearch().
-        :param kwds: Parameters to be passed on to AuthorSearch().
+        :param args: Parameters to be passed on to `AuthorSearch()`.
+        :param kwds: Parameters to be passed on to `AuthorSearch()`.
         """
         if not query:
             query = f"AUTHLAST({self.surname}) AND AUTHFIRST({self.given_name})"
