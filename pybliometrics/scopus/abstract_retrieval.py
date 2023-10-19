@@ -18,7 +18,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def affiliation(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing listed affiliations in
-        the form (id, name, city, country).
+        the form `(id, name, city, country)`.
         """
         out = []
         aff = namedtuple('Affiliation', 'id name city country')
@@ -50,10 +50,10 @@ class AbstractRetrieval(Retrieval):
     @property
     def authorgroup(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the article's authors organized
-        by affiliation, in the form (affiliation_id, dptid, organization,
+        by affiliation, in the form `(affiliation_id, dptid, organization,
         city, postalcode, addresspart, country, collaboration, auid, orcid,
-        indexed_name, surname, given_name).
-        If "given_name" is not present, fall back to initials.
+        indexed_name, surname, given_name)`.
+        If `given_name` is not present, fall back to initials.
         Note: Affiliation information might be missing or mal-assigned even
         when it looks correct in the web view.  In this case please request
         a correction.  It is generally missing for collaborations.
@@ -111,7 +111,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def authors(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing the article's authors, in the
-        form (auid, indexed_name, surname, given_name, affiliation).  In case
+        form `(auid, indexed_name, surname, given_name, affiliation)`.  In case
         multiple affiliation IDs are given, they are joined on ";".
         Note: The affiliation referred to here is what Scopus' algorithm
         determined as the main affiliation.  Property `authorgroup` provides
@@ -146,8 +146,8 @@ class AbstractRetrieval(Retrieval):
     @property
     def chemicals(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples representing chemical entities in the form
-        (source, chemical_name, cas_registry_number).  In case multiple
-        numbers given, they are joined on ";".
+        `(source, chemical_name, cas_registry_number)`.  In case multiple
+        numbers given, they are joined on `";"`.
         """
         path = ['enhancement', 'chemicalgroup', 'chemicals']
         items = listify(chained_get(self._head, path, []))
@@ -209,7 +209,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def contributor_group(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples representing contributors compiled by Scopus,
-        in the form (given_name, initials, surname, indexed_name, role).
+        in the form `(given_name, initials, surname, indexed_name, role)`.
         """
         path = ['source', 'contributor-group']
         items = listify(chained_get(self._head, path, []))
@@ -240,8 +240,8 @@ class AbstractRetrieval(Retrieval):
     @property
     def correspondence(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples representing the authors to whom correspondence
-        should be addressed, in the form (surname, initials, organization,
-        country, city_group). Multiple organziations are joined on semicolon.
+        should be addressed, in the form ´(surname, initials, organization,
+        country, city_group)´. Multiple organziations are joined on semicolon.
         """
         fields = 'surname initials organization country city_group'
         auth = namedtuple('Correspondence', fields)
@@ -310,7 +310,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def funding(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples parsed funding information in the form
-        (agency, agency_id, string, funding_id, acronym, country).
+        `(agency, agency_id, string, funding_id, acronym, country)`.
         """
 
         def _get_funding_id(f_dict: dict) -> list:
@@ -343,7 +343,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def isbn(self) -> Optional[Tuple[str, ...]]:
-        """ISBNs Optional[str] to publicationName as tuple of variying length,
+        """ISBNs `Optional[str]` to publicationName as tuple of variying length,
         (e.g. ISBN-10 or ISBN-13)."""
         isbns = listify(chained_get(self._head, ['source', 'isbn'], []))
         if len(isbns) == 0:
@@ -353,7 +353,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def issn(self) -> Optional[List[Tuple[str, str]]]:
-        """List of namedtuples Optional[List[Tuple[str, str]]] in the form 
+        """List of namedtuples `Optional[List[Tuple[str, str]]]` in the form 
         (issn, type).
         Note: The ISSN type is only available in the FULL view.  As a fallback, 
         the ISSN and E-ISSN values will be returned in random order as tuples 
@@ -482,9 +482,9 @@ class AbstractRetrieval(Retrieval):
     @property
     def references(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples representing references listed in the document,
-        in the form (position, id, doi, title, authors, authors_auid,
+        in the form `(position, id, doi, title, authors, authors_auid,
         authors_affiliationid, sourcetitle, publicationyear, coverDate, volume,
-        issue, first, last, citedbycount, type, text, fulltext).
+        issue, first, last, citedbycount, type, text, fulltext)`.
 
         `position` is the number at which the reference appears in the
         document, `id` is the Scopus ID of the referenced document (EID
@@ -574,7 +574,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def sequencebank(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples representing biological entities defined or
-        mentioned in the text, in the form (name, sequence_number, type).
+        mentioned in the text, in the form `(name, sequence_number, type)`.
         """
         path = ['enhancement', 'sequencebanks', 'sequencebank']
         items = listify(chained_get(self._head, path, []))
@@ -621,7 +621,7 @@ class AbstractRetrieval(Retrieval):
     @property
     def subject_areas(self) -> Optional[List[NamedTuple]]:
         """List of namedtuples containing subject areas of the article
-        in the form (area abbreviation code).
+        in the form `(area abbreviation code)`.
         Note: Requires the FULL view of the article.
         """
         area = namedtuple('Area', 'area abbreviation code')
