@@ -11,16 +11,16 @@ class AffiliationSearch(Search):
     def affiliations(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples storing affiliation information,
         where each namedtuple corresponds to one affiliation.
-        The information in each namedtuple is (eid name variant documents city
-        country parent).
+        The information in each namedtuple is `(eid name variant documents city
+        country parent)`.
 
-        All entries are strings or None.  Field "variant" combines variants
-        of names with a semicolon.
+        All entries are `strings` or `None`.  Field `variant` combines variants
+        of names with a `";"`.
 
         Raises
         ------
-        ValueError
-            If the elements provided in integrity_fields do not match the
+        `ValueError`
+            If the elements provided in `integrity_fields` do not match the
             actual field names (listed above).
         """
         # Initiate namedtuple with ordered list of fields
@@ -63,7 +63,7 @@ class AffiliationSearch(Search):
         :param download: Whether to download results (if they have not been
                          cached).
         :param integrity_fields: Names of fields whose completeness should
-                                 be checked.  AffiliationSearch will perform
+                                 be checked.  `AffiliationSearch` will perform
                                  the action specified in `integrity_action`
                                  if elements in these fields are missing.
                                  This helps avoiding idiosynchratically missing
@@ -71,8 +71,8 @@ class AffiliationSearch(Search):
                                  (e.g. EID or name).
         :param integrity_action: What to do in case integrity of provided fields
                                  cannot be verified.  Possible actions:
-                                 - "raise": Raise an AttributeError
-                                 - "warn": Raise a UserWarning
+                                 - `"raise"`: Raise an AttributeError
+                                 - `"warn"`: Raise a UserWarning
         :param count: (deprecated) The number of entries to be displayed at
                       once.  A smaller number means more queries with each
                       query having fewer results.
@@ -82,12 +82,12 @@ class AffiliationSearch(Search):
 
         Raises
         ------
-        ScopusQueryError
+        `ScopusQueryError`
             If the number of search results exceeds 5000, which is the API's
             maximum number of results returned.  The error prevents the
             download attempt and avoids making use of your API key.
 
-        ValueError
+        `ValueError`
             If any of the parameters `integrity_action` or `refresh` is not
             one of the allowed values.
 
