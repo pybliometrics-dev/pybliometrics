@@ -11,16 +11,16 @@ class AuthorSearch(Search):
     def authors(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples storing author information,
         where each namedtuple corresponds to one author.
-        The information in each namedtuple is (eid orcid surname initials givenname
-        documents affiliation affiliation_id city country areas).
+        The information in each namedtuple is `(eid orcid surname initials givenname
+        documents affiliation affiliation_id city country areas)`.
 
-        All entries are strings or None.  Areas combines abbreviated subject
+        All entries are `str` or `None`.  Areas combines abbreviated subject
         areas followed by the number of documents in this subject.
 
         Raises
         ------
         ValueError
-            If the elements provided in integrity_fields do not match the
+            If the elements provided in `integrity_fields` do not match the
             actual field names (listed above).
         """
         # Initiate namedtuple with ordered list of fields
@@ -68,13 +68,13 @@ class AuthorSearch(Search):
         :param query: A string of the query.  For allowed fields and values see
                       https://dev.elsevier.com/sc_author_search_tips.html.
         :param refresh: Whether to refresh the cached file if it exists or not.
-                        If int is passed, cached file will be refreshed if the
+                        If `int` is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param download: Whether to download results (if they have not been
                          cached).
         :param verbose: Whether to print a download progress bar.
         :param integrity_fields: Names of fields whose completeness should
-                                 be checked.  ScopusSearch will perform the
+                                 be checked.  `ScopusSearch` will perform the
                                  action specified in `integrity_action` if
                                  elements in these fields are missing.  This
                                  helps avoiding idiosynchratically missing
@@ -82,8 +82,8 @@ class AuthorSearch(Search):
                                  (e.g., EID or source ID).
         :param integrity_action: What to do in case integrity of provided fields
                                  cannot be verified.  Possible actions:
-                                 - "raise": Raise an AttributeError
-                                 - "warn": Raise a UserWarning
+                                 - `"raise"`: Raise an `AttributeError`
+                                 - `"warn"`: Raise a `UserWarning`
         :param count: (deprecated) The number of entries to be displayed at
                       once.  A smaller number means more queries with each
                       query having fewer results.
