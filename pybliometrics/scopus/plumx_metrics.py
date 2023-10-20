@@ -93,7 +93,6 @@ class PlumXMetrics(Retrieval):
                         - 'elsevierPii'
                         - 'facebookCountUrlId'
                         - 'figshareArticleId'
-                        - 'githubRepoId'
                         - 'isbn'
                         - 'lccn'
                         - 'medwaveId'
@@ -137,13 +136,13 @@ class PlumXMetrics(Retrieval):
         allowed = ('airitiDocId', 'arxivId', 'cabiAbstractId',
                    'citeulikeId', 'digitalMeasuresArtifactId', 'doi',
                    'elsevierId', 'elsevierPii', 'facebookCountUrlId',
-                   'figshareArticleId', 'githubRepoId', 'isbn',
-                   'lccn', 'medwaveId', 'nctId', 'oclc',
-                   'pittEprintDscholarId', 'pmcid', 'pmid', 'redditId',
-                   'repecHandle', 'repoUrl', 'scieloId', 'sdEid',
-                   'slideshareUrlId', 'smithsonianPddrId', 'soundcloudTrackId',
-                   'ssrnId', 'urlId', 'usPatentApplicationId',
-                   'usPatentPublicationId', 'vimeoVideoId', 'youtubeVideoId')
+                   'figshareArticleId', 'isbn', 'lccn', 'medwaveId',
+                   'nctId', 'oclc', 'pittEprintDscholarId', 'pmcid',
+                   'pmid', 'redditId', 'repecHandle', 'repoUrl', 'scieloId',
+                   'sdEid', 'slideshareUrlId', 'smithsonianPddrId',
+                   'soundcloudTrackId', 'ssrnId', 'urlId',
+                   'usPatentApplicationId', 'usPatentPublicationId',
+                   'vimeoVideoId', 'youtubeVideoId')
         check_parameter_value(id_type, allowed, "id_type")
         self._id_type = id_type
         self._identifier = identifier
