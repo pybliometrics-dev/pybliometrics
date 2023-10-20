@@ -7,7 +7,7 @@ from nose.tools import assert_equal, assert_true
 from pybliometrics.scopus import PlumXMetrics
 
 # A published paper. All PlumX Metrics categories are present.
-m1 = PlumXMetrics('2-s2.0-34249753618', 'elsevierId', refresh=30)
+m1 = PlumXMetrics('2-s2.0-85054706190', 'elsevierId', refresh=30)
 # A published paper. No Usage and Social Media metrics.
 m2 = PlumXMetrics('10.2307/2281868', 'doi', refresh=30)
 # A published paper. No PlumX Metrics.
@@ -16,8 +16,8 @@ m3 = PlumXMetrics('2-s2.0-84950369844', 'elsevierId', refresh=30)
 m4 = PlumXMetrics('1507.02672', 'arxivId', refresh=30)
 # A published book. No Social Media metrics.
 m5 = PlumXMetrics('9783540783893', 'isbn', refresh=30)
-# A GitHub repository. No Citation metrics.
-m6 = PlumXMetrics('tensorflow/tensorflow', 'githubRepoId', refresh=30)
+# A SSRN paper. No mention metrics.
+m6 = PlumXMetrics('3320470', 'ssrnId', refresh=30)
 # A YouTube video. No Capture and Citation metrics.
 m7 = PlumXMetrics('dQw4w9WgXcQ', 'youtubeVideoId', refresh=30)
 
@@ -34,13 +34,14 @@ def test_category_totals():
     m4_expected = ['citation', 'mention', 'socialMedia']
     assert_equal(m4_received, m4_expected)
     m6_received = sorted([c.name  for c in m6.category_totals])
-    m6_expected = ['capture', 'citation', 'mention', 'socialMedia', 'usage']
+    m6_expected = ['capture', 'citation', 'socialMedia', 'usage']
     assert_equal(m6_received, m6_expected)
     m7_received = sorted([c.name  for c in m7.category_totals])
     m7_expected = ['mention', 'socialMedia', 'usage']
     assert_equal(m7_received, m7_expected)
     for plumx in (m1, m2, m4, m5, m6, m7):
-        m_fields = set(field for ntup in plumx.category_totals for field in ntup._fields)
+        m_fields = set(field for ntup in plumx.category_totals for
+                       field in ntup._fields)
         assert_equal(m_fields, {'name', 'total'})
         zero_totals = [i.total for i in plumx.category_totals if i.total <= 0]
         assert_equal(zero_totals, [])
@@ -74,8 +75,10 @@ def test_citation():
 
 def test_mention():
     assert_equal(m3.mention, None)
+    assert_equal(m6.mention, None)
     expected = {'name', 'total'}
-    for plumx in (m1, m2, m4, m5, m6, m7):
+    for plumx in (m1, m2, m4, m5, m7):
+        print(plumx)
         assert_true(isinstance(plumx.mention, list))
         assert_true(len(plumx.mention) > 0)
         m_fields = set(field for ntup in plumx.mention for field in ntup._fields)
