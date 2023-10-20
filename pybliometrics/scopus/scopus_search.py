@@ -10,25 +10,25 @@ from pybliometrics.scopus.utils import check_integrity, chained_get,\
 class ScopusSearch(Search):
     @property
     def results(self) -> Optional[List[NamedTuple]]:
-        """A list of namedtuples in the form (eid doi pii pubmed_id title
+        """A list of namedtuples in the form `(eid doi pii pubmed_id title
         subtype subtypeDescription creator afid affilname affiliation_city
         affiliation_country author_count author_names author_ids author_afids
         coverDate coverDisplayDate publicationName issn source_id eIssn
         aggregationType volume issueIdentifier article_number pageRange
         description authkeywords citedby_count openaccess freetoread
-        freetoreadLabel fund_acr fund_no fund_sponsor).
+        freetoreadLabel fund_acr fund_no fund_sponsor)`.
         Field definitions correspond to
         https://dev.elsevier.com/guides/ScopusSearchViews.htm and return the
-        values as-is, except for afid, affilname, affiliation_city,
-        affiliation_country, author_names, author_ids and author_afids:  These
-        information are joined on ";".  In case an author has multiple
-        affiliations, they are joined on "-"
-        (e.g. Author1Aff;Author2Aff1-Author2Aff2).
+        values as-is, except for `afid`, `affilname`, `affiliation_city`,
+        `affiliation_country`, `author_names`, `author_ids` and `author_afids`:  These
+        information are joined on `";"`.  In case an author has multiple
+        affiliations, they are joined on `"-"`
+        (e.g. `Author1Aff;Author2Aff1-Author2Aff2`).
 
         Raises
         ------
         ValueError
-            If the elements provided in integrity_fields do not match the
+            If the elements provided in `integrity_fields` do not match the
             actual field names (listed above).
 
         Notes
@@ -134,14 +134,14 @@ class ScopusSearch(Search):
                         number of days since last modification exceeds that value.
         :param view: Which view to use for the query, see
                      https://dev.elsevier.com/sc_search_views.html.
-                     Allowed values: STANDARD, COMPLETE.  If None, defaults to
-                     COMPLETE if `subscriber=True` and to STANDARD if
+                     Allowed values: `STANDARD`, `COMPLETE`.  If `None`, defaults to
+                     `COMPLETE` if `subscriber=True` and to `STANDARD` if
                      `subscriber=False`.
         :param verbose: Whether to print a download progress bar.
         :param download: Whether to download results (if they have not been
                          cached).
         :param integrity_fields: Names of fields whose completeness should
-                                 be checked.  ScopusSearch will perform the
+                                 be checked.  `ScopusSearch` will perform the
                                  action specified in `integrity_action` if
                                  elements in these fields are missing.  This
                                  helps avoiding idiosynchratically missing
@@ -149,8 +149,8 @@ class ScopusSearch(Search):
                                  (e.g., EID or source ID).
         :param integrity_action: What to do in case integrity of provided fields
                                  cannot be verified.  Possible actions:
-                                 - "raise": Raise an AttributeError
-                                 - "warn": Raise a UserWarning
+                                 - `"raise"`: Raise an `AttributeError`
+                                 - `"warn"`: Raise a `UserWarning`
         :param subscriber: Whether you access Scopus with a subscription or not.
                            For subscribers, Scopus's cursor navigation will be
                            used.  Sets the number of entries in each query

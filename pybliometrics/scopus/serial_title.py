@@ -14,10 +14,10 @@ class SerialTitle(Retrieval):
 
     @property
     def citescoreyearinfolist(self) -> Optional[List[Tuple[int, float, None]]]:
-        """A list of two tuples of the form (year, cite-score).  The first
+        """A list of two tuples of the form `(year, cite-score)`.  The first
         tuple represents the current cite-score, the second tuple, if present,
         represents the tracker cite-score.  For discontinued sources, there 
-        is no tracker cite-score, and the second tuple is just None.  See
+        is no tracker cite-score, and the second tuple is just `None`.  See
         https://service.elsevier.com/app/answers/detail/a_id/30562/supporthub/scopus/.
         """
         def create_tuple(d, mode):
@@ -115,16 +115,16 @@ class SerialTitle(Retrieval):
 
     @property
     def sjrlist(self) -> Optional[List[Tuple[int, float]]]:
-        """The SCImago Journal Rank (SJR) indicator as list of
-        (year, indicator)-tuples.  See
+        """The SCImago Journal Rank (SJR) indicator as list of tuples in the form
+        `(year, indicator)`.  See
         https://www.scimagojr.com/journalrank.php.
         """
         return _parse_list(self._entry, "SJR")
 
     @property
     def sniplist(self) -> Optional[List[Tuple[int, float]]]:
-        """The Source-Normalized Impact per Paper (SNIP) as list of
-        (year, indicator)-tuples.  See
+        """The Source-Normalized Impact per Paper (SNIP) as list of tuples in the form
+        `(year, indicator)`.  See
         https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip.
         """
         return _parse_list(self._entry, "SNIP")
@@ -137,7 +137,7 @@ class SerialTitle(Retrieval):
     @property
     def subject_area(self) -> Optional[List[NamedTuple]]:
         """List of named tuples of subject areas in the form
-        (area, abbreviation, code) of the source.
+        `(area, abbreviation, code)` of the source.
         """
         area = namedtuple('Subjectarea', 'area abbreviation code')
         areas = [area(area=item['$'], code=int(item['@code']),
@@ -153,8 +153,8 @@ class SerialTitle(Retrieval):
     @property
     def yearly_data(self) -> Optional[List[NamedTuple]]:
         """Yearly citation information as a list of namedtuples in the
-        form (year, publicationcount, revpercent, zerocitessce,
-        zerocitespercentsce, citecountsce).  That's the number of documents
+        form `(year, publicationcount, revpercent, zerocitessce,
+        zerocitespercentsce, citecountsce)`.  That's the number of documents
         published in this year, the share of review articles thereof, the
         number and share of not-cited documents, and the number of distinct
         documents that were cited in this year.
@@ -188,13 +188,13 @@ class SerialTitle(Retrieval):
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param view: The view of the file that should be downloaded.  Allowed
-                     values: STANDARD, ENHANCED, CITESCORE.  For details
+                     values: `STANDARD`, `ENHANCED`, `CITESCORE`.  For details
                      see https://dev.elsevier.com/sc_serial_title_views.html.
         :param years: A string specifying a year or range of years (combining
                       two years with a hyphen) for which yearly metric data
                       (SJR, SNIP, yearly-data) should be looked up for.  If
-                      None, only the most recent metric data values are
-                      provided. Note: If not None, refresh will always be True.
+                      `None`, only the most recent metric data values are
+                      provided. Note: If not `None`, refresh will always be `True`.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/SerialTitleAPI.wadl.

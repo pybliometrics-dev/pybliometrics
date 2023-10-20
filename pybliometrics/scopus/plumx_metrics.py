@@ -9,8 +9,8 @@ class PlumXMetrics(Retrieval):
     @property
     def category_totals(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing total metrics as categorized
-        by PlumX Metrics in the form (capture, citation, mention, socialMedia,
-        usage).
+        by PlumX Metrics in the form `(capture, citation, mention, socialMedia,
+        usage)`.
 
         Note: For Citation category a maximum citation count across sources
         is shown.  For details on PlumX Metrics categories see
@@ -116,7 +116,7 @@ class PlumXMetrics(Retrieval):
                         - 'vimeoVideoId'
                         - 'youtubeVideoId'
         :param refresh: Whether to refresh the cached file if it exists or not.
-                        If int is passed, cached file will be refreshed if the
+                        If `int` is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
@@ -167,7 +167,7 @@ class PlumXMetrics(Retrieval):
 
 def _format_as_namedtuple_list(metric_counts, tuple_name='Metric'):
     """Formats list of dicts of metrics into list of namedtuples in the
-    form (name, total).
+    form `(name, total)`.
     """
     metric = namedtuple(tuple_name, 'name total')
     return [metric(name=t['name'], total=t['total']) for t in metric_counts]

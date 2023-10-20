@@ -63,7 +63,7 @@ class SerialSearch(Search):
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param view: The view of the file that should be downloaded.  Allowed
-                     values: STANDARD, ENHANCED, CITESCORE.  For details see
+                     values: `STANDARD`, `ENHANCED`, `CITESCORE`.  For details see
                      https://dev.elsevier.com/sc_serial_title_views.html.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values listed in the API specification at
@@ -84,7 +84,7 @@ class SerialSearch(Search):
         The directory for cached results is `{path}/{view}/{fname}`,
         where `path` is specified in your configuration file, and `fname` is
         the md5-hashed version of `query` dict turned into string in format
-        of 'key=value' delimited by '&'.
+        of `'key=value'` delimited by `'&'`.
         """
         # Checks
         allowed_query_keys = ('title', 'issn', 'date', 'pub', 'subj',
@@ -111,7 +111,7 @@ def _merge_subject_data(subject_area_data):
     """Auxiliary function to collect and concatenate subject area data into string.
 
     Returns tuple of strings for subject area names, subject area codes and
-    subject area abbreviations deliminated by ';'.
+    subject area abbreviations deliminated by `';'`.
     """
     codes = set([j.get('@code') for j in subject_area_data])
     abbrevs = set([j.get('@abbrev') for j in subject_area_data])
@@ -124,7 +124,7 @@ def _merge_subject_data(subject_area_data):
 def _retrieve_links(link_data):
     """Auxiliary function to collect data on links.
 
-    Returns list of lists in the form of [linkname, link].
+    Returns list of lists in the form of `[linkname, link]`.
     """
     out = []
     for sl in link_data:
@@ -138,8 +138,8 @@ def _retrieve_links(link_data):
 def _retrieve_yearly_data(yearly_data):
     """Auxiliary function to collect yearly data.
 
-    Returns list of lists in the form [mergedstatname, stat], where
-    mergedstatname - dictionary key joined with associated period.
+    Returns list of lists in the form `[mergedstatname, stat]`, where
+    `mergedstatname` - dictionary key joined with associated period.
     """
     out = []
     for t in yearly_data:
@@ -152,8 +152,8 @@ def _retrieve_yearly_data(yearly_data):
 def _retrieve_cite_scores(cite_score_data):
     """Auxiliary function to collect citescore data.
 
-    Returns list of lists in the form [mergedstatname, stat], where
-    mergedstatname - dictionary key joined with associated period.
+    Returns list of lists in the form `[mergedstatname, stat]`, where
+    `mergedstatname` - dictionary key joined with associated period.
     """
     out = []
     for key in ("citeScoreTracker", "citeScoreCurrentMetric"):
@@ -169,8 +169,8 @@ def _retrieve_cite_scores(cite_score_data):
 def _retrieve_source_rankings(source_data):
     """Auxiliary function to collect SNIP and SJR data.
 
-    Returns list of lists in the form [mergedstatname, stat],
-    where mergedstatname - dictionary key joined with associated period
+    Returns list of lists in the form `[mergedstatname, stat]`,
+    where `mergedstatname` - dictionary key joined with associated period
     """
     out = []
     for key in source_data:
