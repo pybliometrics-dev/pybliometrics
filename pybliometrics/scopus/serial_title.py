@@ -11,37 +11,46 @@ class SerialTitle(Retrieval):
     def aggregation_type(self) -> str:
         """The type of the source."""
         return self._entry['prism:aggregationType']
-
+    
     @property
-    def citescoreyearinfolist(self) -> Optional[List[Tuple[int, float, None]]]:
-        """A list of two tuples of the form `(year, cite-score)`.  The first
-        tuple represents the current cite-score, the second tuple, if present,
-        represents the tracker cite-score.  For discontinued sources, there 
-        is no tracker cite-score, and the second tuple is just `None`.  See
-        https://service.elsevier.com/app/answers/detail/a_id/30562/supporthub/scopus/.
+    def citescoreyearinfolist(self) -> Optional[List[NamedTuple]]:
+        """A list of named tuples of the form `(year citescore status documentcount citationcount percentcited rank)`.\n
+        For a complete extraction of the data use the [view]() `'CITESCORE'``. The named tuple contains the following fields:
+        - `year`: Year
+        - `status`: Year 'In-progress' or 'Complete'
+        - `documentcount`: Number of documents of the last 4 years
+        - `citationcount`: Number of citations of the last 4 years
+        - `citescore`: citationCount/scholarlyOutput
+        - `percentcited`: Percent of documents cited
+        - `rank`: List of rank (and percentile) in different subjects
+
+        The `rank` is `None` or a named tuple of the form `(subjectcode rank percentile)`.
+
+        For more information check the [CiteScore documentation](https://service.elsevier.com/app/answers/detail/a_id/14880/supporthub/scopus/)
         """
-        def create_tuple(d, mode):
-            t = [d[f'citeScore{mode}Year'], d[f'citeScore{mode}']]
-            try:
-                t[0] = int(t[0])
-            except TypeError:  # year empty
-                return None
-            t[1] = float(t[1]) if t[1] else t[1]
-            return tuple(t)
+
 
         try:
-            d = self._entry['citeScoreYearInfoList']
+            data = self._entry.get('citeScoreYearInfoList', {})
         except KeyError:
             return None
-        try:
-            current = create_tuple(d, "CurrentMetric")
-        except KeyError:
-            current = None
-        try:
-            tracker = create_tuple(d, "CurrentTracker")
-        except KeyError:
-            tracker = None
-        return [current, tracker]
+        
+        # Named Tuples
+        info_fields = 'year citescore status documentcount '\
+                        'citationcount percentcited '\
+                        'rank'
+        rank_fields = 'subjectcode rank percentile'
+        
+        named_info_list = namedtuple('Citescoreinfolist', info_fields, defaults=(None,) * len(info_fields.split()))
+        named_rank_list = namedtuple('Citescoresubjectrank', rank_fields)
+            
+        # Extract depending on view
+        if self._view in ('STANDARD', 'ENHANCED'):
+                new_data = _getTwoCiteScoreYears(self, named_info_list, data)
+        elif self._view == 'CITESCORE':
+                new_data = _getAllCiteScoreYears(self, named_info_list, named_rank_list, data)
+                
+        return new_data or None
 
     @property
     def eissn(self) -> Optional[str]:
@@ -264,3 +273,46 @@ def _parse_list(d, metric):
         return sorted(set(values))
     except (KeyError, TypeError):
         return None
+    
+def _getAllCiteScoreYears(self, named_info_list, named_rank_list, data) -> Optional[List[NamedTuple]]:
+    data = data.get('citeScoreYearInfo', [])
+
+    new_data = []
+    # Iterate through years
+    for d in data:
+        citeScoreInfo = d.get('citeScoreInformationList', [])[0].get('citeScoreInfo', [])[0]
+        # Iterate through subject ranks
+        subject_rank = [named_rank_list(subjectcode=subject['subjectCode'],
+                        rank=subject['rank'],
+                        percentile=subject['percentile'])
+                        for subject in citeScoreInfo['citeScoreSubjectRank']]
+        # Create named tuple with info
+        Citescoreinfolist_year = named_info_list(year=int(d['@year']),
+                                status=d['@status'],
+                                documentcount=int(citeScoreInfo['scholarlyOutput']),
+                                citationcount=int(citeScoreInfo['citationCount']),
+                                citescore=make_float_if_possible(citeScoreInfo['citeScore']),
+                                percentcited=int(citeScoreInfo['percentCited']),
+                                rank=subject_rank)
+        # Append new data
+        new_data.append(Citescoreinfolist_year)
+    
+    return new_data or None
+
+def _getTwoCiteScoreYears(self, named_info_list, data) -> Optional[List[NamedTuple]]:
+    
+    def create_namedtuple(data, mode, named_info_list):
+        year = data.get(f'citeScore{mode}Year')
+        cite_score = data.get(f'citeScore{mode}')
+
+        # To be consistent with old verion
+        if (year is None) and (cite_score is None):
+            return None
+        else:
+            return named_info_list(year=int(year), citescore=float(cite_score))
+    
+    current = create_namedtuple(data, 'CurrentMetric', named_info_list)
+    tracker = create_namedtuple(data, 'CurrentTracker', named_info_list)
+    
+
+    return [current, tracker]

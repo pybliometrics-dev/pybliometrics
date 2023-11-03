@@ -7,11 +7,15 @@ from nose.tools import assert_equal, assert_true
 
 from pybliometrics.scopus import SerialTitle
 
+import datetime
+
 # SoftwareX
 # sofwarex = SerialTitle("2352-7110", refresh=30, years="2019-2020")
 sofwarex = SerialTitle("2352-7110", refresh=30)
 # OECD Economic Studies
 oecd = SerialTitle("0255-0822", refresh=30)
+# Neural Networks
+neural_networks = SerialTitle('1879-2782', view='CITESCORE')
 
 
 def test_aggregation_type():
@@ -20,9 +24,21 @@ def test_aggregation_type():
 
 
 def test_citescoreyearinfolist():
-    expected1 = [(2022, 5.1), None]
-    assert_equal(sofwarex.citescoreyearinfolist, expected1)
-    assert_equal(oecd.citescoreyearinfolist, None)
+    expected_year = 2022
+    expected_citeScore = 5.1
+    expected_previous_year = None
+
+    assert_equal(sofwarex.citescoreyearinfolist[0][0], expected_year)
+    assert_equal(sofwarex.citescoreyearinfolist[0][1], expected_citeScore)
+    assert_equal(sofwarex.citescoreyearinfolist[1], expected_previous_year)
+
+    assert_equal(oecd.citescoreyearinfolist[0], None)
+    assert_equal(oecd.citescoreyearinfolist[1], None)
+
+    # Test CITESCORE view
+    this_year = datetime.date.today().year
+    assert_equal(neural_networks.citescoreyearinfolist[0].year, this_year)
+    assert_true(type(neural_networks.citescoreyearinfolist[3].citationcount) is int)
 
 
 def test_eissn():
