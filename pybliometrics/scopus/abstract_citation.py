@@ -10,7 +10,7 @@ from pybliometrics.scopus.utils import chained_get, check_parameter_value
 
 class CitationOverview(Retrieval):
     @property
-    def authors(self) -> Optional[List[Optional[List[Optional[NamedTuple]]]]]:
+    def authors(self) -> Optional[List[Optional[NamedTuple]]]:
         """A list of lists of namedtuples storing author information,
         where each namedtuple corresponds to one author and each sub-list to
         one document.
