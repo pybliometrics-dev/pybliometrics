@@ -282,9 +282,9 @@ def _getAllCiteScoreYears(self, named_info_list, named_rank_list, data) -> Optio
     for d in data:
         citeScoreInfo = d.get('citeScoreInformationList', [])[0].get('citeScoreInfo', [])[0]
         # Iterate through subject ranks
-        subject_rank = [named_rank_list(subjectcode=subject['subjectCode'],
-                        rank=subject['rank'],
-                        percentile=subject['percentile'])
+        subject_rank = [named_rank_list(subjectcode=int(subject['subjectCode']),
+                        rank=int(subject['rank']),
+                        percentile=int(subject['percentile']))
                         for subject in citeScoreInfo['citeScoreSubjectRank']]
         # Create named tuple with info
         Citescoreinfolist_year = named_info_list(year=int(d['@year']),
