@@ -28,7 +28,7 @@ class SerialTitle(Retrieval):
 
         For more information check the [CiteScore documentation](https://service.elsevier.com/app/answers/detail/a_id/14880/supporthub/scopus/)
         """
-
+        
         try:
             data = self._entry.get('citeScoreYearInfoList', {})
         except KeyError:
@@ -46,9 +46,9 @@ class SerialTitle(Retrieval):
 
         # Extract depending on view
         if self._view in ('STANDARD', 'ENHANCED'):
-            new_data = _getTwoCiteScoreYears(self, named_info_list, data)
+            new_data = _get_two_cite_score_years(self, named_info_list, data)
         elif self._view == 'CITESCORE':
-            new_data = _getAllCiteScoreYears(
+            new_data = _get_all_cite_score_years(
                 self, named_info_list, named_rank_list, data)
 
         return new_data or None
@@ -276,7 +276,8 @@ def _parse_list(d, metric):
         return None
 
 
-def _getAllCiteScoreYears(self, named_info_list, named_rank_list, data) -> Optional[List[NamedTuple]]:
+def _get_all_cite_score_years(self, named_info_list, named_rank_list, data) -> Optional[List[NamedTuple]]:
+    """Auxiliary function to get all information contained in cite score information list for the `CITESCORE` view"""
     data = data.get('citeScoreYearInfo', [])
 
     new_data = []
@@ -307,7 +308,8 @@ def _getAllCiteScoreYears(self, named_info_list, named_rank_list, data) -> Optio
     return new_data or None
 
 
-def _getTwoCiteScoreYears(self, named_info_list, data) -> Optional[List[NamedTuple]]:
+def _get_two_cite_score_years(self, named_info_list, data) -> Optional[List[NamedTuple]]:
+    """Auxiliary function to get information contained in cite score information list for the `STANDARD` and `ENHANCED` view"""
 
     def create_namedtuple(data, mode, named_info_list):
         year = data.get(f'citeScore{mode}Year')
