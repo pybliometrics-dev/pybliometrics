@@ -67,7 +67,7 @@ class Base:
 
             if ab_ref_retrieval:
                 kwds['startref'] = '1'
-                data = _get_all_refs(url, api, params, verbose, resp, *args, **kwds)
+                data = _get_all_refs(url, params, verbose, resp, *args, **kwds)
                 self._json = data
                 data = [data]
             elif search_request:
@@ -168,7 +168,6 @@ def _check_file_age(self):
 
 
 def _get_all_refs(url: str,
-                  api: str,
                   params: dict,
                   verbose: bool,
                   resp: dict,
@@ -195,7 +194,7 @@ def _get_all_refs(url: str,
         # Increment startref
         kwds['startref'] = str(int(kwds['startref']) + ref_len)
         # Get
-        resp = get_content(url, api, params, *args, **kwds)
+        resp = get_content(url, 'AbstractRetrieval', params, *args, **kwds)
         res = resp.json()
         res = parse_content.chained_get(res, ['abstracts-retrieval-response',
                                               'references',
