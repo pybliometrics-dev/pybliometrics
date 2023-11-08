@@ -10,7 +10,7 @@ from pybliometrics.scopus.utils import chained_get, check_parameter_value
 
 class CitationOverview(Retrieval):
     @property
-    def authors(self) -> Optional[List[Optional[List[Optional[NamedTuple]]]]]:
+    def authors(self) -> Optional[List[Optional[NamedTuple]]]:
         """A list of lists of namedtuples storing author information,
         where each namedtuple corresponds to one author and each sub-list to
         one document.
@@ -43,7 +43,7 @@ class CitationOverview(Retrieval):
         for doc in self._citeInfoMatrix:
             try:
                 cites = [int(d['$']) for d in doc['cc']]
-            except AttributeError:  # No citations
+            except (AttributeError, TypeError):  # No citations
                 cites = [0]*len(_years)
             outer.append(list(zip(_years, cites)))
         return _maybe_return_list(outer)
