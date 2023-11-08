@@ -531,6 +531,7 @@ def test_website():
     assert_equal(ab2.website, None)
     assert_equal(ab8.website, None)
 
+
 def test_all_refs():
     refs_downloaded = len(ab8.references)
     expected = ab8.refcount

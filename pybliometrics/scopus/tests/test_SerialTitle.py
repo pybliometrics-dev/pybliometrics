@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 """Tests for `scopus.SerialTitle` module."""
 
+import datetime
+
 from collections import namedtuple
 from nose.tools import assert_equal, assert_true
 
 from pybliometrics.scopus import SerialTitle
 
-import datetime
 
 # SoftwareX
 # sofwarex = SerialTitle("2352-7110", refresh=30, years="2019-2020")
