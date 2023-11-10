@@ -2,7 +2,7 @@ from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
-from pybliometrics.scopus.utils import chained_get, check_parameter_value, \
+from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
     get_link, make_float_if_possible, make_int_if_possible
 
 
@@ -14,7 +14,8 @@ class SerialTitle(Retrieval):
 
     @property
     def citescoreyearinfolist(self) -> Optional[List[NamedTuple]]:
-        """A list of named tuples of the form `(year citescore status documentcount citationcount percentcited rank)`.
+        """A list of named tuples of the form:
+            `(year citescore status documentcount citationcount percentcited rank)`.
         For a complete extraction of the data use the [view]() `'CITESCORE'``. The named tuple contains the following fields:
         - `year`: Year
         - `status`: Year 'In-progress' or 'Complete'
@@ -35,21 +36,19 @@ class SerialTitle(Retrieval):
             return None
 
         # Named Tuples
-        info_fields = 'year citescore status documentcount '\
-            'citationcount percentcited '\
-            'rank'
+        info_fields = 'year citescore status documentcount citationcount percentcited rank'
         rank_fields = 'subjectcode rank percentile'
 
-        named_info_list = namedtuple(
-            'Citescoreinfolist', info_fields, defaults=(None,) * len(info_fields.split()))
+        named_info_list = namedtuple('Citescoreinfolist', info_fields,
+                                     defaults=(None,) * len(info_fields.split()))
         named_rank_list = namedtuple('Citescoresubjectrank', rank_fields)
 
         # Extract depending on view
         if self._view in ('STANDARD', 'ENHANCED'):
             new_data = _get_two_cite_score_years(self, named_info_list, data)
         elif self._view == 'CITESCORE':
-            new_data = _get_all_cite_score_years(
-                self, named_info_list, named_rank_list, data)
+            new_data = _get_all_cite_score_years(self, named_info_list,
+                                                 named_rank_list, data)
 
         return new_data or None
 
@@ -277,7 +276,8 @@ def _parse_list(d, metric):
 
 
 def _get_all_cite_score_years(self, named_info_list, named_rank_list, data) -> Optional[List[NamedTuple]]:
-    """Auxiliary function to get all information contained in cite score information list for the `CITESCORE` view"""
+    """Auxiliary function to get all information contained in cite score 
+    information list for the `CITESCORE` view."""
     data = data.get('citeScoreYearInfo', [])
 
     new_data = []
@@ -293,14 +293,10 @@ def _get_all_cite_score_years(self, named_info_list, named_rank_list, data) -> O
         # Create named tuple with info
         Citescoreinfolist_year = named_info_list(year=int(d['@year']),
                                                  status=d['@status'],
-                                                 documentcount=int(
-                                                     citeScoreInfo['scholarlyOutput']),
-                                                 citationcount=int(
-                                                     citeScoreInfo['citationCount']),
-                                                 citescore=make_float_if_possible(
-                                                     citeScoreInfo['citeScore']),
-                                                 percentcited=int(
-                                                     citeScoreInfo['percentCited']),
+                                                 documentcount=int(citeScoreInfo['scholarlyOutput']),
+                                                 citationcount=int(citeScoreInfo['citationCount']),
+                                                 citescore=make_float_if_possible(citeScoreInfo['citeScore']),
+                                                 percentcited=int(citeScoreInfo['percentCited']),
                                                  rank=subject_rank)
         # Append new data
         new_data.append(Citescoreinfolist_year)
@@ -309,7 +305,9 @@ def _get_all_cite_score_years(self, named_info_list, named_rank_list, data) -> O
 
 
 def _get_two_cite_score_years(self, named_info_list, data) -> Optional[List[NamedTuple]]:
-    """Auxiliary function to get information contained in cite score information list for the `STANDARD` and `ENHANCED` view"""
+    """Auxiliary function to get information contained in cite score information
+    list for the `STANDARD` and `ENHANCED` view.
+    """
 
     def create_namedtuple(data, mode, named_info_list):
         year = data.get(f'citeScore{mode}Year')
