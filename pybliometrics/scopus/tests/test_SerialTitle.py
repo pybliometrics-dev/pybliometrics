@@ -2,16 +2,21 @@
 # -*- coding: utf-8 -*-
 """Tests for `scopus.SerialTitle` module."""
 
+import datetime
+
 from collections import namedtuple
 from nose.tools import assert_equal, assert_true
 
 from pybliometrics.scopus import SerialTitle
+
 
 # SoftwareX
 # sofwarex = SerialTitle("2352-7110", refresh=30, years="2019-2020")
 sofwarex = SerialTitle("2352-7110", refresh=30)
 # OECD Economic Studies
 oecd = SerialTitle("0255-0822", refresh=30)
+# Neural Networks
+neural_networks = SerialTitle('1879-2782', view='CITESCORE')
 
 
 def test_aggregation_type():
@@ -20,9 +25,22 @@ def test_aggregation_type():
 
 
 def test_citescoreyearinfolist():
-    expected1 = [(2022, 5.1), None]
-    assert_equal(sofwarex.citescoreyearinfolist, expected1)
-    assert_equal(oecd.citescoreyearinfolist, None)
+    info_fields = 'year citescore status documentcount citationcount percentcited rank'
+    named_info_list = namedtuple('Citescoreinfolist', info_fields,
+                                defaults=(None,) * len(info_fields.split()))
+
+    # Test sofwarex
+    expected_named_tuple = [named_info_list(year=2022, citescore=5.1), None]
+    assert_equal(sofwarex.citescoreyearinfolist, expected_named_tuple)
+
+    # Test oecd
+    assert_equal(oecd.citescoreyearinfolist[0], None)
+    assert_equal(oecd.citescoreyearinfolist[1], None)
+
+    # Test CITESCORE view
+    this_year = datetime.date.today().year
+    assert_equal(neural_networks.citescoreyearinfolist[0].year, this_year)
+    assert_true(type(neural_networks.citescoreyearinfolist[3].citationcount) is int)
 
 
 def test_eissn():

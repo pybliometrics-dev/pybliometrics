@@ -5,9 +5,10 @@ from math import ceil
 from time import localtime, strftime, time
 from typing import Dict, Optional
 
-from pybliometrics.scopus.exception import ScopusQueryError
-from pybliometrics.scopus.utils import get_content, SEARCH_MAX_ENTRIES
 from tqdm import tqdm
+
+from pybliometrics.scopus.exception import ScopusQueryError
+from pybliometrics.scopus.utils import get_content, parse_content, SEARCH_MAX_ENTRIES
 
 
 class Base:
@@ -47,7 +48,12 @@ class Base:
 
         # Read or download, possibly with caching
         fname = self._cache_file_path
+
+        # Check if search request
         search_request = "query" in params
+        # Check if ref retrieval for abstract
+        ab_ref_retrieval = (api == 'AbstractRetrieval') and (params['view'] == 'REF')
+
         if fname.exists() and not self._refresh:
             self._mdate = mod_ts
             if search_request:
@@ -59,7 +65,13 @@ class Base:
         else:
             resp = get_content(url, api, params, *args, **kwds)
             header = resp.headers
-            if search_request:
+
+            if ab_ref_retrieval:
+                kwds['startref'] = '1'
+                data = _get_all_refs(url, params, verbose, resp, *args, **kwds)
+                self._json = data
+                data = [data]
+            elif search_request:
                 # Get number of results
                 res = resp.json()
                 n = int(res['search-results'].get('opensearch:totalResults', 0))
@@ -154,3 +166,37 @@ def _check_file_age(self):
         refresh = True
         mod_ts = None
     return refresh, mod_ts
+
+
+def _get_all_refs(url: str, params: dict, verbose: bool, resp: dict, *args, **kwds) -> dict:
+    """Get all references for `AbstractRetrieval` with view `REF`."""
+    # startref starts at 1 (0 does not work)
+    # Max refs per query are 40
+    # Use of refcount leads to errors
+    res = resp.json()
+    path_total_references = ['abstracts-retrieval-response', 'references', '@total-references']
+    n = int(parse_content.chained_get(res, path_total_references))
+
+    data  = res #data is used to gather all responses. res is a tmp variable
+
+    path_reference = ['abstracts-retrieval-response', 'references', 'reference']
+    ref_len = len(parse_content.chained_get(data, path_reference))
+    n_chunks = ceil(n/ref_len)
+
+    for i in tqdm(range(1, n_chunks), disable=not verbose,
+                  initial=1, total=n_chunks):
+        # Increment startref
+        kwds['startref'] = str(int(kwds['startref']) + ref_len)
+        # Get
+        resp = get_content(url, 'AbstractRetrieval', params, *args, **kwds)
+        res = resp.json()
+        res = parse_content.chained_get(res, path_reference)
+        # Append
+        data['abstracts-retrieval-response']['references']['reference'].extend(res)
+        if verbose:
+            print(f'Extracted:\n\tFrom: {kwds["startref"]}\n\tTo:{len(parse_content.chained_get(data, ["abstracts-retrieval-response", "references", "reference"]))}')
+
+    if verbose:
+        print(f'Total data: {len(parse_content.chained_get(data, ["abstracts-retrieval-response", "references", "reference"]))}')
+
+    return data
