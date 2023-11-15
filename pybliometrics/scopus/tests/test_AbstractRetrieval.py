@@ -418,25 +418,22 @@ def test_references_full():
 
 
 def test_references_ref():
+    assert_equal(len(ab8.references), 48)
     fields = 'position id doi title authors authors_auid authors_affiliationid '\
              'sourcetitle publicationyear coverDate volume issue first last '\
              'citedbycount type text fulltext'
     ref = namedtuple('Reference', fields)
-    authors8 = 'Armbrust, Michael; Fox, Armando; Griffith, Rean; Joseph, '\
-        'Anthony D.; Katz, Randy; Konwinski, Andy; Lee, Gunho; '\
-        'Patterson, David; Rabkin, Ariel; Stoica, Ion; Zaharia, Matei'
-    expected8 = ref(position='1', id='77950347409', authors=authors8,
-        doi='10.1145/1721654.1721672', title='A view of cloud computing',
-        sourcetitle='Communications of the ACM', type='resolvedReference',
-        publicationyear=None, volume='53', issue='4', first='50', last='58',
-        text=None, fulltext=None, citedbycount='0', coverDate='2010-04-01',
-        authors_auid='35800975300; 35571093800; 57198081560; 57192787435; '\
-            '7401788602; 25926395200; 56326032000; 7401930147; 26534952300; '\
-            '7007009125; 15064891400',
-        authors_affiliationid='60025038; 60025038; 60025038; 60025038; 60025038; '\
-            '60025038; 60025038; 60025038; 60025038; 60025038; 60025038')
-    assert_true(int(ab8.references[0].citedbycount) >= 0)
-    assert_equal(ab8.references[0]._replace(citedbycount="0"), expected8)
+    expected8 = ref(position='47', id='77953310709',
+        doi='10.1109/INFCOM.2010.5462174', text=None, fulltext=None,
+        title='Achieving secure, scalable, and fine-grained data access control in cloud computing',
+        authors='Yu, Shucheng; Lou, Wenjing; Wang, Cong; Ren, Kui',
+        authors_auid='55636591800; 7006030576; 35106222100; 8396435500',
+        authors_affiliationid='60011410; 60011410; 60002873; 60002873',
+        sourcetitle='Proceedings - IEEE INFOCOM',
+        publicationyear=None, coverDate='2010-06-15', volume=None, issue=None,
+        first=None, last=None, citedbycount='0', type='resolvedReference')
+    assert_equal(ab8.references[-2]._replace(citedbycount="0"), expected8)
+    assert_true(int(ab8.references[-2].citedbycount) >= 0)
 
 
 def test_scopus_link():
