@@ -31,7 +31,7 @@ def test_citescoreyearinfolist():
 
     # Test sofwarex
     expected_named_tuple = [named_info_list(year=2022, citescore=5.1), None]
-    assert_equal(expected_named_tuple, sofwarex.citescoreyearinfolist)
+    assert_equal(sofwarex.citescoreyearinfolist, expected_named_tuple)
 
     # Test oecd
     assert_equal(oecd.citescoreyearinfolist[0], None)

@@ -43,9 +43,23 @@ class SerialTitle(Retrieval):
                                      defaults=(None,) * len(info_fields.split()))
         named_rank_list = namedtuple('Citescoresubjectrank', rank_fields)
 
+        # Function to create a named tuple for CurrentMetric and CurrentTracker
+        def create_namedtuple(data, mode, named_info_list):
+            year = data.get(f'citeScore{mode}Year')
+            cite_score = data.get(f'citeScore{mode}')
+
+            # To be consistent with old verion
+            if (year is None) and (cite_score is None):
+                return None
+
+            return named_info_list(year=int(year), citescore=float(cite_score))
+
         # Extract depending on view
         if self._view in ('STANDARD', 'ENHANCED'):
-            new_data = _get_two_cite_score_years(self, named_info_list, data)
+            current = create_namedtuple(data, 'CurrentMetric', named_info_list)
+            tracker = create_namedtuple(data, 'CurrentTracker', named_info_list)
+            new_data = [current, tracker]
+
         elif self._view == 'CITESCORE':
             new_data = _get_all_cite_score_years(self, named_info_list,
                                                  named_rank_list, data)
@@ -292,34 +306,13 @@ def _get_all_cite_score_years(self, named_info_list, named_rank_list, data) -> O
                         for subject in citeScoreInfo['citeScoreSubjectRank']]
         # Create named tuple with info
         Citescoreinfolist_year = named_info_list(year=int(d['@year']),
-                                                 status=d['@status'],
-                                                 documentcount=int(citeScoreInfo['scholarlyOutput']),
-                                                 citationcount=int(citeScoreInfo['citationCount']),
-                                                 citescore=make_float_if_possible(citeScoreInfo['citeScore']),
-                                                 percentcited=int(citeScoreInfo['percentCited']),
-                                                 rank=subject_rank)
+            status=d['@status'],
+            documentcount=int(citeScoreInfo['scholarlyOutput']),
+            citationcount=int(citeScoreInfo['citationCount']),
+            citescore=make_float_if_possible(citeScoreInfo['citeScore']),
+            percentcited=int(citeScoreInfo['percentCited']),
+            rank=subject_rank)
         # Append new data
         new_data.append(Citescoreinfolist_year)
 
     return new_data or None
-
-
-def _get_two_cite_score_years(self, named_info_list, data) -> Optional[List[NamedTuple]]:
-    """Auxiliary function to get information contained in cite score information
-    list for the `STANDARD` and `ENHANCED` view.
-    """
-
-    def create_namedtuple(data, mode, named_info_list):
-        year = data.get(f'citeScore{mode}Year')
-        cite_score = data.get(f'citeScore{mode}')
-
-        # To be consistent with old verion
-        if (year is None) and (cite_score is None):
-            return None
-        else:
-            return named_info_list(year=int(year), citescore=float(cite_score))
-
-    current = create_namedtuple(data, 'CurrentMetric', named_info_list)
-    tracker = create_namedtuple(data, 'CurrentTracker', named_info_list)
-
-    return [current, tracker]
