@@ -25,12 +25,11 @@ def test_aggregation_type():
 
 
 def test_citescoreyearinfolist():
-    info_fields = 'year citescore status documentcount citationcount percentcited rank'
-    named_info_list = namedtuple('Citescoreinfolist', info_fields,
-                                defaults=(None,) * len(info_fields.split()))
+    info_fields = 'year citescore'
+    info = namedtuple('Citescoreinfolist', info_fields)
 
     # Test sofwarex
-    expected_named_tuple = [named_info_list(year=2022, citescore=5.1), None]
+    expected_named_tuple = [info(year=2022, citescore=5.1), None]
     assert_equal(sofwarex.citescoreyearinfolist, expected_named_tuple)
 
     # Test oecd
@@ -152,7 +151,7 @@ def test_yearly_data():
     dat = namedtuple('Yearlydata', fields)
     expected1_2020 = dat(year=2020, publicationcount=164, revpercent=0.0,
         zerocitessce=10, zerocitespercentsce=6.097560975609756,
-        citecountsce=2567)
+        citecountsce=2571)
     assert_equal(sofwarex.yearly_data[24], expected1_2020)
     expected2_1996 = dat(year=1996, publicationcount=4, revpercent=0.0,
         zerocitessce=0, zerocitespercentsce=0, citecountsce=33)

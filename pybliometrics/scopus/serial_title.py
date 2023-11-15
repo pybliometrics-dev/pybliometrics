@@ -14,20 +14,13 @@ class SerialTitle(Retrieval):
 
     @property
     def citescoreyearinfolist(self) -> Optional[List[NamedTuple]]:
-        """A list of named tuples of the form:
-            `(year citescore status documentcount citationcount percentcited rank)`.
-        For a complete extraction of the data use the [view]() `'CITESCORE'``. The named tuple contains the following fields:
-        - `year`: Year
-        - `status`: Year 'In-progress' or 'Complete'
-        - `documentcount`: Number of documents of the last 4 years
-        - `citationcount`: Number of citations of the last 4 years
-        - `citescore`: citationCount/scholarlyOutput
-        - `percentcited`: Percent of documents cited
-        - `rank`: List of rank (and percentile) in different subjects
+        """A list of named tuples of the form: `(year citescoare)` or (when
+        `view="CITESCORE"`) `(year citescore status documentcount citationcount
+        percentcited rank)`.  `rank` is `None` or a named tuple of the form
+        `(subjectcode rank percentile)`.
 
-        The `rank` is `None` or a named tuple of the form `(subjectcode rank percentile)`.
-
-        For more information check the [CiteScore documentation](https://service.elsevier.com/app/answers/detail/a_id/14880/supporthub/scopus/)
+        For more information see the
+        [CiteScore documentation](https://service.elsevier.com/app/answers/detail/a_id/14880/supporthub/scopus/).
         """
         
         try:
@@ -36,15 +29,16 @@ class SerialTitle(Retrieval):
             return None
 
         # Named Tuples
-        info_fields = 'year citescore status documentcount citationcount percentcited rank'
+        info_fields = 'year citescore status documentcount citationcount '\
+                      'percentcited rank'
         rank_fields = 'subjectcode rank percentile'
-
-        named_info_list = namedtuple('Citescoreinfolist', info_fields,
-                                     defaults=(None,) * len(info_fields.split()))
-        named_rank_list = namedtuple('Citescoresubjectrank', rank_fields)
+        info_short = namedtuple('Citescoreinfolist', info_fields.split()[:2])
+        info_full = namedtuple('Citescoreinfolist', info_fields,
+            defaults=(None,) * len(info_fields.split()))
+        rank = namedtuple('Citescoresubjectrank', rank_fields)
 
         # Function to create a named tuple for CurrentMetric and CurrentTracker
-        def create_namedtuple(data, mode, named_info_list):
+        def _create_namedtuple(data, mode, info):
             year = data.get(f'citeScore{mode}Year')
             cite_score = data.get(f'citeScore{mode}')
 
@@ -52,17 +46,16 @@ class SerialTitle(Retrieval):
             if (year is None) and (cite_score is None):
                 return None
 
-            return named_info_list(year=int(year), citescore=float(cite_score))
+            return info(year=int(year), citescore=float(cite_score))
 
         # Extract depending on view
         if self._view in ('STANDARD', 'ENHANCED'):
-            current = create_namedtuple(data, 'CurrentMetric', named_info_list)
-            tracker = create_namedtuple(data, 'CurrentTracker', named_info_list)
+            current = _create_namedtuple(data, 'CurrentMetric', info_short)
+            tracker = _create_namedtuple(data, 'Tracker', info_short)
             new_data = [current, tracker]
 
         elif self._view == 'CITESCORE':
-            new_data = _get_all_cite_score_years(self, named_info_list,
-                                                 named_rank_list, data)
+            new_data = _get_all_cite_score_years(self, info_full, rank, data)
 
         return new_data or None
 
