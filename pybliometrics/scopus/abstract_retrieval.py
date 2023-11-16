@@ -24,7 +24,7 @@ class AbstractRetrieval(Retrieval):
         aff = namedtuple('Affiliation', 'id name city country')
         affs = listify(self._json.get('affiliation', []))
         for item in affs:
-            new = aff(id=int(item['@id']), name=item.get('affilname'),
+            new = aff(id=make_int_if_possible(item.get('@id')), name=item.get('affilname'),
                       city=item.get('affiliation-city'),
                       country=item.get('affiliation-country'))
             out.append(new)
