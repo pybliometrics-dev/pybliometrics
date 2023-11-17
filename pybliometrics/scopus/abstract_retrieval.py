@@ -747,29 +747,58 @@ class AbstractRetrieval(Retrieval):
         Assumes the document is a journal article and was loaded with
         view="META_ABS" or view="FULL".
         """
-        date = self.get_cache_file_mdate().split()[0]
-        # Authors
-        if self.authors:
-            if len(self.authors) > 1:
-                authors = _list_authors(self.authors)
+        if self._view in ['FULL', 'META_ABS', 'META']:
+            date = self.get_cache_file_mdate().split()[0]
+            # Authors
+            if self.authors:
+                if len(self.authors) > 1:
+                    authors = _list_authors(self.authors)
+                else:
+                    a = self.authors[0]
+                    authors = str(a.given_name) + ' ' + str(a.surname)
             else:
-                a = self.authors[0]
-                authors = str(a.given_name) + ' ' + str(a.surname)
-        else:
-            authors = "(No author found)"
-        # All other information
-        s = f'{authors}: "{self.title}", {self.publicationName}, {self.volume}'
-        if self.issueIdentifier:
-            s += f'({self.issueIdentifier})'
-        s += ', '
-        s += _parse_pages(self)
-        s += f'({self.coverDate[:4]}).'
-        if self.doi:
-            s += f' https://doi.org/{self.doi}.\n'
-        s += f'{self.citedby_count} citation(s) as of {date}'
-        if self.affiliation:
-            s += "\n  Affiliation(s):\n   "
-            s += '\n   '.join([aff.name for aff in self.affiliation])
+                authors = "(No author found)"
+            # All other information
+            s = f'{authors}: "{self.title}", {self.publicationName}, {self.volume}'
+            if self.issueIdentifier:
+                s += f'({self.issueIdentifier})'
+            s += ', '
+            s += _parse_pages(self)
+            s += f'({self.coverDate[:4]}).'
+            if self.doi:
+                s += f' https://doi.org/{self.doi}.\n'
+            s += f'{self.citedby_count} citation(s) as of {date}'
+            if self.affiliation:
+                s += "\n  Affiliation(s):\n   "
+                s += '\n   '.join([aff.name for aff in self.affiliation])
+        
+        elif self._view in ['REF']:
+            def convert_citedbycount(entry):
+                try:
+                    return float(entry.citedbycount) if entry.citedbycount is not None else 0
+                except (ValueError, TypeError):
+                    return 0
+            
+            def get_date(coverDate):
+                try:
+                    return coverDate[:4]
+                except TypeError:
+                    return None
+
+            # Sort reference list by citationcount
+            references = sorted(self.references, key=convert_citedbycount, reverse=True)
+
+            top_5 = [(reference.title +
+                                ' (' +
+                                get_date(reference.coverDate) +
+                                ')'+
+                                ': https://doi.org/' +
+                                str(reference.doi)) for reference in references[:5]]
+
+            s = f'A total of {self.refcount} references were found. '
+            s += f'Top 5 references:\n\t'
+            s += '\n\t'.join(top_5)
+
         return s
 
     def get_bibtex(self) -> str:
