@@ -292,13 +292,19 @@ class AuthorRetrieval(Retrieval):
 
     def __str__(self):
         """Return a summary string."""
-        date = self.get_cache_file_mdate().split()[0]
-        main_aff = self.affiliation_current[0]
-        s = f"{self.indexed_name} from {main_aff.preferred_name} in "\
-            f"{main_aff.country},\npublished {int(self.document_count):,} "\
-            f"document(s) since {self.publication_range[0]} "\
-            f"\nwhich were cited by {int(self.cited_by_count):,} author(s) in "\
-            f"{int(self.citation_count):,} document(s) as of {date}"
+        if self._view in ['STANDARD', 'ENHANCED', 'LIGHT']:
+            date = self.get_cache_file_mdate().split()[0]
+            main_aff = self.affiliation_current[0]
+            s = f"{self.indexed_name} from {main_aff.preferred_name} in "\
+                f"{main_aff.country},\npublished {int(self.document_count):,} "\
+                f"document(s) since {self.publication_range[0]} "\
+                f"\nwhich were cited by {int(self.cited_by_count):,} author(s) in "\
+                f"{int(self.citation_count):,} document(s) as of {date}"
+        elif self._view in ['METRICS']:
+            s = f'Author with ID: {self._id}\n'\
+                f'published {self.document_count} document(s)\n'\
+                f'which were cited by {int(self.cited_by_count):,} author(s) '\
+                f'in {int(self.citation_count):,} document(s)'
         return s
 
     def get_coauthors(self) -> Optional[List[NamedTuple]]:
