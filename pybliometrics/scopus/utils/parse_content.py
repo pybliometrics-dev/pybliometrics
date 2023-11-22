@@ -140,32 +140,42 @@ def make_search_summary(self, keyword, results, joiner="\n    "):
     return s
 
 
-def parse_affiliation(affs):
+def parse_affiliation(affs, view):
     """Helper function to parse list of affiliation-related information."""
     order = 'id parent type relationship afdispname preferred_name '\
             'parent_preferred_name country_code country address_part city '\
             'state postal_code org_domain org_URL'
-    aff = namedtuple('Affiliation', order)
+    aff = namedtuple('Affiliation',
+                 order,
+                 defaults=(None,) * len(order.split()))
     out = []
-    for item in listify(affs):
-        if not item:
-            continue
-        doc = item.get('ip-doc', {}) or {}
-        address = doc.get('address', {}) or {}
-        try:
-            parent = int(item['@parent'])
-        except KeyError:
-            parent = None
-        new = aff(id=int(item['@affiliation-id']), parent=parent,
-            type=doc.get('@type'), relationship=doc.get('@relationship'),
-            afdispname=doc.get('@afdispname'),
-            preferred_name=doc.get('preferred-name', {}).get('$'),
-            parent_preferred_name=doc.get('parent-preferred-name', {}).get('$'),
-            country_code=address.get('@country'), country=address.get('country'),
-            address_part=address.get("address-part"), city=address.get('city'),
-            postal_code=address.get('postal-code'), state=address.get('state'),
-            org_domain=doc.get('org-domain'), org_URL=doc.get('org-URL'))
+
+    if view in ['STANDARD', 'ENHANCED']:
+        for item in listify(affs):
+            if not item:
+                continue
+            doc = item.get('ip-doc', {}) or {}
+            address = doc.get('address', {}) or {}
+            try:
+                parent = int(item['@parent'])
+            except KeyError:
+                parent = None
+            new = aff(id=int(item['@affiliation-id']), parent=parent,
+                type=doc.get('@type'), relationship=doc.get('@relationship'),
+                afdispname=doc.get('@afdispname'),
+                preferred_name=doc.get('preferred-name', {}).get('$'),
+                parent_preferred_name=doc.get('parent-preferred-name', {}).get('$'),
+                country_code=address.get('@country'), country=address.get('country'),
+                address_part=address.get("address-part"), city=address.get('city'),
+                postal_code=address.get('postal-code'), state=address.get('state'),
+                org_domain=doc.get('org-domain'), org_URL=doc.get('org-URL'))
+            out.append(new)
+    elif view in ['LIGHT']:
+        new = aff(preferred_name = affs.get('affiliation-name'),
+              city = affs.get('affiliation-city'),
+              country = affs.get('affiliation-country'))
         out.append(new)
+
     return out or None
 
 

@@ -23,8 +23,11 @@ class AuthorRetrieval(Retrieval):
         when it lookes correct in the web view.  In this case please request
         a correction.
         """
-        affs = chained_get(self._profile, ["affiliation-current", "affiliation"])
-        return parse_affiliation(affs)
+        if self._view in ['STANDARD', 'ENHANCED']:
+            affs = chained_get(self._profile, ["affiliation-current", "affiliation"])
+        elif self._view in ['LIGHT']:
+            affs = self._json.get('affiliation-current')
+        return parse_affiliation(affs, self._view)
 
     @property
     def affiliation_history(self) -> Optional[List[NamedTuple]]:
@@ -128,7 +131,19 @@ class AuthorRetrieval(Retrieval):
     @property
     def indexed_name(self) -> Optional[str]:
         """Author's name as indexed by Scopus."""
-        return html_unescape(chained_get(self._profile, ['preferred-name', 'indexed-name']))
+        if self._view in ['STANDARD', 'ENHANCED']:
+            indexed_name = html_unescape(chained_get(self._profile, ['preferred-name', 'indexed-name']))
+        elif self._view in ['LIGHT']:
+            # Try to get indexed name from name-variants
+            name_variants = chained_get(self._json, ['name-variants', 'name-variant'])
+            if name_variants:
+                indexed_name = chained_get(name_variants[0], ['name-variant', 'indexed-name'])
+            else:
+                # In case of no name-variants get name from preferred-name
+                preferred_name = self._json.get('preferred-name')
+                indexed_name = preferred_name.get('initials') + ' ' + preferred_name.get('surname')
+        
+        return indexed_name
 
     @property
     def initials(self) -> Optional[str]:
@@ -156,11 +171,19 @@ class AuthorRetrieval(Retrieval):
     @property
     def publication_range(self) -> Optional[Tuple[int, int]]:
         """Tuple containing years of first and last publication."""
-        r = self._profile.get('publication-range')
-        try:
-            return int(r['@start']), int(r['@end'])
-        except TypeError:
-            return None
+        if self._view in ['STANDARD', 'ENHANCED']:
+            r = self._profile.get('publication-range')
+            try:
+                return int(r['@start']), int(r['@end'])
+            except TypeError:
+                return None
+
+        elif self._view in ['LIGHT']:
+            r = self._json.get('publication-range')
+            try:
+                return int(r.get('start')), int(r.get('end'))
+            except TypeError:
+                return None
 
     @property
     def scopus_author_link(self) -> Optional[str]:
