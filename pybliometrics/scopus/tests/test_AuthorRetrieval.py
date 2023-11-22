@@ -18,23 +18,36 @@ enhanced = AuthorRetrieval("7004212771", refresh=30, view="ENHANCED")
 
 def test_affiliation_current():
     assert_equal(metrics.affiliation_current, None)
-    assert_equal(light.affiliation_current, None)
+
     order = 'id parent type relationship afdispname preferred_name '\
             'parent_preferred_name country_code country address_part city '\
             'state postal_code org_domain org_URL'
-    aff = namedtuple('Affiliation', order)
-    expected = aff(id=110785688, parent=60027950, type='dept',
-        relationship='author', afdispname=None, country='United States',
-        preferred_name='Department of Chemical Engineering',
-        parent_preferred_name='Carnegie Mellon University', country_code='usa',
+    aff = namedtuple('Affiliation',
+                    order,
+                    defaults=(None,) * len(order.split()))
+
+    expected_std_enh = aff(id=60027950, parent=None, type='parent',
+        relationship='author', afdispname=None, preferred_name='Carnegie Mellon University',
+        parent_preferred_name=None, country_code='usa', country='United States',
         address_part='5000 Forbes Avenue', city='Pittsburgh', state='PA',
-        postal_code='15213-3890', org_domain='cmu.edu',
-        org_URL='https://www.cmu.edu/')
-    for a in (standard, enhanced):
+        postal_code='15213-3890', org_domain='cmu.edu', org_URL='https://www.cmu.edu/')
+
+    expected_lgh = aff(id=None, parent=None, type=None,
+        relationship=None, afdispname=None, preferred_name='Carnegie Mellon University',
+        parent_preferred_name=None, country_code=None, country='United States',
+        address_part=None, city='Pittsburgh', state=None,
+        postal_code=None, org_domain=None, org_URL=None)
+
+    for a in (standard, enhanced, light):
         received = a.affiliation_current
         assert_true(isinstance(received, list))
         assert_true(len(received) >= 1)
-        assert_true(expected in received)
+
+    for a in (standard, enhanced):
+        received = a.affiliation_current
+        assert_true(expected_std_enh in received)
+
+    assert_true(expected_lgh in light.affiliation_current)
 
 
 def test_affiliation_history():
@@ -199,7 +212,7 @@ def test_identifier():
 
 def test_indexed_name():
     assert_equal(metrics.indexed_name, None)
-    assert_equal(light.indexed_name, None)
+    assert_equal(light.indexed_name, 'Kitchin J.')
     assert_equal(standard.indexed_name, 'Kitchin J.')
     assert_equal(enhanced.indexed_name, 'Kitchin J.')
 
@@ -231,8 +244,7 @@ def test_orcid():
 
 def test_publication_range():
     assert_equal(metrics.publication_range, None)
-    assert_equal(light.publication_range, None)
-    for a in (standard, enhanced):
+    for a in (standard, enhanced, light):
         assert_equal(a.publication_range[0], 1995)
         assert_true(a.publication_range[1] >= 2021)
 

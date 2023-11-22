@@ -27,6 +27,8 @@ class AuthorRetrieval(Retrieval):
             affs = chained_get(self._profile, ["affiliation-current", "affiliation"])
         elif self._view in ['LIGHT']:
             affs = self._json.get('affiliation-current')
+        else:
+            return None
         return parse_affiliation(affs, self._view)
 
     @property
@@ -142,6 +144,8 @@ class AuthorRetrieval(Retrieval):
                 # In case of no name-variants get name from preferred-name
                 preferred_name = self._json.get('preferred-name')
                 indexed_name = preferred_name.get('initials') + ' ' + preferred_name.get('surname')
+        else:
+            indexed_name = None
         
         return indexed_name
 
