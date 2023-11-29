@@ -44,6 +44,17 @@ class AffiliationRetrieval(Retrieval):
     def document_count(self) -> int:
         """Number of documents for the affiliation."""
         return int(self._json['coredata']['document-count'])
+    
+    @property
+    def document_entitlement_status(self) -> Optional[str]:
+        """Returns the document entitlement status, i.e. tells if the requestor 
+        is entitled to the requested resource.
+        Note: Only works with `ENTITLED` view.
+        """
+        if self._view == 'ENTITLED':
+            return chained_get(self._json, ['document-entitlement', 'status'])
+        else:
+            return None
 
     @property
     def eid(self) -> str:
@@ -138,11 +149,11 @@ class AffiliationRetrieval(Retrieval):
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param view: The view of the file that should be downloaded.  Allowed
-                     values: `LIGHT`, `STANDARD`, where `STANDARD` includes all
+                     values: `LIGHT`, `STANDARD`, `ENTITLED`, where `STANDARD` includes all
                      information of the `LIGHT` view.  For details see
                      https://dev.elsevier.com/sc_affil_retrieval_views.html.
                      Note: Neither the `BASIC` view nor `DOCUMENTS` or `AUTHORS`
-                     views are active, although documented.
+                     views are active, although documented. `ENTITLED` only contains the `document_entitlement_status`.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/AffiliationRetrievalAPI.wadl.
@@ -159,15 +170,16 @@ class AffiliationRetrieval(Retrieval):
         where `path` is specified in your configuration file.
         """
         # Checks
-        check_parameter_value(view, ('LIGHT', 'STANDARD'), "view")
+        check_parameter_value(view, ('LIGHT', 'STANDARD', 'ENTITLED'), "view")
 
         # Load json
         self._view = view
         self._refresh = refresh
         aff_id = str(int(str(aff_id).split('-')[-1]))
         Retrieval.__init__(self, aff_id, api='AffiliationRetrieval', **kwds)
-        self._json = self._json['affiliation-retrieval-response']
-        self._profile = self._json.get("institution-profile", {})
+        if self._view in ('LIGHT', 'STANDARD'):
+            self._json = self._json['affiliation-retrieval-response']
+            self._profile = self._json.get("institution-profile", {})
 
     def __str__(self):
         """Return a summary string."""

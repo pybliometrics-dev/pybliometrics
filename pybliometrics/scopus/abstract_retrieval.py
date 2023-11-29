@@ -288,6 +288,17 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'dc:description'])
 
     @property
+    def document_entitlement_status(self) -> Optional[str]:
+        """Returns the document entitlement status, i.e. tells if the requestor 
+        is entitled to the requested resource.
+        Note: Only works with `ENTITLED` view.
+        """
+        if self._view == 'ENTITLED':
+            return chained_get(self._json, ['document-entitlement', 'status'])
+        else:
+            return None
+
+    @property
     def doi(self) -> Optional[str]:
         """DOI of the document."""
         return chained_get(self._json, ['coredata', 'prism:doi'])
@@ -697,10 +708,11 @@ class AbstractRetrieval(Retrieval):
                         'scopus_id', 'pubmed_id', 'doi'.  If the value is None,
                         the function tries to infer the ID type itself.
         :param view: The view of the file that should be downloaded.  Allowed
-                     values: META, META_ABS, REF, FULL, where FULL includes all
+                     values: META, META_ABS, REF, FULL, ENTITLED, where FULL includes all
                      information of META_ABS view and META_ABS includes all
                      information of the META view.  For details see
                      https://dev.elsevier.com/sc_abstract_retrieval_views.html.
+                     Note: `ENTITLED` view only contains the `document_entitlement_status`.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values listed in the API specification at
                      https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl.
@@ -719,7 +731,7 @@ class AbstractRetrieval(Retrieval):
         """
         # Checks
         identifier = str(identifier)
-        check_parameter_value(view, ('META', 'META_ABS', 'REF', 'FULL'), "view")
+        check_parameter_value(view, ('META', 'META_ABS', 'REF', 'FULL', 'ENTITLED'), "view")
         if id_type is None:
             id_type = detect_id_type(identifier)
         else:
@@ -731,15 +743,16 @@ class AbstractRetrieval(Retrieval):
         self._refresh = refresh
         Retrieval.__init__(self, identifier=identifier, id_type=id_type,
                            api='AbstractRetrieval', **kwds)
-        self._json = self._json['abstracts-retrieval-response']
-        self._head = chained_get(self._json, ["item", "bibrecord", "head"], {})
-        conf_path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent']
-        self._confevent = chained_get(self._head, conf_path, {})
-        if self._view == "REF":
-            ref_path = ["references"]
-        else:
-            ref_path = ['item', 'bibrecord', 'tail', 'bibliography']
-        self._ref = chained_get(self._json, ref_path, {})
+        if self._view in ('META', 'META_ABS', 'REF', 'FULL'):
+            self._json = self._json['abstracts-retrieval-response']
+            self._head = chained_get(self._json, ["item", "bibrecord", "head"], {})
+            conf_path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent']
+            self._confevent = chained_get(self._head, conf_path, {})
+            if self._view == "REF":
+                ref_path = ["references"]
+            else:
+                ref_path = ['item', 'bibrecord', 'tail', 'bibliography']
+            self._ref = chained_get(self._json, ref_path, {})            
 
     def __str__(self):
         """Return pretty text version of the document.

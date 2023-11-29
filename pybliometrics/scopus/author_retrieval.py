@@ -89,6 +89,17 @@ class AuthorRetrieval(Retrieval):
     def document_count(self) -> int:
         """Number of documents authored (excludes book chapters and notes)."""
         return int(self._json['coredata']['document-count'])
+    
+    @property
+    def document_entitlement_status(self) -> Optional[str]:
+        """Returns the document entitlement status, i.e. tells if the requestor 
+        is entitled to the requested resource.
+        Note: Only works with `ENTITLED` view.
+        """
+        if self._view == 'ENTITLED':
+            return chained_get(self._json, ['document-entitlement', 'status'])
+        else:
+            return None
 
     @property
     def eid(self) -> Optional[str]:
@@ -217,12 +228,12 @@ class AuthorRetrieval(Retrieval):
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param view: The view of the file that should be downloaded.  Allowed
-                     values: `METRICS`, `LIGHT`, `STANDARD`, `ENHANCED`, where `STANDARD`
+                     values: `METRICS`, `LIGHT`, `STANDARD`, `ENHANCED`, `ENTITLED`, where `STANDARD`
                      includes all information of `LIGHT` view and `ENHANCED`
                      includes all information of any view.  For details see
                      https://dev.elsevier.com/sc_author_retrieval_views.html.
                      Note: Neither the `BASIC` nor the `DOCUMENTS` view are active,
-                     although documented.
+                     although documented. `ENTITLED` only contains the `document_entitlement_status`.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/AuthorRetrievalAPI.wadl.
@@ -240,7 +251,7 @@ class AuthorRetrieval(Retrieval):
         is stripped of an eventually leading `'9-s2.0-'`.
         """
         # Checks
-        allowed_views = ('METRICS', 'LIGHT', 'STANDARD', 'ENHANCED')
+        allowed_views = ('METRICS', 'LIGHT', 'STANDARD', 'ENHANCED', 'ENTITLED')
         check_parameter_value(view, allowed_views, "view")
 
         # Load json
@@ -250,22 +261,23 @@ class AuthorRetrieval(Retrieval):
         Retrieval.__init__(self, identifier=self._id,
                            api='AuthorRetrieval', **kwds)
 
-        # Parse json
-        self._json = self._json['author-retrieval-response']
-        try:
-            self._json = self._json[0]
-        except KeyError:  # Incomplete forward
-            alias_json = listify(self._json['alias']['prism:url'])
-            self._alias = [d['$'].split(':')[-1] for d in alias_json]
-            alias_str = ', '.join(self._alias)
-            text = f'Author profile with ID {author_id} has been merged and '\
-                   f'the main profile is now one of {alias_str}.  Please update '\
-                   'your records manually.  Functionality of this object is '\
-                   'reduced.'
-            warn(text, UserWarning)
-        else:
-            self._alias = None
-        self._profile = self._json.get("author-profile", {})
+        if self._view in ('METRICS', 'LIGHT', 'STANDARD', 'ENHANCED'):
+            # Parse json
+            self._json = self._json['author-retrieval-response']
+            try:
+                self._json = self._json[0]
+            except KeyError:  # Incomplete forward
+                alias_json = listify(self._json['alias']['prism:url'])
+                self._alias = [d['$'].split(':')[-1] for d in alias_json]
+                alias_str = ', '.join(self._alias)
+                text = f'Author profile with ID {author_id} has been merged and '\
+                    f'the main profile is now one of {alias_str}.  Please update '\
+                    'your records manually.  Functionality of this object is '\
+                    'reduced.'
+                warn(text, UserWarning)
+            else:
+                self._alias = None
+            self._profile = self._json.get("author-profile", {})
 
     def __str__(self):
         """Return a summary string."""
