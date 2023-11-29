@@ -22,9 +22,7 @@ def test_affiliation_current():
     order = 'id parent type relationship afdispname preferred_name '\
             'parent_preferred_name country_code country address_part city '\
             'state postal_code org_domain org_URL'
-    aff = namedtuple('Affiliation',
-                    order,
-                    defaults=(None,) * len(order.split()))
+    aff = namedtuple('Affiliation', order, defaults=(None,) * len(order.split()))
 
     expected_std_enh = aff(id=60027950, parent=None, type='parent',
         relationship='author', afdispname=None, preferred_name='Carnegie Mellon University',
