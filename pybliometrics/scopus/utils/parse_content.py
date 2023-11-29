@@ -145,12 +145,10 @@ def parse_affiliation(affs, view):
     order = 'id parent type relationship afdispname preferred_name '\
             'parent_preferred_name country_code country address_part city '\
             'state postal_code org_domain org_URL'
-    aff = namedtuple('Affiliation',
-                 order,
-                 defaults=(None,) * len(order.split()))
+    aff = namedtuple('Affiliation', order, defaults=(None,) * len(order.split()))
     out = []
 
-    if view in ['STANDARD', 'ENHANCED']:
+    if view in ('STANDARD', 'ENHANCED'):
         for item in listify(affs):
             if not item:
                 continue
@@ -170,10 +168,10 @@ def parse_affiliation(affs, view):
                 postal_code=address.get('postal-code'), state=address.get('state'),
                 org_domain=doc.get('org-domain'), org_URL=doc.get('org-URL'))
             out.append(new)
-    elif view in ['LIGHT']:
-        new = aff(preferred_name = affs.get('affiliation-name'),
-              city = affs.get('affiliation-city'),
-              country = affs.get('affiliation-country'))
+    elif view == 'LIGHT':
+        new = aff(preferred_name=affs.get('affiliation-name'),
+                  city=affs.get('affiliation-city'),
+                  country=affs.get('affiliation-country'))
         out.append(new)
 
     return out or None
