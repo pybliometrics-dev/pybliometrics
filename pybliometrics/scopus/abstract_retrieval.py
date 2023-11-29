@@ -747,7 +747,7 @@ class AbstractRetrieval(Retrieval):
         Assumes the document is a journal article and was loaded with
         view="META_ABS" or view="FULL".
         """
-        if self._view in ['FULL', 'META_ABS', 'META']:
+        if self._view in ('FULL', 'META_ABS', 'META'):
             date = self.get_cache_file_mdate().split()[0]
             # Authors
             if self.authors:
@@ -772,10 +772,10 @@ class AbstractRetrieval(Retrieval):
                 s += "\n  Affiliation(s):\n   "
                 s += '\n   '.join([aff.name for aff in self.affiliation])
         
-        elif self._view in ['REF']:
+        elif self._view in ('REF'):
             def convert_citedbycount(entry):
                 try:
-                    return float(entry.citedbycount) if entry.citedbycount is not None else 0
+                    return float(entry.citedbycount) or 0
                 except (ValueError, TypeError):
                     return 0
             
