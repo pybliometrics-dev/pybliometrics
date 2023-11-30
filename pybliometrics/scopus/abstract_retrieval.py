@@ -24,7 +24,7 @@ class AbstractRetrieval(Retrieval):
         aff = namedtuple('Affiliation', 'id name city country')
         affs = listify(self._json.get('affiliation', []))
         for item in affs:
-            new = aff(id=int(item['@id']), name=item.get('affilname'),
+            new = aff(id=make_int_if_possible(item.get('@id')), name=item.get('affilname'),
                       city=item.get('affiliation-city'),
                       country=item.get('affiliation-country'))
             out.append(new)
@@ -747,29 +747,55 @@ class AbstractRetrieval(Retrieval):
         Assumes the document is a journal article and was loaded with
         view="META_ABS" or view="FULL".
         """
-        date = self.get_cache_file_mdate().split()[0]
-        # Authors
-        if self.authors:
-            if len(self.authors) > 1:
-                authors = _list_authors(self.authors)
+        def convert_citedbycount(entry):
+                try:
+                    return float(entry.citedbycount) or 0
+                except (ValueError, TypeError):
+                    return 0
+            
+        def get_date(coverDate):
+            try:
+                return coverDate[:4]
+            except TypeError:
+                return None
+                
+        if self._view in ('FULL', 'META_ABS', 'META'):
+            date = self.get_cache_file_mdate().split()[0]
+            # Authors
+            if self.authors:
+                if len(self.authors) > 1:
+                    authors = _list_authors(self.authors)
+                else:
+                    a = self.authors[0]
+                    authors = str(a.given_name) + ' ' + str(a.surname)
             else:
-                a = self.authors[0]
-                authors = str(a.given_name) + ' ' + str(a.surname)
-        else:
-            authors = "(No author found)"
-        # All other information
-        s = f'{authors}: "{self.title}", {self.publicationName}, {self.volume}'
-        if self.issueIdentifier:
-            s += f'({self.issueIdentifier})'
-        s += ', '
-        s += _parse_pages(self)
-        s += f'({self.coverDate[:4]}).'
-        if self.doi:
-            s += f' https://doi.org/{self.doi}.\n'
-        s += f'{self.citedby_count} citation(s) as of {date}'
-        if self.affiliation:
-            s += "\n  Affiliation(s):\n   "
-            s += '\n   '.join([aff.name for aff in self.affiliation])
+                authors = "(No author found)"
+            # All other information
+            s = f'{authors}: "{self.title}", {self.publicationName}, {self.volume}'
+            if self.issueIdentifier:
+                s += f'({self.issueIdentifier})'
+            s += ', '
+            s += _parse_pages(self)
+            s += f'({self.coverDate[:4]}).'
+            if self.doi:
+                s += f' https://doi.org/{self.doi}.\n'
+            s += f'{self.citedby_count} citation(s) as of {date}'
+            if self.affiliation:
+                s += "\n  Affiliation(s):\n   "
+                s += '\n   '.join([aff.name for aff in self.affiliation])
+        
+        elif self._view in ('REF'):
+            # Sort reference list by citationcount
+            top_n = 5
+            references = sorted(self.references, key=convert_citedbycount, reverse=True)
+
+            top_references = [f'{reference.title} ({get_date(reference.coverDate)}). '+
+                              f'EID: {reference.id}' for reference in references[:top_n]]
+
+            s = f'A total of {self.refcount} references were found. '
+            s += f'Top {top_n} references:\n\t'
+            s += '\n\t'.join(top_references)
+
         return s
 
     def get_bibtex(self) -> str:
