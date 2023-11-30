@@ -786,16 +786,15 @@ class AbstractRetrieval(Retrieval):
         
         elif self._view in ('REF'):
             # Sort reference list by citationcount
+            top_n = 5
             references = sorted(self.references, key=convert_citedbycount, reverse=True)
 
-            get_doi = lambda doi: f': https://doi.org/{doi}' if doi else ''
-
-            top_5 = [f'{reference.title} ({get_date(reference.coverDate)})'+
-                    f'{get_doi(reference.doi)}' for reference in references[:5]]
+            top_references = [f'{reference.title} ({get_date(reference.coverDate)}). '+
+                              f'EID: {reference.id}' for reference in references[:top_n]]
 
             s = f'A total of {self.refcount} references were found. '
-            s += f'Top 5 references:\n\t'
-            s += '\n\t'.join(top_5)
+            s += f'Top {top_n} references:\n\t'
+            s += '\n\t'.join(top_references)
 
         return s
 
