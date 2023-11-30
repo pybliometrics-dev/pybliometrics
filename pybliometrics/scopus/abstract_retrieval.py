@@ -747,6 +747,18 @@ class AbstractRetrieval(Retrieval):
         Assumes the document is a journal article and was loaded with
         view="META_ABS" or view="FULL".
         """
+        def convert_citedbycount(entry):
+                try:
+                    return float(entry.citedbycount) or 0
+                except (ValueError, TypeError):
+                    return 0
+            
+        def get_date(coverDate):
+            try:
+                return coverDate[:4]
+            except TypeError:
+                return None
+                
         if self._view in ('FULL', 'META_ABS', 'META'):
             date = self.get_cache_file_mdate().split()[0]
             # Authors
@@ -773,27 +785,13 @@ class AbstractRetrieval(Retrieval):
                 s += '\n   '.join([aff.name for aff in self.affiliation])
         
         elif self._view in ('REF'):
-            def convert_citedbycount(entry):
-                try:
-                    return float(entry.citedbycount) or 0
-                except (ValueError, TypeError):
-                    return 0
-            
-            def get_date(coverDate):
-                try:
-                    return coverDate[:4]
-                except TypeError:
-                    return None
-
             # Sort reference list by citationcount
             references = sorted(self.references, key=convert_citedbycount, reverse=True)
 
-            top_5 = [(reference.title +
-                                ' (' +
-                                get_date(reference.coverDate) +
-                                ')'+
-                                ': https://doi.org/' +
-                                str(reference.doi)) for reference in references[:5]]
+            get_doi = lambda doi: f': https://doi.org/{doi}' if doi else ''
+
+            top_5 = [f'{reference.title} ({get_date(reference.coverDate)})'+
+                    f'{get_doi(reference.doi)}' for reference in references[:5]]
 
             s = f'A total of {self.refcount} references were found. '
             s += f'Top 5 references:\n\t'

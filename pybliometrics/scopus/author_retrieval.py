@@ -143,7 +143,7 @@ class AuthorRetrieval(Retrieval):
             else:
                 # In case of no name-variants get name from preferred-name
                 preferred_name = self._json.get('preferred-name')
-                indexed_name = preferred_name.get('initials') + ' ' + preferred_name.get('surname')
+                indexed_name = ' '.join([preferred_name.get('initials', ''), preferred_name.get('surname', '')])
         else:
             indexed_name = None
         
@@ -180,7 +180,7 @@ class AuthorRetrieval(Retrieval):
                 r = self._profile.get('publication-range')
                 start = '@start'
                 end = '@end'
-            else:
+            elif self._view == 'LIGHT':
                 r = self._json.get('publication-range')
                 start = 'start'
                 end = 'end'
@@ -308,8 +308,8 @@ class AuthorRetrieval(Retrieval):
                 f"\nwhich were cited by {int(self.cited_by_count):,} author(s) in "\
                 f"{int(self.citation_count):,} document(s) as of {date}"
         elif self._view == 'METRICS':
-            s = f'Author with ID: {self._id}\n'\
-                f'published {self.document_count} document(s)\n'\
+            s = f'Author with ID {self._id}\n'\
+                f'published {int(self.document_count):,} document(s)\n'\
                 f'which were cited by {int(self.cited_by_count):,} author(s) '\
                 f'in {int(self.citation_count):,} document(s)'
         return s
