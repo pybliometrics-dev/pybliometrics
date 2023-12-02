@@ -83,38 +83,14 @@ class PlumXMetrics(Retrieval):
 
         :param identifier: The identifier of a document.
         :param id_type: The type of used ID. Allowed values are:
-                        - 'airitiDocId'
-                        - 'arxivId'
-                        - 'cabiAbstractId'
-                        - 'citeulikeId'
-                        - 'digitalMeasuresArtifactId'
-                        - 'doi'
-                        - 'elsevierId'
-                        - 'elsevierPii'
-                        - 'facebookCountUrlId'
-                        - 'figshareArticleId'
-                        - 'isbn'
-                        - 'lccn'
-                        - 'medwaveId'
-                        - 'nctId'
-                        - 'oclc'
-                        - 'pittEprintDscholarId'
-                        - 'pmcid'
-                        - 'pmid'
-                        - 'redditId'
-                        - 'repecHandle'
-                        - 'repoUrl'
-                        - 'scieloId'
-                        - 'sdEid'
-                        - 'slideshareUrlId'
-                        - 'smithsonianPddrId'
-                        - 'soundcloudTrackId'
-                        - 'ssrnId'
-                        - 'urlId'
-                        - 'usPatentApplicationId'
-                        - 'usPatentPublicationId'
-                        - 'vimeoVideoId'
-                        - 'youtubeVideoId'
+                        'airitiDocId'; 'cabiAbstractId'; 'citeulikeId';
+                        'digitalMeasuresArtifactId'; 'doi'; 'elsevierId';
+                        'elsevierPii'; 'facebookCountUrlId';
+                        'figshareArticleId'; 'isbn'; 'lccn'; 'medwaveId';
+                        'nctId'; 'oclc'; 'pittEprintDscholarId'; 'pmcid';
+                        'pmid'; 'redditId'; 'repecHandle'; 'repoUrl';
+                        'scieloId'; 'sdEid'; 'slideshareUrlId';
+                        'smithsonianPddrId'; 'ssrnId'; 'urlId'
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If `int` is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
@@ -133,16 +109,13 @@ class PlumXMetrics(Retrieval):
         where `path` is specified in your configuration file.
         """
         # Checks
-        allowed = ('airitiDocId', 'arxivId', 'cabiAbstractId',
-                   'citeulikeId', 'digitalMeasuresArtifactId', 'doi',
-                   'elsevierId', 'elsevierPii', 'facebookCountUrlId',
-                   'figshareArticleId', 'isbn', 'lccn', 'medwaveId',
-                   'nctId', 'oclc', 'pittEprintDscholarId', 'pmcid',
-                   'pmid', 'redditId', 'repecHandle', 'repoUrl', 'scieloId',
-                   'sdEid', 'slideshareUrlId', 'smithsonianPddrId',
-                   'soundcloudTrackId', 'ssrnId', 'urlId',
-                   'usPatentApplicationId', 'usPatentPublicationId',
-                   'vimeoVideoId', 'youtubeVideoId')
+        allowed = ('airitiDocId', 'cabiAbstractId', 'citeulikeId',
+                   'digitalMeasuresArtifactId', 'doi', 'elsevierId',
+                   'elsevierPii', 'facebookCountUrlId', 'figshareArticleId',
+                   'isbn', 'lccn', 'medwaveId', 'nctId', 'oclc',
+                   'pittEprintDscholarId', 'pmcid', 'pmid', 'redditId',
+                   'repecHandle', 'repoUrl', 'scieloId', 'sdEid',
+                   'slideshareUrlId', 'smithsonianPddrId', 'ssrnId', 'urlId')
         check_parameter_value(id_type, allowed, "id_type")
         self._id_type = id_type
         self._identifier = identifier
