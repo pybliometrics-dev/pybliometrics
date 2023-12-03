@@ -1,7 +1,7 @@
 pybliometrics.scopus.AffiliationRetrieval
 =========================================
 
-`AffiliationRetrieval()` implements the `Affiliation Retrieval API <https://dev.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, like city, country, its members, and more.
+`AffiliationRetrieval()` implements the `Affiliation Retrieval API <https://dev.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, such as city, country, its members, and more.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -17,7 +17,7 @@ Documentation
 Examples
 --------
 
-You initialize the class with Scopus' Affiliation ID:
+You initialize the class using Scopus' Affiliation ID:
 
 .. code-block:: python
 
@@ -34,7 +34,7 @@ You can obtain basic information just by printing the object:
     has 13,033 associated author(s) and 75,695 associated document(s) as of 2021-07-12
 
 
-The object has a number of attributes but no methods.  For example, information regarding the affiliation itself:
+The object has several of attributes but no methods.  For example, information regarding the affiliation itself:
 
 .. code-block:: python
 
@@ -58,7 +58,7 @@ The object has a number of attributes but no methods.  For example, information 
     'http://www.uct.ac.za'
 
 
-There are meta information, too:
+There are meta-information, too:
 
 .. code-block:: python
 
@@ -79,7 +79,7 @@ Scopus also collects information on different names affiliated authors use for t
      Variant(name='Univ. Of Cape Town', doc_count=392)]
 
 
-Using `pandas <https://pandas.pydata.org/>`_ you can easily turn this into a DataFrame:
+Using `pandas <https://pandas.pydata.org/>`_, you can easily convert this into a DataFrame:
 
 .. code-block:: python
 
@@ -94,4 +94,4 @@ Using `pandas <https://pandas.pydata.org/>`_ you can easily turn this into a Dat
 
 More on different types of affiliations in section `tips <../tips.html#affiliations>`_.
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `aff.get_cache_file_mdate()` to get the date of last modification, and `aff.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.

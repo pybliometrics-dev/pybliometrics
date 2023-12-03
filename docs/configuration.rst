@@ -84,7 +84,7 @@ Default location
 ~~~~~~~~~~~~~~~~
 For recent and new installations, the configuration file is located at `~/.config/`.  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
 
-If you started with versions older than 3.5, the file was called `config.ini` and located either in `~/.pybliometrics/` or (for very old installations) in `~/.scopus/`. You can safely move and rename the file.  The location `~/.config/pybliometics.cfg` always takes precedence.
+If you started with versions older than 3.5, the file was called `config.ini` and located either in `~/.pybliometrics/` or (for very old installations) in `~/.scopus/`. You can safely move and rename the file.  The location `~/.config/pybliometrics.cfg` always takes precedence.
 
 To see the location of the configuration file your current `pybliometrics` instance is using, execute this:
 

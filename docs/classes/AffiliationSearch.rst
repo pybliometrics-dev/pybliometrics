@@ -1,7 +1,7 @@
 pybliometrics.scopus.AffiliationSearch
 ======================================
 
-`AffiliationSearch()` implements the `Affiliation Search API <https://dev.elsevier.com/documentation/AffiliationSearchAPI.wadl>`_.  It performs a query to search for affiliations and then retrieves the records of the query.
+`AffiliationSearch()` implements the `Affiliation Search API <https://dev.elsevier.com/documentation/AffiliationSearchAPI.wadl>`_.  It performs a query to search for affiliations and then retrieves the corresponding records.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -17,7 +17,7 @@ Documentation
 Examples
 --------
 
-The class is initialized with a search query which you can read about in `Affiliation Search Guide <https://dev.elsevier.com/tips/AffiliationSearchTips.htm>`_.  An invalid search query will result in an error.
+The class is initialized using a search query, details of which can be found in `Affiliation Search Guide <https://dev.elsevier.com/tips/AffiliationSearchTips.htm>`_.  An invalid search query results in an error.
 
 .. code-block:: python
 
@@ -37,7 +37,7 @@ You can obtain a search summary just by printing the object:
         Max Planck Institute for Competition and Innovation
 
 
-The class mostly serves to provide a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing information about the affiliation.  One of them is the affiliation ID which you can use for the :doc:`AffiliationRetrieval <../classes/AffiliationRetrieval>` class:
+The primary function of the class is to provide a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_, each storing information about the affiliation.  One of them is the affiliation ID which you can use for the :doc:`AffiliationRetrieval <../classes/AffiliationRetrieval>` class:
 
 .. code-block:: python
 
@@ -50,7 +50,7 @@ The class mostly serves to provide a list of `namedtuples <https://docs.python.o
                  parent='0')]
 
 
-It's easy to work with namedtuples: using `pandas <https://pandas.pydata.org/>`_ for example you can quickly turn the results into a DataFrame:
+Working with namedtuples is straightforward: using `pandas <https://pandas.pydata.org/>`_ for example you can quickly convert the results into a DataFrame:
 
 .. code-block:: python
 
@@ -70,12 +70,12 @@ It's easy to work with namedtuples: using `pandas <https://pandas.pydata.org/>`_
     1  Germany      0 
 
 
-As you can see from comparison of the EIDs, the first affiliation starts with 10-s2.0-6, the other with 10-s2.0-1.  The latter denotes a non-org affiliation type.  
+Comparing the EIDs, notice that the first affiliation's EID starts with 10-s2.0-6, while the other begins with 10-s2.0-1.  The latter denotes a non-org affiliation type.  
 More on different types of affiliations in section `tips <../tips.html#affiliations>`_.
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `s.get_cache_file_mdate()` to get the date of last modification, and `s.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.
 
-You can get the number of results using the `.get_results_size()` method, even before you download the results:
+You can determine the number of results using the `.get_results_size()` method, even before you download the results:
 
 .. code-block:: python
 
@@ -85,11 +85,11 @@ You can get the number of results using the `.get_results_size()` method, even b
     398
 
 
-There are sometimes missing information in the returned results although it exists in the Scopus database.  For example, the EID may be missing, even though every element always has an EID.  This is not a bug of `pybliometrics`.  Instead it is somehow related to a problem in the download process from the Scopus database.  To check for completeness of specific fields, use parameter `integrity_fields`, which accepts any iterable.  Using parameter `integrity_action` you can choose between two actions on what to do if the integrity check fails: Set `integrity_action="warn"` to issue a UserWarning, or set `integrity_action="raise"` to raise an AttributeError.
+Sometimes, information that exists in the Scopus database may be missing in the returned results.  For example, the EID may be missing, even though every element always has an EID.  This is not a bug of `pybliometrics`.  Instead it is somehow related to a problem in the download process from the Scopus database.  To check for completeness of specific fields, use parameter `integrity_fields`, which accepts any iterable.  Using the`integrity_action` parameter, you can choose between two actions if the integrity check fails: Set `integrity_action="warn"` to issue a UserWarning, or set `integrity_action="raise"` to raise an AttributeError.
 
 .. code-block:: python
 
     >>> s = AffiliationSearch(query, integrity_fields=["eid"], integrity_action="warn")
 
 
-Often you receive more search results than Scopus allows.  Currently the cap is at 5000 results.  In this case the only solution is to narrow down the research, i.e. instead of "affil('Harvard Medical School')" you search for "affil('Harvard Medical School Boston')".
+Occasionally, the number of search results may exceed Scopus' limit, which is currently capped at 5,000 results.  In this case the only solution is to narrow down the research, i.e., instead of "affil('Harvard Medical School')" you search for "affil('Harvard Medical School Boston')".

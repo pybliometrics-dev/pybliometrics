@@ -1,7 +1,7 @@
 pybliometrics.scopus.PlumXMetrics
 =================================
 
-`PlumXMetrics()` implements the `PlumX Metrics API <https://dev.elsevier.com/documentation/PlumXMetricsAPI.wadl>`_.  It provides metrics in five categories: captures, citations, usage, mentions, and social media (`background information <https://plumanalytics.com/learn/about-metrics/>`_).  It works for 32 different types of media.
+`PlumXMetrics()` implements the `PlumX Metrics API <https://dev.elsevier.com/documentation/PlumXMetricsAPI.wadl>`_.  It offers metrics across five categories: captures, citations, usage, mentions, and social media -- see `here <https://plumanalytics.com/learn/about-metrics/>`_ for background information.  It works for many different types of media.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -39,7 +39,7 @@ You can obtain basic information just by printing the object:
     as of 2023-10-20
 
 
-To each of the five categories, there is one property storing number and origin of the metrics in `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_.  If in a category there are no entries the property is simply `None`:
+For each of the five categories, there is a corresponding property that stores the number and origin of the metrics in `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_.  If a category has no entries, the corresponding property will be `None`:
 
 .. code-block:: python
 
@@ -51,7 +51,7 @@ To each of the five categories, there is one property storing number and origin 
      Metric(name='CrossRef', total=80),
      Metric(name='Policy Citation', total=1)]
     >>> plum.mention
-    [[Metric(name='NEWS_COUNT', total=2)]
+    [Metric(name='NEWS_COUNT', total=2)]
     >>> plum.social_media
     [Metric(name='FACEBOOK_COUNT', total=42)]
     >>> plum.usage
@@ -59,7 +59,7 @@ To each of the five categories, there is one property storing number and origin 
      Metric(name='LINK_OUTS', total=11)]
 
 
-Finally there is a property to total all metrics on an aggregated level:
+Finally, there is a property that totals all metrics at an aggregated level:
 
 .. code-block:: python
 
@@ -73,4 +73,4 @@ Finally there is a property to total all metrics on an aggregated level:
 
 There are no bibliometric information such as title or author.
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `source.get_cache_file_mdate()` to get the date of last modification, and `source.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.

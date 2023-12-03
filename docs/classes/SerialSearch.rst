@@ -1,7 +1,7 @@
 pybliometrics.scopus.SerialSearch
 =================================
 
-`SerialSearch()` implements the search of the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It performs a search for serial sources (journal, tradejournal, conferenceproceeding, bookseries) by title, ISSN, publisher, subject or source type.
+`SerialSearch()` implements the search of the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  This class performs searches for serial sources (journals, trade journals, conference proceedings, book series) based on title, ISSN, publisher, subject, or source type.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -34,7 +34,7 @@ You can obtain basic information just by printing the object:
         SoftwareX
 
 
-Users can receive the number of results programmatically via `.get_results_size()`:
+Users can determine the number of results programmatically using the `.get_results_size()` method:
 
 .. code-block:: python
 
@@ -42,7 +42,7 @@ Users can receive the number of results programmatically via `.get_results_size(
     1
 
 
-The class' main attribute `results` returns a list of `OrderedDict <https://docs.python.org/3/library/collections.html#collections.OrderedDict>`_.  Provided information can differ greatly between results and depending on the view (see below) they can be numerous.  (Lists of )OrderedDict can be used neatly with `pandas <https://pandas.pydata.org/>`_ to form DataFrames:
+The main attribute of the class, `results`, returns a list of `OrderedDict <https://docs.python.org/3/library/collections.html#collections.OrderedDict>`_ objects.  Provided information can differ greatly between results and depending on the view (see below) they can be numerous.  Lists of OrderedDict objects can be efficiently converted into DataFrames using `pandas <https://pandas.pydata.org/>`_:
 
 .. code-block:: python
 
@@ -75,9 +75,9 @@ The class' main attribute `results` returns a list of `OrderedDict <https://docs
     0    4.539                  2.18                       11.56 
 
 
-Information beyond the first 16 columns refer to journal metrics: publication counts, citation counts, not-cited documents, share of not-cited documents, and the share of review article documents, for each year since indexation.
+The information in columns beyond the first 16 pertains to journal metrics: publication counts, citation counts, not-cited documents, share of not-cited documents, and the share of review article documents, for each year since indexation.
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `s.get_cache_file_mdate()` to get the date of last modification, and `s.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.
 
-The Serial Title API allows a differing information depth via
+The Serial Title API offers varying depths of information through
 `views <https://dev.elsevier.com/guides/SerialTitleViews.htm>`_.  While all views are restricted, view 'ENHANCED' is the highest among them. In addition to the information contained in 'STANDARD' it contains yearly journal metrics.  If you are not interested in this information, or when speed is an issue, choose the 'STANDARD' view.

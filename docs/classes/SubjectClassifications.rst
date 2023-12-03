@@ -1,7 +1,7 @@
 pybliometrics.scopus.SubjectClassifications
 ===========================================
 
-`SubjectClassifications()` implements the `Subject Classifications API <https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl>`_.  It allows for retrieval-like query for All Science Journal Classification (ASJC) subjects/areas.
+`SubjectClassifications()` implements the `Subject Classifications API <https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl>`_.  It enables retrieval-like queries for All Science Journal Classification (ASJC) subjects/areas.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -49,7 +49,7 @@ You can obtain basic information just by printing the object:
         2614
 
 
-The class has only one method - `SubjectClass.results` - which returns a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_.  By default, the API returns description, code, detail and abbreviation of each found subject, which is also reflected in the fields of `namedtuples` of `SubjectClass().results`.  You can specify the fields to be returned in the search results (e.g. only codes of subjects).
+The class has a single method, `SubjectClass.results`, which returns a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_.  By default, the API returns the description, code, detail and abbreviation of each found subject, which is also reflected in the fields of `namedtuples` of `SubjectClass().results`.  You have the option to specify which fields to be included in the search results, such as only the codes of subjects.
 
 .. code-block:: python
 
@@ -71,6 +71,4 @@ The class has only one method - `SubjectClass.results` - which returns a list of
      Subject(code='2614', description='Mathematics', detail='Theoretical Computer Science', abbrev='MATH')]
 
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.
-
-Use `source.get_cache_file_mdate()` to get the date of last modification, and `source.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.

@@ -1,7 +1,7 @@
 pybliometrics
 =============
 
-Access Elsevier Scopus's API from Python on a large scale.
+Enables large-scale access to Elsevier's Scopus API from Python.
 
 Documentation: https://pybliometrics.readthedocs.io
 

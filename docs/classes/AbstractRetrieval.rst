@@ -3,9 +3,9 @@ pybliometrics.scopus.AbstractRetrieval
 
 `AbstractRetrieval()` implements the `Scopus Abstract Retrieval API <https://dev.elsevier.com/documentation/AbstractRetrievalAPI.wadl>`_.
 
-It takes any identifier as main argument: Most of the time it will be a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_, but DOI, Scopus ID (the last part of the EID), PubMed identifier or Publisher Item Identifier (PII) work as well. `AbstractRetrieval` tries to infer the class itself - to speed this up you can tell the ID type via `ID_type`.
+It accepts any identifier as the main argument.  Most commonly, this will be a `Scopus EID <http://kitchingroup.cheme.cmu.edu/blog/2015/06/07/Getting-a-Scopus-EID-from-a-DOI/>`_, but DOI, Scopus ID (the last part of the EID), PubMed identifier or Publisher Item Identifier (PII) work as well.  `AbstractRetrieval` tries to infer the class itself - to speed this up you can tell the ID type via `ID_type`.
 
-The Abstract Retrieval API allows a differing information depth via `views <https://dev.elsevier.com/guides/AbstractRetrievalViews.htm>`_, some of which are restricted.  The view 'META_ABS' is the highest unrestricted view and contains all information from other unrestricted views.  It is therefore the default view.  The view with the most information content is 'FULL', which includes all information available with 'META_ABS', but is restricted.  In generally you should always try to use `view='FULL'` when downloading an abstract and fall back to the default otherwise.
+The Abstract Retrieval API allows a differing information depth via `views <https://dev.elsevier.com/guides/AbstractRetrievalViews.htm>`_, some of which are restricted.  The 'META_ABS' view is the most comprehensive among unrestricted views, encompassing all information from other unrestricted views.  It is therefore the default view.  The view with the most information content is 'FULL', which includes all information available with 'META_ABS', but is restricted.  Generally, you should always try to use `view='FULL'` when downloading an abstract and fall back to the default otherwise.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -62,7 +62,7 @@ There are 52 attributes and 8 methods to interact with.  For example, to obtain 
     True
 
 
-Attributes `idxterms`, `subject_areas` and `authkeywords` (if provided) provide an idea on the content of a document:
+The attributes `idxterms`, `subject_areas` and `authkeywords` (if provided) offer insights into the document's content:
 
 .. code-block:: python
 
@@ -84,7 +84,7 @@ To obtain the total citation count (at the time the abstract was retrieved and c
     34
 
 
-You get the authors as a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_, which pair conveniently with `pandas <https://pandas.pydata.org/>`_:
+You can retrieve the authors as a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_, which pair conveniently with `pandas <https://pandas.pydata.org/>`_:
 
 .. code-block:: python
 
@@ -125,7 +125,7 @@ The same structure applies for the attributes `affiliation` and `authorgroup`:
 
 
 
-Keep in mind that Scopus might not perfectly/correctly pair authors and affiliations as per the original document, even if it looks so on the web view.  In this case please request corrections to be made in Scopus' API here `here <https://service.elsevier.com/app/contact/supporthub/scopuscontent/>`_.
+Note that Scopus may not always accurately pair authors with their affiliations as per the original document, even if it looks so on the web view.  In this case please request corrections to be made in Scopus' API here `here <https://service.elsevier.com/app/contact/supporthub/scopuscontent/>`_.
 
 The references of an article (useful to build citation networks) are only
 available if you downloaded the article with 'FULL' as `view` parameter.
@@ -166,7 +166,7 @@ available if you downloaded the article with 'FULL' as `view` parameter.
      '2-s2.0-84887264733']
 
 
-Setting `view="REF"` accesses the REF view of the article, which provides more information on the referenced items (but less on other attributes of the document):
+Using `view="REF"` accesses the REF view of the article, which provides more information on the referenced items (but less on other attributes of the document):
 
 .. code-block:: python
 
@@ -186,7 +186,7 @@ Setting `view="REF"` accesses the REF view of the article, which provides more i
 
 The list of authors contains duplicate because of the 1:1 pairing with the authors' affiliation IDs.  In above example, 7003962139 is affiliated with 60033272 and with 60015849.  Authors are therefore grouped by affiliation ID.
 
-For conference proceedings, Scopus also collects information on the conference:
+Scopus also gathers detailed information about conferences for conference proceedings, including:
 
 .. code-block:: python
 
@@ -256,4 +256,4 @@ You can print the abstract in a variety of formats, including LaTeX, bibtex, HTM
     ER  -
 
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to get the date of last modification, and `ab.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.

@@ -1,7 +1,7 @@
 pybliometrics.scopus.CitationOverview
 =====================================
 
-`CitationOverview()` implements the `Citation Overview API <https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key needs to be approved by Elsevier manually.  Please contact Scopus to do so.  Otherwise each request throws a 403 error.  Ideally provide the key via `apikey="XXX"` when initiating the class, which will override the ones provided in the :doc:`configuration file <../configuration>`.
+`CitationOverview()` implements the `Citation Overview API <https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key requires manual approval by Elsevier.  Please contact Scopus for approval.  Otherwise each request throws a 403 error.  Ideally provide the key via `apikey="XXX"` when initiating the class, which will override the ones provided in the :doc:`configuration file <../configuration>`.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -38,7 +38,7 @@ You can obtain basic information just by printing the object:
         16; 13
 
 
-The most important information is stored in attribute `cc`, which is a list of of list of tuples storing year-wise citations to the article.  Each list corresponds to one document, in the order specified when initating the class:
+The key attribute is `cc`, which provides a list of tuples storing year-wise citations to the article.  Each list corresponds to one document, in the order specified when initating the class:
 
 .. code-block:: python
 
@@ -47,7 +47,7 @@ The most important information is stored in attribute `cc`, which is a list of o
      [(2019, 2), (2020, 2), (2021, 1)]]
 
 
-Attributes `pcc`, `rangeCount`, `lcc` and `rowTotal` give citation summaries by document.  `pcc` is the count of citations before the specified year, `rangeCount` the count of citations for the specified years, and `lcc` the count of citations after the specified year.  For the sum (i.e., the total number of citations by document) use `rowTotal`
+The attributes `pcc`, `rangeCount`, `lcc` and `rowTotal` provide citation summaries for each document.  `pcc` is the count of citations before the specified year, `rangeCount` the count of citations for the specified years, and `lcc` the count of citations after the specified year.  For the sum (i.e., the total number of citations by document) use `rowTotal`
 
 .. code-block:: python
 
@@ -61,7 +61,7 @@ Attributes `pcc`, `rangeCount`, `lcc` and `rowTotal` give citation summaries by 
     [16, 13]
 
 
-Attribute `columnTotal` gives the total number of yearly citations for all documents combined, which `rangeColumnTotal` summarizes.  Finally `grandTotal` is the total number of citations for all documents combined.
+The `columnTotal` attribute represents the total number of yearly citations for all documents combined, which `rangeColumnTotal` summarizes.  Finally `grandTotal` is the total number of citations for all documents combined.
 
 .. code-block:: python
 
@@ -73,7 +73,7 @@ Attribute `columnTotal` gives the total number of yearly citations for all docum
     29
 
 
-Using parameter `citation`, one can exclude self-citations or citations by books:
+With the `citation` parameter, you can exclude self-citations or citations from books:
 
 .. code-block:: python
 
@@ -91,7 +91,7 @@ Using parameter `citation`, one can exclude self-citations or citations by books
         16; 13
 
 
-There are also author information stored as list of lists of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
+Author information is also stored as lists of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
 
 .. code-block:: python
 
@@ -124,7 +124,7 @@ Finally, there are bibliographic information, too:
     ['Article', 'Review']
 
 
-Using `pandas <https://pandas.pydata.org/>`_, you can turn the citation counts into a DataFrame like so:
+Using `pandas <https://pandas.pydata.org/>`_, you can convert the citation counts into a DataFrame as follows:
 
 .. code-block:: python
 
@@ -137,4 +137,4 @@ Using `pandas <https://pandas.pydata.org/>`_, you can turn the citation counts i
     84930616647     2     2     1
 
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated, and will not change if you set certain restrictions (e.g. via the `citation` parameter)!  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `co.get_cache_file_mdate()` to get the date of last modification, and `co.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.

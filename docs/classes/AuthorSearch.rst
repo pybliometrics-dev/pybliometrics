@@ -1,7 +1,7 @@
 pybliometrics.scopus.AuthorSearch
 =================================
 
-`AuthorSearch()` implements the `Author Search API <https://dev.elsevier.com/documentation/AuthorSearchAPI.wadl>`_.  It performs a query to search for authors and then retrieves the records of the query.
+`AuthorSearch()` implements the `Author Search API <https://dev.elsevier.com/documentation/AuthorSearchAPI.wadl>`_.  It executes a query to search for authors and retrieves the corresponding records.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -17,7 +17,7 @@ Documentation
 Examples
 --------
 
-The class is initialized with a search query which you can read about in `Author Search Guide <https://dev.elsevier.com/tips/AuthorSearchTips.htm>`_.  An invalid search query will result in an error.
+The class is initialized using a search query, details of which can be found in `Author Search Guide <https://dev.elsevier.com/tips/AuthorSearchTips.htm>`_.  An invalid search query will result in an error.
 
 .. code-block:: python
 
@@ -35,7 +35,7 @@ You can obtain a search summary just by printing the object:
         Selten, Reinhard; AUTHOR_ID:57213632570 (1 document(s))
 
 
-To know the the number of results use the `.get_results_size()` method, even before you download the results:
+To determine the the number of results use the `.get_results_size()` method, even before you download the results:
 
 .. code-block:: python
 
@@ -44,7 +44,7 @@ To know the the number of results use the `.get_results_size()` method, even bef
     29
 
 
-The class mostly provides a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the :doc:`AuthorRetrieval <../classes/AuthorRetrieval>` class, and corresponding information:
+Primarily, the class provides a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the :doc:`AuthorRetrieval <../classes/AuthorRetrieval>` class, and corresponding information:
 
 .. code-block:: python
 
@@ -55,7 +55,7 @@ The class mostly provides a list of `namedtuples <https://docs.python.org/3/libr
      areas='ECON (73); MATH (19); BUSI (16)')]
 
 
-It's easy to work with namedtuples: Using `pandas <https://pandas.pydata.org/>`_, you can quickly turn the results set into a DataFrame:
+Working with namedtuples is straightforward: Using `pandas <https://pandas.pydata.org/>`_, you can quickly convert the results set into a DataFrame:
 
 .. code-block:: python
 
@@ -75,13 +75,13 @@ It's easy to work with namedtuples: Using `pandas <https://pandas.pydata.org/>`_
     1                         COMP (3)
 
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `s.get_cache_file_mdate()` to get the date of last modification, and `s.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.
 
-There are sometimes missing information in the returned results although it exists in the Scopus database.  For example, the EID may be missing, even though every element always has an EID.  This is not a bug of `pybliometrics`.  Instead it is somehow related to a problem in the download process from the Scopus database.  To check for completeness of specific fields, use parameter `integrity_fields`, which accepts any iterable.  Using parameter `integrity_action` you can choose between two actions on what to do if the integrity check fails: Set `integrity_action="warn"` to issue a UserWarning, or set `integrity_action="raise"` to raise an AttributeError.
+Occasionally, some information that exists in the Scopus database may be missing in the returned results.  For example, the EID may be missing, even though every element always has an EID.  This is not a bug of `pybliometrics`.  Instead it is somehow related to a problem in the download process from the Scopus database.  To check for completeness of specific fields, use parameter `integrity_fields`, which accepts any iterable.  With the `integrity_action` parameter you can choose between two actions if the integrity check fails: Set `integrity_action="warn"` to issue a UserWarning, or set `integrity_action="raise"` to raise an AttributeError.
 
 .. code-block:: python
 
     >>> s = AuthorSearch("AUTHLAST(Selten)", integrity_fields=["eid"], integrity_action="warn")
 
 
-If you search for authors by institution, note that searching by affiliation profile ID and affiliaton name behave differently.  Search by affiliation name, i.e. `AFFIL(Max Planck Institute for Innovation and Competition)`), finds all authors *ever* affiliated with the Max Planck Institute for Innovation and Competition, whereas search by affiliation profile ID, i.e. `AF-ID(60105007)`, finds researchers whose latest affiliation includes the Max Planck Institute for Innovation and Competition.
+When searching for authors by institution, it's important to note that searching by affiliation profile ID and affiliation name yields different results.  Search by affiliation name, i.e. `AFFIL(Max Planck Institute for Innovation and Competition)`), finds all authors *ever* affiliated with the Max Planck Institute for Innovation and Competition, whereas search by affiliation profile ID, i.e. `AF-ID(60105007)`, finds researchers whose latest affiliation includes the Max Planck Institute for Innovation and Competition.

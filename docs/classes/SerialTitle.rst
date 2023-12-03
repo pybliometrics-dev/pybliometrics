@@ -1,7 +1,7 @@
 pybliometrics.scopus.SerialTitle
 ================================
 
-`SerialTitle()` implements the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It provides basic information on registered serials (also called sources), like publisher and identifiers, but also metrics.
+`SerialTitle()` implements the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It offers basic information on registered serials (also known as sources), including publisher details, identifiers, and various metrics.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -54,7 +54,7 @@ The object has a number of attributes but no methods.  For example, information 
     23571
 
 
-Most importantly, it provides three metrics: the CiteScore (see `here <https://service.elsevier.com/app/answers/detail/a_id/30562/supporthub/scopus/>`_ for further information), the SCImago Journal Rank indicator (see `here <https://www.scimagojr.com/journalrank.php>`_), and the Source Normalized Impact Factor (SNIP; see `here <https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip>`_).  The information is stored in lists of 2-element tuples with the first element indicating the year the metric was evaluated.
+Crucially, it provides three metrics: CiteScore (see `here <https://service.elsevier.com/app/answers/detail/a_id/30562/supporthub/scopus/>`_ for further information), SCImago Journal Rank indicator (see `here <https://www.scimagojr.com/journalrank.php>`_), and Source Normalized Impact Factor (SNIP; see `here <https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip>`_).  This information is presented in lists of two-element tuples, with the first element indicating the year of metric evaluation.
 
 .. code-block:: python
 
@@ -67,7 +67,7 @@ Most importantly, it provides three metrics: the CiteScore (see `here <https://s
     [(2022, 7.729)]
 
 
-Property `citescoreyearinfolist` can return detailed information for all available years with `view="CITESCORE"`. It includes the status of the metric, the document count and citation count (of the previous 4 years), the share of documents actually cited, and the rank and percentile for each related ASJC subject:
+The `citescoreyearinfolist` property provides detailed information for all available years when `view="CITESCORE"` is used.  It includes the status of the metric, the document count and citation count (of the previous 4 years), the share of documents actually cited, and the rank and percentile for each related ASJC subject:
 
 .. code-block:: python
 
@@ -90,7 +90,7 @@ Property `citescoreyearinfolist` can return detailed information for all availab
     12  2011       44.7     Complete           3843         171898            91  [(2700, 12, 99), (1000, 2, 98)]
 
 
-Another time series is `yearly_data`. It contains the number of documents published in this year, the share of review articles thereof, the number and share of not-cited documents, and the number of distinct documents that were cited in this year.
+The `yearly_data` time series includes the number of documents published in a given year.  It contains the number of documents published in this year, the share of review articles thereof, the number and share of not-cited documents, and the number of distinct documents that were cited in this year.
 
 
 .. code-block:: python
@@ -109,7 +109,7 @@ Another time series is `yearly_data`. It contains the number of documents publis
     4  2000              2402        6.99           459            19.109076        293867
 
 
-By default, `SerialTitle()` retrieves only the most recent metrics while yearly data is availble from 1996 onwards.  If you provide a year or a range of years via the optional parameter `years`, `SerialTitle()` will retrieve information for these years (except for the CiteScore):
+By default, `SerialTitle()` retrieves only the most recent metrics, although yearly data is availble from 1996 onwards.  If you provide a year or a range of years via the optional parameter `years`, `SerialTitle()` will retrieve information for these years (except for the CiteScore):
 
 .. code-block:: python
 
@@ -123,15 +123,13 @@ By default, `SerialTitle()` retrieves only the most recent metrics while yearly 
     [(2017, 7.409), (2018, 7.584), (2019, 7.535)]
 
 
-The fields associated with the source are stored as a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
+Fields associated with the source are stored as a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
 
 .. code-block:: python
 
     >>> source.subject_area
     [Subjectarea(area='Multidisciplinary', abbreviation='MULT', code=1000)]
 
-Additionally there are many bits of information on Open Access status which are often empty however.
+Additionally, there is information on Open Access status, which, however, is often empty.
 
-Downloaded results are cached to speed up subsequent analysis.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  If `years` is provided, `SerialSearch()` will always refresh.
-
-Use `source.get_cache_file_mdate()` to get the date of last modification, and `source.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.

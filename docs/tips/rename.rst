@@ -1,7 +1,7 @@
 Migration Guide from scopus to pybliometrics
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In June 2019 we renamed the package from scopus to pybliometrics.  This way we comply with naming rules for Elesevier's trademark "Scopus".  At the same time we open the package for further development.
+In June 2019 we renamed the package from scopus to pybliometrics.  This way we comply with naming rules for Elsevier's trademark "Scopus".  At the same time we open the package for further development.
 
 Migration is easy:
 

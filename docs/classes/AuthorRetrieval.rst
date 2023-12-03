@@ -1,7 +1,7 @@
 pybliometrics.scopus.AuthorRetrieval
 ====================================
 
-`AuthorRetrieval()` implements the `Author Retrieval API <https://dev.elsevier.com/documentation/AuthorRetrievalAPI.wadl>`_. It contains an entire author record as per Scopus.
+`AuthorRetrieval()` implements the `Author Retrieval API <https://dev.elsevier.com/documentation/AuthorRetrievalAPI.wadl>`_. It provides a complete author record according to Scopus.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -17,7 +17,7 @@ Documentation
 Examples
 --------
 
-You initiate the class with the author's Scopus ID, which can be passed as either an integer or a string:
+You initiate the class with the author's Scopus ID, which can be either an integer or a string:
 
 .. code-block:: python
 
@@ -35,9 +35,9 @@ You can obtain basic information just by printing the object:
     which were cited by 11,980 author(s) in 14,861 document(s) as of 2021-07-14
 
 
-The object can access many bits of data about an author, including the number of papers, h-index, current affiliation, etc.  When a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ is returned, it can neatly be turned into a `pandas <https://pandas.pydata.org/>`_ DataFrame.
+This object provides access to various data about an author, including the number of papers, h-index, current affiliation, etc.  When a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ is returned, it can neatly be turned into a `pandas <https://pandas.pydata.org/>`_ DataFrame.
 
-Information on names:
+Information regarding the author's names includes:
 
 .. code-block:: python
 
@@ -60,7 +60,7 @@ Information on names:
     '9-s2.0-7004212771'
 
 
-Bibliometric information:
+Bibliometric information includes:
 
 .. code-block:: python
 
@@ -101,9 +101,9 @@ Bibliometric information:
      ('1710', '5')]
 
 
-If you request data of a merged author profile, Scopus returns information belonging to that new profile.  pybliometrics however caches information using the old ID.  With property `.identifer` you can verify the validity of the provided Author ID.  When the provided ID belongs to a profile that has been merged, pybliometrics will throw a UserWarning (upon accessing the property `.identifer`) pointing to the ID of the new main profile.
+If you request data of a merged author profile, Scopus provides information corresponding to the new, merged profile.  The cache file's name uses the provided, i.e., old, ID.  With property `.identifer` you can verify the validity of the provided Author ID.  When the provided ID belongs to a profile that has been merged, pybliometrics will throw a UserWarning (upon accessing the property `.identifer`) pointing to the ID of the new main profile.
 
-Extensive information on current and former affiliations is provided as namedtuples as well:
+Detailed information on current and former affiliations is also provided in the form of namedtuple:
 
 .. code-block:: python
 
@@ -125,9 +125,9 @@ Extensive information on current and former affiliations is provided as namedtup
 
 The affiliation ID to be used for the :doc:`AffiliationRetrieval <../classes/AffiliationRetrieval>` class.
 
-`pybliometrics` caches results to speed up subsequent analysis.  This information eventually becomes outdated.  To refresh the cached results if they exist, use the refresh parameter when initiating the class.  Set `refresh=True` or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `au.get_cache_file_mdate()` to get the date of last modification, and `au.get_cache_file_age()` the number of days since the last modification.
+Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.
 
-There are a number of getter methods for convenience.  For example, you can obtain some basic information on co-authors as a list of namedtuples (query will not be cached and is always up-to-date):
+Several getter methods are available for convenience.  For example, you can obtain some basic information on co-authors as a list of namedtuples (query will not be cached and is always up-to-date):
 
 .. code-block:: python
 
@@ -140,7 +140,7 @@ There are a number of getter methods for convenience.  For example, you can obta
           dtype='object')
 
 
-Method `get_documents()` is another convenience method to search for the author's publications via :doc:`ScopusSearch <../classes/ScopusSearch>` (information will be cached):
+The `get_documents()` method is another convenient option for searching the author's publications via :doc:`ScopusSearch <../classes/ScopusSearch>` (information will be cached):
 
 .. code-block:: python
 
@@ -159,7 +159,7 @@ Method `get_documents()` is another convenience method to search for the author'
           dtype='object')
 
 
-With some additional lines of code you can get the number of journal articles where the author is listed first:
+WWith a few additional code lines, you can determine the number of journal articles where the author is listed first:
 
 .. code-block:: python
 
