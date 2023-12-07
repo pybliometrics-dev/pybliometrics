@@ -44,8 +44,11 @@ class AuthorRetrieval(Retrieval):
         Note: Unlike on their website, Scopus doesn't provide the periods
         of affiliation.
         """
-        affs = chained_get(self._profile, ["affiliation-history", "affiliation"])
-        return parse_affiliation(affs)
+        if self._view in ('STANDARD', 'ENHANCED'):
+            affs = chained_get(self._profile, ["affiliation-history", "affiliation"])
+        else:
+            return None
+        return parse_affiliation(affs, self._view)
 
     @property
     def alias(self) -> Optional[List[str]]:
