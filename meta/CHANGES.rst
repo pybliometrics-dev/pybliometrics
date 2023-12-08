@@ -3,6 +3,23 @@ Change Log
 
 .. toctree::
 
+3.6
+~~~
+
+2023-12-08
+
+* In `AbstractRetrieval(view="FULL").references`, return all references, not just the first 40.
+* In `AbstractRetrieval().issn`, always return a namedtuple indicating the type of the returned ISSN.
+* In `AuthorRetrieval(view="LIGHT").affiliation_current`, parse information.
+* In `CitationOverview()`, rename property `sourceName` to `sortTitle` in accordance with Scopus' documentation.
+* In `SerialTitle().citescoreyearinfolist`, always return a namedtuple.
+* In `SerialTitle(view="CITESCORE").citescoreyearinfolist`, provide detailed yearly information.
+* In all classes, fix or provide __str__ where possible.
+* Improve all docstrings, add proper format, add code-copy button.
+* Update accepted id types of `PlumXMetrics()`.
+* In `CitationOverview().cc`, fix bug due to missing citations.
+* In `SerialTitle().citescoreyearinfolist`, fix bug with missing current and/or tracker metric.
+
 3.5.2
 ~~~~~
 
