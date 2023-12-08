@@ -167,12 +167,14 @@ def parse_affiliation(affs, view):
                 address_part=address.get("address-part"), city=address.get('city'),
                 postal_code=address.get('postal-code'), state=address.get('state'),
                 org_domain=doc.get('org-domain'), org_URL=doc.get('org-URL'))
-            out.append(new)
+            if any(val for val in new):
+                out.append(new)
     elif view == 'LIGHT':
         new = aff(preferred_name=affs.get('affiliation-name'),
                   city=affs.get('affiliation-city'),
                   country=affs.get('affiliation-country'))
-        out.append(new)
+        if any(val for val in new):
+            out.append(new)
 
     return out or None
 

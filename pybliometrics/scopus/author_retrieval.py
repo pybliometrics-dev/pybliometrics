@@ -29,7 +29,7 @@ class AuthorRetrieval(Retrieval):
             affs = self._json.get('affiliation-current')
         else:
             return None
-        return parse_affiliation(affs, self._view)
+        return parse_affiliation(affs or {}, self._view)
 
     @property
     def affiliation_history(self) -> Optional[List[NamedTuple]]:
@@ -44,11 +44,8 @@ class AuthorRetrieval(Retrieval):
         Note: Unlike on their website, Scopus doesn't provide the periods
         of affiliation.
         """
-        if self._view in ('STANDARD', 'ENHANCED'):
-            affs = chained_get(self._profile, ["affiliation-history", "affiliation"])
-        else:
-            return None
-        return parse_affiliation(affs, self._view)
+        affs = chained_get(self._profile, ["affiliation-history", "affiliation"])
+        return parse_affiliation(affs or {}, self._view)
 
     @property
     def alias(self) -> Optional[List[str]]:
@@ -71,8 +68,8 @@ class AuthorRetrieval(Retrieval):
     def classificationgroup(self) -> Optional[List[Tuple[int, int]]]:
         """List with tuples with form`(subject group ID, number of documents)`."""
         path = ['classificationgroup', 'classifications', 'classification']
-        out = [(int(filter_digits(item['$'])), int(filter_digits(item['@frequency']))) for item in
-           listify(chained_get(self._profile, path, []))]
+        out = [(int(filter_digits(item['$'])), int(filter_digits(item['@frequency'])))
+               for item in listify(chained_get(self._profile, path, []))]
         return out or None
 
     @property
