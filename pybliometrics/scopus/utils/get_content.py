@@ -4,7 +4,7 @@ from urllib3.util import Retry
 
 from pybliometrics import __version__
 from pybliometrics.scopus import exception
-from pybliometrics.scopus.utils.startup import config
+from pybliometrics.scopus.utils.startup import get_config, get_keys, get_throttling_params, get_config_path
 
 # Define user agent string for HTTP requests
 user_agent = 'pybliometrics-v' + __version__
@@ -14,13 +14,18 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           407: exception.Scopus407Error, 413: exception.Scopus413Error, 
           414: exception.Scopus414Error, 429: exception.Scopus429Error}
 
-_retries = config.getint("Requests", "Retries", fallback=5)
-retry = Retry(total=_retries, status_forcelist=[500, 501, 502, 503, 504, 524],
-              backoff_factor=0.1)
-adapter = HTTPAdapter(max_retries=retry)
-session = Session()
-session.mount('http://', adapter)
-session.mount('https://', adapter)
+def get_session():
+    config = get_config()
+
+    _retries = config.getint("Requests", "Retries", fallback=5)
+    retry = Retry(total=_retries, status_forcelist=[500, 501, 502, 503, 504, 524],
+                backoff_factor=0.1)
+    adapter = HTTPAdapter(max_retries=retry)
+    session = Session()
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    
+    return session
 
 def get_content(url, api, params=None, **kwds):
     """Helper function to download a file and return its content.
@@ -58,11 +63,14 @@ def get_content(url, api, params=None, **kwds):
     from random import shuffle
     from time import sleep, time
 
-    from pybliometrics.scopus.utils.startup import _throttling_params, KEYS
+    config = get_config()
+    keys = get_keys()
+    throttling_params = get_throttling_params()
+    session = get_session()
 
     # Set header, params and proxy
     try:
-        header = {'X-ELS-APIKey': KEYS[0],
+        header = {'X-ELS-APIKey': keys[0],
                   'Accept': 'application/json',
                   'User-Agent': user_agent}
     except IndexError:
@@ -82,9 +90,9 @@ def get_content(url, api, params=None, **kwds):
         header['X-ELS-Insttoken'] = params.pop("insttoken")
 
     # Eventually wait bc of throttling
-    if len(_throttling_params[api]) == _throttling_params[api].maxlen:
+    if len(throttling_params[api]) == throttling_params[api].maxlen:
         try:
-            sleep(1 - (time() - _throttling_params[api][0]))
+            sleep(1 - (time() - throttling_params[api][0]))
         except (IndexError, ValueError):
             pass
     
@@ -94,14 +102,14 @@ def get_content(url, api, params=None, **kwds):
                       timeout=timeout)
     while resp.status_code == 429:
         try:
-            KEYS.pop(0)  # Remove current key
-            shuffle(KEYS)
-            header['X-ELS-APIKey'] = KEYS[0].strip()
+            keys.pop(0)  # Remove current key
+            shuffle(keys)
+            header['X-ELS-APIKey'] = keys[0].strip()
             resp = session.get(url, headers=header, proxies=proxies,
                                params=params, timeout=timeout)
         except IndexError:  # All keys depleted
             break
-    _throttling_params[api].append(time())
+    throttling_params[api].append(time())
 
     # Eventually raise error, if possible with supplied error message
     try:
@@ -163,17 +171,22 @@ def get_folder(api, view):
     from configparser import NoOptionError
     from pathlib import Path
 
-    from pybliometrics.scopus.utils import CONFIG_FILE, DEFAULT_PATHS
+    from pybliometrics.scopus.utils import DEFAULT_PATHS
     from pybliometrics.scopus.utils.create_config import create_config
 
+    config = get_config()
+    config_path = get_config_path()
+
     if not config.has_section('Directories'):
-        create_config()
+        raise FileNotFoundError(
+            'No configuration file found, please create one by initialize the scopus library with init()'
+            )
     try:
         parent = Path(config.get('Directories', api))
     except NoOptionError:
         parent = DEFAULT_PATHS[api]
         config.set('Directories', api, str(parent))
-        with open(CONFIG_FILE, 'w') as ouf:
+        with open(config_path, 'w') as ouf:
             config.write(ouf)
     try:
         folder = parent/view
