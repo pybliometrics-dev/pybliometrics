@@ -24,7 +24,8 @@ def get_config() -> Type[ConfigParser]:
         if _custom_config_dir:
             config.read(_custom_config_dir)
         else:
-            warn('Please initialize Scopus with init()', FutureWarning)
+            warn('Please initialize Scopus with init().\n'
+                 'For more information visit: https://pybliometrics.readthedocs.io/en/stable/configuration.html', FutureWarning)
             config.read(CONFIG_FILE)
     
     return config
