@@ -2,14 +2,14 @@ from configparser import ConfigParser
 from collections import deque
 from pathlib import Path
 from typing import List, Dict, Optional, Type
-from os import path
+import os
 from warnings import warn
 
 from pybliometrics.scopus.utils.constants import CONFIG_FILE, RATELIMITS
 from pybliometrics.scopus.utils.create_config import create_config
 
-_custom_config_dir = None
-_custom_keys = None
+CUSTOM_DIR = None
+CUSTOM_KEYS = None
 
 def get_config() -> Type[ConfigParser]:
     """Auxiliary function to get the config parser"""
@@ -17,27 +17,29 @@ def get_config() -> Type[ConfigParser]:
     config = ConfigParser()
     config.optionxform = str
 
-    if not _custom_config_dir and not CONFIG_FILE.exists():
-            warn('Please create a configuration file by initializing Scopus with init().\n'
-                 'For more information visit: https://pybliometrics.readthedocs.io/en/stable/configuration.html')
+    if not CUSTOM_DIR and not CONFIG_FILE.exists():
+        warn('Please create a configuration file by initializing Scopus with init().\n'
+             'For more information visit: '
+             'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
     else:
-        if _custom_config_dir:
-            config.read(_custom_config_dir)
+        if CUSTOM_DIR:
+            config.read(CUSTOM_DIR)
         else:
             warn('Please initialize Scopus with init().\n'
-                 'For more information visit: https://pybliometrics.readthedocs.io/en/stable/configuration.html', FutureWarning)
+                 'For more information visit: '
+                 'https://pybliometrics.readthedocs.io/en/stable/configuration.html', FutureWarning)
             config.read(CONFIG_FILE)
-    
+
     return config
 
 def get_config_path() -> Type[Path]:
     """Auxiliary function to get the configuration file path"""
-    return _custom_config_dir or CONFIG_FILE
+    return CUSTOM_DIR or CONFIG_FILE
 
 def get_keys() -> List[str]:
     """Auxiliary function to get the API keys"""
-    if _custom_keys:
-        keys = _custom_keys
+    if CUSTOM_KEYS:
+        keys = CUSTOM_KEYS
     else:
         config = get_config()
         keys = [k.strip() for k in config.get('Authentication', 'APIKey').split(",")]
@@ -49,7 +51,8 @@ def get_throttling_params() -> Dict:
 
 def init(config_dir: Optional[str] = CONFIG_FILE, keys: Optional[List[str]] = None) -> None:
     """
-    Function to initialize the Pybliometrics library. For more information go to the [documentation](https://pybliometrics.readthedocs.io/en/stable/configuration.html).
+    Function to initialize the Pybliometrics library. For more information go to the
+    [documentation](https://pybliometrics.readthedocs.io/en/stable/configuration.html).
     
     Parameters
     ----------
@@ -58,16 +61,21 @@ def init(config_dir: Optional[str] = CONFIG_FILE, keys: Optional[List[str]] = No
     keys : lst
         List of API keys
     """
-    global _custom_config_dir
-    global _custom_keys
+    global CUSTOM_DIR
+    global CUSTOM_KEYS
 
     config_dir = Path(config_dir)
+    config_dir = _change_folder_path(config_dir)
 
     if not config_dir.exists():
         create_config(config_dir,
                       keys)
-    
-    _custom_config_dir = config_dir
-    _custom_keys = keys
 
-    return None
+    CUSTOM_DIR = config_dir
+    CUSTOM_KEYS = keys
+
+def _change_folder_path(path: Type[Path], default_filename: str='pybliometrics.cfg') -> Type[Path]:
+    """Auxiliary function to correct the path for a folder"""
+    if os.path.isdir(path):
+        return path/default_filename
+    return path
