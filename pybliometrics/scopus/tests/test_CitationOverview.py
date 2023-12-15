@@ -5,7 +5,9 @@
 from collections import namedtuple
 from nose.tools import assert_equal, assert_true
 
-from pybliometrics.scopus import CitationOverview
+from pybliometrics.scopus import CitationOverview, init
+
+init()
 
 
 co_eid = CitationOverview(["85068268027", "84930616647"],

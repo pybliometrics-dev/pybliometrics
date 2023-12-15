@@ -5,7 +5,9 @@
 from collections import namedtuple
 from nose.tools import assert_equal, assert_true
 
-from pybliometrics.scopus import AbstractRetrieval
+from pybliometrics.scopus import AbstractRetrieval, init
+
+init()
 
 # Base information
 ab1 = AbstractRetrieval("2-s2.0-84930616647", view="FULL", refresh=30)

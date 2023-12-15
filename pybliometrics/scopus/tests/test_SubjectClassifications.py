@@ -4,7 +4,9 @@
 
 from nose.tools import assert_equal, assert_true
 
-from pybliometrics.scopus import SubjectClassifications
+from pybliometrics.scopus import SubjectClassifications, init
+
+init()
 
 
 # Search by words in subject description

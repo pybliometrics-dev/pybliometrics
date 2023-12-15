@@ -4,7 +4,9 @@
 
 from nose.tools import assert_equal, assert_true
 
-from pybliometrics.scopus import PlumXMetrics
+from pybliometrics.scopus import PlumXMetrics, init
+
+init()
 
 # A published paper. All PlumX Metrics categories are present.
 m1 = PlumXMetrics('2-s2.0-85054706190', 'elsevierId', refresh=30)

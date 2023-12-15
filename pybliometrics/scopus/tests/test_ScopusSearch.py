@@ -6,7 +6,9 @@ from collections import namedtuple
 
 from nose.tools import assert_equal, assert_true
 
-from pybliometrics.scopus import ScopusSearch
+from pybliometrics.scopus import ScopusSearch, init
+
+init()
 
 order = 'eid doi pii pubmed_id title subtype subtypeDescription creator '\
         'afid affilname  affiliation_city affiliation_country author_count '\

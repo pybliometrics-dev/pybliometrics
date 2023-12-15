@@ -4,7 +4,9 @@
 
 from nose.tools import assert_equal, assert_true
 
-from pybliometrics.scopus import AffiliationRetrieval
+from pybliometrics.scopus import AffiliationRetrieval, init
+
+init()
 
 
 light = AffiliationRetrieval('60000356', refresh=30, view="LIGHT")

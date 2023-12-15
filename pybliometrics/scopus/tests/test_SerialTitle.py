@@ -7,7 +7,9 @@ import datetime
 from collections import namedtuple
 from nose.tools import assert_equal, assert_true
 
-from pybliometrics.scopus import SerialTitle
+from pybliometrics.scopus import SerialTitle, init
+
+init()
 
 
 # SoftwareX
