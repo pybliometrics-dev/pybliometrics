@@ -1,10 +1,11 @@
+from typing import Type
 from requests import Session
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 
 from pybliometrics import __version__
 from pybliometrics.scopus import exception
-from pybliometrics.scopus.utils.startup import get_config, get_keys, get_throttling_params, get_config_path
+from pybliometrics.scopus.utils.startup import get_config,get_keys, get_throttling_params, get_config_path
 
 # Define user agent string for HTTP requests
 user_agent = 'pybliometrics-v' + __version__
@@ -14,7 +15,8 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           407: exception.Scopus407Error, 413: exception.Scopus413Error, 
           414: exception.Scopus414Error, 429: exception.Scopus429Error}
 
-def get_session():
+def get_session() -> Type[Session]:
+    """Auxiliary function to create a session"""
     config = get_config()
 
     _retries = config.getint("Requests", "Retries", fallback=5)
@@ -24,7 +26,7 @@ def get_session():
     session = Session()
     session.mount('http://', adapter)
     session.mount('https://', adapter)
-    
+
     return session
 
 def get_content(url, api, params=None, **kwds):
@@ -95,7 +97,7 @@ def get_content(url, api, params=None, **kwds):
             sleep(1 - (time() - throttling_params[api][0]))
         except (IndexError, ValueError):
             pass
-    
+
     # Perform request, eventually replacing the current key
     timeout = config.getint("Requests", "Timeout", fallback=20)
     resp = session.get(url, headers=header, proxies=proxies, params=params,
@@ -172,15 +174,15 @@ def get_folder(api, view):
     from pathlib import Path
 
     from pybliometrics.scopus.utils import DEFAULT_PATHS
-    from pybliometrics.scopus.utils.create_config import create_config
 
     config = get_config()
     config_path = get_config_path()
 
     if not config.has_section('Directories'):
         raise FileNotFoundError(
-            'No configuration file found, please create one by initialize the scopus library with init()'
-            )
+            'No configuration file found, please create one by initialize the scopus library with'
+            'init()'
+        )
     try:
         parent = Path(config.get('Directories', api))
     except NoOptionError:
