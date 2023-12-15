@@ -143,11 +143,12 @@ def test_eid():
 
 
 def test_estimate_uniqueness():
-    expected = 2
-    assert_equal(metrics.estimate_uniqueness(), 0)
-    assert_equal(light.estimate_uniqueness(), 0)
-    assert_equal(standard.estimate_uniqueness(), expected)
-    assert_equal(enhanced.estimate_uniqueness(), expected)
+    expected_1 = 2
+    expected_2 = 1
+    assert_equal(metrics.estimate_uniqueness(), expected_1)
+    assert_equal(light.estimate_uniqueness(), expected_1)
+    assert_equal(standard.estimate_uniqueness(), expected_2)
+    assert_equal(enhanced.estimate_uniqueness(), expected_2)
 
 
 def test_given_name():
@@ -176,7 +177,7 @@ def get_coauthors():
 def test_get_documents():
     subtypes = {'re', 'ed', 'no'}
     received = enhanced.get_documents(subtypes)
-    assert_equal(len(received), 7)
+    assert_equal(len(received), 8)
 
 
 def test_get_document_eids():

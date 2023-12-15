@@ -32,7 +32,7 @@ def test_citescoreyearinfolist():
 
     # Test softwarex
     expected_named_tuple = [info(year=2022, citescore=5.1),
-                            info(year=2023, citescore=4.9)]
+                            info(year=2023, citescore=5.0)]
     assert_equal(softwarex.citescoreyearinfolist, expected_named_tuple)
 
     # Test oecd
@@ -155,7 +155,7 @@ def test_yearly_data():
     dat = namedtuple('Yearlydata', fields)
     expected1_2020 = dat(year=2020, publicationcount=164, revpercent=0.0,
         zerocitessce=10, zerocitespercentsce=6.097560975609756,
-        citecountsce=2571)
+        citecountsce=2570)
     assert_equal(softwarex.yearly_data[24], expected1_2020)
     expected2_1996 = dat(year=1996, publicationcount=4, revpercent=0.0,
         zerocitessce=0, zerocitespercentsce=0, citecountsce=33)
