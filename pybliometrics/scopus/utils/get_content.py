@@ -5,7 +5,7 @@ from urllib3.util import Retry
 
 from pybliometrics import __version__
 from pybliometrics.scopus import exception
-from pybliometrics.scopus.utils.startup import get_config,get_keys, get_throttling_params, get_config_path
+from pybliometrics.scopus.utils.startup import get_config, get_keys, get_throttling_params, get_config_path
 
 # Define user agent string for HTTP requests
 user_agent = 'pybliometrics-v' + __version__
@@ -179,10 +179,9 @@ def get_folder(api, view):
     config_path = get_config_path()
 
     if not config.has_section('Directories'):
-        raise FileNotFoundError(
-            'No configuration file found, please create one by initialize the scopus library with'
-            'init()'
-        )
+        error_message = 'No configuration file found, please create one by initializing the pybliometrics library '\
+            'with init()'
+        raise FileNotFoundError(error_message)
     try:
         parent = Path(config.get('Directories', api))
     except NoOptionError:

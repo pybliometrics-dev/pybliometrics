@@ -1,8 +1,9 @@
 import configparser
 from typing import List, Optional
+from pybliometrics.scopus.utils.constants import CONFIG_FILE
 
 
-def create_config(config_dir: str,
+def create_config(config_dir: Optional[str] = CONFIG_FILE,
                   keys: Optional[List[str]] = None,
                   insttoken: Optional[str] = None
                   ):

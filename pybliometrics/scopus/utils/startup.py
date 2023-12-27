@@ -1,8 +1,8 @@
+import os
 from configparser import ConfigParser
 from collections import deque
 from pathlib import Path
 from typing import List, Dict, Optional, Type
-import os
 from warnings import warn
 
 from pybliometrics.scopus.utils.constants import CONFIG_FILE, RATELIMITS
@@ -18,14 +18,14 @@ def get_config() -> Type[ConfigParser]:
     config.optionxform = str
 
     if not CUSTOM_DIR and not CONFIG_FILE.exists():
-        warn('Please create a configuration file by initializing Scopus with init().\n'
+        warn('Please create a configuration file by initializing Pybliometrics with init().\n'
              'For more information visit: '
              'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
     else:
         if CUSTOM_DIR:
             config.read(CUSTOM_DIR)
         else:
-            warn('Please initialize Scopus with init().\n'
+            warn('Please initialize Pybliometrics with init().\n'
                  'For more information visit: '
                  'https://pybliometrics.readthedocs.io/en/stable/configuration.html', FutureWarning)
             config.read(CONFIG_FILE)
