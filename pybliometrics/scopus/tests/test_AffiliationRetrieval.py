@@ -9,7 +9,7 @@ from pybliometrics.scopus import AffiliationRetrieval
 
 light = AffiliationRetrieval('60000356', refresh=30, view="LIGHT")
 standard = AffiliationRetrieval('60000356', refresh=30, view="STANDARD")
-
+entitled = AffiliationRetrieval('60000356', refresh=30, view='ENTITLED')
 
 def test_address():
     assert_equal(light.address, 'Private Bag X3')
@@ -52,6 +52,9 @@ def test_eid():
     assert_equal(light.eid, '10-s2.0-60000356')
     assert_equal(standard.eid, '10-s2.0-60000356')
 
+def test_entitlement():
+    entitlement = entitled.document_entitlement_status
+    assert_equal(entitlement, 'ENTITLED')
 
 def test_identifier():
     assert_equal(light.identifier, 60000356)

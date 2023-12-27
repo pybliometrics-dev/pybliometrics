@@ -25,6 +25,8 @@ ab7 = AbstractRetrieval("2-s2.0-85050253030", view="FULL", refresh=30)
 ab8 = AbstractRetrieval("2-s2.0-84951753303", view="REF", refresh=30)
 # Collaboration
 ab9 = AbstractRetrieval("2-s2.0-85097473741", view="FULL", refresh=30)
+# ENTITLED view
+ar_entiteled = AbstractRetrieval('10.1109/Multi-Temp.2019.8866947', view='ENTITLED', refresh=30)
 
 
 def test_abstract():
@@ -225,6 +227,9 @@ def test_endingPage():
     assert_equal(ab1.endingPage, '3899')
     assert_equal(ab8.endingPage, None)
 
+def test_entitlement():
+    entitlement = ar_entiteled.document_entitlement_status
+    assert_equal(entitlement, 'ENTITLED')
 
 def test_funding():
     received = ab6.funding

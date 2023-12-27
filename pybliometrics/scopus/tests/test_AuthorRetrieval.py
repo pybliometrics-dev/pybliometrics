@@ -14,6 +14,7 @@ metrics = AuthorRetrieval("7004212771", refresh=30, view="METRICS")
 light = AuthorRetrieval("7004212771", refresh=30, view="LIGHT")
 standard = AuthorRetrieval("7004212771", refresh=30, view="STANDARD")
 enhanced = AuthorRetrieval("7004212771", refresh=30, view="ENHANCED")
+entitled = AuthorRetrieval(36009348900, view='ENTITLED')
 
 
 def test_affiliation_current():
@@ -136,6 +137,9 @@ def test_estimate_uniqueness():
     assert_equal(standard.estimate_uniqueness(), expected)
     assert_equal(enhanced.estimate_uniqueness(), expected)
 
+def test_entitlement():
+    entitlement = entitled.document_entitlement_status
+    assert_equal(entitlement, 'ENTITLED')
 
 def test_given_name():
     assert_equal(metrics.given_name, None)
