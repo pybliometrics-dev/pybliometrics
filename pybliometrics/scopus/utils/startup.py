@@ -11,6 +11,8 @@ from pybliometrics.scopus.utils.create_config import create_config
 CUSTOM_DIR = None
 CUSTOM_KEYS = None
 
+_throttling_params = {k: deque(maxlen=v) for k, v in RATELIMITS.items()}
+
 def get_config() -> Type[ConfigParser]:
     """Auxiliary function to get the config parser"""
     # Read/create config file (with fixture for RTFD.io)
@@ -44,10 +46,6 @@ def get_keys() -> List[str]:
         config = get_config()
         keys = [k.strip() for k in config.get('Authentication', 'APIKey').split(",")]
     return keys
-
-def get_throttling_params() -> Dict:
-    """Auxiliary function to get the throttling params"""
-    return {k: deque(maxlen=v) for k, v in RATELIMITS.items()}
 
 def init(config_dir: Optional[str] = CONFIG_FILE, keys: Optional[List[str]] = None) -> None:
     """

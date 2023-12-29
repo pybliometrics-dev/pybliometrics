@@ -5,7 +5,7 @@ from urllib3.util import Retry
 
 from pybliometrics import __version__
 from pybliometrics.scopus import exception
-from pybliometrics.scopus.utils.startup import get_config, get_keys, get_throttling_params, get_config_path
+from pybliometrics.scopus.utils.startup import get_config, get_keys, get_config_path, _throttling_params
 
 # Define user agent string for HTTP requests
 user_agent = 'pybliometrics-v' + __version__
@@ -67,7 +67,6 @@ def get_content(url, api, params=None, **kwds):
 
     config = get_config()
     keys = get_keys()
-    throttling_params = get_throttling_params()
     session = get_session()
 
     # Set header, params and proxy
@@ -92,9 +91,9 @@ def get_content(url, api, params=None, **kwds):
         header['X-ELS-Insttoken'] = params.pop("insttoken")
 
     # Eventually wait bc of throttling
-    if len(throttling_params[api]) == throttling_params[api].maxlen:
+    if len(_throttling_params[api]) == _throttling_params[api].maxlen:
         try:
-            sleep(1 - (time() - throttling_params[api][0]))
+            sleep(1 - (time() - _throttling_params[api][0]))
         except (IndexError, ValueError):
             pass
 
@@ -111,7 +110,7 @@ def get_content(url, api, params=None, **kwds):
                                params=params, timeout=timeout)
         except IndexError:  # All keys depleted
             break
-    throttling_params[api].append(time())
+    _throttling_params[api].append(time())
 
     # Eventually raise error, if possible with supplied error message
     try:
