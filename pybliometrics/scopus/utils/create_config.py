@@ -3,7 +3,7 @@ from typing import List, Optional
 from pybliometrics.scopus.utils.constants import CONFIG_FILE
 
 
-def create_config(config_dir: Optional[str] = CONFIG_FILE,
+def create_config(config_dir: Optional[str] = None,
                   keys: Optional[List[str]] = None,
                   insttoken: Optional[str] = None
                   ):
@@ -16,6 +16,9 @@ def create_config(config_dir: Optional[str] = CONFIG_FILE,
                       be used if `keys` is not empty.
     """
     from pybliometrics.scopus.utils.constants import DEFAULT_PATHS
+
+    if not config_dir:
+        config_dir = CONFIG_FILE
 
     config = configparser.ConfigParser()
     config.optionxform = str
