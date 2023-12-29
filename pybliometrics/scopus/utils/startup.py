@@ -63,7 +63,6 @@ def init(config_dir: Optional[str] = CONFIG_FILE, keys: Optional[List[str]] = No
     global CUSTOM_KEYS
 
     config_dir = Path(config_dir)
-    config_dir = _change_folder_path(config_dir)
 
     if not config_dir.exists():
         create_config(config_dir,
@@ -71,9 +70,3 @@ def init(config_dir: Optional[str] = CONFIG_FILE, keys: Optional[List[str]] = No
 
     CUSTOM_DIR = config_dir
     CUSTOM_KEYS = keys
-
-def _change_folder_path(path: Type[Path], default_filename: str='pybliometrics.cfg') -> Type[Path]:
-    """Auxiliary function to correct the path for a folder"""
-    if os.path.isdir(path):
-        return path/default_filename
-    return path
