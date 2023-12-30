@@ -55,6 +55,7 @@ def test_eid():
 def test_entitlement():
     entitlement = entitled.document_entitlement_status
     assert_equal(entitlement, 'ENTITLED')
+    assert_is_none(entitled.affiliation_name)
     assert_is_none(standard.document_entitlement_status)
     assert_is_none(light.document_entitlement_status)
 

@@ -140,6 +140,7 @@ def test_estimate_uniqueness():
 def test_entitlement():
     entitlement = entitled.document_entitlement_status
     assert_equal(entitlement, 'ENTITLED')
+    assert_is_none(entitled.h_index)
     assert_is_none(metrics.document_entitlement_status)
     assert_is_none(light.document_entitlement_status)
     assert_is_none(standard.document_entitlement_status)

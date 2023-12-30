@@ -230,6 +230,7 @@ def test_endingPage():
 def test_entitlement():
     entitlement = ar_entitled.document_entitlement_status
     assert_equal(entitlement, 'ENTITLED')
+    assert_is_none(ar_entitled.authors)
     assert_is_none(ab8.document_entitlement_status)
     assert_is_none(ab9.document_entitlement_status)
 
