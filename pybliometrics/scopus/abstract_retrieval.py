@@ -293,10 +293,8 @@ class AbstractRetrieval(Retrieval):
         is entitled to the requested resource.
         Note: Only works with `ENTITLED` view.
         """
-        if self._view == 'ENTITLED':
-            return chained_get(self._json, ['document-entitlement', 'status'])
-        else:
-            return None
+        return chained_get(self._json, ['document-entitlement', 'status'])
+        
 
     @property
     def doi(self) -> Optional[str]:

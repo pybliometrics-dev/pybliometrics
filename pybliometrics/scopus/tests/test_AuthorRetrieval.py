@@ -4,7 +4,7 @@
 
 import warnings
 from collections import Counter, namedtuple
-from nose.tools import assert_equal, assert_true
+from nose.tools import assert_equal, assert_true, assert_is_none
 
 from pybliometrics.scopus import AuthorRetrieval
 
@@ -140,6 +140,10 @@ def test_estimate_uniqueness():
 def test_entitlement():
     entitlement = entitled.document_entitlement_status
     assert_equal(entitlement, 'ENTITLED')
+    assert_is_none(metrics.document_entitlement_status)
+    assert_is_none(light.document_entitlement_status)
+    assert_is_none(standard.document_entitlement_status)
+    assert_is_none(enhanced.document_entitlement_status)
 
 def test_given_name():
     assert_equal(metrics.given_name, None)
