@@ -3,7 +3,7 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
-    get_id, get_link, parse_date_created
+    get_id, get_link, parse_date_created, make_int_if_possible
 
 
 class AffiliationRetrieval(Retrieval):
@@ -20,7 +20,7 @@ class AffiliationRetrieval(Retrieval):
     @property
     def author_count(self) -> int:
         """Number of authors associated with the affiliation."""
-        return int(self._json['coredata']['author-count'])
+        return make_int_if_possible(chained_get(self._json, ['coredata', 'author-count']))
 
     @property
     def city(self) -> Optional[str]:
@@ -43,7 +43,7 @@ class AffiliationRetrieval(Retrieval):
     @property
     def document_count(self) -> int:
         """Number of documents for the affiliation."""
-        return int(self._json['coredata']['document-count'])
+        return make_int_if_possible(chained_get(self._json, ['coredata', 'document-count']))
     
     @property
     def document_entitlement_status(self) -> Optional[str]:
@@ -56,7 +56,7 @@ class AffiliationRetrieval(Retrieval):
     @property
     def eid(self) -> str:
         """The EID of the affiliation."""
-        return self._json['coredata']['eid']
+        return chained_get(self._json, ['coredata', 'eid'])
 
     @property
     def identifier(self) -> int:
@@ -131,7 +131,7 @@ class AffiliationRetrieval(Retrieval):
     @property
     def url(self) -> str:
         """URL to the affiliation's API page."""
-        return self._json['coredata'].get('prism:url')
+        return chained_get(self._json, ['coredata', 'prism:url'])
 
     def __init__(self,
                  aff_id: Union[int, str],

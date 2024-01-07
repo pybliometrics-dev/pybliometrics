@@ -52,12 +52,12 @@ class AuthorRetrieval(Retrieval):
     @property
     def citation_count(self) -> int:
         """Total number of citing items."""
-        return int(self._json['coredata']['citation-count'])
+        return make_int_if_possible(chained_get(self._json, ['coredata', 'citation-count']))
 
     @property
     def cited_by_count(self) -> int:
         """Total number of citing authors."""
-        return int(self._json['coredata']['cited-by-count'])
+        return make_int_if_possible(chained_get(self._json, ['coredata', 'cited-by-count']))
 
     @property
     def classificationgroup(self) -> Optional[List[Tuple[int, int]]]:
@@ -88,7 +88,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def document_count(self) -> int:
         """Number of documents authored (excludes book chapters and notes)."""
-        return int(self._json['coredata']['document-count'])
+        return make_int_if_possible(chained_get(self._json, ['coredata', 'document-count']))
     
     @property
     def document_entitlement_status(self) -> Optional[str]:
@@ -104,7 +104,7 @@ class AuthorRetrieval(Retrieval):
         pybliometrics will throw a warning informing the user about
         author profile merges.
         """
-        return self._json['coredata'].get('eid')
+        return chained_get(self._json, ['coredata', 'eid'])
 
     @property
     def given_name(self) -> Optional[str]:
@@ -125,7 +125,10 @@ class AuthorRetrieval(Retrieval):
     @property
     def identifier(self) -> int:
         """The author's ID.  Might differ from the one provided."""
-        ident = self._json['coredata']['dc:identifier'].split(":")[-1]
+        ident = chained_get(self._json, ['coredata', 'dc:identifier'])
+        if not ident:
+            return ident
+        ident = ident.split(":")[-1]
         if ident != self._id:
             text = f"Profile with ID {self._id} has been merged and the new "\
                    f"ID is {ident}.  Please update your records manually.  "\
@@ -159,7 +162,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def orcid(self) -> Optional[str]:
         """The author's ORCID."""
-        return self._json['coredata'].get('orcid')
+        return chained_get(self._json, ['coredata', 'orcid'])
 
     @property
     def publication_range(self) -> Optional[Tuple[int, int]]:
@@ -210,7 +213,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def url(self) -> Optional[str]:
         """URL to the author's API page."""
-        return self._json['coredata']['prism:url']
+        return chained_get(self._json, ['coredata', 'prism:url'])
 
     def __init__(self,
                  author_id: Union[int, str],
