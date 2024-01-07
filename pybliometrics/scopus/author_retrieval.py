@@ -274,7 +274,9 @@ class AuthorRetrieval(Retrieval):
                 warn(text, UserWarning)
             else:
                 self._alias = None
-            self._profile = self._json.get("author-profile", {})
+        elif self._view == 'ENTITLED':
+            self._alias = None
+        self._profile = self._json.get("author-profile", {})
 
     def __str__(self):
         """Return a summary string."""

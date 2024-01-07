@@ -176,7 +176,7 @@ class AffiliationRetrieval(Retrieval):
         Retrieval.__init__(self, aff_id, api='AffiliationRetrieval', **kwds)
         if self._view in ('LIGHT', 'STANDARD'):
             self._json = self._json['affiliation-retrieval-response']
-            self._profile = self._json.get("institution-profile", {})
+        self._profile = self._json.get("institution-profile", {})
 
     def __str__(self):
         """Return a summary string."""

@@ -743,14 +743,14 @@ class AbstractRetrieval(Retrieval):
                            api='AbstractRetrieval', **kwds)
         if self._view in ('META', 'META_ABS', 'REF', 'FULL'):
             self._json = self._json['abstracts-retrieval-response']
-            self._head = chained_get(self._json, ["item", "bibrecord", "head"], {})
-            conf_path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent']
-            self._confevent = chained_get(self._head, conf_path, {})
-            if self._view == "REF":
-                ref_path = ["references"]
-            else:
-                ref_path = ['item', 'bibrecord', 'tail', 'bibliography']
-            self._ref = chained_get(self._json, ref_path, {})            
+        self._head = chained_get(self._json, ["item", "bibrecord", "head"], {})
+        conf_path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent']
+        self._confevent = chained_get(self._head, conf_path, {})
+        if self._view == "REF":
+            ref_path = ["references"]
+        else:
+            ref_path = ['item', 'bibrecord', 'tail', 'bibliography']
+        self._ref = chained_get(self._json, ref_path, {})
 
     def __str__(self):
         """Return pretty text version of the document.
