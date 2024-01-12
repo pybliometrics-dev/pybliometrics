@@ -177,10 +177,6 @@ def get_folder(api, view):
     config = get_config()
     config_path = get_config_path()
 
-    if not config.has_section('Directories'):
-        error_message = 'No configuration file found, please create one by initializing the pybliometrics library '\
-            'with init()'
-        raise FileNotFoundError(error_message)
     try:
         parent = Path(config.get('Directories', api))
     except NoOptionError:
