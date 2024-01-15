@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If pybliometrics helped you getting data for research, please cite our corresponding paper:"
+title: "pybliometrics: Scriptable bibliometrics using a Python interface to Scopus"
+doi: 10.1016/j.softx.2019.100263
+authors:
+  - family-names: Rose
+    given-names: Michael E.
+    orcid: 0000-0002-4128-4236
+  - family-names: Kitchin
+    given-names: John R.
+    orcid: 0000-0003-2625-9232
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Rose
+      given-names: Michael E.
+      orcid: 0000-0002-4128-4236
+    - family-names: Kitchin
+      given-names: John R.
+      orcid: 0000-0003-2625-9232
+  title: "pybliometrics: Scriptable bibliometrics using a Python interface to Scopus"
+  journal: SoftwareX
+  volume: 10
+  year: 2019
+  issue: 100263
+  doi: 10.1016/j.softx.2019.100263
