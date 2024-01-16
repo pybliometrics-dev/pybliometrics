@@ -1,10 +1,11 @@
+from typing import Type
 from requests import Session
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 
 from pybliometrics import __version__
 from pybliometrics.scopus import exception
-from pybliometrics.scopus.utils.startup import config
+from pybliometrics.scopus.utils.startup import get_config, get_keys, get_config_path, _throttling_params
 
 # Define user agent string for HTTP requests
 user_agent = 'pybliometrics-v' + __version__
@@ -14,13 +15,19 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           407: exception.Scopus407Error, 413: exception.Scopus413Error, 
           414: exception.Scopus414Error, 429: exception.Scopus429Error}
 
-_retries = config.getint("Requests", "Retries", fallback=5)
-retry = Retry(total=_retries, status_forcelist=[500, 501, 502, 503, 504, 524],
-              backoff_factor=0.1)
-adapter = HTTPAdapter(max_retries=retry)
-session = Session()
-session.mount('http://', adapter)
-session.mount('https://', adapter)
+def get_session() -> Type[Session]:
+    """Auxiliary function to create a session"""
+    config = get_config()
+
+    _retries = config.getint("Requests", "Retries", fallback=5)
+    retry = Retry(total=_retries, status_forcelist=[500, 501, 502, 503, 504, 524],
+                backoff_factor=0.1)
+    adapter = HTTPAdapter(max_retries=retry)
+    session = Session()
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+
+    return session
 
 def get_content(url, api, params=None, **kwds):
     """Helper function to download a file and return its content.
@@ -58,11 +65,13 @@ def get_content(url, api, params=None, **kwds):
     from random import shuffle
     from time import sleep, time
 
-    from pybliometrics.scopus.utils.startup import _throttling_params, KEYS
+    config = get_config()
+    keys = get_keys()
+    session = get_session()
 
     # Set header, params and proxy
     try:
-        header = {'X-ELS-APIKey': KEYS[0],
+        header = {'X-ELS-APIKey': keys[0],
                   'Accept': 'application/json',
                   'User-Agent': user_agent}
     except IndexError:
@@ -87,16 +96,16 @@ def get_content(url, api, params=None, **kwds):
             sleep(1 - (time() - _throttling_params[api][0]))
         except (IndexError, ValueError):
             pass
-    
+
     # Perform request, eventually replacing the current key
     timeout = config.getint("Requests", "Timeout", fallback=20)
     resp = session.get(url, headers=header, proxies=proxies, params=params,
                       timeout=timeout)
     while resp.status_code == 429:
         try:
-            KEYS.pop(0)  # Remove current key
-            shuffle(KEYS)
-            header['X-ELS-APIKey'] = KEYS[0].strip()
+            keys.pop(0)  # Remove current key
+            shuffle(keys)
+            header['X-ELS-APIKey'] = keys[0].strip()
             resp = session.get(url, headers=header, proxies=proxies,
                                params=params, timeout=timeout)
         except IndexError:  # All keys depleted
@@ -163,17 +172,17 @@ def get_folder(api, view):
     from configparser import NoOptionError
     from pathlib import Path
 
-    from pybliometrics.scopus.utils import CONFIG_FILE, DEFAULT_PATHS
-    from pybliometrics.scopus.utils.create_config import create_config
+    from pybliometrics.scopus.utils import DEFAULT_PATHS
 
-    if not config.has_section('Directories'):
-        create_config()
+    config = get_config()
+    config_path = get_config_path()
+
     try:
         parent = Path(config.get('Directories', api))
     except NoOptionError:
         parent = DEFAULT_PATHS[api]
         config.set('Directories', api, str(parent))
-        with open(CONFIG_FILE, 'w') as ouf:
+        with open(config_path, 'w') as ouf:
             config.write(ouf)
     try:
         folder = parent/view

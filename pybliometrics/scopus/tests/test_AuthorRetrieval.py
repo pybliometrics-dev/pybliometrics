@@ -6,7 +6,9 @@ import warnings
 from collections import Counter, namedtuple
 from nose.tools import assert_equal, assert_true
 
-from pybliometrics.scopus import AuthorRetrieval
+from pybliometrics.scopus import AuthorRetrieval, init
+
+init()
 
 warnings.simplefilter("always")
 

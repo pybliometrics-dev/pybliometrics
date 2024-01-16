@@ -4,7 +4,9 @@
 
 from nose.tools import assert_equal, assert_true
 
-from pybliometrics.scopus import SerialSearch
+from pybliometrics.scopus import SerialSearch, init
+
+init()
 
 
 # Search by title

@@ -6,7 +6,9 @@ from collections import namedtuple
 
 from nose.tools import assert_equal, assert_true
 
-from pybliometrics.scopus import AffiliationSearch
+from pybliometrics.scopus import AffiliationSearch, init
+
+init()
 
 s1 = AffiliationSearch('AF-ID(60021784)', refresh=30)
 s2 = AffiliationSearch('AFFIL(Max Planck Munich)', download=False, refresh=True)

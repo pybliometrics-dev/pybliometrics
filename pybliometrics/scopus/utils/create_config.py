@@ -1,8 +1,10 @@
 import configparser
 from typing import List, Optional
+from pybliometrics.scopus.utils.constants import CONFIG_FILE
 
 
-def create_config(keys: Optional[List[str]] = None,
+def create_config(config_dir: Optional[str] = None,
+                  keys: Optional[List[str]] = None,
                   insttoken: Optional[str] = None
                   ):
     """Initiates process to generate configuration file.
@@ -13,11 +15,14 @@ def create_config(keys: Optional[List[str]] = None,
     :param insttoken: An InstToken to be used alongside the key(s).  Will only
                       be used if `keys` is not empty.
     """
-    from pybliometrics.scopus.utils.constants import CONFIG_FILE, DEFAULT_PATHS
+    from pybliometrics.scopus.utils.constants import DEFAULT_PATHS
+
+    if not config_dir:
+        config_dir = CONFIG_FILE
 
     config = configparser.ConfigParser()
     config.optionxform = str
-    print(f"Creating config file at {CONFIG_FILE} with default paths...")
+    print(f"Creating config file at {config_dir} with default paths...")
 
     # Set directories
     config.add_section('Directories')
@@ -50,9 +55,9 @@ def create_config(keys: Optional[List[str]] = None,
     config.set('Requests', 'Retries', '5')
 
     # Write out
-    CONFIG_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(CONFIG_FILE, "w") as ouf:
+    config_dir.parent.mkdir(parents=True, exist_ok=True)
+    with open(config_dir, "w") as ouf:
         config.write(ouf)
-    print(f"Configuration file successfully created at {CONFIG_FILE}\n"
+    print(f"Configuration file successfully created at {config_dir}\n"
           "For details see https://pybliometrics.rtfd.io/en/stable/configuration.html.")
     return config
