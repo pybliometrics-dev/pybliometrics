@@ -3,7 +3,7 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
-    get_id, get_link, parse_date_created
+    get_id, get_link, parse_date_created, make_int_if_possible
 
 
 class AffiliationRetrieval(Retrieval):
@@ -20,7 +20,7 @@ class AffiliationRetrieval(Retrieval):
     @property
     def author_count(self) -> int:
         """Number of authors associated with the affiliation."""
-        return int(self._json['coredata']['author-count'])
+        return make_int_if_possible(chained_get(self._json, ['coredata', 'author-count']))
 
     @property
     def city(self) -> Optional[str]:
@@ -43,12 +43,20 @@ class AffiliationRetrieval(Retrieval):
     @property
     def document_count(self) -> int:
         """Number of documents for the affiliation."""
-        return int(self._json['coredata']['document-count'])
+        return make_int_if_possible(chained_get(self._json, ['coredata', 'document-count']))
+    
+    @property
+    def document_entitlement_status(self) -> Optional[str]:
+        """Returns the document entitlement status, i.e. tells if the requestor 
+        is entitled to the requested resource.
+        Note: Only works with `ENTITLED` view.
+        """
+        return chained_get(self._json, ['document-entitlement', 'status'])
 
     @property
     def eid(self) -> str:
         """The EID of the affiliation."""
-        return self._json['coredata']['eid']
+        return chained_get(self._json, ['coredata', 'eid'])
 
     @property
     def identifier(self) -> int:
@@ -123,7 +131,7 @@ class AffiliationRetrieval(Retrieval):
     @property
     def url(self) -> str:
         """URL to the affiliation's API page."""
-        return self._json['coredata'].get('prism:url')
+        return chained_get(self._json, ['coredata', 'prism:url'])
 
     def __init__(self,
                  aff_id: Union[int, str],
@@ -138,11 +146,11 @@ class AffiliationRetrieval(Retrieval):
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param view: The view of the file that should be downloaded.  Allowed
-                     values: `LIGHT`, `STANDARD`, where `STANDARD` includes all
+                     values: `LIGHT`, `STANDARD`, `ENTITLED`, where `STANDARD` includes all
                      information of the `LIGHT` view.  For details see
                      https://dev.elsevier.com/sc_affil_retrieval_views.html.
                      Note: Neither the `BASIC` view nor `DOCUMENTS` or `AUTHORS`
-                     views are active, although documented.
+                     views are active, although documented. `ENTITLED` only contains the `document_entitlement_status`.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/AffiliationRetrievalAPI.wadl.
@@ -159,14 +167,15 @@ class AffiliationRetrieval(Retrieval):
         where `path` is specified in your configuration file.
         """
         # Checks
-        check_parameter_value(view, ('LIGHT', 'STANDARD'), "view")
+        check_parameter_value(view, ('LIGHT', 'STANDARD', 'ENTITLED'), "view")
 
         # Load json
         self._view = view
         self._refresh = refresh
         aff_id = str(int(str(aff_id).split('-')[-1]))
         Retrieval.__init__(self, aff_id, api='AffiliationRetrieval', **kwds)
-        self._json = self._json['affiliation-retrieval-response']
+        if self._view in ('LIGHT', 'STANDARD'):
+            self._json = self._json['affiliation-retrieval-response']
         self._profile = self._json.get("institution-profile", {})
 
     def __str__(self):

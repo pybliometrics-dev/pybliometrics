@@ -57,12 +57,12 @@ class AuthorRetrieval(Retrieval):
     @property
     def citation_count(self) -> int:
         """Total number of citing items."""
-        return int(self._json['coredata']['citation-count'])
+        return make_int_if_possible(chained_get(self._json, ['coredata', 'citation-count']))
 
     @property
     def cited_by_count(self) -> int:
         """Total number of citing authors."""
-        return int(self._json['coredata']['cited-by-count'])
+        return make_int_if_possible(chained_get(self._json, ['coredata', 'cited-by-count']))
 
     @property
     def classificationgroup(self) -> Optional[List[Tuple[int, int]]]:
@@ -93,7 +93,15 @@ class AuthorRetrieval(Retrieval):
     @property
     def document_count(self) -> int:
         """Number of documents authored (excludes book chapters and notes)."""
-        return int(self._json['coredata']['document-count'])
+        return make_int_if_possible(chained_get(self._json, ['coredata', 'document-count']))
+    
+    @property
+    def document_entitlement_status(self) -> Optional[str]:
+        """Returns the document entitlement status, i.e. tells if the requestor 
+        is entitled to the requested resource.
+        Note: Only works with `ENTITLED` view.
+        """
+        return chained_get(self._json, ['document-entitlement', 'status'])
 
     @property
     def eid(self) -> Optional[str]:
@@ -101,7 +109,7 @@ class AuthorRetrieval(Retrieval):
         pybliometrics will throw a warning informing the user about
         author profile merges.
         """
-        return self._json['coredata'].get('eid')
+        return chained_get(self._json, ['coredata', 'eid'])
 
     @property
     def given_name(self) -> Optional[str]:
@@ -122,7 +130,10 @@ class AuthorRetrieval(Retrieval):
     @property
     def identifier(self) -> int:
         """The author's ID.  Might differ from the one provided."""
-        ident = self._json['coredata']['dc:identifier'].split(":")[-1]
+        ident = chained_get(self._json, ['coredata', 'dc:identifier'])
+        if not ident:
+            return ident
+        ident = ident.split(":")[-1]
         if ident != self._id:
             text = f"Profile with ID {self._id} has been merged and the new "\
                    f"ID is {ident}.  Please update your records manually.  "\
@@ -170,7 +181,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def orcid(self) -> Optional[str]:
         """The author's ORCID."""
-        return self._json['coredata'].get('orcid')
+        return chained_get(self._json, ['coredata', 'orcid'])
 
     @property
     def publication_range(self) -> Optional[Tuple[int, int]]:
@@ -232,7 +243,7 @@ class AuthorRetrieval(Retrieval):
     @property
     def url(self) -> Optional[str]:
         """URL to the author's API page."""
-        return self._json['coredata']['prism:url']
+        return chained_get(self._json, ['coredata', 'prism:url'])
 
     def __init__(self,
                  author_id: Union[int, str],
@@ -247,12 +258,12 @@ class AuthorRetrieval(Retrieval):
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param view: The view of the file that should be downloaded.  Allowed
-                     values: `METRICS`, `LIGHT`, `STANDARD`, `ENHANCED`, where `STANDARD`
+                     values: `METRICS`, `LIGHT`, `STANDARD`, `ENHANCED`, `ENTITLED`, where `STANDARD`
                      includes all information of `LIGHT` view and `ENHANCED`
                      includes all information of any view.  For details see
                      https://dev.elsevier.com/sc_author_retrieval_views.html.
                      Note: Neither the `BASIC` nor the `DOCUMENTS` view are active,
-                     although documented.
+                     although documented. `ENTITLED` only contains the `document_entitlement_status`.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/AuthorRetrievalAPI.wadl.
@@ -270,7 +281,7 @@ class AuthorRetrieval(Retrieval):
         is stripped of an eventually leading `'9-s2.0-'`.
         """
         # Checks
-        allowed_views = ('METRICS', 'LIGHT', 'STANDARD', 'ENHANCED')
+        allowed_views = ('METRICS', 'LIGHT', 'STANDARD', 'ENHANCED', 'ENTITLED')
         check_parameter_value(view, allowed_views, "view")
 
         # Load json
@@ -280,20 +291,23 @@ class AuthorRetrieval(Retrieval):
         Retrieval.__init__(self, identifier=self._id,
                            api='AuthorRetrieval', **kwds)
 
-        # Parse json
-        self._json = self._json['author-retrieval-response']
-        try:
-            self._json = self._json[0]
-        except KeyError:  # Incomplete forward
-            alias_json = listify(self._json['alias']['prism:url'])
-            self._alias = [d['$'].split(':')[-1] for d in alias_json]
-            alias_str = ', '.join(self._alias)
-            text = f'Author profile with ID {author_id} has been merged and '\
-                   f'the main profile is now one of {alias_str}.  Please update '\
-                   'your records manually.  Functionality of this object is '\
-                   'reduced.'
-            warn(text, UserWarning)
-        else:
+        if self._view in ('METRICS', 'LIGHT', 'STANDARD', 'ENHANCED'):
+            # Parse json
+            self._json = self._json['author-retrieval-response']
+            try:
+                self._json = self._json[0]
+            except KeyError:  # Incomplete forward
+                alias_json = listify(self._json['alias']['prism:url'])
+                self._alias = [d['$'].split(':')[-1] for d in alias_json]
+                alias_str = ', '.join(self._alias)
+                text = f'Author profile with ID {author_id} has been merged and '\
+                    f'the main profile is now one of {alias_str}.  Please update '\
+                    'your records manually.  Functionality of this object is '\
+                    'reduced.'
+                warn(text, UserWarning)
+            else:
+                self._alias = None
+        elif self._view == 'ENTITLED':
             self._alias = None
         self._profile = self._json.get("author-profile", {})
 

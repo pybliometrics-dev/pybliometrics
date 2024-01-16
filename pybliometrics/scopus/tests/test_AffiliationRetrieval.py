@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Tests for `scopus.AffiliationRetrieval` module."""
 
-from nose.tools import assert_equal, assert_true
+from nose.tools import assert_equal, assert_true, assert_is_none
 
 from pybliometrics.scopus import AffiliationRetrieval, init
 
@@ -11,7 +11,7 @@ init()
 
 light = AffiliationRetrieval('60000356', refresh=30, view="LIGHT")
 standard = AffiliationRetrieval('60000356', refresh=30, view="STANDARD")
-
+entitled = AffiliationRetrieval('60000356', refresh=30, view='ENTITLED')
 
 def test_address():
     assert_equal(light.address, 'Private Bag X3')
@@ -54,6 +54,12 @@ def test_eid():
     assert_equal(light.eid, '10-s2.0-60000356')
     assert_equal(standard.eid, '10-s2.0-60000356')
 
+def test_entitlement():
+    entitlement = entitled.document_entitlement_status
+    assert_equal(entitlement, 'ENTITLED')
+    assert_is_none(entitled.affiliation_name)
+    assert_is_none(standard.document_entitlement_status)
+    assert_is_none(light.document_entitlement_status)
 
 def test_identifier():
     assert_equal(light.identifier, 60000356)

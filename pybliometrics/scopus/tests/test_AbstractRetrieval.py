@@ -3,7 +3,7 @@
 """Tests for `scopus.AbstractRetrieval` module."""
 
 from collections import namedtuple
-from nose.tools import assert_equal, assert_true
+from nose.tools import assert_equal, assert_true, assert_is_none
 
 from pybliometrics.scopus import AbstractRetrieval, init
 
@@ -27,6 +27,8 @@ ab7 = AbstractRetrieval("2-s2.0-85050253030", view="FULL", refresh=30)
 ab8 = AbstractRetrieval("2-s2.0-84951753303", view="REF", refresh=30)
 # Collaboration
 ab9 = AbstractRetrieval("2-s2.0-85097473741", view="FULL", refresh=30)
+# ENTITLED view
+ar_entitled = AbstractRetrieval('10.1109/Multi-Temp.2019.8866947', view='ENTITLED', refresh=30)
 
 
 def test_abstract():
@@ -227,6 +229,12 @@ def test_endingPage():
     assert_equal(ab1.endingPage, '3899')
     assert_equal(ab8.endingPage, None)
 
+def test_entitlement():
+    entitlement = ar_entitled.document_entitlement_status
+    assert_equal(entitlement, 'ENTITLED')
+    assert_is_none(ar_entitled.authors)
+    assert_is_none(ab8.document_entitlement_status)
+    assert_is_none(ab9.document_entitlement_status)
 
 def test_funding():
     received = ab6.funding
