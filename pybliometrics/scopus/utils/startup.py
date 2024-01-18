@@ -56,6 +56,7 @@ def check_default_paths(config: Type[ConfigParser], config_path: Type[Path]) -> 
             config.set('Directories', api, str(path))
             with open(config_path, 'w', encoding='utf-8') as ouf:
                 config.write(ouf)
+        path.mkdir(parents=True, exist_ok=True)
 
 def get_config() -> Type[ConfigParser]:
     """Function to get the config parser."""
