@@ -1,9 +1,10 @@
 """Superclass to access all Scopus retrieval APIs and dump the results."""
 
+from pathlib import Path
 from typing import Union
 
 from pybliometrics.scopus.superclasses import Base
-from pybliometrics.scopus.utils import get_folder, URLS
+from pybliometrics.scopus.utils import get_config, URLS
 
 
 class Retrieval(Base):
@@ -41,7 +42,11 @@ class Retrieval(Base):
         else:
             url += identifier
             stem = identifier.replace('/', '_')
-        self._cache_file_path = get_folder(api, self._view)/stem
+        # Get cache file path
+        self._view = self._view or ''
+        config = get_config()
+        parent = Path(config.get('Directories', api))
+        self._cache_file_path = parent/self._view/stem
 
         # Parse file contents
         params = {'view': self._view, **kwds}

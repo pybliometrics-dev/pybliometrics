@@ -1,9 +1,10 @@
 """Superclass to access all Scopus search APIs and dump the results."""
 
 from hashlib import md5
+from pathlib import Path
 
 from pybliometrics.scopus.superclasses import Base
-from pybliometrics.scopus.utils import get_folder, URLS
+from pybliometrics.scopus.utils import get_config, URLS
 
 
 class Search(Base):
@@ -56,7 +57,11 @@ class Search(Base):
 
         # Construct cache file path
         stem = md5(name.encode('utf8')).hexdigest()
-        self._cache_file_path = get_folder(api, self._view)/stem
+        # Get cache file path
+        self._view = self._view or ''
+        config = get_config()
+        parent = Path(config.get('Directories', api))
+        self._cache_file_path = parent/self._view/stem
 
         # Init
         Base.__init__(self, params=params, url=URLS[api], download=download,

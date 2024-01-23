@@ -3,7 +3,7 @@ from collections import deque
 from pathlib import Path
 from typing import List, Optional, Type
 
-from pybliometrics.scopus.utils.constants import CONFIG_FILE, RATELIMITS, DEFAULT_PATHS
+from pybliometrics.scopus.utils.constants import CONFIG_FILE, RATELIMITS, DEFAULT_PATHS, VIEWS
 from pybliometrics.scopus.utils.create_config import create_config
 
 CONFIG = None
@@ -56,7 +56,9 @@ def check_default_paths(config: Type[ConfigParser], config_path: Type[Path]) -> 
             config.set('Directories', api, str(path))
             with open(config_path, 'w', encoding='utf-8') as ouf:
                 config.write(ouf)
-        path.mkdir(parents=True, exist_ok=True)
+        for view in VIEWS[api]:
+            view_path = path/view
+            view_path.mkdir(parents=True, exist_ok=True)
 
 def get_config() -> Type[ConfigParser]:
     """Function to get the config parser."""
@@ -75,15 +77,3 @@ def get_keys() -> List[str]:
         keys = [k.strip() for k in CONFIG.get('Authentication', 'APIKey').split(",")]
     return keys
 
-def get_folder(api, view):
-    """Auxiliary function to get the cache folder belonging to an API,
-    eventually create the folder.
-    """
-    parent = Path(CONFIG.get('Directories', api))
-    # Create folder if it does not exist
-    try:
-        folder = parent/view
-    except TypeError:
-        folder = parent
-    folder.mkdir(parents=True, exist_ok=True)
-    return folder
