@@ -9,7 +9,7 @@ from .scopus_search import ScopusSearch
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
     filter_digits, get_content, get_link, html_unescape, listify, make_int_if_possible,\
-    parse_affiliation, parse_date_created
+    parse_affiliation, parse_date_created, VIEWS
 
 
 class AuthorRetrieval(Retrieval):
@@ -281,8 +281,7 @@ class AuthorRetrieval(Retrieval):
         is stripped of an eventually leading `'9-s2.0-'`.
         """
         # Checks
-        allowed_views = ('METRICS', 'LIGHT', 'STANDARD', 'ENHANCED', 'ENTITLED')
-        check_parameter_value(view, allowed_views, "view")
+        check_parameter_value(view, VIEWS['AuthorRetrieval'], "view")
 
         # Load json
         self._id = str(author_id).split('-')[-1]
