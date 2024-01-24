@@ -58,7 +58,6 @@ class Search(Base):
         # Construct cache file path
         stem = md5(name.encode('utf8')).hexdigest()
         # Get cache file path
-        self._view = self._view or ''
         config = get_config()
         parent = Path(config.get('Directories', api))
         self._cache_file_path = parent/self._view/stem
