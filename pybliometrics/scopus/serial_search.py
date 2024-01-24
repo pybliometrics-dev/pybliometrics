@@ -2,7 +2,7 @@ from collections import OrderedDict
 from typing import Dict, List, Optional, Union
 
 from pybliometrics.scopus.superclasses import Search
-from pybliometrics.scopus.utils import check_parameter_value, make_search_summary
+from pybliometrics.scopus.utils import check_parameter_value, make_search_summary, VIEWS
 
 
 class SerialSearch(Search):
@@ -92,7 +92,7 @@ class SerialSearch(Search):
         invalid = [k for k in query.keys() if k not in allowed_query_keys]
         if invalid:
             raise ValueError(f'Query key(s) "{", ".join(invalid)}" invalid')
-        check_parameter_value(view, ('STANDARD', 'ENHANCED', 'CITESCORE'), "view")
+        check_parameter_value(view, VIEWS['SerialSearch'], "view")
 
         # Query
         self._query = str(query)

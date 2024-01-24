@@ -4,7 +4,7 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, chained_get,\
     check_parameter_value, check_field_consistency, deduplicate,\
-    get_freetoread, listify, make_search_summary
+    get_freetoread, listify, make_search_summary, VIEWS
 
 
 class ScopusSearch(Search):
@@ -177,7 +177,7 @@ class ScopusSearch(Search):
         """
         # Checks
         if view:
-            check_parameter_value(view, ('STANDARD', 'COMPLETE'), "view")
+            check_parameter_value(view, VIEWS['ScopusSearch'], "view")
         allowed = ("warn", "raise")
         check_parameter_value(integrity_action, allowed, "integrity_action")
 

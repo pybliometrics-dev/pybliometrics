@@ -3,7 +3,7 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
-    get_link, make_float_if_possible, make_int_if_possible
+    get_link, make_float_if_possible, make_int_if_possible, VIEWS
 
 
 class SerialTitle(Retrieval):
@@ -227,8 +227,7 @@ class SerialTitle(Retrieval):
         where `path` is specified in your configuration file.
         """
         # Checks
-        views = ('STANDARD', 'ENHANCED', 'CITESCORE')
-        check_parameter_value(view, views, "view")
+        check_parameter_value(view, VIEWS['SerialTitle'], "view")
         self._view = view
 
         # Force refresh when years is specified

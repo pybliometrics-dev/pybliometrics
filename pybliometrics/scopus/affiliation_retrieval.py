@@ -3,7 +3,7 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
-    get_id, get_link, parse_date_created, make_int_if_possible
+    get_id, get_link, parse_date_created, make_int_if_possible, VIEWS
 
 
 class AffiliationRetrieval(Retrieval):
@@ -167,7 +167,7 @@ class AffiliationRetrieval(Retrieval):
         where `path` is specified in your configuration file.
         """
         # Checks
-        check_parameter_value(view, ('LIGHT', 'STANDARD', 'ENTITLED'), "view")
+        check_parameter_value(view, VIEWS['AffiliationRetrieval'], "view")
 
         # Load json
         self._view = view
