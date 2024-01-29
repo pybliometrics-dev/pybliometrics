@@ -3,6 +3,8 @@ pybliometrics.scopus.AffiliationRetrieval
 
 `AffiliationRetrieval()` implements the `Affiliation Retrieval API <https://dev.elsevier.com/documentation/AffiliationRetrievalAPI.wadl>`_. It provides basic information on registered affiliations, such as city, country, its members, and more.
 
+In addition, the 'ENTITLED' view lets you check you whether you have access to this class.
+
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
     :local:

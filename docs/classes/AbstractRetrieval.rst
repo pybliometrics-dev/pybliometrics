@@ -7,6 +7,8 @@ It accepts any identifier as the main argument.  Most commonly, this will be a `
 
 The Abstract Retrieval API allows a differing information depth via `views <https://dev.elsevier.com/guides/AbstractRetrievalViews.htm>`_, some of which are restricted.  The 'META_ABS' view is the most comprehensive among unrestricted views, encompassing all information from other unrestricted views.  It is therefore the default view.  The view with the most information content is 'FULL', which includes all information available with 'META_ABS', but is restricted.  Generally, you should always try to use `view='FULL'` when downloading an abstract and fall back to the default otherwise.
 
+In addition, the 'ENTITLED' view lets you check you whether you have access to this class.
+
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
     :local:

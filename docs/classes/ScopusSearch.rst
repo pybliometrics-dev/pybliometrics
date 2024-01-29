@@ -73,7 +73,7 @@ The main attribute of the class, `results`, returns a list of `namedtuples <http
 .. code-block:: python
 
     >>> import pandas as pd
-    >>> df = pd.DataFrame(pd.DataFrame(s.results))
+    >>> df = pd.DataFrame(s.results)
     >>> df.columns
     Index(['eid', 'doi', 'pii', 'pubmed_id', 'title', 'subtype', 'subtypeDescription',
            'creator', 'afid', 'affilname', 'affiliation_city', 'affiliation_country',
