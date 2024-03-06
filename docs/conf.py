@@ -57,8 +57,6 @@ html_sidebars = {
         'searchbox.html',
     ]
 }
-html_static_path = ['_static']
-html_css_files = ['custom.css']
 
 # Options for HTMLHelp output
 html_show_sourcelink = True

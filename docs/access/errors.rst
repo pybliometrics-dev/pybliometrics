@@ -19,7 +19,7 @@ Error message hierarchy
 
       * `pybliometrics.scopus.exception.Scopus414Error: TOO LARGE`: The query string you are using is too long.  Break it up in smaller pieces.
 
-      .. _Scopus429Error:
+          .. _Scopus429Error:
 
       * `pybliometrics.scopus.exception.Scopus429Error: QUOTA EXCEEDED`: Your provided API key's weekly quota has been depleted.  If you provided multiple keys in your :doc:`configuration file <../configuration>`, this means all your keys are depleted.  In this case, wait up to week until your API key's quota has been reset.
 
