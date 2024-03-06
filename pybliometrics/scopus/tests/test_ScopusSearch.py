@@ -1,10 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """Tests for `scopus.ScopusSearch` module."""
 
 from collections import namedtuple
-
-from nose.tools import assert_equal, assert_true
 
 from pybliometrics.scopus import ScopusSearch, init
 
@@ -28,17 +24,17 @@ s_empty = ScopusSearch(q_empty, refresh=30)
 
 def test_get_eids_author():
     expected = ['2-s2.0-85117005558', '2-s2.0-84937325266', '2-s2.0-26444452434']
-    assert_equal(s_au.get_eids(), expected)
+    assert s_au.get_eids() == expected
 
 
 def test_get_eids_journal():
-    assert_equal(len(s_j.get_eids()), 118)
+    assert len(s_j.get_eids()) == 118
 
 
 def test_get_results_size():
-    assert_equal(s_au.get_results_size(), 3)
-    assert_equal(s_j.get_results_size(), 118)
-    assert_equal(s_empty.get_results_size(), 0)
+    assert s_au.get_results_size() == 3
+    assert s_j.get_results_size() == 118
+    assert s_empty.get_results_size() == 0
 
 
 def test_results_author():
@@ -56,8 +52,8 @@ def test_results_author():
         description=None, authkeywords=None, citedby_count=0, openaccess=0,
         freetoread=None, freetoreadLabel=None, fund_acr=None,
         fund_no='undefined', fund_sponsor=None)
-    assert_true(int(received.citedby_count) > 0)
-    assert_equal(received._replace(citedby_count=0), expected)
+    assert int(received.citedby_count) > 0
+    assert received._replace(citedby_count=0) == expected
 
 
 def test_results_journal():
@@ -94,9 +90,9 @@ def test_results_journal():
         authkeywords=keywords, citedby_count=0, openaccess=0, freetoread=None,
         freetoreadLabel=None, fund_acr='MOST', fund_no='NSC94-2415-H-194-001',
         fund_sponsor='Ministry of Science and Technology, Taiwan')
-    assert_true(int(received.citedby_count) > 60)
-    assert_equal(received._replace(citedby_count=0), expected)
+    assert int(received.citedby_count) > 60
+    assert received._replace(citedby_count=0) == expected
 
 
 def test_results_empty():
-    assert_equal(s_empty.results, None)
+    assert s_empty.results is None

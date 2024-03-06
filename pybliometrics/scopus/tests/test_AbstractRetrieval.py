@@ -1,9 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """Tests for `scopus.AbstractRetrieval` module."""
 
 from collections import namedtuple
-from nose.tools import assert_equal, assert_true, assert_is_none
 
 from pybliometrics.scopus import AbstractRetrieval, init
 
@@ -28,7 +25,7 @@ ab8 = AbstractRetrieval("2-s2.0-84951753303", view="REF", refresh=30)
 # Collaboration
 ab9 = AbstractRetrieval("2-s2.0-85097473741", view="FULL", refresh=30)
 # ENTITLED view
-ar_entitled = AbstractRetrieval('10.1109/Multi-Temp.2019.8866947', view='ENTITLED', refresh=30)
+ar10 = AbstractRetrieval('10.1109/Multi-Temp.2019.8866947', view='ENTITLED', refresh=30)
 
 
 def test_abstract():
@@ -40,49 +37,49 @@ def test_abstract():
         'seasonal stochastic trends. This leads to analysing seasonal unit '\
         'roots in the presence of mean shifts using Bayesian techniques. '\
         'Our method is illustrated using several simulated and empirical data.'
-    assert_equal(ab4.abstract, expected)
-    assert_equal(ab8.abstract, None)
+    assert ab4.abstract == expected
+    assert ab8.abstract is None
 
 
 def test_affiliation():
     aff = namedtuple('Affiliation', 'id name city country')
-    expected = [aff(id=60027950, name='Carnegie Mellon University',
+    expected = [aff(id=60104842, name='College of Engineering',
                     city='Pittsburgh', country='United States')]
-    assert_equal(ab1.affiliation, expected)
-    assert_equal(ab3.affiliation, None)
-    assert_equal(ab8.affiliation, None)
+    assert ab1.affiliation == expected
+    assert ab3.affiliation is None
+    assert ab8.affiliation is None
 
 
 def test_aggregationType():
-    assert_equal(ab1.aggregationType, 'Journal')
-    assert_equal(ab2.aggregationType, 'Conference Proceeding')
-    assert_equal(ab8.aggregationType, None)
+    assert ab1.aggregationType == 'Journal'
+    assert ab2.aggregationType == 'Conference Proceeding'
+    assert ab8.aggregationType is None
 
 
 def test_authkeywords():
-    assert_equal(ab1.authkeywords, None)
+    assert ab1.authkeywords is None
     expected = ['Bayesian analysis', 'Seasonality',
                 'Structural breaks', 'Unit roots']
-    assert_equal(ab4.authkeywords, expected)
-    assert_equal(ab8.authkeywords, None)
+    assert ab4.authkeywords == expected
+    assert ab8.authkeywords is None
 
 
 def test_authorgroup():
     fields = 'affiliation_id dptid organization city postalcode addresspart '\
              'country collaboration auid orcid indexed_name surname given_name'
     auth = namedtuple('Author', fields)
-    expected = [auth(affiliation_id=60027950, dptid=110785688,
+    expected = [auth(affiliation_id=60104842, dptid=None,
         organization='Department of Chemical Engineering, Carnegie Mellon University',
         city='Pittsburgh', postalcode='15213', addresspart='5000 Forbes Avenue',
         country='United States', collaboration=None, auid=7004212771, orcid=None,
-        indexed_name='Kitchin J.', surname='Kitchin', given_name='John R.')]
-    assert_equal(ab1.authorgroup, expected)
-    assert_equal(ab8.authorgroup, None)
+        indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
+    assert ab1.authorgroup == expected
+    assert ab8.authorgroup is None
     expected = auth(affiliation_id=None, dptid=None, organization=None,
         city=None, postalcode=None, addresspart=None, country=None,
         collaboration='J-PARC-HI Collaboration', auid=7403019450, orcid=None,
         indexed_name='Ahn J.K.', surname='Ahn', given_name='J.K.')
-    assert_equal(ab9.authorgroup[0], expected)
+    assert ab9.authorgroup[0] == expected
 
 
 
@@ -91,69 +88,70 @@ def test_authors():
     auth = namedtuple('Author', fields)
     expected = [auth(auid=7004212771, indexed_name='Kitchin J.R.',
                 surname='Kitchin', given_name='John R.',
-                affiliation_id='60027950')]
-    assert_equal(ab1.authors, expected)
-    assert_equal(ab8.authors, None)
+                affiliation_id='60104842')]
+    assert ab1.authors == expected
+    assert ab8.authors is None
+    assert ar10.authors is None
 
 
 def test_citedby_count():
     expected = 5
-    assert_true(ab1.citedby_count >= expected)
-    assert_equal(ab8.citedby_count, None)
+    assert ab1.citedby_count >= expected
+    assert ab8.citedby_count is None
 
 
 def test_citedby_link():
     expected = 'https://www.scopus.com/inward/citedby.uri?partnerID=HzOxMe3b'\
         '&scp=84930616647&origin=inward'
-    assert_equal(ab1.citedby_link, expected)
-    assert_equal(ab8.citedby_link, None)
+    assert ab1.citedby_link == expected
+    assert ab8.citedby_link is None
 
 
 def test_chemials():
     received = ab6.chemicals
-    assert_true(isinstance(received, list))
-    assert_equal(len(received), 6)
+    assert isinstance(received, list)
+    assert len(received) == 6
     chemical = namedtuple('Chemical', 'source chemical_name cas_registry_number')
     expected = chemical(source='esbd', cas_registry_number='126547-89-5',
         chemical_name='intercellular adhesion molecule 1')
-    assert_true(expected in received)
-    assert_equal(ab3.chemicals, None)
-    assert_equal(ab8.chemicals, None)
+    assert expected in received
+    assert ab3.chemicals is None
+    assert ab8.chemicals is None
 
 
 def test_confcode():
-    assert_equal(ab2.confcode, 44367)
-    assert_equal(ab8.confcode, None)
+    assert ab2.confcode == 44367
+    assert ab8.confcode is None
 
 
 def test_confdate():
-    assert_equal(ab2.confdate, ((1995, 12, 13), (1995, 12, 15)))
-    assert_equal(ab8.confdate, None)
+    assert ab2.confdate == ((1995, 12, 13), (1995, 12, 15))
+    assert ab8.confdate is None
 
 
 def test_conflocation():
-    assert_equal(ab2.conflocation, 'New Orleans, LA, USA')
-    assert_equal(ab8.conflocation, None)
+    assert ab2.conflocation == 'New Orleans, LA, USA'
+    assert ab8.conflocation is None
 
 
 def test_confname():
     expected2 = "Proceedings of the 1995 34th IEEE Conference on Decision "\
                 "and Control. Part 1 (of 4)"
-    assert_equal(ab2.confname, expected2)
-    assert_equal(ab3.confname, None)
+    assert ab2.confname == expected2
+    assert ab3.confname is None
     expected7 = '20th Symposium on Design, Test, Integration and Packaging '\
                 'of MEMS and MOEMS, DTIP 2018'
-    assert_equal(ab7.confname, expected7)
-    assert_equal(ab8.confname, None)
+    assert ab7.confname == expected7
+    assert ab8.confname is None
 
 
 def test_confsponsor():
-    assert_equal(ab2.confsponsor, 'IEEE')
-    assert_equal(ab3.confsponsor, None)
+    assert ab2.confsponsor == 'IEEE'
+    assert ab3.confsponsor is None
     expected7 = ['ARTOV.IMM.CNR.IT', 'CMP.IMAG.FR', 'CNRS.FR',
                  'EPS.IEEE.ORG', 'LIRMM.FR']
-    assert_equal(ab7.confsponsor, expected7)
-    assert_equal(ab8.confsponsor, None)
+    assert ab7.confsponsor == expected7
+    assert ab8.confsponsor is None
 
 
 def test_contributor_group():
@@ -162,21 +160,21 @@ def test_contributor_group():
     expected = pers(given_name='Romolo', initials='R.', surname='Marcelli',
                     indexed_name='Marcelli R.', role='edit')
     received = ab7.contributor_group
-    assert_equal(len(received), 7)
-    assert_true(expected in received)
-    assert_equal(ab3.contributor_group, None)
-    assert_equal(ab8.contributor_group, None)
+    assert len(received) == 7
+    assert expected in received
+    assert ab3.contributor_group is None
+    assert ab8.contributor_group is None
 
 
 def test_copyright():
-    assert_equal(ab8.copyright, None)
+    assert ab8.copyright is None
     expected = "Copyright 2021 Elsevier B.V., All rights reserved."
-    assert_equal(ab9.copyright, expected)
+    assert ab9.copyright == expected
 
 
 def test_copyright_type():
-    assert_equal(ab8.copyright_type, None)
-    assert_equal(ab9.copyright_type, "Elsevier")
+    assert ab8.copyright_type is None
+    assert ab9.copyright_type == "Elsevier"
 
 
 def test_correspondence():
@@ -185,19 +183,19 @@ def test_correspondence():
     expected2 = corr(surname='Boukas', initials='E.K.',
         organization='Ecole Polytechnique de Montreal', country='Canada',
         city_group='Montreal')
-    assert_equal(ab2.correspondence[0], expected2)
-    assert_equal(ab3.correspondence, None)
-    assert_equal(ab8.correspondence, None)
+    assert ab2.correspondence[0] == expected2
+    assert ab3.correspondence is None
+    assert ab8.correspondence is None
 
 
 def test_coverDate():
-    assert_equal(ab1.coverDate, '2015-06-05')
-    assert_equal(ab8.coverDate, None)
+    assert ab1.coverDate == '2015-06-05'
+    assert ab8.coverDate is None
 
 
 def test_date_created():
-    assert_equal(ab8.date_created, None)
-    assert_equal(ab9.date_created, (2021, 9, 14))
+    assert ab8.date_created is None
+    assert ab9.date_created == (2021, 9, 14)
 
 
 def test_description():
@@ -210,36 +208,36 @@ def test_description():
                'analysing seasonal unit roots in the presence of mean '\
                'shifts using Bayesian techniques. Our method is illustrated '\
                'using several simulated and empirical data.'
-    assert_equal(ab4.description, expected)
-    assert_equal(ab8.description, None)
+    assert ab4.description == expected
+    assert ab8.description is None
 
 
 def test_doi():
-    assert_equal(ab1.doi, '10.1021/acscatal.5b00538')
-    assert_equal(ab4.doi, '10.1016/s0304-4076(97)00018-3')
-    assert_equal(ab8.doi, None)
+    assert ab1.doi == '10.1021/acscatal.5b00538'
+    assert ab4.doi == '10.1016/s0304-4076(97)00018-3'
+    assert ab8.doi is None
 
 
 def test_eid():
-    assert_equal(ab1.eid, '2-s2.0-84930616647')
-    assert_equal(ab8.eid, None)
+    assert ab1.eid == '2-s2.0-84930616647'
+    assert ab8.eid is None
 
 
 def test_endingPage():
-    assert_equal(ab1.endingPage, '3899')
-    assert_equal(ab8.endingPage, None)
+    assert ab1.endingPage == '3899'
+    assert ab8.endingPage is None
+
 
 def test_entitlement():
-    entitlement = ar_entitled.document_entitlement_status
-    assert_equal(entitlement, 'ENTITLED')
-    assert_is_none(ar_entitled.authors)
-    assert_is_none(ab8.document_entitlement_status)
-    assert_is_none(ab9.document_entitlement_status)
+    assert ab8.document_entitlement_status is None
+    assert ab9.document_entitlement_status is None
+    assert ar10.document_entitlement_status == 'ENTITLED'
+
 
 def test_funding():
     received = ab6.funding
-    assert_true(isinstance(received, list))
-    assert_equal(len(received), 5)
+    assert isinstance(received, list)
+    assert len(received) == 5
     fund = namedtuple('Funding', 'agency agency_id string funding_id acronym country')
     expected6 = fund(
         agency='Deutsche Forschungsgemeinschaft',
@@ -247,9 +245,9 @@ def test_funding():
         string='German Research Foundation', acronym='DFG',
         funding_id=['SFB685'],
         country='http://sws.geonames.org/2921044/')
-    assert_true(expected6 in received)
-    assert_equal(ab5.funding, None)
-    assert_equal(ab8.funding, None)
+    assert expected6 in received
+    assert ab5.funding is None
+    assert ab8.funding is None
 
 
 def test_funding_text():
@@ -261,8 +259,8 @@ def test_funding_text():
         '102572/B/13/Z (to D.L.H.). All EM was performed in the Astbury '\
         'Biostructure Laboratory, which was funded by the University of '\
         'Leeds and the Wellcome Trust (108466/Z/15/Z).'
-    assert_equal(ab6.funding_text, e)
-    assert_equal(ab8.funding_text, None)
+    assert ab6.funding_text == e
+    assert ab8.funding_text is None
 
 
 def test_get_bibtex():
@@ -271,7 +269,7 @@ def test_get_bibtex():
         'Fairness in consumer pricing}},\n  journal = {Journal of Consumer '\
         'Policy},\n  year = {1991},\n  volume = {14},\n  number = {2},\n  '\
         'pages = {117-140},\n  doi = {10.1007/BF00381915}}'
-    assert_equal(ab3.get_bibtex(), e)
+    assert ab3.get_bibtex() == e
 
 
 def test_get_latex():
@@ -282,7 +280,7 @@ def test_get_latex():
         's0304-4076(97)00018-3}, \\href{https://www.scopus.com/inward/'\
         'record.uri?partnerID=HzOxMe3b&scp=0000016206&origin=inward}'\
         '{scopus:2-s2.0-0000016206}.'
-    assert_equal(ab4.get_latex(), e)
+    assert ab4.get_latex() == e
 
 
 def test_get_ris():
@@ -291,7 +289,7 @@ def test_get_ris():
         '2015\nSP  - 3894-3899\nAU  - Kitchin J.R.\nDO  - 10.1021/'\
         'acscatal.5b00538\nUR  - https://doi.org/10.1021/acscatal.5b00538\n'\
         'IS  - 6\nER  - \n\n'
-    assert_equal(ab1.get_ris(), e)
+    assert ab1.get_ris() == e
 
 
 def test_get_html():
@@ -306,101 +304,101 @@ def test_get_html():
         'source/sourceInfo.url?sourceId=130073">Journal of Consumer Policy'\
         '</a>, <b>14(2)</b>, pp. 117-140, (1991). <a href="https://doi.org/'\
         '10.1007/BF00381915">doi:10.1007/BF00381915</a>.'
-    assert_equal(ab3.get_html(), e)
+    assert ab3.get_html() == e
 
 
 def test_isbn():
-    assert_equal(ab3.isbn, None)
-    assert_equal(ab5.isbn, ('0203881486', '9780203881484'))
-    assert_equal(ab8.isbn, None)
+    assert ab3.isbn is None
+    assert ab5.isbn == ('0203881486', '9780203881484')
+    assert ab8.isbn is None
 
 
 def test_issn():
     issn = namedtuple('ISSN', 'print electronic')
     expected1 = issn(print='21555435', electronic=None)
-    assert_equal(ab1.issn, expected1)
+    assert ab1.issn == expected1
     expected3 = issn(print='03425843', electronic='15730700')
-    assert_equal(ab3.issn, expected3)
-    assert_equal(ab5.issn, None)
-    assert_equal(ab8.issn, None)
+    assert ab3.issn == expected3
+    assert ab5.issn is None
+    assert ab8.issn is None
 
 
 def test_identifier():
-    assert_equal(ab1.identifier, 84930616647)
-    assert_equal(ab8.identifier, None)
+    assert ab1.identifier == 84930616647
+    assert ab8.identifier is None
 
 
 def test_idxterms():
     expected = ['Control variables', 'Cost function',
                 'Hamilton-Jacobi-Isaacs equation', 'Machine capacity',
                 'Stochastic manufacturing systems', 'Value function']
-    assert_equal(ab2.idxterms, expected)
-    assert_equal(ab4.idxterms, None)
+    assert ab2.idxterms == expected
+    assert ab4.idxterms is None
 
 
 def test_issueIdentifier():
-    assert_equal(ab1.issueIdentifier, '6')
-    assert_equal(ab8.issueIdentifier, None)
+    assert ab1.issueIdentifier == '6'
+    assert ab8.issueIdentifier is None
 
 
 def test_issuetitle():
-    assert_equal(ab3.issuetitle, 'Law, Economics and Behavioural Sciences')
-    assert_equal(ab8.issuetitle, None)
+    assert ab3.issuetitle == 'Law, Economics and Behavioural Sciences'
+    assert ab8.issuetitle is None
 
 
 def test_language():
-    assert_equal(ab1.language, 'eng')
-    assert_equal(ab8.language, None)
+    assert ab1.language == 'eng'
+    assert ab8.language is None
 
 
 def test_openaccess():
-    assert_equal(ab5.openaccess, 2)
-    assert_equal(ab6.openaccess, 1)
-    assert_equal(ab7.openaccess, 0)
-    assert_equal(ab8.openaccess, None)
+    assert ab5.openaccess == 2
+    assert ab6.openaccess == 1
+    assert ab7.openaccess == 0
+    assert ab8.openaccess is None
 
 
 def test_openaccessFlag():
-    assert_equal(ab5.openaccessFlag, None)
-    assert_equal(ab6.openaccessFlag, True)
-    assert_equal(ab7.openaccessFlag, False)
-    assert_equal(ab8.openaccessFlag, None)
+    assert ab5.openaccessFlag is None
+    assert ab6.openaccessFlag == True
+    assert ab7.openaccessFlag == False
+    assert ab8.openaccessFlag is None
 
 
 def test_pageRange():
-    assert_equal(ab1.pageRange, '3894-3899')
-    assert_equal(ab8.pageRange, None)
+    assert ab1.pageRange == '3894-3899'
+    assert ab8.pageRange is None
 
 
 def test_pii():
-    assert_equal(ab4.pii, 'S0304407697000183')
-    assert_equal(ab5.pii, None)
-    assert_equal(ab6.pii, None)
+    assert ab4.pii == 'S0304407697000183'
+    assert ab5.pii is None
+    assert ab6.pii is None
 
 
 def test_publicationName():
-    assert_equal(ab1.publicationName, 'ACS Catalysis')
-    assert_equal(ab8.publicationName, None)
+    assert ab1.publicationName == 'ACS Catalysis'
+    assert ab8.publicationName is None
 
 
 def test_publisher():
-    assert_equal(ab1.publisher, 'American Chemical Society')
-    assert_equal(ab8.publisher, None)
+    assert ab1.publisher == 'American Chemical Society'
+    assert ab8.publisher is None
 
 
 def test_publisheraddress():
-    assert_equal(ab2.publisheraddress, 'Piscataway, NJ, United States')
-    assert_equal(ab8.publisheraddress, None)
+    assert ab2.publisheraddress == 'Piscataway, NJ, United States'
+    assert ab8.publisheraddress is None
 
 
 def test_pubmed_id():
-    assert_equal(ab6.pubmed_id, 29284752)
-    assert_equal(ab7.pubmed_id, None)
+    assert ab6.pubmed_id == 29284752
+    assert ab7.pubmed_id is None
 
 
 def test_refcount():
-    assert_equal(ab4.refcount, 18)
-    assert_equal(ab8.refcount, 48)
+    assert ab4.refcount == 18
+    assert ab8.refcount == 48
 
 
 def test_references_full():
@@ -422,13 +420,13 @@ def test_references_full():
         issue=None, first=None, last=None, citedbycount=None, type=None,
         text='accessed 27 June 2017',
         fulltext='www. hexoskin. com, accessed 27 June 2017')
-    assert_equal(ab1.references[-1], expected1)
-    assert_equal(ab2.references, None)
-    assert_equal(ab7.references[0], expected7)
+    assert ab1.references[-1] == expected1
+    assert ab2.references is None
+    assert ab7.references[0] == expected7
 
 
 def test_references_ref():
-    assert_equal(len(ab8.references), 48)
+    assert len(ab8.references) == 48
     fields = 'position id doi title authors authors_auid authors_affiliationid '\
              'sourcetitle publicationyear coverDate volume issue first last '\
              'citedbycount type text fulltext'
@@ -442,104 +440,101 @@ def test_references_ref():
         sourcetitle='Proceedings - IEEE INFOCOM',
         publicationyear=None, coverDate='2010-06-15', volume=None, issue=None,
         first=None, last=None, citedbycount='0', type='resolvedReference')
-    assert_equal(ab8.references[-2]._replace(citedbycount="0"), expected8)
-    assert_true(int(ab8.references[-2].citedbycount) >= 0)
+    assert ab8.references[-2]._replace(citedbycount="0") == expected8
+    assert int(ab8.references[-2].citedbycount) >= 0
 
 
 def test_scopus_link():
     expected = 'https://www.scopus.com/inward/record.uri?partnerID=HzOxMe3b&'\
         'scp=84930616647&origin=inward'
-    assert_equal(ab1.scopus_link, expected)
+    assert ab1.scopus_link == expected
 
 
 def test_self_link():
     expected = 'https://api.elsevier.com/content/abstract/scopus_id/84930616647'
-    assert_equal(ab1.self_link, expected)
-    assert_equal(ab8.self_link, None)
+    assert ab1.self_link == expected
+    assert ab8.self_link is None
 
 
 def test_sequencebank():
     received = ab6.sequencebank
-    assert_true(isinstance(received, list))
-    assert_equal(len(received), 3)
+    assert isinstance(received, list)
+    assert len(received) == 3
     bank = namedtuple('Chemical', 'name sequence_number type')
     expected = bank(name='GENBANK', sequence_number='MG272373',
                     type='referenced')
-    assert_true(expected in received)
-    assert_equal(ab3.sequencebank, None)
-    assert_equal(ab8.sequencebank, None)
+    assert expected in received
+    assert ab3.sequencebank is None
+    assert ab8.sequencebank is None
 
 
 def test_source_id():
-    assert_equal(ab1.source_id, 19700188320)
-    assert_equal(ab8.source_id, None)
+    assert ab1.source_id == 19700188320
+    assert ab8.source_id is None
 
 
 def test_sourcetitle_abbreviation():
-    assert_equal(ab1.sourcetitle_abbreviation, 'ACS Catal.')
-    assert_equal(ab8.sourcetitle_abbreviation, None)
+    assert ab1.sourcetitle_abbreviation == 'ACS Catal.'
+    assert ab8.sourcetitle_abbreviation is None
 
 
 def test_srctype():
-    assert_equal(ab1.srctype, 'j')
-    assert_equal(ab2.srctype, 'p')
-    assert_equal(ab8.srctype, None)
+    assert ab1.srctype == 'j'
+    assert ab2.srctype == 'p'
+    assert ab8.srctype is None
 
 
 def test_startingPage():
-    assert_equal(ab1.startingPage, '3894')
-    assert_equal(ab8.startingPage, None)
+    assert ab1.startingPage == '3894'
+    assert ab8.startingPage is None
 
 
 def test_subject_areas():
     area = namedtuple('Area', 'area abbreviation code')
     expected = [area(area='Catalysis', abbreviation='CENG', code=1503),
                 area(area='Chemistry (all)', abbreviation='CHEM', code=1600)]
-    assert_equal(ab1.subject_areas, expected)
-    assert_equal(ab8.subject_areas, None)
+    assert ab1.subject_areas == expected
+    assert ab8.subject_areas is None
     expected = [area(area='Nuclear and High Energy Physics',
                      abbreviation='PHYS', code=3106)]
-    assert_equal(ab9.subject_areas, expected)
+    assert ab9.subject_areas == expected
 
 
 def test_subtype():
-    assert_equal(ab1.subtype, "re")
-    assert_equal(ab2.subtype, "cp")
-    assert_equal(ab5.subtype, "bk")
-    assert_equal(ab6.subtype, "ar")
+    assert ab1.subtype == "re"
+    assert ab2.subtype == "cp"
+    assert ab5.subtype == "bk"
+    assert ab6.subtype == "ar"
+    assert ar10.subtype is None
 
 
 def test_subtypedescription():
-    assert_equal(ab1.subtypedescription, "Review")
-    assert_equal(ab2.subtypedescription, "Conference Paper")
-    assert_equal(ab5.subtypedescription, "Book")
-    assert_equal(ab6.subtypedescription, "Article")
+    assert ab1.subtypedescription == "Review"
+    assert ab2.subtypedescription == "Conference Paper"
+    assert ab5.subtypedescription == "Book"
+    assert ab6.subtypedescription == "Article"
+    assert ar10.subtypedescription is None
 
 
 def test_title():
     expected = 'Examples of effective data sharing in scientific publishing'
-    assert_equal(ab1.title, expected)
-    assert_equal(ab8.title, None)
+    assert ab1.title == expected
+    assert ab8.title is None
+    assert ar10.title is None
 
 
 def test_url():
     expected = 'https://api.elsevier.com/content/abstract/scopus_id/84930616647'
-    assert_equal(ab1.url, expected)
-    assert_equal(ab8.url, None)
+    assert ab1.url == expected
+    assert ab8.url is None
 
 
 def test_volume():
-    assert_equal(ab1.volume, '5')
-    assert_equal(ab8.volume, None)
+    assert ab1.volume == '5'
+    assert ab8.volume is None
 
 
 def test_website():
-    assert_equal(ab1.website, 'http://pubs.acs.org/page/accacs/about.html')
-    assert_equal(ab2.website, None)
-    assert_equal(ab8.website, None)
-
-
-def test_all_refs():
-    refs_downloaded = len(ab8.references)
-    expected = ab8.refcount
-    assert_equal(refs_downloaded, expected)
+    assert ab1.website == 'http://pubs.acs.org/page/accacs/about.html'
+    assert ab2.website is None
+    assert ab8.website is None
