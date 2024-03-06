@@ -50,6 +50,21 @@ URLS = {
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/'
 }
 
+# Valid views for all classes
+VIEWS = {
+    "CitationOverview": ["STANDARD"],
+    "AbstractRetrieval": ["META", "META_ABS", "FULL", "REF", "ENTITLED"],
+    "AffiliationRetrieval": ["LIGHT", "STANDARD", "ENTITLED"],
+    "AffiliationSearch": ["STANDARD"],
+    "AuthorRetrieval": ["LIGHT", "STANDARD", "ENHANCED", "METRICS", "ENTITLED"],
+    "AuthorSearch": ["STANDARD"],
+    "PlumXMetrics": ["ENHANCED"],
+    "ScopusSearch": ["STANDARD", "COMPLETE"],
+    "SerialSearch": ["STANDARD", "ENHANCED", "CITESCORE"],
+    "SerialTitle": ["STANDARD", "ENHANCED", "CITESCORE"],
+    "SubjectClassifications": [''],
+}
+
 # Throttling limits (in queries per second) // 0 = no limit
 RATELIMITS = {
     'AbstractRetrieval': 9,

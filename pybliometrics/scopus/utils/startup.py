@@ -3,11 +3,10 @@ from collections import deque
 from pathlib import Path
 from typing import List, Optional, Type
 
-from pybliometrics.scopus.utils.constants import CONFIG_FILE, RATELIMITS
+from pybliometrics.scopus.utils.constants import CONFIG_FILE, RATELIMITS, DEFAULT_PATHS, VIEWS
 from pybliometrics.scopus.utils.create_config import create_config
 
 CONFIG = None
-CONFIG_DIR = None
 CUSTOM_KEYS = None
 
 _throttling_params = {k: deque(maxlen=v) for k, v in RATELIMITS.items()}
@@ -26,7 +25,6 @@ def init(config_dir: Optional[str] = CONFIG_FILE, keys: Optional[List[str]] = No
     """
     global CONFIG
     global CUSTOM_KEYS
-    global CONFIG_DIR
 
     config_dir = Path(config_dir)
 
@@ -39,9 +37,9 @@ def init(config_dir: Optional[str] = CONFIG_FILE, keys: Optional[List[str]] = No
         CONFIG.read(config_dir)
 
     check_sections(CONFIG)
+    check_default_paths(CONFIG, config_dir)
 
     CUSTOM_KEYS = keys
-    CONFIG_DIR = config_dir
 
 
 def check_sections(config: Type[ConfigParser]) -> None:
@@ -50,6 +48,17 @@ def check_sections(config: Type[ConfigParser]) -> None:
         if not config.has_section(section):
             raise NoSectionError(section)
 
+def check_default_paths(config: Type[ConfigParser], config_path: Type[Path]) -> None:
+    """Auxiliary function to check if default cache paths exist.
+    If not, the paths are writen in the config"""
+    for api, path in DEFAULT_PATHS.items():
+        if not config.has_option('Directories', api):
+            config.set('Directories', api, str(path))
+            with open(config_path, 'w', encoding='utf-8') as ouf:
+                config.write(ouf)
+        for view in VIEWS[api]:
+            view_path = path/view
+            view_path.mkdir(parents=True, exist_ok=True)
 
 def get_config() -> Type[ConfigParser]:
     """Function to get the config parser."""
@@ -60,12 +69,6 @@ def get_config() -> Type[ConfigParser]:
                                 'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
     return CONFIG
 
-
-def get_config_path() -> Type[Path]:
-    """Function to get the configuration file path."""
-    return CONFIG_DIR or CONFIG_FILE
-
-
 def get_keys() -> List[str]:
     """Function to get the API keys and overwrite keys in config if needed."""
     if CUSTOM_KEYS:
@@ -73,3 +76,4 @@ def get_keys() -> List[str]:
     else:
         keys = [k.strip() for k in CONFIG.get('Authentication', 'APIKey').split(",")]
     return keys
+

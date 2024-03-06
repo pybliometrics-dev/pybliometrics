@@ -5,7 +5,7 @@ from urllib3.util import Retry
 
 from pybliometrics import __version__
 from pybliometrics.scopus import exception
-from pybliometrics.scopus.utils.startup import get_config, get_keys, get_config_path, _throttling_params
+from pybliometrics.scopus.utils.startup import get_config, get_keys, _throttling_params
 
 # Define user agent string for HTTP requests
 user_agent = 'pybliometrics-v' + __version__
@@ -163,30 +163,3 @@ def detect_id_type(sid):
         return id_type
     except UnboundLocalError:
         raise ValueError(f'ID type detection failed for "{sid}".')
-
-
-def get_folder(api, view):
-    """Auxiliary function to get the cache folder belonging to an API,
-    eventually create the folder.
-    """
-    from configparser import NoOptionError
-    from pathlib import Path
-
-    from pybliometrics.scopus.utils import DEFAULT_PATHS
-
-    config = get_config()
-    config_path = get_config_path()
-
-    try:
-        parent = Path(config.get('Directories', api))
-    except NoOptionError:
-        parent = DEFAULT_PATHS[api]
-        config.set('Directories', api, str(parent))
-        with open(config_path, 'w') as ouf:
-            config.write(ouf)
-    try:
-        folder = parent/view
-    except TypeError:
-        folder = parent
-    folder.mkdir(parents=True, exist_ok=True)
-    return folder
