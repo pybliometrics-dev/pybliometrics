@@ -4,7 +4,7 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 from pybliometrics.scopus.superclasses import Retrieval
 from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
     deduplicate, get_id, detect_id_type, get_link, listify,\
-    make_int_if_possible, parse_date_created
+    make_int_if_possible, parse_date_created, VIEWS
 
 
 class AbstractRetrieval(Retrieval):
@@ -729,7 +729,7 @@ class AbstractRetrieval(Retrieval):
         """
         # Checks
         identifier = str(identifier)
-        check_parameter_value(view, ('META', 'META_ABS', 'REF', 'FULL', 'ENTITLED'), "view")
+        check_parameter_value(view, VIEWS['AbstractRetrieval'], "view")
         if id_type is None:
             id_type = detect_id_type(identifier)
         else:
