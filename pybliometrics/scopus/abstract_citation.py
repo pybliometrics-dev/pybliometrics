@@ -43,7 +43,7 @@ class CitationOverview(Retrieval):
         for doc in self._citeInfoMatrix:
             try:
                 cites = [int(d['$']) for d in doc['cc']]
-            except (AttributeError, TypeError):  # No citations
+            except (AttributeError, KeyError, TypeError):  # No citations
                 cites = [0]*len(_years)
             outer.append(list(zip(_years, cites)))
         return _maybe_return_list(outer)
