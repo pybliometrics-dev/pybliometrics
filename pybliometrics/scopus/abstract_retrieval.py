@@ -537,7 +537,10 @@ class AbstractRetrieval(Retrieval):
         ref = namedtuple('Reference', fields)
         items = listify(self._ref.get("reference", []))
         for item in items:
-            info = item.get('ref-info', item)
+            try:
+                info = item.get('ref-info', item)
+            except AttributeError:  # item not a dictionary
+                continue
             volisspag = info.get('volisspag', {}) or {}
             if isinstance(volisspag, list):
                 volisspag = volisspag[0]
