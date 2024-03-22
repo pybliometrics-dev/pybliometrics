@@ -799,16 +799,19 @@ class AbstractRetrieval(Retrieval):
                 s += '\n   '.join([aff.name for aff in self.affiliation])
         
         elif self._view in ('REF'):
-            # Sort reference list by citationcount
-            top_n = 5
-            references = sorted(self.references, key=convert_citedbycount, reverse=True)
+            try:
+                # Sort reference list by citationcount
+                top_n = 5
+                references = sorted(self.references, key=convert_citedbycount, reverse=True)
 
-            top_references = [f'{reference.title} ({get_date(reference.coverDate)}). '+
-                              f'EID: {reference.id}' for reference in references[:top_n]]
+                top_references = [f'{reference.title} ({get_date(reference.coverDate)}). '+
+                                f'EID: {reference.id}' for reference in references[:top_n]]
 
-            s = f'A total of {self.refcount} references were found. '
-            s += f'Top {top_n} references:\n\t'
-            s += '\n\t'.join(top_references)
+                s = f'A total of {self.refcount} references were found. '
+                s += f'Top {top_n} references:\n\t'
+                s += '\n\t'.join(top_references)
+            except TypeError:
+                s = 'No references found'
 
         return s
 
