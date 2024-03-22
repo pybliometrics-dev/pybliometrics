@@ -175,7 +175,10 @@ def _get_all_refs(url: str, params: dict, verbose: bool, resp: dict, *args, **kw
     # Use of refcount leads to errors
     res = resp.json()
     path_total_references = ['abstracts-retrieval-response', 'references', '@total-references']
-    n = int(parse_content.chained_get(res, path_total_references))
+    try:
+        n = int(parse_content.chained_get(res, path_total_references))
+    except TypeError:
+        return res
 
     data  = res #data is used to gather all responses. res is a tmp variable
 
