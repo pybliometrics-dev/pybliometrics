@@ -26,6 +26,8 @@ ab8 = AbstractRetrieval("2-s2.0-84951753303", view="REF", refresh=30)
 ab9 = AbstractRetrieval("2-s2.0-85097473741", view="FULL", refresh=30)
 # ENTITLED view
 ar10 = AbstractRetrieval('10.1109/Multi-Temp.2019.8866947', view='ENTITLED', refresh=30)
+# REF view without refs
+ab11 = AbstractRetrieval('2-s2.0-0031874638', view="REF", refresh=30)
 
 
 def test_abstract():
@@ -399,6 +401,7 @@ def test_pubmed_id():
 def test_refcount():
     assert ab4.refcount == 18
     assert ab8.refcount == 48
+    assert ab11.refcount is None
 
 
 def test_references_full():
@@ -442,6 +445,7 @@ def test_references_ref():
         first=None, last=None, citedbycount='0', type='resolvedReference')
     assert ab8.references[-2]._replace(citedbycount="0") == expected8
     assert int(ab8.references[-2].citedbycount) >= 0
+    assert ab11.references is None
 
 
 def test_scopus_link():
