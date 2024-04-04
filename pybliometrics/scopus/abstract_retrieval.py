@@ -806,12 +806,13 @@ class AbstractRetrieval(Retrieval):
 
                 top_references = [f'{reference.title} ({get_date(reference.coverDate)}). '+
                                 f'EID: {reference.id}' for reference in references[:top_n]]
+            except TypeError:
+                top_n = 0
 
-                s = f'A total of {self.refcount} references were found. '
+            s = f'A total of {self.refcount or 0} references were found. '
+            if top_n:
                 s += f'Top {top_n} references:\n\t'
                 s += '\n\t'.join(top_references)
-            except TypeError:
-                s = 'No references found'
 
         return s
 

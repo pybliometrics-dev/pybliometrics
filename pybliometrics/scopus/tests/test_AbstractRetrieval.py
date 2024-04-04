@@ -27,7 +27,7 @@ ab9 = AbstractRetrieval("2-s2.0-85097473741", view="FULL", refresh=30)
 # ENTITLED view
 ar10 = AbstractRetrieval('10.1109/Multi-Temp.2019.8866947', view='ENTITLED', refresh=30)
 # REF view without refs
-ab11 = AbstractRetrieval('2-s2.0-0031874638', view="REF", refresh=True)
+ab11 = AbstractRetrieval('2-s2.0-0031874638', view="REF", refresh=30)
 
 
 def test_abstract():
