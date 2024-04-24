@@ -20,14 +20,14 @@ def get_session() -> Type[Session]:
     config = get_config()
 
     _retries = config.getint("Requests", "Retries", fallback=5)
-    retry = Retry(total=_retries, status_forcelist=[500, 501, 502, 503, 504, 524],
-                backoff_factor=0.1)
+    retry = Retry(total=_retries, backoff_factor=0.1,
+                  status_forcelist=[500, 501, 502, 503, 504, 524])
     adapter = HTTPAdapter(max_retries=retry)
     session = Session()
     session.mount('http://', adapter)
     session.mount('https://', adapter)
-
     return session
+
 
 def get_content(url, api, params=None, **kwds):
     """Helper function to download a file and return its content.
