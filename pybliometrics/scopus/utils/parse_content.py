@@ -123,6 +123,15 @@ def make_int_if_possible(val):
     except TypeError:
         return val
 
+def make_bool_if_possible(val):
+    """Attempt a conversion to bool type."""
+    if isinstance(val, str):
+        return val.lower() == 'true'
+    elif isinstance(val, int):
+        return bool(val)
+    else:
+        return val
+    
 
 def make_search_summary(self, keyword, results, joiner="\n    "):
     """Create string for str dunder of search classes."""
