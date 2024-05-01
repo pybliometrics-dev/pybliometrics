@@ -12,3 +12,4 @@ __citation__ = 'Rose, Michael E. and John R. Kitchin: "pybliometrics: '\
     '10 (2019) 100263.'
 
 import pybliometrics.scopus
+import pybliometrics.sciencedirect
