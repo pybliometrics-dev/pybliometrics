@@ -21,7 +21,9 @@ The class is initialized with a search query dictionary.  Its keys are limited t
 
 .. code-block:: python
 
+    >>> import pybliometrics
     >>> from pybliometrics.scopus import SerialSearch
+	>>> pybliometrics.scopus.init()
     >>> s = SerialSearch(query={"title": "SoftwareX"})
 
 

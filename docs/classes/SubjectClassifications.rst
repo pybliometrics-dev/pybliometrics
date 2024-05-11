@@ -21,7 +21,9 @@ You initialize the class with a query `dict`.  It contains the "description" (ge
 
 .. code-block:: python
 
+	>>> import pybliometrics
     >>> from pybliometrics.scopus import SubjectClassifications
+	>>> pybliometrics.scopus.init()
     >>> sub = SubjectClassifications({'description': 'Mathematics'})
 
 

@@ -21,7 +21,9 @@ The class is initialized with a search query.  There are but two exceptions to a
 
 .. code-block:: python
 
+    >>> import pybliometrics
     >>> from pybliometrics.scopus import ScopusSearch
+	>>> pybliometrics.scopus.init()
     >>> q = "REF(2-s2.0-85068268027)"
     >>> s = ScopusSearch(q, verbose=True)
     Downloading results for query "REF(2-s2.0-85068268027)":

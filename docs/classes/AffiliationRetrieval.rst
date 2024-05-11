@@ -23,7 +23,9 @@ You initialize the class using Scopus' Affiliation ID:
 
 .. code-block:: python
 
+    >>> import pybliometrics
     >>> from pybliometrics.scopus import AffiliationRetrieval
+	>>> pybliometrics.scopus.init()
     >>> aff = AffiliationRetrieval(60000356)
 
 

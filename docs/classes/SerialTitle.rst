@@ -21,7 +21,9 @@ You initialize the class with an ISSN or an E-ISSN (works with and without hyphe
 
 .. code-block:: python
 
+    >>> import pybliometrics
     >>> from pybliometrics.scopus import SerialTitle
+	>>> pybliometrics.scopus.init()
     >>> source = SerialTitle("00368075")
 
 You can obtain basic information just by printing the object:

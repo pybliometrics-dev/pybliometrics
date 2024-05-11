@@ -23,7 +23,9 @@ You initiate the class with the author's Scopus ID, which can be either an integ
 
 .. code-block:: python
 
+    >>> import pybliometrics
     >>> from pybliometrics.scopus import AuthorRetrieval
+	>>> pybliometrics.scopus.init()
     >>> au = AuthorRetrieval(7004212771)
 
 

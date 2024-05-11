@@ -30,6 +30,8 @@ Example
 .. example-begin
 .. code:: python
 
+    >>> import pybliometrics
+    >>> pybliometrics.init()  # read API keys
     >>> # Document-specific information
     >>> from pybliometrics.scopus import AbstractRetrieval
     >>> ab = AbstractRetrieval("10.1016/j.softx.2019.100263")

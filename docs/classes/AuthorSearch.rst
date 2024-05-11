@@ -21,7 +21,9 @@ The class is initialized using a search query, details of which can be found in 
 
 .. code-block:: python
 
+    >>> import pybliometrics
     >>> from pybliometrics.scopus import AuthorSearch
+	>>> pybliometrics.scopus.init()
     >>> s = AuthorSearch('AUTHLAST(Selten) and AUTHFIRST(Reinhard)')
 
 

@@ -21,7 +21,9 @@ You initialize the class with the identifier of a document and its type:
 
 .. code-block:: python
 
+    >>> import pybliometrics
     >>> from pybliometrics.scopus import PlumXMetrics
+	>>> pybliometrics.scopus.init()
     >>> plum = PlumXMetrics("2-s2.0-85054706190", id_type='elsevierId')
 
 

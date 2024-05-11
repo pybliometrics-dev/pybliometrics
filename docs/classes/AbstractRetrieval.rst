@@ -26,7 +26,9 @@ You initialize the class with an ID that Scopus uses, e.g. the EID:
 
 .. code-block:: python
 
+	>>> import pybliometrics
     >>> from pybliometrics.scopus import AbstractRetrieval
+	>>> pybliometrics.scopus.init()
     >>> ab = AbstractRetrieval("2-s2.0-85068268027", view='FULL')
 
 
