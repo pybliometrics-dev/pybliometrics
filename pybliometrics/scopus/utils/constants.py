@@ -69,7 +69,7 @@ VIEWS = {
     "SerialSearch": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SerialTitle": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SubjectClassifications": [''],
-    "ArticleRetrieval": ["BASIC", "META", "META_ABS", "META_ABS_REF", "FULL"]
+    "ArticleRetrieval": ["META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"]
 }
 
 # Throttling limits (in queries per second) // 0 = no limit

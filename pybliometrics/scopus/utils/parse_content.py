@@ -106,6 +106,13 @@ def listify(element):
         return [element]
 
 
+def list_authors(lst):
+    """Format a list of authors (Surname, Firstname and Firstname Surname)."""
+    authors = ', '.join([' '.join([a.given_name, a.surname]) for a in lst[0:-1]])
+    authors += ' and ' + ' '.join([lst[-1].given_name, lst[-1].surname])
+    return authors
+
+
 def make_float_if_possible(val):
     """Attempt a conversion to float type."""
     try:
@@ -195,3 +202,16 @@ def parse_date_created(dct):
         return int(date['@year']), int(date['@month']), int(date['@day'])
     else:
         return None, None, None
+
+
+def parse_pages(self, unicode=False):
+    """Auxiliary function to parse and format page range of a document."""
+    if self.pageRange:
+        pages = f'pp. {self.pageRange}'
+    elif self.startingPage:
+        pages = f'pp. {self.startingPage}-{self.endingPage}'
+    else:
+        pages = '(no pages found)'
+    if unicode:
+        pages = f'{pages}'
+    return pages
