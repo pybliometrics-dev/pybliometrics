@@ -16,7 +16,10 @@ class ArticleRetrieval(Retrieval):
     @property
     def abstract(self) -> Optional[str]:
         """The abstract of a document."""
-        return chained_get(self._json, ['coredata', 'dc:description'])
+        abstract = chained_get(self._json, ['coredata', 'dc:description'])
+        if abstract:
+            abstract = abstract.strip()
+        return abstract
 
 
     @property
