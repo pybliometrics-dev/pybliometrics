@@ -32,7 +32,7 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(s)
-    Search '{'title': 'SoftwareX'}' yielded 1 source as of 2021-07-14:
+    Search '{'title': 'SoftwareX'}' yielded 1 source as of 2024-05-11:
         SoftwareX
 
 
@@ -51,7 +51,7 @@ The main attribute of the class, `results`, returns a list of `OrderedDict <http
     >>> import pandas as pd
     >>> df = pd.DataFrame(pd.DataFrame(s.results))
     >>> df.shape
-    (1, 147)
+    (1, 162)
     >>> df.columns
     Index(['title', 'publisher', 'coverageStartYear', 'coverageEndYear',
            'aggregationType', 'source-id', 'eIssn', 'openaccess',
@@ -65,16 +65,16 @@ The main attribute of the class, `results`, returns a list of `OrderedDict <http
     >>> pd.set_option('display.max_columns', None)
     >>> df.iloc[:,:16]
        title    publisher coverageStartYear coverageEndYear aggregationType  \
-    0  SoftwareX  Elsevier BV              2015            2020         journal   
+    0  SoftwareX  Elsevier BV              2015            2024         journal   
 
          source-id      eIssn openaccess  openaccessArticle subject_area_codes  \
     0  21100422153  2352-7110          1               True          1712;1706   
 
-      subject_area_abbrevs                      subject_area_names SNIP_2018  \
-    0                 COMP  Software;Computer Science Applications     4.905   
+      subject_area_abbrevs                      subject_area_names SNIP_['@year']  \
+    0                 COMP  Software;Computer Science Applications          1.426
 
-      SJR_2018 citeScoreTracker_2019 citeScoreCurrentMetric_2018  
-    0    4.539                  2.18                       11.56 
+      SJR_['@year'] citeScoreTracker_2023 citeScoreCurrentMetric_2022
+    0         0.574                   5.4                         5.1
 
 
 The information in columns beyond the first 16 pertains to journal metrics: publication counts, citation counts, not-cited documents, share of not-cited documents, and the share of review article documents, for each year since indexation.

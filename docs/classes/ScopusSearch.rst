@@ -27,7 +27,7 @@ The class is initialized with a search query.  There are but two exceptions to a
     >>> q = "REF(2-s2.0-85068268027)"
     >>> s = ScopusSearch(q, verbose=True)
     Downloading results for query "REF(2-s2.0-85068268027)":
-    100%|████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:03<00:00,  1.07s/it]
+    100%|████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:03<00:00,  1.07s/it]
 
 
 You can obtain a search summary just by printing the object:
@@ -35,7 +35,7 @@ You can obtain a search summary just by printing the object:
 .. code-block:: python
 
     >>> print(s)
-    Search 'REF(2-s2.0-85068268027)' yielded 88 documents as of 2023-12-03:
+    Search 'REF(2-s2.0-85068268027)' yielded 10 documents as of 2024-95-11:
         2-s2.0-85174697039
         2-s2.0-85169560066
         2-s2.0-85163820321
@@ -58,7 +58,7 @@ Users can determine the number of results programmatically using the `.get_resul
 .. code-block:: python
 
     >>> s.get_results_size()
-    88
+    110
 
 
 This method works even if one chooses to not download results.  It thus helps subscribers to decide programmatically if one wants to proceed downloading or not:
@@ -67,7 +67,7 @@ This method works even if one chooses to not download results.  It thus helps su
 
     >>> other = ScopusSearch('AUTHLASTNAME(Brown)', download=False)
     >>> other.get_results_size()
-    311543
+    316970
 
 
 The main attribute of the class, `results`, returns a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_.  They can be efficiently converted into DataFrames using `pandas <https://pandas.pydata.org/>`_:
@@ -215,8 +215,8 @@ For convenience, the `s.get_eids()` method returns the list of EIDs:
 .. code-block:: python
 
     >>> s.get_eids()
-    ['2-s2.0-85174697039', '2-s2.0-85169560066', '2-s2.0-85163820321',
-    '2-s2.0-85153853127', '2-s2.0-85174908092', '2-s2.0-85163278918',
-    '2-s2.0-85169708007', '2-s2.0-85165723386', '2-s2.0-85162924068',
+    ['2-s2.0-85184035025', '2-s2.0-85187781098', '2-s2.0-85191356593',
+     '2-s2.0-85185298843', '2-s2.0-85176114500', '2-s2.0-85187960595',
+	 '2-s2.0-85187507366', '2-s2.0-85187306554', '2-s2.0-85181899797',
     #...
     '2-s2.0-85087770000', '2-s2.0-85086243347', '2-s2.0-85084027658']

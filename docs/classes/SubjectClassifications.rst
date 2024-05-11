@@ -33,7 +33,7 @@ You can obtain basic information just by printing the object:
 
     >>> print(sub)
     Search '{'description': 'Mathematics', 'field': 'code,description,detail,abbrev'}'
-    yielded 15 subject areas as of 2021-02-11:
+    yielded 15 subject areas as of 2024-05-11:
         2600
         2601
         2602

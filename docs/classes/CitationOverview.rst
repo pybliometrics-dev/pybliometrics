@@ -36,8 +36,8 @@ You can obtain basic information just by printing the object:
 
     >>> print(co)
     2 document(s) has/have the following total citation count
-    as of 2021-07-17:
-        16; 13
+    as of 2024-05-11:
+        110; 20
 
 
 The key attribute is `cc`, which provides a list of tuples storing year-wise citations to the article.  Each list corresponds to one document, in the order specified when initating the class:
@@ -45,8 +45,8 @@ The key attribute is `cc`, which provides a list of tuples storing year-wise cit
 .. code-block:: python
 
     >>> co.cc
-    [[(2019, 0), (2020, 6), (2021, 10)],
-     [(2019, 2), (2020, 2), (2021, 1)]]
+    [[(2019, 0), (2020, 6), (2021, 25)],
+	 [(2019, 2), (2020, 2), (2021, 2)]]
 
 
 The attributes `pcc`, `rangeCount`, `lcc` and `rowTotal` provide citation summaries for each document.  `pcc` is the count of citations before the specified year, `rangeCount` the count of citations for the specified years, and `lcc` the count of citations after the specified year.  For the sum (i.e., the total number of citations by document) use `rowTotal`
@@ -56,11 +56,11 @@ The attributes `pcc`, `rangeCount`, `lcc` and `rowTotal` provide citation summar
     >>> co.pcc
     [0, 8]
     >>> co.rangeCount
-    [16, 5]
+    [31, 6]
     >>> co.lcc
-    [0, 0]
+    [79, 5]
     >>> co.rowTotal
-    [16, 13]
+    [110, 20]
 
 
 The `columnTotal` attribute represents the total number of yearly citations for all documents combined, which `rangeColumnTotal` summarizes.  Finally `grandTotal` is the total number of citations for all documents combined.
@@ -68,11 +68,11 @@ The `columnTotal` attribute represents the total number of yearly citations for 
 .. code-block:: python
 
     >>> co.columnTotal
-    [2, 8, 11]
+    [2, 8, 27]
     >>> co.rangeColumnTotal
-    21
+    37
     >>> co.grandTotal
-    29
+    130
 
 
 With the `citation` parameter, you can exclude self-citations or citations from books:
@@ -83,14 +83,14 @@ With the `citation` parameter, you can exclude self-citations or citations from 
                                    citation="exclude-self")
     >>> print(co_self)
     2 document(s) has/have the following total citation count
-    excluding self-citations as of 2021-07-17:
-        14; 11
+    excluding self-citations as of 2024-05-11:
+        110; 20
     >>> co_books = CitationOverview(identifier, start=2019, end=2021,
                                     citation="exclude-books")
     >>> print(co_books)
     2 document(s) has/have the following total citation count
-    excluding citations from books as of 2021-07-17:
-        16; 13
+    excluding citations from books as of 2024-05-11:
+        10; 20
 
 
 Author information is also stored as lists of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:

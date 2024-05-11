@@ -35,7 +35,7 @@ You can obtain basic information just by printing the object:
 
     >>> print(aff)
     University of Cape Town in Cape Town in South Africa,
-    has 13,033 associated author(s) and 75,695 associated document(s) as of 2021-07-12
+    has 14,109 associated author(s) and 89,376 associated document(s) as of 2024-05-11
 
 
 The object has several of attributes but no methods.  For example, information regarding the affiliation itself:
@@ -67,9 +67,9 @@ There are meta-information, too:
 .. code-block:: python
 
     >>> aff.author_count
-    13033
+    14109
     >>> aff.document_count
-    75695
+    89376
 
 
 Scopus also collects information on different names affiliated authors use for this affiliation, which `pybliometrics` returns as list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
@@ -77,10 +77,11 @@ Scopus also collects information on different names affiliated authors use for t
 .. code-block:: python
 
     >>> aff.name_variants
-    [Variant(name='University Of Cape Town', doc_count=60095),
-     Variant(name='Univ. Cape Town', doc_count=1659),
-     Variant(name='Univ Of Cape Town', doc_count=772),
-     Variant(name='Univ. Of Cape Town', doc_count=392)]
+    [Variant(name='University Of Cape Town', doc_count=85821),
+	 Variant(name='Univ. Cape Town', doc_count=1622),
+	 Variant(name='Univ Of Cape Town', doc_count=729),
+	 Variant(name='Institute Of Infectious Disease And Molecular Medicine', doc_count=608),
+	 Variant(name='Department Of Molecular And Cell Biology', doc_count=596)]
 
 
 Using `pandas <https://pandas.pydata.org/>`_, you can easily convert this into a DataFrame:
@@ -90,10 +91,10 @@ Using `pandas <https://pandas.pydata.org/>`_, you can easily convert this into a
     >>> import pandas as pd
     >>> print(pd.DataFrame(aff.name_variants))
                           name doc_count
-    0  University Of Cape Town     60095
-    1          Univ. Cape Town      1659
-    2        Univ Of Cape Town       772
-    3       Univ. Of Cape Town       392
+    0  University Of Cape Town     85821
+    1          Univ. Cape Town       729
+    2        Univ Of Cape Town       608
+    3       Univ. Of Cape Town       596
 
 
 More on different types of affiliations in section `tips <../tips.html#affiliations>`_.

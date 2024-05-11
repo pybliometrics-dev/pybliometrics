@@ -32,9 +32,9 @@ You can obtain a search summary just by printing the object:
 .. code-block:: python
 
     >>> print(s)
-    Search 'AUTHLAST(Selten) and AUTHFIRST(Reinhard)' yielded 2 authors as of 2021-11-12:
-        Selten, Reinhard; AUTHOR_ID:6602907525 (74 document(s))
-        Selten, Reinhard; AUTHOR_ID:57213632570 (1 document(s))
+    Search 'AUTHLAST(Selten) and AUTHFIRST(Reinhard)' yielded 2 authors as of 2024-05-11:
+		Selten, Reinhard; AUTHOR_ID:6602907525 (74 document(s))
+		Selten, Reinhard; AUTHOR_ID:57213632570 (1 document(s))
 
 
 To determine the the number of results use the `.get_results_size()` method, even before you download the results:
@@ -43,7 +43,7 @@ To determine the the number of results use the `.get_results_size()` method, eve
 
     >>> other = AuthorSearch("AUTHLAST(Selten)", download=False)
     >>> other.get_results_size()
-    29
+    27
 
 
 Primarily, the class provides a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the :doc:`AuthorRetrieval <../classes/AuthorRetrieval>` class, and corresponding information:

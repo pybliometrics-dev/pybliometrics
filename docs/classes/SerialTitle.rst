@@ -31,14 +31,13 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(source)
-    'Science', journal published by 'American Association for the Advancement
-    of Science', is active in Multidisciplinary
-    Metrics as of 2023-11-15:
-        SJR:  year value
-              2022 13.328
-        SNIP: year value
-              2022 7.729
-        ISSN: 0036-8075, E-ISSN: 1095-9203, Scopus ID: 23571
+    'Science', journal published by 'American Association for the Advancement of Science', is active in Multidisciplinary
+	Metrics as of 2024-05-11:
+		SJR:  year value
+			  2022 13.328
+		SNIP: year value
+			  2022 7.729
+		ISSN: 0036-8075, E-ISSN: 1095-9203, Scopus ID: 23571
 
 The object has a number of attributes but no methods.  For example, information regarding the source itself:
 
@@ -62,7 +61,7 @@ Crucially, it provides three metrics: CiteScore (see `here <https://service.else
 
     >>> source.citescoreyearinfolist
     [Citescoreinfolist(year=2022, citescore=59.0),
-     Citescoreinfolist(year=2023, citescore=58.8)]
+     Citescoreinfolist(year=2023, citescore=60.9)]
     >>> source.sjrlist
     [(2022, 13.328)]
     >>> source.sniplist
@@ -77,7 +76,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
     >>> info = pd.DataFrame(source_full.citescoreyearinfolist)
     >>> print(info)
         year  citescore       status  documentcount  citationcount  percentcited                             rank
-    0   2023       58.8  In-Progress           4730         278199            79                  [(1000, 2, 99)]
+    0   2023       60.9  In-Progress           4969         302467            79                  [(1000, 2, 99)]
     1   2022       59.0     Complete           4895         288748            82                  [(1000, 2, 98)]
     2   2021       57.8     Complete           4823         278545            84                  [(1000, 2, 98)]
     3   2020       46.8     Complete           4833         226134            82                  [(1000, 2, 98)]
@@ -98,17 +97,17 @@ The `yearly_data` time series includes the number of documents published in a gi
 .. code-block:: python
 
     >>> source.yearly_data[-1]
-    Yearlydata(year=2023, publicationcount=1800, revpercent=2.94,
-               zerocitessce=1201, zerocitespercentsce=66.72222222222223,
-               citecountsce=726948)
+	Yearlydata(year=2024, publicationcount=473, revpercent=4.02,
+			   zerocitessce=400, zerocitespercentsce=84.56659619450318,
+			   citecountsce=246787)
     >>> yearly_data = pd.DataFrame(source.yearly_data)
     >>> yearly_data.head()
        year  publicationcount  revpercent  zerocitessce  zerocitespercentsce  citecountsce
-    0  1996              2395        4.97           655            27.348643        236545
-    1  1997              2833        6.28           904            31.909636        244078
-    2  1998              2816        4.69           854            30.326705        254500
-    3  1999              2373        6.28           532            22.418879        276054
-    4  2000              2402        6.99           459            19.109076        293867
+	0  1996              2395        4.97           653            27.265136        236672
+	1  1997              2833        6.28           899            31.733145        244122
+	2  1998              2816        4.69           850            30.184659        254600
+	3  1999              2373        6.28           531            22.376738        276110
+	4  2000              2401        7.00           457            19.033736        294076
 
 
 By default, `SerialTitle()` retrieves only the most recent metrics, although yearly data is availble from 1996 onwards.  If you provide a year or a range of years via the optional parameter `years`, `SerialTitle()` will retrieve information for these years (except for the CiteScore):
