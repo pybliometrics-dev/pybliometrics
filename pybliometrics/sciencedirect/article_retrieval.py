@@ -134,6 +134,12 @@ class ArticleRetrieval(Retrieval):
 
 
     @property
+    def originalText(self) -> Optional[str]:
+        """Complete document text."""
+        return self._json.get('originalText')
+
+
+    @property
     def pageRange(self) -> Optional[str]:
         """The prism:pageRange of a document."""
         return chained_get(self._json, ['coredata', 'prism:pageRange'])
@@ -179,7 +185,8 @@ class ArticleRetrieval(Retrieval):
         for link in links:
             if link['@rel'] == 'self':
                 return link['@href']
-    
+
+
     @property
     def startingPage(self) -> Optional[str]:
         """The starting page of a document."""
