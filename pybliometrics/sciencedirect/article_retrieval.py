@@ -5,8 +5,10 @@ from pybliometrics.scopus.utils import (
     chained_get,
     check_parameter_value,
     detect_id_type,
+    list_authors,
     make_bool_if_possible,
     make_int_if_possible,
+    parse_pages,
     VIEWS,
 )
 from pybliometrics.scopus.superclasses import Retrieval
@@ -58,6 +60,15 @@ class ArticleRetrieval(Retrieval):
         """The cover display date of a document."""
         return chained_get(self._json, ['coredata', 'prism:coverDisplayDate'])
  
+
+    @property
+    def document_entitlement_status(self) -> Optional[str]:
+        """Returns the document entitlement status, i.e. tells if the requestor 
+        is entitled to the requested resource.
+        Note: Only works with `ENTITLED` view.
+        """
+        return chained_get(self._json, ['document-entitlement', 'status'])
+
 
     @property
     def doi(self) -> str:
@@ -229,5 +240,26 @@ class ArticleRetrieval(Retrieval):
             api="ArticleRetrieval",
             **kwds
         )
+        if self._view != "ENTITLED":
+            self._json = self._json['full-text-retrieval-response']
 
-        self._json = self._json['full-text-retrieval-response']
+
+    def __str__(self):
+        s = ''
+        if self._view in ('FULL', 'META_ABS', 'META'):
+            if self.authors:
+                if len(self.authors) > 1:
+                    authors = list_authors(self.authors)
+                else:
+                    a = self.authors[0]
+                    authors = str(a.given_name) + ' ' + str(a.surname)
+            else:
+                authors = "(No author found)"
+            # All other information
+            s += f'{authors}: "{self.title}", {self.publicationName}, {self.volume}'
+            s += ', '
+            s += parse_pages(self)
+            s += f'({self.coverDate[:4]}).'
+            if self.doi:
+                s += f' https://doi.org/{self.doi}.\n'
+        return s
