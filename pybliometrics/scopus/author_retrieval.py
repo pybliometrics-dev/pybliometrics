@@ -6,8 +6,8 @@ from json import loads
 
 from .author_search import AuthorSearch
 from .scopus_search import ScopusSearch
-from pybliometrics.scopus.superclasses import Retrieval
-from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
+from pybliometrics.superclasses import Retrieval
+from pybliometrics.utils import chained_get, check_parameter_value,\
     filter_digits, get_content, get_link, html_unescape, listify, make_int_if_possible,\
     parse_affiliation, parse_date_created, VIEWS
 

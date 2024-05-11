@@ -1,7 +1,7 @@
 from collections import namedtuple
 from typing import Optional , Union
 
-from pybliometrics.scopus.utils import (
+from pybliometrics.utils import (
     chained_get,
     check_parameter_value,
     detect_id_type,
@@ -11,7 +11,7 @@ from pybliometrics.scopus.utils import (
     parse_pages,
     VIEWS,
 )
-from pybliometrics.scopus.superclasses import Retrieval
+from pybliometrics.superclasses import Retrieval
 
 
 class ArticleRetrieval(Retrieval):
