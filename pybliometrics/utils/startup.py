@@ -3,8 +3,8 @@ from collections import deque
 from pathlib import Path
 from typing import List, Optional, Type
 
-from pybliometrics.scopus.utils.constants import CONFIG_FILE, RATELIMITS, DEFAULT_PATHS, VIEWS
-from pybliometrics.scopus.utils.create_config import create_config
+from pybliometrics.utils.constants import CONFIG_FILE, RATELIMITS, DEFAULT_PATHS, VIEWS
+from pybliometrics.utils.create_config import create_config
 
 CONFIG = None
 CUSTOM_KEYS = None

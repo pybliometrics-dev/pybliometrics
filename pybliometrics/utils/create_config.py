@@ -1,6 +1,6 @@
 import configparser
 from typing import List, Optional
-from pybliometrics.scopus.utils.constants import CONFIG_FILE
+from pybliometrics.utils.constants import CONFIG_FILE
 
 
 def create_config(config_dir: Optional[str] = None,
@@ -15,7 +15,7 @@ def create_config(config_dir: Optional[str] = None,
     :param insttoken: An InstToken to be used alongside the key(s).  Will only
                       be used if `keys` is not empty.
     """
-    from pybliometrics.scopus.utils.constants import DEFAULT_PATHS
+    from pybliometrics.utils.constants import DEFAULT_PATHS
 
     if not config_dir:
         config_dir = CONFIG_FILE

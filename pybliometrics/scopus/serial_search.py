@@ -1,8 +1,8 @@
 from collections import OrderedDict
 from typing import Dict, List, Optional, Union
 
-from pybliometrics.scopus.superclasses import Search
-from pybliometrics.scopus.utils import check_parameter_value, make_search_summary, VIEWS
+from pybliometrics.superclasses import Search
+from pybliometrics.utils import check_parameter_value, make_search_summary, VIEWS
 
 
 class SerialSearch(Search):

@@ -3,8 +3,8 @@
 from hashlib import md5
 from pathlib import Path
 
-from pybliometrics.scopus.superclasses import Base
-from pybliometrics.scopus.utils import get_config, URLS
+from pybliometrics.superclasses import Base
+from pybliometrics.utils import get_config, URLS
 
 
 class Search(Base):

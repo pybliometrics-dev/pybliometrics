@@ -3,8 +3,8 @@
 from pathlib import Path
 from typing import Union
 
-from pybliometrics.scopus.superclasses import Base
-from pybliometrics.scopus.utils import get_config, URLS
+from pybliometrics.superclasses import Base
+from pybliometrics.utils import get_config, URLS
 
 
 class Retrieval(Base):
@@ -33,7 +33,7 @@ class Retrieval(Base):
         """
         # Construct URL and cache file name
         url = URLS[api]
-        if api in ("AbstractRetrieval", "PlumXMetrics"):
+        if api in ("AbstractRetrieval", "PlumXMetrics", "ArticleRetrieval"):
             url += id_type + "/"
         if api == 'CitationOverview':
             stem = identifier.replace("/", "")
