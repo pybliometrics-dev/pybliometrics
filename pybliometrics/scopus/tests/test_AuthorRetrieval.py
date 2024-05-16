@@ -236,6 +236,7 @@ def test_name_variants():
         assert isinstance(received, list)
         assert len(received) > 0
         assert str(type(received[0])) == expected
+        assert isinstance(received[0].doc_count, int)
 
 
 def test_orcid():

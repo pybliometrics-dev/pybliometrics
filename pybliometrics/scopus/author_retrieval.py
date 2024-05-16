@@ -173,7 +173,8 @@ class AuthorRetrieval(Retrieval):
         fields = 'indexed_name initials surname given_name doc_count'
         variant = namedtuple('Variant', fields)
         out = [variant(indexed_name=html_unescape(var['indexed-name']), surname=html_unescape(var['surname']),
-                       doc_count=var.get('@doc-count'), initials=html_unescape(var['initials']),
+                       doc_count=make_int_if_possible(var.get('@doc-count')),
+                       initials=html_unescape(var['initials']),
                        given_name=html_unescape(var.get('given-name')))
                for var in listify(self._profile.get('name-variant', []))]
         return out or None
