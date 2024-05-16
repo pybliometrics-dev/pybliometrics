@@ -55,11 +55,11 @@ Information regarding the author's names includes:
     'J.R.'
     >>> au.name_variants
     [Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin',
-     given_name='John R.', doc_count='105'),
+     given_name='John R.', doc_count=104),
      Variant(indexed_name='Kitchin J.', initials='J.', surname='Kitchin',
-     given_name='John', doc_count='13'),
+     given_name='John', doc_count=13),
      Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin',
-     given_name='J. R.', doc_count='8')]
+     given_name='J. R.', doc_count=8)]
     >>> au.eid
     '9-s2.0-7004212771'
 
