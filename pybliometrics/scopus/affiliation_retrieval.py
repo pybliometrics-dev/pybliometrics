@@ -64,14 +64,15 @@ class AffiliationRetrieval(Retrieval):
         return get_id(self._json)
 
     @property
-    def name_variants(self) -> List[NamedTuple]:
+    def name_variants(self) -> Optional[List[NamedTuple]]:
         """A list of namedtuples representing variants of the `affiliation_name`
         with number of documents referring to this variant.
         """
         variant = namedtuple('Variant', 'name doc_count')
         path = ['name-variants', 'name-variant']
-        return [variant(name=var['$'], doc_count=int(var['@doc-count']))
-                for var in chained_get(self._json, path, [])]
+        variants = [variant(name=var['$'], doc_count=int(var['@doc-count']))
+                    for var in chained_get(self._json, path, [])]
+        return variants or None
 
     @property
     def org_domain(self) -> Optional[str]:
