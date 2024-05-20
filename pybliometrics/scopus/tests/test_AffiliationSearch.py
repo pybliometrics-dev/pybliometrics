@@ -17,7 +17,7 @@ def test_affiliations():
     Affiliation = namedtuple('Affiliation', order)
     expected = Affiliation(eid='10-s2.0-60021784', name='New York University',
         variant='', documents=0, city='New York', country='United States',
-        parent='0')
+        parent=None)
     assert received1[0].documents >= 90_000
     assert received1[0]._replace(documents=0) == expected
 

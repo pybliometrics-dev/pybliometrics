@@ -3,7 +3,7 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, check_parameter_value,\
-    check_field_consistency, make_search_summary
+    check_field_consistency, make_int_if_possible, make_search_summary
 
 
 class AffiliationSearch(Search):
@@ -14,7 +14,7 @@ class AffiliationSearch(Search):
         The information in each namedtuple is `(eid name variant documents city
         country parent)`.
 
-        All entries are `strings` or `None`.  Field `variant` combines variants
+        All entries are `strings`, `int` or `None`.  Field `variant` combines variants
         of names with a `";"`.
 
         Raises
@@ -33,10 +33,11 @@ class AffiliationSearch(Search):
             name = item.get('affiliation-name')
             variants = [d.get('$', "") for d in item.get('name-variant', [])
                         if d.get('$', "") != name]
+            parent = make_int_if_possible(item.get('parent-affiliation-id')) if item.get('parent-affiliation-id') != '0' else None
             new = aff(eid=item.get('eid'), variant=";".join(variants),
                       documents=int(item['document-count']), name=name,
                       city=item.get('city'), country=item.get('country'),
-                      parent=item.get('parent-affiliation-id'))
+                      parent=parent)
             out.append(new)
         # Finalize
         check_integrity(out, self._integrity, self._action)
