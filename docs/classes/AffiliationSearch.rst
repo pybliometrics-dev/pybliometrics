@@ -47,11 +47,11 @@ The primary function of the class is to provide a list of `namedtuples <https://
     [Affiliation(eid='10-s2.0-60105007',
 			     name='Max Planck Institute for Innovation and Competition',
 				 variant='Max Planck Institute For Innovation And Competition',
-				 documents=581, city='Munich', country='Germany', parent='0'),
+				 documents=581, city='Munich', country='Germany', parent=None),
 	 Affiliation(eid='10-s2.0-117495104',
 				 name='Max Planck Insitute for Innovation and Com-petition in Munich',
 				 variant='Max-plank Institut',
-				 documents=4, city='Munich', country='Germany', parent='0')]
+				 documents=4, city='Munich', country='Germany', parent=None)]
 
 
 
@@ -71,8 +71,8 @@ Working with namedtuples is straightforward: using `pandas <https://pandas.pydat
     1                                 Max-plank Institut          4  Munich   
 
        country parent  
-    0  Germany      0  
-    1  Germany      0 
+    0  Germany      None  
+    1  Germany      None 
 
 
 Comparing the EIDs, notice that the first affiliation's EID starts with 10-s2.0-6, while the other begins with 10-s2.0-1.  The latter denotes a non-org affiliation type.  
