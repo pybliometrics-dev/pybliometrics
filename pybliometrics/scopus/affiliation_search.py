@@ -33,7 +33,7 @@ class AffiliationSearch(Search):
             name = item.get('affiliation-name')
             variants = [d.get('$', "") for d in item.get('name-variant', [])
                         if d.get('$', "") != name]
-            parent = make_int_if_possible(item.get('parent-affiliation-id')) if item.get('parent-affiliation-id') != '0' else None
+            parent = make_int_if_possible(item.get('parent-affiliation-id')) or None
             new = aff(eid=item.get('eid'), variant=";".join(variants),
                       documents=int(item['document-count']), name=name,
                       city=item.get('city'), country=item.get('country'),
