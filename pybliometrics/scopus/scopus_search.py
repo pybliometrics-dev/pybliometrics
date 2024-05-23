@@ -1,5 +1,7 @@
 from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
+import bibtexparser
+from bibtexparser import *
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, chained_get,\
@@ -214,6 +216,179 @@ class ScopusSearch(Search):
     def get_eids(self):
         """EIDs of retrieved documents."""
         return [d['eid'] for d in self._json]
+
+    def add_bibtex_field(self, bibtex_fields: list, key: str, value: str) -> list:
+        # Check whether value is not empty:
+        if value:
+            bibtex_fields.append(bibtexparser.model.Field(key, value))
+        return bibtex_fields
+
+    def export_bibtex(self, path: str, imitate_scopus_export: bool = False) -> None:
+        type_conference_paper = "Conference Paper"
+        type_conference_review = "Conference Review"
+        type_article = "Article"
+        type_review = "Review"
+        type_short_survey = "Short Survey"
+        type_editorial = "Editorial"
+        type_note = "Note"
+        type_letter = "Letter"
+        type_data_paper = "Data Paper"
+        type_erratum = "Erratum"
+        type_book_chapter = "Book Chapter"
+        type_book = "Book"
+        type_report = "Report"
+        type_retracted = "Retracted"
+        type_none = None
+
+        aggregation_type_conference_proceedings = "Conference Proceeding"
+        aggregation_type_journal = "Journal"
+        aggregation_type_trade_journal = "Trade Journal"
+        aggregation_type_book_series = "Book Series"
+        aggregation_type_book = "Book"
+        aggregation_type_report = "Report"
+        aggregation_type_none = None
+
+        bib_tex_type_article = "Article"
+        bib_tex_type_in_proceedings = "InProceedings"
+        bib_tex_type_in_collection = "InCollection"
+        bib_tex_type_book = "Book"
+        bib_tex_type_techreport = "TechReport"
+
+        bib_library = bibtexparser.Library()
+
+        results = self.results
+        
+        if results:
+            for result in results:
+                # print(result)
+
+                document_type = result.subtypeDescription
+                aggregation_type = result.aggregationType
+
+
+                # Item key
+                year = result.coverDate[0:4]
+
+                key_author: str = ""
+
+                author_names = result.author_names
+                
+                if author_names:
+                    key_author = author_names.split(",", 1)[0]
+                    
+                    if not imitate_scopus_export:
+                        # Remove potential white spaces
+                        key_author = "".join(key_author.split())
+                
+                key = "".join([key_author, year])
+
+                # Authors
+                authors = ""
+                if author_names:
+                    authors = " and ".join(author_names.split(";"))
+
+                # Pages
+                pages = None
+                page_range = result.pageRange
+                if page_range:
+                    pages = page_range.replace("-", " – ")
+
+                # Affiliation
+                affiliation: str = result.affilname
+                if affiliation:
+                    affiliation = "; ".join(affiliation.split(";"))
+
+                # Author keywords
+                author_keywords: str = result.authkeywords
+                if author_keywords:
+                    author_keywords = "; ".join(author_keywords.split(" | "))
+
+                # All information
+                bib_tex_type = None
+                if (document_type in [type_article, type_review, type_short_survey, type_editorial, type_note, type_letter, type_data_paper, type_erratum, type_conference_review, type_conference_paper, type_retracted, type_none] and aggregation_type == aggregation_type_journal) or (document_type in [type_article, type_review, type_short_survey, type_note] and aggregation_type == aggregation_type_trade_journal) or (document_type == type_article and aggregation_type == aggregation_type_none):
+                    bib_tex_type = bib_tex_type_article
+                if aggregation_type == aggregation_type_conference_proceedings or (document_type == type_conference_paper and aggregation_type in [aggregation_type_book, aggregation_type_none]):
+                    bib_tex_type = bib_tex_type_in_proceedings
+                elif aggregation_type == aggregation_type_book_series or (document_type in [type_book_chapter, type_article, type_editorial] and aggregation_type == aggregation_type_book):
+                    bib_tex_type = bib_tex_type_in_collection
+                elif document_type == type_book and aggregation_type == aggregation_type_book:
+                    bib_tex_type = bib_tex_type_book
+                elif document_type == type_report and aggregation_type == aggregation_type_report:
+                    bib_tex_type = bib_tex_type_techreport
+                if bib_tex_type == None:
+                    raise ValueError(f"Unsupported type | Document type: {document_type} | Aggregation type: {aggregation_type} | DOI: https://doi.org/{result.doi}")
+
+
+                fields = []
+
+                fields = self.add_bibtex_field(fields, "author", authors)
+                fields = self.add_bibtex_field(fields, "title", result.title)
+                fields = self.add_bibtex_field(fields, "date", result.coverDate)
+                if aggregation_type == aggregation_type_journal:
+                    fields = self.add_bibtex_field(fields, "journal", result.publicationName)
+                    fields = self.add_bibtex_field(fields, "volume", result.volume)
+                    fields = self.add_bibtex_field(fields, "number", result.issueIdentifier)
+                elif aggregation_type == aggregation_type_conference_proceedings or aggregation_type == aggregation_type_book_series:
+                    fields = self.add_bibtex_field(fields, "booktitle", result.publicationName)
+                elif bib_tex_type == bib_tex_type_techreport:
+                    fields = self.add_bibtex_field(fields, "institution", affiliation)
+                fields = self.add_bibtex_field(fields, "pages", pages)
+                fields = self.add_bibtex_field(fields, "doi", result.doi)
+                fields = self.add_bibtex_field(fields, "url", "https://api.elsevier.com/content/abstract/scopus_id/" + result.eid.rsplit("-", 1)[1])
+                if not bib_tex_type == bib_tex_type_techreport:
+                    fields = self.add_bibtex_field(fields, "affiliation", affiliation)
+                fields = self.add_bibtex_field(fields, "abstract", result.description)
+                fields = self.add_bibtex_field(fields, "author_keywords", author_keywords)
+                if bib_tex_type == bib_tex_type_book:
+                    fields = self.add_bibtex_field(fields, "isbn", result.volume)
+                fields = self.add_bibtex_field(fields, "issn", result.issn)
+                fields = self.add_bibtex_field(fields, "type", document_type)
+                fields = self.add_bibtex_field(fields, "scopus_aggregation_type", aggregation_type)
+                fields = self.add_bibtex_field(fields, "citedby_count", result.citedby_count)
+                fields = self.add_bibtex_field(fields, "openaccess", result.openaccess)
+                fields = self.add_bibtex_field(fields, "fund_sponsor", result.fund_sponsor)
+                fields = self.add_bibtex_field(fields, "source", "Scopus")
+
+                entry = bibtexparser.model.Entry(bib_tex_type, key, fields)
+
+                bib_library.add(entry)
+
+                # Check whether the addition was successful or resulted in a duplicate block that needs fixing.
+                for i in range(26):
+                    failed_blocks = bib_library.failed_blocks
+                    if failed_blocks:
+                        failed_block = failed_blocks[0]
+                        # Add any additional ending, so that the slicing also works for first iteration.
+                        if i == 0:
+                            entry.key += "a"
+                        entry.key = entry.key[:-1] + chr(ord("a") + i)
+                        if type(failed_block) == bibtexparser.model.DuplicateBlockKeyBlock:
+                            # Causes issues:
+                            # bib_library.replace(failed_block, entry)
+                            # This works:
+                            bib_library.remove(failed_block)
+                            bib_library.add(entry)
+                    else:
+                        break
+
+        # print(bib_library.entries_dict)
+
+        bibtex_format = None
+        
+        if not imitate_scopus_export:
+            bibtex_format = bibtexparser.BibtexFormat()
+            bibtex_format.indent = "  "
+            bibtex_format.block_separator = "\n"
+
+        
+        # print(bib_library.failed_blocks)
+        
+        # bibtexparser.write_file(path, bib_library, bibtex_format=bibtex_format)
+
+        # Workaround since UTF-8 encoding seems to fail with the write_file() function as of now:
+        export_bib = bibtexparser.write_string(bib_library, bibtex_format=bibtex_format)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(export_bib)
 
 
 def _join(item, key, sep=";"):
