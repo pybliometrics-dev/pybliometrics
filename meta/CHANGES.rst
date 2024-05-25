@@ -3,6 +3,20 @@ Change Log
 
 .. toctree::
 
+4.0
+~~~
+
+2024-25-05
+
+* Introduce mandatory `pybliometrics.scopus.init()` function for start-up.
+* Introduce new view ENTITLED for `AbstractRetrieval()`, `AffiliationRetrieval()`, `AuthorRetrieval()` and `ScopusSearch()`.
+* In `AffiliationRetrieval.name_variants`, return `None` instead of an empty list.
+* In `AffiliationSearch.affiliations`, field `parent` is empty when the returned value is `'0'`.
+* In `AuthorRetrieval.name_variants`, field `doc_count` is always integer.
+* Fix bug in `AbstractRetrieval().__str__` resulting from missing citations.
+* Fix bug in `AbstractRetrieval().references` resulting from malformatted reference information.
+* Fix bug in `CitationOverview().cc` resulting from missing citations.
+
 3.6
 ~~~
 
