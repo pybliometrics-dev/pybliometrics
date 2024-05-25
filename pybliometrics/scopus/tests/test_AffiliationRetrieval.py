@@ -76,7 +76,7 @@ def test_name_variants():
     expected = "<class 'pybliometrics.scopus.affiliation_retrieval.Variant'>"
     assert str(type(light.name_variants[0])) == expected
     assert str(type(standard.name_variants[0])) == expected
-    assert entitled.name_variants == []
+    assert entitled.name_variants is None
 
 
 def test_org_domain():
