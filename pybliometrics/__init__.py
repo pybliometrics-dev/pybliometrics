@@ -13,5 +13,3 @@ __citation__ = 'Rose, Michael E. and John R. Kitchin: "pybliometrics: '\
 
 import pybliometrics.scopus
 import pybliometrics.sciencedirect
-import pybliometrics.superclasses
-from pybliometrics.utils import *
