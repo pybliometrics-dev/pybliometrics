@@ -1,6 +1,7 @@
 from collections import namedtuple
-from typing import Optional , Union
+from typing import Optional, Union
 
+from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import (
     chained_get,
     check_parameter_value,
@@ -11,7 +12,6 @@ from pybliometrics.utils import (
     parse_pages,
     VIEWS,
 )
-from pybliometrics.superclasses import Retrieval
 
 
 class ArticleRetrieval(Retrieval):
@@ -31,7 +31,7 @@ class ArticleRetrieval(Retrieval):
 
 
     @property
-    def authors(self) -> list:
+    def authors(self) -> Optional[list]:
         """The authors of a document."""
         out = []
         auth = namedtuple('Author', 'surname given_name')
@@ -40,7 +40,7 @@ class ArticleRetrieval(Retrieval):
             new = auth(surname=surname,
                     given_name=given_name)
             out.append(new)
-        return out
+        return out or None
 
 
     @property
