@@ -72,7 +72,8 @@ class AbstractRetrieval(Retrieval):
         # Check for collaboration
         keys = [k for x in items for k in list(x.keys())]
         if "collaboration" in keys:
-            collaboration = items.pop(-1)['collaboration']
+            collaboration = items[-1]['collaboration']
+            items = items[:-1]
         else:
             collaboration = {'ce:indexed-name': None}
         # Iterate through each author-affiliation combination
@@ -87,6 +88,11 @@ class AbstractRetrieval(Retrieval):
             org = _get_org(aff)
             # Author information (might relate to collaborations)
             authors = listify(item.get('author', item.get('collaboration', [])))
+            # Get collaboration (might be one dict or list of dicts)
+            try:
+                collab = collaboration.get('ce:indexed-name')
+            except AttributeError:
+                collab = [col.get('ce:indexed-name') for col in collaboration]
             for au in authors:
                 try:
                     given = au.get('ce:given-name', au['ce:initials'])
@@ -99,7 +105,7 @@ class AbstractRetrieval(Retrieval):
                            postalcode=aff.get('postal-code'),
                            addresspart=aff.get('address-part'),
                            country=aff.get('country'),
-                           collaboration=collaboration.get('ce:indexed-name'),
+                           collaboration=collab,
                            auid=int(au['@auid']),
                            orcid=au.get('@orcid'),
                            surname=au.get('ce:surname'),
