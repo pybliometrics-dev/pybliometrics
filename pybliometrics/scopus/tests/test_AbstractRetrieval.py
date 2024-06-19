@@ -28,6 +28,8 @@ ab9 = AbstractRetrieval("2-s2.0-85097473741", view="FULL", refresh=30)
 ar10 = AbstractRetrieval('10.1109/Multi-Temp.2019.8866947', view='ENTITLED', refresh=30)
 # REF view without refs
 ab11 = AbstractRetrieval('2-s2.0-0031874638', view="REF", refresh=30)
+# FULL view with list of collaborations
+ab12 = AbstractRetrieval('2-s2.0-85044008512', view='FULL', refresh=30)
 
 
 def test_abstract():
@@ -67,22 +69,25 @@ def test_authkeywords():
 
 
 def test_authorgroup():
-    fields = 'affiliation_id dptid organization city postalcode addresspart '\
-             'country collaboration auid orcid indexed_name surname given_name'
-    auth = namedtuple('Author', fields)
+    fields = 'affiliation_id collaboration_id dptid organization city postalcode '\
+        'addresspart country auid orcid indexed_name surname given_name'
+    auth = namedtuple('Author', fields, defaults=[None for _ in fields.split()])
+    # Test FULL document w.o. collaboration
     expected = [auth(affiliation_id=60104842, dptid=None,
         organization='Department of Chemical Engineering, Carnegie Mellon University',
         city='Pittsburgh', postalcode='15213', addresspart='5000 Forbes Avenue',
-        country='United States', collaboration=None, auid=7004212771, orcid=None,
-        indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
+        country='United States', auid=7004212771, orcid=None, indexed_name='Kitchin J.R.',
+        surname='Kitchin', given_name='John R.')]
     assert ab1.authorgroup == expected
-    assert ab8.authorgroup is None
-    expected = auth(affiliation_id=None, dptid=None, organization=None,
-        city=None, postalcode=None, addresspart=None, country=None,
-        collaboration='J-PARC-HI Collaboration', auid=7403019450, orcid=None,
-        indexed_name='Ahn J.K.', surname='Ahn', given_name='J.K.')
+    # Test FULL document w. 1 collaboration
+    expected = auth(auid=7403019450, indexed_name='Ahn J.K.', surname='Ahn', given_name='J.K.')
     assert ab9.authorgroup[0] == expected
-
+    # Test FULL document w. list of collaborations
+    expected = auth(collaboration_id='S0920379618302370-8f4b482a50491834a3f938b012344bfd',
+                indexed_name='JET Contributors')
+    assert ab12.authorgroup[-1] == expected
+    # Test REF view
+    assert ab8.authorgroup is None
 
 
 def test_authors():
