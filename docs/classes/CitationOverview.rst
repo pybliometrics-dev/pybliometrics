@@ -25,7 +25,7 @@ You initialize the class with a list of identifiers:
 
     >>> import pybliometrics
     >>> from pybliometrics.scopus import CitationOverview
-	>>> pybliometrics.scopus.init()
+    >>> pybliometrics.scopus.init()
     >>> identifier = ["85068268027", "84930616647"]
     >>> co = CitationOverview(identifier, start=2019, end=2021)
 

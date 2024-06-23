@@ -23,7 +23,7 @@ The class is initialized using a search query, details of which can be found in 
 
     >>> import pybliometrics
     >>> from pybliometrics.scopus import AffiliationSearch
-	>>> pybliometrics.scopus.init()
+    >>> pybliometrics.scopus.init()
     >>> query = "AFFIL(Max Planck Institute for Innovation and Competition Munich)"
     >>> s = AffiliationSearch(query)
 
