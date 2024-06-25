@@ -49,9 +49,9 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def authorgroup(self) -> Optional[List[NamedTuple]]:
-        """A list of namedtuples representing the article's authors organized
-        by affiliation, in the form `(affiliation_id, dptid, organization,
-        city, postalcode, addresspart, country, collaboration, auid, orcid,
+        """A list of namedtuples representing the article's authors and collaborations
+        organized by affiliation, in the form `(affiliation_id, collaboration_id, dptid,
+        organization, city, postalcode, addresspart, country, auid, orcid,
         indexed_name, surname, given_name)`.
         If `given_name` is not present, fall back to initials.
         Note: Affiliation information might be missing or mal-assigned even
@@ -63,48 +63,39 @@ class AbstractRetrieval(Retrieval):
         # 2. A list of dicts with as in 1, one for each affiliation (incl. missing)
         # 3. A list of two dicts with one key each (author and collaboration)
         # Initialization
-        fields = 'affiliation_id dptid organization city postalcode '\
-                 'addresspart country collaboration auid orcid indexed_name '\
-                 'surname given_name'
-        auth = namedtuple('Author', fields)
+        fields = 'affiliation_id collaboration_id dptid organization city postalcode '\
+            'addresspart country auid orcid indexed_name surname given_name'
+        auth = namedtuple('Author', fields, defaults=[None for _ in fields.split()])
         items = listify(self._head.get('author-group', []))
-        index_path = ['preferred-name', 'ce:indexed-name']
-        # Check for collaboration
-        keys = [k for x in items for k in list(x.keys())]
-        if "collaboration" in keys:
-            collaboration = items.pop(-1)['collaboration']
-        else:
-            collaboration = {'ce:indexed-name': None}
-        # Iterate through each author-affiliation combination
         out = []
-        for item in items:
-            if not item:
-                continue
-            # Affiliation information
+        for item in filter(None, items):
+            # Get all possible items: affiliation, author, collaboration
             aff = item.get('affiliation', {})
+            authors = item.get('author', [])
+            collaborations = item.get('collaboration', {})
+            # Affiliation information
             aff_id = make_int_if_possible(aff.get("@afid"))
             dep_id = make_int_if_possible(aff.get("@dptid"))
             org = _get_org(aff)
-            # Author information (might relate to collaborations)
-            authors = listify(item.get('author', item.get('collaboration', [])))
-            for au in authors:
-                try:
-                    given = au.get('ce:given-name', au['ce:initials'])
-                except KeyError:  # Collaboration
-                    given = au.get('ce:text')
+            # Author information
+            for author in authors:
                 new = auth(affiliation_id=aff_id,
-                           organization=org,
-                           city=aff.get('city'),
-                           dptid=dep_id,
-                           postalcode=aff.get('postal-code'),
-                           addresspart=aff.get('address-part'),
-                           country=aff.get('country'),
-                           collaboration=collaboration.get('ce:indexed-name'),
-                           auid=int(au['@auid']),
-                           orcid=au.get('@orcid'),
-                           surname=au.get('ce:surname'),
-                           given_name=given,
-                           indexed_name=chained_get(au, index_path))
+                            organization=org,
+                            city=aff.get('city'),
+                            dptid=dep_id,
+                            postalcode=aff.get('postal-code'),
+                            addresspart=aff.get('address-part'),
+                            country=aff.get('country'),
+                            auid=make_int_if_possible(author.get('@auid')),
+                            orcid=author.get('@orcid'),
+                            surname=author.get('ce:surname'),
+                            given_name=author.get('ce:given-name', author['ce:initials']),
+                            indexed_name=chained_get(author, ['preferred-name', 'ce:indexed-name']))
+                out.append(new)
+            # Collaboration information
+            for collaboration in filter(None, listify(collaborations)):
+                new = auth(collaboration_id=collaboration.get('@collaboration-instance-id'),
+                        indexed_name=collaboration.get('ce:indexed-name'))
                 out.append(new)
         return out or None
 

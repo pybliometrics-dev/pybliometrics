@@ -117,16 +117,14 @@ The same structure applies for the attributes `affiliation` and `authorgroup`:
                  city='Pittsburgh', country='United States')]
 
     >>> ab.authorgroup
-    [Author(affiliation_id=60105007, dptid=None,
+    [Author(affiliation_id=60105007, collaboration_id=None, dptid=None,
             organization='Max Planck Institute for Innovation and Competition',
-            city=None, postalcode=None, addresspart=None, country='Germany',
-            collaboration=None, auid=57209617104, orcid=None,
-            indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
-     Author(affiliation_id=60027950, dptid=110785688,
+            city=None, postalcode=None, addresspart=None, country='Germany', auid=57209617104,
+            orcid=None, indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
+     Author(affiliation_id=60027950, collaboration_id=None, dptid=110785688,
             organization='Carnegie Mellon University, Department of Chemical Engineering',
-            city=None, postalcode=None, addresspart=None, country='United States',
-            collaboration=None, auid=7004212771, orcid=None,
-            indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
+            city=None, postalcode=None, addresspart=None, country='United States', auid=7004212771,
+            orcid=None, indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
 
 
 
