@@ -1,5 +1,6 @@
 from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
+from html import unescape as html_unescape
 
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, chained_get,\
@@ -52,10 +53,11 @@ class ScopusSearch(Search):
         for item in self._json:
             info = {}
             # Parse affiliations
-            info["affilname"] = _join(item, 'affilname')
-            info["afid"] = _join(item, 'afid')
-            info["aff_city"] = _join(item, 'affiliation-city')
-            info["aff_country"] = _join(item, 'affiliation-country')
+            for field, key in [('affilname', 'affilname'),
+                               ('afid', 'afid'),
+                               ('aff_city', 'affiliation-city'),
+                               ('aff_country', 'affiliation-country')]:
+                info[field] = _join(item, key, unescape=self.unescape)
             # Parse authors
             try:
                 # Deduplicate list of authors
@@ -122,6 +124,7 @@ class ScopusSearch(Search):
                  integrity_fields: Union[List[str], Tuple[str, ...]] = None,
                  integrity_action: str = "raise",
                  subscriber: bool = True,
+                 unescape: bool = False,
                  **kwds: str
                  ) -> None:
         """Interaction with the Scopus Search API.
@@ -156,6 +159,8 @@ class ScopusSearch(Search):
                            used.  Sets the number of entries in each query
                            iteration to the maximum number allowed by the
                            corresponding view.
+        :param unescape: Convert named and numeric characters in the `results` to
+                        their corresponding Unicode characters.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl.
@@ -206,6 +211,7 @@ class ScopusSearch(Search):
         Search.__init__(self, query=query, api='ScopusSearch', count=count,
                         cursor=subscriber, download=download,
                         verbose=verbose, **kwds)
+        self.unescape = unescape
 
     def __str__(self):
         """Print a summary string."""
@@ -216,11 +222,13 @@ class ScopusSearch(Search):
         return [d['eid'] for d in self._json]
 
 
-def _join(item, key, sep=";"):
+def _join(item, key, sep=";", unescape=False):
     """Auxiliary function to join same elements of a list of dictionaries if
     the elements are not None.
     """
     try:
+        if unescape:
+            return html_unescape(sep.join([d[key] or "" for d in item["affiliation"]]))
         return sep.join([d[key] or "" for d in item["affiliation"]])
     except (KeyError, TypeError):
         return None
