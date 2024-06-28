@@ -1,5 +1,6 @@
 from collections import namedtuple
 from functools import reduce
+from html import unescape
 from warnings import warn
 
 
@@ -92,9 +93,10 @@ def get_link(dct, idx, path=['coredata', 'link']):
         return None
 
 
-def html_unescape(s:str): 
-        from html import unescape
-        return unescape(s) if s else None
+def html_unescape(s: str):
+    """Convert all named and numeric character references in the
+    string s to the corresponding Unicode characters."""
+    return unescape(s) if s else None
 
 
 def listify(element):
