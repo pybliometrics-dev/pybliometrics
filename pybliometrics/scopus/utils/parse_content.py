@@ -94,8 +94,7 @@ def get_link(dct, idx, path=['coredata', 'link']):
 
 
 def html_unescape(s: str):
-    """Convert all named and numeric character references in the
-    string s to the corresponding Unicode characters."""
+    """Convert s to Unicode characters if possible."""
     return unescape(s) if s else None
 
 
