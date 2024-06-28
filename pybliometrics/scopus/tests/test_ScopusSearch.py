@@ -18,7 +18,7 @@ doc = namedtuple('Document', order)
 # Set to refresh=False because of citation count
 s_au = ScopusSearch('AU-ID(24320488600)', refresh=30)
 s_j = ScopusSearch('SOURCE-ID(22900) AND PUBYEAR IS 2010', refresh=30)
-s_d = ScopusSearch("DOI(10.1038/s41556-022-01034-3)", unescape=True, refresh=30)
+s_d = ScopusSearch("DOI(10.1038/s41556-022-01034-3)", unescape=False, refresh=30)
 q_empty = 'SOURCE-ID(19700188323) AND PUBYEAR IS 1900'
 s_empty = ScopusSearch(q_empty, refresh=30)
 
@@ -100,4 +100,5 @@ def test_results_empty():
 
 
 def test_results_unescape():
-    assert len(s_d.results[0].afid.split(";")) == len(s_d.results[0].affilname.split(";"))
+    assert s_d.results[0].afid.count(";") == 14
+    assert '&amp;' in s_d.results[0].affilname
