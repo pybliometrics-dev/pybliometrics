@@ -123,7 +123,7 @@ class ScopusSearch(Search):
                  integrity_fields: Union[List[str], Tuple[str, ...]] = None,
                  integrity_action: str = "raise",
                  subscriber: bool = True,
-                 unescape: bool = False,
+                 unescape: bool = True,
                  **kwds: str
                  ) -> None:
         """Interaction with the Scopus Search API.
