@@ -1,5 +1,7 @@
 from collections import namedtuple
 from functools import reduce
+from html import unescape
+from typing import Any, Dict, Optional
 from warnings import warn
 
 
@@ -92,9 +94,17 @@ def get_link(dct, idx, path=['coredata', 'link']):
         return None
 
 
-def html_unescape(s:str): 
-        from html import unescape
-        return unescape(s) if s else None
+def get_unescaped_or_raw(item: Dict[str, Any], key: str, un_escape: bool) -> Optional[str]:
+    """Retrieve a value from a dictionary and optionally unescape HTML characters."""
+    value = item.get(key)
+    if value:
+        return html_unescape(value) if un_escape else value
+    return None
+
+
+def html_unescape(s: str):
+    """Convert s to Unicode characters if possible."""
+    return unescape(s) if s else None
 
 
 def listify(element):

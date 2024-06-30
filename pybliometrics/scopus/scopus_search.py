@@ -4,7 +4,7 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, chained_get,\
     check_parameter_value, check_field_consistency, deduplicate,\
-    get_freetoread, listify, make_search_summary, VIEWS
+    get_freetoread, get_unescaped_or_raw, listify, make_search_summary, VIEWS
 
 
 class ScopusSearch(Search):
@@ -52,10 +52,11 @@ class ScopusSearch(Search):
         for item in self._json:
             info = {}
             # Parse affiliations
-            info["affilname"] = _join(item, 'affilname')
-            info["afid"] = _join(item, 'afid')
-            info["aff_city"] = _join(item, 'affiliation-city')
-            info["aff_country"] = _join(item, 'affiliation-country')
+            for field, key in [('affilname', 'affilname'),
+                               ('afid', 'afid'),
+                               ('aff_city', 'affiliation-city'),
+                               ('aff_country', 'affiliation-country')]:
+                info[field] = _join(item, key, unescape=self.unescape)
             # Parse authors
             try:
                 # Deduplicate list of authors
@@ -83,7 +84,8 @@ class ScopusSearch(Search):
             freetoread = get_freetoread(item, ["freetoread", "value"], default)
             freetoreadLabel = get_freetoread(item, ["freetoreadLabel", "value"], default)
             new = doc(article_number=item.get('article-number'),
-                      title=item.get('dc:title'), fund_no=item.get('fund-no'),
+                      title=get_unescaped_or_raw(item, 'dc:title', self.unescape),
+                      fund_no=item.get('fund-no'),
                       fund_sponsor=item.get('fund-sponsor'),
                       subtype=item.get('subtype'), doi=item.get('prism:doi'),
                       subtypeDescription=item.get('subtypeDescription'),
@@ -105,8 +107,10 @@ class ScopusSearch(Search):
                       eIssn=item.get('prism:eIssn'),
                       author_count=item.get('author-count', {}).get('$'),
                       affiliation_city=info.get("aff_city"), afid=info.get("afid"),
-                      description=item.get('dc:description'), pii=item.get('pii'),
-                      authkeywords=item.get('authkeywords'), eid=item.get('eid'),
+                      description=get_unescaped_or_raw(item, 'dc:description', self.unescape),
+                      pii=item.get('pii'),
+                      authkeywords=get_unescaped_or_raw(item, 'authkeywords', self.unescape),
+                      eid=item.get('eid'),
                       fund_acr=item.get('fund-acr'), pubmed_id=item.get('pubmed-id'))
             out.append(new)
         # Finalize
@@ -122,6 +126,7 @@ class ScopusSearch(Search):
                  integrity_fields: Union[List[str], Tuple[str, ...]] = None,
                  integrity_action: str = "raise",
                  subscriber: bool = True,
+                 unescape: bool = True,
                  **kwds: str
                  ) -> None:
         """Interaction with the Scopus Search API.
@@ -156,6 +161,8 @@ class ScopusSearch(Search):
                            used.  Sets the number of entries in each query
                            iteration to the maximum number allowed by the
                            corresponding view.
+        :param unescape: Convert named and numeric characters in the `results` to
+                        their corresponding Unicode characters.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl.
@@ -206,6 +213,7 @@ class ScopusSearch(Search):
         Search.__init__(self, query=query, api='ScopusSearch', count=count,
                         cursor=subscriber, download=download,
                         verbose=verbose, **kwds)
+        self.unescape = unescape
 
     def __str__(self):
         """Print a summary string."""
@@ -216,12 +224,12 @@ class ScopusSearch(Search):
         return [d['eid'] for d in self._json]
 
 
-def _join(item, key, sep=";"):
+def _join(item, key, sep=";", unescape=False):
     """Auxiliary function to join same elements of a list of dictionaries if
     the elements are not None.
     """
     try:
-        return sep.join([d[key] or "" for d in item["affiliation"]])
+        return sep.join([get_unescaped_or_raw(d, key, unescape) or "" for d in item["affiliation"]])
     except (KeyError, TypeError):
         return None
 
