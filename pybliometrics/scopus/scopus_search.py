@@ -4,7 +4,7 @@ from typing import List, NamedTuple, Optional, Tuple, Union
 from pybliometrics.scopus.superclasses import Search
 from pybliometrics.scopus.utils import check_integrity, chained_get,\
     check_parameter_value, check_field_consistency, deduplicate,\
-    get_freetoread, html_unescape, listify, make_search_summary, VIEWS
+    get_freetoread, get_unescaped_or_raw, listify, make_search_summary, VIEWS
 
 
 class ScopusSearch(Search):
@@ -84,7 +84,8 @@ class ScopusSearch(Search):
             freetoread = get_freetoread(item, ["freetoread", "value"], default)
             freetoreadLabel = get_freetoread(item, ["freetoreadLabel", "value"], default)
             new = doc(article_number=item.get('article-number'),
-                      title=item.get('dc:title'), fund_no=item.get('fund-no'),
+                      title=get_unescaped_or_raw(item, 'dc:title', self.unescape),
+                      fund_no=item.get('fund-no'),
                       fund_sponsor=item.get('fund-sponsor'),
                       subtype=item.get('subtype'), doi=item.get('prism:doi'),
                       subtypeDescription=item.get('subtypeDescription'),
@@ -106,8 +107,10 @@ class ScopusSearch(Search):
                       eIssn=item.get('prism:eIssn'),
                       author_count=item.get('author-count', {}).get('$'),
                       affiliation_city=info.get("aff_city"), afid=info.get("afid"),
-                      description=item.get('dc:description'), pii=item.get('pii'),
-                      authkeywords=item.get('authkeywords'), eid=item.get('eid'),
+                      description=get_unescaped_or_raw(item, 'dc:description', self.unescape),
+                      pii=item.get('pii'),
+                      authkeywords=get_unescaped_or_raw(item, 'authkeywords', self.unescape),
+                      eid=item.get('eid'),
                       fund_acr=item.get('fund-acr'), pubmed_id=item.get('pubmed-id'))
             out.append(new)
         # Finalize
@@ -226,9 +229,7 @@ def _join(item, key, sep=";", unescape=False):
     the elements are not None.
     """
     try:
-        if unescape:
-            return html_unescape(sep.join([d[key] or "" for d in item["affiliation"]]))
-        return sep.join([d[key] or "" for d in item["affiliation"]])
+        return sep.join([get_unescaped_or_raw(d, key, unescape) or "" for d in item["affiliation"]])
     except (KeyError, TypeError):
         return None
 
