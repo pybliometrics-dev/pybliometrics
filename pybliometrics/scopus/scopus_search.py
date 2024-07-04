@@ -233,9 +233,8 @@ def _join(item, key, sep=";", unescape=False):
     the elements are not None.
     """
     try:
-        if unescape:
-            return html_unescape(sep.join([d[key] or "" for d in item["affiliation"]]))
-        return sep.join([d[key] or "" for d in item["affiliation"]])
+        string = sep.join([d[key] or "" for d in item["affiliation"]])
+        return html_unescape(string) if unescape else string
     except (KeyError, TypeError):
         return None
 
