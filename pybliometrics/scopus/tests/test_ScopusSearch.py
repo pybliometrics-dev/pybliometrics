@@ -16,10 +16,11 @@ order = 'eid doi pii pubmed_id title subtype subtypeDescription creator '\
 doc = namedtuple('Document', order)
 
 # Set to refresh=False because of citation count
-s_au = ScopusSearch('AU-ID(24320488600)', refresh=30)
-s_j = ScopusSearch('SOURCE-ID(22900) AND PUBYEAR IS 2010', refresh=30)
+s_au = ScopusSearch('AU-ID(24320488600)', unescape=False, refresh=30)
+s_j = ScopusSearch('SOURCE-ID(22900) AND PUBYEAR IS 2010', unescape=True, refresh=30)
+s_d = ScopusSearch("DOI(10.1038/s41556-022-01034-3)", unescape=False, refresh=30)
 q_empty = 'SOURCE-ID(19700188323) AND PUBYEAR IS 1900'
-s_empty = ScopusSearch(q_empty, refresh=30)
+s_empty = ScopusSearch(q_empty, unescape=False, refresh=30)
 
 
 def test_get_eids_author():
@@ -73,8 +74,8 @@ def test_results_journal():
         'protection and the income growth rate are fragile determinants of '\
         'R&D investment. © 2009 Elsevier B.V. All rights reserved.'
     keywords = 'Extreme-Bounds-Analysis (EBA) | Patent rights protection | '\
-        'R&amp;D investment | Technology transfer'
-    title = 'Determinants of R&amp;D investment: The Extreme-Bounds-'\
+        'R&D investment | Technology transfer'
+    title = 'Determinants of R&D investment: The Extreme-Bounds-'\
             'Analysis approach applied to 26 OECD countries'
     expected = doc(eid='2-s2.0-74249121335', doi='10.1016/j.respol.2009.11.010',
         pii='S0048733309002145', pubmed_id=None, title=title, subtype='ar',
@@ -96,3 +97,8 @@ def test_results_journal():
 
 def test_results_empty():
     assert s_empty.results is None
+
+
+def test_results_unescape():
+    assert s_d.results[0].afid.count(";") == 14
+    assert '&amp;' in s_d.results[0].affilname

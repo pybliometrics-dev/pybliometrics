@@ -1,5 +1,7 @@
 from collections import namedtuple
 from functools import reduce
+from html import unescape
+from typing import Any, Dict, Optional
 from warnings import warn
 
 
@@ -92,9 +94,9 @@ def get_link(dct, idx, path=['coredata', 'link']):
         return None
 
 
-def html_unescape(s:str): 
-        from html import unescape
-        return unescape(s) if s else None
+def html_unescape(s: str):
+    """Convert s to Unicode characters if possible."""
+    return unescape(s) if s else None
 
 
 def listify(element):
