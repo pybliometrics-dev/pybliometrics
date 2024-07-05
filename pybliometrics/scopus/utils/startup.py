@@ -52,7 +52,8 @@ def check_sections(config: Type[ConfigParser]) -> None:
 
 def check_default_paths(config: Type[ConfigParser], config_path: Type[Path]) -> None:
     """Auxiliary function to check if default cache paths exist.
-    If not, the paths are writen in the config."""
+    If not, the paths are writen in the config.
+    """
     for api, path in DEFAULT_PATHS.items():
         if not config.has_option('Directories', api):
             config.set('Directories', api, str(path))
