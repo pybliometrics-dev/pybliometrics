@@ -63,11 +63,9 @@ def check_default_paths(config: Type[ConfigParser], config_path: Type[Path]) -> 
 
 def create_cache_folders(config: Type[ConfigParser]) -> None:
     """Auxiliary function to create cache folders."""
-    section = 'Directories'
-    for api in config.options(section):
-        path = Path(config.get(section, api))
+    for api, path in config.items('Directories'):
         for view in VIEWS[api]:
-            view_path = path/view
+            view_path = Path(path, view)
             view_path.mkdir(parents=True, exist_ok=True)
 
 
