@@ -38,6 +38,7 @@ def init(config_dir: Optional[str] = CONFIG_FILE, keys: Optional[List[str]] = No
 
     check_sections(CONFIG)
     check_default_paths(CONFIG, config_dir)
+    create_cache_folders(CONFIG)
 
     CUSTOM_KEYS = keys
 
@@ -48,17 +49,25 @@ def check_sections(config: Type[ConfigParser]) -> None:
         if not config.has_section(section):
             raise NoSectionError(section)
 
+
 def check_default_paths(config: Type[ConfigParser], config_path: Type[Path]) -> None:
     """Auxiliary function to check if default cache paths exist.
-    If not, the paths are writen in the config"""
+    If not, the paths are writen in the config.
+    """
     for api, path in DEFAULT_PATHS.items():
         if not config.has_option('Directories', api):
             config.set('Directories', api, str(path))
             with open(config_path, 'w', encoding='utf-8') as ouf:
                 config.write(ouf)
+
+
+def create_cache_folders(config: Type[ConfigParser]) -> None:
+    """Auxiliary function to create cache folders."""
+    for api, path in config.items('Directories'):
         for view in VIEWS[api]:
-            view_path = path/view
+            view_path = Path(path, view)
             view_path.mkdir(parents=True, exist_ok=True)
+
 
 def get_config() -> Type[ConfigParser]:
     """Function to get the config parser."""
@@ -68,6 +77,7 @@ def get_config() -> Type[ConfigParser]:
                                 'For more information visit: '
                                 'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
     return CONFIG
+
 
 def get_keys() -> List[str]:
     """Function to get the API keys and overwrite keys in config if needed."""
