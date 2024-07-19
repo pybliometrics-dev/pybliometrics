@@ -6,7 +6,7 @@ Change Log
 4.0
 ~~~
 
-2024-25-05
+2024-05-25
 
 * Introduce mandatory `pybliometrics.scopus.init()` function for start-up.
 * Introduce new view ENTITLED for `AbstractRetrieval()`, `AffiliationRetrieval()`, `AuthorRetrieval()` and `ScopusSearch()`.
@@ -562,7 +562,7 @@ Change Log
 
 2017-12-12
 
-* `CitationOverview()` class to access the Abstract Citation View.
+* `CitationOverview()` class to access the Abstract Citation API.
 
 0.5
 ~~~
