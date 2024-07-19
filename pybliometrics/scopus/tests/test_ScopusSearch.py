@@ -24,7 +24,8 @@ s_empty = ScopusSearch(q_empty, unescape=False, refresh=30)
 
 
 def test_get_eids_author():
-    expected = ['2-s2.0-85117005558', '2-s2.0-84937325266', '2-s2.0-26444452434']
+    expected = ['2-s2.0-85193728453', '2-s2.0-85117005558',
+                '2-s2.0-84937325266', '2-s2.0-26444452434']
     assert s_au.get_eids() == expected
 
 
@@ -33,7 +34,7 @@ def test_get_eids_journal():
 
 
 def test_get_results_size():
-    assert s_au.get_results_size() == 3
+    assert s_au.get_results_size() == 4
     assert s_j.get_results_size() == 118
     assert s_empty.get_results_size() == 0
 

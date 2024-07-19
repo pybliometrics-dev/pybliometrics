@@ -10,7 +10,6 @@ init()
 
 
 # SoftwareX
-# softwarex = SerialTitle("2352-7110", refresh=30, years="2019-2020")
 softwarex = SerialTitle("2352-7110", refresh=30)
 # OECD Economic Studies
 oecd = SerialTitle("0255-0822", refresh=30)
@@ -28,8 +27,8 @@ def test_citescoreyearinfolist():
     info = namedtuple('Citescoreinfolist', info_fields)
 
     # Test softwarex
-    expected_named_tuple = [info(year=2022, citescore=5.1),
-                            info(year=2023, citescore=5.3)]
+    expected_named_tuple = [info(year=2023, citescore=5.5),
+                            info(year=2024, citescore=3.4)]
     assert softwarex.citescoreyearinfolist == expected_named_tuple
 
     # Test oecd
@@ -112,12 +111,12 @@ def test_self_link():
 
 
 def test_sjrlist():
-    assert softwarex.sjrlist == [(2022, 0.574)]
+    assert softwarex.sjrlist == [(2023, 0.544)]
     assert oecd.sjrlist == [(1999, 2.723)]
 
 
 def test_sniplist():
-    assert softwarex.sniplist == [(2022, 1.426)]
+    assert softwarex.sniplist == [(2023, 1.5)]
     assert oecd.sniplist is None
 
 
@@ -129,8 +128,8 @@ def test_source_id():
 def test_subject_area():
     area = namedtuple('Subjectarea', 'area abbreviation code')
     expected1 = [
-        area(area='Software', abbreviation='COMP', code=1712),
-        area(area='Computer Science Applications', abbreviation='COMP', code=1706)
+        area(area='Computer Science Applications', abbreviation='COMP', code=1706),
+        area(area='Software', abbreviation='COMP', code=1712)
     ]
     assert softwarex.subject_area == expected1
     expected2 = [
@@ -151,8 +150,8 @@ def test_yearly_data():
              'zerocitespercentsce citecountsce'
     dat = namedtuple('Yearlydata', fields)
     expected1_2020 = dat(year=2020, publicationcount=164, revpercent=0.0,
-        zerocitessce=9, zerocitespercentsce=5.487804878048781,
-        citecountsce=2570)
+        zerocitessce=8, zerocitespercentsce=4.878048780487805,
+        citecountsce=2578)
     assert softwarex.yearly_data[24] == expected1_2020
     expected2_1996 = dat(year=1996, publicationcount=4, revpercent=0.0,
         zerocitessce=0, zerocitespercentsce=0, citecountsce=33)
