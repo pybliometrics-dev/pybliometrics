@@ -38,7 +38,7 @@ class Retrieval(Base):
         if api == 'CitationOverview':
             stem = identifier.replace("/", "")
             if self._citation:
-                identifier += "-" + self._citation
+                stem += "-" + self._citation
         else:
             url += identifier
             stem = identifier.replace('/', '_')
