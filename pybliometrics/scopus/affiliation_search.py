@@ -50,7 +50,6 @@ class AffiliationSearch(Search):
                  download: bool = True,
                  integrity_fields: Union[List[str], Tuple[str, ...]] = None,
                  integrity_action: str = "raise",
-                 count: int = 200,
                  **kwds: str
                  ) -> None:
         """Interaction with the Affiliation Search API.
@@ -74,9 +73,6 @@ class AffiliationSearch(Search):
                                  cannot be verified.  Possible actions:
                                  - `"raise"`: Raise an AttributeError
                                  - `"warn"`: Raise a UserWarning
-        :param count: (deprecated) The number of entries to be displayed at
-                      once.  A smaller number means more queries with each
-                      query having fewer results.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/AffiliationSearchAPI.wadl.
@@ -101,10 +97,6 @@ class AffiliationSearch(Search):
         # Check
         allowed = ("warn", "raise")
         check_parameter_value(integrity_action, allowed, "integrity_action")
-        if count != 200:
-            msg = "Parameter `count` is deprecated and will be removed in a "\
-                  "future release.  There will be no substitute."
-            warn(msg, FutureWarning)
 
         # Query
         self._action = integrity_action
@@ -113,7 +105,7 @@ class AffiliationSearch(Search):
         self._refresh = refresh
         self._view = "STANDARD"
         Search.__init__(self, query=query, api="AffiliationSearch",
-                        count=count, download=download, verbose=verbose, **kwds)
+                        download=download, verbose=verbose, **kwds)
 
     def __str__(self):
         """Return a summary string."""

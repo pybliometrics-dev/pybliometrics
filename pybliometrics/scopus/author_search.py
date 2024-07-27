@@ -60,7 +60,6 @@ class AuthorSearch(Search):
                  download: bool = True,
                  integrity_fields: Union[List[str], Tuple[str, ...]] = None,
                  integrity_action: str = "raise",
-                 count: int = 200,
                  **kwds: str
                  ) -> None:
         """Interaction with the Author Search API.
@@ -84,9 +83,6 @@ class AuthorSearch(Search):
                                  cannot be verified.  Possible actions:
                                  - `"raise"`: Raise an `AttributeError`
                                  - `"warn"`: Raise a `UserWarning`
-        :param count: (deprecated) The number of entries to be displayed at
-                      once.  A smaller number means more queries with each
-                      query having fewer results.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/AuthorSearchAPI.wadl.
@@ -111,10 +107,6 @@ class AuthorSearch(Search):
         # Checks
         allowed = ("warn", "raise")
         check_parameter_value(integrity_action, allowed, "integrity_action")
-        if count != 200:
-            msg = "Parameter `count` is deprecated and will be removed in a "\
-                  "future release.  There will be no substitute."
-            warn(msg, FutureWarning)
 
         # Query
         self._action = integrity_action
@@ -122,7 +114,7 @@ class AuthorSearch(Search):
         self._query = query
         self._refresh = refresh
         self._view = "STANDARD"
-        Search.__init__(self, query=query, api='AuthorSearch', count=count,
+        Search.__init__(self, query=query, api='AuthorSearch',
                         download=download, verbose=verbose, **kwds)
 
     def __str__(self):
