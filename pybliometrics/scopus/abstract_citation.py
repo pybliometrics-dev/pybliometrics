@@ -195,7 +195,6 @@ class CitationOverview(Retrieval):
                  start: Union[int, str],
                  end: Union[int, str] = datetime.now().year,
                  id_type: str = "scopus_id",
-                 eid: str = None,
                  refresh: Union[bool, int] = False,
                  citation: Optional[str] = None,
                  **kwds: str
@@ -211,10 +210,6 @@ class CitationOverview(Retrieval):
                     loaded. Defaults to the current year.
         :param id_type: The type of the IDs provided in `identifier`.  Must be
                         one of `"scopus_id", "doi", "pii", "pubmed_id"`.
-        :param eid: (deprecated) The Scopus ID of the abstract - will be
-                    removed in a future release: Instead use param `scopus_id`
-                    after stripping the part until the second hyphen.  If you
-                    use this parameter, it will be converted to `scopus_id`
                     instead.
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
@@ -251,12 +246,6 @@ class CitationOverview(Retrieval):
         if citation:
             allowed = ('exclude-self', 'exclude-books')
             check_parameter_value(citation, allowed, "citation")
-        if eid or not isinstance(identifier, list):
-            msg = "Parameter `eid` is deprecated and will be removed in a "\
-                  "future release.  Instead, provide the corresponding "\
-                  "Scopus ID via parameter `identifier` as a list, and set "\
-                  "`id_type='scopus_id'`."
-            warn(msg, FutureWarning)
         if len(identifier) < 0 or len(identifier) > 25:
             msg = "Provide at least 1 and at most than 25 identifiers"
             raise ValueError(msg)
