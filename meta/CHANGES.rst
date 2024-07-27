@@ -3,6 +3,21 @@ Change Log
 
 .. toctree::
 
+4.1
+~~~
+
+2024-07-27
+
+* In `CitationOverview()`, fix bug with implicit parameter `date`, and make this parameter explicit. Include parameter `date` in the cache file name.
+* In `AbstractRetrieval().authors`, add new field "collaboration_id" (sort of a hash) and remove field "collaboration", and use field "indexed_name" for the name of the collaboration.
+* Unescape all text fields in all classes via `html_unescape()` using optional parameter (default is always True).
+* In `ScousSearch()`, enable keyword parameter `count`.
+* In `CitationOverview()`, remove deprecated parameter `eid` and deprecate parameters `start` and `end`.
+* In `AffiliationSearch()` and `AuthorSearch()``, remove deprecated parameter `count`.
+* Fix bug with cache file name generation for `CitationOverview()` when using parameter `citation`.
+* Fix bug with creating empty configuration file in default location.
+* Fix code examples w.r.t. the `init()` function.
+
 4.0
 ~~~
 
