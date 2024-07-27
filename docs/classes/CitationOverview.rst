@@ -17,7 +17,7 @@ Documentation
 Examples
 --------
 
-The class can download yearly citation counts for up to 25 documents at once.  Simply provide a list of either the Scopus identifiers, the DOIs, the PIIs or the pubmed IDs and specify the identifier type in `id_type`.  The API needs to know for which years you want to retrieve yearly citation counts.  Therefore you need to set the year from which on `CitationOverview()` will return yearly citation counts (e.g., the publication year).  If no ending year is given, `CitationOverview()` will use the current year.  Optionally you can exclude citations by books or self-citation via `exclude`.
+The class can download yearly citation counts for up to 25 documents at once.  Simply provide a list of either the Scopus identifiers, the DOIs, the PIIs or the pubmed IDs and specify the identifier type in `id_type`.  By default, Scopus returns citation information for the current and the previous two years.  Use the `date` parameter to select a different range of years in a single string with the start year and the end year joined on a hypen.  Optionally you can exclude citations by books or self-citation via `exclude`.
 
 You initialize the class with a list of identifiers:
 
@@ -27,7 +27,7 @@ You initialize the class with a list of identifiers:
     >>> from pybliometrics.scopus import CitationOverview
     >>> pybliometrics.scopus.init()
     >>> identifier = ["85068268027", "84930616647"]
-    >>> co = CitationOverview(identifier, start=2019, end=2021)
+    >>> co = CitationOverview(identifier, date="2019-2021")
 
 
 You can obtain basic information just by printing the object:
@@ -36,8 +36,8 @@ You can obtain basic information just by printing the object:
 
     >>> print(co)
     2 document(s) has/have the following total citation count
-    as of 2024-05-11:
-        110; 20
+    as of 2024-07-27:
+        115; 21
 
 
 The key attribute is `cc`, which provides a list of tuples storing year-wise citations to the article.  Each list corresponds to one document, in the order specified when initating the class:
@@ -54,13 +54,13 @@ The attributes `pcc`, `rangeCount`, `lcc` and `rowTotal` provide citation summar
 .. code-block:: python
 
     >>> co.pcc
-    [0, 8]
+    [0, 6]
     >>> co.rangeCount
     [31, 6]
     >>> co.lcc
-    [79, 5]
+    [84, 6]
     >>> co.rowTotal
-    [110, 20]
+    [115, 21]
 
 
 The `columnTotal` attribute represents the total number of yearly citations for all documents combined, which `rangeColumnTotal` summarizes.  Finally `grandTotal` is the total number of citations for all documents combined.
@@ -72,25 +72,25 @@ The `columnTotal` attribute represents the total number of yearly citations for 
     >>> co.rangeColumnTotal
     37
     >>> co.grandTotal
-    130
+    136
 
 
 With the `citation` parameter, you can exclude self-citations or citations from books:
 
 .. code-block:: python
 
-    >>> co_self = CitationOverview(identifier, start=2019, end=2021,
+    >>> co_self = CitationOverview(identifier, date="2019-2021",
                                    citation="exclude-self")
     >>> print(co_self)
     2 document(s) has/have the following total citation count
-    excluding self-citations as of 2024-05-11:
-        110; 20
-    >>> co_books = CitationOverview(identifier, start=2019, end=2021,
+    excluding self-citations as of 2024-07-27:
+        110; 19
+    >>> co_books = CitationOverview(identifier, date="2019-2021",
                                     citation="exclude-books")
     >>> print(co_books)
     2 document(s) has/have the following total citation count
-    excluding citations from books as of 2024-05-11:
-        10; 20
+    excluding citations from books as of 2024-07-27:
+        115; 21
 
 
 Author information is also stored as lists of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
@@ -135,8 +135,8 @@ Using `pandas <https://pandas.pydata.org/>`_, you can convert the citation count
     >>> df.index = co.scopus_id
     >>> print(df)
                  2019  2020  2021
-    85068268027     0     6    10
-    84930616647     2     2     1
+    85068268027     0     6    25
+    84930616647     2     2     2
 
 
 Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.

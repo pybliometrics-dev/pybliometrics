@@ -38,7 +38,12 @@ class CitationOverview(Retrieval):
         """List of lists of tuples of yearly number of citations for specified
         years, where each sub-list corresponds to one document.
         """
-        _years = range(self._start, self._end+1)
+        try:
+            dates = self._date.split("-")
+        except AttributeError:
+            current_year = datetime.now().year
+            dates = (current_year-2, current_year)
+        _years = range(int(dates[0]), int(dates[1])+1)
         outer = []
         for doc in self._citeInfoMatrix:
             try:
@@ -192,8 +197,9 @@ class CitationOverview(Retrieval):
 
     def __init__(self,
                  identifier: List[Union[int, str]],
-                 start: Union[int, str],
-                 end: Union[int, str] = datetime.now().year,
+                 date: Optional[str] = None,
+                 start: Optional[Union[int, str]] = None,
+                 end: Optional[Union[int, str]] = None,
                  id_type: str = "scopus_id",
                  refresh: Union[bool, int] = False,
                  citation: Optional[str] = None,
@@ -204,13 +210,15 @@ class CitationOverview(Retrieval):
         :param identifier: Up to 25 identifiers for which to look up
                            citations.  Must be Scopus IDs, DOIs, PIIs or
                            Pubmed IDs.
-        :param start: The first year for which the citation count should
+        :param data: Represents the year range for which the citations should be counted.
+                     If `None`, Scopus returns data for the current and the previous
+                     two years.
+        :param start: (deprecated) The first year for which the citation count should
                       be loaded.
-        :param end: The last year for which the citation count should be
+        :param end: (deprecated) The last year for which the citation count should be
                     loaded. Defaults to the current year.
         :param id_type: The type of the IDs provided in `identifier`.  Must be
                         one of `"scopus_id", "doi", "pii", "pubmed_id"`.
-                    instead.
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
@@ -233,7 +241,7 @@ class CitationOverview(Retrieval):
 
         Notes
         -----
-        The directory for cached results is `{path}/STANDARD/{id}-{citation}`,
+        The directory for cached results is `{path}/STANDARD/{id}-{citation}-{date}`,
         where `path` is specified in your configuration file, and `id` the
         md5-hashed version of a string joining `identifier` on underscore.
 
@@ -252,14 +260,18 @@ class CitationOverview(Retrieval):
 
         # Variables
         identifier = [str(i) for i in identifier]
-        self._start = int(start)
-        self._end = int(end)
+        if start or end:
+            msg = "Parameters `start` and `end` are deprecated and will be removed"\
+                  f" in a future release.  Please use 'date={start}-{end}' instead."
+            warn(msg, FutureWarning)
+            if not date:
+                date = f'{start}-{end}'
+        self._date = date
         self._citation = citation
         self._refresh = refresh
         self._view = "STANDARD"
 
         # Get file content
-        date = f'{start}-{end}'
         kwds.update({id_type: identifier})
         stem = md5("_".join(identifier).encode('utf8')).hexdigest()
         Retrieval.__init__(self, stem, api='CitationOverview', date=date,

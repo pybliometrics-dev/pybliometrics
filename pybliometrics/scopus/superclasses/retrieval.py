@@ -39,6 +39,8 @@ class Retrieval(Base):
             stem = identifier.replace("/", "")
             if self._citation:
                 stem += "-" + self._citation
+            if self._date:
+                stem += "-" + self._date
         else:
             url += identifier
             stem = identifier.replace('/', '_')
