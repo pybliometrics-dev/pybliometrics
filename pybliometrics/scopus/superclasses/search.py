@@ -11,7 +11,7 @@ class Search(Base):
     def __init__(self,
                  query: str,
                  api: str,
-                 count: int = 200,
+                 size: int = 200,
                  cursor: bool = False,
                  download: bool = True,
                  verbose: bool = False,
@@ -23,9 +23,9 @@ class Search(Base):
         :param api: The name of the Scopus API to be accessed.  Allowed values:
                     AffiliationSearch, AuthorSearch, ScopusSearch,
                     SerialSearch, SubjectClass.
-        :param count: The number of entries to be displayed at once.  A smaller
-                      number means more queries with each query having
-                      fewer results.
+        :param size: The number of entries to be displayed at once.  A smaller
+                     number means more queries with each query having
+                     fewer results.
         :param cursor: Whether to use the cursor in order to iterate over all
                       search results without limit on the number of the results.
                       In contrast to `start` parameter, the `cursor` parameter
@@ -42,7 +42,7 @@ class Search(Base):
             If the api parameter is an invalid entry.
         """
         # Construct query parameters
-        params = {'count': count, 'view': self._view, **kwds}
+        params = {'size': size, 'view': self._view, **kwds}
         if isinstance(query, dict):
             params.update(query)
             name = "&".join(["=".join(t) for t in zip(query.keys(), query.values())])

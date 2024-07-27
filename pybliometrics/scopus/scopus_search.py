@@ -198,15 +198,12 @@ class ScopusSearch(Search):
                 view = "COMPLETE"
             else:
                 view = "STANDARD"
-        count = 25
+        size = 25  # for pagination
         if view == "STANDARD" and subscriber:
-            count = 200
+            size = 200
         if "cursor" in kwds:
             subscriber = kwds["cursor"]
             kwds.pop("cursor")
-        if "count" in kwds:
-            count = kwds["count"]
-            kwds.pop("count")
 
         # Query
         self._action = integrity_action
@@ -214,7 +211,7 @@ class ScopusSearch(Search):
         self._refresh = refresh
         self._query = query
         self._view = view
-        Search.__init__(self, query=query, api='ScopusSearch', count=count,
+        Search.__init__(self, query=query, api='ScopusSearch', size=size,
                         cursor=subscriber, download=download,
                         verbose=verbose, **kwds)
         self.unescape = unescape

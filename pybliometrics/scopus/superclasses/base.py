@@ -95,14 +95,14 @@ class Base:
                     # Download the remaining information in chunks
                     if verbose:
                         print(f'Downloading results for query "{params["query"]}":')
-                    n_chunks = ceil(n/params['count'])
+                    n_chunks = ceil(n/params['size'])
                     for i in tqdm(range(1, n_chunks), disable=not verbose,
                                   initial=1, total=n_chunks):
                         if cursor_exists:
                             cursor = res['search-results']['cursor']['@next']
                             params.update({'cursor': cursor})
                         else:
-                            start += params["count"]
+                            start += params["size"]
                             params.update({'start': start})
                         resp = get_content(url, api, params, *args, **kwds)
                         res = resp.json()
