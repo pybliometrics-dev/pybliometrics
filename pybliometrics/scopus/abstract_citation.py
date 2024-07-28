@@ -207,10 +207,10 @@ class CitationOverview(Retrieval):
                  ) -> None:
         """Interaction with the Citation Overview API.
 
-        :param identifier: Up to 25 identifiers for which to look up
-                           citations.  Must be Scopus IDs, DOIs, PIIs or
+        :param identifier: Up to 25 identifiers of the same kind for which to look
+                           up citations.  Must be Scopus IDs, DOIs, PIIs or
                            Pubmed IDs.
-        :param data: Represents the year range for which the citations should be counted.
+        :param date: Represents the year range for which the citations should be counted.
                      If `None`, Scopus returns data for the current and the previous
                      two years.
         :param start: (deprecated) The first year for which the citation count should
