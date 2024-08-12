@@ -3,8 +3,8 @@
 from pathlib import Path
 from typing import Union
 
-from pybliometrics.scopus.superclasses import Base
-from pybliometrics.scopus.utils import get_config, URLS
+from pybliometrics.superclasses import Base
+from pybliometrics.utils import get_config, URLS
 
 
 class Retrieval(Base):

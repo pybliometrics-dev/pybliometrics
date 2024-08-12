@@ -1,8 +1,8 @@
 from collections import namedtuple
 from typing import List, NamedTuple, Optional, Union
 
-from pybliometrics.scopus.superclasses import Retrieval
-from pybliometrics.scopus.utils import check_parameter_value
+from pybliometrics.superclasses import Retrieval
+from pybliometrics.utils import check_parameter_value
 
 
 class PlumXMetrics(Retrieval):

@@ -4,8 +4,8 @@ from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 
 from pybliometrics import __version__
-from pybliometrics.scopus import exception
-from pybliometrics.scopus.utils.startup import get_config, get_keys, _throttling_params
+from pybliometrics import exception
+from pybliometrics.utils.startup import get_config, get_keys, _throttling_params
 
 # Define user agent string for HTTP requests
 user_agent = 'pybliometrics-v' + __version__

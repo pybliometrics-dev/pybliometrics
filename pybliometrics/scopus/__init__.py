@@ -1,4 +1,4 @@
-from pybliometrics.scopus.utils import *
+from pybliometrics.utils import *
 
 from pybliometrics.scopus.abstract_citation import *
 from pybliometrics.scopus.abstract_retrieval import *

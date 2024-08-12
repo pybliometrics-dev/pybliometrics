@@ -1,8 +1,7 @@
 """Tests for sciencedirect.ArticleRetrieval"""
 from collections import namedtuple
 
-from pybliometrics.sciencedirect import ArticleRetrieval
-from pybliometrics.scopus import init
+from pybliometrics.sciencedirect import ArticleRetrieval, init
 
 init()
 

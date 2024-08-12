@@ -1,8 +1,8 @@
 from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
-from pybliometrics.scopus.superclasses import Retrieval
-from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
+from pybliometrics.superclasses import Retrieval
+from pybliometrics.utils import chained_get, check_parameter_value,\
     get_link, make_float_if_possible, make_int_if_possible, VIEWS
 
 
