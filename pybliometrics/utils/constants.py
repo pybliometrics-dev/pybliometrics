@@ -4,13 +4,13 @@ from pathlib import Path
 # Paths for cached files
 if (Path.home()/".scopus").exists():
     BASE_PATH_SCOPUS = Path.home()/".scopus"
-    BASE_PATH_SCIENCE = Path.home()/".sciencedirect"
+    BASE_PATH_SCIENCEDIRECT = Path.home()/".sciencedirect"
 elif (Path.home()/".pybliometrics"/"Scopus").exists():
     BASE_PATH_SCOPUS = Path.home()/".pybliometrics"/"Scopus"
-    BASE_PATH_SCIENCE = Path.home()/".pybliometrics"/"ScienceDirect"
+    BASE_PATH_SCIENCEDIRECT = Path.home()/".pybliometrics"/"ScienceDirect"
 else:
     BASE_PATH_SCOPUS = Path.home()/".cache"/"pybliometrics"/"Scopus"
-    BASE_PATH_SCIENCE = Path.home()/".cache"/"pybliometrics"/"ScienceDirect"
+    BASE_PATH_SCIENCEDIRECT = Path.home()/".cache"/"pybliometrics"/"ScienceDirect"
 
 DEFAULT_PATHS = {
     'AbstractRetrieval': BASE_PATH_SCOPUS/'abstract_retrieval',
@@ -24,7 +24,7 @@ DEFAULT_PATHS = {
     'SerialTitle': BASE_PATH_SCOPUS/'serial_title',
     'PlumXMetrics': BASE_PATH_SCOPUS/'plumx',
     'SubjectClassifications': BASE_PATH_SCOPUS/'subject_classification',
-    'ArticleRetrieval': BASE_PATH_SCIENCE/'article_retrieval'
+    'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT/'article_retrieval'
 }
 
 # Configuration file location
