@@ -1,8 +1,8 @@
 from collections import namedtuple
 from typing import Dict, List, NamedTuple, Optional, Tuple, Union
 
-from pybliometrics.scopus.superclasses import Search
-from pybliometrics.scopus.utils import chained_get, make_search_summary
+from pybliometrics.superclasses import Search
+from pybliometrics.utils import chained_get, make_search_summary
 
 
 class SubjectClassifications(Search):

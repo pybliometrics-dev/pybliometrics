@@ -1,8 +1,8 @@
 from collections import defaultdict, namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
-from pybliometrics.scopus.superclasses import Retrieval
-from pybliometrics.scopus.utils import chained_get, check_parameter_value,\
+from pybliometrics.superclasses import Retrieval
+from pybliometrics.utils import chained_get, check_parameter_value,\
     deduplicate, get_id, detect_id_type, get_link, listify,\
     make_int_if_possible, parse_date_created, VIEWS
 

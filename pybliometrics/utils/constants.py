@@ -3,23 +3,28 @@ from pathlib import Path
 
 # Paths for cached files
 if (Path.home()/".scopus").exists():
-    BASE_PATH = Path.home()/".scopus"
+    BASE_PATH_SCOPUS = Path.home()/".scopus"
+    BASE_PATH_SCIENCEDIRECT = Path.home()/".sciencedirect"
 elif (Path.home()/".pybliometrics"/"Scopus").exists():
-    BASE_PATH = Path.home()/".pybliometrics"/"Scopus"
+    BASE_PATH_SCOPUS = Path.home()/".pybliometrics"/"Scopus"
+    BASE_PATH_SCIENCEDIRECT = Path.home()/".pybliometrics"/"ScienceDirect"
 else:
-    BASE_PATH = Path.home()/".cache"/"pybliometrics"/"Scopus"
+    BASE_PATH_SCOPUS = Path.home()/".cache"/"pybliometrics"/"Scopus"
+    BASE_PATH_SCIENCEDIRECT = Path.home()/".cache"/"pybliometrics"/"ScienceDirect"
+
 DEFAULT_PATHS = {
-    'AbstractRetrieval': BASE_PATH/'abstract_retrieval',
-    'AffiliationRetrieval': BASE_PATH/'affiliation_retrieval',
-    'AffiliationSearch': BASE_PATH/'affiliation_search',
-    'AuthorRetrieval': BASE_PATH/'author_retrieval',
-    'AuthorSearch': BASE_PATH/'author_search',
-    'CitationOverview': BASE_PATH/'citation_overview',
-    'ScopusSearch': BASE_PATH/'scopus_search',
-    'SerialSearch': BASE_PATH/'serial_search',
-    'SerialTitle': BASE_PATH/'serial_title',
-    'PlumXMetrics': BASE_PATH/'plumx',
-    'SubjectClassifications': BASE_PATH/'subject_classification'
+    'AbstractRetrieval': BASE_PATH_SCOPUS/'abstract_retrieval',
+    'AffiliationRetrieval': BASE_PATH_SCOPUS/'affiliation_retrieval',
+    'AffiliationSearch': BASE_PATH_SCOPUS/'affiliation_search',
+    'AuthorRetrieval': BASE_PATH_SCOPUS/'author_retrieval',
+    'AuthorSearch': BASE_PATH_SCOPUS/'author_search',
+    'CitationOverview': BASE_PATH_SCOPUS/'citation_overview',
+    'ScopusSearch': BASE_PATH_SCOPUS/'scopus_search',
+    'SerialSearch': BASE_PATH_SCOPUS/'serial_search',
+    'SerialTitle': BASE_PATH_SCOPUS/'serial_title',
+    'PlumXMetrics': BASE_PATH_SCOPUS/'plumx',
+    'SubjectClassifications': BASE_PATH_SCOPUS/'subject_classification',
+    'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT/'article_retrieval'
 }
 
 # Configuration file location
@@ -47,7 +52,8 @@ URLS = {
     'SerialSearch': RETRIEVAL_BASE + 'serial/title',
     'SerialTitle': RETRIEVAL_BASE + 'serial/title/issn/',
     'SubjectClassifications': RETRIEVAL_BASE + 'subject/scopus',
-    'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/'
+    'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
+    'ArticleRetrieval': RETRIEVAL_BASE + 'article/'
 }
 
 # Valid views for all classes
@@ -63,6 +69,7 @@ VIEWS = {
     "SerialSearch": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SerialTitle": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SubjectClassifications": [''],
+    "ArticleRetrieval": ["META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"]
 }
 
 # Throttling limits (in queries per second) // 0 = no limit
@@ -77,7 +84,8 @@ RATELIMITS = {
     'SerialSearch': 6,
     'SerialTitle': 6,
     'PlumXMetrics': 6,
-    'SubjectClassifications': 0
+    'SubjectClassifications': 0,
+    'ArticleRetrieval': 10
 }
 
 # Other API restrictions

@@ -1,8 +1,8 @@
 from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
-from pybliometrics.scopus.superclasses import Search
-from pybliometrics.scopus.utils import check_integrity, check_parameter_value,\
+from pybliometrics.superclasses import Search
+from pybliometrics.utils import check_integrity, check_parameter_value,\
     check_field_consistency, make_int_if_possible, make_search_summary
 
 
