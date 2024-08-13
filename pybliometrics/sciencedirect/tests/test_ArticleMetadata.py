@@ -6,8 +6,12 @@ from pybliometrics.sciencedirect import ArticleMetadata, init
 
 init()
 
-am_standard = ArticleMetadata('TITLE("Bayesian Network") AND YEAR(2015)', view="STANDARD", refresh=30)
-am_complete = ArticleMetadata('AFFIL("MIT") AND YEAR("2023") AND DOI(10.1016/B978-0-32-399851-2.00030-2)', view="COMPLETE", refresh=30)
+am_standard = ArticleMetadata('TITLE("Bayesian Network") AND YEAR(2015)',
+                              view="STANDARD",
+                              refresh=30)
+am_complete = ArticleMetadata('AFFIL("MIT") AND YEAR("2023") AND DOI(10.1016/B978-0-32-399851-2.00030-2)',
+                              view="COMPLETE",
+                              refresh=30)
 am_empty = ArticleMetadata('TITLE("Not a very realistic title")', view="STANDARD", refresh=30)
 
 

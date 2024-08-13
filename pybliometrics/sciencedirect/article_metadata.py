@@ -2,7 +2,7 @@ from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.superclasses import Search
-from pybliometrics.utils import chained_get, check_field_consistency, check_integrity,\
+from pybliometrics.utils import check_field_consistency, chained_get, check_integrity,\
     check_parameter_value, deduplicate, make_search_summary, VIEWS
 
 
