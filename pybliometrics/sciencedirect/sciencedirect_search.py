@@ -47,10 +47,11 @@ class ScienceDirectSearch(Search):
                     links['api_link'] = link.get('@href')
                 elif link.get('@ref') == 'scidir':
                     links['scidir'] = link.get('@href')
-
+            # Get doi
+            doi = item.get("prism:doi") or item.get("dc:identifier")[4:] if item.get("dc:identifier") else None
             new = doc(authors=authors,
                 first_author=item.get('dc:creator'),
-                doi=item.get("prism:doi") or item.get("dc:identifier"),
+                doi=doi,
                 title=item.get("dc:title"),
                 link=links["scidir"],
                 load_date=item.get("load-date"),
@@ -149,8 +150,8 @@ class ScienceDirectSearch(Search):
 
     def __str__(self):
         """Print a summary string."""
-        return make_search_summary(self, "document", self.get_eids())
+        return make_search_summary(self, "document", self.get_dois())
 
-    def get_eids(self):
-        """EIDs of retrieved documents."""
-        return [d['eid'] for d in self._json]
+    def get_dois(self):
+        """DOIs of retrieved documents."""
+        return [d.get("prism:doi") or d.get("dc:identifier")[4:] if d.get("dc:identifier") else None for d in self._json]
