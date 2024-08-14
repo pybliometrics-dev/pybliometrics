@@ -115,8 +115,8 @@ def test_length():
 
 
 def test_string():
-    expected_str = 'Search \'AFFIL("MIT") AND YEAR("2023") AND DOI(10.1016/B978-0-32-399851-2.00030-2)\' yielded 1 document as of 2024-08-13:\n    3-s2.0-B9780323998512000302'
-    assert am_complete.__str__() == expected_str
+    part_of_str = 'Search \'AFFIL("MIT") AND YEAR("2023") AND DOI(10.1016/B978-0-32-399851-2.00030-2)\' yielded 1 document as of'
+    assert part_of_str in am_complete.__str__()
 
 
 def test_wrong_query():
