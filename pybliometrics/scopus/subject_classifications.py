@@ -89,7 +89,9 @@ class SubjectClassifications(Search):
         self._refresh = refresh
         self._query = str(query)
         self._view = ''
-        Search.__init__(self, query=query, api='SubjectClassifications', **kwds)
+        # Determine module
+        self._api = 'SubjectClassifications' if 'scopus' in self.__module__ else 'ScienceDirectSubjectClassifications'
+        Search.__init__(self, query=query, api=self._api, **kwds)
         path = ['subject-classifications', 'subject-classification']
         self._n = len(chained_get(self._json, path, []))
 
