@@ -46,12 +46,13 @@ class ArticleMetadata(Search):
             authors = ';'.join(authors_list)
             first_author = item.get('dc:creator')[0].get('$')
             link = item.get('link')[0].get('@href')
+            doi = item.get("prism:doi") or item.get("dc:identifier")[4:] if item.get("dc:identifier") else None
             new = doc(authorKeywords=item.get('authkeywords'),
                     authors=authors,
                     available_online_date=item.get('available-online-date'),
                     first_author=first_author,
                     abstract_text=item.get('dc:description'),
-                    doi=item.get('prism:doi') or item.get('dc:identifier'),
+                    doi=doi,
                     title=item.get('dc:title'),
                     eid=item.get('eid'),
                     link=link,
