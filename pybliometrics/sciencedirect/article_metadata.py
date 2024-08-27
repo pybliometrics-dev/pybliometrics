@@ -93,8 +93,7 @@ class ArticleMetadata(Search):
                  ) -> None:
         """Interaction with the Science Direct Article Metadata API.
 
-        :param query: A string of the query as used in the `Advanced Search <https://service.elsevier.com/app/answers/detail/a_id/11365/supporthub/scopus/#tips>`__.
-        All fields except "INDEXTERMS()" and "LIMIT-TO()" work.
+        :param query: A string of the query as used in the `Advanced Search <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__.
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
