@@ -2,8 +2,10 @@ from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.superclasses import Search
-from pybliometrics.utils import check_integrity, check_parameter_value,\
-    check_field_consistency, make_int_if_possible, make_search_summary
+from pybliometrics.utils import check_integrity, check_parameter_value, \
+    check_field_consistency, html_unescape, make_int_if_possible, \
+    make_search_summary
+
 
 
 class AffiliationSearch(Search):
@@ -30,12 +32,13 @@ class AffiliationSearch(Search):
         # Parse elements one-by-one
         out = []
         for item in self._json:
-            name = item.get('affiliation-name')
-            variants = [d.get('$', "") for d in item.get('name-variant', [])
+            name = item['affiliation-name']
+            variants = [html_unescape(d.get('$', ""))
+                        for d in item.get('name-variant', [])
                         if d.get('$', "") != name]
             parent = make_int_if_possible(item.get('parent-affiliation-id')) or None
             new = aff(eid=item.get('eid'), variant=";".join(variants),
-                      documents=int(item['document-count']), name=name,
+                      documents=int(item['document-count']), name=html_unescape(name),
                       city=item.get('city'), country=item.get('country'),
                       parent=parent)
             out.append(new)
