@@ -6,7 +6,7 @@ from pybliometrics.sciencedirect import ScienceDirectSearch, init
 
 init()
 
-sds_standard = ScienceDirectSearch('Title("LLMs") AND DATE(2012)', view="STANDARD", refresh=30)
+sds_standard = ScienceDirectSearch('TITLE("Assessing LLMs in malicious code deobfuscation of real-world malware campaigns") AND DATE(2012)', view="STANDARD", refresh=30)
 sds_empty = ScienceDirectSearch('TITLE("Not a very realistic title")', view="STANDARD", refresh=30)
 
 
@@ -40,7 +40,7 @@ def test_all_fields():
 
 
 def test_field_consistency():
-    am_wrong_field = ScienceDirectSearch('Title("LLMs") AND DATE(2012)',
+    am_wrong_field = ScienceDirectSearch('TITLE("Assessing LLMs in malicious code deobfuscation of real-world malware campaigns") AND DATE(2012)',
                                  integrity_fields=["notExistingField"],
                                  integrity_action="warn",
                                  view="STANDARD",
@@ -61,7 +61,8 @@ def test_length():
 
 
 def test_string():
-    str_start = 'Search \'Title("LLMs") AND DATE(2012)\' yielded 25 documents as of'
+    str_start = ('Search \'TITLE("Assessing LLMs in malicious code deobfuscation of '
+    'real-world malware campaigns") AND DATE(2012)\' yielded 1 document as of')
     assert sds_standard.__str__().startswith(str_start)
 
 

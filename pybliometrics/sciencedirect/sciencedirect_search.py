@@ -70,10 +70,10 @@ class ScienceDirectSearch(Search):
     def __init__(self,
                  query: str,
                  refresh: Union[bool, int] = False,
-                 view: str = None,
+                 view: Optional[str] = None,
                  verbose: bool = False,
                  download: bool = True,
-                 integrity_fields: Union[List[str], Tuple[str, ...]] = None,
+                 integrity_fields: Optional[Union[List[str], Tuple[str, ...]]] = None,
                  integrity_action: str = "raise",
                  subscriber: bool = True,
                  **kwds: str
@@ -82,8 +82,7 @@ class ScienceDirectSearch(Search):
         ScienceDirect cluster, which contains serial/nonserial full-text articles. Note that this API
         replicates the search experience on `Science Direct <www.sciencedirect.com>`__.
 
-        :param query: A string of the query as used in the `Science Direct Search <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__. Note that
-        this library uses the GET interface.
+        :param query: A string of the query as used in the `Science Direct Search <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__.
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
@@ -98,7 +97,7 @@ class ScienceDirectSearch(Search):
                                  elements in these fields are missing.  This
                                  helps avoiding idiosynchratically missing
                                  elements that should always be present
-                                 (e.g., EID or source ID).
+                                 (e.g., doi or authors).
         :param integrity_action: What to do in case integrity of provided fields
                                  cannot be verified.  Possible actions:
                                  - `"raise"`: Raise an `AttributeError`
@@ -125,6 +124,9 @@ class ScienceDirectSearch(Search):
         The directory for cached results is `{path}/{view}/{fname}`,
         where `path` is specified in your configuration file and `fname` is
         the md5-hashed version of `query`.
+
+        The ScienceDirect Search API V2 has two available interfaces: `PUT` and `GET`. This library uses the
+        `GET` interface.
         """
         # Check view or set to default
         if view:
