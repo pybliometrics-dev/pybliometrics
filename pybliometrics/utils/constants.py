@@ -25,7 +25,8 @@ DEFAULT_PATHS = {
     'PlumXMetrics': BASE_PATH_SCOPUS/'plumx',
     'SubjectClassifications': BASE_PATH_SCOPUS/'subject_classification',
     'ArticleMetadata': BASE_PATH_SCIENCEDIRECT/'article_metadata/',
-    'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT/'article_retrieval'
+    'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT/'article_retrieval',
+    'ScienceDirectSearch': BASE_PATH_SCIENCEDIRECT/'science_direct_search'
 }
 
 # Configuration file location
@@ -55,7 +56,8 @@ URLS = {
     'SubjectClassifications': RETRIEVAL_BASE + 'subject/scopus',
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
     'ArticleMetadata': RETRIEVAL_BASE + 'metadata/article/',
-    'ArticleRetrieval': RETRIEVAL_BASE + 'article/'
+    'ArticleRetrieval': RETRIEVAL_BASE + 'article/',
+    'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/'
 }
 
 # Valid views for all classes
@@ -72,7 +74,8 @@ VIEWS = {
     "SerialTitle": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SubjectClassifications": [''],
     "ArticleRetrieval": ["META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"],
-    "ArticleMetadata": ["STANDARD", "COMPLETE"]
+    "ArticleMetadata": ["STANDARD", "COMPLETE"],
+    "ScienceDirectSearch": ["STANDARD"]
 }
 
 # Throttling limits (in queries per second) // 0 = no limit
@@ -89,7 +92,8 @@ RATELIMITS = {
     'PlumXMetrics': 6,
     'SubjectClassifications': 0,
     'ArticleMetadata': 6,
-    'ArticleRetrieval': 10
+    'ArticleRetrieval': 10,
+    'ScienceDirectSearch': 2
 }
 
 # Other API restrictions
