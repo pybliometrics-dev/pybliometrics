@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 from pybliometrics.exception import ScopusQueryError
 from pybliometrics.utils import get_content, parse_content, SEARCH_MAX_ENTRIES
-
+from pybliometrics.utils import listify
 
 class Base:
     def __init__(self,
@@ -195,7 +195,7 @@ def _get_all_refs(url: str, params: dict, verbose: bool, resp: dict, *args, **kw
         res = resp.json()
         res = parse_content.chained_get(res, path_reference)
         # Append
-        data['abstracts-retrieval-response']['references']['reference'].extend(res)
+        data['abstracts-retrieval-response']['references']['reference'].extend(listify(res))
         if verbose:
             print(f'Extracted:\n\tFrom: {kwds["startref"]}\n\tTo:{len(parse_content.chained_get(data, ["abstracts-retrieval-response", "references", "reference"]))}')
 
