@@ -89,7 +89,9 @@ class AbstractRetrieval(Retrieval):
                             auid=make_int_if_possible(author.get('@auid')),
                             orcid=author.get('@orcid'),
                             surname=author.get('ce:surname'),
-                            given_name=author.get('ce:given-name', author['ce:initials']),
+                            given_name=author.get(
+                                'ce:given-name', authors.get(author['ce:initials'])
+                            ),
                             indexed_name=chained_get(author, ['preferred-name', 'ce:indexed-name']))
                 out.append(new)
             # Collaboration information
