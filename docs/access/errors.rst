@@ -13,7 +13,7 @@ Error message hierarchy
 
       * `pybliometrics.scopus.exception.Scopus401Error: UNAUTHORIZED`: Either the provided key is not correct, in which case you should change it in your :doc:`configuration file <../configuration>`, or you are outside the network that provides you access to the Scopus database (e.g. your university network).  Remember that you need both to access Scopus.
 
-      * `pybliometrics.scopus.exception.Scopus404Error: NOT FOUND`: The entity you are looking for does not exist.  Check that your identifier is still pointing to the item you are looking for.
+      * `pybliometrics.scopus.exception.Scopus404Error: NOT FOUND`: The entity you are looking for does not exist.  Check that your identifier is still pointing to the item you are looking for. [Here](https://github.com/pybliometrics-dev/pybliometrics/issues/309#issuecomment-1823628377) you can find an example on how to retrieve the new Scopus ID.
 
       * `pybliometrics.scopus.exception.Scopus413Error`: The request entity is too large to be processed by the web server.  Try a less complex query.
 
