@@ -84,7 +84,7 @@ RATELIMITS = {
     'SerialSearch': 6,
     'SerialTitle': 6,
     'PlumXMetrics': 6,
-    'ScopusSubjectClassifications': 0,
+    'SubjectClassifications': 0,
     'ArticleMetadata': 6,
     'ArticleRetrieval': 10,
     'ScienceDirectSearch': 2,
