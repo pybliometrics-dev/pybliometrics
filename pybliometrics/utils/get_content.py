@@ -1,6 +1,7 @@
 from typing import Type
 from requests import Session
 from requests.adapters import HTTPAdapter
+from requests.exceptions import JSONDecodeError
 from urllib3.util import Retry
 
 from pybliometrics import __version__
@@ -14,6 +15,7 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           403: exception.Scopus403Error, 404: exception.Scopus404Error,
           407: exception.Scopus407Error, 413: exception.Scopus413Error, 
           414: exception.Scopus414Error, 429: exception.Scopus429Error}
+
 
 def get_session() -> Type[Session]:
     """Auxiliary function to create a session"""
@@ -100,7 +102,7 @@ def get_content(url, api, params=None, **kwds):
     # Perform request, eventually replacing the current key
     timeout = config.getint("Requests", "Timeout", fallback=20)
     resp = session.get(url, headers=header, proxies=proxies, params=params,
-                      timeout=timeout)
+                       timeout=timeout)
     while resp.status_code == 429:
         try:
             keys.pop(0)  # Remove current key
@@ -122,8 +124,8 @@ def get_content(url, api, params=None, **kwds):
                 reason = resp.json()['message']
             except:
                 reason = ""
-        raise errors[resp.status_code](reason)
-    except KeyError:
+        raise error_type(reason)
+    except (JSONDecodeError, KeyError):
         resp.raise_for_status()
     return resp
 
