@@ -18,7 +18,7 @@ class Base:
                  api: str,
                  download: bool = True,
                  verbose: bool = False,
-                 *args: str, **kwds: str
+                 **kwds: str
                  ) -> None:
         """Class intended as base class for superclasses.
 
@@ -28,7 +28,6 @@ class Base:
         :param download: Whether to download the query or not.  Has no effect
                          for retrieval requests.
         :param verbose: Whether to print a download progress bar.
-        :param args: Keywords passed on `get_content()`
         :param kwds: Keywords passed on `get_content()`
 
         Raises
@@ -63,12 +62,12 @@ class Base:
             else:
                 self._json = loads(fname.read_text())
         else:
-            resp = get_content(url, api, params, *args, **kwds)
+            resp = get_content(url, api, params, **kwds)
             header = resp.headers
 
             if ab_ref_retrieval:
                 kwds['startref'] = '1'
-                data = _get_all_refs(url, params, verbose, resp, *args, **kwds)
+                data = _get_all_refs(url, params, verbose, resp, **kwds)
                 self._json = data
                 data = [data]
             elif search_request:
@@ -104,7 +103,7 @@ class Base:
                         else:
                             start += params["size"]
                             params.update({'start': start})
-                        resp = get_content(url, api, params, *args, **kwds)
+                        resp = get_content(url, api, params, **kwds)
                         res = resp.json()
                         data.extend(res.get('search-results', {}).get('entry', []))
                     header = resp.headers  # Use header of final call
@@ -168,7 +167,7 @@ def _check_file_age(self):
     return refresh, mod_ts
 
 
-def _get_all_refs(url: str, params: dict, verbose: bool, resp: dict, *args, **kwds) -> dict:
+def _get_all_refs(url: str, params: dict, verbose: bool, resp: dict, **kwds) -> dict:
     """Get all references for `AbstractRetrieval` with view `REF`."""
     # startref starts at 1 (0 does not work)
     # Max refs per query are 40
@@ -191,7 +190,7 @@ def _get_all_refs(url: str, params: dict, verbose: bool, resp: dict, *args, **kw
         # Increment startref
         kwds['startref'] = str(int(kwds['startref']) + ref_len)
         # Get
-        resp = get_content(url, 'AbstractRetrieval', params, *args, **kwds)
+        resp = get_content(url, 'AbstractRetrieval', params, **kwds)
         res = resp.json()
         res = parse_content.chained_get(res, path_reference)
         # Append
