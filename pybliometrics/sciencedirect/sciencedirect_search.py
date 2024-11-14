@@ -2,8 +2,9 @@ from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.superclasses import Search
-from pybliometrics.utils import check_field_consistency, chained_get, check_integrity,\
-    check_parameter_value, deduplicate, make_search_summary, VIEWS
+from pybliometrics.utils import check_field_consistency, chained_get, \
+    check_integrity, check_parameter_value, deduplicate, \
+    make_search_summary, VIEWS
 
 
 class ScienceDirectSearch(Search):
@@ -49,7 +50,8 @@ class ScienceDirectSearch(Search):
                     links['scidir'] = link.get('@href')
             # Get doi
             doi = item.get("prism:doi") or item.get("dc:identifier")[4:] if item.get("dc:identifier") else None
-            new = doc(authors=authors,
+            new = doc(
+                authors=authors,
                 first_author=item.get('dc:creator'),
                 doi=doi,
                 title=item.get("dc:title"),
@@ -62,7 +64,8 @@ class ScienceDirectSearch(Search):
                 publicationName=item.get("prism:publicationName"),
                 startingPage=item.get("prism:startingPage"),
                 api_link=links["api_link"] or item.get("prism:url"),
-                volume=item.get("prism:volume"))
+                volume=item.get("prism:volume")
+            )
             out.append(new)
         check_integrity(out, self._integrity, self._action)
         return out or None

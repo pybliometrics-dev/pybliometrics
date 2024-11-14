@@ -7,7 +7,6 @@ from pybliometrics.utils import check_integrity, check_parameter_value, \
     make_search_summary
 
 
-
 class AffiliationSearch(Search):
     @property
     def affiliations(self) -> Optional[List[NamedTuple]]:

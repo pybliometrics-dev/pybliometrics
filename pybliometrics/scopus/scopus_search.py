@@ -2,9 +2,9 @@ from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.superclasses import Search
-from pybliometrics.utils import check_integrity, chained_get,\
-    check_parameter_value, check_field_consistency, deduplicate,\
-    get_freetoread, html_unescape, listify, make_search_summary, VIEWS
+from pybliometrics.utils import check_integrity, check_parameter_value, \
+    check_field_consistency, deduplicate, get_freetoread, html_unescape, \
+    listify, make_search_summary, VIEWS
 
 
 class ScopusSearch(Search):

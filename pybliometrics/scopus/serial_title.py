@@ -2,7 +2,7 @@ from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.superclasses import Retrieval
-from pybliometrics.utils import chained_get, check_parameter_value,\
+from pybliometrics.utils import chained_get, check_parameter_value, \
     get_link, make_float_if_possible, make_int_if_possible, VIEWS
 
 
@@ -281,7 +281,7 @@ def _parse_list(d, metric):
         return None
 
 
-def _get_all_cite_score_years(self, named_info_list, named_rank_list, data) -> Optional[List[NamedTuple]]:
+def _get_all_cite_score_years(named_info_list, named_rank_list, data) -> Optional[list[namedtuple]]:
     """Auxiliary function to get all information contained in cite score 
     information list for the `CITESCORE` view."""
     data = data.get('citeScoreYearInfo', [])
@@ -289,12 +289,11 @@ def _get_all_cite_score_years(self, named_info_list, named_rank_list, data) -> O
     new_data = []
     # Iterate through years
     for d in data:
-        citeScoreInfo = d.get('citeScoreInformationList', [])[
-            0].get('citeScoreInfo', [])[0]
+        citeScoreInfo = d.get('citeScoreInformationList', [])[0].get('citeScoreInfo', [])[0]
         # Iterate through subject ranks
         subject_rank = [named_rank_list(subjectcode=int(subject['subjectCode']),
-                        rank=int(subject['rank']),
-                        percentile=int(subject['percentile']))
+                                        rank=int(subject['rank']),
+                                        percentile=int(subject['percentile']))
                         for subject in citeScoreInfo['citeScoreSubjectRank']]
         # Create named tuple with info
         Citescoreinfolist_year = named_info_list(year=int(d['@year']),

@@ -2,7 +2,7 @@ from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.superclasses import Retrieval
-from pybliometrics.utils import chained_get, check_parameter_value,\
+from pybliometrics.utils import chained_get, check_parameter_value, \
     get_id, get_link, parse_date_created, make_int_if_possible, VIEWS
 
 

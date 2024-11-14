@@ -2,8 +2,8 @@ from collections import defaultdict, namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.superclasses import Retrieval
-from pybliometrics.utils import chained_get, check_parameter_value,\
-    deduplicate, get_id, detect_id_type, get_link, listify,\
+from pybliometrics.utils import chained_get, check_parameter_value, \
+    deduplicate, get_id, detect_id_type, get_link, listify, \
     make_int_if_possible, parse_date_created, VIEWS
 
 
@@ -287,7 +287,6 @@ class AbstractRetrieval(Retrieval):
         Note: Only works with `ENTITLED` view.
         """
         return chained_get(self._json, ['document-entitlement', 'status'])
-        
 
     @property
     def doi(self) -> Optional[str]:
@@ -755,10 +754,10 @@ class AbstractRetrieval(Retrieval):
         view="META_ABS" or view="FULL".
         """
         def convert_citedbycount(entry):
-                try:
-                    return float(entry.citedbycount) or 0
-                except (ValueError, TypeError):
-                    return 0
+            try:
+                return float(entry.citedbycount) or 0
+            except (ValueError, TypeError):
+                return 0
             
         def get_date(coverDate):
             try:
@@ -791,14 +790,14 @@ class AbstractRetrieval(Retrieval):
                 s += "\n  Affiliation(s):\n   "
                 s += '\n   '.join([aff.name for aff in self.affiliation])
         
-        elif self._view in ('REF'):
+        elif self._view in ('REF',):
             try:
                 # Sort reference list by citationcount
                 top_n = 5
                 references = sorted(self.references, key=convert_citedbycount, reverse=True)
 
-                top_references = [f'{reference.title} ({get_date(reference.coverDate)}). '+
-                                f'EID: {reference.id}' for reference in references[:top_n]]
+                top_references = [f'{reference.title} ({get_date(reference.coverDate)}). ' +
+                                  f'EID: {reference.id}' for reference in references[:top_n]]
             except TypeError:
                 top_n = 0
 

@@ -2,8 +2,9 @@ from collections import namedtuple
 from typing import List, NamedTuple, Optional, Tuple, Union
 
 from pybliometrics.superclasses import Search
-from pybliometrics.utils import check_field_consistency, chained_get, check_integrity,\
-    check_parameter_value, deduplicate, make_search_summary, VIEWS
+from pybliometrics.utils import check_field_consistency, chained_get, \
+    check_integrity, check_parameter_value, deduplicate, \
+    make_search_summary, VIEWS
 
 
 class ArticleMetadata(Search):
@@ -47,38 +48,38 @@ class ArticleMetadata(Search):
             first_author = item.get('dc:creator')[0].get('$')
             link = item.get('link')[0].get('@href')
             doi = item.get("prism:doi") or item.get("dc:identifier")[4:] if item.get("dc:identifier") else None
-            new = doc(authorKeywords=item.get('authkeywords'),
-                    authors=authors,
-                    available_online_date=item.get('available-online-date'),
-                    first_author=first_author,
-                    abstract_text=item.get('dc:description'),
-                    doi=doi,
-                    title=item.get('dc:title'),
-                    eid=item.get('eid'),
-                    link=link,
-                    openArchiveArticle=item.get('openArchiveArticle'),
-                    openaccess_status=item.get('openaccess'),
-                    openaccessArticle=item.get('openaccessArticle'),
-                    openaccessUserLicense=item.get('openaccessUserLicense'),
-                    pii=item.get('pii'),
-                    aggregationType=item.get('prism:aggregationType'),
-                    copyright=item.get('prism:copyright'),
-                    coverDate=item.get('prism:coverDate'),
-                    coverDisplayDate=item.get('prism:coverDisplayDate'),
-                    edition=item.get('prism:edition'),
-                    endingPage=item.get('prism:endingPage'),
-                    isbn=item.get('prism:isbn'),
-                    publicationName=item.get('prism:publicationName'),
-                    startingPage=item.get('prism:startingPage'),
-                    teaser=item.get('prism:teaser'),
-                    api_link=item.get('prism:url'),
-                    publicationType=item.get('pubType'),
-                    vor_available_online_date=item.get('vor-available-online-date'),
-                    )
+            new = doc(
+                authorKeywords=item.get('authkeywords'),
+                authors=authors,
+                available_online_date=item.get('available-online-date'),
+                first_author=first_author,
+                abstract_text=item.get('dc:description'),
+                doi=doi,
+                title=item.get('dc:title'),
+                eid=item.get('eid'),
+                link=link,
+                openArchiveArticle=item.get('openArchiveArticle'),
+                openaccess_status=item.get('openaccess'),
+                openaccessArticle=item.get('openaccessArticle'),
+                openaccessUserLicense=item.get('openaccessUserLicense'),
+                pii=item.get('pii'),
+                aggregationType=item.get('prism:aggregationType'),
+                copyright=item.get('prism:copyright'),
+                coverDate=item.get('prism:coverDate'),
+                coverDisplayDate=item.get('prism:coverDisplayDate'),
+                edition=item.get('prism:edition'),
+                endingPage=item.get('prism:endingPage'),
+                isbn=item.get('prism:isbn'),
+                publicationName=item.get('prism:publicationName'),
+                startingPage=item.get('prism:startingPage'),
+                teaser=item.get('prism:teaser'),
+                api_link=item.get('prism:url'),
+                publicationType=item.get('pubType'),
+                vor_available_online_date=item.get('vor-available-online-date'),
+            )
             out.append(new)
         check_integrity(out, self._integrity, self._action)
         return out or None
-
 
     def __init__(self,
                  query: str,
@@ -162,11 +163,9 @@ class ArticleMetadata(Search):
         Search.__init__(self, query=query, api="ArticleMetadata", size=size,
                         download=download, verbose=verbose, **kwds)
 
-
     def __str__(self):
         """Print a summary string."""
         return make_search_summary(self, "document", self.get_eids())
-
 
     def get_eids(self):
         """EIDs of retrieved documents."""

@@ -11,6 +11,7 @@ from pybliometrics.exception import ScopusQueryError
 from pybliometrics.utils import get_content, parse_content, SEARCH_MAX_ENTRIES
 from pybliometrics.utils import listify
 
+
 class Base:
     def __init__(self,
                  params: Dict,
@@ -179,8 +180,7 @@ def _get_all_refs(url: str, params: dict, verbose: bool, resp: dict, **kwds) -> 
     except TypeError:
         return res
 
-    data  = res #data is used to gather all responses. res is a tmp variable
-
+    data = res  # data is used to gather all responses. res is a tmp variable
     path_reference = ['abstracts-retrieval-response', 'references', 'reference']
     ref_len = len(parse_content.chained_get(data, path_reference))
     n_chunks = ceil(n/ref_len)
