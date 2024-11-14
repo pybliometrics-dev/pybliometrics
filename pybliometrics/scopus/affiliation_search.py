@@ -68,7 +68,7 @@ class AffiliationSearch(Search):
                                  be checked.  `AffiliationSearch` will perform
                                  the action specified in `integrity_action`
                                  if elements in these fields are missing.
-                                 This helps avoiding idiosynchratically missing
+                                 This helps to avoid idiosynchratically missing
                                  elements that should always be present
                                  (e.g. EID or name).
         :param integrity_action: What to do in case integrity of provided fields

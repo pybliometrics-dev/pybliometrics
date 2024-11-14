@@ -42,7 +42,7 @@ class SerialTitle(Retrieval):
             year = data.get(f'citeScore{mode}Year')
             cite_score = data.get(f'citeScore{mode}')
 
-            # To be consistent with old verion
+            # To be consistent with old version
             if (year is None) and (cite_score is None):
                 return None
 
