@@ -86,7 +86,7 @@ class ScopusSearch(Search):
             # Get text fields and unescape
             for key in ['dc:title', 'dc:description', 'authkeywords']:
                 value = item.get(key)
-                info[key] = html_unescape(value) if (self.unescape and value) else value
+                info[key] = html_unescape(str(value)) if (self.unescape and value) else value
             new = doc(article_number=item.get('article-number'),
                       title=info.get('dc:title'),
                       fund_no=item.get('fund-no'),
