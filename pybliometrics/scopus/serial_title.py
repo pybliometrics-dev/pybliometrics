@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import List, NamedTuple, Optional, Tuple, Union
+from typing import Optional, Union
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import chained_get, check_parameter_value, \
@@ -13,7 +13,7 @@ class SerialTitle(Retrieval):
         return self._entry['prism:aggregationType']
 
     @property
-    def citescoreyearinfolist(self) -> Optional[List[NamedTuple]]:
+    def citescoreyearinfolist(self) -> Optional[list[namedtuple]]:
         """A list of named tuples of the form: `(year citescoare)` or (when
         `view="CITESCORE"`) `(year citescore status documentcount citationcount
         percentcited rank)`.  `rank` is `None` or a named tuple of the form
@@ -130,7 +130,7 @@ class SerialTitle(Retrieval):
         return get_link(self._json, 0, ["link"])
 
     @property
-    def sjrlist(self) -> Optional[List[Tuple[int, float]]]:
+    def sjrlist(self) -> Optional[list[tuple[int, float]]]:
         """The SCImago Journal Rank (SJR) indicator as list of tuples in the form
         `(year, indicator)`.  See
         https://www.scimagojr.com/journalrank.php.
@@ -138,7 +138,7 @@ class SerialTitle(Retrieval):
         return _parse_list(self._entry, "SJR")
 
     @property
-    def sniplist(self) -> Optional[List[Tuple[int, float]]]:
+    def sniplist(self) -> Optional[list[tuple[int, float]]]:
         """The Source-Normalized Impact per Paper (SNIP) as list of tuples in the form
         `(year, indicator)`.  See
         https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip.
@@ -151,7 +151,7 @@ class SerialTitle(Retrieval):
         return int(self._entry['source-id'])
 
     @property
-    def subject_area(self) -> Optional[List[NamedTuple]]:
+    def subject_area(self) -> Optional[list[namedtuple]]:
         """List of named tuples of subject areas in the form
         `(area, abbreviation, code)` of the source.
         """
@@ -167,7 +167,7 @@ class SerialTitle(Retrieval):
         return self._entry['dc:title']
 
     @property
-    def yearly_data(self) -> Optional[List[NamedTuple]]:
+    def yearly_data(self) -> Optional[list[namedtuple]]:
         """Yearly citation information as a list of namedtuples in the
         form `(year, publicationcount, revpercent, zerocitessce,
         zerocitespercentsce, citecountsce)`.  That's the number of documents

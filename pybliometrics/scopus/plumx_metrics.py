@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import List, NamedTuple, Optional, Union
+from typing import Optional, Union
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import check_parameter_value
@@ -7,7 +7,7 @@ from pybliometrics.utils import check_parameter_value
 
 class PlumXMetrics(Retrieval):
     @property
-    def category_totals(self) -> Optional[List[NamedTuple]]:
+    def category_totals(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples representing total metrics as categorized
         by PlumX Metrics in the form `(capture, citation, mention, socialMedia,
         usage)`.
@@ -20,7 +20,7 @@ class PlumXMetrics(Retrieval):
         return _format_as_namedtuple_list(categories, "Category") or None
 
     @property
-    def capture(self) -> Optional[List[NamedTuple]]:
+    def capture(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples representing metrics in the Captures category.
 
         Note: For details on Capture metrics see
@@ -30,7 +30,7 @@ class PlumXMetrics(Retrieval):
         return _format_as_namedtuple_list(metrics) or None
 
     @property
-    def citation(self) -> Optional[List[NamedTuple]]:
+    def citation(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples representing citation counts from
         different sources.
 
@@ -44,7 +44,7 @@ class PlumXMetrics(Retrieval):
         return _format_as_namedtuple_list(metrics) or None
 
     @property
-    def mention(self) -> Optional[List[NamedTuple]]:
+    def mention(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples representing metrics in Mentions category.
 
         Note: For details on Mention metrics see
@@ -54,7 +54,7 @@ class PlumXMetrics(Retrieval):
         return _format_as_namedtuple_list(metrics) or None
 
     @property
-    def social_media(self) -> Optional[List[NamedTuple]]:
+    def social_media(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples representing social media metrics.
 
         Note: For details on Social Media metrics see
@@ -64,7 +64,7 @@ class PlumXMetrics(Retrieval):
         return _format_as_namedtuple_list(metrics) or None
 
     @property
-    def usage(self) -> Optional[List[NamedTuple]]:
+    def usage(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples representing Usage category metrics.
 
         Note: For details on Usage metrics see

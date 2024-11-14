@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import List, NamedTuple, Optional, Tuple, Union
+from typing import Optional, Union
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_integrity, check_parameter_value, \
@@ -9,7 +9,7 @@ from pybliometrics.utils import check_integrity, check_parameter_value, \
 
 class AffiliationSearch(Search):
     @property
-    def affiliations(self) -> Optional[List[NamedTuple]]:
+    def affiliations(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples storing affiliation information,
         where each namedtuple corresponds to one affiliation.
         The information in each namedtuple is `(eid name variant documents city
@@ -50,7 +50,7 @@ class AffiliationSearch(Search):
                  refresh: Union[bool, int] = False,
                  verbose: bool = False,
                  download: bool = True,
-                 integrity_fields: Union[List[str], Tuple[str, ...]] = None,
+                 integrity_fields: Union[list[str], tuple[str, ...]] = None,
                  integrity_action: str = "raise",
                  **kwds: str
                  ) -> None:

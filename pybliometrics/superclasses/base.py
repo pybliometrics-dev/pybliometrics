@@ -3,7 +3,7 @@
 from json import dumps, loads
 from math import ceil
 from time import localtime, strftime, time
-from typing import Dict, Optional
+from typing import Optional
 
 from tqdm import tqdm
 
@@ -14,7 +14,7 @@ from pybliometrics.utils import listify
 
 class Base:
     def __init__(self,
-                 params: Dict,
+                 params: dict,
                  url: str,
                  api: str,
                  download: bool = True,

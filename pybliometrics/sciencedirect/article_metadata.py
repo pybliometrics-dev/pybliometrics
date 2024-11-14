@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import List, NamedTuple, Optional, Tuple, Union
+from typing import Optional, Union
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_field_consistency, chained_get, \
@@ -9,7 +9,7 @@ from pybliometrics.utils import check_field_consistency, chained_get, \
 
 class ArticleMetadata(Search):
     @property
-    def results(self) -> Optional[List[NamedTuple]]:
+    def results(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples in the form `(authorKeywords authors available_online_date
         first_author abstract_text doi title eid link openArchiveArticle openaccess_status
         openaccessArticle openaccessUserLicense pii aggregationType copyright coverDate
@@ -87,7 +87,7 @@ class ArticleMetadata(Search):
                  view: str = None,
                  verbose: bool = False,
                  download: bool = True,
-                 integrity_fields: Union[List[str], Tuple[str, ...]] = None,
+                 integrity_fields: Union[list[str], tuple[str, ...]] = None,
                  integrity_action: str = "raise",
                  subscriber: bool = True,
                  **kwds: str

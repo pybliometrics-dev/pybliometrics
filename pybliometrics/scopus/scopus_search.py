@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import List, NamedTuple, Optional, Tuple, Union
+from typing import Optional, Union
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_integrity, check_parameter_value, \
@@ -9,7 +9,7 @@ from pybliometrics.utils import check_integrity, check_parameter_value, \
 
 class ScopusSearch(Search):
     @property
-    def results(self) -> Optional[List[NamedTuple]]:
+    def results(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples in the form `(eid doi pii pubmed_id title
         subtype subtypeDescription creator afid affilname affiliation_city
         affiliation_country author_count author_names author_ids author_afids
@@ -20,8 +20,8 @@ class ScopusSearch(Search):
         Field definitions correspond to
         https://dev.elsevier.com/guides/ScopusSearchViews.htm and return the
         values as-is, except for `afid`, `affilname`, `affiliation_city`,
-        `affiliation_country`, `author_names`, `author_ids` and `author_afids`:  These
-        information are joined on `";"`.  In case an author has multiple
+        `affiliation_country`, `author_names`, `author_ids` and `author_afids`:
+        This information is joined on `";"`.  In case an author has multiple
         affiliations, they are joined on `"-"`
         (e.g. `Author1Aff;Author2Aff1-Author2Aff2`).
 
@@ -127,7 +127,7 @@ class ScopusSearch(Search):
                  view: str = None,
                  verbose: bool = False,
                  download: bool = True,
-                 integrity_fields: Union[List[str], Tuple[str, ...]] = None,
+                 integrity_fields: Union[list[str], tuple[str, ...]] = None,
                  integrity_action: str = "raise",
                  subscriber: bool = True,
                  unescape: bool = True,

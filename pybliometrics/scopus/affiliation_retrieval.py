@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import List, NamedTuple, Optional, Tuple, Union
+from typing import Optional, Union
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import chained_get, check_parameter_value, \
@@ -33,7 +33,7 @@ class AffiliationRetrieval(Retrieval):
         return self._json.get('country')
 
     @property
-    def date_created(self) -> Optional[Tuple[int, int, int]]:
+    def date_created(self) -> Optional[tuple[int, int, int]]:
         """Date the Scopus record was created."""
         try:
             return parse_date_created(self._profile)
@@ -64,7 +64,7 @@ class AffiliationRetrieval(Retrieval):
         return get_id(self._json)
 
     @property
-    def name_variants(self) -> Optional[List[NamedTuple]]:
+    def name_variants(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples representing variants of the `affiliation_name`
         with number of documents referring to this variant.
         """

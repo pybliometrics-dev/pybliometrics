@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import Dict, List, NamedTuple, Optional, Tuple, Union
+from typing import Optional, Union
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import chained_get, make_search_summary
@@ -7,7 +7,7 @@ from pybliometrics.utils import chained_get, make_search_summary
 
 class SubjectClassifications(Search):
     @property
-    def results(self) -> Optional[List[NamedTuple]]:
+    def results(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples representing results of subject
         classifications search in the form `(code, description, detail, abbrev)`.
         """
@@ -30,9 +30,9 @@ class SubjectClassifications(Search):
         return out or None
 
     def __init__(self,
-                 query: Dict,
+                 query: dict,
                  refresh: Union[bool, int] = False,
-                 fields: Union[List[str], Tuple[str, ...]] = None,
+                 fields: Union[list[str], tuple[str, ...]] = None,
                  **kwds: str
                  ) -> None:
         """Interaction with the Subject Classifications Scopus API.

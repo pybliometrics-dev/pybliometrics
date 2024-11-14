@@ -1,5 +1,5 @@
 from collections import defaultdict, namedtuple
-from typing import List, NamedTuple, Optional, Tuple, Union
+from typing import Optional, Union
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import chained_get, check_parameter_value, \
@@ -16,7 +16,7 @@ class AbstractRetrieval(Retrieval):
         return self._head.get('abstracts')
 
     @property
-    def affiliation(self) -> Optional[List[NamedTuple]]:
+    def affiliation(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples representing listed affiliations in
         the form `(id, name, city, country)`.
         """
@@ -36,7 +36,7 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'prism:aggregationType'])
 
     @property
-    def authkeywords(self) -> Optional[List[str]]:
+    def authkeywords(self) -> Optional[list[str]]:
         """List of author-provided keywords of the document."""
         keywords = self._json.get('authkeywords')
         if not keywords:
@@ -48,7 +48,7 @@ class AbstractRetrieval(Retrieval):
                 return [keywords['author-keyword']['$']]
 
     @property
-    def authorgroup(self) -> Optional[List[NamedTuple]]:
+    def authorgroup(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples representing the article's authors and collaborations
         organized by affiliation, in the form `(affiliation_id, collaboration_id, dptid,
         organization, city, postalcode, addresspart, country, auid, orcid,
@@ -102,7 +102,7 @@ class AbstractRetrieval(Retrieval):
         return out or None
 
     @property
-    def authors(self) -> Optional[List[NamedTuple]]:
+    def authors(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples representing the article's authors, in the
         form `(auid, indexed_name, surname, given_name, affiliation)`.  In case
         multiple affiliation IDs are given, they are joined on `";"`.
@@ -137,7 +137,7 @@ class AbstractRetrieval(Retrieval):
         return get_link(self._json, 2)
 
     @property
-    def chemicals(self) -> Optional[List[NamedTuple]]:
+    def chemicals(self) -> Optional[list[namedtuple]]:
         """List of namedtuples representing chemical entities in the form
         `(source, chemical_name, cas_registry_number)`.  In case multiple
         numbers given, they are joined on `";"`.
@@ -165,7 +165,7 @@ class AbstractRetrieval(Retrieval):
         return make_int_if_possible(self._confevent.get('confcode'))
 
     @property
-    def confdate(self) -> Optional[Tuple[Tuple[int, int], Tuple[int, int]]]:
+    def confdate(self) -> Optional[tuple[tuple[int, int], tuple[int, int]]]:
         """Date range of the conference the document belongs to represented
         by two tuples in the form (YYYY, MM, DD).
         """
@@ -189,7 +189,7 @@ class AbstractRetrieval(Retrieval):
         return self._confevent.get('confname')
 
     @property
-    def confsponsor(self) -> Optional[Union[List[str], str]]:
+    def confsponsor(self) -> Optional[Union[list[str], str]]:
         """Sponsor(s) of the conference the document belongs to."""
         path = ['confsponsors', 'confsponsor']
         sponsors = chained_get(self._confevent, path, [])
@@ -200,7 +200,7 @@ class AbstractRetrieval(Retrieval):
         return sponsors
 
     @property
-    def contributor_group(self) -> Optional[List[NamedTuple]]:
+    def contributor_group(self) -> Optional[list[namedtuple]]:
         """List of namedtuples representing contributors compiled by Scopus,
         in the form `(given_name, initials, surname, indexed_name, role)`.
         """
@@ -231,7 +231,7 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, path)
 
     @property
-    def correspondence(self) -> Optional[List[NamedTuple]]:
+    def correspondence(self) -> Optional[list[namedtuple]]:
         """List of namedtuples representing the authors to whom correspondence
         should be addressed, in the form ´(surname, initials, organization,
         country, city_group)´. Multiple organziations are joined on semicolon.
@@ -263,7 +263,7 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'prism:coverDate'])
 
     @property
-    def date_created(self) -> Optional[Tuple[int, int, int]]:
+    def date_created(self) -> Optional[tuple[int, int, int]]:
         """Return the `date_created` of a record.
         """
         path = ["item", "bibrecord", "item-info", "history"]
@@ -309,7 +309,7 @@ class AbstractRetrieval(Retrieval):
         return ending
 
     @property
-    def funding(self) -> Optional[List[NamedTuple]]:
+    def funding(self) -> Optional[list[namedtuple]]:
         """List of namedtuples parsed funding information in the form
         `(agency, agency_id, string, funding_id, acronym, country)`.
         """
@@ -343,7 +343,7 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, path)
 
     @property
-    def isbn(self) -> Optional[Tuple[str, ...]]:
+    def isbn(self) -> Optional[tuple[str, ...]]:
         """ISBNs `Optional[str]` to publicationName as tuple of variying length,
         (e.g. ISBN-10 or ISBN-13)."""
         isbns = listify(chained_get(self._head, ['source', 'isbn'], []))
@@ -353,7 +353,7 @@ class AbstractRetrieval(Retrieval):
             return tuple((i['$'] for i in isbns))
 
     @property
-    def issn(self) -> Optional[NamedTuple]:
+    def issn(self) -> Optional[namedtuple]:
         """Namedtuple in the form `(print electronic)`.
         Note: If the source has an E-ISSN, the META view will return None.
         Use FULL view instead.
@@ -393,7 +393,7 @@ class AbstractRetrieval(Retrieval):
         return get_id(self._json)
 
     @property
-    def idxterms(self) -> Optional[List[str]]:
+    def idxterms(self) -> Optional[list[str]]:
         """List of index terms (these are just one category of those
         Scopus provides in the web version)
         ."""
@@ -494,7 +494,7 @@ class AbstractRetrieval(Retrieval):
                 return None
 
     @property
-    def references(self) -> Optional[List[NamedTuple]]:
+    def references(self) -> Optional[list[namedtuple]]:
         """List of namedtuples representing references listed in the document,
         in the form `(position, id, doi, title, authors, authors_auid,
         authors_affiliationid, sourcetitle, publicationyear, coverDate, volume,
@@ -589,7 +589,7 @@ class AbstractRetrieval(Retrieval):
         return get_link(self._json, 0)
 
     @property
-    def sequencebank(self) -> Optional[List[NamedTuple]]:
+    def sequencebank(self) -> Optional[list[namedtuple]]:
         """List of namedtuples representing biological entities defined or
         mentioned in the text, in the form `(name, sequence_number, type)`.
         """
@@ -636,7 +636,7 @@ class AbstractRetrieval(Retrieval):
         return starting
 
     @property
-    def subject_areas(self) -> Optional[List[NamedTuple]]:
+    def subject_areas(self) -> Optional[list[namedtuple]]:
         """List of namedtuples containing subject areas of the article
         in the form `(area abbreviation code)`.
         Note: Requires the FULL view of the article.

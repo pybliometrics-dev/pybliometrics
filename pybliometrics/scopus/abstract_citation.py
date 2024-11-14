@@ -1,7 +1,7 @@
 from collections import namedtuple
 from datetime import datetime
 from hashlib import md5
-from typing import List, NamedTuple, Optional, Tuple, Union
+from typing import Optional, Union
 from warnings import warn
 
 from pybliometrics.superclasses import Retrieval
@@ -10,7 +10,7 @@ from pybliometrics.utils import chained_get, check_parameter_value
 
 class CitationOverview(Retrieval):
     @property
-    def authors(self) -> Optional[List[Optional[NamedTuple]]]:
+    def authors(self) -> Optional[list[Optional[namedtuple]]]:
         """A list of lists of namedtuples storing author information,
         where each namedtuple corresponds to one author and each sub-list to
         one document.
@@ -34,7 +34,7 @@ class CitationOverview(Retrieval):
         return _maybe_return_list(outer)
 
     @property
-    def cc(self) -> List[List[Tuple[int, int]]]:
+    def cc(self) -> list[list[tuple[int, int]]]:
         """List of lists of tuples of yearly number of citations for specified
         years, where each sub-list corresponds to one document.
         """
@@ -54,32 +54,32 @@ class CitationOverview(Retrieval):
         return _maybe_return_list(outer)
 
     @property
-    def citationType_long(self) -> Optional[List[str]]:
+    def citationType_long(self) -> Optional[list[str]]:
         """Type (long version) of the documents (e.g. article, review)."""
         path = ["citationType", "$"]
         out = [chained_get(e, path) for e in self._citeInfoMatrix]
         return _maybe_return_list(out)
 
     @property
-    def citationType_short(self) -> Optional[List[str]]:
+    def citationType_short(self) -> Optional[list[str]]:
         """Type (short version) of the documents (e.g. ar, re)."""
         path = ["citationType", "@code"]
         out = [chained_get(e, path) for e in self._citeInfoMatrix]
         return _maybe_return_list(out)
 
     @property
-    def columnTotal(self) -> int:
+    def columnTotal(self) -> list[int]:
         """The yearly number of citations for all documents combined."""
         return [int(d["$"]) for d in self._citeCountHeader["columnTotal"]]
 
     @property
-    def doi(self) -> Optional[List[str]]:
+    def doi(self) -> Optional[list[str]]:
         """Document Object Identifier (DOI) of the documents."""
         out = [e.get('doi') for e in self._identifierlegend]
         return _maybe_return_list(out)
 
     @property
-    def endingPage(self) -> Optional[List[str]]:
+    def endingPage(self) -> Optional[list[str]]:
         """Ending pages of the documents."""
         out = [e.get('endingPage') for e in self._citeInfoMatrix]
         return _maybe_return_list(out)
@@ -95,7 +95,7 @@ class CitationOverview(Retrieval):
         return int(self._data['h-index'])
 
     @property
-    def issn(self) -> Optional[List[Optional[Union[str, Tuple[str, str]]]]]:
+    def issn(self) -> Optional[list[Optional[Union[str, tuple[str, str]]]]]:
         """ISSN of the publishers of the documents.
         Note: If E-ISSN is known to Scopus, this returns both
         ISSN and E-ISSN in random order separated by blank space.
@@ -104,7 +104,7 @@ class CitationOverview(Retrieval):
         return _maybe_return_list(out)
 
     @property
-    def issueIdentifier(self) -> Optional[List[Optional[str]]]:
+    def issueIdentifier(self) -> Optional[list[Optional[str]]]:
         """Issue numbers of the documents."""
         out = [e.get('issueIdentifier') for e in self._citeInfoMatrix]
         return _maybe_return_list(out)
@@ -117,17 +117,17 @@ class CitationOverview(Retrieval):
         return int(self._citeCountHeader["laterColumnTotal"])
 
     @property
-    def lcc(self) -> List[int]:
+    def lcc(self) -> list[int]:
         """Number of citations after the end year of each document."""
         return [int(m['lcc']) for m in self._citeInfoMatrix]
 
     @property
-    def pcc(self) -> int:
+    def pcc(self) -> list[int]:
         """Number of citations before the start year."""
         return [int(m['pcc']) for m in self._citeInfoMatrix]
 
     @property
-    def pii(self) -> Optional[List[Optional[str]]]:
+    def pii(self) -> Optional[list[Optional[str]]]:
         """The Publication Item Identifier (PII) of the documents."""
         out = [e.get('pii') for e in self._identifierlegend]
         return _maybe_return_list(out)
@@ -147,45 +147,45 @@ class CitationOverview(Retrieval):
         return int(self._citeCountHeader["rangeColumnTotal"])
 
     @property
-    def rangeCount(self) -> List[int]:
+    def rangeCount(self) -> list[int]:
         """Total citation count over the specified year range for
         each document.
         """
         return [int(e['rangeCount']) for e in self._citeInfoMatrix]
 
     @property
-    def rowTotal(self) -> List[int]:
+    def rowTotal(self) -> list[int]:
         """Total number of citations (specified and omitted years) for each
         document.
         """
         return [int(e['rowTotal']) for e in self._citeInfoMatrix]
 
     @property
-    def scopus_id(self) -> List[int]:
+    def scopus_id(self) -> list[int]:
         """The Scopus ID(s) of the documents.  Might differ from the
         ones provided.
         """
         return [int(e['scopus_id']) for e in self._identifierlegend]
 
     @property
-    def sortTitle(self) -> Optional[List[Optional[str]]]:
+    def sortTitle(self) -> Optional[list[Optional[str]]]:
         """Name of source the documents are published in (e.g. the Journal)."""
         out = [e.get('sortTitle') for e in self._citeInfoMatrix]
         return _maybe_return_list(out)
 
     @property
-    def startingPage(self) -> Optional[List[Optional[str]]]:
+    def startingPage(self) -> Optional[list[Optional[str]]]:
         """Starting page."""
         out = [e.get('startingPage') for e in self._citeInfoMatrix]
         return _maybe_return_list(out)
 
     @property
-    def title(self) -> List[str]:
+    def title(self) -> list[str]:
         """Titles of each document."""
         return [e["title"] for e in self._citeInfoMatrix]
 
     @property
-    def url(self) -> List[str]:
+    def url(self) -> list[str]:
         """URL(s) to Citation Overview API view of each document."""
         return [e["url"] for e in self._citeInfoMatrix]
 
@@ -196,7 +196,7 @@ class CitationOverview(Retrieval):
         return _maybe_return_list(out)
 
     def __init__(self,
-                 identifier: List[Union[int, str]],
+                 identifier: list[Union[int, str]],
                  date: Optional[str] = None,
                  start: Optional[Union[int, str]] = None,
                  end: Optional[Union[int, str]] = None,

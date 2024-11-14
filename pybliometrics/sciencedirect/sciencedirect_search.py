@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import List, NamedTuple, Optional, Tuple, Union
+from typing import Optional, Union
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_field_consistency, chained_get, \
@@ -9,7 +9,7 @@ from pybliometrics.utils import check_field_consistency, chained_get, \
 
 class ScienceDirectSearch(Search):
     @property
-    def results(self) -> Optional[List[NamedTuple]]:
+    def results(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples in the form `(authors first_author doi title link
         load_date openaccess_status pii coverDate endingPage publicationName startingPage
         api_link volume)`.
@@ -76,7 +76,7 @@ class ScienceDirectSearch(Search):
                  view: Optional[str] = None,
                  verbose: bool = False,
                  download: bool = True,
-                 integrity_fields: Optional[Union[List[str], Tuple[str, ...]]] = None,
+                 integrity_fields: Optional[Union[list[str], tuple[str, ...]]] = None,
                  integrity_action: str = "raise",
                  subscriber: bool = True,
                  **kwds: str

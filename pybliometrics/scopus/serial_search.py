@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_parameter_value, make_search_summary, VIEWS
@@ -7,7 +7,7 @@ from pybliometrics.utils import check_parameter_value, make_search_summary, VIEW
 
 class SerialSearch(Search):
     @property
-    def results(self) -> Optional[List[Dict[str, str]]]:
+    def results(self) -> Optional[list[OrderedDict[str, str]]]:
         """A list of OrderedDicts representing results of serial search. The
         number of keys may vary from one search result to another depending
         on the length of yearly data.
@@ -48,7 +48,7 @@ class SerialSearch(Search):
         return out or None
 
     def __init__(self,
-                 query: Dict,
+                 query: dict,
                  refresh: Union[bool, int] = False,
                  view: str = 'ENHANCED',
                  **kwds: str

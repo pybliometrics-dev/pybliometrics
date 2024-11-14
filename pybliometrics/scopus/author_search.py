@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import List, NamedTuple, Optional, Tuple, Union
+from typing import Optional, Union
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_integrity, check_parameter_value, \
@@ -8,7 +8,7 @@ from pybliometrics.utils import check_integrity, check_parameter_value, \
 
 class AuthorSearch(Search):
     @property
-    def authors(self) -> Optional[List[NamedTuple]]:
+    def authors(self) -> Optional[list[namedtuple]]:
         """A list of namedtuples storing author information,
         where each namedtuple corresponds to one author.
         The information in each namedtuple is `(eid orcid surname initials givenname
@@ -58,7 +58,7 @@ class AuthorSearch(Search):
                  refresh: Union[bool, int] = False,
                  verbose: bool = False,
                  download: bool = True,
-                 integrity_fields: Union[List[str], Tuple[str, ...]] = None,
+                 integrity_fields: Union[list[str], tuple[str, ...]] = None,
                  integrity_action: str = "raise",
                  **kwds: str
                  ) -> None:
