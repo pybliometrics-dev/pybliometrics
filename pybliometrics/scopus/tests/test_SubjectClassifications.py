@@ -22,11 +22,6 @@ sub6 = SubjectClassifications({'detail': 'Analysis', 'description': 'Mathematics
 
 def test_module():
     assert sub1.__module__ == 'pybliometrics.scopus.subject_classifications'
-    assert sub2.__module__ == 'pybliometrics.scopus.subject_classifications'
-    assert sub3.__module__ == 'pybliometrics.scopus.subject_classifications'
-    assert sub4.__module__ == 'pybliometrics.scopus.subject_classifications'
-    assert sub5.__module__ == 'pybliometrics.scopus.subject_classifications'
-    assert sub6.__module__ == 'pybliometrics.scopus.subject_classifications'
 
 
 def test_results_desc():
