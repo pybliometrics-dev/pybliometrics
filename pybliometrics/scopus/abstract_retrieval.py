@@ -80,24 +80,22 @@ class AbstractRetrieval(Retrieval):
             # Author information
             for author in authors:
                 new = auth(affiliation_id=aff_id,
-                            organization=org,
-                            city=aff.get('city'),
-                            dptid=dep_id,
-                            postalcode=aff.get('postal-code'),
-                            addresspart=aff.get('address-part'),
-                            country=aff.get('country'),
-                            auid=make_int_if_possible(author.get('@auid')),
-                            orcid=author.get('@orcid'),
-                            surname=author.get('ce:surname'),
-                            given_name=author.get(
-                                'ce:given-name', authors.get(author['ce:initials'])
-                            ),
-                            indexed_name=chained_get(author, ['preferred-name', 'ce:indexed-name']))
+                           organization=org,
+                           city=aff.get('city'),
+                           dptid=dep_id,
+                           postalcode=aff.get('postal-code'),
+                           addresspart=aff.get('address-part'),
+                           country=aff.get('country'),
+                           auid=make_int_if_possible(author.get('@auid')),
+                           orcid=author.get('@orcid'),
+                           surname=author.get('ce:surname'),
+                           given_name=author.get('ce:given-name', author.get('ce:initials')),
+                           indexed_name=chained_get(author, ['preferred-name', 'ce:indexed-name']))
                 out.append(new)
             # Collaboration information
             for collaboration in filter(None, listify(collaborations)):
                 new = auth(collaboration_id=collaboration.get('@collaboration-instance-id'),
-                        indexed_name=collaboration.get('ce:indexed-name'))
+                           indexed_name=collaboration.get('ce:indexed-name'))
                 out.append(new)
         return out or None
 
