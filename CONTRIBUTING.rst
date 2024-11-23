@@ -2,16 +2,12 @@
 Contributing
 ============
 
-Contributions are welcome, and they are greatly appreciated! Every
-little bit helps, and credit will always be given.
+Contributions are welcome, and they are greatly appreciated! Every little bit helps, and credit will always be given.
 
 You can contribute in many ways:
 
-Types of Contributions
-----------------------
-
 Submit Feedback
-~~~~~~~~~~~~~~~
+---------------
 
 The best way to send feedback is to file an issue at https://github.com/pybliometrics-dev/pybliometrics/issues.
 
@@ -22,7 +18,7 @@ If you are proposing a feature:
 * Respect the `Python Code of Conduct <https://www.python.org/psf/codeofconduct/>`_
 
 Report Bugs
-~~~~~~~~~~~
+-----------
 
 Before are reporting a bug, please
 
@@ -36,40 +32,23 @@ Report bugs at https://github.com/pybliometrics-dev/pybliometrics/issues.  Pleas
 * Detailed steps to reproduce the bug.
 * If you have a mere question on how to do things, please rather pose your question on `StackOverflow.com <https://stackoverflow.com/>`_ using the `#pybliometrics <https://stackoverflow.com/questions/tagged/pybliometrics>`_ tag.
 
-Fix Bugs
-~~~~~~~~
+Fix bugs and implement features
+-------------------------------
 
-Look through the GitHub issues for bugs. Anything tagged with "bug"
-is open to whoever wants to fix it.
+If you found a bug and know how to fix it: Why not suggest a pull request right away? We commit to review it soon.
 
-Implement Features
-~~~~~~~~~~~~~~~~~~
-
-Look through the GitHub issues for features. Anything tagged with "enhancement"
-is open to whoever wants to implement it.
-
-Write Documentation
-~~~~~~~~~~~~~~~~~~~
-
-This repo could always use more documentation, whether as part of the
-official pybliometrics docs, in docstrings, or even on the web in blog posts,
-articles, and such.
-
-Get Started!
-------------
-
-Ready to contribute? Here's how to set up `pybliometrics` for local development.
+Here's how to set up `pybliometrics` for local development:
 
 1. Fork the `pybliometrics` repo on GitHub.
 2. Clone your fork locally::
 
-    $ git clone https@github.com:your_name_here/pybliometrics.git
+    $ git clone https://github.com/your_username_here/pybliometrics.git
 
 3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
 
     $ mkvirtualenv pybliometrics
     $ cd pybliometrics/
-    $ python setup.py develop
+    $ pip install -e .
 
 4. Create a branch for local development::
 
@@ -85,11 +64,8 @@ Ready to contribute? Here's how to set up `pybliometrics` for local development.
 
 6. Submit a pull request through the GitHub website.
 
-Pull Request Guidelines
------------------------
-
 Before you submit a pull request, check that it meets these guidelines:
 
-1. Adhere to `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_
+1. Adhere to `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_.
 2. Run tests locally `python -m pytest --verbose` (on Windows) or `pytest pybliometrics/scopus/tests/ --verbose`.
-3. The pull request should work for Python 3.X.
+3. The pull request should work for all currently active python versions.

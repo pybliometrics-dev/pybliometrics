@@ -45,9 +45,9 @@ You initalize `pybliometrics` like so:
 
 .. code-block:: python
 
-    import pybliometrics
+    >>> import pybliometrics
 	
-	pybliometrics.scopus.init()
+    >>> pybliometrics.scopus.init()
 
 
 This reads the configuration from the default locations.  If you store the configuration file elsewhere, you can provide the path using keyword "config_dir" (str).  You may also pass your own keys using the keyword "keys" (list).
@@ -90,6 +90,6 @@ To see the location of the configuration file your current `pybliometrics` insta
 
 .. code-block:: python
 
-    import pybliometrics
+    >>> import pybliometrics
 
-    pybliometrics.scopus.utils.constants.CONFIG_FILE
+    >>> pybliometrics.scopus.utils.constants.CONFIG_FILE

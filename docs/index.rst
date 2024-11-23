@@ -1,7 +1,7 @@
 pybliometrics: Python-based API-Wrapper to access Scopus
 ========================================================
 
-pybliometrics is an easy to use Python library to pull, cache and extract data from the Scopus database.
+pybliometrics is an easy to use Python library to pull, cache and extract data from the Scopus database. It provides one class per `API Access Point <https://dev.elsevier.com/api_docs.html>`_:
 
 .. include:: ../README.rst
    :start-after: example-begin
@@ -9,27 +9,25 @@ pybliometrics is an easy to use Python library to pull, cache and extract data f
 
 .. include:: installation.rst
 
-=======
-Classes
-=======
+========================================
+Classes to interact with the Scopus APIs
+========================================
 
-pybliometrics provides one class per Scopus API Access Point (see https://dev.elsevier.com/api_docs.html):
-
-.. currentmodule:: pybliometrics
+.. currentmodule:: pybliometrics.scopus
 
 .. autosummary::
 
-   scopus.AbstractRetrieval
-   scopus.AffiliationRetrieval
-   scopus.AffiliationSearch
-   scopus.AuthorRetrieval
-   scopus.AuthorSearch
-   scopus.CitationOverview
-   scopus.PlumXMetrics
-   scopus.ScopusSearch
-   scopus.SerialSearch
-   scopus.SerialTitle
-   scopus.SubjectClassifications
+   AbstractRetrieval
+   AffiliationRetrieval
+   AffiliationSearch
+   AuthorRetrieval
+   AuthorSearch
+   CitationOverview
+   PlumXMetrics
+   ScopusSearch
+   SerialSearch
+   SerialTitle
+   SubjectClassifications
 
 ========
 Citation
@@ -51,7 +49,7 @@ Indices and tables
 
 .. Hidden links for Navigation side panel
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 4
    :hidden:
 
    reference

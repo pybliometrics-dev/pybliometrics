@@ -15,4 +15,4 @@ Founder
 Contributors
 ------------
 
-See `contributors <https://github.com/scopus-api/scopus/graphs/contributors>`_
+See `contributors <https://github.com/scopus-api/scopus/graphs/contributors>`_.
