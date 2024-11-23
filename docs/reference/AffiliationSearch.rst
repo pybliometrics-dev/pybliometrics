@@ -39,7 +39,7 @@ You can obtain a search summary just by printing the object:
 		Max Planck Insitute for Innovation and Com-petition in Munich
 
 
-The primary function of the class is to provide a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_, each storing information about the affiliation.  One of them is the affiliation ID which you can use for the :doc:`AffiliationRetrieval <../classes/AffiliationRetrieval>` class:
+The primary function of the class is to provide a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_, each storing information about the affiliation.  One of them is the affiliation ID which you can use for the :doc:`AffiliationRetrieval <../reference/AffiliationRetrieval>` class:
 
 .. code-block:: python
 

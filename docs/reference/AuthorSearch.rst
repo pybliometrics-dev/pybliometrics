@@ -46,7 +46,7 @@ To determine the the number of results use the `.get_results_size()` method, eve
     27
 
 
-Primarily, the class provides a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the :doc:`AuthorRetrieval <../classes/AuthorRetrieval>` class, and corresponding information:
+Primarily, the class provides a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the :doc:`AuthorRetrieval <../reference/AuthorRetrieval>` class, and corresponding information:
 
 .. code-block:: python
 

@@ -107,7 +107,7 @@ Author information is also stored as lists of `namedtuples <https://docs.python.
             url='https://api.elsevier.com/content/author/author_id/7004212771')]
 
 
-Via `co.authors[0][0].id` one can for instance obtain further author information via the :doc:`AuthorRetrieval() <../classes/AuthorRetrieval>` class.
+Via `co.authors[0][0].id` one can for instance obtain further author information via the :doc:`AuthorRetrieval() <../reference/AuthorRetrieval>` class.
 
 Finally, there are bibliographic information, too:
 

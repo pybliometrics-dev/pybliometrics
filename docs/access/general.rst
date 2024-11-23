@@ -17,4 +17,4 @@ Option 3 is rare.  An InstToken is provided directly by Scopus/Elsevier to allow
 
 There are only three Scopus APIs that you can access without your institution subscribing to it: The Abstract Retrieval API, the Scopus Search API and the Subject Classifications API.
 
-As a non-subscriber, use `view=META` in the :doc:`AbstractRetrieval() <../classes/ScopusSearch>` class.  To search for for documents via the Scopus Search API as a non-subscriber, set `subscriber=False` in the :doc:`ScopusSearch() <../classes/ScopusSearch>` (you will retrieve less information however).  The Subject Classifications API is the same for subscribers and non-subscribers.
+As a non-subscriber, use `view=META` in the :doc:`AbstractRetrieval() <../reference/ScopusSearch>` class.  To search for for documents via the Scopus Search API as a non-subscriber, set `subscriber=False` in the :doc:`ScopusSearch() <../reference/ScopusSearch>` (you will retrieve less information however).  The Subject Classifications API is the same for subscribers and non-subscribers.

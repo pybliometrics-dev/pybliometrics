@@ -54,7 +54,7 @@ Indices and tables
    :maxdepth: 3
    :hidden:
 
-   classes
+   reference
    access
    configuration
    tips

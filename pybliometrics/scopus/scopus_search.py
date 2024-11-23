@@ -166,7 +166,7 @@ class ScopusSearch(Search):
                            iteration to the maximum number allowed by the
                            corresponding view.
         :param unescape: Convert named and numeric characters in the `results` to
-                        their corresponding Unicode characters.
+                         their corresponding Unicode characters.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl.
