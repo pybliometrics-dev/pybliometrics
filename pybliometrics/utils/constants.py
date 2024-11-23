@@ -1,34 +1,34 @@
 from pathlib import Path
 
 # Paths for cached files and configuration location
-if (Path.home()/".scopus").exists():
-    BASE_PATH_SCOPUS = Path.home()/".scopus"
-    BASE_PATH_SCIENCEDIRECT = Path.home()/".sciencedirect"
+if (Path.home() / ".scopus").exists():
+    BASE_PATH_SCOPUS = Path.home() / ".scopus"
+    BASE_PATH_SCIENCEDIRECT = Path.home() / ".sciencedirect"
     CONFIG_FILE = Path.home() / ".scopus" / "config.ini"
-elif (Path.home()/".pybliometrics"/"Scopus").exists():
-    BASE_PATH_SCOPUS = Path.home()/".pybliometrics"/"Scopus"
-    BASE_PATH_SCIENCEDIRECT = Path.home()/".pybliometrics"/"ScienceDirect"
+elif (Path.home() / ".pybliometrics" / "Scopus").exists():
+    BASE_PATH_SCOPUS = Path.home() / ".pybliometrics" / "Scopus"
+    BASE_PATH_SCIENCEDIRECT = Path.home() / ".pybliometrics" / "ScienceDirect"
     CONFIG_FILE = Path.home() / ".pybliometrics" / "config.ini"
 else:
-    BASE_PATH_SCOPUS = Path.home()/".cache"/"pybliometrics"/"Scopus"
-    BASE_PATH_SCIENCEDIRECT = Path.home()/".cache"/"pybliometrics"/"ScienceDirect"
+    BASE_PATH_SCOPUS = Path.home() / ".cache" / "pybliometrics" / "Scopus"
+    BASE_PATH_SCIENCEDIRECT = Path.home() / ".cache" / "pybliometrics" / "ScienceDirect"
     CONFIG_FILE = Path.home() / ".config" / "pybliometrics.cfg"
 
 DEFAULT_PATHS = {
-    'AbstractRetrieval': BASE_PATH_SCOPUS/'abstract_retrieval',
-    'AffiliationRetrieval': BASE_PATH_SCOPUS/'affiliation_retrieval',
-    'AffiliationSearch': BASE_PATH_SCOPUS/'affiliation_search',
-    'AuthorRetrieval': BASE_PATH_SCOPUS/'author_retrieval',
-    'AuthorSearch': BASE_PATH_SCOPUS/'author_search',
-    'CitationOverview': BASE_PATH_SCOPUS/'citation_overview',
-    'ScopusSearch': BASE_PATH_SCOPUS/'scopus_search',
-    'SerialSearch': BASE_PATH_SCOPUS/'serial_search',
-    'SerialTitle': BASE_PATH_SCOPUS/'serial_title',
-    'PlumXMetrics': BASE_PATH_SCOPUS/'plumx',
-    'SubjectClassifications': BASE_PATH_SCOPUS/'subject_classification',
-    'ArticleMetadata': BASE_PATH_SCIENCEDIRECT/'article_metadata/',
-    'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT/'article_retrieval',
-    'ScienceDirectSearch': BASE_PATH_SCIENCEDIRECT/'science_direct_search'
+    'AbstractRetrieval': BASE_PATH_SCOPUS / 'abstract_retrieval',
+    'AffiliationRetrieval': BASE_PATH_SCOPUS / 'affiliation_retrieval',
+    'AffiliationSearch': BASE_PATH_SCOPUS / 'affiliation_search',
+    'AuthorRetrieval': BASE_PATH_SCOPUS / 'author_retrieval',
+    'AuthorSearch': BASE_PATH_SCOPUS / 'author_search',
+    'CitationOverview': BASE_PATH_SCOPUS / 'citation_overview',
+    'ScopusSearch': BASE_PATH_SCOPUS / 'scopus_search',
+    'SerialSearch': BASE_PATH_SCOPUS / 'serial_search',
+    'SerialTitle': BASE_PATH_SCOPUS / 'serial_title',
+    'PlumXMetrics': BASE_PATH_SCOPUS / 'plumx',
+    'SubjectClassifications': BASE_PATH_SCOPUS / 'subject_classification',
+    'ArticleMetadata': BASE_PATH_SCIENCEDIRECT / 'article_metadata / ',
+    'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT / 'article_retrieval',
+    'ScienceDirectSearch': BASE_PATH_SCIENCEDIRECT / 'science_direct_search'
 }
 
 # URLs for all classes
@@ -89,4 +89,3 @@ RATELIMITS = {
 
 # Other API restrictions
 SEARCH_MAX_ENTRIES = 5_000
-

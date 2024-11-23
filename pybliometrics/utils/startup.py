@@ -1,7 +1,7 @@
 from configparser import ConfigParser, NoSectionError
 from collections import deque
 from pathlib import Path
-from typing import List, Optional, Type
+from typing import Optional, Type
 
 from pybliometrics.utils.constants import CONFIG_FILE, RATELIMITS, DEFAULT_PATHS, VIEWS
 from pybliometrics.utils.create_config import create_config
@@ -11,7 +11,8 @@ CUSTOM_KEYS = None
 
 _throttling_params = {k: deque(maxlen=v) for k, v in RATELIMITS.items()}
 
-def init(config_dir: Optional[str] = CONFIG_FILE, keys: Optional[List[str]] = None) -> None:
+
+def init(config_dir: Optional[str] = CONFIG_FILE, keys: Optional[list[str]] = None) -> None:
     """
     Function to initialize the Pybliometrics library. For more information go to the
     [documentation](https://pybliometrics.readthedocs.io/en/stable/configuration.html).
@@ -29,8 +30,7 @@ def init(config_dir: Optional[str] = CONFIG_FILE, keys: Optional[List[str]] = No
     config_dir = Path(config_dir)
 
     if not config_dir.exists():
-        CONFIG = create_config(config_dir,
-                               keys)
+        CONFIG = create_config(config_dir, keys)
     else:
         CONFIG = ConfigParser()
         CONFIG.optionxform = str
@@ -50,7 +50,7 @@ def check_sections(config: Type[ConfigParser]) -> None:
             raise NoSectionError(section)
 
 
-def check_default_paths(config: Type[ConfigParser], config_path: Type[Path]) -> None:
+def check_default_paths(config: Type[ConfigParser], config_path: Path) -> None:
     """Auxiliary function to check if default cache paths exist.
     If not, the paths are writen in the config.
     """
@@ -79,11 +79,10 @@ def get_config() -> Type[ConfigParser]:
     return CONFIG
 
 
-def get_keys() -> List[str]:
+def get_keys() -> list[str]:
     """Function to get the API keys and overwrite keys in config if needed."""
     if CUSTOM_KEYS:
         keys = CUSTOM_KEYS
     else:
         keys = [k.strip() for k in CONFIG.get('Authentication', 'APIKey').split(",")]
     return keys
-

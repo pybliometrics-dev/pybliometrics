@@ -1,14 +1,16 @@
 import configparser
-from typing import List, Optional
+from typing import Optional, Union
+from pathlib import Path
 from pybliometrics.utils.constants import CONFIG_FILE
 
 
-def create_config(config_dir: Optional[str] = None,
-                  keys: Optional[List[str]] = None,
+def create_config(config_dir: Optional[Union[str, Path]] = None,
+                  keys: Optional[list[str]] = None,
                   insttoken: Optional[str] = None
                   ):
     """Initiates process to generate configuration file.
 
+    :param config_dir: The location of the configuration file.
     :param keys: If you provide a list of keys, pybliometrics will skip the
                  prompt.  It will also not ask for InstToken.  This is
                  intended for workflows using CI, not for general use.

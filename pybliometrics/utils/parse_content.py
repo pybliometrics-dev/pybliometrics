@@ -1,7 +1,6 @@
 from collections import namedtuple
 from functools import reduce
 from html import unescape
-from typing import Any, Dict, Optional
 from warnings import warn
 
 
@@ -130,6 +129,7 @@ def make_int_if_possible(val):
     except TypeError:
         return val
 
+
 def make_bool_if_possible(val):
     """Attempt a conversion to bool type."""
     if isinstance(val, str):
@@ -177,14 +177,14 @@ def parse_affiliation(affs, view):
             except KeyError:
                 parent = None
             new = aff(id=int(item['@affiliation-id']), parent=parent,
-                type=doc.get('@type'), relationship=doc.get('@relationship'),
-                afdispname=doc.get('@afdispname'),
-                preferred_name=doc.get('preferred-name', {}).get('$'),
-                parent_preferred_name=doc.get('parent-preferred-name', {}).get('$'),
-                country_code=address.get('@country'), country=address.get('country'),
-                address_part=address.get("address-part"), city=address.get('city'),
-                postal_code=address.get('postal-code'), state=address.get('state'),
-                org_domain=doc.get('org-domain'), org_URL=doc.get('org-URL'))
+                      type=doc.get('@type'), relationship=doc.get('@relationship'),
+                      afdispname=doc.get('@afdispname'),
+                      preferred_name=doc.get('preferred-name', {}).get('$'),
+                      parent_preferred_name=doc.get('parent-preferred-name', {}).get('$'),
+                      country_code=address.get('@country'), country=address.get('country'),
+                      address_part=address.get("address-part"), city=address.get('city'),
+                      postal_code=address.get('postal-code'), state=address.get('state'),
+                      org_domain=doc.get('org-domain'), org_URL=doc.get('org-URL'))
             if any(val for val in new):
                 out.append(new)
     elif view == 'LIGHT':
