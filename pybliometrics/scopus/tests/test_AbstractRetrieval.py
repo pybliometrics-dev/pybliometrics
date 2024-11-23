@@ -27,7 +27,7 @@ ab9 = AbstractRetrieval("2-s2.0-85097473741", view="FULL", refresh=30)
 # ENTITLED view
 ar10 = AbstractRetrieval('10.1109/Multi-Temp.2019.8866947', view='ENTITLED', refresh=30)
 # REF view without refs
-ab11 = AbstractRetrieval('2-s2.0-0031874638', view="REF", refresh=30)
+ab11 = AbstractRetrieval('2-s2.0-85160105660', view="REF", refresh=30)
 # FULL view with list of collaborations
 ab12 = AbstractRetrieval('2-s2.0-85044008512', view='FULL', refresh=30)
 
@@ -244,7 +244,7 @@ def test_entitlement():
 def test_funding():
     received = ab6.funding
     assert isinstance(received, list)
-    assert len(received) == 5
+    assert len(received) == 8
     fund = namedtuple('Funding', 'agency agency_id string funding_id acronym country')
     expected6 = fund(
         agency='Deutsche Forschungsgemeinschaft',

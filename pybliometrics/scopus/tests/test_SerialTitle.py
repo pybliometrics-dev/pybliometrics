@@ -28,7 +28,7 @@ def test_citescoreyearinfolist():
 
     # Test softwarex
     expected_named_tuple = [info(year=2023, citescore=5.5),
-                            info(year=2024, citescore=3.4)]
+                            info(year=2024, citescore=3.7)]
     assert softwarex.citescoreyearinfolist == expected_named_tuple
 
     # Test oecd
