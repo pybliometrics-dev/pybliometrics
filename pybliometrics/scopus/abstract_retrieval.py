@@ -209,10 +209,13 @@ class AbstractRetrieval(Retrieval):
         pers = namedtuple('Contributor', fields)
         for item in items:
             entry = item.get('contributor', {})
-            new = pers(indexed_name=entry.get('ce:indexed-name'),
-                role=entry.get('@role'), surname=entry.get('ce:surname'),
+            new = pers(
                 given_name=entry.get('ce:given-name'),
-                initials=entry.get('ce:initials'))
+                initials=entry.get('ce:initials'),
+                surname=entry.get('ce:surname'),
+                indexed_name=entry.get('ce:indexed-name'),
+                role=entry.get('@role')
+            )
             out.append(new)
         return out or None
 
@@ -560,19 +563,26 @@ class AbstractRetrieval(Retrieval):
                 doi = info.get('ce:doi')
                 scopus_id = info.get('scopus-id')
             # Combine information
-            new = ref(position=item.get('@id'), id=scopus_id, doi=doi,
-                authors="; ".join(authors), authors_auid=auids or None,
-                authors_affiliationid=affids or None,
+            new = ref(
+                position=item.get('@id'),
+                id=scopus_id,
+                doi=doi,
                 title=info.get('ref-title', {}).get('ref-titletext', info.get('title')),
+                authors="; ".join(authors),
+                authors_auid=auids or None,
+                authors_affiliationid=affids or None,
                 sourcetitle=info.get('ref-sourcetitle', info.get('sourcetitle')),
                 publicationyear=info.get('ref-publicationyear', {}).get('@first'),
                 coverDate=info.get('prism:coverDate'),
-                volume=volis.get('@volume'), issue=volis.get('@issue'),
+                volume=volis.get('@volume'),
+                issue=volis.get('@issue'),
                 first=volisspag.get('pagerange', {}).get('@first'),
                 last=volisspag.get('pagerange', {}).get('@last'),
-                citedbycount=info.get('citedby-count'), type=info.get('type'),
+                citedbycount=info.get('citedby-count'),
+                type=info.get('type'),
                 text=info.get('ref-text'),
-                fulltext=item.get('ref-fulltext'))
+                fulltext=item.get('ref-fulltext')
+            )
             out.append(new)
         return out or None
 
