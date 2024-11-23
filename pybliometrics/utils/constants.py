@@ -1,16 +1,18 @@
-from os import environ
 from pathlib import Path
 
-# Paths for cached files
+# Paths for cached files and configuration location
 if (Path.home()/".scopus").exists():
     BASE_PATH_SCOPUS = Path.home()/".scopus"
     BASE_PATH_SCIENCEDIRECT = Path.home()/".sciencedirect"
+    CONFIG_FILE = Path.home() / ".scopus" / "config.ini"
 elif (Path.home()/".pybliometrics"/"Scopus").exists():
     BASE_PATH_SCOPUS = Path.home()/".pybliometrics"/"Scopus"
     BASE_PATH_SCIENCEDIRECT = Path.home()/".pybliometrics"/"ScienceDirect"
+    CONFIG_FILE = Path.home() / ".pybliometrics" / "config.ini"
 else:
     BASE_PATH_SCOPUS = Path.home()/".cache"/"pybliometrics"/"Scopus"
     BASE_PATH_SCIENCEDIRECT = Path.home()/".cache"/"pybliometrics"/"ScienceDirect"
+    CONFIG_FILE = Path.home() / ".config" / "pybliometrics.cfg"
 
 DEFAULT_PATHS = {
     'AbstractRetrieval': BASE_PATH_SCOPUS/'abstract_retrieval',
@@ -28,17 +30,6 @@ DEFAULT_PATHS = {
     'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT/'article_retrieval',
     'ScienceDirectSearch': BASE_PATH_SCIENCEDIRECT/'science_direct_search'
 }
-
-# Configuration file location
-if 'PYB_CONFIG_FILE' in environ:
-    CONFIG_FILE = Path(environ['PYB_CONFIG_FILE'])
-else:
-    if (Path.home()/".scopus").exists():
-        CONFIG_FILE = Path.home()/".scopus"/"config.ini"
-    elif (Path.home()/".pybliometrics"/"config.ini").exists():
-        CONFIG_FILE = Path.home()/".pybliometrics"/"config.ini"
-    else:
-        CONFIG_FILE = Path.home()/".config"/"pybliometrics.cfg"
 
 # URLs for all classes
 RETRIEVAL_BASE = 'https://api.elsevier.com/content/'
