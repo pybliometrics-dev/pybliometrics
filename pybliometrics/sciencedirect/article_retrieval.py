@@ -189,15 +189,24 @@ class ArticleRetrieval(Retrieval):
         return make_int_if_possible(vol)
 
     def __init__(self,
-                 identifier: Union[int, str] = None,
+                 identifier: Union[int, str],
                  refresh: Union[bool, int] = False,
                  view: str = 'META',
-                 id_type: str = None,
+                 id_type: Optional[str] = None,
                  **kwds: str
                  ):
         """Interaction with the Article Retrieval API.
         
-        :param identifier: The indentifier of an article."""
+        :param identifier: The indentifier of an article.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
+        :param view: The view of the file that should be downloaded. Allowed values:
+                        'META', 'META_ABS', 'META_ABS_REF', 'FULL', 'ENTITLED'. Default is 'META'.
+        :param id_type: The type of used ID. Allowed values: `None`, 'eid', 'pii',
+                        'scopus_id', 'pubmed_id', 'doi' and 'pui'.  If the value is `None`,
+                        pybliometrics tries to infer the ID type itself.
+        """
         identifier = str(identifier)
         check_parameter_value(view, VIEWS['ArticleRetrieval'], "view")
         if id_type is None:
