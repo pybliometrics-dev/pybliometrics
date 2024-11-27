@@ -204,7 +204,7 @@ class ArticleRetrieval(Retrieval):
         :param view: The view of the file that should be downloaded. Allowed values:
                         'META', 'META_ABS', 'META_ABS_REF', 'FULL', 'ENTITLED'. Default is 'META'.
         :param id_type: The type of used ID. Allowed values: `None`, 'eid', 'pii',
-                        'scopus_id', 'pubmed_id', 'doi' and 'pui'.  If the value is `None`,
+                        'scopus_id', 'pubmed_id' and 'doi'.  If the value is `None`,
                         pybliometrics tries to infer the ID type itself.
         """
         identifier = str(identifier)
@@ -212,7 +212,7 @@ class ArticleRetrieval(Retrieval):
         if id_type is None:
             id_type = detect_id_type(identifier)
         else:
-            allowed_id_types = ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi', 'pui')
+            allowed_id_types = ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi')
             check_parameter_value(id_type, allowed_id_types, "id_type")
 
         self._view = view
