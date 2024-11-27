@@ -20,6 +20,15 @@ sub6 = SubjectClassifications({'detail': 'Analysis', 'description': 'Mathematics
                               fields=['description', 'detail'], refresh=30)
 
 
+def test_api():
+    assert sub1._api == 'SubjectClassifications'
+    assert sub2._api == 'SubjectClassifications'
+    assert sub3._api == 'SubjectClassifications'
+    assert sub4._api == 'SubjectClassifications'
+    assert sub5._api == 'SubjectClassifications'
+    assert sub6._api == 'SubjectClassifications'
+
+
 def test_results_desc():
     assert len(sub1.results) > 0
     assert all(['Physics' in res.description for res in sub1.results])
