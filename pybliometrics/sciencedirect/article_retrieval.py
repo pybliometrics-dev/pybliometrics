@@ -34,7 +34,7 @@ class ArticleRetrieval(Retrieval):
         out = []
         auth = namedtuple('Author', 'surname given_name')
         for author in chained_get(self._json, ['coredata', 'dc:creator']):
-            surname, given_name = author['$'].split(',')
+            surname, given_name = author['$'].split(', ')
             new = auth(surname=surname, given_name=given_name)
             out.append(new)
         return out or None
@@ -240,10 +240,11 @@ class ArticleRetrieval(Retrieval):
             else:
                 authors = "(No author found)"
             # All other information
-            s += f'{authors}: "{self.title}", {self.publicationName}, {self.volume}'
+            s += f'{authors}: "{self.title}", {self.publicationName}'
+            s += f', {self.volume}' if self.volume else ''
             s += ', '
             s += parse_pages(self)
             s += f'({self.coverDate[:4]}).'
             if self.doi:
-                s += f' https://doi.org/{self.doi}.\n'
+                s += f' https://doi.org/{self.doi}.'
         return s
