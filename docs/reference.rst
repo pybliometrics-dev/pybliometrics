@@ -5,7 +5,7 @@ API Reference
 Each classe in `pybliometrics` corresponds to one of the `Product Specific Scopus APIs <https://dev.elsevier.com/api_docs.html>`_.  See below links for class reference and examples.
 
 Search APIs
-~~~~~~~~~~~
+-----------
 
 .. toctree::
     :maxdepth: 1
@@ -15,7 +15,7 @@ Search APIs
     reference/ScopusSearch.rst
 
 Retrieval APIs
-~~~~~~~~~~~~~~
+--------------
 
 .. toctree::
     :maxdepth: 1
@@ -25,7 +25,7 @@ Retrieval APIs
     reference/AuthorRetrieval.rst
 
 Metadata APIs
-~~~~~~~~~~~~~
+-------------
 
 .. toctree::
     :maxdepth: 1

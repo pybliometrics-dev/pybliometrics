@@ -1,5 +1,6 @@
+====
 Tips
-----
+====
 
 .. include:: tips/support.rst
 .. include:: tips/configuration.rst

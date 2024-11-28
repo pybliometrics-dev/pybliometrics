@@ -1,8 +1,9 @@
+=============
 Configuration
--------------
+=============
 
 pybliometrics.cfg
-~~~~~~~~~~~~~~~~~
+-----------------
 `pybliometrics` stores values it needs for operation in a configuration file called `pybliometrics.cfg`.  The config file saves credentials as well as directory names for folders that store downloaded results. `pybliometrics` reads this file on startup.
 
 By default, after initial set-up (see below), the file will look like this:
@@ -39,7 +40,7 @@ Under `pybliometrics` 2.x and before, the default paths used to be `PPP/.scopus/
 
 
 Start-up
-~~~~~~~~
+--------
 
 You initalize `pybliometrics` like so:
 
@@ -54,7 +55,7 @@ This reads the configuration from the default locations.  If you store the confi
 
 
 Set-up
-~~~~~~
+------
 If the configuration file does not exist, `pybliometrics` will prompt you to provide the configuration values the first time you execute `init()`.
 
 There are two consecutive prompts: For your API Key(s) and your InstToken.  The InstToken enables or facilitates access from outside your institution network, and you request it from Elsevier's Integration Support.  If you don't use InstToken, hit enter on the second prompt.  The InstToken, if provided, is added to the Authentication block:
@@ -81,7 +82,7 @@ In case you build `pybliometrics` using CI or on a server where prompts aren't p
 
 
 Default location
-~~~~~~~~~~~~~~~~
+----------------
 By default, the configuration file is located at `~/.config/`.  Folder `~/` refers to your private home directory or home path.  On many Windows machines this defaults to `C:/Document and Settings/<Your User Name>`.
 
 If you started with versions older than 3.5, the file was called `config.ini` and located either in `~/.pybliometrics/` or (for very old installations) in `~/.scopus/`. You can safely move and rename the file.  The location `~/.config/pybliometrics.cfg` always takes precedence.

@@ -1,7 +1,7 @@
 Migration Guide from 3.x to 4.x
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
-Upgrading from `pybliometrics` 2.x to 3.x requires a minor adjustment in your code due to changes in how the library handles configuration files. Many users requested more flexibility in configuration storage. To address this, version 3.x introduces a new initialization function.
+Upgrading from `pybliometrics` 3.x to 4.x requires a minor adjustment in your code due to changes in how the library handles configuration files. Many users requested more flexibility in configuration storage. To address this, version 4.0 introduces a new initialization function.
 
 Users now simply initialize `pybliometrics`:
 
