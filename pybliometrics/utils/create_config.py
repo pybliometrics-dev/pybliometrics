@@ -5,8 +5,8 @@ from pybliometrics.utils.constants import CONFIG_FILE
 
 
 def create_config(config_dir: Optional[Union[str, Path]] = None,
-                  keys: Optional[list[str]] = None,
-                  insttoken: Optional[str] = None
+                  custom_keys: Optional[list[str]] = None,
+                  custom_tokens: Optional[list[tuple[str, str]]] = None
                   ):
     """Initiates process to generate configuration file.
 
@@ -33,23 +33,36 @@ def create_config(config_dir: Optional[Union[str, Path]] = None,
 
     # Set authentication
     config.add_section('Authentication')
-    if keys:
-        if not isinstance(keys, list):
+
+    # Get keys and tokens
+    new_keys, new_tokens = None, None
+    if custom_keys:
+        if not isinstance(custom_keys, list):
             raise ValueError("Parameter `keys` must be a list.")
-        key = ", ".join(keys)
-        token = insttoken
-    else:
+        new_keys = ", ".join(custom_keys)
+    if custom_tokens:
+        if not isinstance(custom_tokens, list):
+            raise ValueError("Parameter `inst_tokens` must be a list of tuples. "\
+                             "E.g. [('key_1', 'token_1'), ('key_2', 'token_2')]")
+        new_tokens = ", ".join([f"{key}:{value}" for key, value in custom_tokens])
+
+    # If no keys or tokens are provided, ask for them
+    if not (custom_keys or custom_tokens):
         prompt_key = "Please enter your API Key(s), obtained from "\
                      "http://dev.elsevier.com/myapikey.html.  Separate "\
                      "multiple keys by comma:\n"
-        key = input(prompt_key)
+        new_keys = input(prompt_key)
         prompt_token = "API Keys are sufficient for most users.  If you "\
-                       "have an InstToken, please enter the token now; "\
+                       "have an InstToken, please enter the token:key pair now. "\
+                       "Separate multiple tokens by a comma, e.g. token1: key1, token2: key2"\
                        "otherwise just press Enter:\n"
-        token = input(prompt_token)
-    config.set('Authentication', 'APIKey', key)
-    if token:
-        config.set('Authentication', 'InstToken', token)
+        new_tokens = input(prompt_token)
+
+    # Set keys and tokens in config
+    if new_keys:
+        config.set('Authentication', 'APIKey', new_keys)
+    if new_tokens:
+        config.set('Authentication', 'InstToken', new_tokens)
 
     # Set default values
     config.add_section('Requests')
