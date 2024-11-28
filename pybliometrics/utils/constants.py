@@ -64,7 +64,7 @@ VIEWS = {
     "SerialSearch": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SerialTitle": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SubjectClassifications": [''],
-    "ArticleRetrieval": ["BASE", "META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"],
+    "ArticleRetrieval": ["META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"],
     "ArticleMetadata": ["STANDARD", "COMPLETE"],
     "ScienceDirectSearch": ["STANDARD"]
 }

@@ -34,7 +34,7 @@ class ArticleRetrieval(Retrieval):
         out = []
         auth = namedtuple('Author', 'surname given_name')
         for author in chained_get(self._json, ['coredata', 'dc:creator']):
-            surname, given_name = author['$'].split(',')
+            surname, given_name = author['$'].split(', ')
             new = auth(surname=surname, given_name=given_name)
             out.append(new)
         return out or None
@@ -189,21 +189,30 @@ class ArticleRetrieval(Retrieval):
         return make_int_if_possible(vol)
 
     def __init__(self,
-                 identifier: Union[int, str] = None,
+                 identifier: Union[int, str],
                  refresh: Union[bool, int] = False,
                  view: str = 'META',
-                 id_type: str = None,
+                 id_type: Optional[str] = None,
                  **kwds: str
                  ):
         """Interaction with the Article Retrieval API.
         
-        :param identifier: The indentifier of an article."""
+        :param identifier: The indentifier of an article.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
+        :param view: The view of the file that should be downloaded. Allowed values:
+                        'META', 'META_ABS', 'META_ABS_REF', 'FULL', 'ENTITLED'. Default is 'META'.
+        :param id_type: The type of used ID. Allowed values: `None`, 'eid', 'pii',
+                        'scopus_id', 'pubmed_id' and 'doi'.  If the value is `None`,
+                        pybliometrics tries to infer the ID type itself.
+        """
         identifier = str(identifier)
         check_parameter_value(view, VIEWS['ArticleRetrieval'], "view")
         if id_type is None:
             id_type = detect_id_type(identifier)
         else:
-            allowed_id_types = ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi', 'pui')
+            allowed_id_types = ('eid', 'pii', 'scopus_id', 'pubmed_id', 'doi')
             check_parameter_value(id_type, allowed_id_types, "id_type")
 
         self._view = view
@@ -231,10 +240,11 @@ class ArticleRetrieval(Retrieval):
             else:
                 authors = "(No author found)"
             # All other information
-            s += f'{authors}: "{self.title}", {self.publicationName}, {self.volume}'
+            s += f'{authors}: "{self.title}", {self.publicationName}'
+            s += f', {self.volume}' if self.volume else ''
             s += ', '
             s += parse_pages(self)
             s += f'({self.coverDate[:4]}).'
             if self.doi:
-                s += f' https://doi.org/{self.doi}.\n'
+                s += f' https://doi.org/{self.doi}.'
         return s

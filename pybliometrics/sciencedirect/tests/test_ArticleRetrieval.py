@@ -6,7 +6,7 @@ from pybliometrics.sciencedirect import ArticleRetrieval, init
 init()
 
 ar_full = ArticleRetrieval('S2949948823000112', view='FULL', refresh=30)
-ar_meta = ArticleRetrieval("10.1016/j.procs.2018.05.069", view='META', refresh=30)
+ar_meta = ArticleRetrieval("10.1016/j.procs.2018.05.069", id_type='doi', view='META', refresh=30)
 ar_meta_abs = ArticleRetrieval("S0304387823001736", view='META_ABS', refresh=30)
 ar_meta_abs_ref = ArticleRetrieval("S2352226722000630", view='META_ABS_REF', refresh=30)
 ar_entitled = ArticleRetrieval("S2213305418300365", view='ENTITLED', refresh=30)
@@ -31,22 +31,22 @@ def test_aggregationType():
 
 def test_authors():
     auth = namedtuple('Author', 'surname given_name')
-    authors_full = [auth(surname='Soori', given_name=' Mohsen'),
-                          auth(surname='Arezoo', given_name=' Behrooz'),
-                          auth(surname='Dastres', given_name=' Roza')]
-    authors_meta = [auth(surname='Indolia', given_name=' Sakshi'),
-                    auth(surname='Goswami', given_name=' Anil Kumar'),
-                    auth(surname='Mishra', given_name=' S.P.'),
-                    auth(surname='Asopa', given_name=' Pooja')]
-    authors_meta_abs = [auth(surname='Carreira', given_name=' Igor'),
-                        auth(surname='Costa', given_name=' Francisco'),
-                        auth(surname='Pessoa', given_name=' João Paulo')]
-    authors_meta_abs_ref = [auth(surname='Kudrass', given_name=' H.R.'),
-                            auth(surname='Hanebuth', given_name=' T.J.J.'),
-                            auth(surname='Zander', given_name=' A.M.'),
-                            auth(surname='Linstädter', given_name=' J.'),
-                            auth(surname='Akther', given_name=' S.H.'),
-                            auth(surname='Shohrab', given_name=' U.M.')]
+    authors_full = [auth(surname='Soori', given_name='Mohsen'),
+                          auth(surname='Arezoo', given_name='Behrooz'),
+                          auth(surname='Dastres', given_name='Roza')]
+    authors_meta = [auth(surname='Indolia', given_name='Sakshi'),
+                    auth(surname='Goswami', given_name='Anil Kumar'),
+                    auth(surname='Mishra', given_name='S.P.'),
+                    auth(surname='Asopa', given_name='Pooja')]
+    authors_meta_abs = [auth(surname='Carreira', given_name='Igor'),
+                        auth(surname='Costa', given_name='Francisco'),
+                        auth(surname='Pessoa', given_name='João Paulo')]
+    authors_meta_abs_ref = [auth(surname='Kudrass', given_name='H.R.'),
+                            auth(surname='Hanebuth', given_name='T.J.J.'),
+                            auth(surname='Zander', given_name='A.M.'),
+                            auth(surname='Linstädter', given_name='J.'),
+                            auth(surname='Akther', given_name='S.H.'),
+                            auth(surname='Shohrab', given_name='U.M.')]
     assert ar_full.authors == authors_full
     assert ar_meta.authors == authors_meta
     assert ar_meta_abs.authors == authors_meta_abs
@@ -241,3 +241,8 @@ def test_volume():
     assert ar_meta.volume == 132
     assert ar_meta_abs.volume == 167
     assert ar_meta_abs_ref.volume == 32
+
+
+def test__str__():
+    expected  = 'Mohsen Soori, Behrooz Arezoo and Roza Dastres: "Artificial neural networks in supply chain management, a review", Journal of Economy and Technology, 1, pp. 179-196(2023). https://doi.org/10.1016/j.ject.2023.11.002.'
+    assert str(ar_full) == expected
