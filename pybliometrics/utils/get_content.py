@@ -6,7 +6,7 @@ from urllib3.util import Retry
 
 from pybliometrics import __version__
 from pybliometrics import exception
-from pybliometrics.utils.startup import get_config, get_keys, _throttling_params
+from pybliometrics.utils.startup import get_config, get_keys, get_insttokens, _throttling_params
 
 # Define user agent string for HTTP requests
 user_agent = 'pybliometrics-v' + __version__
@@ -67,30 +67,39 @@ def get_content(url, api, params=None, **kwds):
     from random import shuffle
     from time import sleep, time
 
+    # Get needed ressources for query
     config = get_config()
     keys = get_keys()
+    insttokens = get_insttokens()
     session = get_session()
 
-    # Set header, params and proxy
-    try:
-        header = {'X-ELS-APIKey': keys[0],
-                  'Accept': 'application/json',
-                  'User-Agent': user_agent}
-    except IndexError:
-        raise errors[429]
-
-    if config.has_option('Authentication', 'InstToken'):
-        token = config.get('Authentication', 'InstToken')
-        header['X-ELS-Insttoken'] = token
     params = params or {}
     params.update(**kwds)
     proxies = dict(config._sections.get("Proxy", {}))
+    timeout = config.getint("Requests", "Timeout", fallback=20)
 
-    # Replace credentials if provided
-    if "apikey" in params:
-        header['X-ELS-APIKey'] = params.pop("apikey")
+    # Base header
+    base_header = {'Accept': 'application/json',
+                   'User-Agent': user_agent}
+
+    # Get tokens and create header
+    token_key, insttoken = None, None
     if "insttoken" in params:
-        header['X-ELS-Insttoken'] = params.pop("insttoken")
+        token_key, insttoken = params.pop("insttoken")
+    elif insttokens:
+        token_key, insttoken = insttokens[0]
+    token_header = {**base_header,
+                    'X-ELS-APIKey': token_key,
+                    'X-ELS-Insttoken': insttoken}
+
+    # Get keys and create header
+    key = None
+    if "apikey" in params:
+        key = params.pop("apikey")
+    elif keys:
+        key = keys[0]
+    key_header = {**base_header,
+                  'X-ELS-APIKey': key}
 
     # Eventually wait bc of throttling
     if len(_throttling_params[api]) == _throttling_params[api].maxlen:
@@ -99,19 +108,39 @@ def get_content(url, api, params=None, **kwds):
         except (IndexError, ValueError):
             pass
 
-    # Perform request, eventually replacing the current key
-    timeout = config.getint("Requests", "Timeout", fallback=20)
-    resp = session.get(url, headers=header, proxies=proxies, params=params,
-                       timeout=timeout)
+    # Either use token header or key header
+    if token_key:
+        header = token_header
+    else:
+        header = key_header
+
+    # Make query
+    resp = session.get(url, headers=header, proxies=proxies,
+                       params=params, timeout=timeout)
+
+    # If 429 try other tokens
+    while resp.status_code == 429:
+        try:
+            insttokens.pop(0)
+            shuffle(insttokens)
+            key, token = insttokens[0]
+            token_header['X-ELS-APIKey'] = key
+            token_header['X-ELS-Insttoken'] = token
+            resp = session.get(url, headers=token_header, proxies=proxies,
+                               params=params, timeout=timeout)
+        except IndexError:  # All tokens depleted
+            break
+    # If 429 try other keys
     while resp.status_code == 429:
         try:
             keys.pop(0)  # Remove current key
             shuffle(keys)
-            header['X-ELS-APIKey'] = keys[0].strip()
-            resp = session.get(url, headers=header, proxies=proxies,
-                               params=params, timeout=timeout)
+            key_header['X-ELS-APIKey'] = keys[0].strip()
+            resp = session.get(url, headers=key_header, proxies=proxies,
+                            params=params, timeout=timeout)
         except IndexError:  # All keys depleted
             break
+
     _throttling_params[api].append(time())
 
     # Eventually raise error, if possible with supplied error message
