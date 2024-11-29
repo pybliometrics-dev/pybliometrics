@@ -111,13 +111,14 @@ def get_content(url, api, params=None, **kwds):
     # Either use token header or key header
     if token_key:
         header = token_header
+        resp = session.get(url, headers=header, params=params, timeout=timeout)
+
     else:
         header = key_header
+        resp = session.get(url, headers=header, params=params, timeout=timeout, proxies=proxies)
 
     # Make query
-    resp = session.get(url, headers=header, proxies=proxies,
-                       params=params, timeout=timeout)
-
+    
     # If 429 try other tokens
     while resp.status_code == 429:
         try:
@@ -126,8 +127,7 @@ def get_content(url, api, params=None, **kwds):
             key, token = insttokens[0]
             token_header['X-ELS-APIKey'] = key
             token_header['X-ELS-Insttoken'] = token
-            resp = session.get(url, headers=token_header, proxies=proxies,
-                               params=params, timeout=timeout)
+            resp = session.get(url, headers=token_header, params=params, timeout=timeout)
         except IndexError:  # All tokens depleted
             break
     # If 429 try other keys
