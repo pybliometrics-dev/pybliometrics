@@ -112,13 +112,10 @@ def get_content(url, api, params=None, **kwds):
     if token_key:
         header = token_header
         resp = session.get(url, headers=header, params=params, timeout=timeout)
-
     else:
         header = key_header
         resp = session.get(url, headers=header, params=params, timeout=timeout, proxies=proxies)
 
-    # Make query
-    
     # If 429 try other tokens
     while resp.status_code == 429:
         try:
