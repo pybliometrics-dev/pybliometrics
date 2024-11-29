@@ -26,6 +26,9 @@ def init(config_dir: Optional[str] = CONFIG_FILE,
         Path to the configuration file
     keys : lst
         List of API keys
+    inst_tokens : lst
+        List of tuples with key and token. E.g.: `[('key1', 'token1'), ('key2', 'token2')]`
+        
     """
     global CONFIG
     global CUSTOM_KEYS
@@ -40,7 +43,6 @@ def init(config_dir: Optional[str] = CONFIG_FILE,
         CONFIG.optionxform = str
         CONFIG.read(config_dir)
 
-    
     check_sections(CONFIG)
     check_default_paths(CONFIG, config_dir)
     create_cache_folders(CONFIG)
@@ -69,7 +71,7 @@ def check_default_paths(config: Type[ConfigParser], config_path: Path) -> None:
 
 
 def check_keys_tokens() -> None:
-    """Auxiliary function to check if keys and tokens are set."""
+    """Auxiliary function to check if keys or tokens are set."""
     if not (get_keys() or get_insttokens()):
         raise ValueError('No API keys or InstTokens found.  '
                          'Please provide at least one key or token.  '
