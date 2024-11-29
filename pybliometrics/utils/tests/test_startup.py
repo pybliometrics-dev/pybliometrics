@@ -6,14 +6,14 @@ from pybliometrics.utils import get_insttokens, get_keys
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def test_custom_keys():
-    """Test whether custom keys are correctly set."""
+def test_custom_insttokens():
+    """Test whether custom insttokens are correctly set."""
     init(inst_tokens=[('a', 'b')])
     assert get_insttokens() == [('a', 'b')]
 
 
-def test_custom_insttokens():
-    """Test whether custom insttokens are correctly set."""
+def test_custom_keys():
+    """Test whether custom keys are correctly set."""
     init(keys=['a', 'b'])
     assert get_keys() == ['a', 'b']
 
