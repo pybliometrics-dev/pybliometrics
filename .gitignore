@@ -50,4 +50,4 @@ coverage.xml
 docs/_build/
 
 # Dont't track test config file
-*/test_config.cfg
+*test_config.cfg
