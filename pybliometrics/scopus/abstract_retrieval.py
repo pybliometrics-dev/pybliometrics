@@ -742,8 +742,7 @@ class AbstractRetrieval(Retrieval):
         # Load json
         self._view = view
         self._refresh = refresh
-        Retrieval.__init__(self, identifier=identifier, id_type=id_type,
-                           api='AbstractRetrieval', **kwds)
+        Retrieval.__init__(self, identifier=identifier, id_type=id_type, **kwds)
         if self._view in ('META', 'META_ABS', 'REF', 'FULL'):
             self._json = self._json['abstracts-retrieval-response']
         self._head = chained_get(self._json, ["item", "bibrecord", "head"], {})

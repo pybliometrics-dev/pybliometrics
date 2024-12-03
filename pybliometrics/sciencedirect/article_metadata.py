@@ -160,8 +160,7 @@ class ArticleMetadata(Search):
         self._refresh = refresh
         self._query = query
         self._view = view
-        Search.__init__(self, query=query, api="ArticleMetadata", size=size,
-                        download=download, verbose=verbose, **kwds)
+        Search.__init__(self, query=query, size=size, download=download, verbose=verbose, **kwds)
 
     def __str__(self):
         """Print a summary string."""

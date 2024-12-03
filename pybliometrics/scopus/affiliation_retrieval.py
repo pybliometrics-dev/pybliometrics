@@ -174,7 +174,7 @@ class AffiliationRetrieval(Retrieval):
         self._view = view
         self._refresh = refresh
         aff_id = str(int(str(aff_id).split('-')[-1]))
-        Retrieval.__init__(self, aff_id, api='AffiliationRetrieval', **kwds)
+        Retrieval.__init__(self, aff_id, **kwds)
         if self._view in ('LIGHT', 'STANDARD'):
             self._json = self._json['affiliation-retrieval-response']
         self._profile = self._json.get("institution-profile", {})

@@ -274,8 +274,7 @@ class CitationOverview(Retrieval):
         # Get file content
         kwds.update({id_type: identifier})
         stem = md5("_".join(identifier).encode('utf8')).hexdigest()
-        Retrieval.__init__(self, stem, api='CitationOverview', date=date,
-                           citation=citation, **kwds)
+        Retrieval.__init__(self, stem, date=date, citation=citation, **kwds)
         self._data = self._json['abstract-citations-response']
 
         # citeInfoMatrix

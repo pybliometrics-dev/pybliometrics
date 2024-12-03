@@ -123,8 +123,7 @@ class PlumXMetrics(Retrieval):
         # Load json
         self._refresh = refresh
         self._view = 'ENHANCED'
-        Retrieval.__init__(self, identifier=identifier, id_type=id_type,
-                           api='PlumXMetrics', **kwds)
+        Retrieval.__init__(self, identifier=identifier, id_type=id_type, **kwds)
         cats = self._json.get('count_categories', [])
         self._count_categories = {d["name"]: d['count_types'] for d in cats}
 

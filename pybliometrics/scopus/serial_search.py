@@ -98,7 +98,7 @@ class SerialSearch(Search):
         self._query = str(query)
         self._refresh = refresh
         self._view = view
-        Search.__init__(self, query=query, api='SerialSearch', **kwds)
+        Search.__init__(self, query=query, **kwds)
         self._n = len(self._json['serial-metadata-response'].get('entry', []))
 
     def __str__(self):
