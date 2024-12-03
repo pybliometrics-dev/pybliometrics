@@ -89,7 +89,7 @@ class SubjectClassifications(Search):
         self._refresh = refresh
         self._query = str(query)
         self._view = ''
-        Search.__init__(self, query=query, api='SubjectClassifications', **kwds)
+        Search.__init__(self, query=query, **kwds)
         path = ['subject-classifications', 'subject-classification']
         self._n = len(chained_get(self._json, path, []))
 

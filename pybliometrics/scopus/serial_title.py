@@ -238,8 +238,7 @@ class SerialTitle(Retrieval):
         # Load json
         self._id = str(issn)
         self._years = years
-        Retrieval.__init__(self, identifier=self._id, date=years,
-                           api='SerialTitle', **kwds)
+        Retrieval.__init__(self, identifier=self._id, date=years, **kwds)
 
         # Parse json
         self._json = self._json['serial-metadata-response']

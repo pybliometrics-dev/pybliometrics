@@ -288,8 +288,7 @@ class AuthorRetrieval(Retrieval):
         self._id = str(author_id).split('-')[-1]
         self._view = view
         self._refresh = refresh
-        Retrieval.__init__(self, identifier=self._id,
-                           api='AuthorRetrieval', **kwds)
+        Retrieval.__init__(self, identifier=self._id, **kwds)
 
         if self._view in ('METRICS', 'LIGHT', 'STANDARD', 'ENHANCED'):
             # Parse json

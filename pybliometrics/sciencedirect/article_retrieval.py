@@ -218,13 +218,7 @@ class ArticleRetrieval(Retrieval):
         self._view = view
         self._refresh = refresh
 
-        Retrieval.__init__(
-            self,
-            identifier=identifier,
-            id_type=id_type,
-            api="ArticleRetrieval",
-            **kwds
-        )
+        Retrieval.__init__(self, identifier=identifier, id_type=id_type, **kwds)
         if self._view != "ENTITLED":
             self._json = self._json['full-text-retrieval-response']
 
