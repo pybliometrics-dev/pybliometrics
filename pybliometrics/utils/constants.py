@@ -29,7 +29,7 @@ DEFAULT_PATHS = {
     'ArticleMetadata': BASE_PATH_SCIENCEDIRECT / 'article_metadata / ',
     'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT / 'article_retrieval',
     'ScienceDirectSearch': BASE_PATH_SCIENCEDIRECT / 'science_direct_search',
-    'ScienceDirectSubjectClassifications': BASE_PATH_SCIENCEDIRECT / 'subject_classification',
+    'ScDirSubjectClassifications': BASE_PATH_SCIENCEDIRECT / 'subject_classification',
 }
 
 # URLs for all classes
@@ -50,7 +50,7 @@ URLS = {
     'ArticleMetadata': RETRIEVAL_BASE + 'metadata/article/',
     'ArticleRetrieval': RETRIEVAL_BASE + 'article/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
-    'ScienceDirectSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
+    'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
 }
 
 # Valid views for all classes
@@ -69,7 +69,7 @@ VIEWS = {
     "ArticleRetrieval": ["META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"],
     "ArticleMetadata": ["STANDARD", "COMPLETE"],
     "ScienceDirectSearch": ["STANDARD"],
-    "ScienceDirectSubjectClassifications": ['']
+    "ScDirSubjectClassifications": ['']
 }
 
 # Throttling limits (in queries per second) // 0 = no limit
@@ -88,7 +88,7 @@ RATELIMITS = {
     'ArticleMetadata': 6,
     'ArticleRetrieval': 10,
     'ScienceDirectSearch': 2,
-    'ScienceDirectSubjectClassifications': 0,
+    'ScDirSubjectClassifications': 0,
 }
 
 # Other API restrictions
