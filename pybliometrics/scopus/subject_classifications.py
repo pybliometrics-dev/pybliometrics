@@ -32,7 +32,7 @@ class SubjectClassifications(Search):
     def __init__(self,
                  query: dict,
                  refresh: Union[bool, int] = False,
-                 fields: Union[list[str], tuple[str, ...]] = None,
+                 fields: Optional[Union[list[str], tuple[str, ...]]] = None,
                  **kwds: str
                  ) -> None:
         """Interaction with the Subject Classifications Scopus API.
