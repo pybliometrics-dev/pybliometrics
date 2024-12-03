@@ -11,7 +11,6 @@ from pybliometrics.utils import get_config, URLS
 class Search(Base):
     def __init__(self,
                  query: Union[str, dict],
-                 api: str,
                  size: int = 200,
                  cursor: bool = False,
                  download: bool = True,
@@ -21,9 +20,6 @@ class Search(Base):
         """Class intended as superclass to perform a search query.
 
         :param query : A string of the query.
-        :param api: The name of the Scopus API to be accessed.  Allowed values:
-                    AffiliationSearch, AuthorSearch, ScopusSearch,
-                    SerialSearch, SubjectClass.
         :param size: The number of entries to be displayed at once.  A smaller
                      number means more queries with each query having
                      fewer results.
@@ -42,6 +38,7 @@ class Search(Base):
         ValueError
             If the api parameter is an invalid entry.
         """
+        api = self.__class__.__name__
         # Construct query parameters
         params = {'size': size, 'view': self._view, **kwds}
         if isinstance(query, dict):
@@ -64,8 +61,7 @@ class Search(Base):
         self._cache_file_path = parent/self._view/stem
 
         # Init
-        Base.__init__(self, params=params, url=URLS[api], download=download,
-                      api=api, verbose=verbose)
+        Base.__init__(self, params=params, url=URLS[api], download=download, verbose=verbose)
 
     def get_results_size(self) -> int:
         """Return the number of results (works even if download=False)."""

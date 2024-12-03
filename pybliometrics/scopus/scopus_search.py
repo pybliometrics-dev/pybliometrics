@@ -211,7 +211,7 @@ class ScopusSearch(Search):
         self._refresh = refresh
         self._query = query
         self._view = view
-        Search.__init__(self, query=query, api='ScopusSearch', size=size,
+        Search.__init__(self, query=query, size=size,
                         cursor=subscriber, download=download,
                         verbose=verbose, **kwds)
         self.unescape = unescape

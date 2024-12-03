@@ -16,7 +16,6 @@ class Base:
     def __init__(self,
                  params: dict,
                  url: str,
-                 api: str,
                  download: bool = True,
                  verbose: bool = False,
                  **kwds: str
@@ -25,7 +24,6 @@ class Base:
 
         :param params: Dictionary used as header during the API request.
         :param url: The URL to be accessed.
-        :param api: The Scopus API to be accessed.
         :param download: Whether to download the query or not.  Has no effect
                          for retrieval requests.
         :param verbose: Whether to print a download progress bar.
@@ -36,6 +34,7 @@ class Base:
         ValueError
             If `self._refresh` is neither boolean nor numeric.
         """
+        api = self.__class__.__name__
         # Checks
         try:
             _ = int(self._refresh)

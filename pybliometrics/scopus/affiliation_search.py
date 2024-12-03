@@ -106,8 +106,7 @@ class AffiliationSearch(Search):
         self._query = query
         self._refresh = refresh
         self._view = "STANDARD"
-        Search.__init__(self, query=query, api="AffiliationSearch",
-                        download=download, verbose=verbose, **kwds)
+        Search.__init__(self, query=query, download=download, verbose=verbose, **kwds)
 
     def __str__(self):
         """Return a summary string."""
