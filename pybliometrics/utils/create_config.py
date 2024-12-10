@@ -5,8 +5,8 @@ from pybliometrics.utils.constants import CONFIG_FILE
 
 
 def create_config(config_dir: Optional[Union[str, Path]] = None,
-                  custom_keys: Optional[list[str]] = None,
-                  custom_tokens: Optional[list[tuple[str, str]]] = None
+                  keys: Optional[list[str]] = None,
+                  insttoken: Optional[list[str]] = None
                   ):
     """Initiates process to generate configuration file.
 
@@ -36,26 +36,26 @@ def create_config(config_dir: Optional[Union[str, Path]] = None,
 
     # Get keys and tokens
     new_keys, new_tokens = None, None
-    if custom_keys:
-        if not isinstance(custom_keys, list):
+    if keys:
+        if not isinstance(keys, list):
             raise ValueError("Parameter `keys` must be a list.")
-        new_keys = ", ".join(custom_keys)
-    if custom_tokens:
-        if not isinstance(custom_tokens, list):
-            raise ValueError("Parameter `inst_tokens` must be a list of tuples. "\
-                             "E.g. [('key_1', 'token_1'), ('key_2', 'token_2')]")
-        new_tokens = ", ".join([f"{key}:{value}" for key, value in custom_tokens])
+        new_keys = ", ".join(keys)
+    if insttoken:
+        if not isinstance(insttoken, list):
+            raise ValueError("Parameter `inst_tokens` must be a list. ")
+        new_tokens = ", ".join(insttoken)
 
     # If no keys or tokens are provided, ask for them
-    if not (custom_keys or custom_tokens):
+    if not (keys or insttoken):
         prompt_key = "Please enter your API Key(s), obtained from "\
                      "http://dev.elsevier.com/myapikey.html.  Separate "\
                      "multiple keys by comma:\n"
         new_keys = input(prompt_key)
         prompt_token = "API Keys are sufficient for most users.  If you "\
-                       "have an InstToken, please enter the token:key pair now. "\
-                       "Separate multiple tokens by a comma, e.g. token1: key1, token2: key2"\
-                       "otherwise just press Enter:\n"
+                       "have an InstToken, please enter the tokens pair now. "\
+                       "Separate multiple tokens by a comma. The correspondig "\
+                       "key's position should match the position of the token."\
+                       "If you don't have tokens, just press Enter:\n"
         new_tokens = input(prompt_token)
 
     # Set keys and tokens in config
