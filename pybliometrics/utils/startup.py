@@ -1,7 +1,7 @@
 from configparser import ConfigParser, NoOptionError, NoSectionError
 from collections import deque
 from pathlib import Path
-from typing import Optional, Type
+from typing import Optional, Type, Union
 
 from pybliometrics.utils.constants import CONFIG_FILE, RATELIMITS, DEFAULT_PATHS, VIEWS
 from pybliometrics.utils.create_config import create_config
@@ -13,9 +13,9 @@ CUSTOM_INSTTOKENS = None
 _throttling_params = {k: deque(maxlen=v) for k, v in RATELIMITS.items()}
 
 
-def init(config_dir: Optional[str] = CONFIG_FILE,
+def init(config_dir: Union[str, Path] = CONFIG_FILE,
          keys: Optional[list[str]] = None,
-         inst_tokens: Optional[list[tuple[str, str]]] = None) -> None:
+         inst_tokens: Optional[list[str]] = None) -> None:
     """
     Function to initialize the Pybliometrics library. For more information go to the
     [documentation](https://pybliometrics.readthedocs.io/en/stable/configuration.html).
@@ -27,7 +27,8 @@ def init(config_dir: Optional[str] = CONFIG_FILE,
     keys : lst
         List of API keys
     inst_tokens : lst
-        List of tuples with key and token. E.g.: `[('key1', 'token1'), ('key2', 'token2')]`
+        List of tokens. The corresponding keys position in the list must match the
+        position of the token in the list.
         
     """
     global CONFIG
@@ -52,14 +53,14 @@ def init(config_dir: Optional[str] = CONFIG_FILE,
     check_keys_tokens()
 
 
-def check_sections(config: Type[ConfigParser]) -> None:
+def check_sections(config: ConfigParser) -> None:
     """Auxiliary function to check if all sections exist."""
     for section in ['Directories', 'Authentication', 'Requests']:
         if not config.has_section(section):
             raise NoSectionError(section)
 
 
-def check_default_paths(config: Type[ConfigParser], config_path: Path) -> None:
+def check_default_paths(config: ConfigParser, config_path: Path) -> None:
     """Auxiliary function to check if default cache paths exist.
     If not, the paths are writen in the config.
     """
@@ -79,7 +80,7 @@ def check_keys_tokens() -> None:
                          'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
 
 
-def create_cache_folders(config: Type[ConfigParser]) -> None:
+def create_cache_folders(config: ConfigParser) -> None:
     """Auxiliary function to create cache folders."""
     for api, path in config.items('Directories'):
         for view in VIEWS[api]:
@@ -87,7 +88,7 @@ def create_cache_folders(config: Type[ConfigParser]) -> None:
             view_path.mkdir(parents=True, exist_ok=True)
 
 
-def get_config() -> Type[ConfigParser]:
+def get_config() -> ConfigParser:
     """Function to get the config parser."""
     if not CONFIG:
         raise FileNotFoundError('No configuration file found.'
@@ -105,10 +106,11 @@ def get_insttokens() -> list[tuple[str, str]]:
     else:
         try:
             raw_token_text = CONFIG.get('Authentication', 'InstToken')
-            inst_tokens = _token_text_to_tuple(raw_token_text)
+            inst_tokens = [k.strip() for k in raw_token_text.split(",")]
         except NoOptionError:
             inst_tokens = []
-    return inst_tokens
+    key_token_pairs = list(zip(get_keys(), inst_tokens))
+    return key_token_pairs
 
 
 def get_keys() -> list[str]:
@@ -117,16 +119,8 @@ def get_keys() -> list[str]:
         keys = CUSTOM_KEYS
     else:
         try:
-            keys = [k.strip() for k in CONFIG.get('Authentication', 'APIKey').split(",")]
+            raw_keys_text = CONFIG.get('Authentication', 'APIKey')
+            keys = [k.strip() for k in raw_keys_text.split(",")]
         except NoOptionError:
             keys = []
     return keys
-
-
-def _token_text_to_tuple(raw_token_text: str) -> list[tuple[str, str]]:
-    """Auxiliary function to convert token text to list of tuples."""
-    inst_tokens = []
-    for pair in raw_token_text.split(','):
-        key, token = pair.split(':')
-        inst_tokens.append((key.strip(), token.strip()))
-    return inst_tokens

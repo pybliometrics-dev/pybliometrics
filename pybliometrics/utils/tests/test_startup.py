@@ -8,14 +8,14 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def test_custom_insttokens():
     """Test whether custom insttokens are correctly set."""
-    init(inst_tokens=[('a', 'b')])
-    assert get_insttokens() == [('a', 'b')]
+    init(keys=['1', '2'], inst_tokens=['a', 'b'])
+    assert get_insttokens() == [('1', 'a'), ('2', 'b')]
 
 
 def test_custom_keys():
     """Test whether custom keys are correctly set."""
-    init(keys=['a', 'b'])
-    assert get_keys() == ['a', 'b']
+    init(keys=['1', '2'])
+    assert get_keys() == ['1', '2']
 
 
 def test_new_config():
@@ -27,12 +27,12 @@ def test_new_config():
 
     # Create new config
     init(config_dir=f'{CURRENT_DIR}/test_config.cfg',
-         keys=['e', 'f'],
-         inst_tokens=[('g', 'h')])
+         keys=['3', '4'],
+         inst_tokens=['c', 'd'])
 
     # Use custom keys and tokens
-    assert get_keys() == ['e', 'f']
-    assert get_insttokens() == [('g', 'h')]
+    assert get_keys() == ['3', '4']
+    assert get_insttokens() == [('3', 'c'), ('4', 'd')]
 
 
 def test_new_test_config():
@@ -40,13 +40,13 @@ def test_new_test_config():
     init(config_dir=f'{CURRENT_DIR}/test_config.cfg')
 
     # Use keys and tokens from test config
-    assert get_keys() == ['e', 'f']
-    assert get_insttokens() == [('g', 'h')]
+    assert get_keys() == ['3', '4']
+    assert get_insttokens() == [('3', 'c'), ('4', 'd')] # from previous test
 
     init(config_dir=f'{CURRENT_DIR}/test_config.cfg',
-         keys=['i', 'j'],
-         inst_tokens=[('k', 'l')])
+         keys=['5', '6'],
+         inst_tokens=['e', 'f'])
 
     # Use custom keys and tokens
-    assert get_keys() == ['i', 'j']
-    assert get_insttokens() == [('k', 'l')]
+    assert get_keys() == ['5', '6']
+    assert get_insttokens() == [('5', 'e'), ('6', 'f')]
