@@ -51,14 +51,14 @@ def init(config_dir: Union[str, Path] = CONFIG_FILE,
     check_keys_tokens()
 
 
-def check_sections(config: ConfigParser) -> None:
+def check_sections(config: Type[ConfigParser]) -> None:
     """Auxiliary function to check if all sections exist."""
     for section in ['Directories', 'Authentication', 'Requests']:
         if not config.has_section(section):
             raise NoSectionError(section)
 
 
-def check_default_paths(config: ConfigParser, config_path: Path) -> None:
+def check_default_paths(config: Type[ConfigParser], config_path: Path) -> None:
     """Auxiliary function to check if default cache paths exist.
     If not, the paths are writen in the config.
     """
@@ -97,7 +97,7 @@ def check_keys_tokens() -> None:
                              'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
 
 
-def create_cache_folders(config: ConfigParser) -> None:
+def create_cache_folders(config: Type[ConfigParser]) -> None:
     """Auxiliary function to create cache folders."""
     for api, path in config.items('Directories'):
         for view in VIEWS[api]:
