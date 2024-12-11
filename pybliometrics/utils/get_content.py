@@ -132,7 +132,7 @@ def get_content(url, api, params=None, **kwds):
         try:
             keys.pop(0)  # Remove current key
             shuffle(keys)
-            key_header['X-ELS-APIKey'] = keys[0].strip()
+            key_header['X-ELS-APIKey'] = keys[0]
             resp = session.get(url, headers=key_header, proxies=proxies,
                             params=params, timeout=timeout)
         except IndexError:  # All keys depleted

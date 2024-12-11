@@ -27,9 +27,7 @@ def init(config_dir: Union[str, Path] = CONFIG_FILE,
     keys : lst
         List of API keys
     inst_tokens : lst
-        List of tokens. The corresponding keys position in the list must match the
-        position of the token in the list.
-        
+        List of tokens. The corresponding keys must match the position of the tokens.
     """
     global CONFIG
     global CUSTOM_KEYS
@@ -73,11 +71,30 @@ def check_default_paths(config: ConfigParser, config_path: Path) -> None:
 
 def check_keys_tokens() -> None:
     """Auxiliary function to check if keys or tokens are set."""
-    if not (get_keys() or get_insttokens()):
-        raise ValueError('No API keys or InstTokens found.  '
-                         'Please provide at least one key or token.  '
+    keys = get_all_keys()
+    tokens = get_insttokens()
+    # 3 problematic cases
+    no_keys_no_tokens = True if not keys and not tokens else False
+    tokens_no_keys = True if tokens and not keys else False
+    keys_and_tokens = True if keys and tokens else False
+    keys_tokens_diff = len(keys) - len(tokens)
+
+    if no_keys_no_tokens:
+        raise ValueError('No API keys or InstTokens found. '
+                         'Please provide at least one key or token. '
                          'For more information visit: '
                          'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
+    elif tokens_no_keys:
+        raise ValueError('API tokens found but not corresponding keys. '
+                             'Please provide the keys that correspond to the tokens. '
+                             'For more information visit: '
+                             'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
+    elif keys_and_tokens:
+        if keys_tokens_diff < 0:
+            raise ValueError('More tokens than keys found. '
+                             'Please provide all the keys that correspond to the tokens. '
+                             'For more information visit: '
+                             'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
 
 
 def create_cache_folders(config: ConfigParser) -> None:
@@ -104,17 +121,19 @@ def get_insttokens() -> list[tuple[str, str]]:
     if CUSTOM_INSTTOKENS:
         inst_tokens = CUSTOM_INSTTOKENS
     else:
-        try:
-            raw_token_text = CONFIG.get('Authentication', 'InstToken')
-            inst_tokens = [k.strip() for k in raw_token_text.split(",")]
-        except NoOptionError:
-            inst_tokens = []
-    key_token_pairs = list(zip(get_keys(), inst_tokens))
+        if not CUSTOM_KEYS: # if custom keys are set, config inst tokens are not needed
+            try:
+                raw_token_text = CONFIG.get('Authentication', 'InstToken')
+                inst_tokens = [k.strip() for k in raw_token_text.split(",")]
+            except NoOptionError:
+                inst_tokens = []
+
+    key_token_pairs = list(zip(get_all_keys(), inst_tokens))
     return key_token_pairs
 
 
-def get_keys() -> list[str]:
-    """Function to get the API keys and overwrite keys in config if needed."""
+def get_all_keys() -> list[str]:
+    """Function to get all the API keys and overwrite keys in config if needed."""
     if CUSTOM_KEYS:
         keys = CUSTOM_KEYS
     else:
@@ -124,3 +143,10 @@ def get_keys() -> list[str]:
         except NoOptionError:
             keys = []
     return keys
+
+
+def get_keys() -> list[str]:
+    """Function to get the API keys that do not correspond to a token."""
+    keys = get_all_keys()
+    inst_tokens = get_insttokens()
+    return keys[len(inst_tokens):]
