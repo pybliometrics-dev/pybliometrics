@@ -69,8 +69,16 @@ def get_content(url, api, params=None, **kwds):
 
     # Get needed ressources for query
     config = get_config()
+
     keys = get_keys()
+
+    # Get tokens and zip with keys
     insttokens = get_insttokens()
+    insttokens = list(zip(keys, insttokens))
+
+    # Keep keys that are not insttokens
+    keys = keys[len(insttokens):]
+
     session = get_session()
 
     params = params or {}
@@ -85,12 +93,10 @@ def get_content(url, api, params=None, **kwds):
     # Get tokens and create header
     token_key, insttoken = None, None
     if "insttoken" in params:
-        token_key, insttoken = params.pop("insttoken")
+        token_key = params.pop("apikey")
+        insttoken = params.pop("insttoken")
     elif insttokens:
         token_key, insttoken = insttokens[0]
-    token_header = {**base_header,
-                    'X-ELS-APIKey': token_key,
-                    'X-ELS-Insttoken': insttoken}
 
     # Get keys and create header
     key = None
@@ -98,8 +104,6 @@ def get_content(url, api, params=None, **kwds):
         key = params.pop("apikey")
     elif keys:
         key = keys[0]
-    key_header = {**base_header,
-                  'X-ELS-APIKey': key}
 
     # Eventually wait bc of throttling
     if len(_throttling_params[api]) == _throttling_params[api].maxlen:
@@ -109,31 +113,39 @@ def get_content(url, api, params=None, **kwds):
             pass
 
     # Either use token header or key header
-    if token_key:
-        header = token_header
+    if insttoken:
+        header = {**base_header,
+                  'X-ELS-APIKey': token_key,
+                  'X-ELS-Insttoken': insttoken}
         resp = session.get(url, headers=header, params=params, timeout=timeout)
     else:
-        header = key_header
+        header = {**base_header,
+                  'X-ELS-APIKey': key}
         resp = session.get(url, headers=header, params=params, timeout=timeout, proxies=proxies)
 
     # If 429 try other tokens
-    while resp.status_code == 429:
+    while (resp.status_code == 429) or (resp.status_code == 401):
         try:
             insttokens.pop(0)
             shuffle(insttokens)
             key, token = insttokens[0]
-            token_header['X-ELS-APIKey'] = key
-            token_header['X-ELS-Insttoken'] = token
-            resp = session.get(url, headers=token_header, params=params, timeout=timeout)
+            header['X-ELS-APIKey'] = key
+            header['X-ELS-Insttoken'] = token
+            resp = session.get(url, headers=header, params=params, timeout=timeout)
         except IndexError:  # All tokens depleted
             break
+
+   # Remove Insttoken from header (if present)
+    if 'X-ELS-Insttoken' in header:
+        del header['X-ELS-Insttoken']
+
     # If 429 try other keys
-    while resp.status_code == 429:
+    while (resp.status_code == 429) or (resp.status_code == 401):
         try:
             keys.pop(0)  # Remove current key
             shuffle(keys)
-            key_header['X-ELS-APIKey'] = keys[0]
-            resp = session.get(url, headers=key_header, proxies=proxies,
+            header['X-ELS-APIKey'] = keys[0]
+            resp = session.get(url, headers=header, proxies=proxies,
                             params=params, timeout=timeout)
         except IndexError:  # All keys depleted
             break
