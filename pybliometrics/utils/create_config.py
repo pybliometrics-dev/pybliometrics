@@ -14,7 +14,7 @@ def create_config(config_dir: Optional[Union[str, Path]] = None,
     :param keys: If you provide a list of keys, pybliometrics will skip the
                  prompt.  It will also not ask for InstToken.  This is
                  intended for workflows using CI, not for general use.
-    :param insttoken: An InstToken to be used alongside the key(s).  Will only
+    :param insttoken: An InstToken to be used alongside the key(s). Will only
                       be used if `keys` is not empty.
     """
     from pybliometrics.utils.constants import DEFAULT_PATHS
