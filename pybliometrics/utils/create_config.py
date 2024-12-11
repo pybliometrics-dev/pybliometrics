@@ -35,34 +35,33 @@ def create_config(config_dir: Optional[Union[str, Path]] = None,
     config.add_section('Authentication')
 
     # Get keys and tokens
-    new_keys, new_tokens = None, None
     if keys:
         if not isinstance(keys, list):
             raise ValueError("Parameter `keys` must be a list.")
-        new_keys = ", ".join(keys)
+        keys = ", ".join(keys)
     if insttoken:
         if not isinstance(insttoken, list):
             raise ValueError("Parameter `inst_tokens` must be a list. ")
-        new_tokens = ", ".join(insttoken)
+        insttoken = ", ".join(insttoken)
 
     # If no keys or tokens are provided, ask for them
     if not (keys or insttoken):
         prompt_key = "Please enter your API Key(s), obtained from "\
                      "http://dev.elsevier.com/myapikey.html.  Separate "\
                      "multiple keys by comma:\n"
-        new_keys = input(prompt_key)
+        keys = input(prompt_key)
         prompt_token = "API Keys are sufficient for most users.  If you "\
                        "have an InstToken, please enter the tokens pair now. "\
                        "Separate multiple tokens by a comma. The correspondig "\
                        "key's position should match the position of the token."\
                        "If you don't have tokens, just press Enter:\n"
-        new_tokens = input(prompt_token)
+        insttoken = input(prompt_token)
 
     # Set keys and tokens in config
-    if new_keys:
-        config.set('Authentication', 'APIKey', new_keys)
-    if new_tokens:
-        config.set('Authentication', 'InstToken', new_tokens)
+    if keys:
+        config.set('Authentication', 'APIKey', keys)
+    if insttoken:
+        config.set('Authentication', 'InstToken', insttoken)
 
     # Set default values
     config.add_section('Requests')

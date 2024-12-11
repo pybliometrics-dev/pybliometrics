@@ -23,11 +23,11 @@ def init(config_dir: Union[str, Path] = CONFIG_FILE,
     Parameters
     ----------
     config_dir : str
-        Path to the configuration file
+        Path to the configuration file.
     keys : lst
-        List of API keys
+        List of API keys.
     inst_tokens : lst
-        List of tokens. The corresponding keys must match the position of the tokens.
+        List of InstTokens. The corresponding API keys must match the position of the InstTokens.
     """
     global CONFIG
     global CUSTOM_KEYS
@@ -70,29 +70,29 @@ def check_default_paths(config: ConfigParser, config_path: Path) -> None:
 
 
 def check_keys_tokens() -> None:
-    """Auxiliary function to check if keys or tokens are set."""
-    keys = get_all_keys()
-    tokens = get_insttokens()
+    """Auxiliary function to check if API keys or InstTokens are set."""
+    keys = get_keys()
+    insttokens = get_insttokens()
     # 3 problematic cases
-    no_keys_no_tokens = True if not keys and not tokens else False
-    tokens_no_keys = True if tokens and not keys else False
-    keys_and_tokens = True if keys and tokens else False
-    keys_tokens_diff = len(keys) - len(tokens)
+    no_keys_no_insttokens = True if not keys and not insttokens else False
+    insttokens_no_keys = True if insttokens and not keys else False
+    keys_and_insttokens = True if keys and insttokens else False
+    keys_tokens_diff = len(keys) - len(insttokens)
 
-    if no_keys_no_tokens:
+    if no_keys_no_insttokens:
         raise ValueError('No API keys or InstTokens found. '
-                         'Please provide at least one key or token. '
+                         'Please provide at least one API key or InstToken. '
                          'For more information visit: '
                          'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
-    elif tokens_no_keys:
-        raise ValueError('API tokens found but not corresponding keys. '
-                             'Please provide the keys that correspond to the tokens. '
-                             'For more information visit: '
-                             'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
-    elif keys_and_tokens:
+    elif insttokens_no_keys:
+        raise ValueError('InstTokens found but not corresponding API keys. '
+                         'Please provide the API keys that correspond to the InstTokens. '
+                         'For more information visit: '
+                         'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
+    elif keys_and_insttokens:
         if keys_tokens_diff < 0:
-            raise ValueError('More tokens than keys found. '
-                             'Please provide all the keys that correspond to the tokens. '
+            raise ValueError('More InstTokens than API keys found. '
+                             'Please provide all the API keys that correspond to the InstTokens. '
                              'For more information visit: '
                              'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
 
@@ -116,7 +116,7 @@ def get_config() -> ConfigParser:
 
 
 def get_insttokens() -> list[tuple[str, str]]:
-    """Function to get the inst tokens and overwrite tokens in config if needed."""
+    """Function to get the InstToken and overwrite InstToken in config if needed."""
     inst_tokens = []
     if CUSTOM_INSTTOKENS:
         inst_tokens = CUSTOM_INSTTOKENS
@@ -128,11 +128,11 @@ def get_insttokens() -> list[tuple[str, str]]:
             except NoOptionError:
                 inst_tokens = []
 
-    key_token_pairs = list(zip(get_all_keys(), inst_tokens))
-    return key_token_pairs
+    #key_token_pairs = list(zip(get_all_keys(), inst_tokens))
+    return inst_tokens
 
 
-def get_all_keys() -> list[str]:
+def get_keys() -> list[str]:
     """Function to get all the API keys and overwrite keys in config if needed."""
     if CUSTOM_KEYS:
         keys = CUSTOM_KEYS
@@ -143,10 +143,3 @@ def get_all_keys() -> list[str]:
         except NoOptionError:
             keys = []
     return keys
-
-
-def get_keys() -> list[str]:
-    """Function to get the API keys that do not correspond to a token."""
-    keys = get_all_keys()
-    inst_tokens = get_insttokens()
-    return keys[len(inst_tokens):]
