@@ -20,6 +20,10 @@ sub6 = SubjectClassifications({'detail': 'Analysis', 'description': 'Mathematics
                               fields=['description', 'detail'], refresh=30)
 
 
+def test_module():
+    assert sub1.__module__ == 'pybliometrics.scopus.subject_classifications'
+
+
 def test_results_desc():
     assert len(sub1.results) > 0
     assert all(['Physics' in res.description for res in sub1.results])
