@@ -87,7 +87,7 @@ def get_content(url, api, params=None, **kwds):
     timeout = config.getint("Requests", "Timeout", fallback=20)
 
     # Get keys/tokens and create header
-    key, token_key, insttoken = None, None, None
+    token_key, insttoken = None, None
     if "insttoken" in params:
         token_key = params.pop("apikey")
         insttoken = params.pop("insttoken")
