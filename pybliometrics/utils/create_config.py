@@ -58,8 +58,7 @@ def create_config(config_dir: Optional[Union[str, Path]] = None,
         insttoken = input(prompt_token)
 
     # Set keys and tokens in config
-    if keys:
-        config.set('Authentication', 'APIKey', keys)
+    config.set('Authentication', 'APIKey', keys)
     if insttoken:
         config.set('Authentication', 'InstToken', insttoken)
 

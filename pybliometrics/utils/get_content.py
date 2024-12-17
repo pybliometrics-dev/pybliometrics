@@ -6,7 +6,7 @@ from urllib3.util import Retry
 
 from pybliometrics import __version__
 from pybliometrics import exception
-from pybliometrics.utils.startup import get_config, get_keys, get_insttokens, _throttling_params
+from pybliometrics.utils.startup import get_config, get_insttokens, get_keys, _throttling_params
 
 # Define user agent string for HTTP requests
 user_agent = 'pybliometrics-v' + __version__
@@ -86,24 +86,21 @@ def get_content(url, api, params=None, **kwds):
     proxies = dict(config._sections.get("Proxy", {}))
     timeout = config.getint("Requests", "Timeout", fallback=20)
 
-    # Base header
-    base_header = {'Accept': 'application/json',
-                   'User-Agent': user_agent}
-
-    # Get tokens and create header
-    token_key, insttoken = None, None
+    # Get keys/tokens and create header
+    key, token_key, insttoken = None, None, None
     if "insttoken" in params:
         token_key = params.pop("apikey")
         insttoken = params.pop("insttoken")
-    elif insttokens:
-        token_key, insttoken = insttokens[0]
-
-    # Get keys and create header
-    key = None
-    if "apikey" in params:
+    elif "apikey" in params:
         key = params.pop("apikey")
-    elif keys:
-        key = keys[0]
+    elif insttokens:
+        token_key, insttoken = insttokens.pop(0)
+    else:
+        key = keys.pop(0)
+
+    header = {'Accept': 'application/json',
+              'User-Agent': user_agent,
+              'X-ELS-APIKey': token_key or key}
 
     # Eventually wait bc of throttling
     if len(_throttling_params[api]) == _throttling_params[api].maxlen:
@@ -112,25 +109,20 @@ def get_content(url, api, params=None, **kwds):
         except (IndexError, ValueError):
             pass
 
-    # Either use token header or key header
+    # Use insttoken if available
     if insttoken:
-        header = {**base_header,
-                  'X-ELS-APIKey': token_key,
-                  'X-ELS-Insttoken': insttoken}
+        header['X-ELS-Insttoken'] = insttoken
         resp = session.get(url, headers=header, params=params, timeout=timeout)
     else:
-        header = {**base_header,
-                  'X-ELS-APIKey': key}
         resp = session.get(url, headers=header, params=params, timeout=timeout, proxies=proxies)
 
     # If 429 try other tokens
     while (resp.status_code == 429) or (resp.status_code == 401):
         try:
-            insttokens.pop(0)
-            shuffle(insttokens)
-            key, token = insttokens[0]
-            header['X-ELS-APIKey'] = key
+            token_key, token = insttokens.pop(0) # Get and remove current key
+            header['X-ELS-APIKey'] = token_key
             header['X-ELS-Insttoken'] = token
+            shuffle(insttokens)
             resp = session.get(url, headers=header, params=params, timeout=timeout)
         except IndexError:  # All tokens depleted
             break
@@ -142,11 +134,10 @@ def get_content(url, api, params=None, **kwds):
     # If 429 try other keys
     while (resp.status_code == 429) or (resp.status_code == 401):
         try:
-            keys.pop(0)  # Remove current key
+            key = keys.pop(0)  # Remove current key
+            header['X-ELS-APIKey'] = key
             shuffle(keys)
-            header['X-ELS-APIKey'] = keys[0]
-            resp = session.get(url, headers=header, proxies=proxies,
-                            params=params, timeout=timeout)
+            resp = session.get(url, headers=header, proxies=proxies, params=params, timeout=timeout)
         except IndexError:  # All keys depleted
             break
 

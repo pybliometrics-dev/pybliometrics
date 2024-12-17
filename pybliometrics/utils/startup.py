@@ -74,9 +74,9 @@ def check_keys_tokens() -> None:
     keys = get_keys()
     insttokens = get_insttokens()
     # 3 problematic cases
-    no_keys_no_insttokens = True if not keys and not insttokens else False
-    insttokens_no_keys = True if insttokens and not keys else False
-    keys_and_insttokens = True if keys and insttokens else False
+    no_keys_no_insttokens = not keys and not insttokens
+    insttokens_no_keys = insttokens and not keys
+    keys_and_insttokens = keys and insttokens
     keys_tokens_diff = len(keys) - len(insttokens)
 
     if no_keys_no_insttokens:
@@ -105,7 +105,7 @@ def create_cache_folders(config: Type[ConfigParser]) -> None:
             view_path.mkdir(parents=True, exist_ok=True)
 
 
-def get_config() -> ConfigParser:
+def get_config() -> Type[ConfigParser]:
     """Function to get the config parser."""
     if not CONFIG:
         raise FileNotFoundError('No configuration file found.'
