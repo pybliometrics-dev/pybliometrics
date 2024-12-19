@@ -48,3 +48,6 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+# Dont't track test config file
+*test_config.cfg

@@ -6,7 +6,7 @@ from urllib3.util import Retry
 
 from pybliometrics import __version__
 from pybliometrics import exception
-from pybliometrics.utils.startup import get_config, get_keys, _throttling_params
+from pybliometrics.utils.startup import get_config, get_insttokens, get_keys, _throttling_params
 
 # Define user agent string for HTTP requests
 user_agent = 'pybliometrics-v' + __version__
@@ -67,30 +67,40 @@ def get_content(url, api, params=None, **kwds):
     from random import shuffle
     from time import sleep, time
 
+    # Get needed ressources for query
     config = get_config()
+
     keys = get_keys()
+
+    # Get tokens and zip with keys
+    insttokens = get_insttokens()
+    insttokens = list(zip(keys, insttokens))
+
+    # Keep keys that are not insttokens
+    keys = keys[len(insttokens):]
+
     session = get_session()
 
-    # Set header, params and proxy
-    try:
-        header = {'X-ELS-APIKey': keys[0],
-                  'Accept': 'application/json',
-                  'User-Agent': user_agent}
-    except IndexError:
-        raise errors[429]
-
-    if config.has_option('Authentication', 'InstToken'):
-        token = config.get('Authentication', 'InstToken')
-        header['X-ELS-Insttoken'] = token
     params = params or {}
     params.update(**kwds)
     proxies = dict(config._sections.get("Proxy", {}))
+    timeout = config.getint("Requests", "Timeout", fallback=20)
 
-    # Replace credentials if provided
-    if "apikey" in params:
-        header['X-ELS-APIKey'] = params.pop("apikey")
+    # Get keys/tokens and create header
+    token_key, insttoken = None, None
     if "insttoken" in params:
-        header['X-ELS-Insttoken'] = params.pop("insttoken")
+        token_key = params.pop("apikey")
+        insttoken = params.pop("insttoken")
+    elif "apikey" in params:
+        key = params.pop("apikey")
+    elif insttokens:
+        token_key, insttoken = insttokens.pop(0)
+    else:
+        key = keys.pop(0)
+
+    header = {'Accept': 'application/json',
+              'User-Agent': user_agent,
+              'X-ELS-APIKey': token_key or key}
 
     # Eventually wait bc of throttling
     if len(_throttling_params[api]) == _throttling_params[api].maxlen:
@@ -99,19 +109,38 @@ def get_content(url, api, params=None, **kwds):
         except (IndexError, ValueError):
             pass
 
-    # Perform request, eventually replacing the current key
-    timeout = config.getint("Requests", "Timeout", fallback=20)
-    resp = session.get(url, headers=header, proxies=proxies, params=params,
-                       timeout=timeout)
-    while resp.status_code == 429:
+    # Use insttoken if available
+    if insttoken:
+        header['X-ELS-Insttoken'] = insttoken
+        resp = session.get(url, headers=header, params=params, timeout=timeout)
+    else:
+        resp = session.get(url, headers=header, params=params, timeout=timeout, proxies=proxies)
+
+    # If 429 try other tokens
+    while (resp.status_code == 429) or (resp.status_code == 401):
         try:
-            keys.pop(0)  # Remove current key
+            token_key, token = insttokens.pop(0) # Get and remove current key
+            header['X-ELS-APIKey'] = token_key
+            header['X-ELS-Insttoken'] = token
+            shuffle(insttokens)
+            resp = session.get(url, headers=header, params=params, timeout=timeout)
+        except IndexError:  # All tokens depleted
+            break
+
+   # Remove Insttoken from header (if present)
+    if 'X-ELS-Insttoken' in header:
+        del header['X-ELS-Insttoken']
+
+    # If 429 try other keys
+    while (resp.status_code == 429) or (resp.status_code == 401):
+        try:
+            key = keys.pop(0)  # Remove current key
+            header['X-ELS-APIKey'] = key
             shuffle(keys)
-            header['X-ELS-APIKey'] = keys[0].strip()
-            resp = session.get(url, headers=header, proxies=proxies,
-                               params=params, timeout=timeout)
+            resp = session.get(url, headers=header, proxies=proxies, params=params, timeout=timeout)
         except IndexError:  # All keys depleted
             break
+
     _throttling_params[api].append(time())
 
     # Eventually raise error, if possible with supplied error message
