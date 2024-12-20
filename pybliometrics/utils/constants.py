@@ -1,18 +1,23 @@
 from pathlib import Path
 
-# Paths for cached files and configuration location
-if (Path.home() / ".scopus").exists():
-    BASE_PATH_SCOPUS = Path.home() / ".scopus"
-    BASE_PATH_SCIENCEDIRECT = Path.home() / ".sciencedirect"
-    CONFIG_FILE = Path.home() / ".scopus" / "config.ini"
-elif (Path.home() / ".pybliometrics" / "Scopus").exists():
-    BASE_PATH_SCOPUS = Path.home() / ".pybliometrics" / "Scopus"
-    BASE_PATH_SCIENCEDIRECT = Path.home() / ".pybliometrics" / "ScienceDirect"
-    CONFIG_FILE = Path.home() / ".pybliometrics" / "config.ini"
-else:
-    BASE_PATH_SCOPUS = Path.home() / ".cache" / "pybliometrics" / "Scopus"
-    BASE_PATH_SCIENCEDIRECT = Path.home() / ".cache" / "pybliometrics" / "ScienceDirect"
-    CONFIG_FILE = Path.home() / ".config" / "pybliometrics.cfg"
+# Location of configuration file with legacy support
+config_options = [
+    Path.home() / ".scopus" / "config.ini",
+    Path.home() / ".pybliometrics" / "Scopus" / "config.ini",
+    Path.home() / ".config" / "pybliometrics.cfg"  # default
+]
+CONFIG_FILE = next((path for path in config_options if path.exists()),
+                   config_options[-1])
+# Location of Scopus cache with legacy support
+base_path_options = [
+    Path.home() / ".scopus",
+    Path.home() / ".pybliometrics" / "Scopus",
+    Path.home() / ".cache" / "pybliometrics" / "Scopus"  # default
+]
+BASE_PATH_SCOPUS = next((path for path in base_path_options if path.exists()),
+                        base_path_options[-1])
+# Location of ScienceDirect cache
+BASE_PATH_SCIENCEDIRECT = Path.home() / ".cache" / "pybliometrics" / "ScienceDirect"
 
 DEFAULT_PATHS = {
     'AbstractRetrieval': BASE_PATH_SCOPUS / 'abstract_retrieval',
