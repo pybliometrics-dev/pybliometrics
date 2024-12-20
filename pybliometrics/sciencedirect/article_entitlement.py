@@ -67,7 +67,6 @@ class ArticleEntitlement(Retrieval):
         """API url used to check entitlement."""
         return self._json.get("prism:url")
 
-
     @property
     def scopus_id(self) -> Optional[str]:
         """The scopus_id of a document (when used in the request)."""
@@ -79,7 +78,6 @@ class ArticleEntitlement(Retrieval):
                  id_type: Optional[str] = None,
                  refresh: Union[bool, int] = False,
                  **kwds: str) -> None:
-
         # Checks
         identifier = str(identifier)
         check_parameter_value(view, VIEWS["ArticleEntitlement"], "view")
@@ -91,9 +89,8 @@ class ArticleEntitlement(Retrieval):
 
         self._view = view
         self._refresh = refresh
-
+        # Retrieve and get content
         Retrieval.__init__(self, identifier=identifier, id_type=id_type, **kwds)
-
         self._json = chained_get(self._json, ["entitlement-response", "document-entitlement"])
 
     def __str__(self) -> str:
