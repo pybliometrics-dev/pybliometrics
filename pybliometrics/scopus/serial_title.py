@@ -14,7 +14,7 @@ class SerialTitle(Retrieval):
 
     @property
     def citescoreyearinfolist(self) -> Optional[list[namedtuple]]:
-        """A list of named tuples of the form: `(year citescoare)` or (when
+        """A list of named tuples of the form: `(year citescore)` or (when
         `view="CITESCORE"`) `(year citescore status documentcount citationcount
         percentcited rank)`.  `rank` is `None` or a named tuple of the form
         `(subjectcode rank percentile)`.
@@ -55,7 +55,7 @@ class SerialTitle(Retrieval):
             new_data = [current, tracker]
 
         elif self._view == 'CITESCORE':
-            new_data = _get_all_cite_score_years(self, info_full, rank, data)
+            new_data = _get_all_cite_score_years(info_full, rank, data)
 
         return new_data or None
 
@@ -280,9 +280,14 @@ def _parse_list(d, metric):
         return None
 
 
-def _get_all_cite_score_years(named_info_list, named_rank_list, data) -> Optional[list[namedtuple]]:
+def _get_all_cite_score_years(
+        named_info_list: namedtuple,
+        named_rank_list: namedtuple,
+        data: dict
+) -> Optional[list[namedtuple]]:
     """Auxiliary function to get all information contained in cite score 
-    information list for the `CITESCORE` view."""
+    information list for the `CITESCORE` view.
+    """
     data = data.get('citeScoreYearInfo', [])
 
     new_data = []
