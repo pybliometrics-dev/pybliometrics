@@ -28,7 +28,7 @@ def test_new_config():
     TEST_CONFIG.unlink(missing_ok=True)
 
     # Create new config
-    init(config_dir=TEST_CONFIG, keys=['3', '4', '5'], inst_tokens=['c', 'd'])
+    init(config_path=TEST_CONFIG, keys=['3', '4', '5'], inst_tokens=['c', 'd'])
 
     # Use custom keys and tokens
     assert get_keys() == ['3', '4', '5']
@@ -37,13 +37,13 @@ def test_new_config():
 
 def test_new_test_config():
     """Test whether the new test config file is correctly read."""
-    init(config_dir=TEST_CONFIG, keys=['3', '4', '5'])
+    init(config_path=TEST_CONFIG, keys=['3', '4', '5'])
 
     # Use keys and tokens from test config
     assert get_keys() == ['3', '4', '5']
     assert get_insttokens() == []
 
-    init(config_dir=TEST_CONFIG, keys=['5', '6', '7'], inst_tokens=['e', 'f'])
+    init(config_path=TEST_CONFIG, keys=['5', '6', '7'], inst_tokens=['e', 'f'])
 
     # Use custom keys and tokens
     assert get_keys() == ['5', '6', '7']

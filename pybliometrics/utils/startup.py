@@ -1,3 +1,4 @@
+import warnings
 from configparser import ConfigParser, NoOptionError, NoSectionError
 from collections import deque
 from pathlib import Path
@@ -13,17 +14,20 @@ CUSTOM_INSTTOKENS = None
 _throttling_params = {k: deque(maxlen=v) for k, v in RATELIMITS.items()}
 
 
-def init(config_dir: Union[str, Path] = CONFIG_FILE,
+def init(config_path: Union[str, Path] = None,
          keys: Optional[list[str]] = None,
-         inst_tokens: Optional[list[str]] = None) -> None:
+         inst_tokens: Optional[list[str]] = None,
+         config_dir: Union[str, Path] = None) -> None:
     """
     Function to initialize the pybliometrics library. For more information refer to the
     `official documentation <https://pybliometrics.readthedocs.io/en/stable/configuration.html>`_.
     
-    :param config_dir: Path to the configuration file.
+    :param config_path: Path to the configuration file.  If None, defaults to
+                        pybliometrics.utils.constants.CONFIG_FILE.
     :param keys: List of API keys.
     :param inst_tokens: List of corresponding InstTokens. The order must match that
                         of `keys` to avoid errors.
+    :param config_dir: (Deprecated) Path to the configuration file. Use `config_path` instead.
 
     :raises NoSectionError: If the required sections (Directories, Authentication, Request)
                             do not exist.
@@ -33,17 +37,27 @@ def init(config_dir: Union[str, Path] = CONFIG_FILE,
     global CUSTOM_KEYS
     global CUSTOM_INSTTOKENS
 
-    config_dir = Path(config_dir)
+    # Deprecation inserted in 4.2
+    if config_dir is not None:
+        msg = "The 'config_dir' parameter is deprecated and will be removed in " \
+              "a future version. Please use 'config_path' instead."
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        if config_path is None:
+            config_path = config_dir
 
-    if not config_dir.exists():
-        CONFIG = create_config(config_dir, keys, inst_tokens)
+    if not config_path:
+        config_path = CONFIG_FILE
+    config_path = Path(config_path)
+
+    if not config_path.exists():
+        CONFIG = create_config(config_path, keys, inst_tokens)
     else:
         CONFIG = ConfigParser()
         CONFIG.optionxform = str
-        CONFIG.read(config_dir)
+        CONFIG.read(config_path)
 
     check_sections(CONFIG)
-    check_default_paths(CONFIG, config_dir)
+    check_default_paths(CONFIG, config_path)
     create_cache_folders(CONFIG)
 
     CUSTOM_KEYS = keys

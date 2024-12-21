@@ -73,7 +73,7 @@ There are two consecutive prompts: For your API Key(s) and the corresponding Ins
     API Keys are sufficient for most users.  If you have an InstToken, please enter the tokens pair now. Separate multiple tokens by a comma. The correspondig key's position should match the position of the token.If you don't have tokens, just press Enter:
     yyy
 
-The :ref:`function <doc-init>` accepts three parameters: A custom location `config_dir` (str or `pathlib.Path() <https://docs.python.org/3/library/pathlib.html>`_, a list of `keys`, and a list of `inst_tokens`.  The order of the provided InstTokens must match that of the provided API Keys.  This is relevant for users who build `pybliometrics` using CI or who work on a server where prompts aren't possible.
+The :ref:`function <doc-init>` accepts three parameters: A custom location `config_path` (str or `pathlib.Path() <https://docs.python.org/3/library/pathlib.html>`_, a list of `keys`, and a list of `inst_tokens`.  The order of the provided InstTokens must match that of the provided API Keys.  This is relevant for users who build `pybliometrics` using CI or who work on a server where prompts aren't possible.
 
 
 Default location
