@@ -37,3 +37,14 @@ Metadata APIs
     reference/SubjectClassifications.rst
 
 One other Metadata API, the Citations Count Metadata API, is not implemented yet.
+
+Initialization
+--------------
+
+.. _doc-init:
+
+.. currentmodule:: pybliometrics.utils
+
+.. autoclass:: init
+   :members:
+   :inherited-members:

@@ -17,17 +17,17 @@ def init(config_dir: Union[str, Path] = CONFIG_FILE,
          keys: Optional[list[str]] = None,
          inst_tokens: Optional[list[str]] = None) -> None:
     """
-    Function to initialize the Pybliometrics library. For more information go to the
-    [documentation](https://pybliometrics.readthedocs.io/en/stable/configuration.html).
+    Function to initialize the pybliometrics library. For more information refer to the
+    `official documentation <https://pybliometrics.readthedocs.io/en/stable/configuration.html>`_.
     
-    Parameters
-    ----------
-    config_dir : str
-        Path to the configuration file.
-    keys : lst
-        List of API keys.
-    inst_tokens : lst
-        List of InstTokens. The corresponding API keys must match the position of the InstTokens.
+    :param config_dir: Path to the configuration file.
+    :param keys: List of API keys.
+    :param inst_tokens: List of corresponding InstTokens. The order must match that
+                        of `keys` to avoid errors.
+
+    :raises NoSectionError: If the required sections (Directories, Authentication, Request)
+                            do not exist.
+    :raises ValueError: If there are no or fewer API keys than InstTokens present.
     """
     global CONFIG
     global CUSTOM_KEYS
