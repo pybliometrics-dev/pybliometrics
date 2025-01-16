@@ -18,8 +18,8 @@ def test_authors():
     Author = namedtuple('Author', order)
     expected = Author(eid='9-s2.0-6602907525', orcid=None, surname='Selten',
         initials='R.', givenname='Reinhard', affiliation='Universität Bonn',
-        documents=74, affiliation_id='60007493', city='Bonn',
-        country='Germany', areas='ECON (76); MATH (21); BUSI (16)')
+        documents=75, affiliation_id='60007493', city='Bonn',
+        country='Germany', areas='ECON (78); MATH (21); BUSI (16)')
     assert s1.authors[0] == expected
 
 
