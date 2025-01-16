@@ -1,13 +1,9 @@
 """Module for retrieving article entitlement information from ScienceDirect."""
+
 from typing import Optional, Union
 
 from pybliometrics.superclasses import Retrieval
-from pybliometrics.utils import (
-    chained_get,
-    check_parameter_value,
-    detect_id_type,
-    VIEWS,
-)
+from pybliometrics.utils import chained_get, check_parameter_value, detect_id_type, VIEWS
 
 
 class ArticleEntitlement(Retrieval):
@@ -24,7 +20,7 @@ class ArticleEntitlement(Retrieval):
 
     @property
     def eid(self) -> Optional[str]:
-        "The eid of a document."
+        "The EID of a document."
         return self._json.get("eid")
 
     @property
@@ -44,32 +40,32 @@ class ArticleEntitlement(Retrieval):
 
     @property
     def pii(self) -> Optional[str]:
-        """The pii of a document."""
+        """The PII of a document."""
         return self._json.get("pii")
 
     @property
     def pii_norm(self) -> Optional[str]:
-        """The pii-norm of a document."""
+        """The PII-norm of a document."""
         return self._json.get("pii-norm")
 
     @property
     def doi(self) -> Optional[str]:
-        """The doi of a document."""
+        """The DOI of a document."""
         return self._json.get("prism:doi")
 
     @property
     def pubmed_id(self) -> Optional[str]:
-        """The pubmed_id of a document (when used in the request)."""
+        """The Pubmed ID of a document (when used in the request)."""
         return self._json.get("pubmed_id")
 
     @property
     def url(self) -> Optional[str]:
-        """API url used to check entitlement."""
+        """API URL used to check entitlement."""
         return self._json.get("prism:url")
 
     @property
     def scopus_id(self) -> Optional[str]:
-        """The scopus_id of a document (when used in the request)."""
+        """The Scopus ID of a document (when used in the request)."""
         return self._json.get("scopus_id")
 
     def __init__(self,

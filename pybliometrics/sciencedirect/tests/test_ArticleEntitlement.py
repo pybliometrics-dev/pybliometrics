@@ -1,4 +1,5 @@
 """Tests for sciencedirect.ArticleEntitlement"""
+
 from pybliometrics.sciencedirect import ArticleEntitlement, init
 
 init()
