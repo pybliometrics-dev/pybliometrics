@@ -34,6 +34,7 @@ DEFAULT_PATHS = {
     'ArticleEntitlement': BASE_PATH_SCIENCEDIRECT / 'article_entitlement',
     'ArticleMetadata': BASE_PATH_SCIENCEDIRECT / 'article_metadata / ',
     'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT / 'article_retrieval',
+    'ObjectMetadata': BASE_PATH_SCIENCEDIRECT / 'object_metadata',
     'ScienceDirectSearch': BASE_PATH_SCIENCEDIRECT / 'science_direct_search',
     'ScDirSubjectClassifications': BASE_PATH_SCIENCEDIRECT / 'subject_classification',
 }
@@ -56,6 +57,7 @@ URLS = {
     'ArticleEntitlement': RETRIEVAL_BASE + 'article/entitlement/',
     'ArticleMetadata': RETRIEVAL_BASE + 'metadata/article/',
     'ArticleRetrieval': RETRIEVAL_BASE + 'article/',
+    'ObjectMetadata': RETRIEVAL_BASE + 'object/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
     'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
 }
@@ -75,6 +77,7 @@ VIEWS = {
     "SubjectClassifications": [''],
     "ArticleEntitlement": ["FULL"],
     "ArticleRetrieval": ["META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"],
+    "ObjectMetadata": ["META"],
     "ArticleMetadata": ["STANDARD", "COMPLETE"],
     "ScienceDirectSearch": ["STANDARD"],
     "ScDirSubjectClassifications": ['']
@@ -96,6 +99,7 @@ RATELIMITS = {
     'ArticleEntitlement': 0,
     'ArticleMetadata': 6,
     'ArticleRetrieval': 10,
+    'ObjectMetadata': 0,
     'ScienceDirectSearch': 2,
     'ScDirSubjectClassifications': 0,
 }
