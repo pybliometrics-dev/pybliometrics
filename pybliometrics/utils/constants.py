@@ -19,65 +19,73 @@ BASE_PATH_SCOPUS = next((path for path in base_path_options if path.exists()),
 # Location of ScienceDirect cache
 BASE_PATH_SCIENCEDIRECT = Path.home() / ".cache" / "pybliometrics" / "ScienceDirect"
 
+# Location of Scival cache
+BASE_PATH_SCIVAL = Path.home() / ".cache" / "pybliometrics" / "Scival"
+
 DEFAULT_PATHS = {
     'AbstractRetrieval': BASE_PATH_SCOPUS / 'abstract_retrieval',
     'AffiliationRetrieval': BASE_PATH_SCOPUS / 'affiliation_retrieval',
     'AffiliationSearch': BASE_PATH_SCOPUS / 'affiliation_search',
-    'AuthorRetrieval': BASE_PATH_SCOPUS / 'author_retrieval',
-    'AuthorSearch': BASE_PATH_SCOPUS / 'author_search',
-    'CitationOverview': BASE_PATH_SCOPUS / 'citation_overview',
-    'ScopusSearch': BASE_PATH_SCOPUS / 'scopus_search',
-    'SerialSearch': BASE_PATH_SCOPUS / 'serial_search',
-    'SerialTitle': BASE_PATH_SCOPUS / 'serial_title',
-    'PlumXMetrics': BASE_PATH_SCOPUS / 'plumx',
-    'SubjectClassifications': BASE_PATH_SCOPUS / 'subject_classification',
     'ArticleEntitlement': BASE_PATH_SCIENCEDIRECT / 'article_entitlement',
     'ArticleMetadata': BASE_PATH_SCIENCEDIRECT / 'article_metadata / ',
     'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT / 'article_retrieval',
-    'ScienceDirectSearch': BASE_PATH_SCIENCEDIRECT / 'science_direct_search',
+    'AuthorRetrieval': BASE_PATH_SCOPUS / 'author_retrieval',
+    'AuthorSearch': BASE_PATH_SCOPUS / 'author_search',
+    'CitationOverview': BASE_PATH_SCOPUS / 'citation_overview',
+    'PlumXMetrics': BASE_PATH_SCOPUS / 'plumx',
+    'PublicationLookup': BASE_PATH_SCIVAL / 'publication_lookup',
     'ScDirSubjectClassifications': BASE_PATH_SCIENCEDIRECT / 'subject_classification',
+    'ScienceDirectSearch': BASE_PATH_SCIENCEDIRECT / 'science_direct_search',
+    'ScopusSearch': BASE_PATH_SCOPUS / 'scopus_search',
+    'SerialSearch': BASE_PATH_SCOPUS / 'serial_search',
+    'SerialTitle': BASE_PATH_SCOPUS / 'serial_title',
+    'SubjectClassifications': BASE_PATH_SCOPUS / 'subject_classification',
 }
 
 # URLs for all classes
 RETRIEVAL_BASE = 'https://api.elsevier.com/content/'
 SEARCH_BASE = 'https://api.elsevier.com/content/search/'
+SCIVAL_BASE = 'https://api.elsevier.com/analytics/scival/'
+
+
 URLS = {
     'AbstractRetrieval': RETRIEVAL_BASE + 'abstract/',
     'AffiliationRetrieval': RETRIEVAL_BASE + 'affiliation/affiliation_id/',
     'AffiliationSearch': SEARCH_BASE + 'affiliation',
-    'AuthorRetrieval': RETRIEVAL_BASE + 'author/author_id/',
-    'AuthorSearch': SEARCH_BASE + 'author',
-    'CitationOverview': RETRIEVAL_BASE + 'abstract/citations/',
-    'ScopusSearch': SEARCH_BASE + 'scopus',
-    'SerialSearch': RETRIEVAL_BASE + 'serial/title',
-    'SerialTitle': RETRIEVAL_BASE + 'serial/title/issn/',
-    'SubjectClassifications': RETRIEVAL_BASE + 'subject/scopus',
-    'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
     'ArticleEntitlement': RETRIEVAL_BASE + 'article/entitlement/',
     'ArticleMetadata': RETRIEVAL_BASE + 'metadata/article/',
     'ArticleRetrieval': RETRIEVAL_BASE + 'article/',
+    'AuthorRetrieval': RETRIEVAL_BASE + 'author/author_id/',
+    'AuthorSearch': SEARCH_BASE + 'author',
+    'CitationOverview': RETRIEVAL_BASE + 'abstract/citations/',
+    'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
+    'PublicationLookup': SCIVAL_BASE + 'publication/',
+    'ScopusSearch': SEARCH_BASE + 'scopus',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
     'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
+    'SerialSearch': RETRIEVAL_BASE + 'serial/title',
+    'SerialTitle': RETRIEVAL_BASE + 'serial/title/issn/',
+    'SubjectClassifications': RETRIEVAL_BASE + 'subject/scopus',
 }
 
 # Valid views for all classes
 VIEWS = {
-    "CitationOverview": ["STANDARD"],
     "AbstractRetrieval": ["META", "META_ABS", "FULL", "REF", "ENTITLED"],
     "AffiliationRetrieval": ["LIGHT", "STANDARD", "ENTITLED"],
     "AffiliationSearch": ["STANDARD"],
+    "ArticleEntitlement": ["FULL"],
+    "ArticleMetadata": ["STANDARD", "COMPLETE"],
+    "ArticleRetrieval": ["META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"],
     "AuthorRetrieval": ["LIGHT", "STANDARD", "ENHANCED", "METRICS", "ENTITLED"],
     "AuthorSearch": ["STANDARD"],
+    "CitationOverview": ["STANDARD"],
     "PlumXMetrics": ["ENHANCED"],
+    "ScDirSubjectClassifications": [''],
+    "ScienceDirectSearch": ["STANDARD"],
     "ScopusSearch": ["STANDARD", "COMPLETE"],
     "SerialSearch": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SerialTitle": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SubjectClassifications": [''],
-    "ArticleEntitlement": ["FULL"],
-    "ArticleRetrieval": ["META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"],
-    "ArticleMetadata": ["STANDARD", "COMPLETE"],
-    "ScienceDirectSearch": ["STANDARD"],
-    "ScDirSubjectClassifications": ['']
 }
 
 # Throttling limits (in queries per second) // 0 = no limit
@@ -85,19 +93,20 @@ RATELIMITS = {
     'AbstractRetrieval': 9,
     'AffiliationRetrieval': 9,
     'AffiliationSearch': 6,
-    'AuthorRetrieval': 3,
-    'AuthorSearch': 2,
-    'CitationOverview': 4,
-    'ScopusSearch': 9,
-    'SerialSearch': 6,
-    'SerialTitle': 6,
-    'PlumXMetrics': 6,
-    'SubjectClassifications': 0,
     'ArticleEntitlement': 0,
     'ArticleMetadata': 6,
     'ArticleRetrieval': 10,
-    'ScienceDirectSearch': 2,
+    'AuthorRetrieval': 3,
+    'AuthorSearch': 2,
+    'CitationOverview': 4,
+    'PlumXMetrics': 6,
+    'PublicationLookup': 6,
     'ScDirSubjectClassifications': 0,
+    'ScienceDirectSearch': 2,
+    'ScopusSearch': 9,
+    'SerialSearch': 6,
+    'SerialTitle': 6,
+    'SubjectClassifications': 0,
 }
 
 # Other API restrictions

@@ -114,9 +114,13 @@ def check_keys_tokens() -> None:
 def create_cache_folders(config: Type[ConfigParser]) -> None:
     """Auxiliary function to create cache folders."""
     for api, path in config.items('Directories'):
-        for view in VIEWS[api]:
-            view_path = Path(path, view)
-            view_path.mkdir(parents=True, exist_ok=True)
+        base_dir = Path(path)
+        views = VIEWS.get(api, [])
+        if views:
+            for view in views:
+                (base_dir / view).mkdir(parents=True, exist_ok=True)
+        else:
+            base_dir.mkdir(parents=True, exist_ok=True)
 
 
 def get_config() -> Type[ConfigParser]:

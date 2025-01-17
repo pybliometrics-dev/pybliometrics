@@ -47,5 +47,7 @@ class Retrieval(Base):
         self._cache_file_path = parent/self._view/stem
 
         # Parse file contents
-        params = {'view': self._view, **kwds}
+        params = {**kwds}
+        if self._view:
+            params['view'] = self._view
         Base.__init__(self, params=params, url=url)
