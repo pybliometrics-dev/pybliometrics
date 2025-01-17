@@ -19,6 +19,9 @@ BASE_PATH_SCOPUS = next((path for path in base_path_options if path.exists()),
 # Location of ScienceDirect cache
 BASE_PATH_SCIENCEDIRECT = Path.home() / ".cache" / "pybliometrics" / "ScienceDirect"
 
+# Location of Scival cache
+BASE_PATH_SCIVAL = Path.home() / ".cache" / "pybliometrics" / "Scival"
+
 DEFAULT_PATHS = {
     'AbstractRetrieval': BASE_PATH_SCOPUS / 'abstract_retrieval',
     'AffiliationRetrieval': BASE_PATH_SCOPUS / 'affiliation_retrieval',
@@ -36,11 +39,16 @@ DEFAULT_PATHS = {
     'ArticleRetrieval': BASE_PATH_SCIENCEDIRECT / 'article_retrieval',
     'ScienceDirectSearch': BASE_PATH_SCIENCEDIRECT / 'science_direct_search',
     'ScDirSubjectClassifications': BASE_PATH_SCIENCEDIRECT / 'subject_classification',
+
+    'PublicationLookup': BASE_PATH_SCIVAL / 'publication_lookup',
 }
 
 # URLs for all classes
 RETRIEVAL_BASE = 'https://api.elsevier.com/content/'
 SEARCH_BASE = 'https://api.elsevier.com/content/search/'
+SCIVAL_BASE = 'https://api.elsevier.com/analytics/scival/'
+
+
 URLS = {
     'AbstractRetrieval': RETRIEVAL_BASE + 'abstract/',
     'AffiliationRetrieval': RETRIEVAL_BASE + 'affiliation/affiliation_id/',
@@ -58,6 +66,9 @@ URLS = {
     'ArticleRetrieval': RETRIEVAL_BASE + 'article/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
     'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
+
+    'PublicationLookup': SCIVAL_BASE + 'publication/',
+    'PublicationMetrics': SCIVAL_BASE + 'publication/metrics/'
 }
 
 # Valid views for all classes
@@ -77,7 +88,9 @@ VIEWS = {
     "ArticleRetrieval": ["META", "META_ABS", "META_ABS_REF", "FULL", "ENTITLED"],
     "ArticleMetadata": ["STANDARD", "COMPLETE"],
     "ScienceDirectSearch": ["STANDARD"],
-    "ScDirSubjectClassifications": ['']
+    "ScDirSubjectClassifications": [''],
+
+    "PublicationLookup": ['']
 }
 
 # Throttling limits (in queries per second) // 0 = no limit
@@ -98,6 +111,8 @@ RATELIMITS = {
     'ArticleRetrieval': 10,
     'ScienceDirectSearch': 2,
     'ScDirSubjectClassifications': 0,
+
+    'PublicationLookup': 6
 }
 
 # Other API restrictions
