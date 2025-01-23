@@ -1,11 +1,12 @@
 """Tests for ObjectMetadata"""
+from collections import namedtuple
 
 from pybliometrics.sciencedirect import init, ObjectMetadata
 
 init()
 
 om_1 = ObjectMetadata('10.1016/j.neunet.2024.106632', refresh=30)
-om_2 = ObjectMetadata('S2213305418300365', refresh=30)
+om_2 = ObjectMetadata('S2213305418300365', id_type='pii', refresh=30)
 
 
 def test_len():
@@ -16,17 +17,20 @@ def test_len():
 
 def test_results():
     """Tests whether the results are correct."""
-    obj = om_1.results[0]
-    expected_url = 'https://api.elsevier.com/content/object/eid/1-s2.0-S0893608024005562-gr3.jpg?httpAccept=%2A%2F%2A'
-    assert obj.get('url') == expected_url
-    assert obj.get('eid') == '1-s2.0-S0893608024005562-gr3.jpg'
-    assert obj.get('ref') == 'gr3'
-    assert obj.get('filename') == 'gr3.jpg'
-    assert obj.get('mimetype') == 'image/jpeg'
-    assert obj.get('size') == '100202'
-    assert obj.get('height') == '729'
-    assert obj.get('width') == '656'
-    assert obj.get('type') == 'IMAGE-DOWNSAMPLED'
+    fields = 'eid filename height mimetype ref size type url width'
+    metadata = namedtuple('Metadata', fields)
+    expected_metadata_0 = metadata(
+        eid="1-s2.0-S0893608024005562-gr3.jpg",
+        filename="gr3.jpg",
+        height="729",
+        mimetype="image/jpeg",
+        ref="gr3",
+        size="100202",
+        type="IMAGE-DOWNSAMPLED",
+        url="https://api.elsevier.com/content/object/eid/1-s2.0-S0893608024005562-gr3.jpg?httpAccept=%2A%2F%2A",
+        width="656",
+    )
+    assert om_1.results[0] == expected_metadata_0
 
 
 def test_str():

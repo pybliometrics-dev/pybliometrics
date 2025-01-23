@@ -83,6 +83,9 @@ VIEWS = {
     "ScDirSubjectClassifications": ['']
 }
 
+# APIs whose URL needs an id_type
+APIS_WITH_ID_TYPE = ["AbstractRetrieval", "PlumXMetrics", "ArticleRetrieval", "ArticleEntitlement", "ObjectMetadata"]
+
 # Throttling limits (in queries per second) // 0 = no limit
 RATELIMITS = {
     'AbstractRetrieval': 9,

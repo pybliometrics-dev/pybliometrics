@@ -1,5 +1,5 @@
 """Module with the ObjectMetadata class."""
-
+from collections import namedtuple
 from typing import Optional, Union
 
 from pybliometrics.superclasses import Retrieval
@@ -9,24 +9,30 @@ from pybliometrics.utils import chained_get, check_parameter_value, detect_id_ty
 class ObjectMetadata(Retrieval):
     """Class to retrieve a the metadata of all objects of a document."""
     @property
-    def results(self) -> list[dict]:
-        """List with metadata of objects in a document. The metadata includes the `url`, `eid`,
-        `ref`, `filename`, `mimetype`, `size`, `height`, `width`, and `type` of the object.
+    def results(self) -> list[namedtuple]:
+        """List with metadata of objects in a document. The metadata includes the `eid`, `filename`, 
+        `height`, `mimetype`, `ref`, `size`, `type`, `url` and `width` of the object.
         """
+        fields = 'eid filename height mimetype ref size type url width'
+        metadata = namedtuple('Metadata', fields)
+
         refs = chained_get(self._json, ['attachment-metadata-response', 'attachment'], [])
         out = []
         for ref in refs:
-            out.append({'url': ref.get('prism:url'),
-                        'eid': ref.get('eid'),
-                        'ref': ref.get('ref'),
-                        'filename': ref.get('filename'),
-                        'mimetype': ref.get('mimetype'),
-                        'size': ref.get('size'),
-                        'height': ref.get('height'),
-                        'width': ref.get('width'),
-                        'type': ref.get('type')})
+            out.append(
+                metadata(
+                    eid=ref.get("eid"),
+                    filename=ref.get("filename"),
+                    height=ref.get("height"),
+                    mimetype=ref.get("mimetype"),
+                    ref=ref.get("ref"),
+                    size=ref.get("size"),
+                    type=ref.get("type"),
+                    url=ref.get("prism:url"),
+                    width=ref.get("width"),
+                )
+            )
         return out
-
 
     def __init__(self,
                  identifier: Union[int, str],
