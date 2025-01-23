@@ -52,6 +52,8 @@ class Base:
         search_request = "query" in params
         # Check if ref retrieval for abstract
         ab_ref_retrieval = (api == 'AbstractRetrieval') and (params['view'] == 'REF')
+        # Check if object retrieval
+        obj_retrieval = (api == 'ObjectRetrieval')
 
         if fname.exists() and not self._refresh:
             self._mdate = mod_ts
@@ -59,6 +61,8 @@ class Base:
                 self._json = [loads(line) for line in
                               fname.read_text().split("\n") if line]
                 self._n = len(self._json)
+            elif obj_retrieval:
+                self._object = fname.read_bytes()
             else:
                 self._json = loads(fname.read_text())
         else:
@@ -110,6 +114,9 @@ class Base:
                     self._json = data
                 else:
                     data = None
+            elif obj_retrieval:
+                self._object = resp.content
+                data = []
             else:
                 data = loads(resp.text)
                 self._json = data
@@ -119,8 +126,11 @@ class Base:
             self._header = header
             # Finally write data unless download=False
             if download:
-                text = [dumps(item, separators=(',', ':')) for item in data]
-                fname.write_text("\n".join(text))
+                if obj_retrieval:
+                    fname.write_bytes(self._object)
+                else:
+                    text = [dumps(item, separators=(',', ':')) for item in data]
+                    fname.write_text("\n".join(text))
 
     def get_cache_file_age(self) -> int:
         """Return the age of the cached file in days."""
