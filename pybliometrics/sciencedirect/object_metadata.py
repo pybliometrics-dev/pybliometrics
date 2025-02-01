@@ -11,8 +11,8 @@ class ObjectMetadata(Retrieval):
     """Class to retrieve a the metadata of all objects of a document."""
     @property
     def results(self) -> list[namedtuple]:
-        """List of namedtuples in the form `eid`, `filename`, `height`, `mimetype`, 
-        `ref`, `size`, `type`, `url` and `width` of the object.
+        """Metadata of the objects in a document. List of namedtuples in the form `eid`, `filename`,
+        `height`, `mimetype`, `ref`, `size`, `type`, `url` and `width` of the object.
         """
         fields = 'eid filename height mimetype ref size type url width'
         metadata = namedtuple('Metadata', fields)
