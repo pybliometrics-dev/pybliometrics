@@ -1,17 +1,18 @@
 """Module with the ObjectMetadata class."""
+
 from collections import namedtuple
 from typing import Optional, Union
 
 from pybliometrics.superclasses import Retrieval
-from pybliometrics.utils import chained_get, check_parameter_value, detect_id_type, VIEWS
+from pybliometrics.utils import chained_get, check_parameter_value, detect_id_type, make_int_if_possible, VIEWS
 
 
 class ObjectMetadata(Retrieval):
     """Class to retrieve a the metadata of all objects of a document."""
     @property
     def results(self) -> list[namedtuple]:
-        """List with metadata of objects in a document. The metadata includes the `eid`, `filename`, 
-        `height`, `mimetype`, `ref`, `size`, `type`, `url` and `width` of the object.
+        """List of namedtuples in the form `eid`, `filename`, `height`, `mimetype`, 
+        `ref`, `size`, `type`, `url` and `width` of the object.
         """
         fields = 'eid filename height mimetype ref size type url width'
         metadata = namedtuple('Metadata', fields)
@@ -21,15 +22,15 @@ class ObjectMetadata(Retrieval):
         for ref in refs:
             out.append(
                 metadata(
-                    eid=ref.get("eid"),
+                    eid=ref["eid"],
                     filename=ref.get("filename"),
-                    height=ref.get("height"),
+                    height=make_int_if_possible(ref.get("height")),
                     mimetype=ref.get("mimetype"),
                     ref=ref.get("ref"),
-                    size=ref.get("size"),
+                    size=make_int_if_possible(ref.get("size")),
                     type=ref.get("type"),
                     url=ref.get("prism:url"),
-                    width=ref.get("width"),
+                    width=make_int_if_possible(ref.get("width")),
                 )
             )
         return out
