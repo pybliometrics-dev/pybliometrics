@@ -1,4 +1,5 @@
 """Module to retrieve a specific object of a document."""
+
 from io import BytesIO
 from typing import Optional, Union
 
@@ -28,19 +29,6 @@ class ObjectRetrieval(Retrieval):
         :param id_type: Document identifier. Allowed values: `doi`, `pii`, `scopus_id`, 
             `pubmed_id`, `eid`.
         :param refresh: Whether to refresh the cached file if it exists. Default: False.
-
-        Example:
-            >>> from PIL import Image
-            >>> from pybliometrics.sciencedirect import init, ObjectMetadata, ObjectRetrieval
-            >>> init()
-            >>> # Get all objects and its filenames
-            >>> om = ObjectMetadata('10.1016/j.rcim.2020.102086')
-            >>> all_filenames = [f.filename for f in om.results]
-            >>> # Get 6th object: gr7.jpg
-            >>> obj_ret = ObjectRetrieval('10.1016/j.rcim.2020.102086', all_filenames[5])
-            >>> # Display using PIL
-            >>> img = Image.open(obj_ret.object)
-            >>> img.show()
         """
         identifier = str(identifier)
 
