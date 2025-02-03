@@ -12,7 +12,7 @@ class ObjectMetadata(Retrieval):
     @property
     def results(self) -> list[namedtuple]:
         """Metadata of the objects in a document. List of namedtuples in the form `eid`, `filename`,
-        `height`, `mimetype`, `ref`, `size`, `type`, `url` and `width` of the object.
+        `height`, `mimetype`, `ref`, `size`, `type`, `url` and `width`.
         """
         fields = 'eid filename height mimetype ref size type url width'
         metadata = namedtuple('Metadata', fields)
@@ -43,8 +43,9 @@ class ObjectMetadata(Retrieval):
                  **kwds: str
                  ):
         """Class to retrieve the metadata of all objects of a document.
+
         :param identifier: The indentifier of an article.
-        :param view: The view of the object. Allowed values: `META`.
+        :param view: The view of the object. Allowed value: `META`.
         :param id_type: The type of identifier supplied. Allowed values: `doi`, `pii`, `scopus_id`,
         `pubmed_id`, `eid`.
         :param refresh: Whether to refresh the cached file if it exists. Default: `False`.
