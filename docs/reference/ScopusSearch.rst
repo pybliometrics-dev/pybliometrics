@@ -88,7 +88,7 @@ The main attribute of the class, `results`, returns a list of `namedtuples <http
     (88, 36)
     >>> pd.set_option('display.max_columns', None)  # just for display
     >>> df.head()
-                          eid                           doi                pii  \
+                      eid                           doi                pii  \
     0  2-s2.0-85174697039   10.1016/j.softx.2023.101565  S2352711023002613   
     1  2-s2.0-85169560066  10.1016/j.respol.2023.104874  S0048733323001580   
     2  2-s2.0-85163820321    10.1186/s40537-023-00793-6               None   
@@ -166,11 +166,11 @@ The main attribute of the class, `results`, returns a list of `namedtuples <http
     4  offshore energy | offshore wind | wind farm | ...              0   
 
        openaccess         freetoread freetoreadLabel fund_acr             fund_no  \
-    0           1               None            None     None           undefined   
+    0           1               None            None     None                None   
     1           0       repositoryam           Green      MSI  235577387/GRK 1974   
-    2           1       repositoryam           Green      BTH           undefined   
-    3           1       repositoryam           Green     None           undefined   
-    4           1  publisherfullgold            Gold     None           undefined   
+    2           1       repositoryam           Green      BTH                None   
+    3           1       repositoryam           Green     None                None   
+    4           1  publisherfullgold            Gold     None                None   
 
                                           fund_sponsor  
     0                                             None  

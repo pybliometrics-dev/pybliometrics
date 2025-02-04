@@ -53,7 +53,7 @@ def test_results_author():
         issueIdentifier='2-3', article_number=None, pageRange='307-309',
         description=None, authkeywords=None, citedby_count=0, openaccess=0,
         freetoread=None, freetoreadLabel=None, fund_acr=None,
-        fund_no='undefined', fund_sponsor=None)
+        fund_no=None, fund_sponsor=None)
     assert int(received.citedby_count) > 0
     assert received._replace(citedby_count=0) == expected
 
