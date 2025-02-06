@@ -82,9 +82,8 @@ class ScopusSearch(Search):
             date = item.get('prism:coverDate')
             if isinstance(date, list):
                 date = date[0].get('$')
-            default = [None, {"$": None}]
-            freetoread = get_freetoread(item, ["freetoread", "value"], default)
-            freetoreadLabel = get_freetoread(item, ["freetoreadLabel", "value"], default)
+            freetoread = get_freetoread(item, ["freetoread", "value"])
+            freetoreadLabel = get_freetoread(item, ["freetoreadLabel", "value"])
             # Get text fields and unescape
             for key in ['dc:title', 'dc:description', 'authkeywords']:
                 value = item.get(key)

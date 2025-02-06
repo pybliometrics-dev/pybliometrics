@@ -74,11 +74,11 @@ def get_id(s, integer=True):
         return None
 
 
-def get_freetoread(item, path, default):
+def get_freetoread(item, path):
     """Helper function to return freetoread information from search results."""
-    text = chained_get(item, path, default)
+    text = chained_get(item, path)
     try:
-        text = text[-1]["$"]
+        text = " ".join([x['$'] for x in text])
     except TypeError:
         pass
     return text

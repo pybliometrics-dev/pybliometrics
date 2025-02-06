@@ -27,7 +27,7 @@ The class is initialized with a search query.  There are but two exceptions to a
     >>> q = "REF(2-s2.0-85068268027)"
     >>> s = ScopusSearch(q, verbose=True)
     Downloading results for query "REF(2-s2.0-85068268027)":
-    100%|████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:03<00:00,  1.07s/it]
+    100%|████████████████████████████████████████████████████████████████████████████████████████████████| 6/6 [00:05<00:00,  1.07s/it]
 
 
 You can obtain a search summary just by printing the object:
@@ -35,18 +35,18 @@ You can obtain a search summary just by printing the object:
 .. code-block:: python
 
     >>> print(s)
-    Search 'REF(2-s2.0-85068268027)' yielded 116 documents as of 2024-07-27:
-		2-s2.0-85194707120
-		2-s2.0-85184035025
-		2-s2.0-85187781098
-		2-s2.0-85147940888
-		2-s2.0-85197104836
-		2-s2.0-85191356593
-		2-s2.0-85185298843
-		2-s2.0-85176114500
-		2-s2.0-85187960595
-		2-s2.0-85187507366
-		2-s2.0-85187306554
+    Search 'REF(2-s2.0-85068268027)' yielded 128 documents as of 2025-02-06:
+            2-s2.0-85211039740
+            2-s2.0-85214107782
+            2-s2.0-85214598506
+            2-s2.0-85210715388
+            2-s2.0-85204999049
+            2-s2.0-85202700133
+            2-s2.0-85181227776
+            2-s2.0-85206823306
+            2-s2.0-85201454159
+            2-s2.0-85201597291
+            2-s2.0-85194707120
     # output truncated
 
 
@@ -57,7 +57,7 @@ Users can determine the number of results programmatically using the `.get_resul
 .. code-block:: python
 
     >>> s.get_results_size()
-    110
+    128
 
 
 This method works even if one chooses to not download results.  It thus helps subscribers to decide programmatically if one wants to proceed downloading or not:
@@ -85,99 +85,106 @@ The main attribute of the class, `results`, returns a list of `namedtuples <http
            'openaccess', 'freetoread', 'freetoreadLabel' 'fund_acr', 'fund_no', 'fund_sponsor'],
           dtype='object')
     >>> df.shape
-    (88, 36)
+    (128, 36)
     >>> pd.set_option('display.max_columns', None)  # just for display
     >>> df.head()
-                      eid                           doi                pii  \
-    0  2-s2.0-85174697039   10.1016/j.softx.2023.101565  S2352711023002613   
-    1  2-s2.0-85169560066  10.1016/j.respol.2023.104874  S0048733323001580   
-    2  2-s2.0-85163820321    10.1186/s40537-023-00793-6               None   
-    3  2-s2.0-85153853127           10.1162/qss_a_00236               None   
-    4  2-s2.0-85174908092          10.3390/jmse11101855               None   
+                      eid                               doi                pii  \
+    0  2-s2.0-85211039740  10.1016/j.scriptamat.2024.116486  S1359646224005219
+    1  2-s2.0-85214107782        10.1016/j.tacc.2024.101515  S2210844024001849
+    2  2-s2.0-85214598506                              None               None
+    3  2-s2.0-85210715388      10.1371/journal.pone.0312945               None
+    4  2-s2.0-85204999049       10.1016/j.softx.2024.101907  S2352711024002772
 
       pubmed_id                                              title subtype  \
-    0      None  PyblioNet – Software for the creation, visuali...      ar   
-    1      None  The role of gender and coauthors in academic p...      ar   
-    2      None  Bibliometric mining of research directions and...      ar   
-    3      None  How reliable are unsupervised author disambigu...      ar   
-    4      None  Machine Learning Solutions for Offshore Wind F...      re   
+    0      None  Data-driven compositional optimization of La(F...      ar
+    1      None  Identifying and analyzing extremely productive...      ar
+    2      None       Problem Structuring: Methodology in Practice      bk
+    3  39621723  Instant prediction of scientific paper cited p...      ar
+    4      None  core_api_client: An API for the CORE aggregati...      ar
 
-      subtypeDescription      creator               afid  \
-    0            Article    Müller M.           60018373   
-    1            Article  Schmal W.B.  60025310;60006341   
-    2            Article  Lundberg L.           60016636   
-    3            Article    Abramo G.  60027509;60021199   
-    4             Review   Masoumi M.           60017789   
+      subtypeDescription          creator                         afid  \
+    0            Article    Srinithi A.K.            60014256;60002414
+    1            Article  Zarantonello F.            60027298;60000481
+    2               Book     Yearworth M.                         None
+    3            Article           Zhu H.  60023932;60021182;126223799
+    4            Article          Vake D.  60030129;60006286;126197686
 
-                                               affilname     affiliation_city  \
-    0                              Universität Hohenheim            Stuttgart   
-    1  Heinrich-Heine-Universität Düsseldorf;Universi...  Dusseldorf;Mannheim   
-    2                         Blekinge Tekniska Högskola           Karlskrona   
-    3  Università degli Studi di Roma "Tor Vergata";C...            Rome;Rome   
-    4                                  Manhattan College             New York   
+                                               affilname  \
+    0  University of Tsukuba;National Institute for M...
+    1  Azienda Ospedale Università Padova;Università ...
+    2                                               None
+    3  University of Technology Sydney;Sun Yat-Sen Un...
+    4  Znanstvenoraziskovalni Center Slovenske Akadem...
 
-      affiliation_country author_count  \
-    0             Germany            1   
-    1     Germany;Germany            3   
-    2              Sweden            1   
-    3         Italy;Italy            2   
-    4       United States            1   
+                 affiliation_city         affiliation_country author_count  \
+    0             Tsukuba;Tsukuba                 Japan;Japan            8
+    1                 Padua;Padua                 Italy;Italy            8
+    2                        None                        None            1
+    3  Sydney;Guangzhou;Guangzhou       Australia;China;China            2
+    4       Ljubljana;Koper;Izola  Slovenia;Slovenia;Slovenia            4
 
-                                         author_names  \
-    0                                Müller, Matthias   
-    1  Schmal, W. Benedikt;Haucap, Justus;Knoke, Leon   
-    2                                  Lundberg, Lars   
-    3       Abramo, Giovanni;D’angelo, Ciriaco Andrea   
-    4                                 Masoumi, Masoud   
+                                            author_names  \
+    0  Srinithi, A. K.;Bolyachkin, A.;Tang, Xin;Sepeh...
+    1  Zarantonello, Francesco;Sella, Nicolò;De Cassa...
+    2                                    Yearworth, Mike
+    3                               Zhu, Hou;Shuhuai, Li
+    4  Vake, Domen;Hrovatin, Niki;Tošić, Aleksandar;V...
 
-                               author_ids                author_afids   coverDate  \
-    0                         58302698300                    60018373  2023-12-01   
-    1  57350833800;6602422284;57377238100  60025310;60025310;60006341  2023-12-01   
-    2                          7103325657                    60016636  2023-12-01   
-    3             22833445200;57219528028  60021199;60021199-60027509  2023-12-01   
-    4                         56362456200                    60017789  2023-10-01   
+                                              author_ids  \
+    0  57202111701;56418506200;55613058100;3497743530...
+    1  57041172900;57218452414;57200001548;5934273760...
+    2                                         6602655577
+    3                            56359276400;59451089800
+    4    58718905200;57225191729;55559996100;24484099500
 
-      coverDisplayDate                            publicationName      issn  \
-    0    December 2023                                  SoftwareX      None   
-    1    December 2023                            Research Policy  00487333   
-    2    December 2023                        Journal of Big Data      None   
-    3      Winter 2023               Quantitative Science Studies      None   
-    4     October 2023  Journal of Marine Science and Engineering      None   
+                                            author_afids   coverDate  \
+    0  60002414-60014256;60002414;60002414;60002414-6...  2025-03-15
+    1  60027298;60027298;60027298-60000481;60000481;6...  2025-02-01
+    2                                               None  2025-01-01
+    3               60021182-60023932;60021182-126223799  2024-12-01
+    4  60006286;60006286-126197686;60006286-126197686...  2024-12-01
+
+      coverDisplayDate                               publicationName      issn  \
+    0    15 March 2025                            Scripta Materialia  13596462
+    1    February 2025       Trends in Anaesthesia and Critical Care  22108440
+    2   1 January 2025  Problem Structuring: Methodology in Practice      None
+    3    December 2024                                      PLoS ONE      None
+    4    December 2024                                     SoftwareX      None
 
          source_id     eIssn aggregationType volume issueIdentifier  \
-    0  21100422153  23527110         Journal     24            None   
-    1        22900      None         Journal     52              10   
-    2  21100791292  21961115         Journal     10               1   
-    3  21101062805  26413337         Journal      4               1   
-    4  21100830140  20771312         Journal     11              10   
+    0        28379      None         Journal    258            None
+    1  19700200839  22108467         Journal     60            None
+    2  21101268725      None            Book   None            None
+    3  10600153309  19326203         Journal     19              12
+    4  21100422153  23527110         Journal     28            None
 
       article_number pageRange                                        description  \
-    0         101565      None  PyblioNet is a software tool for the creation,...   
-    1         104874      None  This paper contributes to the literature on di...   
-    2            112      None  In this paper a program and methodology for bi...   
-    3           None   144-166  Assessing the performance of universities by o...   
-    4           1855      None  The continuous advancement within the offshore...   
+    0         116486      None  Magnetocaloric liquefaction of industrial and ...
+    1         101515      None  Introduction: Clinical progress relies heavily...
+    2           None     1-337  Current perspectives on approaches to problem ...
+    3       e0312945      None  With the continuous increase in the number of ...
+    4         101907      None  Recent efforts to make research publications p...
 
                                             authkeywords  citedby_count  \
-    0  Bibliometrics | Network | Python | Science map...              0   
-    1  Academic publishing | DEAL | Elsevier | Gender...              0   
-    2  Bibliometrics | Fields of science and technolo...              0   
-    3  author name disambiguation | evaluative scient...              1   
-    4  offshore energy | offshore wind | wind farm | ...              0   
+    0  Gas liquefaction | La(Fe,Si) -based compounds ...              0
+    1  Academics | H-index | Hyperprolific | Metrics ...              0
+    2                                               None              0
+    3                                               None              0
+    4  API | Data analysis | Scientific publication |...              0
 
-       openaccess         freetoread freetoreadLabel fund_acr             fund_no  \
-    0           1               None            None     None                None   
-    1           0       repositoryam           Green      MSI  235577387/GRK 1974   
-    2           1       repositoryam           Green      BTH                None   
-    3           1       repositoryam           Green     None                None   
-    4           1  publisherfullgold            Gold     None                None   
+       openaccess               freetoread              freetoreadLabel fund_acr  \
+    0           0                     None                         None     MEXT
+    1           1  all publisherhybridgold  All Open Access Hybrid Gold     None
+    2           0                     None                         None     None
+    3           1    all publisherfullgold         All Open Access Gold     NSFC
+    4           1                     None                         None       EC
 
-                                          fund_sponsor  
-    0                                             None  
-    1  Ministry of Science and Innovation, New Zealand  
-    2                       Blekinge Tekniska Högskola  
-    3                              Universiteit Leiden  
-    4                                             None 
+               fund_no                                       fund_sponsor
+    0  JPMXP1122715503  Ministry of Education, Culture, Sports, Scienc...
+    1             None                                               None
+    2             None                                               None
+    3  2021A1515011805   Natural Science Foundation of Guangdong Province
+    4           739574                                European Commission
 
 
 It's important to note that the search results include no more than 100 authors.
