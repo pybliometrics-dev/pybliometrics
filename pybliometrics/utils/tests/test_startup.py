@@ -23,6 +23,18 @@ def test_custom_keys():
     assert get_keys() == ['1', '2', '3']
 
 
+def test_imports():
+    """Test the import and initialization of the pybliometrics package and its submodules."""
+    import pybliometrics
+    pybliometrics.init()
+
+    import pybliometrics.sciencedirect
+    pybliometrics.sciencedirect.init()
+
+    import pybliometrics.scopus
+    pybliometrics.scopus.init()
+
+
 def test_new_config():
     """Test whether a new config file is created."""
     TEST_CONFIG.unlink(missing_ok=True)
