@@ -56,7 +56,7 @@ You initalize `pybliometrics` like so:
 
     >>> import pybliometrics
 	
-    >>> pybliometrics.scopus.init()
+    >>> pybliometrics.init()
 
 
 This attempts to read the configuration from the default locations.
