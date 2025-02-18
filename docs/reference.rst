@@ -2,10 +2,13 @@
 API Reference
 =============
 
-Each classe in `pybliometrics` corresponds to one of the `Product Specific Scopus APIs <https://dev.elsevier.com/api_docs.html>`_.  See below links for class reference and examples.
+Each class in `pybliometrics` corresponds to one of the `Product Specific APIs <https://dev.elsevier.com/api_docs.html>`_.  See below links for class reference and examples.
 
-Search APIs
------------
+-------
+Scopus
+-------
+
+**Search APIs**
 
 .. toctree::
     :maxdepth: 1
@@ -14,8 +17,7 @@ Search APIs
     reference/AuthorSearch.rst
     reference/ScopusSearch.rst
 
-Retrieval APIs
---------------
+**Retrieval APIs**
 
 .. toctree::
     :maxdepth: 1
@@ -24,8 +26,7 @@ Retrieval APIs
     reference/AffiliationRetrieval.rst
     reference/AuthorRetrieval.rst
 
-Metadata APIs
--------------
+**Metadata APIs**
 
 .. toctree::
     :maxdepth: 1
@@ -38,8 +39,42 @@ Metadata APIs
 
 One other Metadata API, the Citations Count Metadata API, is not implemented yet.
 
-Initialization
+
 --------------
+ScienceDirect
+--------------
+
+**Search APIs**
+
+.. toctree::
+    :maxdepth: 1
+
+    reference/sciencedirect/ScienceDirectSearch.rst
+
+
+**Retrieval APIs**
+
+.. toctree::
+    :maxdepth: 1
+
+    reference/sciencedirect/ArticleRetrieval.rst
+    reference/sciencedirect/ObjectRetrieval.rst
+
+**Metadata APIs**
+
+.. toctree::
+    :maxdepth: 1
+
+    reference/sciencedirect/ArticleEntitlement.rst
+    reference/sciencedirect/ArticleMetadata.rst
+    reference/sciencedirect/ObjectMetadata.rst
+    reference/sciencedirect/ScDirSubjectClassifications.rst
+
+
+
+---------------
+Initialization
+---------------
 
 .. _doc-init:
 
