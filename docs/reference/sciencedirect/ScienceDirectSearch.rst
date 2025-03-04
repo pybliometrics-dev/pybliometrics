@@ -28,7 +28,7 @@ The class is initialized with a search query. To see the download progress, set 
     >>> # Retrieve documents based on the search query  
     >>> sds = ScienceDirectSearch('"neural radiance fields" AND "3D" AND YEAR(2024)', verbose=True)
     Downloading results for query ""neural radiance fields" AND "3D" AND YEAR(2024)":
-    88%|████████▊ | 7/8 [00:04<00:00,  1.24it/s]
+    100%|██████████| 8/8 [00:05<00:00,  1.39it/s]
 
 To access the results, use the attribute `results` which contains a list of `Document` namedtuples.
 
@@ -41,12 +41,14 @@ To access the results, use the attribute `results` which contains a list of `Doc
      Document(authors='Jian Liu;Zhen Yu', first_author='Jian Liu', doi='10.1016/j.neucom.2025.129420', title='SA3D-L: A lightweight model for 3D object segmentation using neural radiance fields', link='https://www.sciencedirect.com/science/article/pii/S092523122500092X?dgcid=api_sd_search-api-endpoint', load_date='2025-01-14T00:00:00.000Z', openaccess_status=False, pii='S092523122500092X', coverDate='2025-03-28', endingPage=None, publicationName='Neurocomputing', startingPage='129420', api_link='https://api.elsevier.com/content/article/pii/S092523122500092X', volume='623'),
      ...]
 
-The list of results can be easily converted to a pandas DataFrame.
+The list of results can be cast into a Pandas DataFrame.
 
 .. code-block:: python
 
     >>> import pandas as pd
+    >>> # Cast results to a pandas DataFrame
     >>> df = pd.DataFrame(sds.results)
+    >>> # Display available fields
     >>> df.head(3)
 
 .. raw:: html

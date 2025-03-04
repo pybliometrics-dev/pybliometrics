@@ -4,9 +4,8 @@ API Reference
 
 Each class in `pybliometrics` corresponds to one of the `Product Specific APIs <https://dev.elsevier.com/api_docs.html>`_.  See below links for class reference and examples.
 
--------
 Scopus
--------
+=======
 
 **Search APIs**
 
@@ -40,9 +39,8 @@ Scopus
 One other Metadata API, the Citations Count Metadata API, is not implemented yet.
 
 
---------------
 ScienceDirect
---------------
+==============
 
 **Search APIs**
 
@@ -72,9 +70,8 @@ ScienceDirect
 
 
 
----------------
 Initialization
----------------
+===============
 
 .. _doc-init:
 
