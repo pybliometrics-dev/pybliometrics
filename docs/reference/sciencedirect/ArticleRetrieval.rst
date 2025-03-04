@@ -22,7 +22,7 @@ Documentation
 
 Examples
 --------
-You initialize the class with an ID that Science Direct uses, e.g. the EID:
+You initialize the class with an ID that ScienceDirect uses, e.g. the EID:
 
 .. code-block:: python
 

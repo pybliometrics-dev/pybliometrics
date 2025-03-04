@@ -1,7 +1,7 @@
 pybliometrics.scopus.ScienceDirectSearch
 ==========================================
 
-`ScopusSearch()` implements the `Science Direct Search API <https://nonprod-devportal.elsevier.com/documentation/ScienceDirectSearchAPI.wadl>`_.  It executes a query to search for documents and retrieves the resulting records.
+`ScopusSearch()` implements the `ScienceDirect Search API <https://nonprod-devportal.elsevier.com/documentation/ScienceDirectSearchAPI.wadl>`_.  It executes a query to search for documents and retrieves the resulting records.
 Any query that works in the `Advanced Document Search on sciencedirect.com <https://www.sciencedirect.com/search/entry>`_ will work.
 For a complete guide on how to query check the `documentation <https://service.elsevier.com/app/answers/detail/a_id/25974/supporthub/sciencedirect/>`_.
 
