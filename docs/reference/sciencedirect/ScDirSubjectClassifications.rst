@@ -40,3 +40,36 @@ The results are stored in a named tuple. We can access the individual fields, li
     >>> first_result = sc.results[0]
     >>> first_result.code
     '18'
+
+The `results` can be cast into a pandas DataFrame:
+
+    >>> import pandas as pd
+    >>> # Cast results to a pandas DataFrame
+    >>> df = pd.DataFrame(sc.results)
+    >>> # Display available fields
+    >>> df.columns
+    Index(['code', 'description', 'detail', 'abbrev'], dtype='object')
+    >>> # Get shape of the DataFrame (rows x columns)
+    (16, 4)
+    >>> # Display the first 5 rows
+    >>> df.head(5)
+
+.. raw:: html
+
+    <div style="overflow-x:auto; border:1px solid #ddd; padding:10px;">
+    <style scoped>
+        .dataframe tbody tr th:only-of-type {
+            vertical-align: middle;
+        }
+
+        .dataframe tbody tr th {
+            vertical-align: top;
+        }
+
+        .dataframe thead th {
+            text-align: right;
+        }
+        .dataframe{
+            font-size: 12px;
+        }
+    </style>

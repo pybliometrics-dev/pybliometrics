@@ -49,6 +49,13 @@ The list of results can be cast into a Pandas DataFrame.
     >>> # Cast results to a pandas DataFrame
     >>> df = pd.DataFrame(sds.results)
     >>> # Display available fields
+    >>> df.columns
+    Index(['eid', 'filename', 'height', 'mimetype', 'ref', 'size', 'type', 'url',
+       'width'],
+      dtype='object')
+    >>> # Get shape of the DataFrame (rows x columns)
+    (200, 14)
+    >>> # Display the first 3 rows
     >>> df.head(3)
 
 .. raw:: html
