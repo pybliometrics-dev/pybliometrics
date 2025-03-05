@@ -37,7 +37,7 @@ class ScienceDirectSearch(Search):
         out = []
         for item in self._json:
             # Get authors and create ";" separated string
-            authors_list = [author.get('$') for author in chained_get(item, ['authors', 'author'], [])]
+            authors_list = self._get_authors(item)
             authors_list = deduplicate(authors_list)
             authors = ';'.join(authors_list)
             # Get links
@@ -159,3 +159,14 @@ class ScienceDirectSearch(Search):
     def get_dois(self):
         """DOIs of retrieved documents."""
         return [d.get("prism:doi") or d.get("dc:identifier")[4:] if d.get("dc:identifier") else None for d in self._json]
+
+    def _get_authors(self, item: dict) -> list:
+        """Auxiliary function to get the authors."""
+        authors_data = chained_get(item, ['authors', 'author'], [])
+        if isinstance(authors_data, list):
+            authors_list = [a.get('$') for a in authors_data]
+        elif isinstance(authors_data, str):
+            authors_list = [authors_data]
+        else:
+            authors_list = []
+        return authors_list
