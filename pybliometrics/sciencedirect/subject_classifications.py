@@ -11,7 +11,7 @@ class ScDirSubjectClassifications(SubjectClassifications):
                  fields: Optional[Union[list[str], tuple[str, ...]]] = None,
                  **kwds: str
                  ) -> None:
-        """Interaction with the Science Direct Subject Classifications API.
+        """Interaction with the ScienceDirect Subject Classifications API.
 
         :param query: Query parameters and corresponding fields. Allowed keys
                       `'code'`, `'abbrev'`, `'description'`, `'detail'`. For more

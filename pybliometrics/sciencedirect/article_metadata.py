@@ -92,7 +92,7 @@ class ArticleMetadata(Search):
                  subscriber: bool = True,
                  **kwds: str
                  ) -> None:
-        """Interaction with the Science Direct Article Metadata API.
+        """Interaction with the ScienceDirect Article Metadata API.
 
         :param query: A string of the query as used in the `Advanced Search <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__.
         :param refresh: Whether to refresh the cached file if it exists or not.
@@ -116,8 +116,8 @@ class ArticleMetadata(Search):
                                  cannot be verified.  Possible actions:
                                  - `"raise"`: Raise an `AttributeError`
                                  - `"warn"`: Raise a `UserWarning`
-        :param subscriber: Whether you access Science Direct with a subscription or not.
-                           For subscribers, Science Direct's cursor navigation will be
+        :param subscriber: Whether you access ScienceDirect with a subscription or not.
+                           For subscribers, ScienceDirect's cursor navigation will be
                            used.  Sets the number of entries in each query
                            iteration to the maximum number allowed by the
                            corresponding view.

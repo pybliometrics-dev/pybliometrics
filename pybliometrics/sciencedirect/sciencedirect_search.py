@@ -83,9 +83,9 @@ class ScienceDirectSearch(Search):
                  ) -> None:
         """Interaction with the ScienceDirect Search API. This represents a search against the
         ScienceDirect cluster, which contains serial/nonserial full-text articles. Note that this API
-        replicates the search experience on `Science Direct <www.sciencedirect.com>`__.
+        replicates the search experience on `ScienceDirect <www.sciencedirect.com>`__.
 
-        :param query: A string of the query as used in the `Science Direct Search <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__.
+        :param query: A string of the query as used in the `ScienceDirect Search <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__.
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
@@ -105,8 +105,8 @@ class ScienceDirectSearch(Search):
                                  cannot be verified.  Possible actions:
                                  - `"raise"`: Raise an `AttributeError`
                                  - `"warn"`: Raise a `UserWarning`
-        :param subscriber: Whether you access Science Direct with a subscription or not.
-                           For subscribers, Science Direct's cursor navigation will be
+        :param subscriber: Whether you access ScienceDirect with a subscription or not.
+                           For subscribers, ScienceDirect's cursor navigation will be
                            used.  Sets the number of entries in each query
                            iteration to the maximum number allowed by the
                            corresponding view.
