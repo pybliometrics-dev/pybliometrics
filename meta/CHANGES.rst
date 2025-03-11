@@ -4,6 +4,27 @@ Change Log
 
 .. toctree::
 
+4.2
+---
+
+2025-03-11
+
+* Add new module `pybliometrics.sciencedirect` with new classes: `ScienceDirectSearch()`, `ArticleMetadata()`, `ArticleRetrieval`, `ObjectRetrieval` ,`ArticleEntitlement`, `ObjectMetadata`, `SubjectClassifications()`.
+* Deprecate possibility to provide location of configuration file thorugh os.environ.
+* Allow for passing of pairs of API key and InstToken.
+* Allow for initialization via `pybliometrics.init()`.
+* In `ìnit()`, deprecate parameter "config_dir" in favor of "config_path".
+* In `AbstractRetrieval().references`, fix bug occurring when article contains just one reference.
+* In `AbstractRetrieval().author_group`, use author initials in case the first name is absent.
+* In `ScopusSearch().results`, replace "undefined" in field "fund_no" with "None".
+* In `ScopusSearch().results`, parse all free-to-read labels, not just the first.
+* In `SerialTitle().citescoreyearinfolist`, fix bug due to missing data.
+* Raise error when retrieved JSON is malformatted.
+* Drop support for python 3.6, 3.7 and 3.8.
+* Add support for python 3.12 and 3.13.
+* In `AffiliationSearch().affiliations`, always html unescape field "name".
+* Fix mistakes and typos in the documentation.
+
 4.1
 ---
 
