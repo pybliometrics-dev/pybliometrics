@@ -11,8 +11,8 @@ Documentation
 -------------
 
 .. autoclass:: SerialTitle
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

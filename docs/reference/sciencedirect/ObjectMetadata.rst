@@ -13,8 +13,8 @@ Documentation
 -------------
 
 .. autoclass:: ObjectMetadata
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

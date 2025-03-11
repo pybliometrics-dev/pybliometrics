@@ -17,8 +17,8 @@ Documentation
 -------------
 
 .. autoclass:: AbstractRetrieval
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

@@ -1,5 +1,5 @@
 pybliometrics.scopus.ScDirSubjectClassifications
-===========================================
+================================================
 
 `ScDirSubjectClassifications()` implements the `ScienceDirect Subject Classifications API <https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl>`_.  It enables retrieval-like queries for All Science Journal Classification (ASJC) subjects/areas.
 
@@ -11,8 +11,8 @@ Documentation
 -------------
 
 .. autoclass:: ScDirSubjectClassifications
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

@@ -11,8 +11,8 @@ Documentation
 -------------
 
 .. autoclass:: PlumXMetrics
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

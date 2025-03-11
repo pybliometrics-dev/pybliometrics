@@ -13,8 +13,8 @@ Documentation
 -------------
 
 .. autoclass:: ArticleEntitlement
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

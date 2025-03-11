@@ -13,8 +13,8 @@ Documentation
 -------------
 
 .. autoclass:: AffiliationRetrieval
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

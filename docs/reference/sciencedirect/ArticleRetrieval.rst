@@ -17,8 +17,8 @@ Documentation
 -------------
 
 .. autoclass:: ArticleRetrieval
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

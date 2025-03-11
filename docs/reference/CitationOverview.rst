@@ -11,8 +11,8 @@ Documentation
 -------------
 
 .. autoclass:: CitationOverview
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

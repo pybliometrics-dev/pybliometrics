@@ -11,8 +11,8 @@ Documentation
 -------------
 
 .. autoclass:: AffiliationSearch
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

@@ -15,8 +15,8 @@ Documentation
 -------------
 
 .. autoclass:: ArticleMetadata
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

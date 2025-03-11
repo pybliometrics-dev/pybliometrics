@@ -13,8 +13,8 @@ Documentation
 -------------
 
 .. autoclass:: ScienceDirectSearch
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

@@ -11,8 +11,8 @@ Documentation
 -------------
 
 .. autoclass:: ScopusSearch
-   :members:
-   :inherited-members:
+     :members:
+     :inherited-members:
 
 Examples
 --------

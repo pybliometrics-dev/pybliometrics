@@ -12,8 +12,8 @@ Documentation
 -------------
 
 .. autoclass:: ObjectRetrieval
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

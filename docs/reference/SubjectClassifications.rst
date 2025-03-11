@@ -11,8 +11,8 @@ Documentation
 -------------
 
 .. autoclass:: SubjectClassifications
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

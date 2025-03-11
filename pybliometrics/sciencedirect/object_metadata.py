@@ -46,8 +46,8 @@ class ObjectMetadata(Retrieval):
 
         :param identifier: The indentifier of an article.
         :param view: The view of the object. Allowed value: `META`.
-        :param id_type: The type of identifier supplied. Allowed values: `doi`, `pii`, `scopus_id`,
-        `pubmed_id`, `eid`.
+        :param id_type: The type of identifier supplied. Allowed values: `doi`,
+                        `pii`, `scopus_id`, `pubmed_id`, `eid`.
         :param refresh: Whether to refresh the cached file if it exists. Default: `False`.
         """
         self.identifier = str(identifier)

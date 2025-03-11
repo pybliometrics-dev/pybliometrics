@@ -2,7 +2,7 @@
 API Reference
 =============
 
-Each class in `pybliometrics` corresponds to one of the `Product Specific APIs <https://dev.elsevier.com/api_docs.html>`_.  See below links for class reference and examples.
+Each class in `pybliometrics` corresponds to one of the `Product Specific APIs <https://dev.elsevier.com/api_docs.html>`_ for Scopus and ScienceDirect.  See below links for class reference and examples.
 
 Scopus
 =======
@@ -48,7 +48,7 @@ ScienceDirect
     :maxdepth: 1
 
     reference/sciencedirect/ScienceDirectSearch.rst
-
+    reference/sciencedirect/ArticleMetadata.rst
 
 **Retrieval APIs**
 
@@ -57,17 +57,19 @@ ScienceDirect
 
     reference/sciencedirect/ArticleRetrieval.rst
     reference/sciencedirect/ObjectRetrieval.rst
+    reference/sciencedirect/ArticleEntitlement.rst
+    reference/sciencedirect/ObjectMetadata.rst
+
+One other Retrieval API, the Article Hosting Permission API, is not implemented yet.
 
 **Metadata APIs**
 
 .. toctree::
     :maxdepth: 1
 
-    reference/sciencedirect/ArticleEntitlement.rst
-    reference/sciencedirect/ArticleMetadata.rst
-    reference/sciencedirect/ObjectMetadata.rst
-    reference/sciencedirect/ScDirSubjectClassifications.rst
+    reference/sciencedirect/SubjectClassifications.rst
 
+Two other Metadata APIs, Serial Title Metadata API and Nonserial Title Metadata API, are not implemented yet.
 
 
 Initialization

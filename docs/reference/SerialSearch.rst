@@ -11,8 +11,8 @@ Documentation
 -------------
 
 .. autoclass:: SerialSearch
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------

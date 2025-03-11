@@ -202,7 +202,7 @@ class ArticleRetrieval(Retrieval):
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.
         :param view: The view of the file that should be downloaded. Allowed values:
-                        'META', 'META_ABS', 'META_ABS_REF', 'FULL', 'ENTITLED'. Default is 'META'.
+                     'META', 'META_ABS', 'META_ABS_REF', 'FULL', 'ENTITLED'. Default: 'META'.
         :param id_type: The type of used ID. Allowed values: `None`, 'eid', 'pii',
                         'scopus_id', 'pubmed_id' and 'doi'.  If the value is `None`,
                         pybliometrics tries to infer the ID type itself.

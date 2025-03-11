@@ -11,8 +11,8 @@ Documentation
 -------------
 
 .. autoclass:: AuthorSearch
-   :members:
-   :inherited-members:
+    :members:
+    :inherited-members:
 
 Examples
 --------
