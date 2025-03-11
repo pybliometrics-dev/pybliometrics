@@ -12,29 +12,29 @@ Scopus
 .. toctree::
     :maxdepth: 1
 
-    reference/AffiliationSearch.rst
-    reference/AuthorSearch.rst
-    reference/ScopusSearch.rst
+    reference/scopus/AffiliationSearch.rst
+    reference/scopus/AuthorSearch.rst
+    reference/scopus/ScopusSearch.rst
 
 **Retrieval APIs**
 
 .. toctree::
     :maxdepth: 1
 
-    reference/AbstractRetrieval.rst
-    reference/AffiliationRetrieval.rst
-    reference/AuthorRetrieval.rst
+    reference/scopus/AbstractRetrieval.rst
+    reference/scopus/AffiliationRetrieval.rst
+    reference/scopus/AuthorRetrieval.rst
 
 **Metadata APIs**
 
 .. toctree::
     :maxdepth: 1
 
-    reference/CitationOverview.rst
-    reference/PlumXMetrics.rst
-    reference/SerialSearch.rst
-    reference/SerialTitle.rst
-    reference/SubjectClassifications.rst
+    reference/scopus/CitationOverview.rst
+    reference/scopus/PlumXMetrics.rst
+    reference/scopus/SerialSearch.rst
+    reference/scopus/SerialTitle.rst
+    reference/scopus/SubjectClassifications.rst
 
 One other Metadata API, the Citations Count Metadata API, is not implemented yet.
 

@@ -1,7 +1,7 @@
 pybliometrics.scopus.CitationOverview
 =====================================
 
-`CitationOverview()` implements the `Citation Overview API <https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key requires manual approval by Elsevier.  Please contact Scopus for approval.  Otherwise each request throws a 403 error.  Ideally provide the key via `apikey="XXX"` when initiating the class, which will override the ones provided in the :doc:`configuration file <../configuration>`.
+`CitationOverview()` implements the `Citation Overview API <https://dev.elsevier.com/documentation/AbstractCitationAPI.wadl>`_.  Your API Key requires manual approval by Elsevier.  Please contact Scopus for approval.  Otherwise each request throws a 403 error.  Ideally you provide the key via `apikey="XXX"` when initiating the class, which will override the ones provided in the :doc:`configuration file <../../configuration>`.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -107,7 +107,7 @@ Author information is also stored as lists of `namedtuples <https://docs.python.
             url='https://api.elsevier.com/content/author/author_id/7004212771')]
 
 
-Via `co.authors[0][0].id` one can for instance obtain further author information via the :doc:`AuthorRetrieval() <../reference/AuthorRetrieval>` class.
+Via `co.authors[0][0].id` one can for instance obtain further author information via the :doc:`AuthorRetrieval() <AuthorRetrieval>` class.
 
 Finally, there are bibliographic information, too:
 

@@ -128,7 +128,7 @@ Detailed information on current and former affiliations is also provided in the 
     org_domain='fhi.mpg.de', org_URL='https://www.fhi.mpg.de/')
 
 
-The affiliation ID to be used for the :doc:`AffiliationRetrieval <../reference/AffiliationRetrieval>` class.
+The affiliation ID to be used for the :doc:`AffiliationRetrieval <AffiliationRetrieval>` class.
 
 Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.
 
@@ -145,7 +145,7 @@ Several getter methods are available for convenience.  For example, you can obta
           dtype='object')
 
 
-The `get_documents()` method is another convenient option for searching the author's publications via :doc:`ScopusSearch <../reference/ScopusSearch>` (information will be cached):
+The `get_documents()` method is another convenient option for searching the author's publications via :doc:`ScopusSearch <ScopusSearch>` (information will be cached):
 
 .. code-block:: python
 
