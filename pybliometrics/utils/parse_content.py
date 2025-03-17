@@ -217,3 +217,11 @@ def parse_pages(self, unicode=False):
     if unicode:
         pages = f'{pages}'
     return pages
+
+def split_names_str(names_str: str) -> list:
+    """Split a string of names into a list. Names are separated by `,` or `and`."""
+    # Replace 'and' with ',' to unify the separators
+    names_str = names_str.replace(' and ', ', ')
+    # Split the string by ', ' and strip any extra whitespace
+    names_lst = [author.strip() for author in names_str.split(', ')]
+    return names_lst
