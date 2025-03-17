@@ -6,4 +6,5 @@ from pybliometrics.sciencedirect.article_retrieval import *
 from pybliometrics.sciencedirect.object_metadata import *
 from pybliometrics.sciencedirect.object_retrieval import *
 from pybliometrics.sciencedirect.sciencedirect_search import *
+from pybliometrics.sciencedirect.serial_title import *
 from pybliometrics.sciencedirect.subject_classifications import *
