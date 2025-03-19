@@ -79,6 +79,8 @@ class Base:
                 res = resp.json()
                 n = int(res['search-results'].get('opensearch:totalResults', 0))
                 self._n = n
+                # Get actual results size
+                params['size'] = int(res['search-results'].get('opensearch:itemsPerPage', 25))
                 # Results size check
                 cursor_exists = "cursor" in params
                 if not cursor_exists and n > SEARCH_MAX_ENTRIES:
