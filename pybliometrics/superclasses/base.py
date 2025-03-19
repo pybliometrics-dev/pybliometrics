@@ -80,7 +80,7 @@ class Base:
                 n = int(res['search-results'].get('opensearch:totalResults', 0))
                 self._n = n
                 # Get actual results size
-                params['size'] = int(res['search-results'].get('opensearch:itemsPerPage', 25))
+                params['count'] = int(res['search-results'].get('opensearch:itemsPerPage', 25))
                 # Results size check
                 cursor_exists = "cursor" in params
                 if not cursor_exists and n > SEARCH_MAX_ENTRIES:
@@ -100,14 +100,14 @@ class Base:
                     # Download the remaining information in chunks
                     if verbose:
                         print(f'Downloading results for query "{params["query"]}":')
-                    n_chunks = ceil(n/params['size'])
+                    n_chunks = ceil(n/params['count'])
                     for i in tqdm(range(1, n_chunks), disable=not verbose,
                                   initial=1, total=n_chunks):
                         if cursor_exists:
                             cursor = res['search-results']['cursor']['@next']
                             params.update({'cursor': cursor})
                         else:
-                            start += params["size"]
+                            start += params["count"]
                             params.update({'start': start})
                         resp = get_content(url, api, params, **kwds)
                         res = resp.json()

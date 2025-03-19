@@ -150,9 +150,9 @@ class ArticleMetadata(Search):
         allowed = ("warn", "raise")
         check_parameter_value(integrity_action, allowed, "integrity_action")
 
-        size = 25  # for pagination
+        count = 25  # for pagination
         if view == "STANDARD" and subscriber:
-            size = 200
+            count = 200
 
         # Query
         self._action = integrity_action
@@ -160,7 +160,7 @@ class ArticleMetadata(Search):
         self._refresh = refresh
         self._query = query
         self._view = view
-        Search.__init__(self, query=query, size=size, download=download, verbose=verbose, **kwds)
+        Search.__init__(self, query=query, size=count, download=download, verbose=verbose, **kwds)
 
     def __str__(self):
         """Print a summary string."""
