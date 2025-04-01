@@ -5,13 +5,12 @@ from pathlib import Path
 from typing import Union
 
 from pybliometrics.superclasses import Base
-from pybliometrics.utils import get_config, URLS
+from pybliometrics.utils import get_config, COUNTS, URLS
 
 
 class Search(Base):
     def __init__(self,
                  query: Union[str, dict],
-                 count: int = 200,
                  cursor: bool = False,
                  download: bool = True,
                  verbose: bool = False,
@@ -20,9 +19,6 @@ class Search(Base):
         """Class intended as superclass to perform a search query.
 
         :param query : A string of the query.
-        :param count: The number of entries to be displayed at once.  A smaller
-                     number means more queries with each query having
-                     fewer results.
         :param cursor: Whether to use the cursor in order to iterate over all
                       search results without limit on the number of the results.
                       In contrast to `start` parameter, the `cursor` parameter
@@ -40,6 +36,7 @@ class Search(Base):
         """
         api = self.__class__.__name__
         # Construct query parameters
+        count = COUNTS[api][self._view]
         params = {'count': count, 'view': self._view, **kwds}
         if isinstance(query, dict):
             params.update(query)
