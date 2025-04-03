@@ -94,6 +94,18 @@ APIS_WITH_ID_TYPE = {"AbstractRetrieval",
                      "ObjectMetadata",
                      "ObjectRetrieval"}
 
+# Item per page limits for all classes
+COUNTS = {
+    "AffiliationSearch": {"STANDARD": 200},
+    "AuthorSearch": {"STANDARD": 200},
+    "ArticleMetadata": {"STANDARD": 200, "COMPLETE": 25},
+    "ScDirSubjectClassifications": {"": 200},
+    "ScienceDirectSearch": {"STANDARD": 100},
+    "ScopusSearch": {"STANDARD": 200, "COMPLETE": 25},
+    "SerialSearch": {"STANDARD": 200, "ENHANCED": 200, "CITESCORE": 200},
+    "SubjectClassifications": {"": 200}
+}
+
 # Throttling limits (in queries per second) // 0 = no limit
 RATELIMITS = {
     'AbstractRetrieval': 9,
