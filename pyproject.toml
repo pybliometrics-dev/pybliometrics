@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "pybliometrics"
 authors = [{name = "'John Kitchin and Michael E. Rose", email = "Michael.Ernst.Rose@gmail.com"}]
 maintainers = [{name = "Michael E. Rose", email = "Michael.Ernst.Rose@gmail.com"}]
-description = "Python-based API-Wrapper to access Scopus"
+description = "Python-based API-Wrapper to access Scopus and ScienceDirect"
 readme = "README.rst"
 license = {text = "MIT"}
 dependencies = [

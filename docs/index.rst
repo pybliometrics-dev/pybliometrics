@@ -1,8 +1,8 @@
-########################################################
-pybliometrics: Python-based API-Wrapper to access Scopus
-########################################################
+##########################################################################
+pybliometrics: Python-based API-Wrapper to access Scopus and ScienceDirect
+##########################################################################
 
-pybliometrics is an easy to use Python library to pull, cache and extract data from the Scopus database. It provides one class per `API Access Point <https://dev.elsevier.com/api_docs.html>`_:
+pybliometrics is an easy to use Python library to pull, cache and extract data from the Scopus database and its sister databases like ScienceDirect. It provides one class per `API Access Point <https://dev.elsevier.com/api_docs.html>`_:
 
 .. include:: ../README.rst
    :start-after: example-begin
@@ -10,9 +10,9 @@ pybliometrics is an easy to use Python library to pull, cache and extract data f
 
 .. include:: installation.rst
 
-========================================
-Classes to interact with the Scopus APIs
-========================================
+==========================
+Classes for the Scopus API
+==========================
 
 .. currentmodule:: pybliometrics.scopus
 
@@ -29,6 +29,22 @@ Classes to interact with the Scopus APIs
    SerialSearch
    SerialTitle
    SubjectClassifications
+
+=================================
+Classes for the ScienceDirect API
+=================================
+
+.. currentmodule:: pybliometrics.sciencedirect
+
+.. autosummary::
+
+   ArticleEntitlement
+   ArticleMetadata
+   ArticleRetrieval
+   ObjectMetadata
+   ObjectRetrieval
+   ScienceDirectSearch
+   ScDirSubjectClassifications
 
 ========
 Citation
