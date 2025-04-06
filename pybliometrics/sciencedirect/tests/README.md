@@ -4,7 +4,7 @@ These testfiles are designed to test features of the various classes. The simple
 
 in the command line from within the pybliometrics repo.  By passing a specific filename, you can test only one suite:
 
-    pytest pybliometrics/scopus/tests/test_AffiliationRetrieval.py --verbose
+    pytest pybliometrics/sciencedirect/tests/test_ArticleRetrieval.py --verbose
 
 Windows users should try `python -m` in front of above commands.
 
