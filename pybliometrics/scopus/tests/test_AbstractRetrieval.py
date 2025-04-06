@@ -444,7 +444,7 @@ def test_references_ref():
         title='Achieving secure, scalable, and fine-grained data access control in cloud computing',
         authors='Yu, Shucheng; Lou, Wenjing; Wang, Cong; Ren, Kui',
         authors_auid='55636591800; 7006030576; 35106222100; 8396435500',
-        authors_affiliationid='60011410; 60011410; 60002873; 60002873',
+        authors_affiliationid='60157577; 60157577; 60002873; 60002873',
         sourcetitle='Proceedings - IEEE INFOCOM',
         publicationyear=None, coverDate='2010-06-15', volume=None, issue=None,
         first=None, last=None, citedbycount='0', type='resolvedReference')

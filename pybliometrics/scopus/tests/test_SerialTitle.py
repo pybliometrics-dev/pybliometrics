@@ -31,7 +31,7 @@ def test_citescoreyearinfolist():
 
     # Test softwarex
     expected_named_tuple = [info(year=2023, citescore=5.5),
-                            info(year=2024, citescore=3.7)]
+                            info(year=2024, citescore=4.1)]
     assert softwarex.citescoreyearinfolist == expected_named_tuple
 
     # Test oecd
@@ -56,7 +56,7 @@ def test_eissn():
 def test_issn():
     assert softwarex.issn is None
     assert oecd.issn == "0255-0822"
-    assert jco_cci.issn == "2473-4276"
+    assert jco_cci.issn is None
 
 
 def test_oaallowsauthorpaid():
@@ -160,9 +160,11 @@ def test_subject_area():
         area(area='Geography, Planning and Development', abbreviation='SOCI', code=3305)
     ]
     assert oecd.subject_area == expected2
-    expected3 = [area(area='Cancer Research', abbreviation='BIOC', code=1306),
-                 area(area='Oncology', abbreviation='MEDI', code=2730),
-                 area(area='Health Informatics', abbreviation='MEDI', code=2718)]
+    expected3 = [
+        area(area='Cancer Research', abbreviation='BIOC', code=1306),
+        area(area='Health Informatics', abbreviation='MEDI', code=2718),
+        area(area='Oncology', abbreviation='MEDI', code=2730)
+    ]
     assert jco_cci.subject_area == expected3
 
 
@@ -174,13 +176,13 @@ def test_title():
 
 def test_yearly_data():
     assert isinstance(softwarex.yearly_data, list)
-    assert len(softwarex.yearly_data) == 29
+    assert len(softwarex.yearly_data) == 30
     fields = 'year publicationcount revpercent zerocitessce '\
              'zerocitespercentsce citecountsce'
     dat = namedtuple('Yearlydata', fields)
     expected1_2020 = dat(year=2020, publicationcount=164, revpercent=0.0,
-        zerocitessce=8, zerocitespercentsce=4.878048780487805,
-        citecountsce=2578)
+        zerocitessce=7, zerocitespercentsce=4.2682926829268295,
+        citecountsce=2579)
     assert softwarex.yearly_data[24] == expected1_2020
     expected2_1996 = dat(year=1996, publicationcount=4, revpercent=0.0,
         zerocitessce=0, zerocitespercentsce=0, citecountsce=33)
