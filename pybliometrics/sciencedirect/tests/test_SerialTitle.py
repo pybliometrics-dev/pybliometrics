@@ -2,14 +2,14 @@
 
 from collections import namedtuple
 
-from pybliometrics.sciencedirect import ScDirSerialTitle, init
+from pybliometrics.sciencedirect import SerialTitle, init
 
 init()
 
-gene = ScDirSerialTitle('03781119', view='ENHANCED', refresh=30)
+gene = SerialTitle('03781119', view='ENHANCED', refresh=30)
 
 def test_module():
-    assert gene.__module__  == 'pybliometrics.sciencedirect.serial_title'
+    assert gene.__module__  == 'pybliometrics.scopus.serial_title'
 
 
 def test_aggregation_type():

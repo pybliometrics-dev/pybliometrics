@@ -198,6 +198,7 @@ class SerialTitle(Retrieval):
                  **kwds: str
                  ) -> None:
         """Interaction with the Serial Title API.
+        Class retrieves data from both Scopus and ScienceDirect.
 
         :param issn: The ISSN or the E-ISSN of the source.
         :param refresh: Whether to refresh the cached file if it exists or not.
