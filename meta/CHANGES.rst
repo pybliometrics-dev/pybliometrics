@@ -4,6 +4,15 @@ Change Log
 
 .. toctree::
 
+4.2.1
+-----
+
+2025-04-09
+
+* Update default values for "count" parameter to reflect changes in the API.
+* Fix bug related to deprecated "size" parameter.
+* Update documentation.
+
 4.2
 ---
 
