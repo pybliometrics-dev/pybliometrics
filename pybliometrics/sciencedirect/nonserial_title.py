@@ -4,7 +4,7 @@ from typing import Optional, Union
 
 from pybliometrics.superclasses import Retrieval
 
-from pybliometrics.utils import chained_get, check_parameter_value, split_names_str, VIEWS
+from pybliometrics.utils import chained_get, check_parameter_value, VIEWS
 
 
 
@@ -17,8 +17,8 @@ class NonserialTitle(Retrieval):
     @property
     def authors(self) -> Optional[str]:
         """The authors of the book."""
-        authors_str = self._entry.get('authors')
-        return split_names_str(authors_str) if authors_str else None
+        return self._entry.get('authors')
+
 
     @property
     def description(self) -> Optional[str]:
@@ -33,8 +33,7 @@ class NonserialTitle(Retrieval):
     @property
     def editors(self) -> Optional[str]:
         """The editors of the book."""
-        editors_str = self._entry.get('editors')
-        return split_names_str(editors_str) if editors_str else None
+        return self._entry.get('editors')
 
     @property
     def isbn(self) -> str:
@@ -90,7 +89,8 @@ class NonserialTitle(Retrieval):
         :param isbn: The ISBN of the book.
         :param view: The view of the file that should be downloaded. Allowed
                 value: `STANDARD`. For details
-                see `the documentation <https://dev.elsevier.com/sd_nonserial_title_views.html.>`_.
+                see `the documentation <https://dev.elsevier.com/sd_nonserial_title_views.html.>`_. Note that
+                although the `BASIC` view is documented, the API does not support it.
         :param refresh: Whether to refresh the cached file if it exists or not.
                 If int is passed, cached file will be refreshed if the
                 number of days since last modification exceeds that value.

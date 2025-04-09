@@ -15,7 +15,7 @@ def test_aggregation_type():
 
 
 def test_authors():
-    assert nst_1.authors == ["Ian Newton"]
+    assert nst_1.authors == "Ian Newton"
     assert nst_2.authors is None
     assert nst_3.authors is None
 
@@ -34,8 +34,8 @@ def test_edition():
 
 def test_editors():
     assert nst_1.editors is None
-    assert nst_2.editors == ["Elias Barriga", "Ivana Pajic-Lijakovic"]
-    assert nst_3.editors == ["Fatos Xhafa", "Mohamed A. Tawhid", "Pardeep Kumar", "Yugal Kumar"]
+    assert nst_2.editors == "Elias Barriga and Ivana Pajic-Lijakovic"
+    assert nst_3.editors == "Fatos Xhafa, Mohamed A. Tawhid, Pardeep Kumar and Yugal Kumar"
 
 
 def test_isbn():
