@@ -1,4 +1,4 @@
-"""Test ScDirSerialTitle()."""
+"""Test pybliometrics.sciencedirect.SerialTitle()"""
 
 from collections import namedtuple
 
