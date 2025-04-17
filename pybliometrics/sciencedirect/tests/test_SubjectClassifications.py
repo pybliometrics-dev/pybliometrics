@@ -1,25 +1,26 @@
-"""Tests for `sciencedirect.ScDirSubjectClassifications` module."""
+"""Tests for `sciencedirect.SubjectClassifications` module."""
 
-from pybliometrics.sciencedirect import ScDirSubjectClassifications, init
+from pybliometrics.sciencedirect import SubjectClassifications, init
 
 init()
 
 # Search by words in subject description
-sub1 = ScDirSubjectClassifications({'description': 'Chemistry'}, refresh=30)
+sub1 = SubjectClassifications({'description': 'Chemistry'}, refresh=30)
 # Search by subject code
-sub2 = ScDirSubjectClassifications({'code': '5'}, refresh=30)
+sub2 = SubjectClassifications({'code': '5'}, refresh=30)
 # Search by words in subject detail
-sub3 = ScDirSubjectClassifications({'detail': 'Optimization'}, refresh=30)
+sub3 = SubjectClassifications({'detail': 'Optimization'}, refresh=30)
 # Search by subject abbreviation
-sub4 = ScDirSubjectClassifications({'abbrev': 'socialsciences'}, refresh=30)
+sub4 = SubjectClassifications({'abbrev': 'socialsciences'}, refresh=30)
 # Search by multiple criteria
-sub5 = ScDirSubjectClassifications({'description': 'Mathematics', 'detail':'Mathematics::Applied Mathematics'}, refresh=30)
+sub5 = SubjectClassifications({'description': 'Mathematics', 'detail':'Mathematics::Applied Mathematics'}, refresh=30)
 # Search by multiple criteria, subset returned fields
-sub6 = ScDirSubjectClassifications({'detail':'Agricultural and Biological Sciences', 'description': 'Agricultural and Biological Sciences'},
+sub6 = SubjectClassifications({'detail':'Agricultural and Biological Sciences', 'description': 'Agricultural and Biological Sciences'},
                               fields=['description', 'detail'], refresh=30)
 
 
 def test_module():
+    assert sub6.__class__.__name__  == 'ScDirSubjectClassifications'
     assert sub6.__module__  == 'pybliometrics.sciencedirect.subject_classifications'
 
 

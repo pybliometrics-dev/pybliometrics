@@ -1,7 +1,7 @@
-pybliometrics.sciencedirect.ScDirSubjectClassifications
+pybliometrics.sciencedirect.SubjectClassifications
 ========================================================
 
-`ScDirSubjectClassifications()` implements the `ScienceDirect Subject Classifications API <https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl>`_.  It enables retrieval-like queries for All Science Journal Classification (ASJC) subjects/areas.
+`SubjectClassifications()` implements the `ScienceDirect Subject Classifications API <https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl>`_.  It enables retrieval-like queries for All Science Journal Classification (ASJC) subjects/areas.
 
 .. currentmodule:: pybliometrics.sciencedirect
 .. contents:: Table of Contents
@@ -10,7 +10,7 @@ pybliometrics.sciencedirect.ScDirSubjectClassifications
 Documentation
 -------------
 
-.. autoclass:: ScDirSubjectClassifications
+.. autoclass:: SubjectClassifications
     :members:
     :inherited-members:
 
@@ -21,10 +21,10 @@ You initialize the class with a query `dict`.  It contains the "description" (ge
 
 .. code-block:: python
 
-    >>> from pybliometrics.sciencedirect import ScDirSubjectClassifications, init
+    >>> from pybliometrics.sciencedirect import SubjectClassifications, init
     >>> init()
     >>> # Retrieve subject areas with 'Chemistry' in the description
-    >>> sc = ScDirSubjectClassifications({'description': 'Chemistry'}, refresh=30)
+    >>> sc = SubjectClassifications({'description': 'Chemistry'}, refresh=30)
     >>> # Access the results
     >>> sc.results
     [Subject(code='18', description='Biochemistry, Genetics and Molecular Biology', detail='Biochemistry, Genetics and Molecular Biology', abbrev='biochemgenmolbiol'),
