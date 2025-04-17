@@ -1,10 +1,10 @@
-"""Module with the class ScDirSubjectClassifications."""
+"""Module with the class SubjectClassifications."""
 from typing import Optional, Union
 
-from pybliometrics.scopus import SubjectClassifications
+from pybliometrics import scopus
 
 
-class ScDirSubjectClassifications(SubjectClassifications):
+class SubjectClassifications(scopus.SubjectClassifications):
     def __init__(self,
                  query: dict,
                  refresh: Union[bool, int] = False,
@@ -44,4 +44,5 @@ class ScDirSubjectClassifications(SubjectClassifications):
         the md5-hashed version of `query` dict turned into string in format
         of `'key=value'` delimited by `'&'`.
         """
-        SubjectClassifications.__init__(self, query=query, refresh=refresh, fields=fields, **kwds)
+        self.__class__.__name__ = 'ScDirSubjectClassifications'
+        super().__init__(query=query, refresh=refresh, fields=fields, **kwds)
