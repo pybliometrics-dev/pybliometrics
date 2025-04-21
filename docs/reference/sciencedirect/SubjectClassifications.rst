@@ -1,5 +1,5 @@
 pybliometrics.sciencedirect.SubjectClassifications
-========================================================
+===================================================
 
 `SubjectClassifications()` implements the `ScienceDirect Subject Classifications API <https://dev.elsevier.com/documentation/SubjectClassificationsAPI.wadl>`_.  It enables retrieval-like queries for All Science Journal Classification (ASJC) subjects/areas.
 
