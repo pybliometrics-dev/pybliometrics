@@ -44,7 +44,7 @@ Classes for the ScienceDirect API
    ObjectMetadata
    ObjectRetrieval
    ScienceDirectSearch
-   ScDirSubjectClassifications
+   SubjectClassifications
 
 ========
 Citation
