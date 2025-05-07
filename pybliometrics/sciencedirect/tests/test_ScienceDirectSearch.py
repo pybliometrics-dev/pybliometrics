@@ -3,6 +3,7 @@ from collections import namedtuple
 
 import pytest
 
+from pybliometrics.exception import ScopusQueryError
 from pybliometrics.sciencedirect import ScienceDirectSearch, init
 
 init()
@@ -19,12 +20,6 @@ sds_huge = ScienceDirectSearch(huge_query, view="STANDARD", download=False, refr
 
 pagination_query = {'qs': '"Neural Networks" AND "Shapley"', 'date': '2020'}
 sds_pagination = ScienceDirectSearch(pagination_query, view="STANDARD", refresh=30)
-
-
-def test_empty_results():
-    assert sds_empty.results is None
-    assert sds_empty._n == 0
-
 
 def test_all_fields():
     fields = 'authors doi loadDate openAccess first_page last_page pii publicationDate ' \
@@ -65,6 +60,10 @@ def test_all_fields():
     assert sds_pagination.results[-1] == expected_last_document
 
 
+def test_empty_results():
+    assert sds_empty.results is None
+    assert sds_empty._n == 0
+
 
 def test_field_consistency():
     am_wrong_field = ScienceDirectSearch(one_article_query,
@@ -76,11 +75,17 @@ def test_field_consistency():
         _ = am_wrong_field.results
 
 
+def test_large_results():
+    with pytest.raises(ScopusQueryError):
+        _ = ScienceDirectSearch(huge_query, view="STANDARD", download=True, refresh=30)
+
+
 def test_length():
     assert len(sds_standard.results) == sds_standard._n
     assert len(sds_standard.results) == sds_standard._n
     assert sds_huge.get_results_size() > 156_000
     assert len(sds_pagination.results) == 127
+
 
 def test_string():
     expected_str = "Search '{'title': 'Assessing LLMs in malicious code deobfuscation of real-world malware campaigns', 'date': '2024'}' yielded 1 document as of 2025-05-07:\n    10.1016/j.eswa.2024.124912"
