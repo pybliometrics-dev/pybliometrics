@@ -1,3 +1,4 @@
+"""ScienceDirectSearch class for searching documents in ScienceDirect."""
 from collections import namedtuple
 from typing import Optional, Union
 
@@ -8,11 +9,16 @@ from pybliometrics.utils import check_field_consistency, chained_get, \
 
 
 class ScienceDirectSearch(Search):
+    """
+    Interaction with the ScienceDirect Search API using the `PUT` method.
+    See the official `documentation <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__ 
+    for more details.
+    """
     @property
     def results(self) -> Optional[list]:
         """
-        A list of namedtuples in the form `(authors doi loadDate openAccess first_page last_page
-        pii publicationDate sourceTitle title uri volumeIssue)`.
+        A list of namedtuples in the form `(authors, doi, loadDate, openAccess, first_page, last_page
+        pii, publicationDate, sourceTitle, title, uri, volumeIssue)`.
 
         Field definitions correspond to the `ScienceDirect Search API Migration Documentation
         <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__ and return the
@@ -69,10 +75,6 @@ class ScienceDirectSearch(Search):
                  subscriber: bool = True,
                  ) -> None:
         """
-        Interaction with the ScienceDirect Search API using the `PUT` method.
-        See the official `documentation <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__ 
-        for more details.
-
         Parameters
         ----------
         query : dict

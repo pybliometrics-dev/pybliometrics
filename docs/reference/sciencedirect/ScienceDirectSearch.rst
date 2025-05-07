@@ -1,8 +1,8 @@
 pybliometrics.sciencedirect.ScienceDirectSearch
 ===============================================
 
-`ScienceDirectSearch()` implements the `ScienceDirect Search API <https://nonprod-devportal.elsevier.com/documentation/ScienceDirectSearchAPI.wadl>`_ using the `PUT method`.  It executes a query to search for documents and retrieves the resulting records.
-The class takes a `query`` dictionary as input which has to follow this schema:
+`ScienceDirectSearch()` implements the `ScienceDirect Search API <https://nonprod-devportal.elsevier.com/documentation/ScienceDirectSearchAPI.wadl>`_ using the `PUT` method.  It executes a query to search for documents and retrieves the resulting records.
+The class takes a `query` dictionary as input which has to follow this schema:
 
 .. code-block:: text
 
@@ -44,7 +44,7 @@ Examples
 --------
 
 The class is initialized with a search query.
-We can pass the field `qs` to search for a specific keywords.
+We can pass the field `qs`` to search for specific keywords.
 Using `verbose=True` will print the progress of the download.
 
 .. code-block:: python
@@ -78,7 +78,7 @@ To access the results, use the attribute `results` which contains a list of `Doc
      Document(authors='Ruxandra Stoean; Nebojsa Bacanin; Leonard Ionescu', doi='10.1016/j.culher.2024.07.008', loadDate='2024-08-09T00:00:00.000Z', openAccess=False, first_page=18, last_page=26, pii='S1296207424001468', publicationDate='2024-10-31', sourceTitle='Journal of Cultural Heritage', title='Bridging the past and present: AI-driven 3D restoration of degraded artefacts for museum digital display', uri='https://www.sciencedirect.com/science/article/pii/S1296207424001468?dgcid=api_sd_search-api-endpoint', volumeIssue='Volume 69'),
      ...]
 
-The list of results can be cast into a Pandas DataFrame.
+The list of results can be converted into a Pandas DataFrame.
 
 .. code-block:: python
 

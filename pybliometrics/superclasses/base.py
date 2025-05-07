@@ -8,7 +8,7 @@ from typing import Optional
 from tqdm import tqdm
 
 from pybliometrics.exception import ScopusQueryError
-from pybliometrics.utils import get_content, parse_content, SEARCH_MAX_ENTRIES
+from pybliometrics.utils import get_content, parse_content, SCIENCE_DIRECT_MAX_ENTRIES, SEARCH_MAX_ENTRIES
 from pybliometrics.utils import listify
 
 
@@ -77,6 +77,11 @@ class Base:
                 self._n = n
                 self._json = []
                 if download:
+                    if n > SCIENCE_DIRECT_MAX_ENTRIES:
+                        text = f'Found {n:,} matches.  The query fails to return '\
+                            f'more than {SCIENCE_DIRECT_MAX_ENTRIES} entries. Please '\
+                            'refine your query.'
+                        raise ScopusQueryError(text)
                     data = res.get('results', [])
                     n_chunks = ceil(n/params["display"]["show"])
                     if verbose:
