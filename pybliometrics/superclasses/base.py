@@ -54,10 +54,12 @@ class Base:
         ab_ref_retrieval = (api == 'AbstractRetrieval') and (params['view'] == 'REF')
         # Check if object retrieval
         obj_retrieval = (api == 'ObjectRetrieval')
+        # Check if ScienceDirect Search API
+        sciencedirect_search = (api == 'ScienceDirectSearch')
 
         if fname.exists() and not self._refresh:
             self._mdate = mod_ts
-            if search_request:
+            if search_request or sciencedirect_search:
                 self._json = [loads(line) for line in
                               fname.read_text().split("\n") if line]
                 self._n = len(self._json)
@@ -66,61 +68,84 @@ class Base:
             else:
                 self._json = loads(fname.read_text())
         else:
-            resp = get_content(url, api, params, **kwds)
-            header = resp.headers
-
-            if ab_ref_retrieval:
-                kwds['startref'] = '1'
-                data = _get_all_refs(url, params, verbose, resp, **kwds)
-                self._json = data
-                data = [data]
-            elif search_request:
-                # Get number of results
+            if sciencedirect_search:
+                resp = get_content(url, api, params, 'PUT' ,**kwds)
+                header = resp.headers
                 res = resp.json()
-                n = int(res['search-results'].get('opensearch:totalResults', 0) or 0)
+                # Get the number of results
+                n = int(res.get('resultsFound', 0))
                 self._n = n
-                # Results size check
-                cursor_exists = "cursor" in params
-                if not cursor_exists and n > SEARCH_MAX_ENTRIES:
-                    # Stop if there are too many results
-                    text = f'Found {n:,} matches.  The query fails to return '\
-                           f'more than {SEARCH_MAX_ENTRIES} entries.  Change '\
-                           'your query such that it returns fewer entries.'
-                    raise ScopusQueryError(text)
                 self._json = []
-                # Download results page-wise
                 if download:
-                    data = res.get('search-results', {}).get('entry', [])
-                    if not n:
-                        data = ""
-                    if not cursor_exists:
-                        start = params["start"]
-                    # Download the remaining information in chunks
+                    data = res.get('results', [])
+                    n_chunks = ceil(n/params["display"]["show"])
                     if verbose:
-                        print(f'Downloading results for query "{params["query"]}":')
-                    n_chunks = ceil(n/params['count'])
-                    for i in tqdm(range(1, n_chunks), disable=not verbose,
-                                  initial=1, total=n_chunks):
-                        if cursor_exists:
-                            cursor = res['search-results']['cursor']['@next']
-                            params.update({'cursor': cursor})
-                        else:
-                            start += params["count"]
-                            params.update({'start': start})
-                        resp = get_content(url, api, params, **kwds)
+                        print(f'Downloading results for query "{params}":')
+                    for i in tqdm(range(1, n_chunks), disable=not verbose):
+                        params['display']['offset'] += params["display"]["show"]
+                        resp = get_content(url, api, params, 'PUT' ,**kwds)
                         res = resp.json()
-                        data.extend(res.get('search-results', {}).get('entry', []))
+                        data.extend(res.get('results', []))
                     header = resp.headers  # Use header of final call
                     self._json = data
                 else:
                     data = None
-            elif obj_retrieval:
-                self._object = resp.content
-                data = []
             else:
-                data = loads(resp.text)
-                self._json = data
-                data = [data]
+                resp = get_content(url, api, params, **kwds)
+                header = resp.headers
+
+                if ab_ref_retrieval:
+                    kwds['startref'] = '1'
+                    data = _get_all_refs(url, params, verbose, resp, **kwds)
+                    self._json = data
+                    data = [data]
+                elif search_request:
+                    # Get number of results
+                    res = resp.json()
+                    n = int(res['search-results'].get('opensearch:totalResults', 0) or 0)
+                    self._n = n
+                    # Results size check
+                    cursor_exists = "cursor" in params
+                    if not cursor_exists and n > SEARCH_MAX_ENTRIES:
+                        # Stop if there are too many results
+                        text = f'Found {n:,} matches.  The query fails to return '\
+                            f'more than {SEARCH_MAX_ENTRIES} entries.  Change '\
+                            'your query such that it returns fewer entries.'
+                        raise ScopusQueryError(text)
+                    self._json = []
+                    # Download results page-wise
+                    if download:
+                        data = res.get('search-results', {}).get('entry', [])
+                        if not n:
+                            data = ""
+                        if not cursor_exists:
+                            start = params["start"]
+                        # Download the remaining information in chunks
+                        if verbose:
+                            print(f'Downloading results for query "{params["query"]}":')
+                        n_chunks = ceil(n/params['count'])
+                        for i in tqdm(range(1, n_chunks), disable=not verbose,
+                                    initial=1, total=n_chunks):
+                            if cursor_exists:
+                                cursor = res['search-results']['cursor']['@next']
+                                params.update({'cursor': cursor})
+                            else:
+                                start += params["count"]
+                                params.update({'start': start})
+                            resp = get_content(url, api, params, **kwds)
+                            res = resp.json()
+                            data.extend(res.get('search-results', {}).get('entry', []))
+                        header = resp.headers  # Use header of final call
+                        self._json = data
+                    else:
+                        data = None
+                elif obj_retrieval:
+                    self._object = resp.content
+                    data = []
+                else:
+                    data = loads(resp.text)
+                    self._json = data
+                    data = [data]
             # Set private variables
             self._mdate = time()
             self._header = header

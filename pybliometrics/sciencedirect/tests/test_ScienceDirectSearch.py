@@ -1,13 +1,24 @@
 """Tests for sciencedirect.ScienceDirectSearch"""
 from collections import namedtuple
 
-from pybliometrics.exception import Scopus400Error
+import pytest
+
 from pybliometrics.sciencedirect import ScienceDirectSearch, init
 
 init()
 
-sds_standard = ScienceDirectSearch('TITLE("Assessing LLMs in malicious code deobfuscation of real-world malware campaigns") AND DATE(2012)', view="STANDARD", refresh=30)
-sds_empty = ScienceDirectSearch('TITLE("Not a very realistic title")', view="STANDARD", refresh=30)
+one_article_query = {'title': 'Assessing LLMs in malicious code deobfuscation of real-world malware campaigns',
+                     'date': '2024'}
+sds_standard = ScienceDirectSearch(one_article_query, refresh=30)
+
+empty_query = {'title': 'Not a realistic title', 'date': '2012'}
+sds_empty = ScienceDirectSearch(empty_query, view="STANDARD", refresh=30)
+
+huge_query = {'qs': 'Neural Networks', 'date': '2015-2020'}
+sds_huge = ScienceDirectSearch(huge_query, view="STANDARD", download=False, refresh=30)
+
+pagination_query = {'qs': '"Neural Networks" AND "Shapley"', 'date': '2020'}
+sds_pagination = ScienceDirectSearch(pagination_query, view="STANDARD", refresh=30)
 
 
 def test_empty_results():
@@ -16,64 +27,61 @@ def test_empty_results():
 
 
 def test_all_fields():
-    fields = 'authors first_author doi title link load_date openaccess_status pii '\
-        'coverDate endingPage publicationName startingPage api_link volume'
-    doc = namedtuple("Document", fields)
+    fields = 'authors doi loadDate openAccess first_page last_page pii publicationDate ' \
+             'sourceTitle title uri volumeIssue'
+    doc = namedtuple('Document', fields)
 
     expected_standard_doc = doc(
-        authors="Constantinos Patsakis;Fran Casino;Nikolaos Lykousas",
-        first_author="Constantinos Patsakis",
-        doi="10.1016/j.eswa.2024.124912",
-        title="Assessing LLMs in malicious code deobfuscation of real-world malware campaigns",
-        link="https://www.sciencedirect.com/science/article/pii/S0957417424017792?dgcid=api_sd_search-api-endpoint",
-        load_date="2024-07-31T00:00:00.000Z",
-        openaccess_status=True,
-        pii="S0957417424017792",
-        coverDate="2024-12-05",
-        endingPage=None,
-        publicationName="Expert Systems with Applications",
-        startingPage="124912",
-        api_link="https://api.elsevier.com/content/article/pii/S0957417424017792",
-        volume="256",
+        authors='Constantinos Patsakis; Fran Casino; Nikolaos Lykousas',
+        doi='10.1016/j.eswa.2024.124912',
+        loadDate="2024-07-31T00:00:00.000Z",
+        openAccess=True,
+        first_page=124912,
+        last_page=None,
+        pii='S0957417424017792',
+        publicationDate='2024-12-05',
+        sourceTitle='Expert Systems with Applications',
+        title='Assessing LLMs in malicious code deobfuscation of real-world malware campaigns',
+        uri='https://www.sciencedirect.com/science/article/pii/S0957417424017792?dgcid=api_sd_search-api-endpoint',
+        volumeIssue='Volume 256'
     )
+
     assert sds_standard.results[0] == expected_standard_doc
+
+    expected_last_document = doc(
+        authors='Elhadji Amadou Oury Diallo; Ayumi Sugiyama; Toshiharu Sugawara',
+        doi='10.1016/j.neucom.2018.08.094',
+        loadDate='2019-04-25T00:00:00.000Z',
+        openAccess=False,
+        first_page=230,
+        last_page=240,
+        pii='S0925231219304424',
+        publicationDate='2020-07-05',
+        sourceTitle='Neurocomputing',
+        title='Coordinated behavior of cooperative agents using deep reinforcement learning',
+        uri='https://www.sciencedirect.com/science/article/pii/S0925231219304424?dgcid=api_sd_search-api-endpoint',
+        volumeIssue='Volume 396'
+    )
+    assert sds_pagination.results[-1] == expected_last_document
+
 
 
 def test_field_consistency():
-    am_wrong_field = ScienceDirectSearch('TITLE("Assessing LLMs in malicious code deobfuscation of real-world malware campaigns") AND DATE(2012)',
+    am_wrong_field = ScienceDirectSearch(one_article_query,
                                  integrity_fields=["notExistingField"],
                                  integrity_action="warn",
                                  view="STANDARD",
                                  refresh=30)
-    try:
-        am_wrong_field.results
-    except ValueError:
-        pass
-    except Exception as e:
-        raise AssertionError(f"Unexpected exception type: {type(e).__name__}")
-    else:
-        raise AssertionError("Expected ValueError but no exception was raised")
+    with pytest.raises(ValueError):
+        _ = am_wrong_field.results
 
 
 def test_length():
     assert len(sds_standard.results) == sds_standard._n
     assert len(sds_standard.results) == sds_standard._n
-
+    assert sds_huge.get_results_size() > 156_000
+    assert len(sds_pagination.results) == 127
 
 def test_string():
-    str_start = ('Search \'TITLE("Assessing LLMs in malicious code deobfuscation of '
-    'real-world malware campaigns") AND DATE(2012)\' yielded 1 document as of')
-    assert sds_standard.__str__().startswith(str_start)
-
-
-def test_wrong_query():
-    try:
-        ScienceDirectSearch(
-            'Th(s querY - has M&ny ( Errors', view="STANDARD", refresh=30
-        )
-    except Scopus400Error:
-        pass
-    except Exception as e:
-        raise AssertionError(f"Unexpected exception type: {type(e).__name__}")
-    else:
-        raise AssertionError("Expected Scopus400Error but no exception was raised")
+    expected_str = "Search '{'title': 'Assessing LLMs in malicious code deobfuscation of real-world malware campaigns', 'date': '2024'}' yielded 1 document as of 2025-05-07:\n    10.1016/j.eswa.2024.124912"
+    assert str(sds_standard) == expected_str

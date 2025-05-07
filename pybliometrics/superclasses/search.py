@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Union
 
 from pybliometrics.superclasses import Base
-from pybliometrics.utils import get_config, COUNTS, URLS
+from pybliometrics.utils import flatten_dict, get_config, COUNTS, URLS
 
 
 class Search(Base):
@@ -37,13 +37,27 @@ class Search(Base):
         api = self.__class__.__name__
         # Construct query parameters
         count = COUNTS[api][self._view]
-        params = {'count': count, 'view': self._view, **kwds}
-        if isinstance(query, dict):
-            params.update(query)
-            name = "&".join(["=".join(t) for t in zip(query.keys(), query.values())])
+
+        if api == 'ScienceDirectSearch':
+            # Add default parameters
+            params = {**query}
+            params.setdefault('display', {})
+            defaults = {'offset': 0, 'show': count, 'sortBy': 'date'}
+            for key, default in defaults.items():
+                params['display'].setdefault(key, default)
+            # Flatten query and create name
+            flat_query = flatten_dict(query)
+            name = "&".join(["=".join(map(str, t)) for t in zip(flat_query.keys(), flat_query.values())])
         else:
-            params['query'] = query
-            name = query
+            params = {'count': count, 'view': self._view, **kwds}
+
+            if isinstance(query, dict):
+                params.update(query)
+                name = "&".join(["=".join(t) for t in zip(query.keys(), query.values())])
+            else:
+                params['query'] = query
+                name = query
+
         if cursor:
             params.update({'cursor': '*'})
         else:
