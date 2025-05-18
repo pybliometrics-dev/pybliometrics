@@ -65,7 +65,7 @@ class ScienceDirectSearch(Search):
         return out or None
 
     def __init__(self,
-                 query: str = '',
+                 query: Optional[str] = None,
                  refresh: Union[bool, int] = False,
                  view: Optional[str] = None,
                  verbose: bool = False,
@@ -127,6 +127,7 @@ class ScienceDirectSearch(Search):
         if not (query or kwds):
             msg = "The query is empty. Please provide either a query string or keyword arguments."
             raise ValueError(msg)
+        query = query or ''
 
         if view:
             check_parameter_value(view, VIEWS["ScienceDirectSearch"], "view")
