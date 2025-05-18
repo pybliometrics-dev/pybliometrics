@@ -65,6 +65,18 @@ def deduplicate(lst):
     return new
 
 
+def flatten_dict(d, parent_key='', sep='.'):
+    """Recursively flatten a nested dictionary."""
+    items = []
+    for k, v in d.items():
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten_dict(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+
+
 def get_id(s, integer=True):
     """Helper function to return the Scopus ID at a fixed position."""
     path = ['coredata', 'dc:identifier']
@@ -126,7 +138,7 @@ def make_int_if_possible(val):
     """Attempt a conversion to int type."""
     try:
         return int(val)
-    except TypeError:
+    except (TypeError, ValueError):
         return val
 
 
