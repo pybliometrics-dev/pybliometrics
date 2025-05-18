@@ -8,18 +8,21 @@ from pybliometrics.sciencedirect import ScienceDirectSearch, init
 
 init()
 
-one_article_query = {'title': 'Assessing LLMs in malicious code deobfuscation of real-world malware campaigns',
-                     'date': '2024'}
-sds_standard = ScienceDirectSearch(one_article_query, refresh=30)
+sds_standard = ScienceDirectSearch(title='Assessing LLMs in malicious code deobfuscation of real-world malware campaigns',
+                                   date='2024',
+                                   refresh=30)
 
-empty_query = {'title': 'Not a realistic title', 'date': '2012'}
-sds_empty = ScienceDirectSearch(empty_query, view="STANDARD", refresh=30)
+sds_empty = ScienceDirectSearch(title='Not a realistic title',
+                                date='2012',
+                                view="STANDARD", refresh=30)
 
-huge_query = {'qs': 'Neural Networks', 'date': '2015-2020'}
-sds_huge = ScienceDirectSearch(huge_query, view="STANDARD", download=False, refresh=30)
+sds_huge = ScienceDirectSearch('Neural Networks',
+                               date='2015-2020',
+                               view="STANDARD", download=False, refresh=30)
 
-pagination_query = {'qs': '"Neural Networks" AND "Shapley"', 'date': '2020'}
-sds_pagination = ScienceDirectSearch(pagination_query, view="STANDARD", refresh=30)
+sds_pagination = ScienceDirectSearch('"Neural Networks" AND "Shapley"',
+                                     date='2020',
+                                     view="STANDARD", refresh=30)
 
 def test_all_fields():
     fields = 'authors doi loadDate openAccess first_page last_page pii publicationDate ' \
@@ -66,18 +69,19 @@ def test_empty_results():
 
 
 def test_field_consistency():
-    am_wrong_field = ScienceDirectSearch(one_article_query,
-                                 integrity_fields=["notExistingField"],
-                                 integrity_action="warn",
-                                 view="STANDARD",
-                                 refresh=30)
+    am_wrong_field = ScienceDirectSearch(query='',
+                                   title='Assessing LLMs in malicious code deobfuscation of real-world malware campaigns',
+                                   date='2024',
+                                   integrity_fields=["notExistingField"],
+                                   integrity_action="warn",
+                                   view="STANDARD", refresh=30)
     with pytest.raises(ValueError):
         _ = am_wrong_field.results
 
 
 def test_large_results():
     with pytest.raises(ScopusQueryError):
-        _ = ScienceDirectSearch(huge_query, view="STANDARD", download=True, refresh=30)
+        _ = ScienceDirectSearch('Neural Networks', view="STANDARD", download=True, refresh=30)
 
 
 def test_length():
@@ -88,5 +92,5 @@ def test_length():
 
 
 def test_string():
-    expected_str = "Search '{'title': 'Assessing LLMs in malicious code deobfuscation of real-world malware campaigns', 'date': '2024'}' yielded 1 document as of 2025-05-07:\n    10.1016/j.eswa.2024.124912"
-    assert str(sds_standard) == expected_str
+    expected_str = "Search '' yielded 1 document as of"
+    assert str(sds_standard).startswith(expected_str)

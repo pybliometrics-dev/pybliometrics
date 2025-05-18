@@ -39,15 +39,16 @@ class Search(Base):
         count = COUNTS[api][self._view]
 
         if api == 'ScienceDirectSearch':
-            # Add default parameters
-            params = {**query}
+            # Set qs, keyword arguments and add default parameters
+            params = {'qs': query, **kwds}
+            # Flatten query and create name
+            flat_query = flatten_dict(params)
+            name = "&".join(["=".join(map(str, t)) for t in zip(flat_query.keys(), flat_query.values())])
+            # Add default parameters for pagination
             params.setdefault('display', {})
             defaults = {'offset': 0, 'show': count, 'sortBy': 'date'}
             for key, default in defaults.items():
                 params['display'].setdefault(key, default)
-            # Flatten query and create name
-            flat_query = flatten_dict(query)
-            name = "&".join(["=".join(map(str, t)) for t in zip(flat_query.keys(), flat_query.values())])
         else:
             params = {'count': count, 'view': self._view, **kwds}
 
