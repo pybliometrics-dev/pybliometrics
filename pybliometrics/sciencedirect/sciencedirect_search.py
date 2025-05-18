@@ -65,7 +65,7 @@ class ScienceDirectSearch(Search):
         return out or None
 
     def __init__(self,
-                 query: dict,
+                 query: str = '',
                  refresh: Union[bool, int] = False,
                  view: Optional[str] = None,
                  verbose: bool = False,
@@ -73,13 +73,13 @@ class ScienceDirectSearch(Search):
                  integrity_fields: Optional[Union[list[str], tuple[str, ...]]] = None,
                  integrity_action: str = "raise",
                  subscriber: bool = True,
+                 **kwds: str
                  ) -> None:
         """
         Parameters
         ----------
-        query : dict
-            The query to be sent to the API, e.g.,
-            {'qs': '"Neural Networks" AND "Shapley"', 'date': '2019-2020'}
+        query : str
+            The query to be sent to the API, e.g. '"Neural Networks" AND "Shapley"'
 
         refresh : bool or int, optional
             Whether to refresh the cached file. If an int is passed, the cache
@@ -107,6 +107,12 @@ class ScienceDirectSearch(Search):
         subscriber : bool, optional
             If True, cursor navigation is enabled, allowing more than 5,000 results.
         
+        **kwds: str
+            Additional keyword arguments to be passed to the API. These can be any available
+            search fields, such as `authors`, `pub-date` and `title`. For a full list of
+            available fields, see the `ScienceDirect Search API Migration Documentation
+            <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__.
+        
         Raises
         ------
         ScopusQueryError
@@ -117,8 +123,13 @@ class ScienceDirectSearch(Search):
             is not one of the allowed values.
 
         """
+        # Check if the query and keyword arguments are empty
+        if not (query or kwds):
+            msg = "The query is empty. Please provide either a query string or keyword arguments."
+            raise ValueError(msg)
+
         if view:
-            check_parameter_value(view, VIEWS['ScienceDirectSearch'], "view")
+            check_parameter_value(view, VIEWS["ScienceDirectSearch"], "view")
         else:
             view = "STANDARD"
 
@@ -133,7 +144,7 @@ class ScienceDirectSearch(Search):
 
         Search.__init__(self, query=query,
                         cursor=subscriber, download=download,
-                        verbose=verbose)
+                        verbose=verbose, **kwds)
 
     def __str__(self):
         """Print a summary string."""

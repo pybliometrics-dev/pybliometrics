@@ -2,7 +2,7 @@ pybliometrics.sciencedirect.ScienceDirectSearch
 ===============================================
 
 `ScienceDirectSearch()` implements the `ScienceDirect Search API <https://nonprod-devportal.elsevier.com/documentation/ScienceDirectSearchAPI.wadl>`_ using the `PUT` method.  It executes a query to search for documents and retrieves the resulting records.
-The class takes a `query` dictionary as input which has to follow this schema:
+The class takes a `query` string that searches through all the article's or chapter's content. You can also pass any of the following parameters as keyword arguments:
 
 .. code-block:: text
 
@@ -44,16 +44,15 @@ Examples
 --------
 
 The class is initialized with a search query.
-We can pass the field `qs`` to search for specific keywords.
+We can pass `date` as keyword argument to search for documents published in a specific date.
 Using `verbose=True` will print the progress of the download.
 
 .. code-block:: python
 
     >>> from pybliometrics.sciencedirect import ScienceDirectSearch, init
     >>> init()
-    >>> # Retrieve documents based on the search query  
-    >>> query = query = {'qs': '"neural radiance fields" AND "3D rendering"', 'date': '2024'}
-    >>> sds = ScienceDirectSearch(query, verbose=True)
+    >>> # Retrieve documents based on the search query and date
+    >>> sds = ScienceDirectSearch('"neural radiance fields" AND "3D rendering"', date='2024', verbose=True)
     Downloading results for query "{'qs': '"neural radiance fields" AND "3D rendering"', 'date': '2024', 'display': {'offset': 0, 'show': 100, 'sortBy': 'date'}, 'cursor': '*'}":
     100%|██████████| 1/1 [00:00<00:00,  3.23it/s]
 
