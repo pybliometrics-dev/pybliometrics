@@ -68,6 +68,11 @@ def test_empty_results():
     assert sds_empty._n == 0
 
 
+def test_empty_query():
+    with pytest.raises(ValueError):
+        _ = ScienceDirectSearch(view="STANDARD", refresh=30)
+
+
 def test_field_consistency():
     am_wrong_field = ScienceDirectSearch(query='',
                                    title='Assessing LLMs in malicious code deobfuscation of real-world malware campaigns',
