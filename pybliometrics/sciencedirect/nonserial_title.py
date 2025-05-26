@@ -84,29 +84,24 @@ class NonserialTitle(Retrieval):
                  refresh: Union[bool, int] = False,
                  **kwds: str
                  ) -> None:
-        """ Interaction with the ScienceDirect Nonserial Title API.
+        """
+        Interaction with the ScienceDirect Nonserial Title API.
 
         :param isbn: The ISBN of the book.
-        :param view: The view of the file that should be downloaded. Allowed
-                value: `STANDARD`. For details
-                see `the documentation <https://dev.elsevier.com/sd_nonserial_title_views.html.>`_. Note that
-                although the `BASIC` view is documented, the API does not support it.
+        :param view: The view of the file that should be downloaded. Allowed value: "STANDARD".
+                     For details see `the documentation <https://dev.elsevier.com/sd_nonserial_title_views.html>`_.
+                     Note that although the "BASIC" view is documented, the API does not support it.
         :param refresh: Whether to refresh the cached file if it exists or not.
-                If int is passed, cached file will be refreshed if the
-                number of days since last modification exceeds that value.
-        :param kwds: Keywords passed on as query parameters.  Must contain
-                fields and values mentioned in the 
-                `API specification<https://dev.elsevier.com/documentation/NonSerialTitleAPI.wadl>`_.
-        
-        Raises
-        ------
-        ValueError
-            If any of the parameters `refresh` or `view` is not one of the allowed values.
+                        If int is passed, cached file will be refreshed if the number of days since
+                        last modification exceeds that value.
+        :param kwds: Keywords passed on as query parameters. Must contain fields and values
+                     mentioned in the `API specification <https://dev.elsevier.com/documentation/NonSerialTitleAPI.wadl>`_.
 
-        Notes
-        -----
-        The directory for cached results is `{path}/{view}/{source_id}`,
-        where `path` is specified in your configuration file.
+        :raises ValueError: If any of the parameters `refresh` or `view` is not one of the allowed values.
+
+        .. note::
+           The directory for cached results is ``{path}/{view}/{source_id}``,
+           where `path` is specified in your configuration file.
         """
         # Checks
         check_parameter_value(view, VIEWS['NonserialTitle'], "view")
