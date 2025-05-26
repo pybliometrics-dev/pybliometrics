@@ -84,8 +84,7 @@ class NonserialTitle(Retrieval):
                  refresh: Union[bool, int] = False,
                  **kwds: str
                  ) -> None:
-        """
-        Interaction with the ScienceDirect Nonserial Title API.
+        """Interaction with the ScienceDirect Nonserial Title API.
 
         :param isbn: The ISBN of the book.
         :param view: The view of the file that should be downloaded. Allowed value: "STANDARD".
