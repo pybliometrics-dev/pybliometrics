@@ -55,10 +55,12 @@ ScienceDirect
 .. toctree::
     :maxdepth: 1
 
-    reference/sciencedirect/ArticleRetrieval.rst
-    reference/sciencedirect/ObjectRetrieval.rst
     reference/sciencedirect/ArticleEntitlement.rst
+    reference/sciencedirect/ArticleRetrieval.rst
+    reference/sciencedirect/NonserialTitle.rst
     reference/sciencedirect/ObjectMetadata.rst
+    reference/sciencedirect/ObjectRetrieval.rst
+    reference/sciencedirect/SerialTitle.rst
 
 One other Retrieval API, the Article Hosting Permission API, is not implemented yet.
 

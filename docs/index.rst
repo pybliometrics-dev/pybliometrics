@@ -41,9 +41,11 @@ Classes for the ScienceDirect API
    ArticleEntitlement
    ArticleMetadata
    ArticleRetrieval
+   NonserialTitle
    ObjectMetadata
    ObjectRetrieval
    ScienceDirectSearch
+   SerialTitle
    SubjectClassifications
 
 ========
