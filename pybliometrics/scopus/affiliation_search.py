@@ -13,7 +13,7 @@ class AffiliationSearch(Search):
         """A list of namedtuples storing affiliation information,
         where each namedtuple corresponds to one affiliation.
         The information in each namedtuple is `(eid name variant documents city
-        country parent)`.
+        country)`.
 
         All entries are `strings`, `int` or `None`.  Field `variant` combines variants
         of names with a `";"`.
@@ -25,7 +25,7 @@ class AffiliationSearch(Search):
             actual field names (listed above).
         """
         # Initiate namedtuple with ordered list of fields
-        fields = 'eid name variant documents city country parent'
+        fields = 'eid name variant documents city country'
         aff = namedtuple('Affiliation', fields)
         check_field_consistency(self._integrity, fields)
         # Parse elements one-by-one
@@ -35,11 +35,9 @@ class AffiliationSearch(Search):
             variants = [html_unescape(d.get('$', ""))
                         for d in item.get('name-variant', [])
                         if d.get('$', "") != name]
-            parent = make_int_if_possible(item.get('parent-affiliation-id')) or None
             new = aff(eid=item.get('eid'), variant=";".join(variants),
                       documents=int(item['document-count']), name=html_unescape(name),
-                      city=item.get('city'), country=item.get('country'),
-                      parent=parent)
+                      city=item.get('city'), country=item.get('country'))
             out.append(new)
         # Finalize
         check_integrity(out, self._integrity, self._action)
