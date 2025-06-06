@@ -30,8 +30,8 @@ def test_citescoreyearinfolist():
     info = namedtuple('Citescoreinfolist', info_fields)
 
     # Test softwarex
-    expected_named_tuple = [info(year=2023, citescore=5.5),
-                            info(year=2024, citescore=4.1)]
+    expected_named_tuple = [info(year=2024, citescore=4.2),
+                            info(year=2025, citescore=3.1)]
     assert softwarex.citescoreyearinfolist == expected_named_tuple
 
     # Test oecd
@@ -132,15 +132,15 @@ def test_self_link():
 
 
 def test_sjrlist():
-    assert softwarex.sjrlist == [(2023, 0.544)]
+    assert softwarex.sjrlist == [(2024, 0.483)]
     assert oecd.sjrlist == [(1999, 2.723)]
-    assert jco_cci.sjrlist == [(2023, 1.396)]
+    assert jco_cci.sjrlist == [(2024, 1.25)]
 
 
 def test_sniplist():
-    assert softwarex.sniplist == [(2023, 1.5)]
+    assert softwarex.sniplist == [(2024, 1.095)]
     assert oecd.sniplist is None
-    assert jco_cci.sniplist == [(2023, 1.518)]
+    assert jco_cci.sniplist == [(2024, 0.896)]
 
 
 def test_source_id():
@@ -181,7 +181,7 @@ def test_yearly_data():
              'zerocitespercentsce citecountsce'
     dat = namedtuple('Yearlydata', fields)
     expected1_2020 = dat(year=2020, publicationcount=164, revpercent=0.0,
-        zerocitessce=7, zerocitespercentsce=4.2682926829268295,
+        zerocitessce=6, zerocitespercentsce=3.658536585365854,
         citecountsce=2579)
     assert softwarex.yearly_data[24] == expected1_2020
     expected2_1996 = dat(year=1996, publicationcount=4, revpercent=0.0,

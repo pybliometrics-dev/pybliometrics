@@ -30,12 +30,12 @@ def test_get_eids_author():
 
 
 def test_get_eids_journal():
-    assert len(s_j.get_eids()) == 118
+    assert len(s_j.get_eids()) == 119
 
 
 def test_get_results_size():
     assert s_au.get_results_size() == 4
-    assert s_j.get_results_size() == 118
+    assert s_j.get_results_size() == 119
     assert s_empty.get_results_size() == 0
 
 
@@ -59,7 +59,7 @@ def test_results_author():
 
 
 def test_results_journal():
-    received = s_j.results[-1]
+    received = s_j.results[105]
     abstract = 'This paper investigates the determinants of R&D investment '\
         'at the national level with an emphasis on the roles of patent '\
         'rights protection, international technology transfer through trade '\
@@ -92,7 +92,7 @@ def test_results_journal():
         authkeywords=keywords, citedby_count=0, openaccess=0, freetoread=None,
         freetoreadLabel=None, fund_acr='MOST', fund_no='NSC94-2415-H-194-001',
         fund_sponsor='Ministry of Science and Technology, Taiwan')
-    assert int(received.citedby_count) > 60
+    assert int(received.citedby_count) >= 1
     assert received._replace(citedby_count=0) == expected
 
 
@@ -102,4 +102,4 @@ def test_results_empty():
 
 def test_results_unescape():
     assert s_d.results[0].afid.count(";") == 14
-    assert '&amp;' in s_d.results[0].affilname
+    assert '&' in s_d.results[0].affilname

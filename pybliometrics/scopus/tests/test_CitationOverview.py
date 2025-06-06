@@ -7,7 +7,7 @@ from pybliometrics.scopus import CitationOverview, init
 init()
 
 
-co_eid = CitationOverview(["85068268027", "84930616647"],
+co_eid = CitationOverview(["84930616647", "85068268027"],
                           refresh=30, date="2016-2020")
 co_doi = CitationOverview(["10.1016/j.softx.2019.100263"],
                           id_type="doi", refresh=30, date="2016-2020")
@@ -132,7 +132,7 @@ def test_startingPage():
 
 
 def test_sortTitle():
-    expected = ['SoftwareX', 'ACS Catalysis']
+    expected = ['Softwarex', 'ACS Catalysis']
     assert co_eid.sortTitle == expected
     assert co_doi.sortTitle == [expected[0]]
 

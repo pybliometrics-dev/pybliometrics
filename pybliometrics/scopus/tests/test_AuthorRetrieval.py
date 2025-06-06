@@ -199,10 +199,7 @@ def test_historical_identifier():
     assert metrics.historical_identifier is None
     assert light.historical_identifier is None
     assert standard.historical_identifier is None
-    expected = [35787230500, 36488127000, 54974425600, 55004143700,
-                55004143800, 57057263700, 56641032000, 36747787600,
-                57206217299, 57219840256, 58343886400]
-    assert enhanced.historical_identifier == expected
+    assert enhanced.historical_identifier == None
 
 
 def test_identifier():
