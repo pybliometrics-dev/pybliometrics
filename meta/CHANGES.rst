@@ -4,6 +4,18 @@ Change Log
 
 .. toctree::
 
+4.3
+~~~
+
+2025-06-06
+
+* Add new class `sciencedirect.SerialTitle()`.
+* Add new class `sciencedirect.NonSerialTitle()`.
+* Rename class `sciencedirect.ScDirSubjectClassifications()` to `sciencedirect.SubjectClassifications()`.
+* Remove deprecated exceptions Scopus500Error, Scopus502Error, Scopus504Error in favor of ScopusServerError.
+* In `scopus.AffiliationRetrieval().name_variants`, set "doc_count" to None instead of 0 if no number is returned.
+* In `scopus.AffiliationSearch().affiliations`, remove field "parent" as this is always None.
+
 4.2.1
 -----
 
