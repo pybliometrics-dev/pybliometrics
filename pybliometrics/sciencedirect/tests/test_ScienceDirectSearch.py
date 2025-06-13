@@ -10,19 +10,19 @@ init()
 
 sds_standard = ScienceDirectSearch(title='Assessing LLMs in malicious code deobfuscation of real-world malware campaigns',
                                    date='2024',
-                                   refresh=30)
+                                   refresh=True)
 
 sds_empty = ScienceDirectSearch(title='Not a realistic title',
                                 date='2012',
-                                view="STANDARD", refresh=30)
+                                view="STANDARD", refresh=True)
 
 sds_huge = ScienceDirectSearch('Neural Networks',
                                date='2015-2020',
-                               view="STANDARD", download=False, refresh=30)
+                               view="STANDARD", download=False, refresh=True)
 
 sds_pagination = ScienceDirectSearch('"Neural Networks" AND "Shapley"',
                                      date='2020',
-                                     view="STANDARD", refresh=30)
+                                     view="STANDARD", refresh=True)
 
 def test_all_fields():
     fields = 'authors doi loadDate openAccess first_page last_page pii publicationDate ' \

@@ -68,34 +68,7 @@ class Base:
             else:
                 self._json = loads(fname.read_text())
         else:
-            if sciencedirect_search:
-                resp = get_content(url, api, params, 'PUT' ,**kwds)
-                header = resp.headers
-                res = resp.json()
-                # Get the number of results
-                n = int(res.get('resultsFound', 0))
-                self._n = n
-                self._json = []
-                if download:
-                    if n > SCIENCE_DIRECT_MAX_ENTRIES:
-                        text = f'Found {n:,} matches.  The query fails to return '\
-                            f'more than {SCIENCE_DIRECT_MAX_ENTRIES} entries. Please '\
-                            'refine your query.'
-                        raise ScopusQueryError(text)
-                    data = res.get('results', [])
-                    n_chunks = ceil(n/params["display"]["show"])
-                    if verbose:
-                        print(f'Downloading results for query "{params}":')
-                    for i in tqdm(range(1, n_chunks), disable=not verbose):
-                        params['display']['offset'] += params["display"]["show"]
-                        resp = get_content(url, api, params, 'PUT' ,**kwds)
-                        res = resp.json()
-                        data.extend(res.get('results', []))
-                    header = resp.headers  # Use header of final call
-                    self._json = data
-                else:
-                    data = None
-            else:
+            if not sciencedirect_search:
                 resp = get_content(url, api, params, **kwds)
                 header = resp.headers
 
@@ -151,6 +124,33 @@ class Base:
                     data = loads(resp.text)
                     self._json = data
                     data = [data]
+            else: # ScienceDirect Search API
+                resp = get_content(url, api, params, 'PUT' ,**kwds)
+                header = resp.headers
+                res = resp.json()
+                # Get the number of results
+                n = int(res.get('resultsFound', 0))
+                self._n = n
+                self._json = []
+                if download:
+                    if n > SCIENCE_DIRECT_MAX_ENTRIES:
+                        text = f'Found {n:,} matches.  The query fails to return '\
+                            f'more than {SCIENCE_DIRECT_MAX_ENTRIES} entries. Please '\
+                            'refine your query.'
+                        raise ScopusQueryError(text)
+                    data = res.get('results', [])
+                    n_chunks = ceil(n/params["display"]["show"])
+                    if verbose:
+                        print(f'Downloading results for query "{params}":')
+                    for i in tqdm(range(1, n_chunks), disable=not verbose):
+                        params['display']['offset'] += params["display"]["show"]
+                        resp = get_content(url, api, params, 'PUT' ,**kwds)
+                        res = resp.json()
+                        data.extend(res.get('results', []))
+                    header = resp.headers  # Use header of final call
+                    self._json = data
+                else:
+                    data = None
             # Set private variables
             self._mdate = time()
             self._header = header
