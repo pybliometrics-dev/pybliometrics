@@ -30,3 +30,10 @@ def test_object():
     assert isinstance(or_2.object, BytesIO)
     assert or_2.object.getvalue()[150:200] == obj_2_150_200
     assert ET.parse(or_2.object).getroot().tag == '{http://www.w3.org/2000/svg}svg'
+
+def test_str():
+    """Tests the string representation of the ObjectRetrieval object."""
+    expected_1 = "Object gr10.jpg from document with EID 1-s2.0-S156984322300331X has size of 34.7 KB."
+    assert str(or_1) == expected_1
+    expected_2 = "Object si92.svg from document with EID 1-s2.0-S0736584520302969 has size of 10.0 KB."
+    assert str(or_2) == expected_2
