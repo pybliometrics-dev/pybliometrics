@@ -115,3 +115,18 @@ class NonserialTitle(Retrieval):
         # Parse json
         self._json = self._json['nonserial-metadata-response']
         self._entry = self._json['entry'][0]
+
+    def __str__(self) -> str:
+        """Return a citation string for the Nonserial Title."""
+        if self.authors:
+            authors = f"{self.authors}."
+        elif self.editors:
+            authors = f"{self.editors} (ed.)."
+        else:
+            authors = ""
+        edition = f", {self.edition}." if self.edition else "."
+        publisher = f" {self.publisher_name}." if self.publisher_name else "."
+        title = f" {self.title}"
+        isbn = self.isbn
+
+        return f"{authors}{title}{edition}{publisher} ISBN: {isbn}"
