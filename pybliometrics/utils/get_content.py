@@ -1,9 +1,7 @@
 from typing import Literal, Optional, Type
-from random import shuffle
 from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.exceptions import JSONDecodeError
-from time import sleep, time
 from urllib3.util import Retry
 
 from pybliometrics import __version__
@@ -33,12 +31,66 @@ def get_session() -> Type[Session]:
     return session
 
 
-def prepare_headers_and_tokens(params):
-    """Prepare headers and tokens for the request."""
+def get_content(url: str,
+                api: str,
+                params: Optional[dict],
+                method: Literal['GET', 'PUT'] = 'GET',
+                **kwds):
+    """Helper function to download a file and return its content.
+
+    Parameters
+    ----------
+    url : str
+        The URL to be parsed.
+
+    api : str
+        The Scopus API to be accessed.
+
+    params : dict (optional)
+        Dictionary containing query parameters.  For required keys
+        and accepted values see e.g.
+        https://api.elsevier.com/documentation/AuthorRetrievalAPI.wadl
+
+    **kwds : key-value parings, optional
+        Keywords passed on to as query parameters.  Must contain fields
+        and values specified in the respective API specification.
+
+    Raises
+    ------
+    ScopusHtmlError or HTTPError
+        If the status of the response is not ok.
+
+    ValueError
+        If the accept parameter is not one of the accepted values.
+
+    Returns
+    -------
+    resp : byte-like object
+        The content of the file, which needs to be serialized.
+    """
+    from random import shuffle
+    from time import sleep, time
+
+    # Get needed ressources for query
+    config = get_config()
+
     keys = get_keys()
-    insttokens = list(zip(keys, get_insttokens()))
+
+    # Get tokens and zip with keys
+    insttokens = get_insttokens()
+    insttokens = list(zip(keys, insttokens))
+
+    # Keep keys that are not insttokens
     keys = keys[len(insttokens):]
 
+    session = get_session()
+
+    params = params or {}
+    params.update(**kwds)
+    proxies = dict(config._sections.get("Proxy", {}))
+    timeout = config.getint("Requests", "Timeout", fallback=20)
+
+    # Get keys/tokens and create header
     token_key, insttoken = None, None
     if "insttoken" in params:
         token_key = params.pop("apikey")
@@ -50,29 +102,64 @@ def prepare_headers_and_tokens(params):
     else:
         key = keys.pop(0)
 
-    header = {
-        'Accept': 'application/json',
-        'User-Agent': user_agent,
-        'X-ELS-APIKey': token_key or key
-    }
+    header = {'Accept': 'application/json',
+              'User-Agent': user_agent,
+              'X-ELS-APIKey': token_key or key}
 
-    if insttoken:
-        header['X-ELS-Insttoken'] = insttoken
-
-    return header, insttokens, keys
-
-
-def handle_throttling(api):
-    """Handle throttling based on API limits."""
+    # Eventually wait bc of throttling
     if len(_throttling_params[api]) == _throttling_params[api].maxlen:
         try:
             sleep(1 - (time() - _throttling_params[api][0]))
         except (IndexError, ValueError):
             pass
 
+    # Use insttoken if available
+    if insttoken:
+        header['X-ELS-Insttoken'] = insttoken
+        if method == 'GET':
+            resp = session.get(url, headers=header, params=params, timeout=timeout)
+        else:
+            resp = session.put(url, headers=header, json=params, timeout=timeout)
+    else:
+        if method == 'GET':
+            resp = session.get(url, headers=header, params=params, timeout=timeout, proxies=proxies)
+        else:
+            resp = session.put(url, headers=header, json=params, timeout=timeout, proxies=proxies)
 
-def handle_response(resp):
-    """Handle the response and raise appropriate errors."""
+    # If 429 try other tokens
+    while (resp.status_code == 429) or (resp.status_code == 401):
+        try:
+            token_key, token = insttokens.pop(0) # Get and remove current key
+            header['X-ELS-APIKey'] = token_key
+            header['X-ELS-Insttoken'] = token
+            shuffle(insttokens)
+            if method == 'GET':
+                resp = session.get(url, headers=header, params=params, timeout=timeout)
+            else:
+                resp = session.put(url, headers=header, json=params, timeout=timeout)
+        except IndexError:  # All tokens depleted
+            break
+
+   # Remove Insttoken from header (if present)
+    if 'X-ELS-Insttoken' in header:
+        del header['X-ELS-Insttoken']
+
+    # If 429 try other keys
+    while (resp.status_code == 429) or (resp.status_code == 401):
+        try:
+            key = keys.pop(0)  # Remove current key
+            header['X-ELS-APIKey'] = key
+            shuffle(keys)
+            if method == 'GET':
+                resp = session.get(url, headers=header, proxies=proxies, params=params, timeout=timeout)
+            else:
+                resp = session.put(url, headers=header, json=params, timeout=timeout, proxies=proxies)
+        except IndexError:  # All keys depleted
+            break
+
+    _throttling_params[api].append(time())
+
+    # Eventually raise error, if possible with supplied error message
     try:
         error_type = errors[resp.status_code]
         try:
@@ -88,71 +175,6 @@ def handle_response(resp):
         raise error_type(reason)
     except (JSONDecodeError, KeyError):
         resp.raise_for_status()
-
-
-def get_content(url: str,
-                api: str,
-                params: Optional[dict],
-                method: Literal['GET', 'PUT'] = 'GET',
-                **kwds):
-    """Helper function to download a file and return its content."""
-    config = get_config()
-
-    session = get_session()
-
-    params = params or {}
-    params.update(**kwds)
-    proxies = dict(config._sections.get("Proxy", {}))
-    timeout = config.getint("Requests", "Timeout", fallback=20)
-
-    header, insttokens, keys = prepare_headers_and_tokens(params)
-    handle_throttling(api)
-
-    # Use insttoken if available
-    if 'X-ELS-Insttoken' in header:
-        if method == 'GET':
-            resp = session.get(url, headers=header, params=params, timeout=timeout)
-        else:
-            resp = session.put(url, headers=header, json=params, timeout=timeout)
-    else:
-        if method == 'GET':
-            resp = session.get(url, headers=header, params=params, timeout=timeout, proxies=proxies)
-        else:
-            resp = session.put(url, headers=header, json=params, timeout=timeout, proxies=proxies)
-
-
-    # Retry logic for 429 or 401
-    while resp.status_code in (429, 401):
-        try:
-            token_key, token = insttokens.pop(0) # Get and remove current key
-            header['X-ELS-APIKey'] = token_key
-            header['X-ELS-Insttoken'] = token
-            shuffle(insttokens)
-            if method == 'GET':
-                resp = session.get(url, headers=header, params=params, timeout=timeout)
-            else:
-                resp = session.put(url, headers=header, json=params, timeout=timeout)
-        except IndexError:  # All tokens depleted
-            break
-
-    while resp.status_code in (429, 401):
-        try:
-            key = keys.pop(0)  # Remove current key
-            header['X-ELS-APIKey'] = key
-            shuffle(keys)
-            if method == 'GET':
-                resp = session.get(url, headers=header, proxies=proxies, params=params, timeout=timeout)
-            else:
-                resp = session.put(url, headers=header, json=params, timeout=timeout, proxies=proxies)
-        except IndexError:  # All keys depleted
-            break
-
-    if 'X-ELS-Insttoken' in header:
-        del header['X-ELS-Insttoken']
-
-    _throttling_params[api].append(time())
-
-    handle_response(resp)
     return resp
 
 
