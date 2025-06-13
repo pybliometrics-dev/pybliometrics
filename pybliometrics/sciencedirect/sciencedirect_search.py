@@ -9,11 +9,6 @@ from pybliometrics.utils import check_field_consistency, chained_get, \
 
 
 class ScienceDirectSearch(Search):
-    """
-    Interaction with the ScienceDirect Search API using the `PUT` method.
-    See the official `documentation <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__ 
-    for more details.
-    """
     @property
     def results(self) -> Optional[list]:
         """
@@ -76,42 +71,38 @@ class ScienceDirectSearch(Search):
                  **kwds: str
                  ) -> None:
         """
-        Parameters
-        ----------
-        query : str
-            The query to be sent to the API, e.g. '"Neural Networks" AND "Shapley"'
+        Interaction with the ScienceDirect Search API using the `PUT` method.
+        See the official `documentation <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__ 
+        for more details.
 
-        refresh : bool or int, optional
-            Whether to refresh the cached file. If an int is passed, the cache
-            will refresh if older than that many days.
-
-        view : str, optional
-            The API view to use. Default is "STANDARD".
-
-        verbose : bool, optional
-            Whether to print a download progress bar.
-
-        download : bool, optional
-            Whether to download results (if they haven't been cached).
-
-        integrity_fields : list of str or tuple of str, optional
-            Fields whose completeness should be checked. If any field is missing,
-            the `integrity_action` will be triggered.
-
-        integrity_action : {'raise', 'warn'}, optional
-            What to do if required fields are missing:
-            
-            - 'raise' : Raise an AttributeError
-            - 'warn' : Emit a UserWarning
-
-        subscriber : bool, optional
-            If True, cursor navigation is enabled, allowing more than 5,000 results.
-        
-        **kwds: str
-            Additional keyword arguments to be passed to the API. These can be any available
-            search fields, such as `authors`, `pub-date` and `title`. For a full list of
-            available fields, see the `ScienceDirect Search API Migration Documentation
-            <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__.
+        :param query: Free text query string as the `qs`field in the `documentation
+                      <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
+        :param view: Which view to use for the query, see `the documentation <https://dev.elsevier.com/sd_search_views.html>`__.
+                     Allowed values: `STANDARD`.
+        :param verbose: Whether to print a download progress bar.
+        :param download: Whether to download results (if they have not been
+                         cached).
+        :param integrity_fields: A list or tuple with the names of fields whose completeness should
+                                 be checked.  `ScienceDirectSearch` will perform the
+                                 action specified in `integrity_action` if
+                                 elements in these fields are missing.  This
+                                 helps to avoid idiosynchratically missing
+                                 elements that should always be present
+                                 (e.g., doi or authors).
+        :param integrity_action: What to do in case integrity of provided fields
+                                 cannot be verified.  Possible actions:
+                                 - `"raise"`: Raise an `AttributeError`
+                                 - `"warn"`: Raise a `UserWarning`
+        :param subscriber: Whether you access ScienceDirect with a subscription or not.
+                           For subscribers, ScienceDirect's cursor navigation will be
+                           used.  Sets the number of entries in each query
+                           iteration to the maximum number allowed by the
+                           corresponding view.
+        :param kwds: Keywords passed on as query parameters.  Must contain
+                     fields and values mentioned in the `API specification <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`__.
         
         Raises
         ------
@@ -121,6 +112,12 @@ class ScienceDirectSearch(Search):
         ValueError
             If any of the parameters `integrity_action`, `refresh` or `view`
             is not one of the allowed values.
+        
+        Notes
+        -----
+        The directory for cached results is `{path}/{view}/{fname}`,
+        where `path` is specified in your configuration file and `fname` is
+        the md5-hashed version of the flattened `query`.
 
         """
         # Check if the query and keyword arguments are empty
