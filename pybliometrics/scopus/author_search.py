@@ -3,7 +3,7 @@ from typing import Optional, Union
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_integrity, check_parameter_value, \
-    check_field_consistency, listify, make_search_summary
+    check_field_consistency, get_and_aggregate_subjects, listify, make_search_summary
 
 
 class AuthorSearch(Search):
@@ -33,10 +33,9 @@ class AuthorSearch(Search):
         for item in self._json:
             name = item.get('preferred-name', {})
             aff = item.get('affiliation-current', {})
-            fields = item.get('subject-area',
-                              [{'@abbrev': '', '@frequency': ''}])
-            areas = [f"{d.get('@abbrev', '')} ({d.get('@frequency', '')})"
-                     for d in listify(fields)]
+            fields = item.get('subject-area')
+            subjects = get_and_aggregate_subjects(fields)
+            areas = [f"{abbrev} ({freq})" for abbrev, freq in subjects.items()]
             new = auth(eid=item.get('eid'),
                        orcid=item.get('orcid'),
                        initials=name.get('initials'),
