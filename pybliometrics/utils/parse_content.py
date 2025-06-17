@@ -67,15 +67,14 @@ def deduplicate(lst):
 def get_and_aggregate_subjects(fields):
     """Get and aggregate subject areas from Scopus AuthorSearch."""
     frequencies = {}
-    if fields:
-        for field in fields:
-            abbrev = field.get('@abbrev', '')
-            frequency = int(field.get('@frequency', 0))
-            if abbrev in frequencies:
-                frequencies[abbrev] += frequency
-            else:
-                frequencies[abbrev] = frequency
-        return frequencies
+    for field in fields:
+        abbrev = field.get('@abbrev', '')
+        freq_str = field.get('@frequency', '')
+        frequency = int(freq_str) if freq_str.isdigit() else 0
+        if abbrev in frequencies:
+            frequencies[abbrev] += frequency
+        else:
+            frequencies[abbrev] = frequency
     return frequencies
 
 

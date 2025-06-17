@@ -56,6 +56,8 @@ Primarily, the class provides a list of `namedtuples <https://docs.python.org/3/
      areas='ECON (72); BUSI (8)')]
 
 
+Please note that Scopus sometimes returns duplicate `areas`, which are then aggregated (e.g. 'ECON (51); ECON (21)' → 'ECON (72)').
+
 Working with namedtuples is straightforward: Using `pandas <https://pandas.pydata.org/>`_, you can quickly convert the results set into a DataFrame:
 
 .. code-block:: python

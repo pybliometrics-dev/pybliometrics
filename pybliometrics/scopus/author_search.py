@@ -33,9 +33,10 @@ class AuthorSearch(Search):
         for item in self._json:
             name = item.get('preferred-name', {})
             aff = item.get('affiliation-current', {})
-            fields = item.get('subject-area')
+            fields = item.get('subject-area',
+                              [{'@abbrev': '', '@frequency': ''}])
             subjects = get_and_aggregate_subjects(fields)
-            areas = [f"{abbrev} ({freq})" for abbrev, freq in subjects.items()]
+            areas = [f"{abbrev} ({'' if freq == 0 else freq})" for abbrev, freq in subjects.items()]
             new = auth(eid=item.get('eid'),
                        orcid=item.get('orcid'),
                        initials=name.get('initials'),
