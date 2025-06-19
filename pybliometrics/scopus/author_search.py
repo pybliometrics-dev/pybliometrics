@@ -15,7 +15,8 @@ class AuthorSearch(Search):
         documents affiliation affiliation_id city country areas)`.
 
         All entries are `str` or `None`.  Areas combines abbreviated subject
-        areas followed by the number of documents in this subject.
+        areas followed by the number of documents in this subject. The number of 
+        documents on duplicate subject areas is summed up.
 
         Raises
         ------
