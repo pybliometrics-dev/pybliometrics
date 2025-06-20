@@ -3,7 +3,7 @@ from typing import Optional, Union
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_integrity, check_parameter_value, \
-    check_field_consistency, listify, make_search_summary
+    check_field_consistency, get_and_aggregate_subjects, listify, make_search_summary
 
 
 class AuthorSearch(Search):
@@ -15,7 +15,8 @@ class AuthorSearch(Search):
         documents affiliation affiliation_id city country areas)`.
 
         All entries are `str` or `None`.  Areas combines abbreviated subject
-        areas followed by the number of documents in this subject.
+        areas followed by the number of documents in this subject. The number of 
+        documents on duplicate subject areas is summed up.
 
         Raises
         ------
@@ -35,8 +36,8 @@ class AuthorSearch(Search):
             aff = item.get('affiliation-current', {})
             fields = item.get('subject-area',
                               [{'@abbrev': '', '@frequency': ''}])
-            areas = [f"{d.get('@abbrev', '')} ({d.get('@frequency', '')})"
-                     for d in listify(fields)]
+            subjects = get_and_aggregate_subjects(fields)
+            areas = [f"{abbrev} ({'' if freq == 0 else freq})" for abbrev, freq in subjects.items()]
             new = auth(eid=item.get('eid'),
                        orcid=item.get('orcid'),
                        initials=name.get('initials'),
