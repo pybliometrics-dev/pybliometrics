@@ -32,6 +32,7 @@ DEFAULT_PATHS = {
     'ObjectMetadata': CACHE_PATH / "ScienceDirect" / 'object_metadata',
     'ObjectRetrieval': CACHE_PATH / "ScienceDirect" / 'object_retrieval',
     'PlumXMetrics': CACHE_PATH / "Scopus" / 'plumx',
+    'PublicationLookup': CACHE_PATH / "Scival" / "publication_lookup",
     'ScDirSubjectClassifications': CACHE_PATH / "ScienceDirect" / 'subject_classification',
     'ScienceDirectSearch': CACHE_PATH / "ScienceDirect" / 'science_direct_search',
     'ScopusSearch': CACHE_PATH / "Scopus" / 'scopus_search',
@@ -43,6 +44,7 @@ DEFAULT_PATHS = {
 # URLs for all classes
 RETRIEVAL_BASE = 'https://api.elsevier.com/content/'
 SEARCH_BASE = 'https://api.elsevier.com/content/search/'
+SCIVAL_BASE = 'https://api.elsevier.com/analytics/scival/'
 URLS = {
     'AbstractRetrieval': RETRIEVAL_BASE + 'abstract/',
     'ArticleEntitlement': RETRIEVAL_BASE + 'article/entitlement/',
@@ -56,6 +58,7 @@ URLS = {
     'NonserialTitle': RETRIEVAL_BASE + 'nonserial/title/isbn/',
     'ObjectMetadata': RETRIEVAL_BASE + 'object/',
     'ObjectRetrieval': RETRIEVAL_BASE + 'object/',
+    'PublicationLookup': SCIVAL_BASE + 'publication/',
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
     'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
