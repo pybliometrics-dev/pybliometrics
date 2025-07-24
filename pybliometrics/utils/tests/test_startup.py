@@ -34,6 +34,9 @@ def test_imports():
     import pybliometrics.scopus
     pybliometrics.scopus.init()
 
+    import pybliometrics.scival
+    pybliometrics.scival.init()
+
 
 def test_new_config():
     """Test whether a new config file is created."""
