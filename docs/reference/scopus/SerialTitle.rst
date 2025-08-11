@@ -55,7 +55,7 @@ The object has a number of attributes but no methods.  For example, information 
     23571
 
 
-Crucially, it provides three metrics: CiteScore (see `here <https://service.elsevier.com/app/answers/detail/a_id/30562/supporthub/scopus/>`_ for further information), SCImago Journal Rank indicator (see `here <https://www.scimagojr.com/journalrank.php>`_), and Source Normalized Impact Factor (SNIP; see `here <https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip>`_).  This information is presented in lists of two-element tuples, with the first element indicating the year of metric evaluation.
+Crucially, it provides three metrics: `CiteScore <https://service.elsevier.com/app/answers/detail/a_id/30562/supporthub/scopus/>`_, `SCImago Journal Rank indicator <https://www.scimagojr.com/journalrank.php>`_), and Source Normalized Impact Factor (`SNIP <https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip>`_).  This information is presented in lists of two-element tuples, with the first element indicating the year of metric evaluation.
 
 .. code-block:: python
 
