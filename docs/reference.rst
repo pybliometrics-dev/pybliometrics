@@ -74,6 +74,15 @@ One other Retrieval API, the Article Hosting Permission API, is not implemented 
 Two other Metadata APIs, Serial Title Metadata API and Nonserial Title Metadata API, are not implemented yet.
 
 
+SciVal
+======
+
+.. toctree::
+    :maxdepth: 1
+    
+    reference/scival/PublicationLookup.rst
+
+
 Initialization
 ==============
 
