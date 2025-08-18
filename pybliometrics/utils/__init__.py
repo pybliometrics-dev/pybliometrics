@@ -3,4 +3,5 @@ from pybliometrics.utils.constants import *
 from pybliometrics.utils.create_config import *
 from pybliometrics.utils.get_content import *
 from pybliometrics.utils.parse_content import *
+from pybliometrics.utils.parse_metrics import *
 from pybliometrics.utils.startup import *
