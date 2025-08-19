@@ -12,33 +12,34 @@ class AuthorMetrics(Retrieval):
     def AcademicCorporateCollaboration(self) -> Optional[list]:
         """Academic corporate collaboration metrics for each author.
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
-        return extract_metric_data(self._json, 'AcademicCorporateCollaboration', self._by_year)
+        return extract_metric_data(self._json, 'AcademicCorporateCollaboration', self._by_year, "author")
 
     @property
     def AcademicCorporateCollaborationImpact(self) -> Optional[list]:
         """Academic corporate collaboration impact metrics for each author.
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
-        return extract_metric_data(self._json, 'AcademicCorporateCollaborationImpact', self._by_year)
+        return extract_metric_data(self._json, 'AcademicCorporateCollaborationImpact', self._by_year, "author")
 
     @property
     def all_metrics(self) -> Optional[list]:
         """Get all available metrics concatenated into a single list.
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
         all_metrics = []
 
         # List of all metric properties
-        metric_properties = self._metric_types.split(",")
-
-        for prop_name in metric_properties:
-            metrics = getattr(self, prop_name)
-            if metrics:
-                all_metrics.extend(metrics)
+        if self._metric_types:
+            metric_properties = self._metric_types.split(",")
+            
+            for prop_name in metric_properties:
+                metrics = getattr(self, prop_name)
+                if metrics:
+                    all_metrics.extend(metrics)
 
         return all_metrics or None
 
@@ -70,81 +71,81 @@ class AuthorMetrics(Retrieval):
     def CitationCount(self) -> Optional[list]:
         """Citation count metrics for each author.
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
-        return extract_metric_data(self._json, 'CitationCount', self._by_year)
+        return extract_metric_data(self._json, 'CitationCount', self._by_year, "author")
 
     @property
     def CitationsPerPublication(self) -> Optional[list]:
         """Citations per publication metrics for each author.
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
-        return extract_metric_data(self._json, 'CitationsPerPublication', self._by_year)
+        return extract_metric_data(self._json, 'CitationsPerPublication', self._by_year, "author")
 
     @property
     def CitedPublications(self) -> Optional[list]:
         """Cited publications metrics for each author.
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
-        return extract_metric_data(self._json, 'CitedPublications', self._by_year)
+        return extract_metric_data(self._json, 'CitedPublications', self._by_year, "author")
 
     @property
     def Collaboration(self) -> Optional[list]:
         """Collaboration metrics for each author.
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
-        return extract_metric_data(self._json, 'Collaboration', self._by_year)
+        return extract_metric_data(self._json, 'Collaboration', self._by_year, "author")
 
     @property
     def CollaborationImpact(self) -> Optional[list]:
         """Collaboration impact metrics for each author.
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
-        return extract_metric_data(self._json, 'CollaborationImpact', self._by_year)
+        return extract_metric_data(self._json, 'CollaborationImpact', self._by_year, "author")
 
     @property
     def FieldWeightedCitationImpact(self) -> Optional[list]:
         """Field weighted citation impact metrics for each author.
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
-        return extract_metric_data(self._json, 'FieldWeightedCitationImpact', self._by_year)
+        return extract_metric_data(self._json, 'FieldWeightedCitationImpact', self._by_year, "author")
 
     @property
     def HIndices(self) -> Optional[list]:
         """H-indices metrics for each author (only available when by_year=False).
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
-        return extract_metric_data(self._json, 'HIndices', self._by_year)
+        return extract_metric_data(self._json, 'HIndices', self._by_year, "author")
 
     @property
     def OutputsInTopCitationPercentiles(self) -> Optional[list]:
         """Outputs in top citation percentiles metrics for each author.
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
-        return extract_metric_data(self._json, 'OutputsInTopCitationPercentiles', self._by_year)
+        return extract_metric_data(self._json, 'OutputsInTopCitationPercentiles', self._by_year, "author")
 
     @property
     def PublicationsInTopJournalPercentiles(self) -> Optional[list]:
         """Publications in top journal percentiles metrics for each author.
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
-        return extract_metric_data(self._json, 'PublicationsInTopJournalPercentiles', self._by_year)
+        return extract_metric_data(self._json, 'PublicationsInTopJournalPercentiles', self._by_year, "author")
 
     @property
     def ScholarlyOutput(self) -> Optional[list]:
         """Scholarly output metrics for each author.
         Returns list of MetricData namedtuples with unified structure:
-        (author_id, author_name, metric, metric_type, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
         """
-        return extract_metric_data(self._json, 'ScholarlyOutput', self._by_year)
+        return extract_metric_data(self._json, 'ScholarlyOutput', self._by_year, "author")
 
     def __init__(self,
                  author_ids: Union[str, list],
@@ -175,7 +176,7 @@ class AuthorMetrics(Retrieval):
             
         Note:
             All metric properties return lists of MetricData namedtuples with 
-            unified structure: `(author_id, author_name, metric, metric_type, 
+            unified structure: `(entity_id, entity_name, metric, metric_type, 
             year, value, percentage, threshold)`. Use the `all_metrics` property
             to get all metrics concatenated into a single list for easy data
             manipulation and analysis.

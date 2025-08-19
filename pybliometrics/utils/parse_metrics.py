@@ -5,11 +5,11 @@ from pybliometrics.utils import make_int_if_possible
 
 # Global namedtuple for all metric data with default values
 MetricData = namedtuple('MetricData', 
-                       'author_id author_name metric metric_type year value percentage threshold',
+                       'entity_id entity_name metric metric_type year value percentage threshold',
                        defaults=(None, None, None, None, "all", None, None, None))
 
 
-def extract_metric_data(json_data, metric_type: str, by_year: bool = False):
+def extract_metric_data(json_data, metric_type: str, by_year: bool, entity_type: str):
     """Helper function to extract metric data for a specific metric type.
     
     Parameters
@@ -20,6 +20,8 @@ def extract_metric_data(json_data, metric_type: str, by_year: bool = False):
         The metric type to extract
     by_year : bool, optional
         Whether the data is broken down by year
+    entity_type : str, optional
+        The type of entity ("author" or "institution")
         
     Returns
     -------
@@ -35,37 +37,39 @@ def extract_metric_data(json_data, metric_type: str, by_year: bool = False):
         results = []
 
     for result in results:
-        author_id, author_name = extract_author_info(result)
+        entity_id, entity_name = extract_entity_info(result, entity_type)
         metric_data = find_metric_data(result, metric_type)
 
         if not metric_data:
             continue
 
         # Process metric data using unified approach
-        metric_items = process_metric(metric_data, author_id, author_name, metric_type, by_year)
+        metric_items = process_metric(metric_data, entity_id, entity_name, metric_type, by_year)
         if metric_items:
             out.extend(metric_items)
 
     return out or None
 
 
-def extract_author_info(result: dict) -> tuple:
-    """Extract author ID and name from a result.
+def extract_entity_info(result: dict, entity_type: str) -> tuple:
+    """Extract entity ID and name from a result.
     
     Parameters
     ----------
     result : dict
-        Author result from API response
+        Entity result from API response
+    entity_type : str
+        The type of entity ("author" or "institution")
         
     Returns
     -------
     tuple
-        (author_id, author_name)
+        (entity_id, entity_name)
     """
-    author_data = result.get('author', {})
-    author_id = make_int_if_possible(author_data.get('id'))
-    author_name = author_data.get('name')
-    return author_id, author_name
+    entity_data = result.get(entity_type, {})
+    entity_id = make_int_if_possible(entity_data.get('id'))
+    entity_name = entity_data.get('name')
+    return entity_id, entity_name
 
 
 def find_metric_data(result: dict, metric_type: str):
@@ -90,17 +94,17 @@ def find_metric_data(result: dict, metric_type: str):
     return None
 
 
-def process_metric(metric_data: dict, author_id: int, author_name: str, metric_type: str, by_year: bool = False):
+def process_metric(metric_data: dict, entity_id: int, entity_name: str, metric_type: str, by_year: bool = False):
     """Unified function to process all metric types.
     
     Parameters
     ----------
     metric_data : dict
         The metric data from API response
-    author_id : int
-        Author ID
-    author_name : str
-        Author name
+    entity_id : int
+        Entity ID (author or institution)
+    entity_name : str
+        Entity name (author or institution)
     metric_type : str
         The metric type
     by_year : bool, optional
@@ -138,8 +142,8 @@ def process_metric(metric_data: dict, author_id: int, author_name: str, metric_t
         # Process all years uniformly
         for year in value_data.keys():
             new = MetricData(
-                author_id=author_id,
-                author_name=author_name,
+                entity_id=entity_id,
+                entity_name=entity_name,
                 metric=metric_type,
                 metric_type=collab_type or value_item.get('indexType') or value_item.get('impactType'),
                 year=str(year),

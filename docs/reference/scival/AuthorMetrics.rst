@@ -45,16 +45,16 @@ There are many properties available that provide different types of metrics. You
 
 **Individual Metric Properties**
 
-Each metric property returns a list of `MetricData` namedtuples with the structure: `(author_id, author_name, metric, metric_type, year, value, percentage, threshold)`.
+Each metric property returns a list of `MetricData` namedtuples with the structure: `(entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)` where `entity_id` and `entity_name` refer to the author.
 
 .. code-block:: python
 
     >>> author_metrics.CitationCount
-    [MetricData(author_id=6602819806, author_name='Algül, Hana', metric='CitationCount', 
+    [MetricData(entity_id=6602819806, entity_name='Algül, Hana', metric='CitationCount', 
                 metric_type='Citation count', year='all', value=1234, percentage=85.5, threshold=None)]
 
     >>> author_metrics.HIndices
-    [MetricData(author_id=6602819806, author_name='Algül, Hana', metric='HIndices', 
+    [MetricData(entity_id=6602819806, entity_name='Algül, Hana', metric='HIndices', 
                 metric_type='h-index', year='all', value=46.0, percentage=None, threshold=None)]
 
 **Available Metric Properties**:
@@ -71,6 +71,9 @@ Each metric property returns a list of `MetricData` namedtuples with the structu
 - `OutputsInTopCitationPercentiles`
 - `PublicationsInTopJournalPercentiles`
 - `ScholarlyOutput`
+
+.. note::
+   **Unified Data Structure**: AuthorMetrics uses a unified `MetricData` structure with `entity_id` and `entity_name` fields. For authors, these fields contain the author ID and author name respectively. This structure is compatible with `InstitutionMetrics` and other SciVal metric classes, enabling consistent data analysis across different entity types.
 
 **Getting All Metrics at Once**
 
@@ -110,8 +113,8 @@ You can retrieve all available metrics in a single list using the `all_metrics` 
     <thead>
         <tr style="text-align: right;">
         <th></th>
-        <th>author_id</th>
-        <th>author_name</th>
+        <th>entity_id</th>
+        <th>entity_name</th>
         <th>metric</th>
         <th>metric_type</th>
         <th>year</th>
@@ -219,8 +222,8 @@ You can analyze multiple authors simultaneously. Furthermore, you can specify wh
     <thead>
         <tr style="text-align: right;">
         <th></th>
-        <th>author_id</th>
-        <th>author_name</th>
+        <th>entity_id</th>
+        <th>entity_name</th>
         <th>metric</th>
         <th>metric_type</th>
         <th>year</th>
@@ -298,7 +301,7 @@ You can request only specific metrics to reduce API response size:
 
     >>> h_index_only = AuthorMetrics("6602819806", metric_types=["HIndices"])
     >>> h_index_only.HIndices
-    [MetricData(author_id=6602819806, author_name='Algül, Hana', metric='HIndices', 
+    [MetricData(entity_id=6602819806, entity_name='Algül, Hana', metric='HIndices', 
                 metric_type='h-index', year='all', value=46.0, percentage=None, threshold=None)]
 
     >>> # Multiple specific metrics

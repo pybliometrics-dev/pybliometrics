@@ -36,13 +36,13 @@ def test_academic_corporate_collaboration_impact():
 def test_all_metrics():
     """Test all_metrics property for all test cases."""
     MetricData = namedtuple('MetricData',
-                            'author_id author_name metric metric_type year value percentage threshold',
+                            'entity_id entity_name metric metric_type year value percentage threshold',
                             defaults=(None, None, None, None, "all", None, None, None))
 
     single_author_all_metrics = single_author_all.all_metrics
     assert len(single_author_all_metrics) == 29
-    expected_first_metric = MetricData(author_id=6602819806,
-                                       author_name='Algül, Hana',
+    expected_first_metric = MetricData(entity_id=6602819806,
+                                       entity_name='Algül, Hana',
                                        metric='AcademicCorporateCollaboration',
                                        metric_type='Academic-corporate collaboration',
                                        year='all',
@@ -54,8 +54,8 @@ def test_all_metrics():
 
     single_author_h_index_all_metrics = single_author_h_index.all_metrics
     assert len(single_author_h_index_all_metrics) == 1
-    expected_h_index = MetricData(author_id=6602819806,
-                                  author_name='Algül, Hana',
+    expected_h_index = MetricData(entity_id=6602819806,
+                                  entity_name='Algül, Hana',
                                   metric='HIndices',
                                   metric_type='h-index',
                                   year='all', value=46.0,
@@ -66,8 +66,8 @@ def test_all_metrics():
 
     multiple_authors_all_metrics = multiple_authors_all.all_metrics
     assert len(multiple_authors_all_metrics) == 280
-    expected_multi_metric = MetricData(author_id=6603480302,
-                                       author_name='Vogel-Heuser, Birgit',
+    expected_multi_metric = MetricData(entity_id=6603480302,
+                                       entity_name='Vogel-Heuser, Birgit',
                                        metric='AcademicCorporateCollaboration',
                                        metric_type='Academic-corporate collaboration',
                                        year='2024',
@@ -111,7 +111,7 @@ def test_authors():
 
 def has_all_fields(metric_data):
     """Check if the metric data has all required fields."""
-    required_fields = ['author_id', 'author_name', 'metric', 'metric_type', 'year', 'value', 'percentage', 'threshold']
+    required_fields = ['entity_id', 'entity_name', 'metric', 'metric_type', 'year', 'value', 'percentage', 'threshold']
     return all(hasattr(metric_data, field) for field in required_fields)
 
 
