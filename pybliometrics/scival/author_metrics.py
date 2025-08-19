@@ -209,7 +209,7 @@ class AuthorMetrics(Retrieval):
             **kwds
         }
 
-        Retrieval.__init__(self, **params, **kwds)
+        Retrieval.__init__(self, **params)
 
     def __str__(self):
         """Return pretty text version of the author metrics."""
