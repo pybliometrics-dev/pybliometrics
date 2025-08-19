@@ -34,6 +34,7 @@ DEFAULT_PATHS = {
     'PlumXMetrics': CACHE_PATH / "Scopus" / 'plumx',
     'PublicationLookup': CACHE_PATH / "Scival" / "publication_lookup",
     'AuthorMetrics': CACHE_PATH / "Scival" / "author_metrics",
+    'InstitutionMetrics': CACHE_PATH / "Scival" / "institution_metrics",
     'ScDirSubjectClassifications': CACHE_PATH / "ScienceDirect" / 'subject_classification',
     'ScienceDirectSearch': CACHE_PATH / "ScienceDirect" / 'science_direct_search',
     'ScopusSearch': CACHE_PATH / "Scopus" / 'scopus_search',
@@ -61,6 +62,7 @@ URLS = {
     'ObjectRetrieval': RETRIEVAL_BASE + 'object/',
     'PublicationLookup': SCIVAL_BASE + 'publication/',
     'AuthorMetrics': SCIVAL_BASE + 'author/metrics/',
+    'InstitutionMetrics': SCIVAL_BASE + 'institution/metrics/',
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
     'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
@@ -112,6 +114,22 @@ SCIVAL_METRICS = {
         "notByYear": [
             "HIndices"
         ]
+    },
+    "InstitutionMetrics": {
+        "byYear": [
+            "AcademicCorporateCollaboration",
+            "AcademicCorporateCollaborationImpact",
+            "Collaboration",
+            "CitationCount",
+            "CitationsPerPublication",
+            "CollaborationImpact",
+            "CitedPublications",
+            "FieldWeightedCitationImpact",
+            "ScholarlyOutput",
+            "PublicationsInTopJournalPercentiles",
+            "OutputsInTopCitationPercentiles"
+        ],
+        "notByYear": []
     }
 }
 
@@ -124,7 +142,7 @@ APIS_WITH_ID_TYPE = {"AbstractRetrieval",
                      "ObjectRetrieval"}
 
 # APIs that do not require an ID in the URL
-APIS_NO_ID_IN_URL = {"AuthorMetrics"}
+APIS_NO_ID_IN_URL = {"AuthorMetrics", "InstitutionMetrics"}
 
 # Item per page limits for all classes
 COUNTS = {
@@ -147,6 +165,7 @@ RATELIMITS = {
     'ArticleMetadata': 6,
     'ArticleRetrieval': 10,
     'AuthorMetrics': 6,
+    'InstitutionMetrics': 6,
     'AuthorRetrieval': 3,
     'AuthorSearch': 2,
     'CitationOverview': 4,
