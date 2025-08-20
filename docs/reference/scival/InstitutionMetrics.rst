@@ -84,18 +84,18 @@ For **nested metrics** (like CollaborationImpact), `metric_type` contains the ma
 .. note::
    **Unified Data Structure**: InstitutionMetrics uses a unified `MetricData` structure with `entity_id` and `entity_name` fields. For institutions, these fields contain the institution ID and institution name respectively. This structure is compatible with `AuthorMetrics` and other SciVal metric classes, enabling consistent data analysis across different entity types.
 
-**Getting All Metrics at Once**
+**Concatenating Metrics**
 
-You can retrieve all available metrics in a single list using the `all_metrics` property:
+
 
 .. code-block:: python
 
-    >>> all_data = institution_metrics.all_metrics
-    >>> len(all_data)
-    28
-    >>> # Convert to pandas DataFrame for analysis
     >>> import pandas as pd
-    >>> df = pd.DataFrame(all_data)
+    >>>
+    >>> collab_data = []
+    >>> collab_data.extend(institution_metrics.Collaboration)
+    >>> collab_data.extend(institution_metrics.CollaborationImpact)
+    >>> df = pd.DataFrame(collab_data)
     >>> df.head()
 
 
@@ -137,56 +137,56 @@ You can retrieve all available metrics in a single list using the `all_metrics` 
         <th>0</th>
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
-        <td>Academic-corporate collaboration</td>
-        <td>AcademicCorporateCollaboration</td>
+        <td>Institutional collaboration</td>
+        <td>Collaboration</td>
         <td>all</td>
-        <td>1015.000000</td>
-        <td>4.469594</td>
-        <td>NaN</td>
+        <td>980.000000</td>
+        <td>4.32</td>
+        <td>None</td>
         </tr>
         <tr>
         <th>1</th>
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
-        <td>No academic-corporate collaboration</td>
-        <td>AcademicCorporateCollaboration</td>
+        <td>International collaboration</td>
+        <td>Collaboration</td>
         <td>all</td>
-        <td>21694.000000</td>
-        <td>95.530410</td>
-        <td>NaN</td>
+        <td>12754.000000</td>
+        <td>56.16</td>
+        <td>None</td>
         </tr>
         <tr>
         <th>2</th>
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
-        <td>Academic-corporate collaboration</td>
-        <td>AcademicCorporateCollaborationImpact</td>
+        <td>National collaboration</td>
+        <td>Collaboration</td>
         <td>all</td>
-        <td>59.104435</td>
-        <td>NaN</td>
-        <td>NaN</td>
+        <td>6728.000000</td>
+        <td>29.63</td>
+        <td>None</td>
         </tr>
         <tr>
         <th>3</th>
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
-        <td>No academic-corporate collaboration</td>
-        <td>AcademicCorporateCollaborationImpact</td>
+        <td>Single authorship</td>
+        <td>Collaboration</td>
         <td>all</td>
-        <td>14.222181</td>
-        <td>NaN</td>
-        <td>NaN</td>
+        <td>2247.000000</td>
+        <td>9.89</td>
+        <td>None</td>
         </tr>
         <tr>
         <th>4</th>
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
-        <td>Collaboration</td>
         <td>Institutional collaboration</td>
+        <td>CollaborationImpact</td>
         <td>all</td>
-        <td>980.000000</td>
-        <td>4.320000</td>
+        <td>8.610204</td>
         <td>NaN</td>
+        <td>None</td>
         </tr>
     </tbody>
     </table>
@@ -204,8 +204,8 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
     InstitutionMetrics for 2 institution(s):
     - Technical University of Berlin (ID: 309050)
     - Heidelberg University  (ID: 309076)
-    >>> # Get all collaboration metrics for all institutions
-    >>> df = pd.DataFrame(multi_institutions.all_metrics)
+    >>> # Get CitedPublications metrics
+    >>> df = pd.DataFrame(multi_institutions.CitedPublications)
     >>> df.head()
 
 .. raw:: html
@@ -227,6 +227,7 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
             font-size: 12px;
         }
     </style>
+    <div>
     <table border="1" class="dataframe">
     <thead>
         <tr style="text-align: right;">
@@ -246,56 +247,111 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
         <th>0</th>
         <td>309050</td>
         <td>Technical University of Berlin</td>
-        <td>AcademicCorporateCollaboration</td>
-        <td>Academic-corporate collaboration</td>
+        <td>CitedPublications</td>
+        <td>CitedPublications</td>
         <td>2024</td>
-        <td>282.0</td>
-        <td>7.770736</td>
-        <td>NaN</td>
+        <td>2400</td>
+        <td>66.133920</td>
+        <td>None</td>
         </tr>
         <tr>
         <th>1</th>
         <td>309050</td>
         <td>Technical University of Berlin</td>
-        <td>AcademicCorporateCollaboration</td>
-        <td>Academic-corporate collaboration</td>
+        <td>CitedPublications</td>
+        <td>CitedPublications</td>
         <td>2020</td>
-        <td>285.0</td>
-        <td>7.740358</td>
-        <td>NaN</td>
+        <td>3294</td>
+        <td>89.462250</td>
+        <td>None</td>
         </tr>
         <tr>
         <th>2</th>
         <td>309050</td>
         <td>Technical University of Berlin</td>
-        <td>AcademicCorporateCollaboration</td>
-        <td>Academic-corporate collaboration</td>
+        <td>CitedPublications</td>
+        <td>CitedPublications</td>
         <td>2021</td>
-        <td>250.0</td>
-        <td>6.529120</td>
-        <td>NaN</td>
+        <td>3385</td>
+        <td>88.404290</td>
+        <td>None</td>
         </tr>
         <tr>
         <th>3</th>
         <td>309050</td>
         <td>Technical University of Berlin</td>
-        <td>AcademicCorporateCollaboration</td>
-        <td>Academic-corporate collaboration</td>
+        <td>CitedPublications</td>
+        <td>CitedPublications</td>
         <td>2022</td>
-        <td>249.0</td>
-        <td>6.709782</td>
-        <td>NaN</td>
+        <td>3209</td>
+        <td>86.472650</td>
+        <td>None</td>
         </tr>
         <tr>
         <th>4</th>
         <td>309050</td>
         <td>Technical University of Berlin</td>
-        <td>AcademicCorporateCollaboration</td>
-        <td>Academic-corporate collaboration</td>
+        <td>CitedPublications</td>
+        <td>CitedPublications</td>
         <td>2023</td>
-        <td>253.0</td>
-        <td>6.693122</td>
-        <td>NaN</td>
+        <td>3044</td>
+        <td>80.529100</td>
+        <td>None</td>
+        </tr>
+        <tr>
+        <th>5</th>
+        <td>309076</td>
+        <td>Heidelberg University</td>
+        <td>CitedPublications</td>
+        <td>CitedPublications</td>
+        <td>2024</td>
+        <td>5937</td>
+        <td>72.517410</td>
+        <td>None</td>
+        </tr>
+        <tr>
+        <th>6</th>
+        <td>309076</td>
+        <td>Heidelberg University</td>
+        <td>CitedPublications</td>
+        <td>CitedPublications</td>
+        <td>2020</td>
+        <td>7423</td>
+        <td>92.005455</td>
+        <td>None</td>
+        </tr>
+        <tr>
+        <th>7</th>
+        <td>309076</td>
+        <td>Heidelberg University</td>
+        <td>CitedPublications</td>
+        <td>CitedPublications</td>
+        <td>2021</td>
+        <td>7828</td>
+        <td>90.864770</td>
+        <td>None</td>
+        </tr>
+        <tr>
+        <th>8</th>
+        <td>309076</td>
+        <td>Heidelberg University</td>
+        <td>CitedPublications</td>
+        <td>CitedPublications</td>
+        <td>2022</td>
+        <td>7354</td>
+        <td>88.166885</td>
+        <td>None</td>
+        </tr>
+        <tr>
+        <th>9</th>
+        <td>309076</td>
+        <td>Heidelberg University</td>
+        <td>CitedPublications</td>
+        <td>CitedPublications</td>
+        <td>2023</td>
+        <td>6921</td>
+        <td>85.150100</td>
+        <td>None</td>
         </tr>
     </tbody>
     </table>
