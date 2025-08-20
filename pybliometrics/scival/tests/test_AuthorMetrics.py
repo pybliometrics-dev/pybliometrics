@@ -43,8 +43,8 @@ def test_all_metrics():
     assert len(single_author_all_metrics) == 29
     expected_first_metric = MetricData(entity_id=6602819806,
                                        entity_name='Algül, Hana',
-                                       metric='AcademicCorporateCollaboration',
-                                       metric_type='Academic-corporate collaboration',
+                                       metric='Academic-corporate collaboration',
+                                       metric_type='AcademicCorporateCollaboration',
                                        year='all',
                                        value=12,
                                        percentage=22.64151,
@@ -56,8 +56,8 @@ def test_all_metrics():
     assert len(single_author_h_index_all_metrics) == 1
     expected_h_index = MetricData(entity_id=6602819806,
                                   entity_name='Algül, Hana',
-                                  metric='HIndices',
-                                  metric_type='h-index',
+                                  metric='h-index',
+                                  metric_type='HIndices',
                                   year='all', value=46.0,
                                   percentage=None,
                                   threshold=None)
@@ -68,8 +68,8 @@ def test_all_metrics():
     assert len(multiple_authors_all_metrics) == 280
     expected_multi_metric = MetricData(entity_id=6603480302,
                                        entity_name='Vogel-Heuser, Birgit',
-                                       metric='AcademicCorporateCollaboration',
-                                       metric_type='Academic-corporate collaboration',
+                                       metric='Academic-corporate collaboration',
+                                       metric_type='AcademicCorporateCollaboration',
                                        year='2024',
                                        value=8,
                                        percentage=21.052631,

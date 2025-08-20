@@ -141,11 +141,15 @@ def process_metric(metric_data: dict, entity_id: int, entity_name: str, metric_t
 
         # Process all years uniformly
         for year in value_data.keys():
+            # For nested metrics (like Collaboration), metric is the specific type (collabType)
+            # For simple metrics (like CitationCount), metric is the metric_type itself
+            metric_name = collab_type or value_item.get('indexType') or value_item.get('impactType') or metric_type
+
             new = MetricData(
                 entity_id=entity_id,
                 entity_name=entity_name,
-                metric=metric_type,
-                metric_type=collab_type or value_item.get('indexType') or value_item.get('impactType'),
+                metric=metric_name,
+                metric_type=metric_type,
                 year=str(year),
                 value=value_data.get(year),
                 percentage=percentage_data.get(year),
