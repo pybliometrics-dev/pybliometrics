@@ -51,17 +51,21 @@ Each metric property returns a list of `MetricData` namedtuples with the structu
 
     >>> institution_metrics.CitationCount
     [MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='CitationCount', 
-                metric_type=None, year='all', value=368527, percentage=None, threshold=None)]
+                metric_type='CitationCount', year='all', value=368527, percentage=None, threshold=None)]
+
+For **nested metrics** (like CollaborationImpact), `metric_type` contains the main category and `metric` contains the specific sub-type:
+
+.. code-block:: python
 
     >>> institution_metrics.CollaborationImpact
-    [MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='CollaborationImpact', 
-                metric_type='Institutional collaboration', year='all', value=8.610204, percentage=None, threshold=None),
-     MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='CollaborationImpact', 
-                metric_type='International collaboration', year='all', value=22.430689, percentage=None, threshold=None),
-     MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='CollaborationImpact', 
-                metric_type='National collaboration', year='all', value=9.935493, percentage=None, threshold=None),
-     MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='CollaborationImpact', 
-                metric_type='Single authorship', year='all', value=3.187361, percentage=None, threshold=None)]
+    [MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='Institutional collaboration', 
+                metric_type='CollaborationImpact', year='all', value=8.610204, percentage=None, threshold=None),
+     MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='International collaboration', 
+                metric_type='CollaborationImpact', year='all', value=22.430689, percentage=None, threshold=None),
+     MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='National collaboration', 
+                metric_type='CollaborationImpact', year='all', value=9.935493, percentage=None, threshold=None),
+     MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='Single authorship', 
+                metric_type='CollaborationImpact', year='all', value=3.187361, percentage=None, threshold=None)]
 
 **Available Metric Properties**:
 
@@ -133,8 +137,8 @@ You can retrieve all available metrics in a single list using the `all_metrics` 
         <th>0</th>
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
-        <td>AcademicCorporateCollaboration</td>
         <td>Academic-corporate collaboration</td>
+        <td>AcademicCorporateCollaboration</td>
         <td>all</td>
         <td>1015.000000</td>
         <td>4.469594</td>
@@ -144,8 +148,8 @@ You can retrieve all available metrics in a single list using the `all_metrics` 
         <th>1</th>
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
-        <td>AcademicCorporateCollaboration</td>
         <td>No academic-corporate collaboration</td>
+        <td>AcademicCorporateCollaboration</td>
         <td>all</td>
         <td>21694.000000</td>
         <td>95.530410</td>
@@ -155,8 +159,8 @@ You can retrieve all available metrics in a single list using the `all_metrics` 
         <th>2</th>
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
-        <td>AcademicCorporateCollaborationImpact</td>
         <td>Academic-corporate collaboration</td>
+        <td>AcademicCorporateCollaborationImpact</td>
         <td>all</td>
         <td>59.104435</td>
         <td>NaN</td>
@@ -166,8 +170,8 @@ You can retrieve all available metrics in a single list using the `all_metrics` 
         <th>3</th>
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
-        <td>AcademicCorporateCollaborationImpact</td>
         <td>No academic-corporate collaboration</td>
+        <td>AcademicCorporateCollaborationImpact</td>
         <td>all</td>
         <td>14.222181</td>
         <td>NaN</td>
