@@ -11,6 +11,10 @@ single_author_h_index = AuthorMetrics("6602819806", metric_types=["HIndices"], b
 multiple_authors_all = AuthorMetrics([7201667143, 6603480302], by_year=True, refresh=30)
 empty_metrics = AuthorMetrics("0000000000")
 
+MetricData = namedtuple('MetricData', 
+                       'entity_id entity_name metric metric_type year value percentage threshold',
+                       defaults=(None, None, None, None, "all", None, None, None))
+
 
 def test_academic_corporate_collaboration():
     """Test AcademicCorporateCollaboration property for all test cases."""
@@ -18,9 +22,25 @@ def test_academic_corporate_collaboration():
 
     assert has_all_fields(result[0])
     assert single_author_h_index.AcademicCorporateCollaboration is None
+    assert result[0].entity_id == 6602819806
+    assert result[0].entity_name == 'Algül, Hana'
+    assert result[0].metric == 'Academic-corporate collaboration'
+    assert result[0].metric_type == 'AcademicCorporateCollaboration'
+    assert result[0].year == 'all'
+    assert result[0].value >= 12
+    assert result[0].percentage >= 22
+    assert result[0].threshold is None
 
     result_multi = multiple_authors_all.AcademicCorporateCollaboration
     assert has_all_fields(result_multi[0])
+    assert result_multi[0].entity_id == 7201667143
+    assert result_multi[0].entity_name == 'Wolff, Klaus Dietrich'
+    assert result_multi[0].metric == 'Academic-corporate collaboration'
+    assert result_multi[0].metric_type == 'AcademicCorporateCollaboration'
+    assert result_multi[0].year >= '2024'
+    assert result_multi[0].value >= 0
+    assert result_multi[0].percentage >= 0
+    assert result_multi[0].threshold is None
 
 
 def test_academic_corporate_collaboration_impact():
@@ -31,50 +51,6 @@ def test_academic_corporate_collaboration_impact():
 
     result_multi = multiple_authors_all.AcademicCorporateCollaborationImpact
     assert has_all_fields(result_multi[0])
-
-
-def test_all_metrics():
-    """Test all_metrics property for all test cases."""
-    MetricData = namedtuple('MetricData',
-                            'entity_id entity_name metric metric_type year value percentage threshold',
-                            defaults=(None, None, None, None, "all", None, None, None))
-
-    single_author_all_metrics = single_author_all.all_metrics
-    assert len(single_author_all_metrics) == 29
-    expected_first_metric = MetricData(entity_id=6602819806,
-                                       entity_name='Algül, Hana',
-                                       metric='Academic-corporate collaboration',
-                                       metric_type='AcademicCorporateCollaboration',
-                                       year='all',
-                                       value=12,
-                                       percentage=22.64151,
-                                       threshold=None)
-    assert expected_first_metric == single_author_all_metrics[0]
-
-
-    single_author_h_index_all_metrics = single_author_h_index.all_metrics
-    assert len(single_author_h_index_all_metrics) == 1
-    expected_h_index = MetricData(entity_id=6602819806,
-                                  entity_name='Algül, Hana',
-                                  metric='h-index',
-                                  metric_type='HIndices',
-                                  year='all', value=46.0,
-                                  percentage=None,
-                                  threshold=None)
-    assert expected_h_index == single_author_h_index_all_metrics[0]
-
-
-    multiple_authors_all_metrics = multiple_authors_all.all_metrics
-    assert len(multiple_authors_all_metrics) == 280
-    expected_multi_metric = MetricData(entity_id=6603480302,
-                                       entity_name='Vogel-Heuser, Birgit',
-                                       metric='Academic-corporate collaboration',
-                                       metric_type='AcademicCorporateCollaboration',
-                                       year='2024',
-                                       value=8,
-                                       percentage=21.052631,
-                                       threshold=None)
-    assert expected_multi_metric == multiple_authors_all_metrics[10]
 
 
 def test_authors():
@@ -167,7 +143,6 @@ def test_collaboration_impact():
 
 def test_empty_metrics():
     """Test handling of empty metric_types."""
-    assert empty_metrics.all_metrics is None
     assert empty_metrics.authors is None 
     assert empty_metrics.CitationCount is None
     assert empty_metrics.CitationsPerPublication is None

@@ -72,18 +72,17 @@ Each metric property returns a list of `MetricData` namedtuples with the structu
 .. note::
    **Unified Data Structure**: AuthorMetrics uses a unified `MetricData` structure with `entity_id` and `entity_name` fields. For authors, these fields contain the author ID and author name respectively. This structure is compatible with `InstitutionMetrics` and other SciVal metric classes, enabling consistent data analysis across different entity types.
 
-**Getting All Metrics at Once**
+**Concatenating Metrics**
 
-You can retrieve all available metrics in a single list using the `all_metrics` property:
+Metrics can be concatenated and converted into a pandas DataFrame for easier analysis. 
 
 .. code-block:: python
 
-    >>> all_data = author_metrics.all_metrics
-    >>> len(all_data)
-    29
-    >>> # Convert to pandas DataFrame for analysis
     >>> import pandas as pd
-    >>> df = pd.DataFrame(all_data)
+    >>> collab_data = []
+    >>> collab_data.extend(author_metrics.Collaboration)
+    >>> collab_data.extend(author_metrics.CollaborationImpact)
+    >>> df = pd.DataFrame(collab_data)
     >>> df.head()
 
 
@@ -125,56 +124,89 @@ You can retrieve all available metrics in a single list using the `all_metrics` 
         <th>0</th>
         <td>6602819806</td>
         <td>Algül, Hana</td>
-        <td>Academic-corporate collaboration</td>
-        <td>AcademicCorporateCollaboration</td>
+        <td>Institutional collaboration</td>
+        <td>Collaboration</td>
         <td>all</td>
-        <td>12.000000</td>
-        <td>22.64151</td>
-        <td>NaN</td>
+        <td>6.000000</td>
+        <td>11.32</td>
+        <td>None</td>
         </tr>
         <tr>
         <th>1</th>
         <td>6602819806</td>
         <td>Algül, Hana</td>
-        <td>No academic-corporate collaboration</td>
-        <td>AcademicCorporateCollaboration</td>
+        <td>International collaboration</td>
+        <td>Collaboration</td>
         <td>all</td>
-        <td>41.000000</td>
-        <td>77.35849</td>
-        <td>NaN</td>
+        <td>26.000000</td>
+        <td>49.06</td>
+        <td>None</td>
         </tr>
         <tr>
         <th>2</th>
         <td>6602819806</td>
         <td>Algül, Hana</td>
-        <td>Academic-corporate collaboration</td>
-        <td>AcademicCorporateCollaborationImpact</td>
+        <td>National collaboration</td>
+        <td>Collaboration</td>
         <td>all</td>
-        <td>43.166668</td>
-        <td>NaN</td>
-        <td>NaN</td>
+        <td>21.000000</td>
+        <td>39.62</td>
+        <td>None</td>
         </tr>
         <tr>
         <th>3</th>
         <td>6602819806</td>
         <td>Algül, Hana</td>
-        <td>No academic-corporate collaboration</td>
-        <td>AcademicCorporateCollaborationImpact</td>
+        <td>Single authorship</td>
+        <td>Collaboration</td>
         <td>all</td>
-        <td>14.682927</td>
-        <td>NaN</td>
-        <td>NaN</td>
+        <td>0.000000</td>
+        <td>0.00</td>
+        <td>None</td>
         </tr>
         <tr>
         <th>4</th>
         <td>6602819806</td>
         <td>Algül, Hana</td>
         <td>Institutional collaboration</td>
-        <td>Collaboration</td>
+        <td>CollaborationImpact</td>
         <td>all</td>
-        <td>6.000000</td>
-        <td>11.32000</td>
+        <td>3.500000</td>
         <td>NaN</td>
+        <td>None</td>
+        </tr>
+        <tr>
+        <th>5</th>
+        <td>6602819806</td>
+        <td>Algül, Hana</td>
+        <td>International collaboration</td>
+        <td>CollaborationImpact</td>
+        <td>all</td>
+        <td>28.461538</td>
+        <td>NaN</td>
+        <td>None</td>
+        </tr>
+        <tr>
+        <th>6</th>
+        <td>6602819806</td>
+        <td>Algül, Hana</td>
+        <td>National collaboration</td>
+        <td>CollaborationImpact</td>
+        <td>all</td>
+        <td>17.095238</td>
+        <td>NaN</td>
+        <td>None</td>
+        </tr>
+        <tr>
+        <th>7</th>
+        <td>6602819806</td>
+        <td>Algül, Hana</td>
+        <td>Single authorship</td>
+        <td>CollaborationImpact</td>
+        <td>all</td>
+        <td>0.000000</td>
+        <td>NaN</td>
+        <td>None</td>
         </tr>
     </tbody>
     </table>
@@ -192,8 +224,9 @@ You can analyze multiple authors simultaneously. Furthermore, you can specify wh
     AuthorMetrics for 2 author(s):
     - Wolff, Klaus Dietrich (ID: 7201667143)
     - Vogel-Heuser, Birgit (ID: 6603480302)
-    >>> df = pd.DataFrame(multi_authors.all_metrics)
-    >>> df.tail()
+    >>> # Create a DataFrame from the Collaboration metrics
+    >>> df_multi = pd.DataFrame(multi_authors.Collaboration)
+    >>> df_multi.head()
 
 
 .. raw:: html
@@ -215,6 +248,7 @@ You can analyze multiple authors simultaneously. Furthermore, you can specify wh
             font-size: 12px;
         }
     </style>
+    <div>
     <table border="1" class="dataframe">
     <thead>
         <tr style="text-align: right;">
@@ -231,62 +265,63 @@ You can analyze multiple authors simultaneously. Furthermore, you can specify wh
     </thead>
     <tbody>
         <tr>
-        <th>275</th>
-        <td>6603480302</td>
-        <td>Vogel-Heuser, Birgit</td>
-        <td>OutputsInTopCitationPercentiles</td>
-        <td>OutputsInTopCitationPercentiles</td>
+        <th>0</th>
+        <td>7201667143</td>
+        <td>Wolff, Klaus Dietrich</td>
+        <td>Institutional collaboration</td>
+        <td>Collaboration</td>
         <td>2024</td>
-        <td>5.0</td>
-        <td>13.157895</td>
-        <td>25.0</td>
+        <td>3</td>
+        <td>30.000002</td>
+        <td>None</td>
         </tr>
         <tr>
-        <th>276</th>
-        <td>6603480302</td>
-        <td>Vogel-Heuser, Birgit</td>
-        <td>OutputsInTopCitationPercentiles</td>
-        <td>OutputsInTopCitationPercentiles</td>
+        <th>1</th>
+        <td>7201667143</td>
+        <td>Wolff, Klaus Dietrich</td>
+        <td>Institutional collaboration</td>
+        <td>Collaboration</td>
         <td>2020</td>
-        <td>5.0</td>
-        <td>10.000000</td>
-        <td>25.0</td>
+        <td>3</td>
+        <td>16.666668</td>
+        <td>None</td>
         </tr>
         <tr>
-        <th>277</th>
-        <td>6603480302</td>
-        <td>Vogel-Heuser, Birgit</td>
-        <td>OutputsInTopCitationPercentiles</td>
-        <td>OutputsInTopCitationPercentiles</td>
+        <th>2</th>
+        <td>7201667143</td>
+        <td>Wolff, Klaus Dietrich</td>
+        <td>Institutional collaboration</td>
+        <td>Collaboration</td>
         <td>2021</td>
-        <td>14.0</td>
-        <td>27.450981</td>
-        <td>25.0</td>
+        <td>2</td>
+        <td>25.000000</td>
+        <td>None</td>
         </tr>
         <tr>
-        <th>278</th>
-        <td>6603480302</td>
-        <td>Vogel-Heuser, Birgit</td>
-        <td>OutputsInTopCitationPercentiles</td>
-        <td>OutputsInTopCitationPercentiles</td>
+        <th>3</th>
+        <td>7201667143</td>
+        <td>Wolff, Klaus Dietrich</td>
+        <td>Institutional collaboration</td>
+        <td>Collaboration</td>
         <td>2022</td>
-        <td>8.0</td>
-        <td>24.242424</td>
-        <td>25.0</td>
+        <td>0</td>
+        <td>0.000000</td>
+        <td>None</td>
         </tr>
         <tr>
-        <th>279</th>
-        <td>6603480302</td>
-        <td>Vogel-Heuser, Birgit</td>
-        <td>OutputsInTopCitationPercentiles</td>
-        <td>OutputsInTopCitationPercentiles</td>
+        <th>4</th>
+        <td>7201667143</td>
+        <td>Wolff, Klaus Dietrich</td>
+        <td>Institutional collaboration</td>
+        <td>Collaboration</td>
         <td>2023</td>
-        <td>1.0</td>
-        <td>2.173913</td>
-        <td>25.0</td>
+        <td>4</td>
+        <td>30.769232</td>
+        <td>None</td>
         </tr>
     </tbody>
     </table>
+    </div>
     </div>
 
 

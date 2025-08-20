@@ -25,25 +25,6 @@ class AuthorMetrics(Retrieval):
         return extract_metric_data(self._json, 'AcademicCorporateCollaborationImpact', self._by_year, "author")
 
     @property
-    def all_metrics(self) -> Optional[list]:
-        """Get all available metrics concatenated into a single list.
-        Returns list of MetricData namedtuples with unified structure:
-        (entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)
-        """
-        all_metrics = []
-
-        # List of all metric properties
-        if self._metric_types:
-            metric_properties = self._metric_types.split(",")
-            
-            for prop_name in metric_properties:
-                metrics = getattr(self, prop_name)
-                if metrics:
-                    all_metrics.extend(metrics)
-
-        return all_metrics or None
-
-    @property
     def authors(self) -> Optional[list]:
         """A list of namedtuples representing authors and their basic info
         in the form `(id, name, uri)`.
@@ -177,9 +158,8 @@ class AuthorMetrics(Retrieval):
         Note:
             All metric properties return lists of MetricData namedtuples with 
             unified structure: `(entity_id, entity_name, metric, metric_type, 
-            year, value, percentage, threshold)`. Use the `all_metrics` property
-            to get all metrics concatenated into a single list for easy data
-            manipulation and analysis.
+            year, value, percentage, threshold)` which enable concatenation
+            of results from different metrics.
         """
         self._view = ''
         self._refresh = refresh
