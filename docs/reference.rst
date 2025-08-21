@@ -80,6 +80,8 @@ SciVal
 .. toctree::
     :maxdepth: 1
     
+    reference/scival/AuthorMetrics.rst
+    reference/scival/InstitutionMetrics.rst
     reference/scival/PublicationLookup.rst
 
 
