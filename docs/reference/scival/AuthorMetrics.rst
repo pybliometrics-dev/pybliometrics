@@ -25,7 +25,7 @@ You initialize the class with one or more Scopus Author IDs. The argument can be
 
     >>> from pybliometrics.scival import AuthorMetrics, init
     >>> init()
-    >>> author_metrics = AuthorMetrics("6602819806")
+    >>> author_metrics = AuthorMetrics("57209617104")
 
 You can obtain basic information just by printing the object:
 
@@ -33,14 +33,14 @@ You can obtain basic information just by printing the object:
 
     >>> print(author_metrics)
     AuthorMetrics for 1 author(s):
-    - Algül, Hana (ID: 6602819806)
+    - Rose, Michael E. (ID: 57209617104)
 
 There are many properties available that provide different types of metrics. You can explore the available authors:
 
 .. code-block:: python
 
     >>> author_metrics.authors
-    [Author(id=6602819806, name='Algül, Hana', uri='Author/6602819806')]
+    [Author(id=57209617104, name='Rose, Michael E.', uri='Author/57209617104')]
 
 **Individual Metric Properties**
 
@@ -49,10 +49,10 @@ Each metric property returns a list of `MetricData` namedtuples with the structu
 .. code-block:: python
 
     >>> author_metrics.CitationCount
-    [MetricData(entity_id=6602819806, entity_name='Algül, Hana', metric='CitationCount', metric_type='CitationCount', year='all', value=1120, percentage=None, threshold=None)]
+    [MetricData(entity_id=57209617104, entity_name='Rose, Michael E.', metric='CitationCount', metric_type='CitationCount', year='all', value=92, percentage=None, threshold=None)]
 
     >>> author_metrics.HIndices
-    [MetricData(entity_id=6602819806, entity_name='Algül, Hana', metric='h-index', metric_type='HIndices', year='all', value=46.0, percentage=None, threshold=None)]
+    [MetricData(entity_id=57209617104, entity_name='Rose, Michael E.', metric='h-index', metric_type='HIndices', year='all', value=5.0, percentage=None, threshold=None)]
 
 **Available Metric Properties**:
 
@@ -122,42 +122,31 @@ Metrics can be concatenated and converted into a pandas DataFrame for easier ana
     <tbody>
         <tr>
         <th>0</th>
-        <td>6602819806</td>
-        <td>Algül, Hana</td>
+        <td>57209617104</td>
+        <td>Rose, Michael E.</td>
         <td>Institutional collaboration</td>
         <td>Collaboration</td>
         <td>all</td>
-        <td>6.000000</td>
-        <td>11.32</td>
+        <td>1.000000</td>
+        <td>11.11</td>
         <td>None</td>
         </tr>
         <tr>
         <th>1</th>
-        <td>6602819806</td>
-        <td>Algül, Hana</td>
+        <td>57209617104</td>
+        <td>Rose, Michael E.</td>
         <td>International collaboration</td>
         <td>Collaboration</td>
         <td>all</td>
-        <td>26.000000</td>
-        <td>49.06</td>
+        <td>7.000000</td>
+        <td>77.78</td>
         <td>None</td>
         </tr>
         <tr>
         <th>2</th>
-        <td>6602819806</td>
-        <td>Algül, Hana</td>
+        <td>57209617104</td>
+        <td>Rose, Michael E.</td>
         <td>National collaboration</td>
-        <td>Collaboration</td>
-        <td>all</td>
-        <td>21.000000</td>
-        <td>39.62</td>
-        <td>None</td>
-        </tr>
-        <tr>
-        <th>3</th>
-        <td>6602819806</td>
-        <td>Algül, Hana</td>
-        <td>Single authorship</td>
         <td>Collaboration</td>
         <td>all</td>
         <td>0.000000</td>
@@ -165,46 +154,57 @@ Metrics can be concatenated and converted into a pandas DataFrame for easier ana
         <td>None</td>
         </tr>
         <tr>
+        <th>3</th>
+        <td>57209617104</td>
+        <td>Rose, Michael E.</td>
+        <td>Single authorship</td>
+        <td>Collaboration</td>
+        <td>all</td>
+        <td>1.000000</td>
+        <td>11.11</td>
+        <td>None</td>
+        </tr>
+        <tr>
         <th>4</th>
-        <td>6602819806</td>
-        <td>Algül, Hana</td>
+        <td>57209617104</td>
+        <td>Rose, Michael E.</td>
         <td>Institutional collaboration</td>
         <td>CollaborationImpact</td>
         <td>all</td>
-        <td>3.500000</td>
+        <td>0.000000</td>
         <td>NaN</td>
         <td>None</td>
         </tr>
         <tr>
         <th>5</th>
-        <td>6602819806</td>
-        <td>Algül, Hana</td>
+        <td>57209617104</td>
+        <td>Rose, Michael E.</td>
         <td>International collaboration</td>
         <td>CollaborationImpact</td>
         <td>all</td>
-        <td>28.461538</td>
+        <td>12.571428</td>
         <td>NaN</td>
         <td>None</td>
         </tr>
         <tr>
         <th>6</th>
-        <td>6602819806</td>
-        <td>Algül, Hana</td>
+        <td>57209617104</td>
+        <td>Rose, Michael E.</td>
         <td>National collaboration</td>
         <td>CollaborationImpact</td>
         <td>all</td>
-        <td>17.095238</td>
+        <td>0.000000</td>
         <td>NaN</td>
         <td>None</td>
         </tr>
         <tr>
         <th>7</th>
-        <td>6602819806</td>
-        <td>Algül, Hana</td>
+        <td>57209617104</td>
+        <td>Rose, Michael E.</td>
         <td>Single authorship</td>
         <td>CollaborationImpact</td>
         <td>all</td>
-        <td>0.000000</td>
+        <td>4.000000</td>
         <td>NaN</td>
         <td>None</td>
         </tr>
@@ -219,11 +219,11 @@ You can analyze multiple authors simultaneously. Furthermore, you can specify wh
 
 .. code-block:: python
 
-    >>> multi_authors = AuthorMetrics([7201667143, 6603480302], by_year=True)
+    >>> multi_authors = AuthorMetrics([57209617104, 7004212771], by_year=True)
     >>> print(multi_authors)
     AuthorMetrics for 2 author(s):
-    - Wolff, Klaus Dietrich (ID: 7201667143)
-    - Vogel-Heuser, Birgit (ID: 6603480302)
+    - Kitchin, John R. (ID: 7004212771)
+    - Rose, Michael E. (ID: 57209617104)
     >>> # Create a DataFrame from the Collaboration metrics
     >>> df_multi = pd.DataFrame(multi_authors.Collaboration)
     >>> df_multi.head()
@@ -266,57 +266,57 @@ You can analyze multiple authors simultaneously. Furthermore, you can specify wh
     <tbody>
         <tr>
         <th>0</th>
-        <td>7201667143</td>
-        <td>Wolff, Klaus Dietrich</td>
+        <td>7004212771</td>
+        <td>Kitchin, John R.</td>
         <td>Institutional collaboration</td>
         <td>Collaboration</td>
         <td>2024</td>
-        <td>3</td>
-        <td>30.000002</td>
+        <td>6</td>
+        <td>37.500000</td>
         <td>None</td>
         </tr>
         <tr>
         <th>1</th>
-        <td>7201667143</td>
-        <td>Wolff, Klaus Dietrich</td>
+        <td>7004212771</td>
+        <td>Kitchin, John R.</td>
         <td>Institutional collaboration</td>
         <td>Collaboration</td>
         <td>2020</td>
-        <td>3</td>
-        <td>16.666668</td>
+        <td>1</td>
+        <td>50.000000</td>
         <td>None</td>
         </tr>
         <tr>
         <th>2</th>
-        <td>7201667143</td>
-        <td>Wolff, Klaus Dietrich</td>
+        <td>7004212771</td>
+        <td>Kitchin, John R.</td>
         <td>Institutional collaboration</td>
         <td>Collaboration</td>
         <td>2021</td>
-        <td>2</td>
-        <td>25.000000</td>
+        <td>1</td>
+        <td>33.333336</td>
         <td>None</td>
         </tr>
         <tr>
         <th>3</th>
-        <td>7201667143</td>
-        <td>Wolff, Klaus Dietrich</td>
+        <td>7004212771</td>
+        <td>Kitchin, John R.</td>
         <td>Institutional collaboration</td>
         <td>Collaboration</td>
         <td>2022</td>
-        <td>0</td>
-        <td>0.000000</td>
+        <td>6</td>
+        <td>66.666670</td>
         <td>None</td>
         </tr>
         <tr>
         <th>4</th>
-        <td>7201667143</td>
-        <td>Wolff, Klaus Dietrich</td>
+        <td>7004212771</td>
+        <td>Kitchin, John R.</td>
         <td>Institutional collaboration</td>
         <td>Collaboration</td>
         <td>2023</td>
-        <td>4</td>
-        <td>30.769232</td>
+        <td>5</td>
+        <td>55.555557</td>
         <td>None</td>
         </tr>
     </tbody>
@@ -331,14 +331,14 @@ You can request only specific metrics to reduce API response size:
 
 .. code-block:: python
 
-    >>> h_index_only = AuthorMetrics("6602819806", metric_types=["HIndices"])
+    >>> h_index_only = AuthorMetrics("57209617104", metric_types=["HIndices"])
     >>> h_index_only.HIndices
-    [MetricData(entity_id=6602819806, entity_name='Algül, Hana', metric='h-index', metric_type='HIndices', year='all', value=46.0, percentage=None, threshold=None)]
+    [MetricData(entity_id=57209617104, entity_name='Rose, Michael E.', metric='h-index', metric_type='HIndices', year='all', value=5.0, percentage=None, threshold=None)]
 
     >>> # Multiple specific metrics
-    >>> selected_metrics = AuthorMetrics("6602819806", metric_types=["CitationCount", "ScholarlyOutput"])
+    >>> selected_metrics = AuthorMetrics("57209617104", metric_types=["CitationCount", "ScholarlyOutput"])
     >>> selected_metrics.CitationCount
-    [MetricData(entity_id=6602819806, entity_name='Algül, Hana', metric='CitationCount', metric_type='CitationCount', year='all', value=1126, percentage=None, threshold=None)]
+    [MetricData(entity_id=57209617104, entity_name='Rose, Michael E.', metric='CitationCount', metric_type='CitationCount', year='all', value=92, percentage=None, threshold=None)]
 
 
 Downloaded results are cached to expedite subsequent analyses. This information may become outdated. To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as the maximum allowed number of days since the last modification date. For example, if you want to refresh all cached results older than 100 days, set `refresh=100`. Use `author_metrics.get_cache_file_mdate()` to obtain the date of last modification, and `author_metrics.get_cache_file_age()` to determine the number of days since the last modification.
