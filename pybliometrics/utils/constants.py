@@ -61,6 +61,8 @@ URLS = {
     'ObjectMetadata': RETRIEVAL_BASE + 'object/',
     'ObjectRetrieval': RETRIEVAL_BASE + 'object/',
     'PublicationLookup': SCIVAL_BASE + 'publication/',
+    'AuthorMetrics': SCIVAL_BASE + 'author/metrics/',
+    'InstitutionMetrics': SCIVAL_BASE + 'institution/metrics/',
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
     'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
@@ -91,6 +93,44 @@ VIEWS = {
     "SubjectClassifications": [''],
     "ObjectMetadata": ["META"],
     "ObjectRetrieval": [""]
+}
+
+# SciVal Metrics
+SCIVAL_METRICS = {
+    "AuthorMetrics": {
+        "byYear": [
+            "AcademicCorporateCollaboration",
+            "AcademicCorporateCollaborationImpact",
+            "Collaboration",
+            "CitationCount",
+            "CitationsPerPublication",
+            "CollaborationImpact",
+            "CitedPublications",
+            "FieldWeightedCitationImpact",
+            "ScholarlyOutput",
+            "PublicationsInTopJournalPercentiles",
+            "OutputsInTopCitationPercentiles"
+        ],
+        "notByYear": [
+            "HIndices"
+        ]
+    },
+    "InstitutionMetrics": {
+        "byYear": [
+            "AcademicCorporateCollaboration",
+            "AcademicCorporateCollaborationImpact",
+            "Collaboration",
+            "CitationCount",
+            "CitationsPerPublication",
+            "CollaborationImpact",
+            "CitedPublications",
+            "FieldWeightedCitationImpact",
+            "ScholarlyOutput",
+            "PublicationsInTopJournalPercentiles",
+            "OutputsInTopCitationPercentiles"
+        ],
+        "notByYear": []
+    }
 }
 
 # APIs whose URL needs an id_type
