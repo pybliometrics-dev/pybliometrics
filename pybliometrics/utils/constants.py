@@ -61,8 +61,6 @@ URLS = {
     'ObjectMetadata': RETRIEVAL_BASE + 'object/',
     'ObjectRetrieval': RETRIEVAL_BASE + 'object/',
     'PublicationLookup': SCIVAL_BASE + 'publication/',
-    'AuthorMetrics': SCIVAL_BASE + 'author/metrics/',
-    'InstitutionMetrics': SCIVAL_BASE + 'institution/metrics/',
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
     'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
@@ -93,44 +91,6 @@ VIEWS = {
     "SubjectClassifications": [''],
     "ObjectMetadata": ["META"],
     "ObjectRetrieval": [""]
-}
-
-# SciVal Metrics
-SCIVAL_METRICS = {
-    "AuthorMetrics": {
-        "byYear": [
-            "AcademicCorporateCollaboration",
-            "AcademicCorporateCollaborationImpact",
-            "Collaboration",
-            "CitationCount",
-            "CitationsPerPublication",
-            "CollaborationImpact",
-            "CitedPublications",
-            "FieldWeightedCitationImpact",
-            "ScholarlyOutput",
-            "PublicationsInTopJournalPercentiles",
-            "OutputsInTopCitationPercentiles"
-        ],
-        "notByYear": [
-            "HIndices"
-        ]
-    },
-    "InstitutionMetrics": {
-        "byYear": [
-            "AcademicCorporateCollaboration",
-            "AcademicCorporateCollaborationImpact",
-            "Collaboration",
-            "CitationCount",
-            "CitationsPerPublication",
-            "CollaborationImpact",
-            "CitedPublications",
-            "FieldWeightedCitationImpact",
-            "ScholarlyOutput",
-            "PublicationsInTopJournalPercentiles",
-            "OutputsInTopCitationPercentiles"
-        ],
-        "notByYear": []
-    }
 }
 
 # APIs whose URL needs an id_type
@@ -164,8 +124,6 @@ RATELIMITS = {
     'ArticleEntitlement': 0,
     'ArticleMetadata': 6,
     'ArticleRetrieval': 10,
-    'AuthorMetrics': 6,
-    'InstitutionMetrics': 6,
     'AuthorRetrieval': 3,
     'AuthorSearch': 2,
     'CitationOverview': 4,
@@ -173,6 +131,7 @@ RATELIMITS = {
     'ObjectMetadata': 0,
     'ObjectRetrieval': 0,
     'PlumXMetrics': 6,
+    'PublicationLookup': 6,
     'ScDirSubjectClassifications': 0,
     'ScienceDirectSearch': 2,
     'ScopusSearch': 9,
