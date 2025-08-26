@@ -10,7 +10,7 @@ class AuthorMetrics(Retrieval):
     @property  
     def AcademicCorporateCollaboration(self) -> Optional[list[MetricData]]:
         """Academic corporate collaboration metrics for each author.
-        Returns list of MetricData namedtuples with unified structure:
+        Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
         """
         return extract_metric_data(self._json, 'AcademicCorporateCollaboration', self._by_year, "author")
