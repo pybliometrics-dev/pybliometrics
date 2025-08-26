@@ -12,8 +12,8 @@ multiple_authors_all = AuthorMetrics([7201667143, 6603480302], by_year=True, ref
 empty_metrics = AuthorMetrics("0000000000")
 
 MetricData = namedtuple('MetricData', 
-                       'entity_id entity_name metric metric_type year value percentage threshold',
-                       defaults=(None, None, None, None, "all", None, None, None))
+                       'entity_id entity_name metric year value percentage threshold',
+                       defaults=(None, None, None, "all", None, None, None))
 
 
 def test_academic_corporate_collaboration():
@@ -25,7 +25,6 @@ def test_academic_corporate_collaboration():
     assert result[0].entity_id == 6602819806
     assert result[0].entity_name == 'Algül, Hana'
     assert result[0].metric == 'Academic-corporate collaboration'
-    assert result[0].metric_type == 'AcademicCorporateCollaboration'
     assert result[0].year == 'all'
     assert result[0].value >= 12
     assert result[0].percentage >= 22
@@ -36,7 +35,6 @@ def test_academic_corporate_collaboration():
     assert result_multi[0].entity_id == 7201667143
     assert result_multi[0].entity_name == 'Wolff, Klaus Dietrich'
     assert result_multi[0].metric == 'Academic-corporate collaboration'
-    assert result_multi[0].metric_type == 'AcademicCorporateCollaboration'
     assert result_multi[0].year >= '2024'
     assert result_multi[0].value >= 0
     assert result_multi[0].percentage >= 0
@@ -87,7 +85,7 @@ def test_authors():
 
 def has_all_fields(metric_data):
     """Check if the metric data has all required fields."""
-    required_fields = ['entity_id', 'entity_name', 'metric', 'metric_type', 'year', 'value', 'percentage', 'threshold']
+    required_fields = ['entity_id', 'entity_name', 'metric', 'year', 'value', 'percentage', 'threshold']
     return all(hasattr(metric_data, field) for field in required_fields)
 
 

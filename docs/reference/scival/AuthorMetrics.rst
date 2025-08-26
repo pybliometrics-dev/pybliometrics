@@ -44,15 +44,15 @@ There are many properties available that provide different types of metrics. You
 
 **Individual Metric Properties**
 
-Each metric property returns a list of `MetricData` namedtuples with the structure: `(entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)` where `entity_id` and `entity_name` refer to the author.
+Each metric property returns a list of `MetricData` namedtuples with the structure: `(entity_id, entity_name, metric, year, value, percentage, threshold)` where `entity_id` and `entity_name` refer to the author.
 
 .. code-block:: python
 
     >>> author_metrics.CitationCount
-    [MetricData(entity_id=57209617104, entity_name='Rose, Michael E.', metric='CitationCount', metric_type='CitationCount', year='all', value=92, percentage=None, threshold=None)]
+    [MetricData(entity_id=57209617104, entity_name='Rose, Michael E.', metric='CitationCount', year='all', value=92, percentage=None, threshold=None)]
 
     >>> author_metrics.HIndices
-    [MetricData(entity_id=57209617104, entity_name='Rose, Michael E.', metric='h-index', metric_type='HIndices', year='all', value=5.0, percentage=None, threshold=None)]
+    [MetricData(entity_id=57209617104, entity_name='Rose, Michael E.', metric='h-index', year='all', value=5.0, percentage=None, threshold=None)]
 
 **Available Metric Properties**:
 
@@ -112,7 +112,6 @@ Metrics can be concatenated and converted into a pandas DataFrame for easier ana
         <th>entity_id</th>
         <th>entity_name</th>
         <th>metric</th>
-        <th>metric_type</th>
         <th>year</th>
         <th>value</th>
         <th>percentage</th>
@@ -125,7 +124,6 @@ Metrics can be concatenated and converted into a pandas DataFrame for easier ana
         <td>57209617104</td>
         <td>Rose, Michael E.</td>
         <td>Institutional collaboration</td>
-        <td>Collaboration</td>
         <td>all</td>
         <td>1.000000</td>
         <td>11.11</td>
@@ -136,7 +134,6 @@ Metrics can be concatenated and converted into a pandas DataFrame for easier ana
         <td>57209617104</td>
         <td>Rose, Michael E.</td>
         <td>International collaboration</td>
-        <td>Collaboration</td>
         <td>all</td>
         <td>7.000000</td>
         <td>77.78</td>
@@ -147,7 +144,6 @@ Metrics can be concatenated and converted into a pandas DataFrame for easier ana
         <td>57209617104</td>
         <td>Rose, Michael E.</td>
         <td>National collaboration</td>
-        <td>Collaboration</td>
         <td>all</td>
         <td>0.000000</td>
         <td>0.00</td>
@@ -158,7 +154,6 @@ Metrics can be concatenated and converted into a pandas DataFrame for easier ana
         <td>57209617104</td>
         <td>Rose, Michael E.</td>
         <td>Single authorship</td>
-        <td>Collaboration</td>
         <td>all</td>
         <td>1.000000</td>
         <td>11.11</td>
@@ -169,7 +164,6 @@ Metrics can be concatenated and converted into a pandas DataFrame for easier ana
         <td>57209617104</td>
         <td>Rose, Michael E.</td>
         <td>Institutional collaboration</td>
-        <td>CollaborationImpact</td>
         <td>all</td>
         <td>0.000000</td>
         <td>NaN</td>
@@ -180,7 +174,6 @@ Metrics can be concatenated and converted into a pandas DataFrame for easier ana
         <td>57209617104</td>
         <td>Rose, Michael E.</td>
         <td>International collaboration</td>
-        <td>CollaborationImpact</td>
         <td>all</td>
         <td>12.571428</td>
         <td>NaN</td>
@@ -191,7 +184,6 @@ Metrics can be concatenated and converted into a pandas DataFrame for easier ana
         <td>57209617104</td>
         <td>Rose, Michael E.</td>
         <td>National collaboration</td>
-        <td>CollaborationImpact</td>
         <td>all</td>
         <td>0.000000</td>
         <td>NaN</td>
@@ -202,7 +194,6 @@ Metrics can be concatenated and converted into a pandas DataFrame for easier ana
         <td>57209617104</td>
         <td>Rose, Michael E.</td>
         <td>Single authorship</td>
-        <td>CollaborationImpact</td>
         <td>all</td>
         <td>4.000000</td>
         <td>NaN</td>
@@ -256,7 +247,6 @@ You can analyze multiple authors simultaneously. Furthermore, you can specify wh
         <th>entity_id</th>
         <th>entity_name</th>
         <th>metric</th>
-        <th>metric_type</th>
         <th>year</th>
         <th>value</th>
         <th>percentage</th>
@@ -269,7 +259,6 @@ You can analyze multiple authors simultaneously. Furthermore, you can specify wh
         <td>7004212771</td>
         <td>Kitchin, John R.</td>
         <td>Institutional collaboration</td>
-        <td>Collaboration</td>
         <td>2024</td>
         <td>6</td>
         <td>37.500000</td>
@@ -280,7 +269,6 @@ You can analyze multiple authors simultaneously. Furthermore, you can specify wh
         <td>7004212771</td>
         <td>Kitchin, John R.</td>
         <td>Institutional collaboration</td>
-        <td>Collaboration</td>
         <td>2020</td>
         <td>1</td>
         <td>50.000000</td>
@@ -291,7 +279,6 @@ You can analyze multiple authors simultaneously. Furthermore, you can specify wh
         <td>7004212771</td>
         <td>Kitchin, John R.</td>
         <td>Institutional collaboration</td>
-        <td>Collaboration</td>
         <td>2021</td>
         <td>1</td>
         <td>33.333336</td>
@@ -302,7 +289,6 @@ You can analyze multiple authors simultaneously. Furthermore, you can specify wh
         <td>7004212771</td>
         <td>Kitchin, John R.</td>
         <td>Institutional collaboration</td>
-        <td>Collaboration</td>
         <td>2022</td>
         <td>6</td>
         <td>66.666670</td>
@@ -313,7 +299,6 @@ You can analyze multiple authors simultaneously. Furthermore, you can specify wh
         <td>7004212771</td>
         <td>Kitchin, John R.</td>
         <td>Institutional collaboration</td>
-        <td>Collaboration</td>
         <td>2023</td>
         <td>5</td>
         <td>55.555557</td>
@@ -333,12 +318,12 @@ You can request only specific metrics to reduce API response size:
 
     >>> h_index_only = AuthorMetrics("57209617104", metric_types=["HIndices"])
     >>> h_index_only.HIndices
-    [MetricData(entity_id=57209617104, entity_name='Rose, Michael E.', metric='h-index', metric_type='HIndices', year='all', value=5.0, percentage=None, threshold=None)]
+    [MetricData(entity_id=57209617104, entity_name='Rose, Michael E.', metric='h-index', year='all', value=5.0, percentage=None, threshold=None)]
 
     >>> # Multiple specific metrics
     >>> selected_metrics = AuthorMetrics("57209617104", metric_types=["CitationCount", "ScholarlyOutput"])
     >>> selected_metrics.CitationCount
-    [MetricData(entity_id=57209617104, entity_name='Rose, Michael E.', metric='CitationCount', metric_type='CitationCount', year='all', value=92, percentage=None, threshold=None)]
+    [MetricData(entity_id=57209617104, entity_name='Rose, Michael E.', metric='CitationCount', year='all', value=92, percentage=None, threshold=None)]
 
 
 Downloaded results are cached to expedite subsequent analyses. This information may become outdated. To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as the maximum allowed number of days since the last modification date. For example, if you want to refresh all cached results older than 100 days, set `refresh=100`. Use `author_metrics.get_cache_file_mdate()` to obtain the date of last modification, and `author_metrics.get_cache_file_age()` to determine the number of days since the last modification.

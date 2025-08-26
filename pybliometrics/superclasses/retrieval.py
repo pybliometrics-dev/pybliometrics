@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional, Union
 
 from pybliometrics.superclasses import Base
-from pybliometrics.utils import APIS_NO_ID_IN_ULR, APIS_WITH_ID_TYPE, get_config, URLS
+from pybliometrics.utils import APIS_NO_ID_IN_URL, APIS_WITH_ID_TYPE, get_config, URLS
 
 
 class Retrieval(Base):
@@ -40,7 +40,7 @@ class Retrieval(Base):
             if self._date:
                 stem += "-" + self._date
         # For APIs that don't use ID in URL, hash the parameters for unique cache filename
-        elif api in APIS_NO_ID_IN_ULR:
+        elif api in APIS_NO_ID_IN_URL:
             params_str = str(sorted(kwds.items()))
             stem = hashlib.md5(params_str.encode()).hexdigest()
         else:

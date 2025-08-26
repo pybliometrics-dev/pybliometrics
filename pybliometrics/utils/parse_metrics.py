@@ -5,8 +5,8 @@ from pybliometrics.utils import make_int_if_possible
 
 # Global namedtuple for all metric data with default values
 MetricData = namedtuple('MetricData', 
-                       'entity_id entity_name metric metric_type year value percentage threshold',
-                       defaults=(None, None, None, None, "all", None, None, None))
+                       'entity_id entity_name metric year value percentage threshold',
+                       defaults=(None, None, None, "all", None, None, None))
 
 
 def extract_metric_data(json_data, metric_type: str, by_year: bool, entity_type: str):
@@ -149,7 +149,6 @@ def process_metric(metric_data: dict, entity_id: int, entity_name: str, metric_t
                 entity_id=entity_id,
                 entity_name=entity_name,
                 metric=metric_name,
-                metric_type=metric_type,
                 year=str(year),
                 value=value_data.get(year),
                 percentage=percentage_data.get(year),

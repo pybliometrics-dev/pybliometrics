@@ -124,7 +124,7 @@ APIS_WITH_ID_TYPE = {"AbstractRetrieval",
                      "ObjectRetrieval"}
 
 # APIs that do not require an ID in the URL
-APIS_NO_ID_IN_ULR = {"AuthorMetrics"}
+APIS_NO_ID_IN_URL = {"AuthorMetrics"}
 
 # Item per page limits for all classes
 COUNTS = {
