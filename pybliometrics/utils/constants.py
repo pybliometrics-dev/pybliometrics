@@ -126,6 +126,7 @@ RATELIMITS = {
     'ObjectMetadata': 0,
     'ObjectRetrieval': 0,
     'PlumXMetrics': 6,
+    'PublicationLookup': 6,
     'ScDirSubjectClassifications': 0,
     'ScienceDirectSearch': 2,
     'ScopusSearch': 9,
