@@ -23,9 +23,8 @@ You initialize the class with one or more SciVal Institution IDs. The argument c
 
 .. code-block:: python
 
-    >>> import pybliometrics
-    >>> from pybliometrics.scival import InstitutionMetrics
-    >>> pybliometrics.scival.init()
+    >>> from pybliometrics.scival import InstitutionMetrics, init
+    >>> init()
     >>> institution_metrics = InstitutionMetrics("309021")
 
 You can obtain basic information just by printing the object:
@@ -45,27 +44,27 @@ There are many properties available that provide different types of metrics. You
 
 **Individual Metric Properties**
 
-Each metric property returns a list of `MetricData` namedtuples with the structure: `(entity_id, entity_name, metric, metric_type, year, value, percentage, threshold)` where `entity_id` and `entity_name` refer to the institution.
+Each metric property returns a list of `MetricData` namedtuples with the structure: `(entity_id, entity_name, metric, year, value, percentage, threshold)` where `entity_id` and `entity_name` refer to the institution.
 
 .. code-block:: python
 
     >>> institution_metrics.CitationCount
     [MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='CitationCount', 
-                metric_type='CitationCount', year='all', value=368527, percentage=None, threshold=None)]
+                year='all', value=368527, percentage=None, threshold=None)]
 
-For **nested metrics** (like CollaborationImpact), `metric_type` contains the main category and `metric` contains the specific sub-type:
+For **nested metrics** (like CollaborationImpact), `metric` contains the specific sub-type:
 
 .. code-block:: python
 
     >>> institution_metrics.CollaborationImpact
     [MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='Institutional collaboration', 
-                metric_type='CollaborationImpact', year='all', value=8.610204, percentage=None, threshold=None),
+                year='all', value=8.610204, percentage=None, threshold=None),
      MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='International collaboration', 
-                metric_type='CollaborationImpact', year='all', value=22.430689, percentage=None, threshold=None),
+                year='all', value=22.430689, percentage=None, threshold=None),
      MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='National collaboration', 
-                metric_type='CollaborationImpact', year='all', value=9.935493, percentage=None, threshold=None),
+                year='all', value=9.935493, percentage=None, threshold=None),
      MetricData(entity_id=309021, entity_name='Humboldt University of Berlin', metric='Single authorship', 
-                metric_type='CollaborationImpact', year='all', value=3.187361, percentage=None, threshold=None)]
+                year='all', value=3.187361, percentage=None, threshold=None)]
 
 **Available Metric Properties**:
 
@@ -125,7 +124,6 @@ For **nested metrics** (like CollaborationImpact), `metric_type` contains the ma
         <th>entity_id</th>
         <th>entity_name</th>
         <th>metric</th>
-        <th>metric_type</th>
         <th>year</th>
         <th>value</th>
         <th>percentage</th>
@@ -138,7 +136,6 @@ For **nested metrics** (like CollaborationImpact), `metric_type` contains the ma
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
         <td>Institutional collaboration</td>
-        <td>Collaboration</td>
         <td>all</td>
         <td>980.000000</td>
         <td>4.32</td>
@@ -149,7 +146,6 @@ For **nested metrics** (like CollaborationImpact), `metric_type` contains the ma
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
         <td>International collaboration</td>
-        <td>Collaboration</td>
         <td>all</td>
         <td>12754.000000</td>
         <td>56.16</td>
@@ -160,7 +156,6 @@ For **nested metrics** (like CollaborationImpact), `metric_type` contains the ma
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
         <td>National collaboration</td>
-        <td>Collaboration</td>
         <td>all</td>
         <td>6728.000000</td>
         <td>29.63</td>
@@ -171,7 +166,6 @@ For **nested metrics** (like CollaborationImpact), `metric_type` contains the ma
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
         <td>Single authorship</td>
-        <td>Collaboration</td>
         <td>all</td>
         <td>2247.000000</td>
         <td>9.89</td>
@@ -182,7 +176,6 @@ For **nested metrics** (like CollaborationImpact), `metric_type` contains the ma
         <td>309021</td>
         <td>Humboldt University of Berlin</td>
         <td>Institutional collaboration</td>
-        <td>CollaborationImpact</td>
         <td>all</td>
         <td>8.610204</td>
         <td>NaN</td>
@@ -235,7 +228,6 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
         <th>entity_id</th>
         <th>entity_name</th>
         <th>metric</th>
-        <th>metric_type</th>
         <th>year</th>
         <th>value</th>
         <th>percentage</th>
@@ -248,7 +240,6 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
         <td>309050</td>
         <td>Technical University of Berlin</td>
         <td>CitedPublications</td>
-        <td>CitedPublications</td>
         <td>2024</td>
         <td>2400</td>
         <td>66.133920</td>
@@ -258,7 +249,6 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
         <th>1</th>
         <td>309050</td>
         <td>Technical University of Berlin</td>
-        <td>CitedPublications</td>
         <td>CitedPublications</td>
         <td>2020</td>
         <td>3294</td>
@@ -270,7 +260,6 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
         <td>309050</td>
         <td>Technical University of Berlin</td>
         <td>CitedPublications</td>
-        <td>CitedPublications</td>
         <td>2021</td>
         <td>3385</td>
         <td>88.404290</td>
@@ -280,7 +269,6 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
         <th>3</th>
         <td>309050</td>
         <td>Technical University of Berlin</td>
-        <td>CitedPublications</td>
         <td>CitedPublications</td>
         <td>2022</td>
         <td>3209</td>
@@ -292,7 +280,6 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
         <td>309050</td>
         <td>Technical University of Berlin</td>
         <td>CitedPublications</td>
-        <td>CitedPublications</td>
         <td>2023</td>
         <td>3044</td>
         <td>80.529100</td>
@@ -302,7 +289,6 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
         <th>5</th>
         <td>309076</td>
         <td>Heidelberg University</td>
-        <td>CitedPublications</td>
         <td>CitedPublications</td>
         <td>2024</td>
         <td>5937</td>
@@ -314,7 +300,6 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
         <td>309076</td>
         <td>Heidelberg University</td>
         <td>CitedPublications</td>
-        <td>CitedPublications</td>
         <td>2020</td>
         <td>7423</td>
         <td>92.005455</td>
@@ -324,7 +309,6 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
         <th>7</th>
         <td>309076</td>
         <td>Heidelberg University</td>
-        <td>CitedPublications</td>
         <td>CitedPublications</td>
         <td>2021</td>
         <td>7828</td>
@@ -336,7 +320,6 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
         <td>309076</td>
         <td>Heidelberg University</td>
         <td>CitedPublications</td>
-        <td>CitedPublications</td>
         <td>2022</td>
         <td>7354</td>
         <td>88.166885</td>
@@ -346,7 +329,6 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
         <th>9</th>
         <td>309076</td>
         <td>Heidelberg University</td>
-        <td>CitedPublications</td>
         <td>CitedPublications</td>
         <td>2023</td>
         <td>6921</td>

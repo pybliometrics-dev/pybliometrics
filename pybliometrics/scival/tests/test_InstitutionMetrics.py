@@ -14,7 +14,7 @@ empty_metrics = InstitutionMetrics("0000000")
 def has_all_fields(metric_data):
     """Check if the metric data has all required fields."""
     required_fields = ['entity_id', 'entity_name', 'metric',
-                       'metric_type', 'year', 'value', 'percentage',
+                       'year', 'value', 'percentage',
                        'threshold']
     return all(hasattr(metric_data, field) for field in required_fields)
 
@@ -26,7 +26,6 @@ def test_academic_corporate_collaboration():
     assert result[0].entity_id == 505023
     assert result[0].entity_name == 'Universidad Nacional Autónoma de México'
     assert result[0].metric == 'Academic-corporate collaboration'
-    assert result[0].metric_type == 'AcademicCorporateCollaboration'
     assert result[0].year == 'all'
     assert result[0].value >= 900
     assert result[0].percentage > 2
@@ -37,7 +36,6 @@ def test_academic_corporate_collaboration():
     assert result_multi[0].entity_id == 309054
     assert result_multi[0].entity_name == 'Technical University of Munich'
     assert result_multi[0].metric == 'Academic-corporate collaboration'
-    assert result_multi[0].metric_type == 'AcademicCorporateCollaboration'
     assert result_multi[0].year == '2024'
     assert result_multi[0].value >= 1000
     assert result_multi[0].percentage > 9
