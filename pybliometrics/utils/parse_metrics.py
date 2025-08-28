@@ -21,7 +21,7 @@ def extract_metric_data(json_data, metric_type: str, by_year: bool, entity_type:
     by_year : bool, optional
         Whether the data is broken down by year
     entity_type : str, optional
-        The type of entity ("author" or "institution")
+        The type of entity ("author", "institution", or "topic")
         
     Returns
     -------
@@ -42,13 +42,36 @@ def extract_metric_data(json_data, metric_type: str, by_year: bool, entity_type:
 
         if not metric_data:
             continue
-
-        # Process metric data using unified approach
+        # Process metric data using unified approach for standard metrics
         metric_items = process_metric(metric_data, entity_id, entity_name, metric_type, by_year)
         if metric_items:
             out.extend(metric_items)
 
     return out or None
+
+def extract_metric_lists(json_data, metric_type: str, entity_type: str) -> list:
+    out = []
+
+    # Get results from JSON data
+    if isinstance(json_data, dict):
+        results = json_data.get('results', [])
+    else:
+        results = []
+
+    for result in results:
+        entity_id, entity_name = extract_entity_info(result, entity_type)
+        metric_data = find_metric_data(result, metric_type)
+
+        if not metric_data:
+            continue
+
+        metric_values = metric_data.get('values', [])
+        out.append({
+            "entity_id": entity_id,
+            "entity_name": entity_name,
+            "values": metric_values
+        })
+    return out
 
 
 def extract_entity_info(result: dict, entity_type: str) -> tuple:
@@ -59,7 +82,7 @@ def extract_entity_info(result: dict, entity_type: str) -> tuple:
     result : dict
         Entity result from API response
     entity_type : str
-        The type of entity ("author" or "institution")
+        The type of entity ("author", "institution", or "topic")
         
     Returns
     -------
