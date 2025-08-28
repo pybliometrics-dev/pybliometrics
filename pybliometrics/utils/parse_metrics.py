@@ -42,7 +42,7 @@ def extract_metric_data(json_data, metric_type: str, by_year: bool, entity_type:
 
         if not metric_data:
             continue
-        
+
         # Process metric data using unified approach
         metric_items = process_metric(metric_data, entity_id, entity_name, metric_type, by_year)
         if metric_items:
