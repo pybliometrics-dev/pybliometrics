@@ -6,7 +6,7 @@ from pybliometrics.utils import make_int_if_possible
 from pybliometrics.utils.constants import SCIVAL_METRICS
 from pybliometrics.utils.parse_metrics import extract_metric_data, extract_metric_lists, MetricData
 
-class TopicMetrics(Retrieval):
+class TopicLookupMetrics(Retrieval):
     @property
     def topics(self) -> list:
         """A list of namedtuples representing topics and their basic info
@@ -277,7 +277,7 @@ class TopicMetrics(Retrieval):
                  refresh: Union[bool, int] = False,
                  **kwds: str
                  ) -> None:
-        """Interaction with the SciVal Topic Metrics API.
+        """Interaction with the SciVal's `metrics` endpoint of the `TopicLookup API`.
 
         :param topic_ids: SciVal Topic ID(s). Can be a single ID or comma-separated 
                           string of IDs, or a list of IDs (e.g. `[1516, 1517]`).
@@ -312,9 +312,9 @@ class TopicMetrics(Retrieval):
         # Depend on by_year, set default metric_types if not provided
         if metric_types is None:
             if not by_year:
-                metric_types = SCIVAL_METRICS["TopicMetrics"]["byYear"] + SCIVAL_METRICS["TopicMetrics"]["notByYear"]
+                metric_types = SCIVAL_METRICS["TopicLookupMetrics"]["byYear"] + SCIVAL_METRICS["TopicLookupMetrics"]["notByYear"]
             else:
-                metric_types = SCIVAL_METRICS["TopicMetrics"]["byYear"]
+                metric_types = SCIVAL_METRICS["TopicLookupMetrics"]["byYear"]
 
         if isinstance(metric_types, list):
             metric_types = ",".join(metric_types)
@@ -337,7 +337,7 @@ class TopicMetrics(Retrieval):
         if topic_count == 0:
             return "No topics found"
         else:
-            s = f"TopicMetrics for {topic_count} topic(s):"
+            s = f"TopicLookupMetrics for {topic_count} topic(s):"
             for topic in topics:
                 s += f"\n- {topic.name} (ID: {topic.id})"
             return s

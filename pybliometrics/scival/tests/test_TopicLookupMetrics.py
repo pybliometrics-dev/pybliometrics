@@ -1,15 +1,15 @@
 from pytest import approx
-from pybliometrics.scival import TopicMetrics, init
+from pybliometrics.scival import TopicLookupMetrics, init
 
 init()
 
-topic = TopicMetrics("9549", by_year=False, refresh=30)
-topics_by_year = TopicMetrics("110, 1438, 1012", by_year=True, refresh=30)
-topics_not_by_year = TopicMetrics(["3909", "4374"], by_year=False, refresh=30)
-specific_metrics = TopicMetrics("1516, 2848",
+topic = TopicLookupMetrics("9549", by_year=False, refresh=30)
+topics_by_year = TopicLookupMetrics("110, 1438, 1012", by_year=True, refresh=30)
+topics_not_by_year = TopicLookupMetrics(["3909", "4374"], by_year=False, refresh=30)
+specific_metrics = TopicLookupMetrics("1516, 2848",
                                 metric_types=["AuthorCount", "CitationCount"],
                                 by_year=False, refresh=30)
-non_existing = TopicMetrics("9999999999", by_year=False, refresh=30)
+non_existing = TopicLookupMetrics("9999999999", by_year=False, refresh=30)
 
 def test_topics():
     """Tests topics property"""
