@@ -81,7 +81,7 @@ SciVal
     :maxdepth: 1
     
     reference/scival/AuthorMetrics.rst
-    reference/scival/InstitutionMetrics.rst
+    reference/scival/InstitutionLookupMetrics.rst
     reference/scival/PublicationLookup.rst
 
 

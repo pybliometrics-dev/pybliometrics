@@ -7,7 +7,7 @@ from pybliometrics.utils.constants import SCIVAL_METRICS
 from pybliometrics.utils.parse_metrics import extract_metric_data, MetricData
 
 
-class InstitutionMetrics(Retrieval):
+class InstitutionLookupMetrics(Retrieval):
     @property  
     def AcademicCorporateCollaboration(self) -> Optional[list[MetricData]]:
         """Academic corporate collaboration metrics for each institution.
@@ -127,7 +127,7 @@ class InstitutionMetrics(Retrieval):
                  refresh: Union[bool, int] = False,
                  **kwds: str
                  ) -> None:
-        """Interaction with the SciVal Institution Metrics API.
+        """Interaction with the SciVal's `metrics` endpoint of the `InstitutionLookup API`.
 
         :param institution_ids: SciVal Institution ID(s). Can be a single ID or comma-separated 
                                string of IDs, or a list of IDs (e.g. `[309054, 309086]`).
@@ -162,7 +162,7 @@ class InstitutionMetrics(Retrieval):
 
         # Handle metric_types parameter - use all metrics by default
         if metric_types is None:
-            metric_types = SCIVAL_METRICS["InstitutionMetrics"]["byYear"]
+            metric_types = SCIVAL_METRICS["InstitutionLookupMetrics"]["byYear"]
 
         if isinstance(metric_types, list):
             metric_types = ",".join(metric_types)
@@ -187,7 +187,7 @@ class InstitutionMetrics(Retrieval):
         if institution_count == 0:
             return "No institutions found"
         else:
-            s = f"InstitutionMetrics for {institution_count} institution(s):"
+            s = f"InstitutionLookupMetrics for {institution_count} institution(s):"
             for institution in institutions:
                 s += f"\n- {institution.name} (ID: {institution.id})"
             return s

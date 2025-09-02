@@ -34,7 +34,7 @@ DEFAULT_PATHS = {
     'PlumXMetrics': CACHE_PATH / "Scopus" / 'plumx',
     'PublicationLookup': CACHE_PATH / "Scival" / "publication_lookup",
     'AuthorMetrics': CACHE_PATH / "Scival" / "author_metrics",
-    'InstitutionMetrics': CACHE_PATH / "Scival" / "institution_metrics",
+    'InstitutionLookupMetrics': CACHE_PATH / "Scival" / "institution_metrics",
     'ScDirSubjectClassifications': CACHE_PATH / "ScienceDirect" / 'subject_classification',
     'ScienceDirectSearch': CACHE_PATH / "ScienceDirect" / 'science_direct_search',
     'ScopusSearch': CACHE_PATH / "Scopus" / 'scopus_search',
@@ -62,7 +62,7 @@ URLS = {
     'ObjectRetrieval': RETRIEVAL_BASE + 'object/',
     'PublicationLookup': SCIVAL_BASE + 'publication/',
     'AuthorMetrics': SCIVAL_BASE + 'author/metrics/',
-    'InstitutionMetrics': SCIVAL_BASE + 'institution/metrics/',
+    'InstitutionLookupMetrics': SCIVAL_BASE + 'institution/metrics/',
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
     'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
@@ -115,7 +115,7 @@ SCIVAL_METRICS = {
             "HIndices"
         ]
     },
-    "InstitutionMetrics": {
+    "InstitutionLookupMetrics": {
         "byYear": [
             "AcademicCorporateCollaboration",
             "AcademicCorporateCollaborationImpact",
@@ -142,7 +142,7 @@ APIS_WITH_ID_TYPE = {"AbstractRetrieval",
                      "ObjectRetrieval"}
 
 # APIs that do not require an ID in the URL
-APIS_NO_ID_IN_URL = {"AuthorMetrics", "InstitutionMetrics"}
+APIS_NO_ID_IN_URL = {"AuthorMetrics", "InstitutionLookupMetrics"}
 
 # Item per page limits for all classes
 COUNTS = {
@@ -168,7 +168,7 @@ RATELIMITS = {
     'AuthorRetrieval': 3,
     'AuthorSearch': 2,
     'CitationOverview': 4,
-    "InstitutionMetrics": 6,
+    "InstitutionLookupMetrics": 6,
     'NonserialTitle': 6,
     'ObjectMetadata': 0,
     'ObjectRetrieval': 0,

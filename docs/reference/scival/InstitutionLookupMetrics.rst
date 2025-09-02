@@ -1,7 +1,7 @@
-pybliometrics.scival.InstitutionMetrics
-=======================================
+pybliometrics.scival.InstitutionLookupMetrics
+=============================================
 
-`InstitutionMetrics()` implements the `SciVal Institution Metrics API <https://dev.elsevier.com/documentation/SciValInstitutionAPI.wadl>`_.
+`InstitutionLookupMetrics()` implements the `metrics` endpoint of the `SciVal InstitutionLookup API <https://dev.elsevier.com/documentation/SciValInstitutionAPI.wadl>`_.
 
 It accepts one or more SciVal Institution IDs as the main argument and retrieves various performance metrics for the specified institutions.
 
@@ -12,7 +12,7 @@ It accepts one or more SciVal Institution IDs as the main argument and retrieves
 Documentation
 -------------
 
-.. autoclass:: InstitutionMetrics
+.. autoclass:: InstitutionLookupMetrics
     :members:
     :inherited-members:
 
@@ -23,16 +23,16 @@ You initialize the class with one or more SciVal Institution IDs. The argument c
 
 .. code-block:: python
 
-    >>> from pybliometrics.scival import InstitutionMetrics, init
+    >>> from pybliometrics.scival import InstitutionLookupMetrics, init
     >>> init()
-    >>> institution_metrics = InstitutionMetrics("309021")
+    >>> institution_metrics = InstitutionLookupMetrics("309021")
 
 You can obtain basic information just by printing the object:
 
 .. code-block:: python
 
     >>> print(institution_metrics)
-    InstitutionMetrics for 1 institution(s):
+    InstitutionLookupMetrics for 1 institution(s):
     - Humboldt University of Berlin (ID: 309021)
 
 There are many properties available that provide different types of metrics. You can explore the available institutions:
@@ -81,7 +81,7 @@ For **nested metrics** (like CollaborationImpact), `metric` contains the specifi
 - `ScholarlyOutput`
 
 .. note::
-   **Unified Data Structure**: InstitutionMetrics uses a unified `MetricData` structure with `entity_id` and `entity_name` fields. For institutions, these fields contain the institution ID and institution name respectively. This structure is compatible with `AuthorMetrics` and other SciVal metric classes, enabling consistent data analysis across different entity types.
+   **Unified Data Structure**: InstitutionLookupMetrics uses a unified `MetricData` structure with `entity_id` and `entity_name` fields. For institutions, these fields contain the institution ID and institution name respectively. This structure is compatible with `AuthorMetrics` and other SciVal metric classes, enabling consistent data analysis across different entity types.
 
 **Concatenating Metrics**
 
@@ -192,9 +192,9 @@ You can analyze multiple institutions simultaneously and retrieve metrics `by_ye
 
 .. code-block:: python
 
-    >>> multi_institutions = InstitutionMetrics([309050, 309076], by_year=True)
+    >>> multi_institutions = InstitutionLookupMetrics([309050, 309076], by_year=True)
     >>> print(multi_institutions)
-    InstitutionMetrics for 2 institution(s):
+    InstitutionLookupMetrics for 2 institution(s):
     - Technical University of Berlin (ID: 309050)
     - Heidelberg University  (ID: 309076)
     >>> # Get CitedPublications metrics

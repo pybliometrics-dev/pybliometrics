@@ -1,13 +1,13 @@
 from collections import namedtuple
 
-from pybliometrics.scival import init, InstitutionMetrics
+from pybliometrics.scival import init, InstitutionLookupMetrics
 
 init()
 
 # Test cases with actual institution IDs from the response examples
-single_institution_all = InstitutionMetrics("505023", by_year=False, refresh=30)
-multiple_institutions_all = InstitutionMetrics([309054, 309086], by_year=True, refresh=30)
-empty_metrics = InstitutionMetrics("0000000")
+single_institution_all = InstitutionLookupMetrics("505023", by_year=False, refresh=30)
+multiple_institutions_all = InstitutionLookupMetrics([309054, 309086], by_year=True, refresh=30)
+empty_metrics = InstitutionLookupMetrics("0000000")
 
 
 # Auxiliary function to check if a MetricData namedtuple has all required fields
@@ -166,15 +166,15 @@ def test_scholarly_output():
 
 
 def test_str_representation():
-    """Test the string representation of InstitutionMetrics objects."""
+    """Test the string representation of InstitutionLookupMetrics objects."""
     # Test single institution
     str_single = str(single_institution_all)
-    expected_str = "InstitutionMetrics for 1 institution(s):\n- Universidad Nacional Autónoma de México (ID: 505023)"
+    expected_str = "InstitutionLookupMetrics for 1 institution(s):\n- Universidad Nacional Autónoma de México (ID: 505023)"
     assert str_single == expected_str
 
     # Test multiple institutions
     str_multi = str(multiple_institutions_all)
-    expected_str_multi = "InstitutionMetrics for 2 institution(s):\n- Technical University of Munich (ID: 309054)\n- Ludwig Maximilian University of Munich (ID: 309086)"
+    expected_str_multi = "InstitutionLookupMetrics for 2 institution(s):\n- Technical University of Munich (ID: 309054)\n- Ludwig Maximilian University of Munich (ID: 309086)"
     assert str_multi == expected_str_multi
 
     # Test empty metrics
