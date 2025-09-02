@@ -35,6 +35,7 @@ DEFAULT_PATHS = {
     'PublicationLookup': CACHE_PATH / "Scival" / "publication_lookup",
     'AuthorMetrics': CACHE_PATH / "Scival" / "author_metrics",
     'InstitutionLookupMetrics': CACHE_PATH / "Scival" / "institution_metrics",
+    'TopicLookupMetrics': CACHE_PATH / "Scival" / "topic_metrics",
     'ScDirSubjectClassifications': CACHE_PATH / "ScienceDirect" / 'subject_classification',
     'ScienceDirectSearch': CACHE_PATH / "ScienceDirect" / 'science_direct_search',
     'ScopusSearch': CACHE_PATH / "Scopus" / 'scopus_search',
@@ -63,6 +64,7 @@ URLS = {
     'PublicationLookup': SCIVAL_BASE + 'publication/',
     'AuthorMetrics': SCIVAL_BASE + 'author/metrics/',
     'InstitutionLookupMetrics': SCIVAL_BASE + 'institution/metrics/',
+    'TopicLookupMetrics': SCIVAL_BASE + 'topic/metrics/',
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
     'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
@@ -115,6 +117,25 @@ SCIVAL_METRICS = {
             "HIndices"
         ]
     },
+    "TopicLookupMetrics": {
+        "byYear": [
+            "AuthorCount",
+            "CitationCount",
+            "FieldWeightedCitationImpact",
+            "InstitutionCount",
+            "ScholarlyOutput",
+            "TopCitedPublications",
+        ],
+        "notByYear": [
+            "CorePapers",
+            "MostRecentlyPublishedPapers",
+            "RelatedTopics",
+            "TopAuthors",
+            "TopInstitutions",
+            "TopJournals",
+            "TopKeywords"
+            ]
+    },
     "InstitutionLookupMetrics": {
         "byYear": [
             "AcademicCorporateCollaboration",
@@ -142,7 +163,7 @@ APIS_WITH_ID_TYPE = {"AbstractRetrieval",
                      "ObjectRetrieval"}
 
 # APIs that do not require an ID in the URL
-APIS_NO_ID_IN_URL = {"AuthorMetrics", "InstitutionLookupMetrics"}
+APIS_NO_ID_IN_URL = {"AuthorMetrics", "InstitutionLookupMetrics", "TopicLookupMetrics"}
 
 # Item per page limits for all classes
 COUNTS = {
@@ -165,6 +186,7 @@ RATELIMITS = {
     'ArticleMetadata': 6,
     'ArticleRetrieval': 10,
     'AuthorMetrics': 6,
+    'TopicLookupMetrics': 6,
     'AuthorRetrieval': 3,
     'AuthorSearch': 2,
     'CitationOverview': 4,
