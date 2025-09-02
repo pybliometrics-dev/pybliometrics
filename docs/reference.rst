@@ -82,6 +82,7 @@ SciVal
     
     reference/scival/AuthorMetrics.rst
     reference/scival/PublicationLookup.rst
+    reference/scival/TopicLookupMetrics.rst
 
 
 Initialization
