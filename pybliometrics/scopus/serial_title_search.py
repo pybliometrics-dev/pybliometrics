@@ -5,7 +5,7 @@ from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_parameter_value, make_search_summary, VIEWS
 
 
-class SerialSearch(Search):
+class SerialTitleSearch(Search):
     @property
     def results(self) -> Optional[list[OrderedDict[str, str]]]:
         """A list of OrderedDicts representing results of serial search. The
@@ -53,7 +53,7 @@ class SerialSearch(Search):
                  view: str = 'ENHANCED',
                  **kwds: str
                  ) -> None:
-        """Interaction with the Serial Title API.
+        """Interaction with the base endpoint of the `Serial Title API`.
 
         :param query:  Query parameters and corresponding fields. Allowed keys
                       'title', 'issn', 'pub', 'subj', 'subjCode', 'content',
@@ -92,7 +92,7 @@ class SerialSearch(Search):
         invalid = [k for k in query.keys() if k not in allowed_query_keys]
         if invalid:
             raise ValueError(f'Query key(s) "{", ".join(invalid)}" invalid')
-        check_parameter_value(view, VIEWS['SerialSearch'], "view")
+        check_parameter_value(view, VIEWS['SerialTitleSearch'], "view")
 
         # Query
         self._query = str(query)

@@ -38,8 +38,8 @@ DEFAULT_PATHS = {
     'ScDirSubjectClassifications': CACHE_PATH / "ScienceDirect" / 'subject_classification',
     'ScienceDirectSearch': CACHE_PATH / "ScienceDirect" / 'science_direct_search',
     'ScopusSearch': CACHE_PATH / "Scopus" / 'scopus_search',
-    'SerialSearch': CACHE_PATH / "Scopus" / 'serial_search',
-    'SerialTitle': CACHE_PATH / "Scopus" / 'serial_title',
+    'SerialTitleSearch': CACHE_PATH / "Scopus" / 'serial_search',
+    'SerialTitleISSN': CACHE_PATH / "Scopus" / 'serial_title',
     'SubjectClassifications': CACHE_PATH / "Scopus" / 'subject_classification',
 }
 
@@ -67,8 +67,8 @@ URLS = {
     'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
     'ScopusSearch': SEARCH_BASE + 'scopus',
-    'SerialSearch': RETRIEVAL_BASE + 'serial/title',
-    'SerialTitle': RETRIEVAL_BASE + 'serial/title/issn/',
+    'SerialTitleSearch': RETRIEVAL_BASE + 'serial/title',
+    'SerialTitleISSN': RETRIEVAL_BASE + 'serial/title/issn/',
     'SubjectClassifications': RETRIEVAL_BASE + 'subject/scopus',
 }
 
@@ -88,8 +88,8 @@ VIEWS = {
     "ScDirSubjectClassifications": [''],
     "ScienceDirectSearch": ["STANDARD"],
     "ScopusSearch": ["STANDARD", "COMPLETE"],
-    "SerialSearch": ["STANDARD", "ENHANCED", "CITESCORE"],
-    "SerialTitle": ["STANDARD", "ENHANCED", "CITESCORE"],
+    "SerialTitleSearch": ["STANDARD", "ENHANCED", "CITESCORE"],
+    "SerialTitleISSN": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SubjectClassifications": [''],
     "ObjectMetadata": ["META"],
     "ObjectRetrieval": [""]
@@ -155,7 +155,7 @@ COUNTS = {
     "ScDirSubjectClassifications": {"": 200},
     "ScienceDirectSearch": {"STANDARD": 100},
     "ScopusSearch": {"STANDARD": 200, "COMPLETE": 25},
-    "SerialSearch": {"STANDARD": 200, "ENHANCED": 200, "CITESCORE": 200},
+    "SerialTitleSearch": {"STANDARD": 200, "ENHANCED": 200, "CITESCORE": 200},
     "SubjectClassifications": {"": 200}
 }
 
@@ -180,8 +180,8 @@ RATELIMITS = {
     'ScDirSubjectClassifications': 0,
     'ScienceDirectSearch': 2,
     'ScopusSearch': 9,
-    'SerialSearch': 6,
-    'SerialTitle': 6,
+    'SerialTitleSearch': 6,
+    'SerialTitleISSN': 6,
     'SubjectClassifications': 0
 }
 

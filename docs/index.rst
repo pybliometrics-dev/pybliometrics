@@ -26,8 +26,8 @@ Classes for the Scopus API
    CitationOverview
    PlumXMetrics
    ScopusSearch
-   SerialSearch
-   SerialTitle
+   SerialTitleSearch
+   SerialTitleISSN
    SubjectClassifications
 
 =================================
@@ -45,7 +45,7 @@ Classes for the ScienceDirect API
    ObjectMetadata
    ObjectRetrieval
    ScienceDirectSearch
-   SerialTitle
+   SerialTitleISSN
    SubjectClassifications
    
 ==========================

@@ -1,15 +1,15 @@
-"""Test pybliometrics.sciencedirect.SerialTitle()"""
+"""Test pybliometrics.sciencedirect.SerialTitleISSN()"""
 
 from collections import namedtuple
 
-from pybliometrics.sciencedirect import SerialTitle, init
+from pybliometrics.sciencedirect import SerialTitleISSN, init
 
 init()
 
-gene = SerialTitle('03781119', view='ENHANCED', refresh=30)
+gene = SerialTitleISSN('03781119', view='ENHANCED', refresh=30)
 
 def test_module():
-    assert gene.__module__  == 'pybliometrics.scopus.serial_title'
+    assert gene.__module__  == 'pybliometrics.scopus.serial_title_issn'
 
 
 def test_aggregation_type():

@@ -6,7 +6,7 @@ from pybliometrics.utils import chained_get, check_parameter_value, \
     get_link, make_float_if_possible, make_int_if_possible, VIEWS
 
 
-class SerialTitle(Retrieval):
+class SerialTitleISSN(Retrieval):
     @property
     def aggregation_type(self) -> str:
         """The type of the source."""
@@ -197,7 +197,7 @@ class SerialTitle(Retrieval):
                  years: str = None,
                  **kwds: str
                  ) -> None:
-        """Interaction with the Serial Title API.
+        """Interaction with the `ISSN` endpoint of the `Serial Title API`.
         Class retrieves data from both Scopus and ScienceDirect.
 
         :param issn: The ISSN or the E-ISSN of the source.
@@ -228,7 +228,7 @@ class SerialTitle(Retrieval):
         where `path` is specified in your configuration file.
         """
         # Checks
-        check_parameter_value(view, VIEWS['SerialTitle'], "view")
+        check_parameter_value(view, VIEWS['SerialTitleISSN'], "view")
         self._view = view
 
         # Force refresh when years is specified

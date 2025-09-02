@@ -8,6 +8,8 @@ from pybliometrics.scopus.author_retrieval import *
 from pybliometrics.scopus.author_search import *
 from pybliometrics.scopus.plumx_metrics import *
 from pybliometrics.scopus.scopus_search import *
-from pybliometrics.scopus.serial_search import *
-from pybliometrics.scopus.serial_title import *
+from pybliometrics.scopus.serial_title_search import *
+from pybliometrics.scopus.serial_title_search import SerialTitleSearch as SerialSearch # For backward compatibility
+from pybliometrics.scopus.serial_title_issn import *
+from pybliometrics.scopus.serial_title_issn import SerialTitleISSN as SerialTitle # For backward compatibility
 from pybliometrics.scopus.subject_classifications import *
