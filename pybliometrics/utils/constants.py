@@ -34,6 +34,7 @@ DEFAULT_PATHS = {
     'PlumXMetrics': CACHE_PATH / "Scopus" / 'plumx',
     'PublicationLookup': CACHE_PATH / "Scival" / "publication_lookup",
     'AuthorMetrics': CACHE_PATH / "Scival" / "author_metrics",
+    'InstitutionLookupMetrics': CACHE_PATH / "Scival" / "institution_metrics",
     'TopicLookupMetrics': CACHE_PATH / "Scival" / "topic_metrics",
     'ScDirSubjectClassifications': CACHE_PATH / "ScienceDirect" / 'subject_classification',
     'ScienceDirectSearch': CACHE_PATH / "ScienceDirect" / 'science_direct_search',
@@ -62,6 +63,7 @@ URLS = {
     'ObjectRetrieval': RETRIEVAL_BASE + 'object/',
     'PublicationLookup': SCIVAL_BASE + 'publication/',
     'AuthorMetrics': SCIVAL_BASE + 'author/metrics/',
+    'InstitutionLookupMetrics': SCIVAL_BASE + 'institution/metrics/',
     'TopicLookupMetrics': SCIVAL_BASE + 'topic/metrics/',
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
     'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
@@ -133,6 +135,22 @@ SCIVAL_METRICS = {
             "TopJournals",
             "TopKeywords"
             ]
+    },
+    "InstitutionLookupMetrics": {
+        "byYear": [
+            "AcademicCorporateCollaboration",
+            "AcademicCorporateCollaborationImpact",
+            "Collaboration",
+            "CitationCount",
+            "CitationsPerPublication",
+            "CollaborationImpact",
+            "CitedPublications",
+            "FieldWeightedCitationImpact",
+            "ScholarlyOutput",
+            "PublicationsInTopJournalPercentiles",
+            "OutputsInTopCitationPercentiles"
+        ],
+        "notByYear": []
     }
 }
 
@@ -145,7 +163,7 @@ APIS_WITH_ID_TYPE = {"AbstractRetrieval",
                      "ObjectRetrieval"}
 
 # APIs that do not require an ID in the URL
-APIS_NO_ID_IN_URL = {"AuthorMetrics", "TopicLookupMetrics"}
+APIS_NO_ID_IN_URL = {"AuthorMetrics", "InstitutionLookupMetrics", "TopicLookupMetrics"}
 
 # Item per page limits for all classes
 COUNTS = {
@@ -172,6 +190,7 @@ RATELIMITS = {
     'AuthorRetrieval': 3,
     'AuthorSearch': 2,
     'CitationOverview': 4,
+    "InstitutionLookupMetrics": 6,
     'NonserialTitle': 6,
     'ObjectMetadata': 0,
     'ObjectRetrieval': 0,
