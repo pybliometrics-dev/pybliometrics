@@ -1,18 +1,18 @@
 pybliometrics.scival.PublicationLookup
 ======================================
 
-`PublicationLookup()` implements the `SciVal Publication Lookup API <https://dev.elsevier.com/documentation/SciValPublicationAPI.wadl>`_.
+`PublicationLookup()` implements the base endpoint of the `SciVal Publication Lookup API <https://dev.elsevier.com/documentation/SciValPublicationAPI.wadl>`_.
 
 It accepts a Scopus ID as the main argument.
 
-.. currentmodule:: pybliometrics.sciencedirect
+.. currentmodule:: pybliometrics.scival
 .. contents:: Table of Contents
     :local:
 
 Documentation
 -------------
 
-.. autoclass:: ArticleEntitlement
+.. autoclass:: PublicationLookup
     :members:
     :inherited-members:
 
