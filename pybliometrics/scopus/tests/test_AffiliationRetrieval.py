@@ -1,6 +1,7 @@
 """Tests for `scopus.AffiliationRetrieval` module."""
 
 from pybliometrics.scopus import AffiliationRetrieval, init
+from pybliometrics.scopus.affiliation_retrieval import Variant
 
 init()
 
@@ -137,14 +138,14 @@ def test_status():
     assert entitled.status is None
 
 
-def sort_name():
+def test_sort_name():
     assert light.sort_name is None
-    assert standard.sort_name== 'Cape Town, University of'
+    assert standard.sort_name == 'Cape Town, University of'
     assert entitled.sort_name is None
 
 
-def url():
+def test_url():
     expected = 'https://api.elsevier.com/content/affiliation/affiliation_id/60000356'
-    assert light.url== expected
-    assert standard.url== expected
+    assert light.url == expected
+    assert standard.url == expected
     assert entitled.url is None

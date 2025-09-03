@@ -1,5 +1,5 @@
-from collections import defaultdict, namedtuple
-from typing import Optional, Union
+from collections import defaultdict
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import chained_get, check_parameter_value, \
@@ -7,26 +7,125 @@ from pybliometrics.utils import chained_get, check_parameter_value, \
     make_int_if_possible, parse_date_created, VIEWS
 
 
+class Affiliation(NamedTuple):
+    id: int | None
+    name: str | None
+    city: str | None
+    country: str | None
+
+
+class AuthorGroup(NamedTuple):
+    affiliation_id: int | None
+    collaboration_id: str | None
+    dptid: int | None
+    organization: str | None
+    city: str | None
+    postalcode: str | None
+    addresspart: str | None
+    country: str | None
+    auid: int | None
+    orcid: str | None
+    indexed_name: str | None
+    surname: str | None
+    given_name: str | None
+
+
+class Author(NamedTuple):
+    auid: int
+    indexed_name: str | None
+    surname: str | None
+    given_name: str | None
+    affiliation: str | None
+
+
+class Chemical(NamedTuple):
+    source: str
+    chemical_name: str
+    cas_registry_number: str | None
+
+
+class Contributor(NamedTuple):
+    given_name: str | None
+    initials: str | None
+    surname: str | None
+    indexed_name: str | None
+    role: str | None
+
+
+class Correspondence(NamedTuple):
+    surname: str | None
+    initials: str | None
+    organization: str | None
+    country: str | None
+    city_group: str | None
+
+
+class Funding(NamedTuple):
+    agency: str | None
+    agency_id: str | None
+    string: str | None
+    funding_id: list[str] | None
+    acronym: str | None
+    country: str | None
+
+
+class ISSN(NamedTuple):
+    print: str | None = None
+    electronic: str | None = None
+
+
+class Reference(NamedTuple):
+    position: str | None
+    id: str | None
+    doi: str | None
+    title: str | None
+    authors: str | None
+    authors_auid: str | None
+    authors_affiliationid: str | None
+    sourcetitle: str | None
+    publicationyear: str | None
+    coverDate: str | None
+    volume: str | None
+    issue: str | None
+    first: str | None
+    last: str | None
+    citedbycount: str | None
+    type: str | None
+    text: str | None
+    fulltext: str | None
+
+
+class Sequencebank(NamedTuple):
+    name: str
+    sequence_number: str
+    type: str
+
+
+class Area(NamedTuple):
+    area: str
+    abbreviation: str
+    code: int
+
+
 class AbstractRetrieval(Retrieval):
     @property
-    def abstract(self) -> Optional[str]:
+    def abstract(self) -> str | None:
         """The abstract of a document.
         Note: If this is empty, try `description` property instead.
         """
         return self._head.get('abstracts')
 
     @property
-    def affiliation(self) -> Optional[list[namedtuple]]:
+    def affiliation(self) -> list[Affiliation] | None:
         """A list of namedtuples representing listed affiliations in
         the form `(id, name, city, country)`.
         """
         out = []
-        aff = namedtuple('Affiliation', 'id name city country')
         affs = listify(self._json.get('affiliation', []))
         for item in affs:
-            new = aff(id=make_int_if_possible(item.get('@id')), name=item.get('affilname'),
-                      city=item.get('affiliation-city'),
-                      country=item.get('affiliation-country'))
+            new = Affiliation(id=make_int_if_possible(item.get('@id')), name=item.get('affilname'),
+                              city=item.get('affiliation-city'),
+                              country=item.get('affiliation-country'))
             out.append(new)
         return out or None
 
@@ -36,7 +135,7 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'prism:aggregationType'])
 
     @property
-    def authkeywords(self) -> Optional[list[str]]:
+    def authkeywords(self) -> list[str] | None:
         """List of author-provided keywords of the document."""
         keywords = self._json.get('authkeywords')
         if not keywords:
@@ -48,7 +147,7 @@ class AbstractRetrieval(Retrieval):
                 return [keywords['author-keyword']['$']]
 
     @property
-    def authorgroup(self) -> Optional[list[namedtuple]]:
+    def authorgroup(self) -> list[AuthorGroup] | None:
         """A list of namedtuples representing the article's authors and collaborations
         organized by affiliation, in the form `(affiliation_id, collaboration_id, dptid,
         organization, city, postalcode, addresspart, country, auid, orcid,
@@ -63,9 +162,6 @@ class AbstractRetrieval(Retrieval):
         # 2. A list of dicts with as in 1, one for each affiliation (incl. missing)
         # 3. A list of two dicts with one key each (author and collaboration)
         # Initialization
-        fields = 'affiliation_id collaboration_id dptid organization city postalcode '\
-            'addresspart country auid orcid indexed_name surname given_name'
-        auth = namedtuple('Author', fields, defaults=[None for _ in fields.split()])
         items = listify(self._head.get('author-group', []))
         out = []
         for item in filter(None, items):
@@ -79,28 +175,40 @@ class AbstractRetrieval(Retrieval):
             org = _get_org(aff)
             # Author information
             for author in authors:
-                new = auth(affiliation_id=aff_id,
-                           organization=org,
-                           city=aff.get('city'),
-                           dptid=dep_id,
-                           postalcode=aff.get('postal-code'),
-                           addresspart=aff.get('address-part'),
-                           country=aff.get('country'),
-                           auid=make_int_if_possible(author.get('@auid')),
-                           orcid=author.get('@orcid'),
-                           surname=author.get('ce:surname'),
-                           given_name=author.get('ce:given-name', author.get('ce:initials')),
-                           indexed_name=chained_get(author, ['preferred-name', 'ce:indexed-name']))
+                new = AuthorGroup(affiliation_id=aff_id,
+                                  organization=org,
+                                  city=aff.get('city'),
+                                  dptid=dep_id,
+                                  postalcode=aff.get('postal-code'),
+                                  addresspart=aff.get('address-part'),
+                                  country=aff.get('country'),
+                                  auid=make_int_if_possible(author.get('@auid')),
+                                  orcid=author.get('@orcid'),
+                                  surname=author.get('ce:surname'),
+                                  given_name=author.get('ce:given-name', author.get('ce:initials')),
+                                  indexed_name=chained_get(author, ['preferred-name', 'ce:indexed-name']),
+                                  collaboration_id=None)
                 out.append(new)
             # Collaboration information
             for collaboration in filter(None, listify(collaborations)):
-                new = auth(collaboration_id=collaboration.get('@collaboration-instance-id'),
-                           indexed_name=collaboration.get('ce:indexed-name'))
+                new = AuthorGroup(collaboration_id=collaboration.get('@collaboration-instance-id'),
+                                  indexed_name=collaboration.get('ce:indexed-name'),
+                                  affiliation_id=None,
+                                  organization=None,
+                                  city=None,
+                                  dptid=None,
+                                  postalcode=None,
+                                  addresspart=None,
+                                  country=None,
+                                  auid=None,
+                                  orcid=None,
+                                  surname=None,
+                                  given_name=None)
                 out.append(new)
         return out or None
 
     @property
-    def authors(self) -> Optional[list[namedtuple]]:
+    def authors(self) -> list[Author] | None:
         """A list of namedtuples representing the article's authors, in the
         form `(auid, indexed_name, surname, given_name, affiliation)`.  In case
         multiple affiliation IDs are given, they are joined on `";"`.
@@ -109,22 +217,20 @@ class AbstractRetrieval(Retrieval):
         all affiliations.
         """
         out = []
-        fields = 'auid indexed_name surname given_name affiliation'
-        auth = namedtuple('Author', fields)
         for item in chained_get(self._json, ['authors', 'author'], []):
             affs = [a for a in listify(item.get('affiliation')) if a] or None
             try:
                 aff = ";".join([aff.get('@id') for aff in affs])
             except TypeError:
                 aff = None
-            new = auth(auid=int(item['@auid']), surname=item.get('ce:surname'),
-                       indexed_name=item.get('ce:indexed-name'), affiliation=aff,
-                       given_name=chained_get(item, ['preferred-name', 'ce:given-name']))
+            new = Author(auid=int(item['@auid']), surname=item.get('ce:surname'),
+                         indexed_name=item.get('ce:indexed-name'), affiliation=aff,
+                         given_name=chained_get(item, ['preferred-name', 'ce:given-name']))
             out.append(new)
         return out or None
 
     @property
-    def citedby_count(self) -> Optional[int]:
+    def citedby_count(self) -> int | None:
         """Number of articles citing the document."""
         path = ['coredata', 'citedby-count']
         return make_int_if_possible(chained_get(self._json, path))
@@ -135,15 +241,13 @@ class AbstractRetrieval(Retrieval):
         return get_link(self._json, 2)
 
     @property
-    def chemicals(self) -> Optional[list[namedtuple]]:
+    def chemicals(self) -> list[Chemical] | None:
         """List of namedtuples representing chemical entities in the form
         `(source, chemical_name, cas_registry_number)`.  In case multiple
         numbers given, they are joined on `";"`.
         """
         path = ['enhancement', 'chemicalgroup', 'chemicals']
         items = listify(chained_get(self._head, path, []))
-        fields = 'source chemical_name cas_registry_number'
-        chemical = namedtuple('Chemical', fields)
         out = []
         for item in items:
             for chem in listify(item['chemical']):
@@ -152,18 +256,18 @@ class AbstractRetrieval(Retrieval):
                     num = ";".join([n['$'] for n in number])
                 except TypeError:
                     num = number
-                new = chemical(source=item['@source'], cas_registry_number=num,
+                new = Chemical(source=item['@source'], cas_registry_number=num,
                                chemical_name=chem['chemical-name'])
                 out.append(new)
         return out or None
 
     @property
-    def confcode(self) -> Optional[int]:
+    def confcode(self) -> int | None:
         """Code of the conference the document belongs to."""
         return make_int_if_possible(self._confevent.get('confcode'))
 
     @property
-    def confdate(self) -> Optional[tuple[tuple[int, int], tuple[int, int]]]:
+    def confdate(self) -> tuple[tuple[int, int], tuple[int, int]] | None:
         """Date range of the conference the document belongs to represented
         by two tuples in the form (YYYY, MM, DD).
         """
@@ -177,17 +281,17 @@ class AbstractRetrieval(Retrieval):
             return None
 
     @property
-    def conflocation(self) -> Optional[str]:
+    def conflocation(self) -> str | None:
         """Location of the conference the document belongs to."""
         return chained_get(self._confevent, ['conflocation', 'city-group'])
 
     @property
-    def confname(self) -> Optional[str]:
+    def confname(self) -> str | None:
         """Name of the conference the document belongs to."""
         return self._confevent.get('confname')
 
     @property
-    def confsponsor(self) -> Optional[Union[list[str], str]]:
+    def confsponsor(self) -> list[str] | str | None:
         """Sponsor(s) of the conference the document belongs to."""
         path = ['confsponsors', 'confsponsor']
         sponsors = chained_get(self._confevent, path, [])
@@ -198,18 +302,16 @@ class AbstractRetrieval(Retrieval):
         return sponsors
 
     @property
-    def contributor_group(self) -> Optional[list[namedtuple]]:
+    def contributor_group(self) -> list[Contributor] | None:
         """List of namedtuples representing contributors compiled by Scopus,
         in the form `(given_name, initials, surname, indexed_name, role)`.
         """
         path = ['source', 'contributor-group']
         items = listify(chained_get(self._head, path, []))
         out = []
-        fields = 'given_name initials surname indexed_name role'
-        pers = namedtuple('Contributor', fields)
         for item in items:
             entry = item.get('contributor', {})
-            new = pers(
+            new = Contributor(
                 given_name=entry.get('ce:given-name'),
                 initials=entry.get('ce:initials'),
                 surname=entry.get('ce:surname'),
@@ -232,13 +334,11 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, path)
 
     @property
-    def correspondence(self) -> Optional[list[namedtuple]]:
+    def correspondence(self) -> list[Correspondence] | None:
         """List of namedtuples representing the authors to whom correspondence
         should be addressed, in the form ´(surname, initials, organization,
         country, city_group)´. Multiple organziations are joined on semicolon.
         """
-        fields = 'surname initials organization country city_group'
-        auth = namedtuple('Correspondence', fields)
         items = listify(self._head.get('correspondence', []))
         out = []
         for item in items:
@@ -251,10 +351,10 @@ class AbstractRetrieval(Retrieval):
                     org = "; ".join([d['$'] for d in org])
             except KeyError:
                 org = None
-            new = auth(surname=item.get('person', {}).get('ce:surname'),
-                       initials=item.get('person', {}).get('ce:initials'),
-                       organization=org, country=aff.get('country'),
-                       city_group=aff.get('city-group'))
+            new = Correspondence(surname=item.get('person', {}).get('ce:surname'),
+                                 initials=item.get('person', {}).get('ce:initials'),
+                                 organization=org, country=aff.get('country'),
+                                 city_group=aff.get('city-group'))
             out.append(new)
         return out or None
 
@@ -264,7 +364,7 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'prism:coverDate'])
 
     @property
-    def date_created(self) -> Optional[tuple[int, int, int]]:
+    def date_created(self) -> tuple[int, int, int] | None:
         """Return the `date_created` of a record.
         """
         path = ["item", "bibrecord", "item-info", "history"]
@@ -275,14 +375,14 @@ class AbstractRetrieval(Retrieval):
             return None
 
     @property
-    def description(self) -> Optional[str]:
+    def description(self) -> str | None:
         """Return the description of a record.
         Note: If this is empty, try `abstract` property instead.
         """
         return chained_get(self._json, ['coredata', 'dc:description'])
 
     @property
-    def document_entitlement_status(self) -> Optional[str]:
+    def document_entitlement_status(self) -> str | None:
         """Returns the document entitlement status, i.e. tells if the requestor 
         is entitled to the requested resource.
         Note: Only works with `ENTITLED` view.
@@ -290,7 +390,7 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['document-entitlement', 'status'])
 
     @property
-    def doi(self) -> Optional[str]:
+    def doi(self) -> str | None:
         """DOI of the document."""
         return chained_get(self._json, ['coredata', 'prism:doi'])
 
@@ -300,7 +400,7 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'eid'])
 
     @property
-    def endingPage(self) -> Optional[str]:
+    def endingPage(self) -> str | None:
         """Ending page. If this is empty, try `pageRange` property instead."""
         # Try coredata first, fall back to head afterwards
         ending = chained_get(self._json, ['coredata', 'prism:endingPage'])
@@ -310,7 +410,7 @@ class AbstractRetrieval(Retrieval):
         return ending
 
     @property
-    def funding(self) -> Optional[list[namedtuple]]:
+    def funding(self) -> list[Funding] | None:
         """List of namedtuples parsed funding information in the form
         `(agency, agency_id, string, funding_id, acronym, country)`.
         """
@@ -325,26 +425,24 @@ class AbstractRetrieval(Retrieval):
         path = ['item', 'xocs:meta', 'xocs:funding-list', 'xocs:funding']
         funds = listify(chained_get(self._json, path, []))
         out = []
-        fields = 'agency agency_id string funding_id acronym country'
-        fund = namedtuple('Funding', fields)
         for item in funds:
-            new = fund(agency=item.get('xocs:funding-agency'),
-                       agency_id=item.get('xocs:funding-agency-id'),
-                       string=item.get('xocs:funding-agency-matched-string'),
-                       funding_id=_get_funding_id(item),
-                       acronym=item.get('xocs:funding-agency-acronym'),
-                       country=item.get('xocs:funding-agency-country'))
+            new = Funding(agency=item.get('xocs:funding-agency'),
+                          agency_id=item.get('xocs:funding-agency-id'),
+                          string=item.get('xocs:funding-agency-matched-string'),
+                          funding_id=_get_funding_id(item),
+                          acronym=item.get('xocs:funding-agency-acronym'),
+                          country=item.get('xocs:funding-agency-country'))
             out.append(new)
         return out or None
 
     @property
-    def funding_text(self) -> Optional[str]:
+    def funding_text(self) -> str | None:
         """The raw text from which Scopus derives funding information."""
         path = ['item', 'xocs:meta', 'xocs:funding-list', 'xocs:funding-text']
         return chained_get(self._json, path)
 
     @property
-    def isbn(self) -> Optional[tuple[str, ...]]:
+    def isbn(self) -> tuple[str, ...] | None:
         """ISBNs `Optional[str]` to publicationName as tuple of variying length,
         (e.g. ISBN-10 or ISBN-13)."""
         isbns = listify(chained_get(self._head, ['source', 'isbn'], []))
@@ -354,7 +452,7 @@ class AbstractRetrieval(Retrieval):
             return tuple((i['$'] for i in isbns))
 
     @property
-    def issn(self) -> Optional[namedtuple]:
+    def issn(self) -> ISSN | None:
         """Namedtuple in the form `(print electronic)`.
         Note: If the source has an E-ISSN, the META view will return None.
         Use FULL view instead.
@@ -382,11 +480,10 @@ class AbstractRetrieval(Retrieval):
             else:
                 container["print"] = parts[0]
         # Finalize
-        issns = namedtuple('ISSN', 'print electronic', defaults=(None, None))
         if not container:
             return None
         else:
-            return issns(**container)
+            return ISSN(**container)
 
     @property
     def identifier(self) -> int:
@@ -394,7 +491,7 @@ class AbstractRetrieval(Retrieval):
         return get_id(self._json)
 
     @property
-    def idxterms(self) -> Optional[list[str]]:
+    def idxterms(self) -> list[str] | None:
         """List of index terms (these are just one category of those
         Scopus provides in the web version)
         ."""
@@ -408,28 +505,28 @@ class AbstractRetrieval(Retrieval):
             return None
 
     @property
-    def issueIdentifier(self) -> Optional[str]:
+    def issueIdentifier(self) -> str | None:
         """Number of the issue the document was published in."""
         return chained_get(self._json, ['coredata', 'prism:issueIdentifier'])
 
     @property
-    def issuetitle(self) -> Optional[str]:
+    def issuetitle(self) -> str | None:
         """Title of the issue the document was published in."""
         return chained_get(self._head, ['source', 'issuetitle'])
 
     @property
-    def language(self) -> Optional[str]:
+    def language(self) -> str | None:
         """Language of the article."""
         return chained_get(self._json, ['language', '@xml:lang'])
 
     @property
-    def openaccess(self) -> Optional[int]:
+    def openaccess(self) -> int | None:
         """The openaccess status encoded in single digits."""
         path = ['coredata', 'openaccess']
         return make_int_if_possible(chained_get(self._json, path))
 
     @property
-    def openaccessFlag(self) -> Optional[bool]:
+    def openaccessFlag(self) -> bool | None:
         """Whether the document is available via open access or not."""
         flag = chained_get(self._json, ['coredata', 'openaccessFlag'])
         if flag:
@@ -437,7 +534,7 @@ class AbstractRetrieval(Retrieval):
         return flag
 
     @property
-    def pageRange(self) -> Optional[str]:
+    def pageRange(self) -> str | None:
         """Page range.  If this is empty, try `startingPage` and
         `endingPage` properties instead.
         """
@@ -448,17 +545,17 @@ class AbstractRetrieval(Retrieval):
         return pages
 
     @property
-    def pii(self) -> Optional[str]:
+    def pii(self) -> str | None:
         """The PII (Publisher Item Identifier) of the document."""
         return chained_get(self._json, ['coredata', 'pii'])
 
     @property
-    def publicationName(self) -> Optional[str]:
+    def publicationName(self) -> str | None:
         """Name of source the document is published in."""
         return chained_get(self._json, ['coredata', 'prism:publicationName'])
 
     @property
-    def publisher(self) -> Optional[str]:
+    def publisher(self) -> str | None:
         """Name of the publisher of the document.
         Note: Information provided in the FULL view of the article might be
         more complete.
@@ -471,18 +568,18 @@ class AbstractRetrieval(Retrieval):
             return full
 
     @property
-    def publisheraddress(self) -> Optional[str]:
+    def publisheraddress(self) -> str | None:
         """Name of the publisher of the document."""
         return chained_get(self._head, ['source', 'publisher', 'publisheraddress'])
 
     @property
-    def pubmed_id(self) -> Optional[int]:
+    def pubmed_id(self) -> int | None:
         """The PubMed ID of the document."""
         path = ['coredata', 'pubmed-id']
         return make_int_if_possible(chained_get(self._json, path))
 
     @property
-    def refcount(self) -> Optional[int]:
+    def refcount(self) -> int | None:
         """Number of references of an article.
         Note: Requires either the FULL view or REF view.
         """
@@ -495,7 +592,7 @@ class AbstractRetrieval(Retrieval):
                 return None
 
     @property
-    def references(self) -> Optional[list[namedtuple]]:
+    def references(self) -> list[Reference] | None:
         """List of namedtuples representing references listed in the document,
         in the form `(position, id, doi, title, authors, authors_auid,
         authors_affiliationid, sourcetitle, publicationyear, coverDate, volume,
@@ -524,10 +621,6 @@ class AbstractRetrieval(Retrieval):
         the 1:1 pairing with the list `authors_affiliationid`.
         """
         out = []
-        fields = 'position id doi title authors authors_auid '\
-                 'authors_affiliationid sourcetitle publicationyear coverDate '\
-                 'volume issue first last citedbycount type text fulltext'
-        ref = namedtuple('Reference', fields)
         items = listify(self._ref.get("reference", []))
         for item in items:
             try:
@@ -563,7 +656,7 @@ class AbstractRetrieval(Retrieval):
                 doi = info.get('ce:doi')
                 scopus_id = info.get('scopus-id')
             # Combine information
-            new = ref(
+            new = Reference(
                 position=item.get('@id'),
                 id=scopus_id,
                 doi=doi,
@@ -597,44 +690,43 @@ class AbstractRetrieval(Retrieval):
         return get_link(self._json, 0)
 
     @property
-    def sequencebank(self) -> Optional[list[namedtuple]]:
+    def sequencebank(self) -> list[Sequencebank] | None:
         """List of namedtuples representing biological entities defined or
         mentioned in the text, in the form `(name, sequence_number, type)`.
         """
         path = ['enhancement', 'sequencebanks', 'sequencebank']
         items = listify(chained_get(self._head, path, []))
-        bank = namedtuple('Sequencebank', 'name sequence_number type')
         out = []
         for item in items:
             numbers = listify(item['sequence-number'])
             for number in numbers:
-                new = bank(name=item['@name'], sequence_number=number['$'],
-                           type=number['@type'])
+                new = Sequencebank(name=item['@name'], sequence_number=number['$'],
+                                   type=number['@type'])
                 out.append(new)
         return out or None
 
     @property
-    def source_id(self) -> Optional[int]:
+    def source_id(self) -> int | None:
         """Scopus source ID of the document."""
         path = ['coredata', 'source-id']
         return make_int_if_possible(chained_get(self._json, path))
 
     @property
-    def sourcetitle_abbreviation(self) -> Optional[str]:
+    def sourcetitle_abbreviation(self) -> str | None:
         """Abbreviation of the source the document is published in.
         Note: Requires the FULL view of the article.
         """
         return self._head.get('source', {}).get('sourcetitle-abbrev')
 
     @property
-    def srctype(self) -> Optional[str]:
+    def srctype(self) -> str | None:
         """Aggregation type of source the document is published in (short
         version of aggregationType).
         """
         return chained_get(self._json, ['coredata', 'srctype'])
 
     @property
-    def startingPage(self) -> Optional[str]:
+    def startingPage(self) -> str | None:
         """Starting page.  If this is empty, try `pageRange` property instead."""
         # Try coredata first, fall back to bibrecord afterwards
         starting = chained_get(self._json, ['coredata', 'prism:startingPage'])
@@ -644,14 +736,13 @@ class AbstractRetrieval(Retrieval):
         return starting
 
     @property
-    def subject_areas(self) -> Optional[list[namedtuple]]:
+    def subject_areas(self) -> list[Area] | None:
         """List of namedtuples containing subject areas of the article
         in the form `(area abbreviation code)`.
         Note: Requires the FULL view of the article.
         """
-        area = namedtuple('Area', 'area abbreviation code')
         path = ['subject-areas', 'subject-area']
-        out = [area(area=item['$'], abbreviation=item['@abbrev'],
+        out = [Area(area=item['$'], abbreviation=item['@abbrev'],
                     code=int(item['@code']))
                for item in listify(chained_get(self._json, path, []))]
         return out or None
@@ -671,17 +762,17 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'subtypeDescription']) or None
 
     @property
-    def title(self) -> Optional[str]:
+    def title(self) -> str | None:
         """Title of the document."""
         return chained_get(self._json, ['coredata', 'dc:title'])
 
     @property
-    def url(self) -> Optional[str]:
+    def url(self) -> str | None:
         """URL to the API view of the document."""
         return chained_get(self._json, ['coredata', 'prism:url'])
 
     @property
-    def volume(self) -> Optional[str]:
+    def volume(self) -> str | None:
         """Volume for the document."""
         return chained_get(self._json, ['coredata', 'prism:volume'])
 
@@ -692,10 +783,10 @@ class AbstractRetrieval(Retrieval):
         return chained_get(self._head, path)
 
     def __init__(self,
-                 identifier: Union[int, str] = None,
-                 refresh: Union[bool, int] = False,
+                 identifier: int | str | None = None,
+                 refresh: bool | int = False,
                  view: str = 'META_ABS',
-                 id_type: str = None,
+                 id_type: str | None = None,
                  **kwds: str
                  ) -> None:
         """Interaction with the Abstract Retrieval API.
@@ -857,10 +948,10 @@ class AbstractRetrieval(Retrieval):
         au_link = ('<a href="https://www.scopus.com/authid/detail.url'
                    '?origin=AuthorProfile&authorId={0}">{1}</a>')
         if len(self.authors) > 1:
-            authors = u', '.join([au_link.format(a.auid, a.given_name +
+            authors = ', '.join([au_link.format(a.auid, a.given_name +
                                                  ' ' + a.surname)
                                  for a in self.authors[0:-1]])
-            authors += (u' and ' +
+            authors += (' and ' +
                         au_link.format(self.authors[-1].auid,
                                        (str(self.authors[-1].given_name) +
                                         ' ' +

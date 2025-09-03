@@ -1,14 +1,18 @@
-from collections import namedtuple
-from typing import Optional, Union
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import chained_get, check_parameter_value, \
     get_id, get_link, parse_date_created, make_int_if_possible, VIEWS
 
 
+class Variant(NamedTuple):
+    name: str
+    doc_count: int | None
+
+
 class AffiliationRetrieval(Retrieval):
     @property
-    def address(self) -> Optional[str]:
+    def address(self) -> str | None:
         """The address of the affiliation."""
         return self._json.get('address')
 
@@ -23,17 +27,17 @@ class AffiliationRetrieval(Retrieval):
         return make_int_if_possible(chained_get(self._json, ['coredata', 'author-count']))
 
     @property
-    def city(self) -> Optional[str]:
+    def city(self) -> str | None:
         """The city of the affiliation."""
         return self._json.get('city')
 
     @property
-    def country(self) -> Optional[str]:
+    def country(self) -> str | None:
         """The country of the affiliation."""
         return self._json.get('country')
 
     @property
-    def date_created(self) -> Optional[tuple[int, int, int]]:
+    def date_created(self) -> tuple[int, int, int] | None:
         """Date the Scopus record was created."""
         try:
             return parse_date_created(self._profile)
@@ -46,7 +50,7 @@ class AffiliationRetrieval(Retrieval):
         return make_int_if_possible(chained_get(self._json, ['coredata', 'document-count']))
     
     @property
-    def document_entitlement_status(self) -> Optional[str]:
+    def document_entitlement_status(self) -> str | None:
         """Returns the document entitlement status, i.e. tells if the requestor 
         is entitled to the requested resource.
         Note: Only works with `ENTITLED` view.
@@ -64,36 +68,35 @@ class AffiliationRetrieval(Retrieval):
         return get_id(self._json)
 
     @property
-    def name_variants(self) -> Optional[list[namedtuple]]:
+    def name_variants(self) -> list[Variant] | None:
         """A list of namedtuples representing variants of the `affiliation_name`
         with number of documents referring to this variant.
         """
-        variant = namedtuple('Variant', 'name doc_count')
         path = ['name-variants', 'name-variant']
-        variants = [variant(name=var['$'],
+        variants = [Variant(name=var['$'],
                             doc_count=make_int_if_possible(var.get('@doc-count')))
                     for var in chained_get(self._json, path, [])]
         return variants or None
 
     @property
-    def org_domain(self) -> Optional[str]:
+    def org_domain(self) -> str | None:
         """Internet domain of the affiliation.  Requires the STANDARD view."""
         return self._profile.get('org-domain')
 
     @property
-    def org_type(self) -> Optional[str]:
+    def org_type(self) -> str | None:
         """Type of the affiliation.  Requires the STANDARD view and only
         present if `profile` is `org profile`.
         """
         return self._profile.get('org-type')
 
     @property
-    def org_URL(self) -> Optional[str]:
+    def org_URL(self) -> str | None:
         """Website of the affiliation.  Requires the STANDARD view."""
         return self._profile.get('org-URL')
 
     @property
-    def postal_code(self) -> Optional[str]:
+    def postal_code(self) -> str | None:
         """The postal code of the affiliation.  Requires the STANDARD view."""
         return chained_get(self._profile, ['address', 'postal-code'])
 
@@ -113,18 +116,18 @@ class AffiliationRetrieval(Retrieval):
         return get_link(self._json, 1)
 
     @property
-    def state(self) -> Optional[str]:
+    def state(self) -> str | None:
         """The state (country's administrative sububunit)
         of the affiliation.   Requires the STANDARD view.
         """
         return chained_get(self._profile, ['address', 'state'])
 
     @property
-    def status(self) -> Optional[str]:
+    def status(self) -> str | None:
         return self._profile.get("status")
 
     @property
-    def sort_name(self) -> Optional[str]:
+    def sort_name(self) -> str | None:
         """The name of the affiliation used for sorting.  Requires the
         STANDARD view.
         """
@@ -136,8 +139,8 @@ class AffiliationRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'prism:url'])
 
     def __init__(self,
-                 aff_id: Union[int, str],
-                 refresh: Union[bool, int] = False,
+                 aff_id: int | str,
+                 refresh: bool | int = False,
                  view: str = "STANDARD",
                  **kwds: str
                  ) -> None:
