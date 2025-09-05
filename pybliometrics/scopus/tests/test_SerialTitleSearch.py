@@ -1,20 +1,28 @@
-"""Tests for `scopus.SerialSearch` module."""
+"""Tests for `scopus.SerialTitleSearch` module."""
 
-from pybliometrics.scopus import SerialSearch, init
+from pybliometrics.scopus import SerialTitleSearch, init
 
 init()
 
 
 # Search by title
-ser1 = SerialSearch({'title': 'SoftwareX'}, refresh=30)
+ser1 = SerialTitleSearch({'title': 'SoftwareX'}, refresh=30)
 # Search by ISSN
-ser2 = SerialSearch({'issn': '1468-0262'}, refresh=30)
+ser2 = SerialTitleSearch({'issn': '1468-0262'}, refresh=30)
 # Search by publisher
-ser3 = SerialSearch({'pub': 'Stellenbosch'}, refresh=30)
+ser3 = SerialTitleSearch({'pub': 'Stellenbosch'}, refresh=30)
 # Search by subject abbreviation
-ser4 = SerialSearch({'subj': 'COMP'}, refresh=30)
+ser4 = SerialTitleSearch({'subj': 'COMP'}, refresh=30)
 # Search by subject area code
-ser5 = SerialSearch({'subjCode': '2612'}, refresh=30)
+ser5 = SerialTitleSearch({'subjCode': '2612'}, refresh=30)
+
+
+def test_deprecated_class():
+    from pytest import deprecated_call
+    from pybliometrics.scopus import SerialSearch
+
+    with deprecated_call():
+        _ = SerialSearch({'title': 'SoftwareX'}, refresh=30)
 
 
 def test_results_title():

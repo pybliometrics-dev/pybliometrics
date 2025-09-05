@@ -1,7 +1,7 @@
-pybliometrics.scopus.SerialTitle
-================================
+pybliometrics.scopus.SerialTitleISSN
+====================================
 
-`SerialTitle()` implements the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It offers basic information on registered serials (also known as sources), including publisher details, identifiers, and various metrics.
+`SerialTitleISSN()` implements the `issn` endpoint of the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It offers basic information on registered serials (also known as sources), including publisher details, identifiers, and various metrics.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -10,7 +10,7 @@ pybliometrics.scopus.SerialTitle
 Documentation
 -------------
 
-.. autoclass:: SerialTitle
+.. autoclass:: SerialTitleISSN
     :members:
     :inherited-members:
 
@@ -22,9 +22,9 @@ You initialize the class with an ISSN or an E-ISSN (works with and without hyphe
 .. code-block:: python
 
     >>> import pybliometrics
-    >>> from pybliometrics.scopus import SerialTitle
+    >>> from pybliometrics.scopus import SerialTitleISSN
     >>> pybliometrics.scopus.init()
-    >>> source = SerialTitle("00368075")
+    >>> source = SerialTitleISSN("00368075")
 
 You can obtain basic information just by printing the object:
 
@@ -72,7 +72,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
 
 .. code-block:: python
 
-    >>> source_full = SerialTitle("00368075", view="CITESCORE")
+    >>> source_full = SerialTitleISSN("00368075", view="CITESCORE")
     >>> info = pd.DataFrame(source_full.citescoreyearinfolist)
     >>> print(info)
         year  citescore       status  documentcount  citationcount  percentcited                             rank
@@ -110,11 +110,11 @@ The `yearly_data` time series includes the number of documents published in a gi
 	4  2000              2401        7.00           457            19.033736        294076
 
 
-By default, `SerialTitle()` retrieves only the most recent metrics, although yearly data is availble from 1996 onwards.  If you provide a year or a range of years via the optional parameter `years`, `SerialTitle()` will retrieve information for these years (except for the CiteScore):
+By default, `SerialTitleISSN()` retrieves only the most recent metrics, although yearly data is availble from 1996 onwards.  If you provide a year or a range of years via the optional parameter `years`, `SerialTitleISSN()` will retrieve information for these years (except for the CiteScore):
 
 .. code-block:: python
 
-    >>> source_y = SerialTitle("00368075", years="2017-2019")
+    >>> source_y = SerialTitleISSN("00368075", years="2017-2019")
     >>> source_y.citescoreyearinfolist
     [Citescoreinfolist(year=2022, citescore=59.0),
      Citescoreinfolist(year=2023, citescore=58.8)]

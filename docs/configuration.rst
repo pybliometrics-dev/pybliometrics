@@ -18,8 +18,8 @@ The structure of the file is the following:
     AuthorSearch = PPP/.cache/.pybliometrics/Scopus/author_search
     CitationOverview = PPP/.cache/.pybliometrics/Scopus/citation_overview
     ScopusSearch = PPP/.cache/.pybliometrics/Scopus/scopus_search
-    SerialSearch = PPP/.cache/.pybliometrics/Scopus/serial_search
-    SerialTitle = PPP/.cache/.pybliometrics/Scopus/serial_title
+    SerialTitleSearch = PPP/.cache/.pybliometrics/Scopus/serial_search
+    SerialTitleISSN = PPP/.cache/.pybliometrics/Scopus/serial_title
     PlumXMetrics = PPP/.cache/.pybliometrics/Scopus/plumx
     SubjectClassifications = PPP/.cache/.pybliometrics/Scopus/subject_classification
 

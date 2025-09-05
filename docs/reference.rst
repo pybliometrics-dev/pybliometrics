@@ -32,8 +32,8 @@ Scopus
 
     reference/scopus/CitationOverview.rst
     reference/scopus/PlumXMetrics.rst
-    reference/scopus/SerialSearch.rst
-    reference/scopus/SerialTitle.rst
+    reference/scopus/SerialTitleSearch.rst
+    reference/scopus/SerialTitleISSN.rst
     reference/scopus/SubjectClassifications.rst
 
 One other Metadata API, the Citations Count Metadata API, is not implemented yet.
@@ -60,7 +60,7 @@ ScienceDirect
     reference/sciencedirect/NonserialTitle.rst
     reference/sciencedirect/ObjectMetadata.rst
     reference/sciencedirect/ObjectRetrieval.rst
-    reference/sciencedirect/SerialTitle.rst
+    reference/sciencedirect/SerialTitleISSN.rst
 
 One other Retrieval API, the Article Hosting Permission API, is not implemented yet.
 

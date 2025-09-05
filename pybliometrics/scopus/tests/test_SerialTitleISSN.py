@@ -1,22 +1,22 @@
-"""Tests for `scopus.SerialTitle` module."""
+"""Tests for `scopus.SerialTitleISSN` module."""
 
 import datetime
 
 from collections import namedtuple
 
-from pybliometrics.scopus import SerialTitle, init
+from pybliometrics.scopus import SerialTitleISSN, init
 
 init()
 
 
 # SoftwareX
-softwarex = SerialTitle("2352-7110", refresh=30)
+softwarex = SerialTitleISSN("2352-7110", refresh=30)
 # OECD Economic Studies
-oecd = SerialTitle("0255-0822", refresh=30)
+oecd = SerialTitleISSN("0255-0822", refresh=30)
 # Neural Networks
-neural_networks = SerialTitle('1879-2782', view='CITESCORE', refresh=30)
+neural_networks = SerialTitleISSN('1879-2782', view='CITESCORE', refresh=30)
 # Empty rank for year 2018 in JCO clinical cancer informatics
-jco_cci = SerialTitle('2473-4276', view='CITESCORE', refresh=30)
+jco_cci = SerialTitleISSN('2473-4276', view='CITESCORE', refresh=30)
 
 
 def test_aggregation_type():
@@ -46,6 +46,14 @@ def test_citescoreyearinfolist():
     # Test empty rank
     assert jco_cci.citescoreyearinfolist[-1].rank == []
 
+
+def test_deprecated_class():
+    from pytest import deprecated_call
+    from pybliometrics.scopus import SerialTitle
+
+    with deprecated_call():
+        _ = SerialTitle("2352-7110", refresh=30)
+    
 
 def test_eissn():
     assert softwarex.eissn == "2352-7110"
