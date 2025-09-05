@@ -9,4 +9,3 @@ from pybliometrics.sciencedirect.object_retrieval import *
 from pybliometrics.sciencedirect.sciencedirect_search import *
 from pybliometrics.sciencedirect.subject_classifications import *
 from pybliometrics.scopus.serial_title_issn import *
-from pybliometrics.scopus.serial_title_issn import SerialTitleISSN as SerialTitle # For backward compatibility

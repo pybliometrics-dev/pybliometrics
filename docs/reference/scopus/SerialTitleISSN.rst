@@ -1,7 +1,7 @@
 pybliometrics.scopus.SerialTitleISSN
 ====================================
 
-`SerialTitleISSN()` implements the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It offers basic information on registered serials (also known as sources), including publisher details, identifiers, and various metrics.
+`SerialTitleISSN()` implements the `issn` endpoint of the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It offers basic information on registered serials (also known as sources), including publisher details, identifiers, and various metrics.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents

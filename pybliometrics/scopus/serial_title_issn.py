@@ -1,5 +1,6 @@
 from collections import namedtuple
 from typing import Optional, Union
+import warnings
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import chained_get, check_parameter_value, \
@@ -312,3 +313,15 @@ def _get_all_cite_score_years(
         new_data.append(Citescoreinfolist_year)
 
     return new_data or None
+
+def SerialTitle(*args, **kwds):
+    """Deprecated: Use SerialTitleISSN instead.
+    This class is deprecated and will be removed.
+    """
+    warnings.warn(
+        "SerialTitle is deprecated and will be removed."
+        "Use SerialTitleISSN instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    return SerialTitleISSN(*args, **kwds)

@@ -47,6 +47,14 @@ def test_citescoreyearinfolist():
     assert jco_cci.citescoreyearinfolist[-1].rank == []
 
 
+def test_deprecated_class():
+    from pytest import deprecated_call
+    from pybliometrics.scopus import SerialTitle
+
+    with deprecated_call():
+        _ = SerialTitle("2352-7110", refresh=30)
+    
+
 def test_eissn():
     assert softwarex.eissn == "2352-7110"
     assert oecd.eissn == "1609-7491"

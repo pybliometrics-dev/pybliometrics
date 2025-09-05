@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from typing import Optional, Union
+import warnings
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_parameter_value, make_search_summary, VIEWS
@@ -178,3 +179,16 @@ def _retrieve_source_rankings(source_data):
         for t in stats:
             out.append([f"{key}_['@year']", t['$']])
     return out or None
+
+
+def SerialSearch(*args, **kwds):
+    """Deprecated: Use SerialTitleSearch instead.
+    This class is deprecated and will be removed.
+    """
+    warnings.warn(
+        "SerialSearch is deprecated and will be removed."
+        "Use SerialTitleSearch instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    return SerialTitleSearch(*args, **kwds)

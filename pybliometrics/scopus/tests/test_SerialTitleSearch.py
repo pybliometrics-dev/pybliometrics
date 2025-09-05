@@ -17,6 +17,14 @@ ser4 = SerialTitleSearch({'subj': 'COMP'}, refresh=30)
 ser5 = SerialTitleSearch({'subjCode': '2612'}, refresh=30)
 
 
+def test_deprecated_class():
+    from pytest import deprecated_call
+    from pybliometrics.scopus import SerialSearch
+
+    with deprecated_call():
+        _ = SerialSearch({'title': 'SoftwareX'}, refresh=30)
+
+
 def test_results_title():
     assert len(ser1.results) == 1
     assert ser1.results[0]['title'] == 'SoftwareX'

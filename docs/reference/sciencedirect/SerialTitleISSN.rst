@@ -1,8 +1,7 @@
 pybliometrics.sciencedirect.SerialTitleISSN
 ===========================================
 
-`SerialTitleISSN()` implements the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It offers basic information on registered serials (also known as sources), including publisher details, identifiers, and various metrics.
-Note that this class accesses the same API endpoint as the :class:`pybliometrics.scopus.SerialTitleISSN` class.
+`SerialTitleISSN()` implements the `issn` endpoint of the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  It offers basic information on registered serials (also known as sources), including publisher details, identifiers, and various metrics.
 
 .. currentmodule:: pybliometrics.sciencedirect
 .. contents:: Table of Contents

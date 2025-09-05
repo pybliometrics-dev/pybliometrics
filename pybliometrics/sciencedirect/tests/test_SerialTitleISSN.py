@@ -12,6 +12,14 @@ def test_module():
     assert gene.__module__  == 'pybliometrics.scopus.serial_title_issn'
 
 
+def test_deprecated_class():
+    from pytest import deprecated_call
+    from pybliometrics.sciencedirect import SerialTitle
+
+    with deprecated_call():
+        _ = SerialTitle('03781119', refresh=30)
+
+
 def test_aggregation_type():
     assert gene.aggregation_type == "journal"
 
