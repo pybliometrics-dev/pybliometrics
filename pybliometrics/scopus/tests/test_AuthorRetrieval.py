@@ -1,8 +1,9 @@
 """Tests for `scopus.AuthorRetrieval` module."""
 
-from collections import Counter, namedtuple
+from collections import Counter
 
 from pybliometrics.scopus import AuthorRetrieval, init
+from pybliometrics.scopus.author_retrieval import Affiliation, Coauthor
 
 init()
 
@@ -16,18 +17,13 @@ entitled = AuthorRetrieval(36009348900, view='ENTITLED')
 def test_affiliation_current():
     assert metrics.affiliation_current is None
 
-    order = 'id parent type relationship afdispname preferred_name '\
-            'parent_preferred_name country_code country address_part city '\
-            'state postal_code org_domain org_URL'
-    aff = namedtuple('Affiliation', order, defaults=(None,) * len(order.split()))
-
-    expected_std_enh = aff(id=60027950, parent=None, type='parent',
+    expected_std_enh = Affiliation(id=60027950, parent=None, type='parent',
         relationship='author', afdispname=None, preferred_name='Carnegie Mellon University',
         parent_preferred_name=None, country_code='usa', country='United States',
         address_part='5000 Forbes Avenue', city='Pittsburgh', state='PA',
         postal_code='15213-3890', org_domain='cmu.edu', org_URL='https://www.cmu.edu/')
 
-    expected_lgh = aff(id=None, parent=None, type=None,
+    expected_lgh = Affiliation(id=None, parent=None, type=None,
         relationship=None, afdispname=None, preferred_name='Carnegie Mellon University',
         parent_preferred_name=None, country_code=None, country='United States',
         address_part=None, city='Pittsburgh', state=None,
@@ -48,11 +44,7 @@ def test_affiliation_current():
 def test_affiliation_history():
     assert metrics.affiliation_history is None
     assert light.affiliation_history is None
-    order = 'id parent type relationship afdispname preferred_name '\
-            'parent_preferred_name country_code country address_part city '\
-            'state postal_code org_domain org_URL'
-    aff = namedtuple('Affiliation', order)
-    expected = aff(id=60008644, parent=None, type='parent',
+    expected = Affiliation(id=60008644, parent=None, type='parent',
         relationship='author', afdispname=None,
         preferred_name='Fritz Haber Institute of the Max Planck Society',
         parent_preferred_name=None, country_code='deu', country='Germany',
@@ -166,10 +158,8 @@ def get_coauthors():
     received = enhanced.get_coauthors()
     assert isinstance(received, list)
     assert len(received) > 155
-    fields = 'surname given_name id areas affiliation_id name city country'
-    coauth = namedtuple('Coauthor', fields)
-    expected = coauth(surname='Rose', given_name='Michael E.', id=57209617104,
-        areas='Computer Science (all)', affiliation_id=60105007,
+    expected = Coauthor(surname='Rose', given_name='Michael E.', id=57209617104,
+        areas='Computer Science (all)', affiliation_id='60105007',
         name='Max-Planck-Institut für Innovation und Wettbewerb',
         city='Munich', country='Germany')
     assert expected in received

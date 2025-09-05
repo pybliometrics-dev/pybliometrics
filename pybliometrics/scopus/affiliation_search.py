@@ -1,16 +1,23 @@
-from collections import namedtuple
-from typing import Optional, Union
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_integrity, check_parameter_value, \
-    check_field_consistency, html_unescape, make_int_if_possible, \
-    make_search_summary
+    check_field_consistency, html_unescape, make_search_summary
+
+
+class Affiliation(NamedTuple):
+    eid: str | None
+    name: str
+    variant: str
+    documents: int
+    city: str | None
+    country: str | None
 
 
 class AffiliationSearch(Search):
     @property
-    def affiliations(self) -> Optional[list[namedtuple]]:
-        """A list of namedtuples storing affiliation information,
+    def affiliations(self) -> list[Affiliation] | None:
+        """A list of Affiliation namedtuples storing affiliation information,
         where each namedtuple corresponds to one affiliation.
         The information in each namedtuple is `(eid name variant documents city
         country)`.
@@ -24,9 +31,8 @@ class AffiliationSearch(Search):
             If the elements provided in `integrity_fields` do not match the
             actual field names (listed above).
         """
-        # Initiate namedtuple with ordered list of fields
+        # Check field consistency
         fields = 'eid name variant documents city country'
-        aff = namedtuple('Affiliation', fields)
         check_field_consistency(self._integrity, fields)
         # Parse elements one-by-one
         out = []
@@ -35,7 +41,7 @@ class AffiliationSearch(Search):
             variants = [html_unescape(d.get('$', ""))
                         for d in item.get('name-variant', [])
                         if d.get('$', "") != name]
-            new = aff(eid=item.get('eid'), variant=";".join(variants),
+            new = Affiliation(eid=item.get('eid'), variant=";".join(variants),
                       documents=int(item['document-count']), name=html_unescape(name),
                       city=item.get('city'), country=item.get('country'))
             out.append(new)
@@ -45,10 +51,10 @@ class AffiliationSearch(Search):
 
     def __init__(self,
                  query: str,
-                 refresh: Union[bool, int] = False,
+                 refresh: bool | int = False,
                  verbose: bool = False,
                  download: bool = True,
-                 integrity_fields: Union[list[str], tuple[str, ...]] = None,
+                 integrity_fields: list[str] | tuple[str, ...] | None = None,
                  integrity_action: str = "raise",
                  **kwds: str
                  ) -> None:
