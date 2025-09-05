@@ -26,7 +26,7 @@ You initialize the class with an ID that Scopus uses, e.g. the EID:
 
 .. code-block:: python
 
-	>>> import pybliometrics
+    >>> import pybliometrics
     >>> from pybliometrics.scopus import AbstractRetrieval
     >>> pybliometrics.scopus.init()
     >>> ab = AbstractRetrieval("2-s2.0-85068268027", view='FULL')
@@ -38,11 +38,11 @@ You can obtain basic information just by printing the object:
 
     >>> print(ab)
     Michael E. Rose and John R. Kitchin: "pybliometrics: Scriptable bibliometrics using a Python interface to Scopus",
-	SoftwareX, 10, (no pages found)(2019). https://doi.org/10.1016/j.softx.2019.100263.
-	110 citation(s) as of 2024-05-11
-	  Affiliation(s):
-	   Max Planck Institute for Innovation and Competition
-	   Carnegie Mellon University
+        SoftwareX, 10, (no pages found)(2019). https://doi.org/10.1016/j.softx.2019.100263.
+        151 citation(s) as of 2025-09-05
+          Affiliation(s):
+           Carnegie Mellon University
+           Max Planck Institute for Innovation and Competition
 
 
 There are 52 attributes and 8 methods to interact with.  For example, to obtain bibliographic information:
@@ -86,7 +86,7 @@ To obtain the total citation count (at the time the abstract was retrieved and c
 .. code-block:: python
 
     >>> ab.citedby_count
-    110
+    151
 
 
 You can retrieve the authors as a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_, which pair conveniently with `pandas <https://pandas.pydata.org/>`_:
