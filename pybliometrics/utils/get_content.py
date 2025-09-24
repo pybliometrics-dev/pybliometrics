@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Literal, Optional, Type
 from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.exceptions import JSONDecodeError
@@ -31,7 +31,11 @@ def get_session() -> Type[Session]:
     return session
 
 
-def get_content(url, api, params=None, **kwds):
+def get_content(url: str,
+                api: str,
+                params: Optional[dict],
+                method: Literal['GET', 'PUT'] = 'GET',
+                **kwds):
     """Helper function to download a file and return its content.
 
     Parameters
@@ -112,9 +116,15 @@ def get_content(url, api, params=None, **kwds):
     # Use insttoken if available
     if insttoken:
         header['X-ELS-Insttoken'] = insttoken
-        resp = session.get(url, headers=header, params=params, timeout=timeout)
+        if method == 'GET':
+            resp = session.get(url, headers=header, params=params, timeout=timeout)
+        else:
+            resp = session.put(url, headers=header, json=params, timeout=timeout)
     else:
-        resp = session.get(url, headers=header, params=params, timeout=timeout, proxies=proxies)
+        if method == 'GET':
+            resp = session.get(url, headers=header, params=params, timeout=timeout, proxies=proxies)
+        else:
+            resp = session.put(url, headers=header, json=params, timeout=timeout, proxies=proxies)
 
     # If 429 try other tokens
     while (resp.status_code == 429) or (resp.status_code == 401):
@@ -123,7 +133,10 @@ def get_content(url, api, params=None, **kwds):
             header['X-ELS-APIKey'] = token_key
             header['X-ELS-Insttoken'] = token
             shuffle(insttokens)
-            resp = session.get(url, headers=header, params=params, timeout=timeout)
+            if method == 'GET':
+                resp = session.get(url, headers=header, params=params, timeout=timeout)
+            else:
+                resp = session.put(url, headers=header, json=params, timeout=timeout)
         except IndexError:  # All tokens depleted
             break
 
@@ -137,7 +150,10 @@ def get_content(url, api, params=None, **kwds):
             key = keys.pop(0)  # Remove current key
             header['X-ELS-APIKey'] = key
             shuffle(keys)
-            resp = session.get(url, headers=header, proxies=proxies, params=params, timeout=timeout)
+            if method == 'GET':
+                resp = session.get(url, headers=header, proxies=proxies, params=params, timeout=timeout)
+            else:
+                resp = session.put(url, headers=header, json=params, timeout=timeout, proxies=proxies)
         except IndexError:  # All keys depleted
             break
 
@@ -151,8 +167,11 @@ def get_content(url, api, params=None, **kwds):
         except KeyError:
             try:
                 reason = resp.json()['message']
-            except:
-                reason = ""
+            except KeyError:
+                try:
+                    reason = resp.json()['error-response']['error-message']
+                except KeyError:
+                    reason = ""
         raise error_type(reason)
     except (JSONDecodeError, KeyError):
         resp.raise_for_status()
