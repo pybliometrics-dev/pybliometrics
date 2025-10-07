@@ -21,7 +21,8 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx_autodoc_typehints',
     'sphinx_autodoc_defaultargs',
-    'sphinx_copybutton']
+    'sphinx_copybutton',
+    'sphinx_reredirects']
 copybutton_prompt_text = ">>> "
 
 source_suffix = '.rst'
@@ -112,3 +113,9 @@ texinfo_documents = [
      author, 'pybliometrics', 'One line description of project.',
      'Miscellaneous'),
 ]
+
+# Redirects for moved pages
+redirects = {
+    'reference/scopus/SerialSearch': '/reference/scopus/SerialTitleSearch.html',
+    'reference/scopus/SerialTitle': '/reference/scopus/SerialTitleISSN.html'
+}

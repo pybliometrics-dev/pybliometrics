@@ -186,7 +186,7 @@ def SerialSearch(*args, **kwds):
     This class is deprecated and will be removed.
     """
     warnings.warn(
-        "SerialSearch is deprecated and will be removed."
+        "SerialSearch is deprecated and will be removed with the next major release. "
         "Use SerialTitleSearch instead.",
         DeprecationWarning,
         stacklevel=2

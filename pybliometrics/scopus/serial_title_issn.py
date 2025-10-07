@@ -319,7 +319,7 @@ def SerialTitle(*args, **kwds):
     This class is deprecated and will be removed.
     """
     warnings.warn(
-        "SerialTitle is deprecated and will be removed."
+        "SerialTitle is deprecated and will be removed with the next major release. "
         "Use SerialTitleISSN instead.",
         DeprecationWarning,
         stacklevel=2
