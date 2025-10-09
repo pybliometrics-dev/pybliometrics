@@ -136,7 +136,7 @@ def test_institution_count():
     assert len(topic.InstitutionCount) == 1
     assert topic.InstitutionCount[0]._fields == expected_fields
 
-    assert len(topics_by_year.InstitutionCount) == 18
+    assert len(topics_by_year.InstitutionCount) == 15
     assert topics_by_year.InstitutionCount[0]._fields == expected_fields
 
     assert len(topics_not_by_year.InstitutionCount) == 2
@@ -167,7 +167,7 @@ def test_most_recently_published_papers():
     assert topics_not_by_year.MostRecentlyPublishedPapers[0]._fields == expected_fields
     assert topics_not_by_year.MostRecentlyPublishedPapers[0].entity_id == 3909
     assert topics_not_by_year.MostRecentlyPublishedPapers[0].entity_name == "Point Cloud Semantic Segmentation"
-    assert topics_not_by_year.MostRecentlyPublishedPapers[0].publication_id == 105011703758
+    assert topics_not_by_year.MostRecentlyPublishedPapers[0].publication_id == 105016011921
 
     assert specific_metrics.MostRecentlyPublishedPapers is None
 

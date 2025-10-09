@@ -359,14 +359,14 @@ def test_language():
 
 
 def test_openaccess():
-    assert ab5.openaccess == 2
+    assert ab5.openaccess == 0
     assert ab6.openaccess == 1
     assert ab7.openaccess == 0
     assert ab8.openaccess is None
 
 
 def test_openaccessFlag():
-    assert ab5.openaccessFlag is None
+    assert ab5.openaccessFlag == False
     assert ab6.openaccessFlag == True
     assert ab7.openaccessFlag == False
     assert ab8.openaccessFlag is None

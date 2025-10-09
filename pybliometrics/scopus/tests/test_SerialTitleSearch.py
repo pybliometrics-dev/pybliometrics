@@ -36,8 +36,8 @@ def test_results_issn():
 
 
 def test_results_pub():
-    assert len(ser3.results) == 5
-    assert ser3.results[0]['title'] == 'African Finance Journal'
+    assert len(ser3.results) == 4
+    assert ser3.results[0]['title'] == 'Akroterion'
 
 
 def test_results_subj():

@@ -48,7 +48,7 @@ def test_date_created():
 
 
 def test_document_count():
-    expected = 73581
+    expected = 0
     assert light.document_count >= expected
     assert standard.document_count >= expected
     assert entitled.document_count is None

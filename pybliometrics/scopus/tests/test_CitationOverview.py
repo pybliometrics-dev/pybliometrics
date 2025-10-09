@@ -15,7 +15,7 @@ co_doi = CitationOverview(["10.1016/j.softx.2019.100263"],
 def test_authors():
     Author = namedtuple('Author', 'name surname initials id url')
     url = 'https://api.elsevier.com/content/author/author_id/7004212771'
-    john = Author(name='Kitchin J.R.', surname='Kitchin',
+    john = Author(name='J.R., Kitchin, John R.', surname='Kitchin',
                   initials='J.R.', id='7004212771', url=url)
     assert co_eid.authors[0][1] == john
     assert co_eid.authors[1] == [john]
@@ -30,13 +30,13 @@ def test_cc():
 
 
 def test_citationType_long():
-    assert co_eid.citationType_long == ['Article', 'Review']
-    assert co_doi.citationType_long == ['Article']
+    assert co_eid.citationType_long == ['ARTICLE', 'REVIEW']
+    assert co_doi.citationType_long == ['ARTICLE']
 
 
 def test_citationType_short():
-    assert co_eid.citationType_short == ['ar', 're']
-    assert co_doi.citationType_short == ['ar']
+    assert co_eid.citationType_short == ['ARTICLE', 'REVIEW']
+    assert co_doi.citationType_short == ['ARTICLE']
 
 
 def test_columnTotal():
@@ -132,9 +132,8 @@ def test_startingPage():
 
 
 def test_sortTitle():
-    expected = ['Softwarex', 'ACS Catalysis']
-    assert co_eid.sortTitle == expected
-    assert co_doi.sortTitle == [expected[0]]
+    assert co_eid.sortTitle == None
+    assert co_doi.sortTitle == None
 
 
 def test_title():

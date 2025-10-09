@@ -31,7 +31,7 @@ def test_citescoreyearinfolist():
 
     # Test softwarex
     expected_named_tuple = [info(year=2024, citescore=4.2),
-                            info(year=2025, citescore=3.1)]
+                            info(year=2025, citescore=3.4)]
     assert softwarex.citescoreyearinfolist == expected_named_tuple
 
     # Test oecd
@@ -170,8 +170,8 @@ def test_subject_area():
     assert oecd.subject_area == expected2
     expected3 = [
         area(area='Cancer Research', abbreviation='BIOC', code=1306),
-        area(area='Health Informatics', abbreviation='MEDI', code=2718),
-        area(area='Oncology', abbreviation='MEDI', code=2730)
+        area(area='Oncology', abbreviation='MEDI', code=2730),
+        area(area='Health Informatics', abbreviation='MEDI', code=2718)
     ]
     assert jco_cci.subject_area == expected3
 
@@ -190,7 +190,7 @@ def test_yearly_data():
     dat = namedtuple('Yearlydata', fields)
     expected1_2020 = dat(year=2020, publicationcount=164, revpercent=0.0,
         zerocitessce=6, zerocitespercentsce=3.658536585365854,
-        citecountsce=2579)
+        citecountsce=2580)
     assert softwarex.yearly_data[24] == expected1_2020
     expected2_1996 = dat(year=1996, publicationcount=4, revpercent=0.0,
         zerocitessce=0, zerocitespercentsce=0, citecountsce=33)

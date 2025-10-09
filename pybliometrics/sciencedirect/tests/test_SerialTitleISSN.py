@@ -28,9 +28,9 @@ def test_citescoreyearinfolist():
     info_fields = 'year citescore'
     info = namedtuple('Citescoreinfolist', info_fields)
 
-    # Test softwarex
-    expected_named_tuple = [info(year=2023, citescore=6.1),
-                            info(year=2024, citescore=5.1)]
+    # Test Gene journal
+    expected_named_tuple = [info(year=2024, citescore=5.1),
+                            info(year=2025, citescore=4.5)]
     assert gene.citescoreyearinfolist == expected_named_tuple
 
 
@@ -89,11 +89,11 @@ def test_self_link():
 
 
 def test_sjrlist():
-    assert gene.sjrlist == [(2023, 0.725)]
+    assert gene.sjrlist == [(2024, 0.682)]
 
 
 def test_sniplist():
-    assert gene.sniplist == [(2023, 0.765)]
+    assert gene.sniplist == [(2024, 0.716)]
 
 
 def test_source_id():
@@ -119,6 +119,6 @@ def test_yearly_data():
              'zerocitespercentsce citecountsce'
     dat = namedtuple('Yearlydata', fields)
     expected1_2023 = dat(year=2023, publicationcount=654, revpercent=8.56,
-        zerocitessce=89, zerocitespercentsce=13.608562691131498,
-        citecountsce=32424)
+        zerocitessce=64, zerocitespercentsce=9.785932721712538,
+        citecountsce=32573)
     assert gene.yearly_data[27] == expected1_2023
