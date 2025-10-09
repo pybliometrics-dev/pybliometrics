@@ -6,7 +6,7 @@ from pybliometrics.sciencedirect import ScienceDirectSearch, init
 
 init()
 
-sds_standard = ScienceDirectSearch('TITLE("Assessing LLMs in malicious code deobfuscation of real-world malware campaigns") AND DATE(2012)', view="STANDARD", refresh=30)
+sds_standard = ScienceDirectSearch('TITLE("Assessing LLMs in malicious code deobfuscation of real-world malware campaigns") AND DATE(2024)', view="STANDARD", refresh=30)
 sds_empty = ScienceDirectSearch('TITLE("Not a very realistic title")', view="STANDARD", refresh=30)
 
 
@@ -62,7 +62,7 @@ def test_length():
 
 def test_string():
     str_start = ('Search \'TITLE("Assessing LLMs in malicious code deobfuscation of '
-    'real-world malware campaigns") AND DATE(2012)\' yielded 1 document as of')
+    'real-world malware campaigns") AND DATE(2024)\' yielded 1 document as of')
     assert sds_standard.__str__().startswith(str_start)
 
 

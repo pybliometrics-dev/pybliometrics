@@ -46,7 +46,7 @@ def test_all_fields():
         openaccessUserLicense=None,
         pii="B978-0-32-399851-2.00030-2",
         aggregationType="EBook",
-        copyright="Copyright © 2023 Elsevier Inc. All rights reserved.",
+        copyright="Copyright © 2023 Elsevier Inc. All rights are reserved, including those for text and data mining, AI training, and similar technologies.",
         coverDate="2023-12-31",
         coverDisplayDate="2023",
         edition=None,

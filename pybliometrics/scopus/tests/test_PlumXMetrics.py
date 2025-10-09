@@ -23,7 +23,8 @@ def test_category_totals():
     m2_received = sorted([c.name  for c in m2.category_totals])
     m2_expected = ['capture', 'citation', 'mention']
     assert m2_received == m2_expected
-    assert m3.category_totals is None
+    m3_received = sorted([c.name  for c in m3.category_totals])
+    assert m3_received == ['citation']
     m5_received = sorted([c.name  for c in m5.category_totals])
     m5_expected = ['capture', 'citation', 'socialMedia', 'usage']
     assert m5_received == m5_expected
@@ -48,7 +49,7 @@ def test_capture():
 
 
 def test_citation():
-    assert m3.citation is None
+    assert m3.citation[0].total == 0
     expected = {'name', 'total'}
     for plumx in (m1, m2, m4, m5):
         assert isinstance(plumx.citation, list)
