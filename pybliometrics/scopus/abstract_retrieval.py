@@ -443,7 +443,7 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def isbn(self) -> tuple[str, ...] | None:
-        """ISBNs `Optional[str]` to publicationName as tuple of variying length,
+        """ISBNs `str | None` to publicationName as tuple of variying length,
         (e.g. ISBN-10 or ISBN-13)."""
         isbns = listify(chained_get(self._head, ['source', 'isbn'], []))
         if len(isbns) == 0:
