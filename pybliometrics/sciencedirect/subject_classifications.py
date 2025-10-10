@@ -1,5 +1,4 @@
 """Module with the class SubjectClassifications."""
-from typing import Optional, Union
 
 from pybliometrics import scopus
 
@@ -7,8 +6,8 @@ from pybliometrics import scopus
 class SubjectClassifications(scopus.SubjectClassifications):
     def __init__(self,
                  query: dict,
-                 refresh: Union[bool, int] = False,
-                 fields: Optional[Union[list[str], tuple[str, ...]]] = None,
+                 refresh: bool | int = False,
+                 fields: list[str] | tuple[str, ...] | None = None,
                  **kwds: str
                  ) -> None:
         """Interaction with the ScienceDirect Subject Classifications API.

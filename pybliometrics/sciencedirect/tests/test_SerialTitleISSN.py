@@ -1,7 +1,5 @@
 """Test pybliometrics.sciencedirect.SerialTitleISSN()"""
 
-from collections import namedtuple
-
 from pybliometrics.sciencedirect import SerialTitleISSN, init
 from pybliometrics.scopus.serial_title_issn import Citescoreinfolist, Subjectarea, Yearlydata
 

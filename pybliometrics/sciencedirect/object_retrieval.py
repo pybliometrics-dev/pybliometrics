@@ -1,7 +1,6 @@
 """Module to retrieve a specific object of a document."""
 
 from io import BytesIO
-from typing import Optional, Union
 
 from pybliometrics.sciencedirect import ArticleRetrieval
 from pybliometrics.superclasses import Retrieval
@@ -15,10 +14,10 @@ class ObjectRetrieval(Retrieval):
         return BytesIO(self._object)
 
     def __init__(self,
-                 identifier: Union[int, str],
+                 identifier: int | str,
                  filename: str,
-                 id_type: Optional[str] = None,
-                 refresh: Union[bool, int] = False,
+                 id_type: str | None = None,
+                 refresh: bool | int = False,
                  **kwds: str
                  ):
         """Class to retrieve a specific object of a document by its filename.

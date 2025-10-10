@@ -1,5 +1,4 @@
-from collections import namedtuple
-from typing import Optional, Union
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_field_consistency, chained_get, \
@@ -7,9 +6,27 @@ from pybliometrics.utils import check_field_consistency, chained_get, \
     make_search_summary, VIEWS
 
 
+class Document(NamedTuple):
+    """Named tuple representing a document from ScienceDirect Search API."""
+    authors: str | None
+    first_author: str | None
+    doi: str | None
+    title: str | None
+    link: str | None
+    load_date: str | None
+    openaccess_status: bool | None
+    pii: str | None
+    coverDate: str | None
+    endingPage: str | None
+    publicationName: str | None
+    startingPage: str | None
+    api_link: str | None
+    volume: str | None
+
+
 class ScienceDirectSearch(Search):
     @property
-    def results(self) -> Optional[list[namedtuple]]:
+    def results(self) -> list[Document] | None:
         """A list of namedtuples in the form `(authors first_author doi title link
         load_date openaccess_status pii coverDate endingPage publicationName startingPage
         api_link volume)`.
@@ -31,7 +48,6 @@ class ScienceDirectSearch(Search):
         """
         fields = 'authors first_author doi title link load_date openaccess_status pii '\
             'coverDate endingPage publicationName startingPage api_link volume'
-        doc = namedtuple('Document', fields)
         check_field_consistency(self._integrity, fields)
         # Parse elements one-by-one
         out = []
@@ -50,7 +66,7 @@ class ScienceDirectSearch(Search):
                     links['scidir'] = link.get('@href')
             # Get doi
             doi = item.get("prism:doi") or item.get("dc:identifier")[4:] if item.get("dc:identifier") else None
-            new = doc(
+            new = Document(
                 authors=authors,
                 first_author=item.get('dc:creator'),
                 doi=doi,
@@ -72,11 +88,11 @@ class ScienceDirectSearch(Search):
 
     def __init__(self,
                  query: str,
-                 refresh: Union[bool, int] = False,
-                 view: Optional[str] = None,
+                 refresh: bool | int = False,
+                 view: str | None = None,
                  verbose: bool = False,
                  download: bool = True,
-                 integrity_fields: Optional[Union[list[str], tuple[str, ...]]] = None,
+                 integrity_fields: list[str] | tuple[str, ...] | None = None,
                  integrity_action: str = "raise",
                  subscriber: bool = True,
                  **kwds: str

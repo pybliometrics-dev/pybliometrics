@@ -1,8 +1,8 @@
 """Tests for sciencedirect.ScienceDirectSearch"""
-from collections import namedtuple
 
 from pybliometrics.exception import Scopus400Error
 from pybliometrics.sciencedirect import ScienceDirectSearch, init
+from pybliometrics.sciencedirect.sciencedirect_search import Document
 
 init()
 
@@ -16,11 +16,7 @@ def test_empty_results():
 
 
 def test_all_fields():
-    fields = 'authors first_author doi title link load_date openaccess_status pii '\
-        'coverDate endingPage publicationName startingPage api_link volume'
-    doc = namedtuple("Document", fields)
-
-    expected_standard_doc = doc(
+    expected_standard_doc = Document(
         authors="Constantinos Patsakis;Fran Casino;Nikolaos Lykousas",
         first_author="Constantinos Patsakis",
         doi="10.1016/j.eswa.2024.124912",
