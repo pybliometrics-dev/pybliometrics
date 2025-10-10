@@ -1,19 +1,9 @@
 """Tests for `scopus.ScopusSearch` module."""
 
-from collections import namedtuple
-
 from pybliometrics.scopus import ScopusSearch, init
+from pybliometrics.scopus.scopus_search import Document
 
 init()
-
-order = 'eid doi pii pubmed_id title subtype subtypeDescription creator '\
-        'afid affilname  affiliation_city affiliation_country author_count '\
-        'author_names author_ids author_afids coverDate coverDisplayDate '\
-        'publicationName issn source_id eIssn aggregationType volume '\
-        'issueIdentifier article_number pageRange description authkeywords '\
-        'citedby_count openaccess freetoread freetoreadLabel fund_acr '\
-        'fund_no fund_sponsor'
-doc = namedtuple('Document', order)
 
 # Set to refresh=False because of citation count
 s_au = ScopusSearch('AU-ID(24320488600)', unescape=False, refresh=30)
@@ -41,7 +31,7 @@ def test_get_results_size():
 
 def test_results_author():
     received = s_au.results[-1]
-    expected = doc(eid='2-s2.0-26444452434', doi='10.1016/0014-2921(92)90085-B',
+    expected = Document(eid='2-s2.0-26444452434', doi='10.1016/0014-2921(92)90085-B',
         pii='001429219290085B', pubmed_id=None,
         title='Economists as policymakers: A round-table discussion. Introduction',
         subtype='ar', subtypeDescription='Article', creator='Draghi M.',
