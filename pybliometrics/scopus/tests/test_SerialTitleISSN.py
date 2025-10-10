@@ -164,9 +164,9 @@ def test_subject_area():
     ]
     assert oecd.subject_area == expected2
     expected3 = [
-        area(area='Cancer Research', abbreviation='BIOC', code=1306),
-        area(area='Health Informatics', abbreviation='MEDI', code=2718),
-        area(area='Oncology', abbreviation='MEDI', code=2730)
+        Subjectarea(area='Cancer Research', abbreviation='BIOC', code=1306),
+        Subjectarea(area='Oncology', abbreviation='MEDI', code=2730),
+        Subjectarea(area='Health Informatics', abbreviation='MEDI', code=2718)
     ]
     assert jco_cci.subject_area == expected3
 

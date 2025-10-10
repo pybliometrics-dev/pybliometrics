@@ -72,7 +72,7 @@ def test_results_journal():
         "reserved."
     keywords = 'Group processes | Learning | Panel data | Research alliance dynamics | Transaction costs'
     title = 'Learning dynamics in research alliances: A panel data analysis'
-    expected = doc(eid='2-s2.0-79952579400', doi='10.1016/j.respol.2010.03.002',
+    expected = Document(eid='2-s2.0-79952579400', doi='10.1016/j.respol.2010.03.002',
         pii='S0048733310000752', pubmed_id=None, title=title, subtype='ar',
         subtypeDescription='Article', creator='Duso T.', afid='60002483;60000762;60022265',
         affilname='Universiteit van Amsterdam;Humboldt-Universität zu Berlin;Erasmus Universiteit Rotterdam',
