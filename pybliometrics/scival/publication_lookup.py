@@ -1,92 +1,102 @@
-from collections import namedtuple
-from typing import Union, Optional
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Retrieval
-from pybliometrics.utils import make_int_if_possible, chained_get, list_authors
+from pybliometrics.utils import make_int_if_possible, chained_get
+
+
+class Author(NamedTuple):
+    """Named tuple representing an author."""
+    id: int | None
+    name: str | None
+    uri: str | None
+
+
+class Institution(NamedTuple):
+    """Named tuple representing an institution."""
+    id: int | None
+    name: str | None
+    country: str | None
+    country_code: str | None
 
 
 class PublicationLookup(Retrieval):
 
     @property
-    def authors(self) -> Optional[list[namedtuple]]:
+    def authors(self) -> list[Author] | None:
         """A list of namedtuples representing listed authors in
         the form `(id, name, uri)`.
         """
         out = []
-        fields = 'id name uri'
-        auth = namedtuple('Author', fields)
         for item in chained_get(self._json, ['publication', 'authors'], []):
-            new = auth(id=make_int_if_possible(item['id']), name=item.get('name'),
+            new = Author(id=make_int_if_possible(item['id']), name=item.get('name'),
                        uri=item.get('uri'))
             out.append(new)
         return out or None
 
     @property
-    def citation_count(self) -> Optional[int]:
+    def citation_count(self) -> int | None:
         """Count of citations"""
         return make_int_if_possible(chained_get(self._json, ['publication', 'citationCount']))
 
     @property
-    def doi(self) -> Optional[str]:
+    def doi(self) -> str | None:
         """Digital Object Identifier (DOI)"""
         return chained_get(self._json, ['publication', 'doi'])
 
     @property
-    def id(self) -> Optional[int]:
+    def id(self) -> int | None:
         """ID of the document (same as EID without "2-s2.0-")."""
         return make_int_if_possible(chained_get(self._json, ['publication', 'id']))
 
     @property
-    def institutions(self) -> Optional[list[namedtuple]]:
+    def institutions(self) -> list[Institution] | None:
         """A list of namedtuples representing listed institutions in
         the form `(id, name, country, country_code)`.
         """
         out = []
-        fields = 'id name country country_code'
-        auth = namedtuple('Institution', fields)
         for item in chained_get(self._json, ['publication', 'institutions'], []):
-            new = auth(id=make_int_if_possible(item['id']), name=item.get('name'),
+            new = Institution(id=make_int_if_possible(item['id']), name=item.get('name'),
                        country=item.get('country'), country_code=item.get('countryCode'))
             out.append(new)
         return out or None
 
     @property
-    def link(self) -> Optional[str]:
+    def link(self) -> str | None:
         """URL link"""
         return chained_get(self._json, ['link', '@href'])
 
     @property
-    def publication_year(self) -> Optional[int]:
+    def publication_year(self) -> int | None:
         """Year of publication"""
         return make_int_if_possible(chained_get(self._json, ['publication', 'publicationYear']))
 
     @property
-    def sdgs(self) -> Optional[list[str]]:
+    def sdgs(self) -> list[str] | None:
         """Sustainable Development Goals."""
         return chained_get(self._json, ['publication', 'sdg'])
 
     @property
-    def source_title(self) -> Optional[str]:
+    def source_title(self) -> str | None:
         """Title of source"""
         return chained_get(self._json, ['publication', 'sourceTitle'])
 
     @property
-    def title(self) -> Optional[str]:
+    def title(self) -> str | None:
         """Publication title"""
         return chained_get(self._json, ['publication', 'title'])
 
     @property
-    def topic_cluster_id(self) -> Optional[int]:
+    def topic_cluster_id(self) -> int | None:
         """Topic cluster id"""
         return make_int_if_possible(chained_get(self._json, ['publication', 'topicClusterId']))
 
     @property
-    def topic_id(self) -> Optional[int]:
+    def topic_id(self) -> int | None:
         """Topic id"""
         return make_int_if_possible(chained_get(self._json, ['publication', 'topicId']))
 
     @property
-    def type(self) -> Optional[str]:
+    def type(self) -> str | None:
         """Type of publication"""
         return chained_get(self._json, ['publication', 'type'])
 
@@ -114,8 +124,8 @@ class PublicationLookup(Retrieval):
         )
 
     def __init__(self,
-                 identifier: Union[int, str] = None,
-                 refresh: Union[bool, int] = False,
+                 identifier: int | str | None = None,
+                 refresh: bool | int = False,
                  **kwds: str
                  ) -> None:
         """Interaction with the Publication Lookup API.

@@ -1,5 +1,4 @@
-from collections import namedtuple
-from typing import Union, Optional
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import make_int_if_possible
@@ -7,9 +6,16 @@ from pybliometrics.utils.constants import SCIVAL_METRICS
 from pybliometrics.utils.parse_metrics import extract_metric_data, MetricData
 
 
+class Institution(NamedTuple):
+    """Named tuple representing an institution."""
+    id: int | None
+    name: str | None
+    uri: str | None
+
+
 class InstitutionLookupMetrics(Retrieval):
     @property  
-    def AcademicCorporateCollaboration(self) -> Optional[list[MetricData]]:
+    def AcademicCorporateCollaboration(self) -> list[MetricData] | None:
         """Academic corporate collaboration metrics for each institution.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -17,7 +23,7 @@ class InstitutionLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'AcademicCorporateCollaboration', self._by_year, "institution")
 
     @property
-    def AcademicCorporateCollaborationImpact(self) -> Optional[list[MetricData]]:
+    def AcademicCorporateCollaborationImpact(self) -> list[MetricData] | None:
         """Academic corporate collaboration impact metrics for each institution.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -25,12 +31,11 @@ class InstitutionLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'AcademicCorporateCollaborationImpact', self._by_year, "institution")
 
     @property
-    def institutions(self) -> Optional[list[MetricData]]:
+    def institutions(self) -> list[Institution] | None:
         """A list of namedtuples representing institutions and their basic info
         in the form `(id, name, uri)`.
         """
         out = []
-        Institution = namedtuple('Institution', 'id name uri')
 
         # Handle both dict and direct access to results
         if isinstance(self._json, dict):
@@ -49,7 +54,7 @@ class InstitutionLookupMetrics(Retrieval):
         return out or None
 
     @property
-    def CitationCount(self) -> Optional[list[MetricData]]:
+    def CitationCount(self) -> list[MetricData] | None:
         """Citation count metrics for each institution.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -57,7 +62,7 @@ class InstitutionLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'CitationCount', self._by_year, "institution")
 
     @property
-    def CitationsPerPublication(self) -> Optional[list[MetricData]]:
+    def CitationsPerPublication(self) -> list[MetricData] | None:
         """Citations per publication metrics for each institution.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -65,7 +70,7 @@ class InstitutionLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'CitationsPerPublication', self._by_year, "institution")
 
     @property
-    def CitedPublications(self) -> Optional[list[MetricData]]:
+    def CitedPublications(self) -> list[MetricData] | None:
         """Cited publications metrics for each institution.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -73,7 +78,7 @@ class InstitutionLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'CitedPublications', self._by_year, "institution")
 
     @property
-    def Collaboration(self) -> Optional[list[MetricData]]:
+    def Collaboration(self) -> list[MetricData] | None:
         """Collaboration metrics for each institution.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -81,7 +86,7 @@ class InstitutionLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'Collaboration', self._by_year, "institution")
 
     @property
-    def CollaborationImpact(self) -> Optional[list[MetricData]]:
+    def CollaborationImpact(self) -> list[MetricData] | None:
         """Collaboration impact metrics for each institution.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -89,7 +94,7 @@ class InstitutionLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'CollaborationImpact', self._by_year, "institution")
 
     @property
-    def FieldWeightedCitationImpact(self) -> Optional[list[MetricData]]:
+    def FieldWeightedCitationImpact(self) -> list[MetricData] | None:
         """Field weighted citation impact metrics for each institution.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -97,7 +102,7 @@ class InstitutionLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'FieldWeightedCitationImpact', self._by_year, "institution")
 
     @property
-    def OutputsInTopCitationPercentiles(self) -> Optional[list[MetricData]]:
+    def OutputsInTopCitationPercentiles(self) -> list[MetricData] | None:
         """Outputs in top citation percentiles metrics for each institution.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -105,7 +110,7 @@ class InstitutionLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'OutputsInTopCitationPercentiles', self._by_year, "institution")
 
     @property
-    def PublicationsInTopJournalPercentiles(self) -> Optional[list[MetricData]]:
+    def PublicationsInTopJournalPercentiles(self) -> list[MetricData] | None:
         """Publications in top journal percentiles metrics for each institution.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -113,7 +118,7 @@ class InstitutionLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'PublicationsInTopJournalPercentiles', self._by_year, "institution")
 
     @property
-    def ScholarlyOutput(self) -> Optional[list[MetricData]]:
+    def ScholarlyOutput(self) -> list[MetricData] | None:
         """Scholarly output metrics for each institution.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -121,10 +126,10 @@ class InstitutionLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'ScholarlyOutput', self._by_year, "institution")
 
     def __init__(self,
-                 institution_ids: Union[str, list],
-                 metric_types: Optional[Union[str, list]] = None,
+                 institution_ids: str | list,
+                 metric_types: str | list | None = None,
                  by_year: bool = False,
-                 refresh: Union[bool, int] = False,
+                 refresh: bool | int = False,
                  **kwds: str
                  ) -> None:
         """Interaction with the SciVal's `metrics` endpoint of the `InstitutionLookup API`.
