@@ -2,7 +2,6 @@
 
 import hashlib
 from pathlib import Path
-from typing import Optional, Union
 
 from pybliometrics.superclasses import Base
 from pybliometrics.utils import APIS_NO_ID_IN_URL, APIS_WITH_ID_TYPE, get_config, URLS
@@ -10,8 +9,8 @@ from pybliometrics.utils import APIS_NO_ID_IN_URL, APIS_WITH_ID_TYPE, get_config
 
 class Retrieval(Base):
     def __init__(self,
-                 identifier: Optional[Union[int, str]] = None,
-                 id_type: Optional[str] = None,
+                 identifier: int | str | None = None,
+                 id_type: str | None = None,
                  **kwds: str
                  ) -> None:
         """Class intended as superclass to perform retrievals.
