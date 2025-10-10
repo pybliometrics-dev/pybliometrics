@@ -1,7 +1,26 @@
-from collections import namedtuple
+from typing import NamedTuple
 from functools import reduce
 from html import unescape
 from warnings import warn
+
+
+class Affiliation(NamedTuple):
+    """Named tuple representing affiliation information."""
+    id: int | None
+    parent: int | None
+    type: str | None
+    relationship: str | None
+    afdispname: str | None
+    preferred_name: str | None
+    parent_preferred_name: str | None
+    country_code: str | None
+    country: str | None
+    address_part: str | None
+    city: str | None
+    state: str | None
+    postal_code: str | None
+    org_domain: str | None
+    org_URL: str | None
 
 
 def filter_digits(s):
@@ -106,7 +125,7 @@ def get_link(dct, idx, path=['coredata', 'link']):
         return None
 
 
-def html_unescape(s: str):
+def html_unescape(s: str | None) -> str | None:
     """Convert s to Unicode characters if possible."""
     return unescape(s) if s else None
 
@@ -171,12 +190,8 @@ def make_search_summary(self, keyword, results, joiner="\n    "):
     return s
 
 
-def parse_affiliation(affs, view):
+def parse_affiliation(affs, view) -> list[Affiliation] | None:
     """Helper function to parse list of affiliation-related information."""
-    order = 'id parent type relationship afdispname preferred_name '\
-            'parent_preferred_name country_code country address_part city '\
-            'state postal_code org_domain org_URL'
-    aff = namedtuple('Affiliation', order, defaults=(None,) * len(order.split()))
     out = []
 
     if view in ('STANDARD', 'ENHANCED'):
@@ -189,7 +204,7 @@ def parse_affiliation(affs, view):
                 parent = int(item['@parent'])
             except KeyError:
                 parent = None
-            new = aff(id=int(item['@affiliation-id']), parent=parent,
+            new = Affiliation(id=int(item['@affiliation-id']), parent=parent,
                       type=doc.get('@type'), relationship=doc.get('@relationship'),
                       afdispname=doc.get('@afdispname'),
                       preferred_name=doc.get('preferred-name', {}).get('$'),
@@ -201,9 +216,11 @@ def parse_affiliation(affs, view):
             if any(val for val in new):
                 out.append(new)
     elif view == 'LIGHT':
-        new = aff(preferred_name=affs.get('affiliation-name'),
-                  city=affs.get('affiliation-city'),
-                  country=affs.get('affiliation-country'))
+        new = Affiliation(id=None, parent=None, type=None, relationship=None,
+                  afdispname=None, preferred_name=affs.get('affiliation-name'),
+                  parent_preferred_name=None, country_code=None, country=affs.get('affiliation-country'),
+                  address_part=None, city=affs.get('affiliation-city'), state=None,
+                  postal_code=None, org_domain=None, org_URL=None)
         if any(val for val in new):
             out.append(new)
 
