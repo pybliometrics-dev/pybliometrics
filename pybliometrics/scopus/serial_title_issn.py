@@ -37,37 +37,6 @@ class Yearlydata(NamedTuple):
     citecountsce: int
 
 
-class Citescoreinfolist(NamedTuple):
-    year: int
-    citescore: float
-    status: str | None = None
-    documentcount: int | None = None 
-    citationcount: int | None = None
-    percentcited: int | None = None
-    rank: list['Citescoresubjectrank'] | None = None
-
-
-class Citescoresubjectrank(NamedTuple):
-    subjectcode: int
-    rank: int
-    percentile: int
-
-
-class Subjectarea(NamedTuple):
-    area: str
-    abbreviation: str
-    code: int
-
-
-class Yearlydata(NamedTuple):
-    year: int
-    publicationcount: int
-    revpercent: float | None
-    zerocitessce: int
-    zerocitespercentsce: float | None
-    citecountsce: int
-
-
 class SerialTitleISSN(Retrieval):
     @property
     def aggregation_type(self) -> str:
