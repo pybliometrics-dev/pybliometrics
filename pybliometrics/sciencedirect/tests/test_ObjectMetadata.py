@@ -1,8 +1,7 @@
 """Tests for ObjectMetadata() class."""
 
-from collections import namedtuple
-
 from pybliometrics.sciencedirect import init, ObjectMetadata
+from pybliometrics.sciencedirect.object_metadata import Metadata
 
 init()
 
@@ -13,12 +12,11 @@ om_2 = ObjectMetadata('S2213305418300365', id_type='pii', refresh=30)
 def test_results():
     """Tests the length and fields of `results`."""
     fields = ('eid', 'filename', 'height', 'mimetype', 'ref', 'size', 'type', 'url', 'width')
-    metadata = namedtuple('Metadata', fields)
 
     assert om_1.results[0]._fields == fields
     assert len(om_1.results) == 355
 
-    expected_om_1 = metadata(eid='1-s2.0-S0893608024005562-gr3.jpg',
+    expected_om_1 = Metadata(eid='1-s2.0-S0893608024005562-gr3.jpg',
                          filename='gr3.jpg',
                          height=729,
                          mimetype='image/jpeg',
@@ -33,7 +31,7 @@ def test_results():
     assert om_2.results[2]._fields == fields
     assert len(om_2.results) == 18
 
-    expected_om_2 = metadata(eid='1-s2.0-S2213305418300365-gr2.sml',
+    expected_om_2 = Metadata(eid='1-s2.0-S2213305418300365-gr2.sml',
                              filename='gr2.sml',
                              height=146,
                              mimetype='image/gif',

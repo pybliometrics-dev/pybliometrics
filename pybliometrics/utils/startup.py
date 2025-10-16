@@ -2,7 +2,6 @@ import warnings
 from configparser import ConfigParser, NoOptionError, NoSectionError
 from collections import deque
 from pathlib import Path
-from typing import Optional, Type, Union
 
 from pybliometrics.utils.constants import CONFIG_FILE, RATELIMITS, DEFAULT_PATHS, VIEWS
 from pybliometrics.utils.create_config import create_config
@@ -14,10 +13,10 @@ CUSTOM_INSTTOKENS = None
 _throttling_params = {k: deque(maxlen=v) for k, v in RATELIMITS.items()}
 
 
-def init(config_path: Union[str, Path] = None,
-         keys: Optional[list[str]] = None,
-         inst_tokens: Optional[list[str]] = None,
-         config_dir: Union[str, Path] = None) -> None:
+def init(config_path: str | Path | None = None,
+         keys: list[str] | None = None,
+         inst_tokens: list[str] | None = None,
+         config_dir: str | Path | None = None) -> None:
     """
     Function to initialize the pybliometrics library. For more information refer to the
     `official documentation <https://pybliometrics.readthedocs.io/en/stable/configuration.html>`_.
@@ -65,14 +64,14 @@ def init(config_path: Union[str, Path] = None,
     check_keys_tokens()
 
 
-def check_sections(config: Type[ConfigParser]) -> None:
+def check_sections(config: ConfigParser) -> None:
     """Auxiliary function to check if all sections exist."""
     for section in ['Directories', 'Authentication', 'Requests']:
         if not config.has_section(section):
             raise NoSectionError(section)
 
 
-def check_default_paths(config: Type[ConfigParser], config_path: Path) -> None:
+def check_default_paths(config: ConfigParser, config_path: Path) -> None:
     """Auxiliary function to check if default cache paths exist.
     If not, the paths are writen in the config.
     """
@@ -111,7 +110,7 @@ def check_keys_tokens() -> None:
                              'https://pybliometrics.readthedocs.io/en/stable/configuration.html')
 
 
-def create_cache_folders(config: Type[ConfigParser]) -> None:
+def create_cache_folders(config: ConfigParser) -> None:
     """Auxiliary function to create cache folders."""
     for api, path in config.items('Directories'):
         views = VIEWS.get(api, [""])  # empty string
@@ -120,7 +119,7 @@ def create_cache_folders(config: Type[ConfigParser]) -> None:
             view_path.mkdir(parents=True, exist_ok=True)
 
 
-def get_config() -> Type[ConfigParser]:
+def get_config() -> ConfigParser:
     """Function to get the config parser."""
     if not CONFIG:
         raise FileNotFoundError('No configuration file found.'

@@ -1,5 +1,4 @@
-from collections import namedtuple
-from typing import Optional, Union
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import (
@@ -14,9 +13,15 @@ from pybliometrics.utils import (
 )
 
 
+class Author(NamedTuple):
+    """Named tuple representing an author."""
+    surname: str
+    given_name: str
+
+
 class ArticleRetrieval(Retrieval):
     @property
-    def abstract(self) -> Optional[str]:
+    def abstract(self) -> str | None:
         """The abstract of a document."""
         abstract = chained_get(self._json, ['coredata', 'dc:description'])
         if abstract:
@@ -24,38 +29,37 @@ class ArticleRetrieval(Retrieval):
         return abstract
 
     @property
-    def aggregationType(self) -> Optional[str]:
+    def aggregationType(self) -> str | None:
         """The aggregation type of a document."""
         return chained_get(self._json, ['coredata', 'prism:aggregationType'])
 
     @property
-    def authors(self) -> Optional[list]:
+    def authors(self) -> list[Author] | None:
         """The authors of a document."""
         out = []
-        auth = namedtuple('Author', 'surname given_name')
         for author in chained_get(self._json, ['coredata', 'dc:creator']):
             surname, given_name = author['$'].split(', ')
-            new = auth(surname=surname, given_name=given_name)
+            new = Author(surname=surname, given_name=given_name)
             out.append(new)
         return out or None
 
     @property
-    def copyright(self) -> Optional[str]:
+    def copyright(self) -> str | None:
         """The copyright of a document."""
         return chained_get(self._json, ['coredata', 'prism:copyright'])
 
     @property
-    def coverDate(self) -> Optional[str]:
+    def coverDate(self) -> str | None:
         """The date of the cover the document is in."""
         return chained_get(self._json, ['coredata', 'prism:coverDate'])
 
     @property
-    def coverDisplayDate(self) -> Optional[str]:
+    def coverDisplayDate(self) -> str | None:
         """The cover display date of a document."""
         return chained_get(self._json, ['coredata', 'prism:coverDisplayDate'])
 
     @property
-    def document_entitlement_status(self) -> Optional[str]:
+    def document_entitlement_status(self) -> str | None:
         """Returns the document entitlement status, i.e. tells if the requestor 
         is entitled to the requested resource.
         Note: Only works with `ENTITLED` view.
@@ -68,12 +72,12 @@ class ArticleRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'prism:doi'])
 
     @property
-    def eid(self) -> Optional[str]:
+    def eid(self) -> str | None:
         """The eid of a document."""
         return chained_get(self._json, ['coredata', 'eid'])
 
     @property
-    def endingPage(self) -> Optional[str]:
+    def endingPage(self) -> str | None:
         """The ending page of a document."""
         page = chained_get(self._json, ['coredata', 'prism:endingPage'])
         return page
@@ -90,22 +94,22 @@ class ArticleRetrieval(Retrieval):
         return make_bool_if_possible(open_access)
 
     @property
-    def openaccessSponsorName(self) -> Optional[str]:
+    def openaccessSponsorName(self) -> str | None:
         """The open access sponsor name of a document."""
         return chained_get(self._json, ['coredata', 'openaccessSponsorName'])
 
     @property
-    def openaccessSponsorType(self) -> Optional[str]:
+    def openaccessSponsorType(self) -> str | None:
         """The open access sponsor type of a document."""
         return chained_get(self._json, ['coredata', 'openaccessSponsorType'])
 
     @property
-    def openaccessType(self) -> Optional[str]:
+    def openaccessType(self) -> str | None:
         """The open access type of a document."""
         return chained_get(self._json, ['coredata', 'openaccessType'])
 
     @property
-    def openaccessUserLicense(self) -> Optional[str]:
+    def openaccessUserLicense(self) -> str | None:
         """The open access user license of a document."""
         return chained_get(self._json, ['coredata', 'openaccessUserLicense'])
 
@@ -116,12 +120,12 @@ class ArticleRetrieval(Retrieval):
         return make_bool_if_possible(open_archive)
 
     @property
-    def originalText(self) -> Optional[str]:
+    def originalText(self) -> str | None:
         """Complete document text."""
         return self._json.get('originalText')
 
     @property
-    def pageRange(self) -> Optional[str]:
+    def pageRange(self) -> str | None:
         """The prism:pageRange of a document."""
         return chained_get(self._json, ['coredata', 'prism:pageRange'])
 
@@ -131,12 +135,12 @@ class ArticleRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'prism:publicationName'])
 
     @property
-    def publisher(self) -> Optional[str]:
+    def publisher(self) -> str | None:
         """The publisher of a document."""
         return chained_get(self._json, ['coredata', 'prism:publisher'])
 
     @property
-    def pubType(self) -> Optional[str]:
+    def pubType(self) -> str | None:
         """The publication type of a document."""
         return chained_get(self._json, ['coredata', 'pubType'])
 
@@ -162,12 +166,12 @@ class ArticleRetrieval(Retrieval):
                 return link['@href']
 
     @property
-    def startingPage(self) -> Optional[str]:
+    def startingPage(self) -> str | None:
         """The starting page of a document."""
         return chained_get(self._json, ['coredata', 'prism:startingPage'])
 
     @property
-    def subjects(self) -> Optional[str]:
+    def subjects(self) -> list[str] | None:
         """The subjects of a document."""
         subjects = chained_get(self._json, ['coredata', 'dcterms:subject'])
         return [subject['$'] for subject in subjects]
@@ -183,16 +187,16 @@ class ArticleRetrieval(Retrieval):
         return chained_get(self._json, ['coredata', 'prism:url'])
 
     @property
-    def volume(self) -> Optional[str]:
+    def volume(self) -> int | None:
         """The prism:volume of a document."""
         vol = chained_get(self._json, ['coredata', 'prism:volume'])
         return make_int_if_possible(vol)
 
     def __init__(self,
-                 identifier: Union[int, str],
-                 refresh: Union[bool, int] = False,
+                 identifier: int | str,
+                 refresh: bool | int = False,
                  view: str = 'META',
-                 id_type: Optional[str] = None,
+                 id_type: str | None = None,
                  **kwds: str
                  ):
         """Interaction with the Article Retrieval API.

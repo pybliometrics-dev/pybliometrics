@@ -1,7 +1,7 @@
 """Tests for sciencedirect.ArticleRetrieval"""
-from collections import namedtuple
 
 from pybliometrics.sciencedirect import ArticleRetrieval, init
+from pybliometrics.sciencedirect.article_retrieval import Author
 
 init()
 
@@ -30,23 +30,22 @@ def test_aggregationType():
 
 
 def test_authors():
-    auth = namedtuple('Author', 'surname given_name')
-    authors_full = [auth(surname='Soori', given_name='Mohsen'),
-                          auth(surname='Arezoo', given_name='Behrooz'),
-                          auth(surname='Dastres', given_name='Roza')]
-    authors_meta = [auth(surname='Indolia', given_name='Sakshi'),
-                    auth(surname='Goswami', given_name='Anil Kumar'),
-                    auth(surname='Mishra', given_name='S.P.'),
-                    auth(surname='Asopa', given_name='Pooja')]
-    authors_meta_abs = [auth(surname='Carreira', given_name='Igor'),
-                        auth(surname='Costa', given_name='Francisco'),
-                        auth(surname='Pessoa', given_name='João Paulo')]
-    authors_meta_abs_ref = [auth(surname='Kudrass', given_name='H.R.'),
-                            auth(surname='Hanebuth', given_name='T.J.J.'),
-                            auth(surname='Zander', given_name='A.M.'),
-                            auth(surname='Linstädter', given_name='J.'),
-                            auth(surname='Akther', given_name='S.H.'),
-                            auth(surname='Shohrab', given_name='U.M.')]
+    authors_full = [Author(surname='Soori', given_name='Mohsen'),
+                          Author(surname='Arezoo', given_name='Behrooz'),
+                          Author(surname='Dastres', given_name='Roza')]
+    authors_meta = [Author(surname='Indolia', given_name='Sakshi'),
+                    Author(surname='Goswami', given_name='Anil Kumar'),
+                    Author(surname='Mishra', given_name='S.P.'),
+                    Author(surname='Asopa', given_name='Pooja')]
+    authors_meta_abs = [Author(surname='Carreira', given_name='Igor'),
+                        Author(surname='Costa', given_name='Francisco'),
+                        Author(surname='Pessoa', given_name='João Paulo')]
+    authors_meta_abs_ref = [Author(surname='Kudrass', given_name='H.R.'),
+                            Author(surname='Hanebuth', given_name='T.J.J.'),
+                            Author(surname='Zander', given_name='A.M.'),
+                            Author(surname='Linstädter', given_name='J.'),
+                            Author(surname='Akther', given_name='S.H.'),
+                            Author(surname='Shohrab', given_name='U.M.')]
     assert ar_full.authors == authors_full
     assert ar_meta.authors == authors_meta
     assert ar_meta_abs.authors == authors_meta_abs

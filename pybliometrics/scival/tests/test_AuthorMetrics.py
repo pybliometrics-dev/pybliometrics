@@ -1,5 +1,3 @@
-from collections import namedtuple
-
 from pybliometrics.scival.author_metrics import AuthorMetrics
 from pybliometrics.utils.startup import init
 
@@ -10,10 +8,6 @@ single_author_all = AuthorMetrics("6602819806", by_year=False, refresh=30)
 single_author_h_index = AuthorMetrics("6602819806", metric_types=["HIndices"], by_year=False, refresh=30)
 multiple_authors_all = AuthorMetrics([7201667143, 6603480302], by_year=True, refresh=30)
 empty_metrics = AuthorMetrics("0000000000")
-
-MetricData = namedtuple('MetricData', 
-                       'entity_id entity_name metric year value percentage threshold',
-                       defaults=(None, None, None, "all", None, None, None))
 
 
 def test_academic_corporate_collaboration():

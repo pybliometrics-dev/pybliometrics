@@ -1,12 +1,17 @@
 """Utility functions to parse and extract metrics data from JSON responses."""
-from collections import namedtuple
+from typing import NamedTuple
 
 from pybliometrics.utils import make_int_if_possible
 
-# Global namedtuple for all metric data with default values
-MetricData = namedtuple('MetricData', 
-                       'entity_id entity_name metric year value percentage threshold',
-                       defaults=(None, None, None, "all", None, None, None))
+class MetricData(NamedTuple):
+    """Global namedtuple for all metric data with default values."""
+    entity_id: int | None
+    entity_name: str | None
+    metric: str | None
+    year: str | None = "all"
+    value: int | float | None = None
+    percentage: float | None = None
+    threshold: int | None = None
 
 
 def extract_metric_data(json_data, metric_type: str, by_year: bool, entity_type: str):

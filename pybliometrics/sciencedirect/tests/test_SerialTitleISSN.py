@@ -1,8 +1,7 @@
 """Test pybliometrics.sciencedirect.SerialTitleISSN()"""
 
-from collections import namedtuple
-
 from pybliometrics.sciencedirect import SerialTitleISSN, init
+from pybliometrics.scopus.serial_title_issn import Citescoreinfolist, Subjectarea, Yearlydata
 
 init()
 
@@ -25,12 +24,9 @@ def test_aggregation_type():
 
 
 def test_citescoreyearinfolist():
-    info_fields = 'year citescore'
-    info = namedtuple('Citescoreinfolist', info_fields)
-
     # Test Gene journal
-    expected_named_tuple = [info(year=2024, citescore=5.1),
-                            info(year=2025, citescore=4.5)]
+    expected_named_tuple = [Citescoreinfolist(year=2024, citescore=5.1),
+                            Citescoreinfolist(year=2025, citescore=4.5)]
     assert gene.citescoreyearinfolist == expected_named_tuple
 
 
@@ -101,9 +97,8 @@ def test_source_id():
 
 
 def test_subject_area():
-    area = namedtuple('Subjectarea', 'area abbreviation code')
     expected1 = [
-        area(area='Genetics', abbreviation='BIOC', code=1311)
+        Subjectarea(area='Genetics', abbreviation='BIOC', code=1311)
     ]
     assert gene.subject_area == expected1
 
@@ -115,10 +110,8 @@ def test_title():
 def test_yearly_data():
     assert isinstance(gene.yearly_data, list)
     assert len(gene.yearly_data) == 30
-    fields = 'year publicationcount revpercent zerocitessce '\
-             'zerocitespercentsce citecountsce'
-    dat = namedtuple('Yearlydata', fields)
-    expected1_2023 = dat(year=2023, publicationcount=654, revpercent=8.56,
+
+    expected1_2023 = Yearlydata(year=2023, publicationcount=654, revpercent=8.56,
         zerocitessce=64, zerocitespercentsce=9.785932721712538,
         citecountsce=32573)
     assert gene.yearly_data[27] == expected1_2023

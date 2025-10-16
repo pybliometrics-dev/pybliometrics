@@ -1,8 +1,7 @@
 """Tests for `scopus.CitationOverview` module."""
 
-from collections import namedtuple
-
-from pybliometrics.scopus import CitationOverview, init
+from pybliometrics.scopus import init
+from pybliometrics.scopus.abstract_citation import Author, CitationOverview
 
 init()
 
@@ -13,7 +12,6 @@ co_doi = CitationOverview(["10.1016/j.softx.2019.100263"],
                           id_type="doi", refresh=30, date="2016-2020")
 
 def test_authors():
-    Author = namedtuple('Author', 'name surname initials id url')
     url = 'https://api.elsevier.com/content/author/author_id/7004212771'
     john = Author(name='J.R., Kitchin, John R.', surname='Kitchin',
                   initials='J.R.', id='7004212771', url=url)

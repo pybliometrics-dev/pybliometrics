@@ -1,6 +1,5 @@
-from collections import namedtuple
-
 from pybliometrics.scival import init, InstitutionLookupMetrics
+from pybliometrics.scival.institution_lookup_metrics import Institution
 
 init()
 
@@ -50,7 +49,6 @@ def test_academic_corporate_collaboration_impact():
 
 def test_institutions():
     """Test the institutions property for all test cases."""
-    Institution = namedtuple('Institution', 'id name uri')
 
     # Test single institution
     institutions = single_institution_all.institutions

@@ -1,19 +1,9 @@
 """Tests for `scopus.ScopusSearch` module."""
 
-from collections import namedtuple
-
 from pybliometrics.scopus import ScopusSearch, init
+from pybliometrics.scopus.scopus_search import Document
 
 init()
-
-order = 'eid doi pii pubmed_id title subtype subtypeDescription creator '\
-        'afid affilname  affiliation_city affiliation_country author_count '\
-        'author_names author_ids author_afids coverDate coverDisplayDate '\
-        'publicationName issn source_id eIssn aggregationType volume '\
-        'issueIdentifier article_number pageRange description authkeywords '\
-        'citedby_count openaccess freetoread freetoreadLabel fund_acr '\
-        'fund_no fund_sponsor'
-doc = namedtuple('Document', order)
 
 # Set to refresh=False because of citation count
 s_au = ScopusSearch('AU-ID(24320488600)', unescape=False, refresh=30)
@@ -41,7 +31,7 @@ def test_get_results_size():
 
 def test_results_author():
     received = s_au.results[-1]
-    expected = doc(eid='2-s2.0-26444452434', doi='10.1016/0014-2921(92)90085-B',
+    expected = Document(eid='2-s2.0-26444452434', doi='10.1016/0014-2921(92)90085-B',
         pii='001429219290085B', pubmed_id=None,
         title='Economists as policymakers: A round-table discussion. Introduction',
         subtype='ar', subtypeDescription='Article', creator='Draghi M.',
@@ -82,7 +72,7 @@ def test_results_journal():
         "reserved."
     keywords = 'Group processes | Learning | Panel data | Research alliance dynamics | Transaction costs'
     title = 'Learning dynamics in research alliances: A panel data analysis'
-    expected = doc(eid='2-s2.0-79952579400', doi='10.1016/j.respol.2010.03.002',
+    expected = Document(eid='2-s2.0-79952579400', doi='10.1016/j.respol.2010.03.002',
         pii='S0048733310000752', pubmed_id=None, title=title, subtype='ar',
         subtypeDescription='Article', creator='Duso T.', afid='60002483;60000762;60022265',
         affilname='Universiteit van Amsterdam;Humboldt-Universität zu Berlin;Erasmus Universiteit Rotterdam',

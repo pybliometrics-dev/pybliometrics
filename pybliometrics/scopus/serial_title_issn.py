@@ -1,10 +1,40 @@
-from collections import namedtuple
-from typing import Optional, Union
+from typing import NamedTuple
 import warnings
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import chained_get, check_parameter_value, \
     get_link, make_float_if_possible, make_int_if_possible, VIEWS
+
+
+class Citescoreinfolist(NamedTuple):
+    year: int
+    citescore: float
+    status: str | None = None
+    documentcount: int | None = None 
+    citationcount: int | None = None
+    percentcited: int | None = None
+    rank: list['Citescoresubjectrank'] | None = None
+
+
+class Citescoresubjectrank(NamedTuple):
+    subjectcode: int
+    rank: int
+    percentile: int
+
+
+class Subjectarea(NamedTuple):
+    area: str
+    abbreviation: str
+    code: int
+
+
+class Yearlydata(NamedTuple):
+    year: int
+    publicationcount: int
+    revpercent: float | None
+    zerocitessce: int
+    zerocitespercentsce: float | None
+    citecountsce: int
 
 
 class SerialTitleISSN(Retrieval):
@@ -14,7 +44,7 @@ class SerialTitleISSN(Retrieval):
         return self._entry['prism:aggregationType']
 
     @property
-    def citescoreyearinfolist(self) -> Optional[list[namedtuple]]:
+    def citescoreyearinfolist(self) -> list[Citescoreinfolist] | None:
         """A list of named tuples of the form: `(year citescore)` or (when
         `view="CITESCORE"`) `(year citescore status documentcount citationcount
         percentcited rank)`.  `rank` is `None` or a named tuple of the form
@@ -29,17 +59,8 @@ class SerialTitleISSN(Retrieval):
         except KeyError:
             return None
 
-        # Named Tuples
-        info_fields = 'year citescore status documentcount citationcount '\
-                      'percentcited rank'
-        rank_fields = 'subjectcode rank percentile'
-        info_short = namedtuple('Citescoreinfolist', info_fields.split()[:2])
-        info_full = namedtuple('Citescoreinfolist', info_fields,
-            defaults=(None,) * len(info_fields.split()))
-        rank = namedtuple('Citescoresubjectrank', rank_fields)
-
         # Function to create a named tuple for CurrentMetric and CurrentTracker
-        def _create_namedtuple(data, mode, info):
+        def _create_namedtuple(data, mode, info_class):
             year = data.get(f'citeScore{mode}Year')
             cite_score = data.get(f'citeScore{mode}')
 
@@ -47,36 +68,37 @@ class SerialTitleISSN(Retrieval):
             if (year is None) and (cite_score is None):
                 return None
 
-            return info(year=int(year), citescore=float(cite_score))
+            return info_class(year=int(year), citescore=float(cite_score))
 
         # Extract depending on view
+        new_data = None
         if self._view in ('STANDARD', 'ENHANCED'):
-            current = _create_namedtuple(data, 'CurrentMetric', info_short)
-            tracker = _create_namedtuple(data, 'Tracker', info_short)
+            current = _create_namedtuple(data, 'CurrentMetric', Citescoreinfolist)
+            tracker = _create_namedtuple(data, 'Tracker', Citescoreinfolist)
             new_data = [current, tracker]
 
         elif self._view == 'CITESCORE':
-            new_data = _get_all_cite_score_years(info_full, rank, data)
+            new_data = _get_all_cite_score_years(Citescoreinfolist, Citescoresubjectrank, data)
 
         return new_data or None
 
     @property
-    def eissn(self) -> Optional[str]:
+    def eissn(self) -> str | None:
         """The electronic ISSN of the source."""
         return self._entry.get('prism:eIssn')
 
     @property
-    def issn(self) -> Optional[str]:
+    def issn(self) -> str | None:
         """The ISSN of the source."""
         return self._entry.get('prism:issn')
 
     @property
-    def oaallowsauthorpaid(self) -> Optional[str]:
+    def oaallowsauthorpaid(self) -> str | None:
         """Whether under the Open-Access policy authors are allowed to pay."""
         return self._entry.get('oaAllowsAuthorPaid')
 
     @property
-    def openaccess(self) -> Optional[int]:
+    def openaccess(self) -> int | None:
         """Open Access status (0 or 1)."""
         return make_int_if_possible(chained_get(self._entry, ['openaccess']))
 
@@ -86,32 +108,32 @@ class SerialTitleISSN(Retrieval):
         return self._entry.get('openaccessStartDate')
 
     @property
-    def openaccesstype(self) -> Optional[str]:
+    def openaccesstype(self) -> str | None:
         """Open Archive status (full or partial)."""
         return self._entry.get('openaccessType')
 
     @property
-    def openaccessarticle(self) -> Optional[bool]:
+    def openaccessarticle(self) -> bool | None:
         """Open Access status."""
         return self._entry.get('openaccessArticle')
 
     @property
-    def openarchivearticle(self) -> Optional[bool]:
+    def openarchivearticle(self) -> bool | None:
         """Open Archive status."""
         return self._entry.get('openArchiveArticle')
 
     @property
-    def openaccesssponsorname(self) -> Optional[str]:
+    def openaccesssponsorname(self) -> str | None:
         """The name of the Open Access sponsor."""
         return self._entry.get('openaccessSponsorName')
 
     @property
-    def openaccesssponsortype(self) -> Optional[str]:
+    def openaccesssponsortype(self) -> str | None:
         """The type of the Open Access sponsor."""
         return self._entry.get('openaccessSponsorType')
 
     @property
-    def openaccessuserlicense(self) -> Optional[str]:
+    def openaccessuserlicense(self) -> str | None:
         """The User license."""
         return self._entry.get('openaccessUserLicense')
 
@@ -131,7 +153,7 @@ class SerialTitleISSN(Retrieval):
         return get_link(self._json, 0, ["link"])
 
     @property
-    def sjrlist(self) -> Optional[list[tuple[int, float]]]:
+    def sjrlist(self) -> list[tuple[int, float]] | None:
         """The SCImago Journal Rank (SJR) indicator as list of tuples in the form
         `(year, indicator)`.  See
         https://www.scimagojr.com/journalrank.php.
@@ -139,7 +161,7 @@ class SerialTitleISSN(Retrieval):
         return _parse_list(self._entry, "SJR")
 
     @property
-    def sniplist(self) -> Optional[list[tuple[int, float]]]:
+    def sniplist(self) -> list[tuple[int, float]] | None:
         """The Source-Normalized Impact per Paper (SNIP) as list of tuples in the form
         `(year, indicator)`.  See
         https://blog.scopus.com/posts/journal-metrics-in-scopus-source-normalized-impact-per-paper-snip.
@@ -152,12 +174,11 @@ class SerialTitleISSN(Retrieval):
         return int(self._entry['source-id'])
 
     @property
-    def subject_area(self) -> Optional[list[namedtuple]]:
+    def subject_area(self) -> list[Subjectarea] | None:
         """List of named tuples of subject areas in the form
         `(area, abbreviation, code)` of the source.
         """
-        area = namedtuple('Subjectarea', 'area abbreviation code')
-        areas = [area(area=item['$'], code=int(item['@code']),
+        areas = [Subjectarea(area=item['$'], code=int(item['@code']),
                       abbreviation=item['@abbrev'])
                  for item in self._entry["subject-area"]]
         return areas or None
@@ -168,8 +189,8 @@ class SerialTitleISSN(Retrieval):
         return self._entry['dc:title']
 
     @property
-    def yearly_data(self) -> Optional[list[namedtuple]]:
-        """Yearly citation information as a list of namedtuples in the
+    def yearly_data(self) -> list[Yearlydata] | None:
+        """Yearly citation information as a list of Yearlydata in the
         form `(year, publicationcount, revpercent, zerocitessce,
         zerocitespercentsce, citecountsce)`.  That's the number of documents
         published in this year, the share of review articles thereof, the
@@ -180,10 +201,7 @@ class SerialTitleISSN(Retrieval):
             data = self._entry['yearly-data']["info"]
         except KeyError:
             return None
-        fields = 'year publicationcount revpercent zerocitessce '\
-                 'zerocitespercentsce citecountsce'
-        dat = namedtuple('Yearlydata', fields)
-        data = [dat(year=int(d['@year']), citecountsce=int(d['citeCountSCE']),
+        data = [Yearlydata(year=int(d['@year']), citecountsce=int(d['citeCountSCE']),
                     publicationcount=int(d['publicationCount']),
                     revpercent=make_float_if_possible(d['revPercent']),
                     zerocitessce=int(d['zeroCitesSCE']),
@@ -192,10 +210,10 @@ class SerialTitleISSN(Retrieval):
         return data or None
 
     def __init__(self,
-                 issn: Union[int, str],
-                 refresh: Union[bool, int] = False,
+                 issn: int | str,
+                 refresh: bool | int = False,
                  view: str = "ENHANCED",
-                 years: str = None,
+                 years: str | None = None,
                  **kwds: str
                  ) -> None:
         """Interaction with the `ISSN` endpoint of the `Serial Title API`.
@@ -249,7 +267,7 @@ class SerialTitleISSN(Retrieval):
     def __str__(self):
         """Print a summary string."""
         date = self.get_cache_file_mdate().split()[0]
-        areas = [e.area for e in self.subject_area]
+        areas = [e.area for e in self.subject_area or []]
         if len(areas) == 1:
             areas = areas[0]
         else:
@@ -258,11 +276,11 @@ class SerialTitleISSN(Retrieval):
             f"'{self.publisher}', is active in {areas}\n"
         metrics = []
         if self.sjrlist:
-            metrics.append(f"SJR:  year value")
+            metrics.append("SJR:  year value")
             for rec in self.sjrlist:
                 metrics.append(f"      {rec[0]} {rec[1]}")
         if self.sniplist:
-            metrics.append(f"SNIP: year value")
+            metrics.append("SNIP: year value")
             for rec in self.sniplist:
                 metrics.append(f"      {rec[0]} {rec[1]}")
         if metrics:
@@ -283,10 +301,10 @@ def _parse_list(d, metric):
 
 
 def _get_all_cite_score_years(
-        named_info_list: namedtuple,
-        named_rank_list: namedtuple,
+        named_info_list: type[Citescoreinfolist],
+        named_rank_list: type[Citescoresubjectrank],
         data: dict
-) -> Optional[list[namedtuple]]:
+) -> list[Citescoreinfolist] | None:
     """Auxiliary function to get all information contained in cite score 
     information list for the `CITESCORE` view.
     """
@@ -303,10 +321,10 @@ def _get_all_cite_score_years(
                         for subject in citeScoreInfo.get('citeScoreSubjectRank', [])]
         # Create named tuple with info
         Citescoreinfolist_year = named_info_list(year=int(d['@year']),
+            citescore=make_float_if_possible(citeScoreInfo['citeScore']),
             status=d['@status'],
             documentcount=int(citeScoreInfo['scholarlyOutput']),
             citationcount=int(citeScoreInfo['citationCount']),
-            citescore=make_float_if_possible(citeScoreInfo['citeScore']),
             percentcited=int(citeScoreInfo['percentCited']),
             rank=subject_rank)
         # Append new data

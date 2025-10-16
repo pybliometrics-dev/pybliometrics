@@ -1,20 +1,107 @@
-from collections import namedtuple
-from typing import Union, Optional
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import make_int_if_possible
 from pybliometrics.utils.constants import SCIVAL_METRICS
 from pybliometrics.utils.parse_metrics import extract_metric_data, extract_metric_lists, MetricData
 
+
+class Topic(NamedTuple):
+    """Named tuple representing a topic."""
+    id: int | None
+    name: str | None
+    uri: str | None
+    prominencePercentile: int | float | None
+    scholarlyOutput: int | float | None
+
+
+class CorePaper(NamedTuple):
+    """Named tuple representing a core paper."""
+    entity_id: int | None
+    entity_name: str | None
+    publication_id: int | None
+
+
+class RecentPaper(NamedTuple):
+    """Named tuple representing a recently published paper."""
+    entity_id: int | None
+    entity_name: str | None
+    publication_id: int | None
+
+
+class RelatedTopic(NamedTuple):
+    """Named tuple representing a related topic."""
+    entity_id: int | None
+    entity_name: str | None
+    related_topic_id: int | None
+    related_topic_name: str | None
+    related_topic_uri: str | None
+    prominencePercentile: int | float | None
+    relationScore: int | float | None
+    relatedTopicRank: int | None
+
+
+class TopAuthor(NamedTuple):
+    """Named tuple representing a top author."""
+    entity_id: int | None
+    entity_name: str | None
+    author_id: int | None
+    author_name: str | None
+    publicationCount: int | float | None
+
+
+class TopPublication(NamedTuple):
+    """Named tuple representing a top cited publication."""
+    entity_id: int | None
+    entity_name: str | None
+    publication_id: int | None
+    citationCount: int | float | None
+
+
+class TopInstitution(NamedTuple):
+    """Named tuple representing a top institution."""
+    entity_id: int | None
+    entity_name: str | None
+    institution_id: int | None
+    institution_name: str | None
+    publicationCount: int | float | None
+
+
+class TopJournal(NamedTuple):
+    """Named tuple representing a top journal."""
+    entity_id: int | None
+    entity_name: str | None
+    journal_id: int | None
+    journal_name: str | None
+    publicationCount: int | float | None
+    citationCount: int | float | None
+    authorCount: int | float | None
+    publicationGrowth: float | None
+    authorGrowth: float | None
+    sjr: float | None
+    snip: float | None
+    citeScore: float | None
+
+
+class TopKeyword(NamedTuple):
+    """Named tuple representing a top keyword."""
+    entity_id: int | None
+    entity_name: str | None
+    keyword_name: str | None
+    keyword_uri: str | None
+    weight: int | float | None
+    relevance: int | float | None
+    publicationCount: int | float | None
+    publicationGrowth: float | None
+
+
 class TopicLookupMetrics(Retrieval):
     @property
-    def topics(self) -> list:
+    def topics(self) -> list[Topic]:
         """A list of namedtuples representing topics and their basic info
         in the form `(id, name, uri, prominencePercentile, scholarlyOutput)`.
         """
         out = []
-        Topic = namedtuple('Topic',
-                           'id name uri prominencePercentile scholarlyOutput')
 
         results = self._json.get('results', [])
 
@@ -31,7 +118,7 @@ class TopicLookupMetrics(Retrieval):
         return out
 
     @property
-    def AuthorCount(self) -> Optional[list[MetricData]]:
+    def AuthorCount(self) -> list[MetricData] | None:
         """Author count metrics for each topic.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -39,7 +126,7 @@ class TopicLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'AuthorCount', self._by_year, "topic")
 
     @property
-    def CitationCount(self) -> Optional[list[MetricData]]:
+    def CitationCount(self) -> list[MetricData] | None:
         """Citation count metrics for each topic.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -47,12 +134,10 @@ class TopicLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'CitationCount', self._by_year, "topic")
 
     @property
-    def CorePapers(self) -> Optional[list]:
+    def CorePapers(self) -> list[CorePaper] | None:
         """Core papers for the topic.
         Returns list of CorePaper namedtuples with structure: (entity_id, entity_name, publication_id)
         """
-        CorePaper = namedtuple('CorePaper',
-                               'entity_id entity_name publication_id')
 
         out = []
         for item in extract_metric_lists(self._json, "CorePapers", "topic"):
@@ -68,7 +153,7 @@ class TopicLookupMetrics(Retrieval):
         return out or None
 
     @property
-    def FieldWeightedCitationImpact(self) -> Optional[list[MetricData]]:
+    def FieldWeightedCitationImpact(self) -> list[MetricData] | None:
         """Field weighted citation impact metrics for each topic.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -76,7 +161,7 @@ class TopicLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'FieldWeightedCitationImpact', self._by_year, "topic")
 
     @property
-    def InstitutionCount(self) -> Optional[list[MetricData]]:
+    def InstitutionCount(self) -> list[MetricData] | None:
         """Institution count metrics for each topic.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -84,12 +169,10 @@ class TopicLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'InstitutionCount', self._by_year, "topic")
 
     @property
-    def MostRecentlyPublishedPapers(self) -> Optional[list]:
+    def MostRecentlyPublishedPapers(self) -> list[RecentPaper] | None:
         """Most recently published papers for the topic.
         Returns list of RecentPaper namedtuples with structure: (entity_id, entity_name, publication_id)
         """
-        RecentPaper = namedtuple('RecentPaper',
-                                 'entity_id entity_name publication_id')
 
         out = []
         for item in extract_metric_lists(self._json, "MostRecentlyPublishedPapers", "topic"):
@@ -105,13 +188,11 @@ class TopicLookupMetrics(Retrieval):
         return out or None
 
     @property
-    def RelatedTopics(self) -> Optional[list]:
+    def RelatedTopics(self) -> list[RelatedTopic] | None:
         """Related topics for the topic.
         Returns list of RelatedTopic namedtuples with structure:
         (entity_id, entity_name, related_topic_id, related_topic_name, related_topic_uri, prominencePercentile, relationScore, relatedTopicRank)
         """
-        RelatedTopic = namedtuple('RelatedTopic',
-                                  'entity_id entity_name related_topic_id related_topic_name related_topic_uri prominencePercentile relationScore relatedTopicRank')
 
         out = []
         for item in extract_metric_lists(self._json, "RelatedTopics", "topic"):
@@ -133,7 +214,7 @@ class TopicLookupMetrics(Retrieval):
         return out or None
 
     @property
-    def ScholarlyOutput(self) -> Optional[list[MetricData]]:
+    def ScholarlyOutput(self) -> list[MetricData] | None:
         """Scholarly output metrics for each topic.
         Returns list of MetricData namedtuples with structure:
         (entity_id, entity_name, metric, year, value, percentage, threshold)
@@ -141,13 +222,11 @@ class TopicLookupMetrics(Retrieval):
         return extract_metric_data(self._json, 'ScholarlyOutput', self._by_year, "topic")
 
     @property
-    def TopAuthors(self) -> Optional[list]:
+    def TopAuthors(self) -> list[TopAuthor] | None:
         """Top authors for the topic.
         Returns list of TopAuthor namedtuples with structure:
         (entity_id, entity_name, author_id, author_name, publicationCount)
         """
-        TopAuthor = namedtuple('TopAuthor',
-                               'entity_id entity_name author_id author_name publicationCount')
 
         out = []
         for item in extract_metric_lists(self._json, "TopAuthors", "topic"):
@@ -165,13 +244,11 @@ class TopicLookupMetrics(Retrieval):
         return out or None
 
     @property
-    def TopCitedPublications(self) -> Optional[list]:
+    def TopCitedPublications(self) -> list[TopPublication] | None:
         """Top cited publications for the topic.
         Returns list of TopPublication namedtuples with structure:
         (entity_id, entity_name, publication_id, citationCount)
         """
-        TopPublication = namedtuple('TopPublication',
-                                    'entity_id entity_name publication_id citationCount')
 
         out = []
         for item in extract_metric_lists(self._json, "TopCitedPublications", "topic"):
@@ -188,13 +265,11 @@ class TopicLookupMetrics(Retrieval):
         return out or None
 
     @property
-    def TopInstitutions(self) -> Optional[list]:
+    def TopInstitutions(self) -> list[TopInstitution] | None:
         """Top institutions for the topic.
         Returns list of TopInstitution namedtuples with structure:
         (entity_id, entity_name, institution_id, institution_name, publicationCount)
         """
-        TopInstitution = namedtuple('TopInstitution',
-                                    'entity_id entity_name institution_id institution_name publicationCount')
 
         out = []
         for item in extract_metric_lists(self._json, "TopInstitutions", "topic"):
@@ -212,14 +287,12 @@ class TopicLookupMetrics(Retrieval):
         return out or None
 
     @property
-    def TopJournals(self) -> Optional[list]:
+    def TopJournals(self) -> list[TopJournal] | None:
         """Top journals for the topic.
         Returns list of TopJournal namedtuples with structure:
         (entity_id, entity_name, journal_id, journal_name, publicationCount, 
         citationCount, authorCount, publicationGrowth, authorGrowth, sjr, snip, citeScore)
         """
-        TopJournal = namedtuple('TopJournal',
-                                'entity_id entity_name journal_id journal_name publicationCount citationCount authorCount publicationGrowth authorGrowth sjr snip citeScore')
 
         out = []
         for item in extract_metric_lists(self._json, "TopJournals", "topic"):
@@ -244,14 +317,12 @@ class TopicLookupMetrics(Retrieval):
         return out or None
 
     @property
-    def TopKeywords(self) -> Optional[list]:
+    def TopKeywords(self) -> list[TopKeyword] | None:
         """Top keywords for the topic.
         Returns list of TopKeyword namedtuples with structure:
         (entity_id, entity_name, keyword_name, keyword_uri, weight, 
         relevance, publicationCount, publicationGrowth)
         """
-        TopKeyword = namedtuple('TopKeyword',
-                                'entity_id entity_name keyword_name keyword_uri weight relevance publicationCount publicationGrowth')
         out = []
         for item in extract_metric_lists(self._json, "TopKeywords", "topic"):
             entity_id = item.get('entity_id')
@@ -271,10 +342,10 @@ class TopicLookupMetrics(Retrieval):
         return out or None
 
     def __init__(self,
-                 topic_ids: Union[str, list],
-                 metric_types: Optional[Union[str, list]] = None,
+                 topic_ids: str | list,
+                 metric_types: str | list | None = None,
                  by_year: bool = False,
-                 refresh: Union[bool, int] = False,
+                 refresh: bool | int = False,
                  **kwds: str
                  ) -> None:
         """Interaction with the SciVal's `metrics` endpoint of the `TopicLookup API`.

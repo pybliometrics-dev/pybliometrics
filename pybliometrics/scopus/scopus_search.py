@@ -1,5 +1,4 @@
-from collections import namedtuple
-from typing import Optional, Union
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_integrity, check_parameter_value, \
@@ -7,9 +6,48 @@ from pybliometrics.utils import check_integrity, check_parameter_value, \
     listify, make_search_summary, VIEWS
 
 
+class Document(NamedTuple):
+    eid: str | None
+    doi: str | None
+    pii: str | None
+    pubmed_id: str | None
+    title: str | None
+    subtype: str | None
+    subtypeDescription: str | None
+    creator: str | None
+    afid: str | None
+    affilname: str | None
+    affiliation_city: str | None
+    affiliation_country: str | None
+    author_count: str | None
+    author_names: str | None
+    author_ids: str | None
+    author_afids: str | None
+    coverDate: str | None
+    coverDisplayDate: str | None
+    publicationName: str | None
+    issn: str | None
+    source_id: str | None
+    eIssn: str | None
+    aggregationType: str | None
+    volume: str | None
+    issueIdentifier: str | None
+    article_number: str | None
+    pageRange: str | None
+    description: str | None
+    authkeywords: str | None
+    citedby_count: int
+    openaccess: int
+    freetoread: str | None
+    freetoreadLabel: str | None
+    fund_acr: str | None
+    fund_no: str | None
+    fund_sponsor: str | None
+
+
 class ScopusSearch(Search):
     @property
-    def results(self) -> Optional[list[namedtuple]]:
+    def results(self) -> list[Document] | None:
         """A list of namedtuples in the form `(eid doi pii pubmed_id title
         subtype subtypeDescription creator afid affilname affiliation_city
         affiliation_country author_count author_names author_ids author_afids
@@ -47,7 +85,6 @@ class ScopusSearch(Search):
                  'issueIdentifier article_number pageRange description '\
                  'authkeywords citedby_count openaccess freetoread '\
                  'freetoreadLabel fund_acr fund_no fund_sponsor'
-        doc = namedtuple('Document', fields)
         check_field_consistency(self._integrity, fields)
         # Parse elements one-by-one
         out = []
@@ -89,7 +126,7 @@ class ScopusSearch(Search):
                 value = item.get(key)
                 info[key] = html_unescape(str(value)) if (self.unescape and value) else value
             fund_no = item.get('fund-no', '').replace("undefined", "") or None
-            new = doc(article_number=item.get('article-number'),
+            new = Document(article_number=item.get('article-number'),
                       title=info.get('dc:title'),
                       fund_no=fund_no,
                       fund_sponsor=item.get('fund-sponsor'),
@@ -125,11 +162,11 @@ class ScopusSearch(Search):
 
     def __init__(self,
                  query: str,
-                 refresh: Union[bool, int] = False,
+                 refresh: bool | int = False,
                  view: str = None,
                  verbose: bool = False,
                  download: bool = True,
-                 integrity_fields: Union[list[str], tuple[str, ...]] = None,
+                 integrity_fields: list[str] | tuple[str, ...] | None = None,
                  integrity_action: str = "raise",
                  subscriber: bool = True,
                  unescape: bool = True,

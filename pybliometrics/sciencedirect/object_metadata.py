@@ -1,27 +1,36 @@
 """Module with the ObjectMetadata class."""
 
-from collections import namedtuple
-from typing import Optional, Union
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import chained_get, check_parameter_value, detect_id_type, make_int_if_possible, VIEWS
 
 
+class Metadata(NamedTuple):
+    """Named tuple representing metadata of a document object."""
+    eid: str
+    filename: str | None
+    height: int | None
+    mimetype: str | None
+    ref: str | None
+    size: int | None
+    type: str | None
+    url: str | None
+    width: int | None
+
+
 class ObjectMetadata(Retrieval):
     """Class to retrieve a the metadata of all objects of a document."""
     @property
-    def results(self) -> list[namedtuple]:
+    def results(self) -> list[Metadata]:
         """Metadata of the objects in a document. List of namedtuples in the form `eid`, `filename`,
         `height`, `mimetype`, `ref`, `size`, `type`, `url` and `width`.
         """
-        fields = 'eid filename height mimetype ref size type url width'
-        metadata = namedtuple('Metadata', fields)
-
         refs = chained_get(self._json, ['attachment-metadata-response', 'attachment'], [])
         out = []
         for ref in refs:
             out.append(
-                metadata(
+                Metadata(
                     eid=ref["eid"],
                     filename=ref.get("filename"),
                     height=make_int_if_possible(ref.get("height")),
@@ -36,10 +45,10 @@ class ObjectMetadata(Retrieval):
         return out
 
     def __init__(self,
-                 identifier: Union[int, str],
+                 identifier: int | str,
                  view: str = 'META',
-                 id_type: Optional[str] = None,
-                 refresh: Union[bool, int] = False,
+                 id_type: str | None = None,
+                 refresh: bool | int = False,
                  **kwds: str
                  ):
         """Class to retrieve the metadata of all objects of a document.

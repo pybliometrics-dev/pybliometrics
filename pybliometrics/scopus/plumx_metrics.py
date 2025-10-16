@@ -1,13 +1,22 @@
-from collections import namedtuple
-from typing import Optional, Union
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import check_parameter_value
 
 
+class Category(NamedTuple):
+    name: str
+    total: int
+
+
+class Metric(NamedTuple):
+    name: str
+    total: int
+
+
 class PlumXMetrics(Retrieval):
     @property
-    def category_totals(self) -> Optional[list[namedtuple]]:
+    def category_totals(self) -> list[Category] | None:
         """A list of namedtuples representing total metrics as categorized
         by PlumX Metrics in the form `(capture, citation, mention, socialMedia,
         usage)`.
@@ -17,20 +26,20 @@ class PlumXMetrics(Retrieval):
         https://plumanalytics.com/learn/about-metrics/.
         """
         categories = self._json.get('count_categories', [])
-        return _format_as_namedtuple_list(categories, "Category") or None
+        return _format_as_category_list(categories) or None
 
     @property
-    def capture(self) -> Optional[list[namedtuple]]:
+    def capture(self) -> list[Metric] | None:
         """A list of namedtuples representing metrics in the Captures category.
 
         Note: For details on Capture metrics see
         https://plumanalytics.com/learn/about-metrics/capture-metrics/.
         """
         metrics = self._count_categories.get('capture', [])
-        return _format_as_namedtuple_list(metrics) or None
+        return _format_as_metric_list(metrics) or None
 
     @property
-    def citation(self) -> Optional[list[namedtuple]]:
+    def citation(self) -> list[Metric] | None:
         """A list of namedtuples representing citation counts from
         different sources.
 
@@ -41,42 +50,42 @@ class PlumXMetrics(Retrieval):
         for item in self._count_categories.get('citation', []):
             if item.get('sources'):
                 metrics += item['sources']
-        return _format_as_namedtuple_list(metrics) or None
+        return _format_as_metric_list(metrics) or None
 
     @property
-    def mention(self) -> Optional[list[namedtuple]]:
+    def mention(self) -> list[Metric] | None:
         """A list of namedtuples representing metrics in Mentions category.
 
         Note: For details on Mention metrics see
         https://plumanalytics.com/learn/about-metrics/mention-metrics/.
         """
         metrics = self._count_categories.get('mention', [])
-        return _format_as_namedtuple_list(metrics) or None
+        return _format_as_metric_list(metrics) or None
 
     @property
-    def social_media(self) -> Optional[list[namedtuple]]:
+    def social_media(self) -> list[Metric] | None:
         """A list of namedtuples representing social media metrics.
 
         Note: For details on Social Media metrics see
         https://plumanalytics.com/learn/about-metrics/social-media-metrics/.
         """
         metrics = self._count_categories.get('socialMedia', [])
-        return _format_as_namedtuple_list(metrics) or None
+        return _format_as_metric_list(metrics) or None
 
     @property
-    def usage(self) -> Optional[list[namedtuple]]:
+    def usage(self) -> list[Metric] | None:
         """A list of namedtuples representing Usage category metrics.
 
         Note: For details on Usage metrics see
         https://plumanalytics.com/learn/about-metrics/usage-metrics/.
         """
         metrics = self._count_categories.get('usage', [])
-        return _format_as_namedtuple_list(metrics) or None
+        return _format_as_metric_list(metrics) or None
 
     def __init__(self,
                  identifier: str,
                  id_type: str,
-                 refresh: Union[bool, int] = False,
+                 refresh: bool | int = False,
                  **kwds: str
                  ) -> None:
         """Interaction with the PlumX Metrics API.
@@ -137,9 +146,11 @@ class PlumXMetrics(Retrieval):
         return s
 
 
-def _format_as_namedtuple_list(metric_counts, tuple_name='Metric'):
-    """Formats list of dicts of metrics into list of namedtuples in the
-    form `(name, total)`.
-    """
-    metric = namedtuple(tuple_name, 'name total')
-    return [metric(name=t['name'], total=t['total']) for t in metric_counts]
+def _format_as_category_list(metric_counts):
+    """Formats list of dicts of metrics into list of Category namedtuples."""
+    return [Category(name=t['name'], total=t['total']) for t in metric_counts]
+
+
+def _format_as_metric_list(metric_counts):
+    """Formats list of dicts of metrics into list of Metric namedtuples."""
+    return [Metric(name=t['name'], total=t['total']) for t in metric_counts]

@@ -1,12 +1,11 @@
 import configparser
-from typing import Optional, Union
 from pathlib import Path
 from pybliometrics.utils.constants import CONFIG_FILE
 
 
-def create_config(config_dir: Optional[Union[str, Path]] = None,
-                  keys: Optional[list[str]] = None,
-                  insttoken: Optional[list[str]] = None
+def create_config(config_dir: str | Path | None = None,
+                  keys: list[str] | None = None,
+                  insttoken: list[str] | None = None
                   ):
     """Initiates process to generate configuration file.
 
