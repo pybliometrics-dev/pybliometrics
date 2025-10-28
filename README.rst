@@ -1,7 +1,7 @@
 pybliometrics
 =============
 
-Enables large-scale access to Elsevier's Scopus and ScienceDirect APIs from Python.
+Enables large-scale access to Elsevier's Scopus, ScienceDirect and SciVal APIs in Python.
 
 Documentation: https://pybliometrics.readthedocs.io
 

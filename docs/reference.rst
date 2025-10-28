@@ -2,7 +2,7 @@
 API Reference
 =============
 
-Each class in `pybliometrics` corresponds to one of the `Product Specific APIs <https://dev.elsevier.com/api_docs.html>`_ for Scopus and ScienceDirect.  See below links for class reference and examples.
+Each class in `pybliometrics` corresponds to one of the `Product Specific APIs <https://dev.elsevier.com/api_docs.html>`_ for Scopus, ScienceDirect and SciVal.  See below links for class reference and examples.
 
 Scopus
 ======
@@ -84,6 +84,8 @@ SciVal
     reference/scival/InstitutionLookupMetrics.rst
     reference/scival/PublicationLookup.rst
     reference/scival/TopicLookupMetrics.rst
+
+Several other APIs are not implemented yet.
 
 
 Initialization

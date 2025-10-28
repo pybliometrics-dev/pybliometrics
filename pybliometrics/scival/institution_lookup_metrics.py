@@ -18,7 +18,7 @@ class InstitutionLookupMetrics(Retrieval):
     def AcademicCorporateCollaboration(self) -> list[MetricData] | None:
         """Academic corporate collaboration metrics for each institution.
         Returns list of MetricData namedtuples with structure:
-        (entity_id, entity_name, metric, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, year, value, percentage, threshold).
         """
         return extract_metric_data(self._json, 'AcademicCorporateCollaboration', self._by_year, "institution")
 
@@ -26,7 +26,7 @@ class InstitutionLookupMetrics(Retrieval):
     def AcademicCorporateCollaborationImpact(self) -> list[MetricData] | None:
         """Academic corporate collaboration impact metrics for each institution.
         Returns list of MetricData namedtuples with structure:
-        (entity_id, entity_name, metric, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, year, value, percentage, threshold).
         """
         return extract_metric_data(self._json, 'AcademicCorporateCollaborationImpact', self._by_year, "institution")
 
@@ -57,7 +57,7 @@ class InstitutionLookupMetrics(Retrieval):
     def CitationCount(self) -> list[MetricData] | None:
         """Citation count metrics for each institution.
         Returns list of MetricData namedtuples with structure:
-        (entity_id, entity_name, metric, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, year, value, percentage, threshold).
         """
         return extract_metric_data(self._json, 'CitationCount', self._by_year, "institution")
 
@@ -65,7 +65,7 @@ class InstitutionLookupMetrics(Retrieval):
     def CitationsPerPublication(self) -> list[MetricData] | None:
         """Citations per publication metrics for each institution.
         Returns list of MetricData namedtuples with structure:
-        (entity_id, entity_name, metric, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, year, value, percentage, threshold).
         """
         return extract_metric_data(self._json, 'CitationsPerPublication', self._by_year, "institution")
 
@@ -73,7 +73,7 @@ class InstitutionLookupMetrics(Retrieval):
     def CitedPublications(self) -> list[MetricData] | None:
         """Cited publications metrics for each institution.
         Returns list of MetricData namedtuples with structure:
-        (entity_id, entity_name, metric, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, year, value, percentage, threshold).
         """
         return extract_metric_data(self._json, 'CitedPublications', self._by_year, "institution")
 
@@ -81,7 +81,7 @@ class InstitutionLookupMetrics(Retrieval):
     def Collaboration(self) -> list[MetricData] | None:
         """Collaboration metrics for each institution.
         Returns list of MetricData namedtuples with structure:
-        (entity_id, entity_name, metric, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, year, value, percentage, threshold).
         """
         return extract_metric_data(self._json, 'Collaboration', self._by_year, "institution")
 
@@ -89,7 +89,7 @@ class InstitutionLookupMetrics(Retrieval):
     def CollaborationImpact(self) -> list[MetricData] | None:
         """Collaboration impact metrics for each institution.
         Returns list of MetricData namedtuples with structure:
-        (entity_id, entity_name, metric, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, year, value, percentage, threshold).
         """
         return extract_metric_data(self._json, 'CollaborationImpact', self._by_year, "institution")
 
@@ -97,7 +97,7 @@ class InstitutionLookupMetrics(Retrieval):
     def FieldWeightedCitationImpact(self) -> list[MetricData] | None:
         """Field weighted citation impact metrics for each institution.
         Returns list of MetricData namedtuples with structure:
-        (entity_id, entity_name, metric, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, year, value, percentage, threshold).
         """
         return extract_metric_data(self._json, 'FieldWeightedCitationImpact', self._by_year, "institution")
 
@@ -105,7 +105,7 @@ class InstitutionLookupMetrics(Retrieval):
     def OutputsInTopCitationPercentiles(self) -> list[MetricData] | None:
         """Outputs in top citation percentiles metrics for each institution.
         Returns list of MetricData namedtuples with structure:
-        (entity_id, entity_name, metric, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, year, value, percentage, threshold).
         """
         return extract_metric_data(self._json, 'OutputsInTopCitationPercentiles', self._by_year, "institution")
 
@@ -113,7 +113,7 @@ class InstitutionLookupMetrics(Retrieval):
     def PublicationsInTopJournalPercentiles(self) -> list[MetricData] | None:
         """Publications in top journal percentiles metrics for each institution.
         Returns list of MetricData namedtuples with structure:
-        (entity_id, entity_name, metric, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, year, value, percentage, threshold).
         """
         return extract_metric_data(self._json, 'PublicationsInTopJournalPercentiles', self._by_year, "institution")
 
@@ -121,7 +121,7 @@ class InstitutionLookupMetrics(Retrieval):
     def ScholarlyOutput(self) -> list[MetricData] | None:
         """Scholarly output metrics for each institution.
         Returns list of MetricData namedtuples with structure:
-        (entity_id, entity_name, metric, year, value, percentage, threshold)
+        (entity_id, entity_name, metric, year, value, percentage, threshold).
         """
         return extract_metric_data(self._json, 'ScholarlyOutput', self._by_year, "institution")
 

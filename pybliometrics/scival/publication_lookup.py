@@ -35,12 +35,12 @@ class PublicationLookup(Retrieval):
 
     @property
     def citation_count(self) -> int | None:
-        """Count of citations"""
+        """Count of citations."""
         return make_int_if_possible(chained_get(self._json, ['publication', 'citationCount']))
 
     @property
     def doi(self) -> str | None:
-        """Digital Object Identifier (DOI)"""
+        """Digital Object Identifier (DOI)."""
         return chained_get(self._json, ['publication', 'doi'])
 
     @property
@@ -62,12 +62,12 @@ class PublicationLookup(Retrieval):
 
     @property
     def link(self) -> str | None:
-        """URL link"""
+        """URL link."""
         return chained_get(self._json, ['link', '@href'])
 
     @property
     def publication_year(self) -> int | None:
-        """Year of publication"""
+        """Year of publication."""
         return make_int_if_possible(chained_get(self._json, ['publication', 'publicationYear']))
 
     @property
@@ -77,27 +77,27 @@ class PublicationLookup(Retrieval):
 
     @property
     def source_title(self) -> str | None:
-        """Title of source"""
+        """Title of source."""
         return chained_get(self._json, ['publication', 'sourceTitle'])
 
     @property
     def title(self) -> str | None:
-        """Publication title"""
+        """Publication title."""
         return chained_get(self._json, ['publication', 'title'])
 
     @property
     def topic_cluster_id(self) -> int | None:
-        """Topic cluster id"""
+        """Topic cluster id."""
         return make_int_if_possible(chained_get(self._json, ['publication', 'topicClusterId']))
 
     @property
     def topic_id(self) -> int | None:
-        """Topic id"""
+        """Topic id."""
         return make_int_if_possible(chained_get(self._json, ['publication', 'topicId']))
 
     @property
     def type(self) -> str | None:
-        """Type of publication"""
+        """Type of publication."""
         return chained_get(self._json, ['publication', 'type'])
 
     def __str__(self):
@@ -130,13 +130,13 @@ class PublicationLookup(Retrieval):
                  ) -> None:
         """Interaction with the Publication Lookup API.
 
-            :param identifier: The Scopus ID of the publication.
-            :param refresh: Whether to refresh the cached file if it exists or not.
-                If int is passed, cached file will be refreshed if the
-                number of days since last modification exceeds that value.
-            :param kwds: Keywords passed on as query parameters.  Must contain
-                fields and values mentioned in the API specification at
-                https://dev.elsevier.com/documentation/SciValPublicationAPI.wadl.
+        :param identifier: The Scopus ID of the publication.
+        :param refresh: Whether to refresh the cached file if it exists or not.
+            If int is passed, cached file will be refreshed if the
+            number of days since last modification exceeds that value.
+        :param kwds: Keywords passed on as query parameters.  Must contain
+            fields and values mentioned in the API specification at
+            https://dev.elsevier.com/documentation/SciValPublicationAPI.wadl.
         """
         self._view = ''
         self._refresh = refresh
