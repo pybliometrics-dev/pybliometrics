@@ -48,6 +48,8 @@ class AuthorSearch(Search):
             aff = item.get('affiliation-current', {})
             fields = item.get('subject-area',
                               [{'@abbrev': '', '@frequency': ''}])
+            if not isinstance(fields, list):
+                fields = [fields]
             subjects = get_and_aggregate_subjects(fields)
             areas = [f"{abbrev} ({'' if freq == 0 else freq})" for abbrev, freq in subjects.items()]
             new = Author(eid=item.get('eid'),
