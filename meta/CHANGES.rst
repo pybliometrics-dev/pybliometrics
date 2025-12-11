@@ -4,6 +4,22 @@ Change Log
 
 .. toctree::
 
+4.4
+~~~
+
+2025-10-28
+
+* Drop support for python 3.9.
+* Rename class `scopus.SertialTitle()` to `scopus.SertialTitleISSN()` with deprecation warning.
+* Rename class `scopus.SertialSearch()` to `scopus.SertialTitleSearch()` with deprecation warning.
+* In `scopus.CitationOverview()`, remove property "sortTitle" and add property "publicationName" in line with changes in the Scopus API.
+* In `scopus.AuthorSearch().subject_areas`, aggregate data to prevent bugs originating in the Scopus API.
+* Provide `__str__` for `sciencedirect.ObjectRetrieval`.
+* Provide `__str__` for `sciencedirect.NonSerialTitle`.
+* New module `scival` with multiple new classes: `scival.AuthorMetrics()`, `scival.InstitutionLookupMetrics()`, `scival.PublicationLookup()` and `scival.TopicLookupMetrics()`.
+* Fix installation issues on some systems.
+* Improve and fix all type hints.
+
 4.3
 ~~~
 

@@ -8,4 +8,4 @@ from pybliometrics.sciencedirect.object_metadata import *
 from pybliometrics.sciencedirect.object_retrieval import *
 from pybliometrics.sciencedirect.sciencedirect_search import *
 from pybliometrics.sciencedirect.subject_classifications import *
-from pybliometrics.scopus.serial_title import *
+from pybliometrics.scopus.serial_title_issn import *

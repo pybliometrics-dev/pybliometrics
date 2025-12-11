@@ -3,7 +3,6 @@
 from json import dumps, loads
 from math import ceil
 from time import localtime, strftime, time
-from typing import Optional
 
 from tqdm import tqdm
 
@@ -141,7 +140,7 @@ class Base:
         """Return the modification date of the cached file."""
         return strftime('%Y-%m-%d %H:%M:%S', localtime(self._mdate))
 
-    def get_key_remaining_quota(self) -> Optional[str]:
+    def get_key_remaining_quota(self) -> str | None:
         """Return number of remaining requests for the current key and the
         current API (relative on last actual request).
         """
@@ -150,7 +149,7 @@ class Base:
         except AttributeError:
             return None
 
-    def get_key_reset_time(self) -> Optional[str]:
+    def get_key_reset_time(self) -> str | None:
         """Return time when current key is reset (relative on last
         actual request).
         """

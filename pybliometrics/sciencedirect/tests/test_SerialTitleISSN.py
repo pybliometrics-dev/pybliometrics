@@ -1,15 +1,22 @@
-"""Test pybliometrics.sciencedirect.SerialTitle()"""
+"""Test pybliometrics.sciencedirect.SerialTitleISSN()"""
 
-from collections import namedtuple
-
-from pybliometrics.sciencedirect import SerialTitle, init
+from pybliometrics.sciencedirect import SerialTitleISSN, init
+from pybliometrics.scopus.serial_title_issn import Citescoreinfolist, Subjectarea, Yearlydata
 
 init()
 
-gene = SerialTitle('03781119', view='ENHANCED', refresh=30)
+gene = SerialTitleISSN('03781119', view='ENHANCED', refresh=30)
 
 def test_module():
-    assert gene.__module__  == 'pybliometrics.scopus.serial_title'
+    assert gene.__module__  == 'pybliometrics.scopus.serial_title_issn'
+
+
+def test_deprecated_class():
+    from pytest import deprecated_call
+    from pybliometrics.sciencedirect import SerialTitle
+
+    with deprecated_call():
+        _ = SerialTitle('03781119', refresh=30)
 
 
 def test_aggregation_type():
@@ -17,12 +24,9 @@ def test_aggregation_type():
 
 
 def test_citescoreyearinfolist():
-    info_fields = 'year citescore'
-    info = namedtuple('Citescoreinfolist', info_fields)
-
-    # Test softwarex
-    expected_named_tuple = [info(year=2023, citescore=6.1),
-                            info(year=2024, citescore=5.1)]
+    # Test Gene journal
+    expected_named_tuple = [Citescoreinfolist(year=2024, citescore=5.1),
+                            Citescoreinfolist(year=2025, citescore=4.5)]
     assert gene.citescoreyearinfolist == expected_named_tuple
 
 
@@ -81,11 +85,11 @@ def test_self_link():
 
 
 def test_sjrlist():
-    assert gene.sjrlist == [(2023, 0.725)]
+    assert gene.sjrlist == [(2024, 0.682)]
 
 
 def test_sniplist():
-    assert gene.sniplist == [(2023, 0.765)]
+    assert gene.sniplist == [(2024, 0.716)]
 
 
 def test_source_id():
@@ -93,9 +97,8 @@ def test_source_id():
 
 
 def test_subject_area():
-    area = namedtuple('Subjectarea', 'area abbreviation code')
     expected1 = [
-        area(area='Genetics', abbreviation='BIOC', code=1311)
+        Subjectarea(area='Genetics', abbreviation='BIOC', code=1311)
     ]
     assert gene.subject_area == expected1
 
@@ -107,10 +110,8 @@ def test_title():
 def test_yearly_data():
     assert isinstance(gene.yearly_data, list)
     assert len(gene.yearly_data) == 30
-    fields = 'year publicationcount revpercent zerocitessce '\
-             'zerocitespercentsce citecountsce'
-    dat = namedtuple('Yearlydata', fields)
-    expected1_2023 = dat(year=2023, publicationcount=654, revpercent=8.56,
-        zerocitessce=89, zerocitespercentsce=13.608562691131498,
-        citecountsce=32424)
+
+    expected1_2023 = Yearlydata(year=2023, publicationcount=654, revpercent=8.56,
+        zerocitessce=64, zerocitespercentsce=9.785932721712538,
+        citecountsce=32573)
     assert gene.yearly_data[27] == expected1_2023

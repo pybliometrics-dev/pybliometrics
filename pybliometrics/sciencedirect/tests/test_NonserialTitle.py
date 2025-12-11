@@ -79,6 +79,14 @@ def test_self_link():
     assert nst_2.self_link == "https://api.elsevier.com/content/nonserial/title/isbn/9780128203101"
     assert nst_3.self_link == "https://api.elsevier.com/content/nonserial/title/isbn/9780128217771"
 
+def test_str():
+    expected_1 = "Ian Newton. The Migration Ecology of Birds, Second Edition. Academic Press. ISBN: 9780128237519"
+    expected_2 = "Elias Barriga and Ivana Pajic-Lijakovic (ed.). Viscoelasticity and  Collective Cell Migration. Academic Press. ISBN: 9780128203101"
+    expected_3 = "Fatos Xhafa, Mohamed A. Tawhid, Pardeep Kumar and Yugal Kumar (ed.). Machine Learning, Big Data, and IoT for Medical Informatics. Academic Press. ISBN: 9780128217771"
+    assert str(nst_1) == expected_1
+    assert str(nst_2) == expected_2
+    assert str(nst_3) == expected_3
+
 
 def test_title():
     assert nst_1.title == "The Migration Ecology of Birds"

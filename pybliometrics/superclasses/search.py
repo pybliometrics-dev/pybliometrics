@@ -2,7 +2,6 @@
 
 from hashlib import md5
 from pathlib import Path
-from typing import Union
 
 from pybliometrics.superclasses import Base
 from pybliometrics.utils import get_config, COUNTS, URLS
@@ -10,7 +9,7 @@ from pybliometrics.utils import get_config, COUNTS, URLS
 
 class Search(Base):
     def __init__(self,
-                 query: Union[str, dict],
+                 query: str | dict,
                  cursor: bool = False,
                  download: bool = True,
                  verbose: bool = False,

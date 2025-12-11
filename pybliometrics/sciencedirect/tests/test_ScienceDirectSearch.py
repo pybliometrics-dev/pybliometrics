@@ -1,12 +1,12 @@
 """Tests for sciencedirect.ScienceDirectSearch"""
-from collections import namedtuple
 
 from pybliometrics.exception import Scopus400Error
 from pybliometrics.sciencedirect import ScienceDirectSearch, init
+from pybliometrics.sciencedirect.sciencedirect_search import Document
 
 init()
 
-sds_standard = ScienceDirectSearch('TITLE("Assessing LLMs in malicious code deobfuscation of real-world malware campaigns") AND DATE(2012)', view="STANDARD", refresh=30)
+sds_standard = ScienceDirectSearch('TITLE("Assessing LLMs in malicious code deobfuscation of real-world malware campaigns") AND DATE(2024)', view="STANDARD", refresh=30)
 sds_empty = ScienceDirectSearch('TITLE("Not a very realistic title")', view="STANDARD", refresh=30)
 
 
@@ -16,11 +16,7 @@ def test_empty_results():
 
 
 def test_all_fields():
-    fields = 'authors first_author doi title link load_date openaccess_status pii '\
-        'coverDate endingPage publicationName startingPage api_link volume'
-    doc = namedtuple("Document", fields)
-
-    expected_standard_doc = doc(
+    expected_standard_doc = Document(
         authors="Constantinos Patsakis;Fran Casino;Nikolaos Lykousas",
         first_author="Constantinos Patsakis",
         doi="10.1016/j.eswa.2024.124912",
@@ -62,7 +58,7 @@ def test_length():
 
 def test_string():
     str_start = ('Search \'TITLE("Assessing LLMs in malicious code deobfuscation of '
-    'real-world malware campaigns") AND DATE(2012)\' yielded 1 document as of')
+    'real-world malware campaigns") AND DATE(2024)\' yielded 1 document as of')
     assert sds_standard.__str__().startswith(str_start)
 
 

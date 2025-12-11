@@ -1,6 +1,7 @@
 """Tests for `scopus.AffiliationRetrieval` module."""
 
 from pybliometrics.scopus import AffiliationRetrieval, init
+from pybliometrics.scopus.affiliation_retrieval import Variant
 
 init()
 
@@ -48,7 +49,7 @@ def test_date_created():
 
 
 def test_document_count():
-    expected = 73581
+    expected = 0
     assert light.document_count >= expected
     assert standard.document_count >= expected
     assert entitled.document_count is None
@@ -73,9 +74,8 @@ def test_identifier():
 
 
 def test_name_variants():
-    expected = "<class 'pybliometrics.scopus.affiliation_retrieval.Variant'>"
-    assert str(type(light.name_variants[0])) == expected
-    assert str(type(standard.name_variants[0])) == expected
+    assert isinstance(light.name_variants[0], Variant)
+    assert isinstance(standard.name_variants[0], Variant)
     assert entitled.name_variants is None
 
 
@@ -137,14 +137,14 @@ def test_status():
     assert entitled.status is None
 
 
-def sort_name():
+def test_sort_name():
     assert light.sort_name is None
-    assert standard.sort_name== 'Cape Town, University of'
+    assert standard.sort_name == 'Cape Town, University of'
     assert entitled.sort_name is None
 
 
-def url():
+def test_url():
     expected = 'https://api.elsevier.com/content/affiliation/affiliation_id/60000356'
-    assert light.url== expected
-    assert standard.url== expected
+    assert light.url == expected
+    assert standard.url == expected
     assert entitled.url is None

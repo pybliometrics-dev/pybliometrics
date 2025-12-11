@@ -1,7 +1,7 @@
-pybliometrics.scopus.SerialSearch
-=================================
+pybliometrics.scopus.SerialTitleSearch
+======================================
 
-`SerialSearch()` implements the search of the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  This class performs searches for serial sources (journals, trade journals, conference proceedings, book series) based on title, ISSN, publisher, subject, or source type.
+`SerialTitleSearch()` implements the search of the `Serial Title API <https://dev.elsevier.com/documentation/SerialTitleAPI.wadl>`_.  This class performs searches for serial sources (journals, trade journals, conference proceedings, book series) based on title, ISSN, publisher, subject, or source type.
 
 .. currentmodule:: pybliometrics.scopus
 .. contents:: Table of Contents
@@ -10,7 +10,7 @@ pybliometrics.scopus.SerialSearch
 Documentation
 -------------
 
-.. autoclass:: SerialSearch
+.. autoclass:: SerialTitleSearch
     :members:
     :inherited-members:
 
@@ -22,9 +22,9 @@ The class is initialized with a search query dictionary.  Its keys are limited t
 .. code-block:: python
 
     >>> import pybliometrics
-    >>> from pybliometrics.scopus import SerialSearch
+    >>> from pybliometrics.scopus import SerialTitleSearch
     >>> pybliometrics.scopus.init()
-    >>> s = SerialSearch(query={"title": "SoftwareX"})
+    >>> s = SerialTitleSearch(query={"title": "SoftwareX"})
 
 
 You can obtain basic information just by printing the object:

@@ -1,8 +1,7 @@
 """Tests for `scopus.AffiliationSearch` module."""
 
-from collections import namedtuple
-
 from pybliometrics.scopus import AffiliationSearch, init
+from pybliometrics.scopus.affiliation_search import Affiliation
 
 init()
 
@@ -13,8 +12,6 @@ s2 = AffiliationSearch('AFFIL(Max Planck Munich)', download=False, refresh=True)
 def test_affiliations():
     received1 = s1.affiliations
     assert isinstance(received1, list)
-    order = 'eid name variant documents city country'
-    Affiliation = namedtuple('Affiliation', order)
     expected = Affiliation(eid='10-s2.0-60021784', name='New York University',
         variant='', documents=0, city='New York', country='United States')
     assert received1[0].documents >= 90_000

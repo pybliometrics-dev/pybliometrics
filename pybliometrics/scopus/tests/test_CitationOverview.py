@@ -1,8 +1,7 @@
 """Tests for `scopus.CitationOverview` module."""
 
-from collections import namedtuple
-
-from pybliometrics.scopus import CitationOverview, init
+from pybliometrics.scopus import init
+from pybliometrics.scopus.abstract_citation import Author, CitationOverview
 
 init()
 
@@ -13,9 +12,8 @@ co_doi = CitationOverview(["10.1016/j.softx.2019.100263"],
                           id_type="doi", refresh=30, date="2016-2020")
 
 def test_authors():
-    Author = namedtuple('Author', 'name surname initials id url')
     url = 'https://api.elsevier.com/content/author/author_id/7004212771'
-    john = Author(name='Kitchin J.R.', surname='Kitchin',
+    john = Author(name='J.R., Kitchin, John R.', surname='Kitchin',
                   initials='J.R.', id='7004212771', url=url)
     assert co_eid.authors[0][1] == john
     assert co_eid.authors[1] == [john]
@@ -30,13 +28,13 @@ def test_cc():
 
 
 def test_citationType_long():
-    assert co_eid.citationType_long == ['Article', 'Review']
-    assert co_doi.citationType_long == ['Article']
+    assert co_eid.citationType_long == ['ARTICLE', 'REVIEW']
+    assert co_doi.citationType_long == ['ARTICLE']
 
 
 def test_citationType_short():
-    assert co_eid.citationType_short == ['ar', 're']
-    assert co_doi.citationType_short == ['ar']
+    assert co_eid.citationType_short == ['ARTICLE', 'REVIEW']
+    assert co_doi.citationType_short == ['ARTICLE']
 
 
 def test_columnTotal():
@@ -98,9 +96,15 @@ def test_pii():
     assert co_doi.pii == [expected[0]]
 
 
-def prevColumnTotal():
+def test_prevColumnTotal():
     assert co_eid.prevColumnTotal == 0
     assert co_doi.prevColumnTotal == 0
+
+
+def test_publicationName():
+    expected = ['SoftwareX', 'ACS Catalysis']
+    assert co_eid.publicationName == expected
+    assert co_doi.publicationName == [expected[0]]
 
 
 def test_rangeColumnTotal():
@@ -129,12 +133,6 @@ def test_scopus_id():
 def test_startingPage():
     assert co_eid.startingPage == [None, '3894']
     assert co_doi.startingPage == None
-
-
-def test_sortTitle():
-    expected = ['Softwarex', 'ACS Catalysis']
-    assert co_eid.sortTitle == expected
-    assert co_doi.sortTitle == [expected[0]]
 
 
 def test_title():

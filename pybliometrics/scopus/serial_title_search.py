@@ -1,13 +1,13 @@
 from collections import OrderedDict
-from typing import Optional, Union
+import warnings
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_parameter_value, make_search_summary, VIEWS
 
 
-class SerialSearch(Search):
+class SerialTitleSearch(Search):
     @property
-    def results(self) -> Optional[list[OrderedDict[str, str]]]:
+    def results(self) -> list[OrderedDict[str, str]] | None:
         """A list of OrderedDicts representing results of serial search. The
         number of keys may vary from one search result to another depending
         on the length of yearly data.
@@ -49,11 +49,11 @@ class SerialSearch(Search):
 
     def __init__(self,
                  query: dict,
-                 refresh: Union[bool, int] = False,
+                 refresh: bool | int = False,
                  view: str = 'ENHANCED',
                  **kwds: str
                  ) -> None:
-        """Interaction with the Serial Title API.
+        """Interaction with the base endpoint of the `Serial Title API`.
 
         :param query:  Query parameters and corresponding fields. Allowed keys
                       'title', 'issn', 'pub', 'subj', 'subjCode', 'content',
@@ -92,7 +92,7 @@ class SerialSearch(Search):
         invalid = [k for k in query.keys() if k not in allowed_query_keys]
         if invalid:
             raise ValueError(f'Query key(s) "{", ".join(invalid)}" invalid')
-        check_parameter_value(view, VIEWS['SerialSearch'], "view")
+        check_parameter_value(view, VIEWS['SerialTitleSearch'], "view")
 
         # Query
         self._query = str(query)
@@ -178,3 +178,16 @@ def _retrieve_source_rankings(source_data):
         for t in stats:
             out.append([f"{key}_['@year']", t['$']])
     return out or None
+
+
+def SerialSearch(*args, **kwds):
+    """Deprecated: Use SerialTitleSearch instead.
+    This class is deprecated and will be removed.
+    """
+    warnings.warn(
+        "SerialSearch is deprecated and will be removed with the next major release. "
+        "Use SerialTitleSearch instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    return SerialTitleSearch(*args, **kwds)

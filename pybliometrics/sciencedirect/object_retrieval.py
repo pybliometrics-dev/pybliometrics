@@ -1,7 +1,6 @@
 """Module to retrieve a specific object of a document."""
 
 from io import BytesIO
-from typing import Optional, Union
 
 from pybliometrics.sciencedirect import ArticleRetrieval
 from pybliometrics.superclasses import Retrieval
@@ -15,10 +14,10 @@ class ObjectRetrieval(Retrieval):
         return BytesIO(self._object)
 
     def __init__(self,
-                 identifier: Union[int, str],
+                 identifier: int | str,
                  filename: str,
-                 id_type: Optional[str] = None,
-                 refresh: Union[bool, int] = False,
+                 id_type: str | None = None,
+                 refresh: bool | int = False,
                  **kwds: str
                  ):
         """Class to retrieve a specific object of a document by its filename.
@@ -43,6 +42,8 @@ class ObjectRetrieval(Retrieval):
             identifier = self._get_eid(identifier)
         file_identifier = f'{identifier}-{filename}'
 
+        self._identifier = identifier
+        self._filename = filename
         self._view = ''
         self._refresh = refresh
 
@@ -52,3 +53,9 @@ class ObjectRetrieval(Retrieval):
         """Get the EID of a document."""
         am = ArticleRetrieval(identifier, field='eid')
         return am.eid
+
+    def __str__(self) -> str:
+        """Return a string with the filename, document and object size in KB."""
+        size_kb = f"{len(self._object) / 1024:.1f}" if self._object else "0.0"
+        return (f"Object {self._filename} from document with EID {self._identifier}"
+                f" has size of {size_kb} KB.")

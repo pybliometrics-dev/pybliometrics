@@ -1,21 +1,35 @@
-from collections import namedtuple
-from typing import Optional, Union
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_integrity, check_parameter_value, \
-    check_field_consistency, listify, make_search_summary
+    check_field_consistency, get_and_aggregate_subjects, make_search_summary
+
+
+class Author(NamedTuple):
+    eid: str | None
+    orcid: str | None
+    surname: str | None
+    initials: str | None
+    givenname: str | None
+    affiliation: str | None
+    documents: int
+    affiliation_id: str | None
+    city: str | None
+    country: str | None
+    areas: str
 
 
 class AuthorSearch(Search):
     @property
-    def authors(self) -> Optional[list[namedtuple]]:
+    def authors(self) -> list[Author] | None:
         """A list of namedtuples storing author information,
         where each namedtuple corresponds to one author.
         The information in each namedtuple is `(eid orcid surname initials givenname
         documents affiliation affiliation_id city country areas)`.
 
         All entries are `str` or `None`.  Areas combines abbreviated subject
-        areas followed by the number of documents in this subject.
+        areas followed by the number of documents in this subject. The number of 
+        documents on duplicate subject areas is summed up.
 
         Raises
         ------
@@ -26,7 +40,6 @@ class AuthorSearch(Search):
         # Initiate namedtuple with ordered list of fields
         fields = 'eid orcid surname initials givenname affiliation documents '\
                  'affiliation_id city country areas'
-        auth = namedtuple('Author', fields)
         check_field_consistency(self._integrity, fields)
         # Parse elements one-by-one
         out = []
@@ -35,9 +48,11 @@ class AuthorSearch(Search):
             aff = item.get('affiliation-current', {})
             fields = item.get('subject-area',
                               [{'@abbrev': '', '@frequency': ''}])
-            areas = [f"{d.get('@abbrev', '')} ({d.get('@frequency', '')})"
-                     for d in listify(fields)]
-            new = auth(eid=item.get('eid'),
+            if not isinstance(fields, list):
+                fields = [fields]
+            subjects = get_and_aggregate_subjects(fields)
+            areas = [f"{abbrev} ({'' if freq == 0 else freq})" for abbrev, freq in subjects.items()]
+            new = Author(eid=item.get('eid'),
                        orcid=item.get('orcid'),
                        initials=name.get('initials'),
                        surname=name.get('surname'),
@@ -55,10 +70,10 @@ class AuthorSearch(Search):
 
     def __init__(self,
                  query: str,
-                 refresh: Union[bool, int] = False,
+                 refresh: bool | int = False,
                  verbose: bool = False,
                  download: bool = True,
-                 integrity_fields: Union[list[str], tuple[str, ...]] = None,
+                 integrity_fields: list[str] | tuple[str, ...] | None = None,
                  integrity_action: str = "raise",
                  **kwds: str
                  ) -> None:

@@ -1,19 +1,9 @@
 """Tests for `scopus.ScopusSearch` module."""
 
-from collections import namedtuple
-
 from pybliometrics.scopus import ScopusSearch, init
+from pybliometrics.scopus.scopus_search import Document
 
 init()
-
-order = 'eid doi pii pubmed_id title subtype subtypeDescription creator '\
-        'afid affilname  affiliation_city affiliation_country author_count '\
-        'author_names author_ids author_afids coverDate coverDisplayDate '\
-        'publicationName issn source_id eIssn aggregationType volume '\
-        'issueIdentifier article_number pageRange description authkeywords '\
-        'citedby_count openaccess freetoread freetoreadLabel fund_acr '\
-        'fund_no fund_sponsor'
-doc = namedtuple('Document', order)
 
 # Set to refresh=False because of citation count
 s_au = ScopusSearch('AU-ID(24320488600)', unescape=False, refresh=30)
@@ -30,18 +20,18 @@ def test_get_eids_author():
 
 
 def test_get_eids_journal():
-    assert len(s_j.get_eids()) == 119
+    assert len(s_j.get_eids()) == 118
 
 
 def test_get_results_size():
     assert s_au.get_results_size() == 4
-    assert s_j.get_results_size() == 119
+    assert s_j.get_results_size() == 118
     assert s_empty.get_results_size() == 0
 
 
 def test_results_author():
     received = s_au.results[-1]
-    expected = doc(eid='2-s2.0-26444452434', doi='10.1016/0014-2921(92)90085-B',
+    expected = Document(eid='2-s2.0-26444452434', doi='10.1016/0014-2921(92)90085-B',
         pii='001429219290085B', pubmed_id=None,
         title='Economists as policymakers: A round-table discussion. Introduction',
         subtype='ar', subtypeDescription='Article', creator='Draghi M.',
@@ -59,39 +49,43 @@ def test_results_author():
 
 
 def test_results_journal():
-    received = s_j.results[105]
-    abstract = 'This paper investigates the determinants of R&D investment '\
-        'at the national level with an emphasis on the roles of patent '\
-        'rights protection, international technology transfer through trade '\
-        'and FDI, and economic growth, in addition to the essentials of '\
-        'human capital accumulation and the number of scientific '\
-        'researchers. The Extreme-Bounds-Analysis (EBA) approach is applied '\
-        'to examine the robustness and sensitivity of these factors. The '\
-        'results of the EBA tests on data from 26 OECD countries from 1996 '\
-        'to 2006 showed that tertiary education and the proportion of '\
-        'scientific researchers in a country were robust determinants that '\
-        'had positive effects on R&D intensity. Foreign technology inflows '\
-        'had a robust and negative impact on domestic R&D. Patent rights '\
-        'protection and the income growth rate are fragile determinants of '\
-        'R&D investment. © 2009 Elsevier B.V. All rights reserved.'
-    keywords = 'Extreme-Bounds-Analysis (EBA) | Patent rights protection | '\
-        'R&D investment | Technology transfer'
-    title = 'Determinants of R&D investment: The Extreme-Bounds-'\
-            'Analysis approach applied to 26 OECD countries'
-    expected = doc(eid='2-s2.0-74249121335', doi='10.1016/j.respol.2009.11.010',
-        pii='S0048733309002145', pubmed_id=None, title=title, subtype='ar',
-        subtypeDescription='Article', creator='Wang E.', afid='60007954',
-        affilname='National Chung Cheng University',
-        affiliation_city='Min-Hsiung', affiliation_country='Taiwan',
-        author_count='1', author_names='Wang, Eric C.',
-        author_ids='7403414138', author_afids='60007954',
-        coverDate='2010-01-01', coverDisplayDate='2010',
+    received = s_j.results[104]  # Changed from 105 to 104 due to one less result
+    abstract = "The aim of this paper is to empirically test the determinants "\
+        "of Research Joint Ventures' (RJVs) group dynamics. We develop a "\
+        "model based on learning and transaction cost theories, which "\
+        "represent the benefits and costs of RJV participation, respectively. "\
+        "According to our framework, firms at each period in time weigh the "\
+        "benefits against the costs of being an RJV member. RJV dynamics can "\
+        "then be interpreted as a consequence of this evolving trade-off over "\
+        "time. We look at entry, turbulence and exit in RJVs that have been "\
+        "set up under the US National Cooperative Research Act, which allows "\
+        "for certain antitrust exemptions in order to stimulate firms to "\
+        "co-operate in R&D. Accounting for unobserved project characteristics "\
+        "and controlling for inter-RJV interactions and industry effects, the "\
+        "Tobit panel regressions show the importance of group and time "\
+        "features for an RJVs evolution. We further identify an average RJVs "\
+        "long-term equilibrium size and assess its determining factors. Ours "\
+        "is a first attempt to produce robust stylized facts about "\
+        "co-operational short- and long-term dynamics, a neglected dimension "\
+        "in research co-operations, but an important element in understanding "\
+        "how collaborative learning works. © 2010 Elsevier B.V. All rights "\
+        "reserved."
+    keywords = 'Group processes | Learning | Panel data | Research alliance dynamics | Transaction costs'
+    title = 'Learning dynamics in research alliances: A panel data analysis'
+    expected = Document(eid='2-s2.0-79952579400', doi='10.1016/j.respol.2010.03.002',
+        pii='S0048733310000752', pubmed_id=None, title=title, subtype='ar',
+        subtypeDescription='Article', creator='Duso T.', afid='60002483;60000762;60022265',
+        affilname='Universiteit van Amsterdam;Humboldt-Universität zu Berlin;Erasmus Universiteit Rotterdam',
+        affiliation_city='Amsterdam;Berlin;Rotterdam', affiliation_country='Netherlands;Germany;Netherlands',
+        author_count='3', author_names='Duso, Tomaso;Pennings, Enrico;Seldeslachts, Jo',
+        author_ids='24281174200;56248433100;25226239100', author_afids='60000762;60022265;60002483',
+        coverDate='2010-01-01', coverDisplayDate='July 2010',
         publicationName='Research Policy', issn='00487333', source_id='22900',
-        eIssn=None, aggregationType='Journal', volume='39', issueIdentifier='1',
-        article_number=None, pageRange='103-116', description=abstract,
+        eIssn=None, aggregationType='Journal', volume='39', issueIdentifier='6',
+        article_number=None, pageRange='776-789', description=abstract,
         authkeywords=keywords, citedby_count=0, openaccess=0, freetoread=None,
-        freetoreadLabel=None, fund_acr='MOST', fund_no='NSC94-2415-H-194-001',
-        fund_sponsor='Ministry of Science and Technology, Taiwan')
+        freetoreadLabel=None, fund_acr='DFG', fund_no='HPRN-CT-2002-00224',
+        fund_sponsor='Deutsche Forschungsgemeinschaft')
     assert int(received.citedby_count) >= 1
     assert received._replace(citedby_count=0) == expected
 

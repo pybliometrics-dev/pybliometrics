@@ -1,5 +1,4 @@
-from collections import namedtuple
-from typing import Optional, Union
+from typing import NamedTuple
 
 from pybliometrics.superclasses import Search
 from pybliometrics.utils import check_field_consistency, chained_get, \
@@ -7,9 +6,40 @@ from pybliometrics.utils import check_field_consistency, chained_get, \
     make_search_summary, VIEWS
 
 
+class Document(NamedTuple):
+    """Named tuple representing a document from ScienceDirect Article Metadata API."""
+    authorKeywords: str | None
+    authors: str | None
+    available_online_date: str | None
+    first_author: str | None
+    abstract_text: str | None
+    doi: str | None
+    title: str | None
+    eid: str | None
+    link: str | None
+    openArchiveArticle: bool | None
+    openaccess_status: str | None
+    openaccessArticle: bool | None
+    openaccessUserLicense: str | None
+    pii: str | None
+    aggregationType: str | None
+    copyright: str | None
+    coverDate: str | None
+    coverDisplayDate: str | None
+    edition: str | None
+    endingPage: str | None
+    isbn: str | None
+    publicationName: str | None
+    startingPage: str | None
+    teaser: str | None
+    api_link: str | None
+    publicationType: str | None
+    vor_available_online_date: str | None
+
+
 class ArticleMetadata(Search):
     @property
-    def results(self) -> Optional[list[namedtuple]]:
+    def results(self) -> list[Document] | None:
         """A list of namedtuples in the form `(authorKeywords authors available_online_date
         first_author abstract_text doi title eid link openArchiveArticle openaccess_status
         openaccessArticle openaccessUserLicense pii aggregationType copyright coverDate
@@ -36,7 +66,6 @@ class ArticleMetadata(Search):
             'openaccessUserLicense pii aggregationType copyright coverDate coverDisplayDate '\
             'edition endingPage isbn publicationName startingPage teaser api_link publicationType '\
             'vor_available_online_date'
-        doc = namedtuple('Document', fields)
         check_field_consistency(self._integrity, fields)
         # Parse elements one-by-one
         out = []
@@ -48,7 +77,7 @@ class ArticleMetadata(Search):
             first_author = item.get('dc:creator')[0].get('$')
             link = item.get('link')[0].get('@href')
             doi = item.get("prism:doi") or item.get("dc:identifier")[4:] if item.get("dc:identifier") else None
-            new = doc(
+            new = Document(
                 authorKeywords=item.get('authkeywords'),
                 authors=authors,
                 available_online_date=item.get('available-online-date'),
@@ -83,11 +112,11 @@ class ArticleMetadata(Search):
 
     def __init__(self,
                  query: str,
-                 refresh: Union[bool, int] = False,
-                 view: str = None,
+                 refresh: bool | int = False,
+                 view: str | None = None,
                  verbose: bool = False,
                  download: bool = True,
-                 integrity_fields: Union[list[str], tuple[str, ...]] = None,
+                 integrity_fields: list[str] | tuple[str, ...] | None = None,
                  integrity_action: str = "raise",
                  subscriber: bool = True,
                  **kwds: str

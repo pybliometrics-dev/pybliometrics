@@ -1,8 +1,8 @@
 """Tests for sciencedirect.ArticleMetadata"""
-from collections import namedtuple
 
 from pybliometrics.exception import Scopus400Error
 from pybliometrics.sciencedirect import ArticleMetadata, init
+from pybliometrics.sciencedirect.article_metadata import Document
 
 init()
 
@@ -21,16 +21,7 @@ def test_empty_results():
 
 
 def test_all_fields():
-    fields = (
-        "authorKeywords authors available_online_date first_author abstract_text "
-        "doi title eid link openArchiveArticle openaccess_status openaccessArticle "
-        "openaccessUserLicense pii aggregationType copyright coverDate coverDisplayDate "
-        "edition endingPage isbn publicationName startingPage teaser api_link publicationType "
-        "vor_available_online_date"
-    )
-    doc = namedtuple("Document", fields)
-
-    expected_complete_doc = doc(
+    expected_complete_doc = Document(
         authorKeywords="Large scale learning | Few shot learning | Meta learning",
         authors="Balaji, Yogesh",
         available_online_date="2022-09-30",
@@ -46,7 +37,7 @@ def test_all_fields():
         openaccessUserLicense=None,
         pii="B978-0-32-399851-2.00030-2",
         aggregationType="EBook",
-        copyright="Copyright © 2023 Elsevier Inc. All rights reserved.",
+        copyright="Copyright © 2023 Elsevier Inc. All rights are reserved, including those for text and data mining, AI training, and similar technologies.",
         coverDate="2023-12-31",
         coverDisplayDate="2023",
         edition=None,
@@ -61,7 +52,7 @@ def test_all_fields():
     )
     assert am_complete.results[0] == expected_complete_doc
 
-    expected_standard_doc = doc(
+    expected_standard_doc = Document(
         authorKeywords=None,
         authors="Zhong, Lu;Haijun, Zeng",
         available_online_date="2015-02-14",

@@ -32,17 +32,22 @@ DEFAULT_PATHS = {
     'ObjectMetadata': CACHE_PATH / "ScienceDirect" / 'object_metadata',
     'ObjectRetrieval': CACHE_PATH / "ScienceDirect" / 'object_retrieval',
     'PlumXMetrics': CACHE_PATH / "Scopus" / 'plumx',
+    'PublicationLookup': CACHE_PATH / "Scival" / "publication_lookup",
+    'AuthorMetrics': CACHE_PATH / "Scival" / "author_metrics",
+    'InstitutionLookupMetrics': CACHE_PATH / "Scival" / "institution_metrics",
+    'TopicLookupMetrics': CACHE_PATH / "Scival" / "topic_metrics",
     'ScDirSubjectClassifications': CACHE_PATH / "ScienceDirect" / 'subject_classification',
     'ScienceDirectSearch': CACHE_PATH / "ScienceDirect" / 'science_direct_search',
     'ScopusSearch': CACHE_PATH / "Scopus" / 'scopus_search',
-    'SerialSearch': CACHE_PATH / "Scopus" / 'serial_search',
-    'SerialTitle': CACHE_PATH / "Scopus" / 'serial_title',
+    'SerialTitleSearch': CACHE_PATH / "Scopus" / 'serial_search',
+    'SerialTitleISSN': CACHE_PATH / "Scopus" / 'serial_title',
     'SubjectClassifications': CACHE_PATH / "Scopus" / 'subject_classification',
 }
 
 # URLs for all classes
 RETRIEVAL_BASE = 'https://api.elsevier.com/content/'
 SEARCH_BASE = 'https://api.elsevier.com/content/search/'
+SCIVAL_BASE = 'https://api.elsevier.com/analytics/scival/'
 URLS = {
     'AbstractRetrieval': RETRIEVAL_BASE + 'abstract/',
     'ArticleEntitlement': RETRIEVAL_BASE + 'article/entitlement/',
@@ -56,12 +61,16 @@ URLS = {
     'NonserialTitle': RETRIEVAL_BASE + 'nonserial/title/isbn/',
     'ObjectMetadata': RETRIEVAL_BASE + 'object/',
     'ObjectRetrieval': RETRIEVAL_BASE + 'object/',
+    'PublicationLookup': SCIVAL_BASE + 'publication/',
+    'AuthorMetrics': SCIVAL_BASE + 'author/metrics/',
+    'InstitutionLookupMetrics': SCIVAL_BASE + 'institution/metrics/',
+    'TopicLookupMetrics': SCIVAL_BASE + 'topic/metrics/',
     'PlumXMetrics': 'https://api.elsevier.com/analytics/plumx/',
     'ScDirSubjectClassifications': RETRIEVAL_BASE + 'subject/scidir/',
     'ScienceDirectSearch': SEARCH_BASE + 'sciencedirect/',
     'ScopusSearch': SEARCH_BASE + 'scopus',
-    'SerialSearch': RETRIEVAL_BASE + 'serial/title',
-    'SerialTitle': RETRIEVAL_BASE + 'serial/title/issn/',
+    'SerialTitleSearch': RETRIEVAL_BASE + 'serial/title',
+    'SerialTitleISSN': RETRIEVAL_BASE + 'serial/title/issn/',
     'SubjectClassifications': RETRIEVAL_BASE + 'subject/scopus',
 }
 
@@ -81,11 +90,68 @@ VIEWS = {
     "ScDirSubjectClassifications": [''],
     "ScienceDirectSearch": ["STANDARD"],
     "ScopusSearch": ["STANDARD", "COMPLETE"],
-    "SerialSearch": ["STANDARD", "ENHANCED", "CITESCORE"],
-    "SerialTitle": ["STANDARD", "ENHANCED", "CITESCORE"],
+    "SerialTitleSearch": ["STANDARD", "ENHANCED", "CITESCORE"],
+    "SerialTitleISSN": ["STANDARD", "ENHANCED", "CITESCORE"],
     "SubjectClassifications": [''],
     "ObjectMetadata": ["META"],
     "ObjectRetrieval": [""]
+}
+
+# SciVal Metrics
+SCIVAL_METRICS = {
+    "AuthorMetrics": {
+        "byYear": [
+            "AcademicCorporateCollaboration",
+            "AcademicCorporateCollaborationImpact",
+            "Collaboration",
+            "CitationCount",
+            "CitationsPerPublication",
+            "CollaborationImpact",
+            "CitedPublications",
+            "FieldWeightedCitationImpact",
+            "ScholarlyOutput",
+            "PublicationsInTopJournalPercentiles",
+            "OutputsInTopCitationPercentiles"
+        ],
+        "notByYear": [
+            "HIndices"
+        ]
+    },
+    "TopicLookupMetrics": {
+        "byYear": [
+            "AuthorCount",
+            "CitationCount",
+            "FieldWeightedCitationImpact",
+            "InstitutionCount",
+            "ScholarlyOutput",
+            "TopCitedPublications",
+        ],
+        "notByYear": [
+            "CorePapers",
+            "MostRecentlyPublishedPapers",
+            "RelatedTopics",
+            "TopAuthors",
+            "TopInstitutions",
+            "TopJournals",
+            "TopKeywords"
+            ]
+    },
+    "InstitutionLookupMetrics": {
+        "byYear": [
+            "AcademicCorporateCollaboration",
+            "AcademicCorporateCollaborationImpact",
+            "Collaboration",
+            "CitationCount",
+            "CitationsPerPublication",
+            "CollaborationImpact",
+            "CitedPublications",
+            "FieldWeightedCitationImpact",
+            "ScholarlyOutput",
+            "PublicationsInTopJournalPercentiles",
+            "OutputsInTopCitationPercentiles"
+        ],
+        "notByYear": []
+    }
 }
 
 # APIs whose URL needs an id_type
@@ -96,6 +162,9 @@ APIS_WITH_ID_TYPE = {"AbstractRetrieval",
                      "ObjectMetadata",
                      "ObjectRetrieval"}
 
+# APIs that do not require an ID in the URL
+APIS_NO_ID_IN_URL = {"AuthorMetrics", "InstitutionLookupMetrics", "TopicLookupMetrics"}
+
 # Item per page limits for all classes
 COUNTS = {
     "AffiliationSearch": {"STANDARD": 200},
@@ -104,7 +173,7 @@ COUNTS = {
     "ScDirSubjectClassifications": {"": 200},
     "ScienceDirectSearch": {"STANDARD": 100},
     "ScopusSearch": {"STANDARD": 200, "COMPLETE": 25},
-    "SerialSearch": {"STANDARD": 200, "ENHANCED": 200, "CITESCORE": 200},
+    "SerialTitleSearch": {"STANDARD": 200, "ENHANCED": 200, "CITESCORE": 200},
     "SubjectClassifications": {"": 200}
 }
 
@@ -116,18 +185,22 @@ RATELIMITS = {
     'ArticleEntitlement': 0,
     'ArticleMetadata': 6,
     'ArticleRetrieval': 10,
+    'AuthorMetrics': 6,
+    'TopicLookupMetrics': 6,
     'AuthorRetrieval': 3,
     'AuthorSearch': 2,
     'CitationOverview': 4,
+    "InstitutionLookupMetrics": 6,
     'NonserialTitle': 6,
     'ObjectMetadata': 0,
     'ObjectRetrieval': 0,
     'PlumXMetrics': 6,
+    'PublicationLookup': 6,
     'ScDirSubjectClassifications': 0,
     'ScienceDirectSearch': 2,
     'ScopusSearch': 9,
-    'SerialSearch': 6,
-    'SerialTitle': 6,
+    'SerialTitleSearch': 6,
+    'SerialTitleISSN': 6,
     'SubjectClassifications': 0
 }
 

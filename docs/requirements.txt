@@ -2,4 +2,5 @@ sphinx==8.2.3
 sphinx_autodoc_typehints==3.1.0
 sphinx_autodoc_defaultargs==0.1.2
 sphinx_copybutton==0.5.2
+sphinx-reredirects==1.0.0
 -e .

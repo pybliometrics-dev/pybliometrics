@@ -1,4 +1,3 @@
-from typing import Type
 from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.exceptions import JSONDecodeError
@@ -17,7 +16,7 @@ errors = {400: exception.Scopus400Error, 401: exception.Scopus401Error,
           414: exception.Scopus414Error, 429: exception.Scopus429Error}
 
 
-def get_session() -> Type[Session]:
+def get_session() -> Session:
     """Auxiliary function to create a session"""
     config = get_config()
 

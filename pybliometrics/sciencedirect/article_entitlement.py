@@ -1,7 +1,5 @@
 """Module for retrieving article entitlement information from ScienceDirect."""
 
-from typing import Optional, Union
-
 from pybliometrics.superclasses import Retrieval
 from pybliometrics.utils import chained_get, check_parameter_value, detect_id_type, VIEWS
 
@@ -9,70 +7,70 @@ from pybliometrics.utils import chained_get, check_parameter_value, detect_id_ty
 class ArticleEntitlement(Retrieval):
     """Class to retrieve the entitlement status for a document from ScienceDirect."""
     @property
-    def status(self) -> Optional[str]:
+    def status(self) -> str | None:
         """Status of whether a document has been found"""
         return self._json.get("@status")
 
     @property
-    def identifier(self) -> Optional[str]:
+    def identifier(self) -> str | None:
         """Identifier of a document."""
         return self._json.get("dc:identifier")
 
     @property
-    def eid(self) -> Optional[str]:
+    def eid(self) -> str | None:
         "The EID of a document."
         return self._json.get("eid")
 
     @property
-    def entitled(self) -> Optional[str]:
+    def entitled(self) -> str | None:
         """Entitlement status of a document."""
         return self._json.get("entitled")
 
     @property
-    def link(self) -> Optional[str]:
+    def link(self) -> str | None:
         """ScienceDirect canonical URL."""
         return chained_get(self._json, ['link', '@href'])
 
     @property
-    def message(self) -> Optional[str]:
+    def message(self) -> str | None:
         """Entitlement status message."""
         return self._json.get("message")
 
     @property
-    def pii(self) -> Optional[str]:
+    def pii(self) -> str | None:
         """The PII of a document."""
         return self._json.get("pii")
 
     @property
-    def pii_norm(self) -> Optional[str]:
+    def pii_norm(self) -> str | None:
         """The PII-norm of a document."""
         return self._json.get("pii-norm")
 
     @property
-    def doi(self) -> Optional[str]:
+    def doi(self) -> str | None:
         """The DOI of a document."""
         return self._json.get("prism:doi")
 
     @property
-    def pubmed_id(self) -> Optional[str]:
+    def pubmed_id(self) -> str | None:
         """The Pubmed ID of a document (when used in the request)."""
         return self._json.get("pubmed_id")
 
     @property
-    def url(self) -> Optional[str]:
+    def url(self) -> str | None:
         """API URL used to check entitlement."""
         return self._json.get("prism:url")
 
     @property
-    def scopus_id(self) -> Optional[str]:
+    def scopus_id(self) -> str | None:
         """The Scopus ID of a document (when used in the request)."""
         return self._json.get("scopus_id")
 
     def __init__(self,
-                 identifier: Union[int, str],
+                 identifier: int | str,
                  view: str = "FULL",
-                 id_type: Optional[str] = None,
-                 refresh: Union[bool, int] = False,
+                 id_type: str | None = None,
+                 refresh: bool | int = False,
                  **kwds: str) -> None:
         # Checks
         identifier = str(identifier)

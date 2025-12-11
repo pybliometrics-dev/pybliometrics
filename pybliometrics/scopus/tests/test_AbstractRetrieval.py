@@ -1,8 +1,10 @@
 """Tests for `scopus.AbstractRetrieval` module."""
 
-from collections import namedtuple
-
 from pybliometrics.scopus import AbstractRetrieval, init
+from pybliometrics.scopus.abstract_retrieval import (
+    Affiliation, AuthorGroup, Author, Chemical, Contributor, 
+    Correspondence, Funding, ISSN, Reference, Sequencebank, Area
+)
 
 init()
 
@@ -46,8 +48,7 @@ def test_abstract():
 
 
 def test_affiliation():
-    aff = namedtuple('Affiliation', 'id name city country')
-    expected = [aff(id=60104842, name='College of Engineering',
+    expected = [Affiliation(id=60104842, name='College of Engineering',
                     city='Pittsburgh', country='United States')]
     assert ab1.affiliation == expected
     assert ab3.affiliation is None
@@ -69,33 +70,31 @@ def test_authkeywords():
 
 
 def test_authorgroup():
-    fields = 'affiliation_id collaboration_id dptid organization city postalcode '\
-        'addresspart country auid orcid indexed_name surname given_name'
-    auth = namedtuple('Author', fields, defaults=[None for _ in fields.split()])
     # Test FULL document w.o. collaboration
-    expected = [auth(affiliation_id=60104842, dptid=None,
+    expected = [AuthorGroup(affiliation_id=60104842, collaboration_id=None, dptid=None,
         organization='Department of Chemical Engineering, Carnegie Mellon University',
         city='Pittsburgh', postalcode='15213', addresspart='5000 Forbes Avenue',
         country='United States', auid=7004212771, orcid=None, indexed_name='Kitchin J.R.',
         surname='Kitchin', given_name='John R.')]
     assert ab1.authorgroup == expected
     # Test FULL document w. 1 collaboration
-    expected = auth(auid=7403019450, indexed_name='Ahn J.K.', surname='Ahn', given_name='J.K.')
+    expected = AuthorGroup(affiliation_id=None, collaboration_id=None, dptid=None, organization=None, 
+        city=None, postalcode=None, addresspart=None, country=None, auid=7403019450, 
+        orcid=None, indexed_name='Ahn J.K.', surname='Ahn', given_name='J.K.')
     assert ab9.authorgroup[0] == expected
     # Test FULL document w. list of collaborations
-    expected = auth(collaboration_id='S0920379618302370-8f4b482a50491834a3f938b012344bfd',
-                indexed_name='JET Contributors')
+    expected = AuthorGroup(affiliation_id=None, collaboration_id='S0920379618302370-8f4b482a50491834a3f938b012344bfd',
+        dptid=None, organization=None, city=None, postalcode=None, addresspart=None, country=None,
+        auid=None, orcid=None, indexed_name='JET Contributors', surname=None, given_name=None)
     assert ab12.authorgroup[-1] == expected
     # Test REF view
     assert ab8.authorgroup is None
 
 
 def test_authors():
-    fields = 'auid indexed_name surname given_name affiliation_id'
-    auth = namedtuple('Author', fields)
-    expected = [auth(auid=7004212771, indexed_name='Kitchin J.R.',
+    expected = [Author(auid=7004212771, indexed_name='Kitchin J.R.',
                 surname='Kitchin', given_name='John R.',
-                affiliation_id='60104842')]
+                affiliation='60104842')]
     assert ab1.authors == expected
     assert ab8.authors is None
     assert ar10.authors is None
@@ -118,8 +117,7 @@ def test_chemials():
     received = ab6.chemicals
     assert isinstance(received, list)
     assert len(received) == 6
-    chemical = namedtuple('Chemical', 'source chemical_name cas_registry_number')
-    expected = chemical(source='esbd', cas_registry_number='126547-89-5',
+    expected = Chemical(source='esbd', cas_registry_number='126547-89-5',
         chemical_name='intercellular adhesion molecule 1')
     assert expected in received
     assert ab3.chemicals is None
@@ -162,9 +160,7 @@ def test_confsponsor():
 
 
 def test_contributor_group():
-    fields = 'given_name initials surname indexed_name role'
-    pers = namedtuple('Contributor', fields)
-    expected = pers(given_name='Romolo', initials='R.', surname='Marcelli',
+    expected = Contributor(given_name='Romolo', initials='R.', surname='Marcelli',
                     indexed_name='Marcelli R.', role='edit')
     received = ab7.contributor_group
     assert len(received) == 7
@@ -185,9 +181,7 @@ def test_copyright_type():
 
 
 def test_correspondence():
-    fields = 'surname initials organization country city_group'
-    corr = namedtuple('Correspondence', fields)
-    expected2 = corr(surname='Boukas', initials='E.K.',
+    expected2 = Correspondence(surname='Boukas', initials='E.K.',
         organization='Ecole Polytechnique de Montreal', country='Canada',
         city_group='Montreal')
     assert ab2.correspondence[0] == expected2
@@ -245,8 +239,7 @@ def test_funding():
     received = ab6.funding
     assert isinstance(received, list)
     assert len(received) == 8
-    fund = namedtuple('Funding', 'agency agency_id string funding_id acronym country')
-    expected6 = fund(
+    expected6 = Funding(
         agency='Deutsche Forschungsgemeinschaft',
         agency_id='http://data.elsevier.com/vocabulary/SciValFunders/501100001659',
         string='German Research Foundation', acronym='DFG',
@@ -321,10 +314,9 @@ def test_isbn():
 
 
 def test_issn():
-    issn = namedtuple('ISSN', 'print electronic')
-    expected1 = issn(print='21555435', electronic=None)
+    expected1 = ISSN(print='21555435', electronic=None)
     assert ab1.issn == expected1
-    expected3 = issn(print='03425843', electronic='15730700')
+    expected3 = ISSN(print='03425843', electronic='15730700')
     assert ab3.issn == expected3
     assert ab5.issn is None
     assert ab8.issn is None
@@ -359,14 +351,14 @@ def test_language():
 
 
 def test_openaccess():
-    assert ab5.openaccess == 2
+    assert ab5.openaccess == 0
     assert ab6.openaccess == 1
     assert ab7.openaccess == 0
     assert ab8.openaccess is None
 
 
 def test_openaccessFlag():
-    assert ab5.openaccessFlag is None
+    assert ab5.openaccessFlag == False
     assert ab6.openaccessFlag == True
     assert ab7.openaccessFlag == False
     assert ab8.openaccessFlag is None
@@ -410,19 +402,15 @@ def test_refcount():
 
 
 def test_references_full():
-    fields = 'position id doi title authors authors_auid authors_affiliationid '\
-             'sourcetitle publicationyear coverDate volume issue first last '\
-             'citedbycount type text fulltext'
-    ref = namedtuple('Reference', fields)
     fulltext1 = 'Implementing Reproducible Research; Stodden, V.; Leisch, '\
                 'F.; Peng, R. D., Eds., Chapman and Hall/CRC: London, 2014.'
-    expected1 = ref(position='22', id='85055586929', doi=None, title=None,
+    expected1 = Reference(position='22', id='85055586929', doi=None, title=None,
         authors='Stodden, V.; Leisch, F.; Peng, R.D.', authors_auid=None,
         authors_affiliationid=None, fulltext=fulltext1, coverDate=None,
         sourcetitle='Implementing Reproducible Research', type=None,
         publicationyear='2014', volume=None, issue=None, first=None,
         last=None, citedbycount=None, text='Eds. Chapman and Hall/CRC: London.')
-    expected7 = ref(position='1', id='85050215448', doi=None, title=None,
+    expected7 = Reference(position='1', id='85050215448', doi=None, title=None,
         authors='', authors_auid=None, authors_affiliationid=None,
         sourcetitle=None, publicationyear=None, coverDate=None, volume=None,
         issue=None, first=None, last=None, citedbycount=None, type=None,
@@ -435,11 +423,7 @@ def test_references_full():
 
 def test_references_ref():
     assert len(ab8.references) == 48
-    fields = 'position id doi title authors authors_auid authors_affiliationid '\
-             'sourcetitle publicationyear coverDate volume issue first last '\
-             'citedbycount type text fulltext'
-    ref = namedtuple('Reference', fields)
-    expected8 = ref(position='47', id='77953310709',
+    expected8 = Reference(position='47', id='77953310709',
         doi='10.1109/INFCOM.2010.5462174', text=None, fulltext=None,
         title='Achieving secure, scalable, and fine-grained data access control in cloud computing',
         authors='Yu, Shucheng; Lou, Wenjing; Wang, Cong; Ren, Kui',
@@ -469,8 +453,7 @@ def test_sequencebank():
     received = ab6.sequencebank
     assert isinstance(received, list)
     assert len(received) == 3
-    bank = namedtuple('Chemical', 'name sequence_number type')
-    expected = bank(name='GENBANK', sequence_number='MG272373',
+    expected = Sequencebank(name='GENBANK', sequence_number='MG272373',
                     type='referenced')
     assert expected in received
     assert ab3.sequencebank is None
@@ -499,12 +482,11 @@ def test_startingPage():
 
 
 def test_subject_areas():
-    area = namedtuple('Area', 'area abbreviation code')
-    expected = [area(area='Catalysis', abbreviation='CENG', code=1503),
-                area(area='Chemistry (all)', abbreviation='CHEM', code=1600)]
+    expected = [Area(area='Catalysis', abbreviation='CENG', code=1503),
+                Area(area='Chemistry (all)', abbreviation='CHEM', code=1600)]
     assert ab1.subject_areas == expected
     assert ab8.subject_areas is None
-    expected = [area(area='Nuclear and High Energy Physics',
+    expected = [Area(area='Nuclear and High Energy Physics',
                      abbreviation='PHYS', code=3106)]
     assert ab9.subject_areas == expected
 

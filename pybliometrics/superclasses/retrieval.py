@@ -1,16 +1,16 @@
 """Superclass to access all Scopus retrieval APIs and dump the results."""
 
+import hashlib
 from pathlib import Path
-from typing import Union
 
 from pybliometrics.superclasses import Base
-from pybliometrics.utils import APIS_WITH_ID_TYPE, get_config, URLS
+from pybliometrics.utils import APIS_NO_ID_IN_URL, APIS_WITH_ID_TYPE, get_config, URLS
 
 
 class Retrieval(Base):
     def __init__(self,
-                 identifier: Union[int, str],
-                 id_type: str = None,
+                 identifier: int | str | None = None,
+                 id_type: str | None = None,
                  **kwds: str
                  ) -> None:
         """Class intended as superclass to perform retrievals.
@@ -38,9 +38,13 @@ class Retrieval(Base):
                 stem += "-" + self._citation
             if self._date:
                 stem += "-" + self._date
+        # For APIs that don't use ID in URL, hash the parameters for unique cache filename
+        elif api in APIS_NO_ID_IN_URL:
+            params_str = str(sorted(kwds.items()))
+            stem = hashlib.md5(params_str.encode()).hexdigest()
         else:
-            url += identifier
-            stem = identifier.replace('/', '_')
+            url += str(identifier)
+            stem = str(identifier).replace('/', '_')
         # Get cache file path
         config = get_config()
         parent = Path(config.get('Directories', api))
