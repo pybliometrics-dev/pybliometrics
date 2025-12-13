@@ -856,13 +856,13 @@ class AbstractRetrieval(Retrieval):
                 return float(entry.citedbycount) or 0
             except (ValueError, TypeError):
                 return 0
-            
+
         def get_date(coverDate):
             try:
                 return coverDate[:4]
             except TypeError:
                 return None
-                
+
         if self._view in ('FULL', 'META_ABS', 'META'):
             date = self.get_cache_file_mdate().split()[0]
             # Authors
@@ -887,7 +887,7 @@ class AbstractRetrieval(Retrieval):
             if self.affiliation:
                 s += "\n  Affiliation(s):\n   "
                 s += '\n   '.join([aff.name for aff in self.affiliation])
-        
+
         elif self._view in ('REF',):
             try:
                 # Sort reference list by citationcount
@@ -1006,19 +1006,26 @@ class AbstractRetrieval(Retrieval):
         if self.aggregationType != 'Journal':
             raise ValueError('Only Journal articles supported.')
         # Basic information
-        ris = f"TY  - JOUR\nTI  - {self.title}\nJO  - {self.publicationName}"\
-              f"\nVL  - {self.volume}\nDA  - {self.coverDate}\n"\
-              f"PY  - {self.coverDate[0:4]}\nSP  - {self.pageRange}\n"
+        ris = (
+            f"TY  - JOUR\nTI  - {self.title}\nJO  - {self.publicationName}"
+            f"\nDA  - {self.coverDate}\nPY  - {self.coverDate[0:4]}\n"
+        )
         # Authors
         for au in self.authors:
             ris += f'AU  - {au.indexed_name}\n'
         # DOI
         if self.doi:
             ris += f'DO  - {self.doi}\nUR  - https://doi.org/{self.doi}\n'
+        # Volume
+        if self.volume:
+            ris += f"VL  - {self.volume}\n"
         # Issue
         if self.issueIdentifier:
             ris += f'IS  - {self.issueIdentifier}\n'
-        ris += 'ER  - \n\n'
+        # Pages
+        if self.pageRange:
+            ris += f"SP  - {self.pageRange}\n"
+        ris += "ER  - \n\n"
         return ris
 
 

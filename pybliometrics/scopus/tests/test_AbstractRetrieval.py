@@ -284,11 +284,13 @@ def test_get_latex():
 
 
 def test_get_ris():
-    e = 'TY  - JOUR\nTI  - Examples of effective data sharing in scientific '\
-        'publishing\nJO  - ACS Catalysis\nVL  - 5\nDA  - 2015-06-05\nPY  - '\
-        '2015\nSP  - 3894-3899\nAU  - Kitchin J.R.\nDO  - 10.1021/'\
-        'acscatal.5b00538\nUR  - https://doi.org/10.1021/acscatal.5b00538\n'\
-        'IS  - 6\nER  - \n\n'
+    e = (
+        "TY  - JOUR\nTI  - Examples of effective data sharing in scientific "
+        "publishing\nJO  - ACS Catalysis\nDA  - 2015-06-05\nPY  - "
+        "2015\nAU  - Kitchin J.R.\nDO  - 10.1021/acscatal.5b00538\n"
+        "UR  - https://doi.org/10.1021/acscatal.5b00538\nVL  - 5\n"
+        "IS  - 6\nSP  - 3894-3899\nER  - \n\n"
+    )
     assert ab1.get_ris() == e
 
 
