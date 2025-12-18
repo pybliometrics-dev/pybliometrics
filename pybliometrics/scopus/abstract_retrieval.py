@@ -294,7 +294,7 @@ class AbstractRetrieval(Retrieval):
     def confsponsor(self) -> list[str] | str | None:
         """Sponsor(s) of the conference the document belongs to."""
         path = ['confsponsors', 'confsponsor']
-        sponsors = chained_get(self._confevent, path, [])
+        sponsors = chained_get(self._confevent, path, []) or []
         if len(sponsors) == 0:
             return None
         if isinstance(sponsors, list):
