@@ -310,15 +310,16 @@ class AbstractRetrieval(Retrieval):
         items = listify(chained_get(self._head, path, []))
         out = []
         for item in items:
-            entry = item.get('contributor', {})
-            new = Contributor(
-                given_name=entry.get('ce:given-name'),
-                initials=entry.get('ce:initials'),
-                surname=entry.get('ce:surname'),
-                indexed_name=entry.get('ce:indexed-name'),
-                role=entry.get('@role')
-            )
-            out.append(new)
+            entries = listify(item.get('contributor', {}))
+            for entry in entries:
+                new = Contributor(
+                    given_name=entry.get('ce:given-name'),
+                    initials=entry.get('ce:initials'),
+                    surname=entry.get('ce:surname'),
+                    indexed_name=entry.get('ce:indexed-name'),
+                    role=entry.get('@role')
+                )
+                out.append(new)
         return out or None
 
     @property
