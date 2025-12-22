@@ -32,6 +32,8 @@ ar10 = AbstractRetrieval('10.1109/Multi-Temp.2019.8866947', view='ENTITLED', ref
 ab11 = AbstractRetrieval('2-s2.0-85160105660', view="REF", refresh=30)
 # FULL view with list of collaborations
 ab12 = AbstractRetrieval('2-s2.0-85044008512', view='FULL', refresh=30)
+# List of contributors in contributor group
+ab13 = AbstractRetrieval("2-s2.0-85038825012", view="FULL", refresh=30)
 
 
 def test_abstract():
@@ -167,6 +169,11 @@ def test_contributor_group():
     assert expected in received
     assert ab3.contributor_group is None
     assert ab8.contributor_group is None
+
+    expected_13 = Contributor(given_name='Constantinos', initials='C.', surname='Antoniou',
+                    indexed_name='Antoniou C.', role='edit')
+    assert len(ab13.contributor_group) == 4
+    assert ab13.contributor_group[0] == expected_13
 
 
 def test_copyright():
