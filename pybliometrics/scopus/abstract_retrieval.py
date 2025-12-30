@@ -349,7 +349,7 @@ class AbstractRetrieval(Retrieval):
                 try:
                     org = org['$']
                 except TypeError:  # Multiple names given
-                    org = "; ".join([d['$'] for d in org])
+                    org = "; ".join([d['$'] for d in org if d])
             except KeyError:
                 org = None
             new = Correspondence(surname=item.get('person', {}).get('ce:surname'),
