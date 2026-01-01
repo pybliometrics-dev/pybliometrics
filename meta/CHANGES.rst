@@ -4,6 +4,17 @@ Change Log
 
 .. toctree::
 
+4.4.1
+~~~~~
+
+2026-01-01
+
+* Fix bug related to missing organizations in `scopus.AbstractRetrieval()`.
+* Fix bug related to malformatted contributor groups in `scopus.AbstractRetrieval()`.
+* Fix bug related to missing confsponsor in `scopus.AbstractRetrieval()`.
+* Fix bug related to missing bibliometric information in `scopus.AbstractRetrieval().get_ris()`.
+* Fix bug related to malformatted field counts in `scopus.AuthorSearch()`.
+
 4.4
 ~~~
 
