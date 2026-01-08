@@ -450,7 +450,7 @@ class AbstractRetrieval(Retrieval):
         if len(isbns) == 0:
             return None
         else:
-            return tuple((i['$'] for i in isbns))
+            return tuple(i['$'] if isinstance(i, dict) else str(i) for i in isbns)
 
     @property
     def issn(self) -> ISSN | None:
@@ -839,7 +839,7 @@ class AbstractRetrieval(Retrieval):
             self._json = self._json['abstracts-retrieval-response']
         self._head = chained_get(self._json, ["item", "bibrecord", "head"], {})
         conf_path = ['source', 'additional-srcinfo', 'conferenceinfo', 'confevent']
-        self._confevent = chained_get(self._head, conf_path, {})
+        self._confevent = chained_get(self._head, conf_path, {}) or {}
         if self._view == "REF":
             ref_path = ["references"]
         else:
