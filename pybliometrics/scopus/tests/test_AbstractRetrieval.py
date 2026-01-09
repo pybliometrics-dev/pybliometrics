@@ -34,6 +34,10 @@ ab11 = AbstractRetrieval('2-s2.0-85160105660', view="REF", refresh=30)
 ab12 = AbstractRetrieval('2-s2.0-85044008512', view='FULL', refresh=30)
 # List of contributors in contributor group
 ab13 = AbstractRetrieval("2-s2.0-85038825012", view="FULL", refresh=30)
+# None in confcode
+ab14 = AbstractRetrieval("2-s2.0-79960092540", view="FULL", refresh=30)
+# Single isbn
+ab15 = AbstractRetrieval("2-s2.0-14544289566", view="FULL", refresh=30)
 
 
 def test_abstract():
@@ -129,6 +133,7 @@ def test_chemials():
 def test_confcode():
     assert ab2.confcode == 44367
     assert ab8.confcode is None
+    assert ab14.confcode is None
 
 
 def test_confdate():
@@ -320,6 +325,7 @@ def test_isbn():
     assert ab3.isbn is None
     assert ab5.isbn == ('0203881486', '9780203881484')
     assert ab8.isbn is None
+    assert ab15.isbn == ('0780385969',)
 
 
 def test_issn():
