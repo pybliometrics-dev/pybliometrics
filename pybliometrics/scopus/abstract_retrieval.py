@@ -137,14 +137,10 @@ class AbstractRetrieval(Retrieval):
     @property
     def authkeywords(self) -> list[str] | None:
         """List of author-provided keywords of the document."""
-        keywords = self._json.get('authkeywords')
-        if not keywords:
-            return None
-        else:
-            try:
-                return [d['$'] for d in keywords['author-keyword']]
-            except TypeError:  # Singleton keyword
-                return [keywords['author-keyword']['$']]
+        keywords = self._json.get('authkeywords') or {}
+        keywords = listify(keywords.get('author-keyword', []))
+        out = [d['$'] for d in keywords if d.get('$')]
+        return out or None
 
     @property
     def authorgroup(self) -> list[AuthorGroup] | None:
