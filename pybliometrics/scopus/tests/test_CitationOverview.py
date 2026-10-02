@@ -54,8 +54,8 @@ def test_endingPage():
 
 
 def test_grandTotal():
-    assert co_eid.grandTotal >= 29
-    assert co_doi.grandTotal >= 16
+    assert co_eid.grandTotal >= 222
+    assert co_doi.grandTotal >= 198
 
 
 def test_h_index():
@@ -75,14 +75,14 @@ def test_issueIdentifier():
 
 
 def test_laterColumnTotal():
-    assert co_eid.laterColumnTotal >= 18
-    assert co_doi.laterColumnTotal >= 16
+    assert co_eid.laterColumnTotal >= 203
+    assert co_doi.laterColumnTotal >= 192
 
 
 def test_lcc():
-    assert co_eid.lcc[0] >= 1
-    assert co_eid.lcc[1] >= 1
-    assert co_doi.lcc[0] >= 1
+    assert co_eid.lcc[0] >= 192
+    assert co_eid.lcc[1] >= 11
+    assert co_doi.lcc[0] >= 192
 
 
 def test_pcc():
@@ -113,15 +113,15 @@ def test_rangeColumnTotal():
 
 
 def test_rangeCount():
-    assert co_eid.rangeCount[0] >= 6
-    assert co_eid.rangeCount[1] >= 6
-    assert co_doi.rangeCount[0] >= 6
+    assert co_eid.rangeCount[0] == 6
+    assert co_eid.rangeCount[1] == 13
+    assert co_doi.rangeCount[0] == 6
 
 
 def test_rowTotal():
-    assert co_eid.rowTotal[0] >= 10
-    assert co_eid.rowTotal[1] >= 10
-    assert co_doi.rowTotal[0] >= 10
+    assert co_eid.rowTotal[0] >= 198
+    assert co_eid.rowTotal[1] >= 24
+    assert co_doi.rowTotal[0] >= 198
 
 
 def test_scopus_id():

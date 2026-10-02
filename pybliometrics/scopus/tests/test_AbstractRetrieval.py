@@ -107,7 +107,7 @@ def test_authors():
 
 
 def test_citedby_count():
-    expected = 5
+    expected = 24
     assert ab1.citedby_count >= expected
     assert ab8.citedby_count is None
 
@@ -312,7 +312,7 @@ def test_get_html():
         'https://www.scopus.com/authid/detail.url?origin=AuthorProfile&'\
         'authorId=16430389100">Gwen Ortmeyer</a> and <a href="https://'\
         'www.scopus.com/authid/detail.url?origin=AuthorProfile&authorId='\
-        '57225963896">N. Craig Smith</a>, <a href="https://www.scopus.com/'\
+        '55613241349">N. Craig Smith</a>, <a href="https://www.scopus.com/'\
         'inward/record.uri?partnerID=HzOxMe3b&scp=0001270077&origin=inward">'\
         'Fairness in consumer pricing</a>, <a href="https://www.scopus.com/'\
         'source/sourceInfo.url?sourceId=130073">Journal of Consumer Policy'\
@@ -448,7 +448,7 @@ def test_references_ref():
         publicationyear=None, coverDate='2010-06-15', volume=None, issue=None,
         first=None, last=None, citedbycount='0', type='resolvedReference')
     assert ab8.references[-2]._replace(citedbycount="0") == expected8
-    assert int(ab8.references[-2].citedbycount) >= 0
+    assert int(ab8.references[-2].citedbycount) >= 1412
     assert ab11.references is None
 
 

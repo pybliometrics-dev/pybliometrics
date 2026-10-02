@@ -26,8 +26,8 @@ def test_aggregation_type():
 
 def test_citescoreyearinfolist():
     # Test softwarex
-    expected_named_tuple = [Citescoreinfolist(year=2024, citescore=4.2),
-                            Citescoreinfolist(year=2025, citescore=3.4)]
+    expected_named_tuple = [Citescoreinfolist(year=2025, citescore=3.9),
+                            Citescoreinfolist(year=2026, citescore=3.0)]
     assert softwarex.citescoreyearinfolist == expected_named_tuple
 
     # Test oecd
@@ -136,15 +136,15 @@ def test_self_link():
 
 
 def test_sjrlist():
-    assert softwarex.sjrlist == [(2024, 0.483)]
+    assert softwarex.sjrlist == [(2025, 0.499)]
     assert oecd.sjrlist == [(1999, 2.723)]
-    assert jco_cci.sjrlist == [(2024, 1.25)]
+    assert jco_cci.sjrlist == [(2025, 1.174)]
 
 
 def test_sniplist():
-    assert softwarex.sniplist == [(2024, 1.095)]
+    assert softwarex.sniplist == [(2025, 0.977)]
     assert oecd.sniplist is None
-    assert jco_cci.sniplist == [(2024, 0.896)]
+    assert jco_cci.sniplist == [(2025, 1.075)]
 
 
 def test_source_id():
@@ -179,11 +179,12 @@ def test_title():
 
 def test_yearly_data():
     assert isinstance(softwarex.yearly_data, list)
-    assert len(softwarex.yearly_data) == 30
+    assert len(softwarex.yearly_data) == 31
     expected1_2020 = Yearlydata(year=2020, publicationcount=164, revpercent=0.0,
-        zerocitessce=6, zerocitespercentsce=3.658536585365854,
-        citecountsce=2580)
-    assert softwarex.yearly_data[24] == expected1_2020
+        zerocitessce=3, zerocitespercentsce=1.829268292682927,
+        citecountsce=0)
+    assert softwarex.yearly_data[24].citecountsce >= 2582
+    assert softwarex.yearly_data[24]._replace(citecountsce=0) == expected1_2020
     expected2_1996 = Yearlydata(year=1996, publicationcount=4, revpercent=0.0,
         zerocitessce=0, zerocitespercentsce=0, citecountsce=33)
     assert oecd.yearly_data[0] == expected2_1996

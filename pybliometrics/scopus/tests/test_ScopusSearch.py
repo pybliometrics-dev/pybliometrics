@@ -49,7 +49,7 @@ def test_results_author():
 
 
 def test_results_journal():
-    received = s_j.results[104]  # Changed from 105 to 104 due to one less result
+    received = [d for d in s_j.results if d.eid == '2-s2.0-79952579400'][0]
     abstract = "The aim of this paper is to empirically test the determinants "\
         "of Research Joint Ventures' (RJVs) group dynamics. We develop a "\
         "model based on learning and transaction cost theories, which "\
@@ -86,7 +86,7 @@ def test_results_journal():
         authkeywords=keywords, citedby_count=0, openaccess=0, freetoread=None,
         freetoreadLabel=None, fund_acr='DFG', fund_no='HPRN-CT-2002-00224',
         fund_sponsor='Deutsche Forschungsgemeinschaft')
-    assert int(received.citedby_count) >= 1
+    assert int(received.citedby_count) >= 27
     assert received._replace(citedby_count=0) == expected
 
 

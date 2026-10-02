@@ -43,4 +43,4 @@ def test_results_pub():
 def test_results_subjcode():
     ser4_subj_codes = set(i['subject_area_codes'] for i in ser4.results)
     assert False not in ['2708' in i for i in ser4_subj_codes]
-    assert ser4.get_results_size() >= 255
+    assert ser4.get_results_size() >= 260

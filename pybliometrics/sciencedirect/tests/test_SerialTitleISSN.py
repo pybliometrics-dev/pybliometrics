@@ -25,8 +25,8 @@ def test_aggregation_type():
 
 def test_citescoreyearinfolist():
     # Test Gene journal
-    expected_named_tuple = [Citescoreinfolist(year=2024, citescore=5.1),
-                            Citescoreinfolist(year=2025, citescore=4.5)]
+    expected_named_tuple = [Citescoreinfolist(year=2025, citescore=5.3),
+                            Citescoreinfolist(year=2026, citescore=5.0)]
     assert gene.citescoreyearinfolist == expected_named_tuple
 
 
@@ -85,11 +85,11 @@ def test_self_link():
 
 
 def test_sjrlist():
-    assert gene.sjrlist == [(2024, 0.682)]
+    assert gene.sjrlist == [(2025, 0.703)]
 
 
 def test_sniplist():
-    assert gene.sniplist == [(2024, 0.716)]
+    assert gene.sniplist == [(2025, 0.73)]
 
 
 def test_source_id():
@@ -109,9 +109,9 @@ def test_title():
 
 def test_yearly_data():
     assert isinstance(gene.yearly_data, list)
-    assert len(gene.yearly_data) == 30
+    assert len(gene.yearly_data) == 31
 
     expected1_2023 = Yearlydata(year=2023, publicationcount=654, revpercent=8.56,
-        zerocitessce=64, zerocitespercentsce=9.785932721712538,
-        citecountsce=32573)
+        zerocitessce=40, zerocitespercentsce=6.116207951070336,
+        citecountsce=32817)
     assert gene.yearly_data[27] == expected1_2023

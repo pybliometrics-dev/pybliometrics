@@ -14,7 +14,7 @@ def test_authors():
     assert len(s1.authors) >= 1
     expected = Author(eid='9-s2.0-6602907525', orcid=None, surname='Selten',
         initials='R.', givenname='Reinhard', affiliation='Universität Bonn',
-        documents=76, affiliation_id='60007493', city='Bonn',
+        documents=75, affiliation_id='60007493', city='Bonn',
         country='Germany', areas='ECON (72); BUSI (8)')
     assert s1.authors[0] == expected
 
@@ -28,4 +28,4 @@ def test_results_size():
     received1 = s1.get_results_size()
     assert received1 >= 1
     received2 = s2.get_results_size()
-    assert received2 >= 25
+    assert received2 >= 30

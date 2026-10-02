@@ -64,7 +64,7 @@ def test_alias():
 
 
 def test_citation_count():
-    expected = 13600
+    expected = 36800
     assert metrics.citation_count >= expected
     assert light.citation_count >= expected
     assert standard.citation_count >= expected
@@ -72,7 +72,7 @@ def test_citation_count():
 
 
 def test_cited_by_count():
-    expected = 10900
+    expected = 30500
     assert metrics.cited_by_count >= expected
     assert light.cited_by_count >= expected
     assert standard.cited_by_count >= expected
@@ -92,7 +92,7 @@ def test_classificationgroup():
 def test_coauthor_count():
     assert light.coauthor_count is None
     assert standard.coauthor_count is None
-    expected = 175
+    expected = 385
     assert metrics.coauthor_count >= expected
     assert enhanced.coauthor_count >= expected
 
@@ -108,12 +108,12 @@ def test_coauthor_link():
 def test_date_created():
     assert metrics.date_created is None
     assert light.date_created is None
-    assert standard.date_created, (2005, 12, 3)
-    assert enhanced.date_created, (2005, 12, 3)
+    assert standard.date_created == (2005, 12, 3)
+    assert enhanced.date_created == (2005, 12, 3)
 
 
 def test_document_count():
-    expected = 106
+    expected = 164
     assert light.document_count >= expected
     assert standard.document_count >= expected
     assert metrics.document_count >= expected
@@ -122,9 +122,9 @@ def test_document_count():
 
 def test_eid():
     assert metrics.eid is None
-    assert light.eid, '9-s2.0-7004212771'
-    assert standard.eid, '9-s2.0-7004212771'
-    assert enhanced.eid, '9-s2.0-7004212771'
+    assert light.eid == '9-s2.0-7004212771'
+    assert standard.eid == '9-s2.0-7004212771'
+    assert enhanced.eid == '9-s2.0-7004212771'
 
 
 def test_estimate_uniqueness():
@@ -149,35 +149,32 @@ def test_given_name():
     assert enhanced.given_name == 'John R.'
 
 
-def get_coauthors():
+def test_get_coauthors():
     assert metrics.get_coauthors() is None
     assert light.get_coauthors() is None
     assert standard.get_coauthors() is None
     received = enhanced.get_coauthors()
     assert isinstance(received, list)
-    assert len(received) > 155
-    expected = Coauthor(surname='Rose', given_name='Michael E.', id=57209617104,
-        areas='Computer Science (all)', affiliation_id='60105007',
-        name='Max-Planck-Institut für Innovation und Wettbewerb',
-        city='Munich', country='Germany')
-    assert expected in received
+    assert len(received) == 160  # API maximum
+    assert all(isinstance(c, Coauthor) for c in received)
+    assert 7007042214 in [c.id for c in received]  # Nørskov
 
 
 def test_get_documents():
     subtypes = {'re', 'ed', 'no'}
-    received = enhanced.get_documents(subtypes)
-    assert len(received) == 8
+    received = enhanced.get_documents(subtypes, refresh=30)
+    assert len(received) >= 15
 
 
 def test_get_document_eids():
-    expected = 100
-    assert len(enhanced.get_document_eids()) >= expected
+    expected = 164
+    assert len(enhanced.get_document_eids(refresh=30)) >= expected
 
 
 def test_h_index():
     assert light.h_index is None
     assert standard.h_index is None
-    expected = 34
+    expected = 44
     assert metrics.h_index >= expected
     assert enhanced.h_index >= expected
     assert entitled.h_index is None
