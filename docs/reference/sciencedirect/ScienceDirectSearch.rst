@@ -1,9 +1,33 @@
 pybliometrics.sciencedirect.ScienceDirectSearch
-=================================================
+===============================================
 
-`ScopusSearch()` implements the `ScienceDirect Search API <https://nonprod-devportal.elsevier.com/documentation/ScienceDirectSearchAPI.wadl>`_.  It executes a query to search for documents and retrieves the resulting records.
-Any query that works in the `Advanced Document Search on sciencedirect.com <https://www.sciencedirect.com/search/entry>`_ will work.
-For a complete guide on how to query check the `documentation <https://service.elsevier.com/app/answers/detail/a_id/25974/supporthub/sciencedirect/>`_.
+`ScienceDirectSearch()` implements the `ScienceDirect Search API <https://nonprod-devportal.elsevier.com/documentation/ScienceDirectSearchAPI.wadl>`_ using the `PUT` method.  It executes a query to search for documents and retrieves the resulting records.
+The class takes a `query` string that searches through all the article's or chapter's content. You can also pass any of the following parameters as keyword arguments:
+
+.. code-block:: text
+
+    {
+        authors: string,
+        date: string,
+        display: {
+            highlights: boolean,
+            offset: integer,
+            show: integer,
+            sortBy: string
+        },
+        filters: {
+            openAccess: boolean
+        },
+        issue: string,
+        loadedAfter: string,
+        page: string,
+        pub: string,
+        qs: string,
+        title: string,
+        volume: string
+    }
+
+For a more detailed description of the parameters, please refer to the `ScienceDirect Search API migration documentation <https://dev.elsevier.com/tecdoc_sdsearch_migration.html>`_.
 
 .. currentmodule:: pybliometrics.sciencedirect
 .. contents:: Table of Contents
@@ -19,16 +43,28 @@ Documentation
 Examples
 --------
 
-The class is initialized with a search query. To see the download progress, set `verbose=True`.
+The class is initialized with a search query.
+We can pass `date` as keyword argument to search for documents published in a specific date.
+Using `verbose=True` will print the progress of the download.
 
 .. code-block:: python
 
     >>> from pybliometrics.sciencedirect import ScienceDirectSearch, init
     >>> init()
-    >>> # Retrieve documents based on the search query  
-    >>> sds = ScienceDirectSearch('"neural radiance fields" AND "3D" AND YEAR(2024)', verbose=True)
-    Downloading results for query ""neural radiance fields" AND "3D" AND YEAR(2024)":
-    100%|██████████| 8/8 [00:05<00:00,  1.39it/s]
+    >>> # Retrieve documents based on the search query and date
+    >>> sds = ScienceDirectSearch('"neural radiance fields" AND "3D rendering"', date='2024', verbose=True)
+    Downloading results for query "{'qs': '"neural radiance fields" AND "3D rendering"', 'date': '2024', 'display': {'offset': 0, 'show': 100, 'sortBy': 'date'}, 'cursor': '*'}":
+    100%|██████████| 1/1 [00:00<00:00,  3.23it/s]
+
+
+To check the number of results, use the method `get_results_size()`.
+
+.. code-block:: python
+
+    >>> # Check the number of results
+    >>> sds.get_results_size()
+    10
+
 
 To access the results, use the attribute `results` which contains a list of `Document` namedtuples.
 
@@ -36,12 +72,12 @@ To access the results, use the attribute `results` which contains a list of `Doc
 
     >>> # Access the results
     >>> results = sds.results
-    [Document(authors='Dong He;Wenhua Qian;Jinde Cao', first_author='Dong He', doi='10.1016/j.cag.2025.104181', title='GEAST-RF: Geometry Enhanced 3D Arbitrary Style Transfer Via Neural Radiance Fields', link='https://www.sciencedirect.com/science/article/pii/S0097849325000202?dgcid=api_sd_search-api-endpoint', load_date='2025-02-16T00:00:00.000Z', openaccess_status=False, pii='S0097849325000202', coverDate='2025-02-16', endingPage=None, publicationName='Computers & Graphics', startingPage='104181', api_link='https://api.elsevier.com/content/article/pii/S0097849325000202', volume=None),
-     Document(authors='Qicheng Xu;Min Hu;Xitao Zhang', first_author='Qicheng Xu', doi='10.1016/j.asr.2025.01.065', title='A neural radiance fields method for 3D reconstruction of space target', link='https://www.sciencedirect.com/science/article/pii/S0273117725000973?dgcid=api_sd_search-api-endpoint', load_date='2025-02-01T00:00:00.000Z', openaccess_status=False, pii='S0273117725000973', coverDate='2025-02-01', endingPage=None, publicationName='Advances in Space Research', startingPage=None, api_link='https://api.elsevier.com/content/article/pii/S0273117725000973', volume=None),
-     Document(authors='Jian Liu;Zhen Yu', first_author='Jian Liu', doi='10.1016/j.neucom.2025.129420', title='SA3D-L: A lightweight model for 3D object segmentation using neural radiance fields', link='https://www.sciencedirect.com/science/article/pii/S092523122500092X?dgcid=api_sd_search-api-endpoint', load_date='2025-01-14T00:00:00.000Z', openaccess_status=False, pii='S092523122500092X', coverDate='2025-03-28', endingPage=None, publicationName='Neurocomputing', startingPage='129420', api_link='https://api.elsevier.com/content/article/pii/S092523122500092X', volume='623'),
+    [Document(authors='Geontae Kim; Youngjin Cha', doi='10.1016/j.autcon.2024.105878', loadDate='2024-11-19T00:00:00.000Z', openAccess=True, first_page=105878, last_page=None, pii='S0926580524006149', publicationDate='2024-12-15', sourceTitle='Automation in Construction', title='3D Pixelwise damage mapping using a deep attention based modified Nerfacto', uri='https://www.sciencedirect.com/science/article/pii/S0926580524006149?dgcid=api_sd_search-api-endpoint', volumeIssue='Volume 168, Part B'),
+     Document(authors='Akram Akbar; Chun Liu; Zeran Xu', doi='10.1016/j.aei.2024.102913', loadDate='2024-11-16T00:00:00.000Z', openAccess=False, first_page=102913, last_page=None, pii='S1474034624005640', publicationDate='2024-10-31', sourceTitle='Advanced Engineering Informatics', title='Scene information guided aerial photogrammetric mission recomposition towards detailed level building reconstruction', uri='https://www.sciencedirect.com/science/article/pii/S1474034624005640?dgcid=api_sd_search-api-endpoint', volumeIssue='Volume 62, Part D'),
+     Document(authors='Ruxandra Stoean; Nebojsa Bacanin; Leonard Ionescu', doi='10.1016/j.culher.2024.07.008', loadDate='2024-08-09T00:00:00.000Z', openAccess=False, first_page=18, last_page=26, pii='S1296207424001468', publicationDate='2024-10-31', sourceTitle='Journal of Cultural Heritage', title='Bridging the past and present: AI-driven 3D restoration of degraded artefacts for museum digital display', uri='https://www.sciencedirect.com/science/article/pii/S1296207424001468?dgcid=api_sd_search-api-endpoint', volumeIssue='Volume 69'),
      ...]
 
-The list of results can be cast into a Pandas DataFrame.
+The list of results can be converted into a Pandas DataFrame.
 
 .. code-block:: python
 
@@ -50,11 +86,12 @@ The list of results can be cast into a Pandas DataFrame.
     >>> df = pd.DataFrame(sds.results)
     >>> # Display available fields
     >>> df.columns
-    Index(['eid', 'filename', 'height', 'mimetype', 'ref', 'size', 'type', 'url',
-       'width'],
+    Index(['authors', 'doi', 'loadDate', 'openAccess', 'first_page', 'last_page',
+       'pii', 'publicationDate', 'sourceTitle', 'title', 'uri', 'volumeIssue'],
       dtype='object')
     >>> # Get shape of the DataFrame (rows x columns)
-    (200, 14)
+    >>> df.shape
+    (10, 12)
     >>> # Display the first 3 rows
     >>> df.head(3)
 
@@ -82,74 +119,65 @@ The list of results can be cast into a Pandas DataFrame.
         <tr style="text-align: right;">
         <th></th>
         <th>authors</th>
-        <th>first_author</th>
         <th>doi</th>
-        <th>title</th>
-        <th>link</th>
-        <th>load_date</th>
-        <th>openaccess_status</th>
+        <th>loadDate</th>
+        <th>openAccess</th>
+        <th>first_page</th>
+        <th>last_page</th>
         <th>pii</th>
-        <th>coverDate</th>
-        <th>endingPage</th>
-        <th>publicationName</th>
-        <th>startingPage</th>
-        <th>api_link</th>
-        <th>volume</th>
+        <th>publicationDate</th>
+        <th>sourceTitle</th>
+        <th>title</th>
+        <th>uri</th>
+        <th>volumeIssue</th>
         </tr>
     </thead>
     <tbody>
         <tr>
         <th>0</th>
-        <td>Dong He;Wenhua Qian;Jinde Cao</td>
-        <td>Dong He</td>
-        <td>10.1016/j.cag.2025.104181</td>
-        <td>GEAST-RF: Geometry Enhanced 3D Arbitrary Style...</td>
+        <td>Geontae Kim; Youngjin Cha</td>
+        <td>10.1016/j.autcon.2024.105878</td>
+        <td>2024-11-19T00:00:00.000Z</td>
+        <td>True</td>
+        <td>105878</td>
+        <td>NaN</td>
+        <td>S0926580524006149</td>
+        <td>2024-12-15</td>
+        <td>Automation in Construction</td>
+        <td>3D Pixelwise damage mapping using a deep atten...</td>
         <td>https://www.sciencedirect.com/science/article/...</td>
-        <td>2025-02-16T00:00:00.000Z</td>
-        <td>False</td>
-        <td>S0097849325000202</td>
-        <td>2025-02-16</td>
-        <td>None</td>
-        <td>Computers &amp; Graphics</td>
-        <td>104181</td>
-        <td>https://api.elsevier.com/content/article/pii/S...</td>
-        <td>None</td>
+        <td>Volume 168, Part B</td>
         </tr>
         <tr>
         <th>1</th>
-        <td>Qicheng Xu;Min Hu;Xitao Zhang</td>
-        <td>Qicheng Xu</td>
-        <td>10.1016/j.asr.2025.01.065</td>
-        <td>A neural radiance fields method for 3D reconst...</td>
-        <td>https://www.sciencedirect.com/science/article/...</td>
-        <td>2025-02-01T00:00:00.000Z</td>
+        <td>Akram Akbar; Chun Liu; Zeran Xu</td>
+        <td>10.1016/j.aei.2024.102913</td>
+        <td>2024-11-16T00:00:00.000Z</td>
         <td>False</td>
-        <td>S0273117725000973</td>
-        <td>2025-02-01</td>
-        <td>None</td>
-        <td>Advances in Space Research</td>
-        <td>None</td>
-        <td>https://api.elsevier.com/content/article/pii/S...</td>
-        <td>None</td>
+        <td>102913</td>
+        <td>NaN</td>
+        <td>S1474034624005640</td>
+        <td>2024-10-31</td>
+        <td>Advanced Engineering Informatics</td>
+        <td>Scene information guided aerial photogrammetri...</td>
+        <td>https://www.sciencedirect.com/science/article/...</td>
+        <td>Volume 62, Part D</td>
         </tr>
         <tr>
         <th>2</th>
-        <td>Jian Liu;Zhen Yu</td>
-        <td>Jian Liu</td>
-        <td>10.1016/j.neucom.2025.129420</td>
-        <td>SA3D-L: A lightweight model for 3D object segm...</td>
-        <td>https://www.sciencedirect.com/science/article/...</td>
-        <td>2025-01-14T00:00:00.000Z</td>
+        <td>Ruxandra Stoean; Nebojsa Bacanin; Leonard Ionescu</td>
+        <td>10.1016/j.culher.2024.07.008</td>
+        <td>2024-08-09T00:00:00.000Z</td>
         <td>False</td>
-        <td>S092523122500092X</td>
-        <td>2025-03-28</td>
-        <td>None</td>
-        <td>Neurocomputing</td>
-        <td>129420</td>
-        <td>https://api.elsevier.com/content/article/pii/S...</td>
-        <td>623</td>
+        <td>18</td>
+        <td>26.0</td>
+        <td>S1296207424001468</td>
+        <td>2024-10-31</td>
+        <td>Journal of Cultural Heritage</td>
+        <td>Bridging the past and present: AI-driven 3D re...</td>
+        <td>https://www.sciencedirect.com/science/article/...</td>
+        <td>Volume 69</td>
         </tr>
     </tbody>
     </table>
     </div>
-

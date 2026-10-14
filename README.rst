@@ -1,11 +1,18 @@
-pybliometrics
-=============
+pybliometrics-sd
+================
+
+.. note::
+
+   This is a **fork** of `pybliometrics <https://github.com/pybliometrics-dev/pybliometrics>`_
+   that adds a PUT-based ScienceDirect Search implementation.  It is maintained for the
+   `bibly <https://github.com/nils-herrmann/bibly>`_ library.  For the original, upstream
+   project, see https://github.com/pybliometrics-dev/pybliometrics.
 
 Enables large-scale access to Elsevier's Scopus, ScienceDirect and SciVal APIs in Python.
 
 Documentation: https://pybliometrics.readthedocs.io
 
-Development: https://github.com/pybliometrics-dev/pybliometrics
+Development: https://github.com/nils-herrmann/pybliometrics
 
 .. image:: https://badge.fury.io/py/pybliometrics.svg
     :target: https://badge.fury.io/py/pybliometrics

@@ -3,10 +3,10 @@ requires = ["setuptools>=80.9", "wheel", "setuptools_scm[toml]>=8.1"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pybliometrics"
+name = "pybliometrics-sd"
 authors = [{name = "'John Kitchin and Michael E. Rose", email = "Michael.Ernst.Rose@gmail.com"}]
-maintainers = [{name = "Michael E. Rose", email = "Michael.Ernst.Rose@gmail.com"}]
-description = "Python-based API-Wrapper to access Scopus and ScienceDirect"
+maintainers = [{name = "Nils Herrmann", email = "nils_herrmann@outlook.de"}]
+description = "Fork of pybliometrics with a PUT-based ScienceDirect Search implementation, maintained for the bibly library"
 readme = "README.rst"
 license = "MIT"
 dependencies = [
@@ -39,8 +39,9 @@ test = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/pybliometrics-dev/pybliometrics"
-"Bug Tracker" = "https://github.com/pybliometrics-dev/pybliometrics/issues"
+Homepage = "https://github.com/nils-herrmann/pybliometrics"
+"Bug Tracker" = "https://github.com/nils-herrmann/pybliometrics/issues"
+"Upstream project" = "https://github.com/pybliometrics-dev/pybliometrics"
 "Documentation (stable)" = "https://pybliometrics.readthedocs.io/en/stable/"
 "Documentation (latest)" = "https://pybliometrics.readthedocs.io/en/latest/"
 
