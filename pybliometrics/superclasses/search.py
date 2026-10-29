@@ -39,7 +39,7 @@ class Search(Base):
         params = {'count': count, 'view': self._view, **kwds}
         if isinstance(query, dict):
             params.update(query)
-            name = "&".join(["=".join(t) for t in zip(query.keys(), query.values())])
+            name = "&".join(["=".join(t) for t in query.items()])
         else:
             params['query'] = query
             name = query

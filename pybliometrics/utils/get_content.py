@@ -184,12 +184,11 @@ def detect_id_type(sid):
             id_type = 'doi'
         elif 16 <= len(sid) <= 17:
             id_type = 'pii'
+        else:
+            raise ValueError(f'ID type detection failed for "{sid}".')
     else:
         if len(sid) < 10:
             id_type = 'pubmed_id'
         else:
             id_type = 'scopus_id'
-    try:
-        return id_type
-    except UnboundLocalError:
-        raise ValueError(f'ID type detection failed for "{sid}".')
+    return id_type

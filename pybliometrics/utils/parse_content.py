@@ -78,9 +78,10 @@ def check_field_consistency(needles, haystack):
 
 def deduplicate(lst):
     """Auxiliary function to deduplicate a list while preserving its order."""
-    new = reduce(lambda x, y: x + y if y[0] not in x else x,
-                 map(lambda x: [x], lst),
-                 [])
+    new = []
+    for item in lst:
+        if item not in new:
+            new.append(item)
     return new
 
 def get_and_aggregate_subjects(fields):
@@ -90,10 +91,7 @@ def get_and_aggregate_subjects(fields):
         abbrev = field_d.get('@abbrev', '')
         freq_str = field_d.get('@frequency', '')
         frequency = int(freq_str) if freq_str.isdigit() else 0
-        if abbrev in frequencies:
-            frequencies[abbrev] += frequency
-        else:
-            frequencies[abbrev] = frequency
+        frequencies[abbrev] = frequencies.get(abbrev, 0) + frequency
     return frequencies
 
 
