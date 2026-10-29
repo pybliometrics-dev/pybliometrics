@@ -32,7 +32,7 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(s)
-    Search '{'title': 'SoftwareX'}' yielded 1 source as of 2024-05-11:
+    Search '{'title': 'SoftwareX'}' yielded 1 source as of 2026-10-02:
         SoftwareX
 
 
@@ -51,30 +51,30 @@ The main attribute of the class, `results`, returns a list of `OrderedDict <http
     >>> import pandas as pd
     >>> df = pd.DataFrame(pd.DataFrame(s.results))
     >>> df.shape
-    (1, 162)
+    (1, 172)
     >>> df.columns
     Index(['title', 'publisher', 'coverageStartYear', 'coverageEndYear',
            'aggregationType', 'source-id', 'eIssn', 'openaccess',
            'openaccessArticle', 'subject_area_codes',
            ...
-           'publicationCount_2019', 'citeCountSCE_2019', 'zeroCitesSCE_2019',
-           'zeroCitesPercentSCE_2019', 'revPercent_2019', 'publicationCount_2020',
-           'citeCountSCE_2020', 'zeroCitesSCE_2020', 'zeroCitesPercentSCE_2020',
-           'revPercent_2020'],
-          dtype='object', length=142)
+           'publicationCount_2025', 'citeCountSCE_2025', 'zeroCitesSCE_2025',
+           'zeroCitesPercentSCE_2025', 'revPercent_2025', 'publicationCount_2026',
+           'citeCountSCE_2026', 'zeroCitesSCE_2026', 'zeroCitesPercentSCE_2026',
+           'revPercent_2026'],
+          dtype='str', length=172)
     >>> pd.set_option('display.max_columns', None)
     >>> df.iloc[:,:16]
-       title    publisher coverageStartYear coverageEndYear aggregationType  \
-    0  SoftwareX  Elsevier BV              2015            2024         journal   
+           title      publisher coverageStartYear coverageEndYear aggregationType  \
+    0  SoftwareX  Elsevier B.V.              2015            2026         journal
 
          source-id      eIssn openaccess  openaccessArticle subject_area_codes  \
-    0  21100422153  2352-7110          1               True          1712;1706   
+    0  21100422153  2352-7110          1               True          1712;1706
 
       subject_area_abbrevs                      subject_area_names SNIP_['@year']  \
-    0                 COMP  Software;Computer Science Applications          1.426
+    0                 COMP  Software;Computer Science Applications          0.977
 
-      SJR_['@year'] citeScoreTracker_2023 citeScoreCurrentMetric_2022
-    0         0.574                   5.4                         5.1
+      SJR_['@year'] citeScoreTracker_2026 citeScoreCurrentMetric_2025
+    0         0.499                   3.0                         3.9
 
 
 The information in columns beyond the first 16 pertains to journal metrics: publication counts, citation counts, not-cited documents, share of not-cited documents, and the share of review article documents, for each year since indexation.

@@ -40,7 +40,7 @@ In the following example, we retrieve the third object in the list (`gr12.jpg`),
     >>> obj_ret = ObjectRetrieval('10.1016/j.rcim.2020.102086', all_filenames[2])
     >>> # Access object using the 'object' property and display using PIL
     >>> img = Image.open(obj_ret.object)
-    >>>> img.show()
+    >>> img.show()
 
 .. image:: ./figures/gr12.jpg
     :alt: Example image of gr12.jpg

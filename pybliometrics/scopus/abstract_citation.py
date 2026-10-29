@@ -296,7 +296,7 @@ class CitationOverview(Retrieval):
         cits_dict = {'exclude-self': 'excluding self-citations',
                      'exclude-books': 'excluding citations from books'}
         date = self.get_cache_file_mdate().split()[0]
-        cits_type = f'{cits_dict.get(self._citation, "")}'
+        cits_type = f' {cits_dict[self._citation]}' if self._citation else ''
         s = f"{len(self.scopus_id)} document(s) has/have the following "\
             f"total citation count{cits_type} as of {date}:\n    "\
             f"{'; '.join([str(n) for n in self.rowTotal])}"

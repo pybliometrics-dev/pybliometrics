@@ -33,11 +33,11 @@ You can obtain basic information just by printing the object:
 
     >>> print(plum)
     Document with elsevierId 2-s2.0-85054706190 received:
-	- 469 citation(s) in category 'capture'
-	- 248 citation(s) in category 'citation'
+	- 525 citation(s) in category 'capture'
+	- 364 citation(s) in category 'citation'
 	- 2 citation(s) in category 'mention'
 	- 185,819 citation(s) in category 'socialMedia'
-	as of 2024-05-11
+	as of 2026-10-02
 
 
 For each of the five categories, there is a corresponding property that stores the number and origin of the metrics in `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_.  If a category has no entries, the corresponding property will be `None`:
@@ -45,11 +45,12 @@ For each of the five categories, there is a corresponding property that stores t
 .. code-block:: python
 
     >>> plum.capture
-    [Metric(name='READER_COUNT', total=469)]
+    [Metric(name='READER_COUNT', total=525)]
     >>> plum.citation
-    [Metric(name='Scopus', total=247),
-	 Metric(name='CrossRef', total=80),
-     Metric(name='Policy Citation', total=1)]
+    [Metric(name='Scopus', total=362),
+	 Metric(name='CrossRef', total=320),
+     Metric(name='Policy Citation', total=1),
+     Metric(name='Patent Families', total=1)]
     >>> plum.mention
     [Metric(name='NEWS_COUNT', total=2)]
     >>> plum.social_media
@@ -63,8 +64,8 @@ Finally, there is a property that totals all metrics at an aggregated level:
 .. code-block:: python
 
     >>> plum.category_totals
-    [Category(name='capture', total=469),
-	 Category(name='citation', total=248),
+    [Category(name='capture', total=525),
+	 Category(name='citation', total=364),
 	 Category(name='mention', total=2),
 	 Category(name='socialMedia', total=185819)]
 

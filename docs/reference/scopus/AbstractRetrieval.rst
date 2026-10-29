@@ -39,7 +39,7 @@ You can obtain basic information just by printing the object:
     >>> print(ab)
     Michael E. Rose and John R. Kitchin: "pybliometrics: Scriptable bibliometrics using a Python interface to Scopus",
         SoftwareX, 10, (no pages found)(2019). https://doi.org/10.1016/j.softx.2019.100263.
-        151 citation(s) as of 2025-09-05
+        198 citation(s) as of 2026-10-02
           Affiliation(s):
            Carnegie Mellon University
            Max Planck Institute for Innovation and Competition
@@ -86,7 +86,7 @@ To obtain the total citation count (at the time the abstract was retrieved and c
 .. code-block:: python
 
     >>> ab.citedby_count
-    151
+    198
 
 
 You can retrieve the authors as a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_, which pair conveniently with `pandas <https://pandas.pydata.org/>`_:
@@ -111,20 +111,20 @@ The same structure applies for the attributes `affiliation` and `authorgroup`:
 .. code-block:: python
 
     >>> ab.affiliation
-    [Affiliation(id=60105007, name='Max Planck Institute for Innovation and Competition',
-                 city='Munich', country='Germany'),
-     Affiliation(id=60027950, name='Carnegie Mellon University',
-                 city='Pittsburgh', country='United States')]
+    [Affiliation(id=60027950, name='Carnegie Mellon University',
+                 city='Pittsburgh', country='United States'),
+     Affiliation(id=60105007, name='Max Planck Institute for Innovation and Competition',
+                 city='Munich', country='Germany')]
 
     >>> ab.authorgroup
-    [Author(affiliation_id=60105007, collaboration_id=None, dptid=None,
-            organization='Max Planck Institute for Innovation and Competition',
-            city=None, postalcode=None, addresspart=None, country='Germany', auid=57209617104,
-            orcid=None, indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
-     Author(affiliation_id=60027950, collaboration_id=None, dptid=110785688,
-            organization='Carnegie Mellon University, Department of Chemical Engineering',
-            city=None, postalcode=None, addresspart=None, country='United States', auid=7004212771,
-            orcid=None, indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
+    [AuthorGroup(affiliation_id=60105007, collaboration_id=None, dptid=None,
+                 organization='Max Planck Institute for Innovation and Competition',
+                 city=None, postalcode=None, addresspart=None, country='Germany', auid=57209617104,
+                 orcid=None, indexed_name='Rose M.E.', surname='Rose', given_name='Michael E.'),
+     AuthorGroup(affiliation_id=60027950, collaboration_id=None, dptid=110785688,
+                 organization='Carnegie Mellon University, Department of Chemical Engineering',
+                 city=None, postalcode=None, addresspart=None, country='United States', auid=7004212771,
+                 orcid=None, indexed_name='Kitchin J.R.', surname='Kitchin', given_name='John R.')]
 
 
 
@@ -155,17 +155,19 @@ available if you downloaded the article with 'FULL' as `view` parameter.
     >>> df.columns
     Index(['position', 'id', 'doi', 'title', 'authors', 'authors_auid',
            'authors_affiliationid', 'sourcetitle', 'publicationyear', 'coverDate',
-           'volume', 'issue', 'first', 'last', 'citedbycount', 'type', 'fulltext'],
-          dtype='object')
+           'volume', 'issue', 'first', 'last', 'citedbycount', 'type', 'text',
+           'fulltext'],
+          dtype='str')
     >>> df['eid'] = '2-s2.0-' + df['id']
     >>> df['eid'].tolist()
     ['2-s2.0-38949137710', '2-s2.0-84956635108', '2-s2.0-84954384742',
      '2-s2.0-85054706190', '2-s2.0-84978682989', '2-s2.0-85047117387',
      '2-s2.0-85068267813', '2-s2.0-84959420483', '2-s2.0-85041892797',
      '2-s2.0-85019268211', '2-s2.0-85059309053', '2-s2.0-85033499871',
-     nan, '2-s2.0-85068268189', '2-s2.0-84958069531', '2-s2.0-84964429621',
-     '2-s2.0-84977619412', '2-s2.0-85068262994', nan, '2-s2.0-23744500479',
-     '2-s2.0-70349549313', nan, '2-s2.0-85042855814', '2-s2.0-85068258349',
+     '2-s2.0-85068261773', '2-s2.0-85068268189', '2-s2.0-84958069531',
+     '2-s2.0-84964429621', '2-s2.0-84977619412', '2-s2.0-85068262994',
+     '2-s2.0-85055232002', '2-s2.0-23744500479', '2-s2.0-70349549313',
+     '2-s2.0-80555140075', '2-s2.0-85042855814', '2-s2.0-85068258349',
      '2-s2.0-84887264733']
 
 
@@ -183,7 +185,7 @@ Using `view="REF"` accesses the REF view of the article, which provides more inf
                authors_auid='7003962139; 16240046300; 43761284000; 7003962139; 7102070422',
                authors_affiliationid='60033272; 60033272; 60033272; 60015849; 60081865',
                sourcetitle='FASEB Journal', publicationyear=None, coverDate='2008-02-01',
-               volume='22', issue='2', first='338', last='342', citedbycount='1676',
+               volume='22', issue='2', first='338', last='342', citedbycount='4475',
                type='resolvedReference', text=None, fulltext=None)
 
 
@@ -197,7 +199,7 @@ Scopus also gathers detailed information about conferences for conference procee
     >>> cp.confname
     'Proceedings of the 1995 34th IEEE Conference on Decision and Control. Part 1 (of 4)'
     >>> cp.confcode
-    '44367'
+    44367
     >>> cp.confdate
     ((1995, 12, 13), (1995, 12, 15))
     >>> cp.conflocation
@@ -212,9 +214,9 @@ Some articles have information on funding, chemicals and genome banks:
 
     >>> ab_fund = AbstractRetrieval("2-s2.0-85053478849", view="FULL")
     >>> ab_fund.funding
-    [Funding(agency=None, string='CNRT “Nickel et son Environnement',
-     agency_id=None, funding_id=None, acronym=None, country=None)]
-    >> ab_fund.funding_text
+    [Funding(agency=None, agency_id=None, string='CNRT “Nickel et son Environnement',
+     funding_id=None, acronym=None, country=None)]
+    >>> ab_fund.funding_text
     'The authors gratefully acknowledge CNRT “Nickel et son Environnement” for
     providing the financial support. The results reported in this publication
     are gathered from the CNRT report “Ecomine BioTop”.'
@@ -248,14 +250,13 @@ You can print the abstract in a variety of formats, including LaTeX, bibtex, HTM
     TY  - JOUR
     TI  - pybliometrics: Scriptable bibliometrics using a Python interface to Scopus
     JO  - SoftwareX
-    VL  - 10
     DA  - 2019-07-01
     PY  - 2019
-    SP  - None
     AU  - Rose M.E.
     AU  - Kitchin J.R.
     DO  - 10.1016/j.softx.2019.100263
     UR  - https://doi.org/10.1016/j.softx.2019.100263
+    VL  - 10
     ER  -
 
 

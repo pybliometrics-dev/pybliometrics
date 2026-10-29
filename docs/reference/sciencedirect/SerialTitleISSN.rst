@@ -33,11 +33,11 @@ You can obtain basic information just by printing the object:
 
     >>> print(source)
     'Gene', journal published by 'Elsevier B.V.', is active in Genetics
-    Metrics as of 2025-05-18:
+    Metrics as of 2026-10-02:
         SJR:  year value
-            2023 0.725
+              2025 0.703
         SNIP: year value
-            2023 0.765
+              2025 0.73
         ISSN: 0378-1119, E-ISSN: 1879-0038, Scopus ID: 15636
 
 The object has a number of attributes but no methods.  For example, information regarding the source itself:
@@ -61,19 +61,21 @@ Crucially, it provides three metrics: `CiteScore <https://service.elsevier.com/a
 .. code-block:: python
 
     >>> source.citescoreyearinfolist
-    [Citescoreinfolist(year=2023, citescore=6.1),
-     Citescoreinfolist(year=2024, citescore=5.1)]
+    [Citescoreinfolist(year=2025, citescore=5.3, status=None, documentcount=None,
+                       citationcount=None, percentcited=None, rank=None),
+     Citescoreinfolist(year=2026, citescore=5.0, status=None, documentcount=None,
+                       citationcount=None, percentcited=None, rank=None)]
     >>> source.sjrlist
-    [(2023, 0.725)]
+    [(2025, 0.703)]
     >>> source.sniplist
-    [(2023, 0.765)]
+    [(2025, 0.73)]
 
 The `citescoreyearinfolist` property provides detailed information for all available years when `view="CITESCORE"` is used.  It includes the status of the metric, the document count and citation count (of the previous 4 years), the share of documents actually cited, and the rank and percentile for each related ASJC subject:
 
 .. code-block:: python
 
     >>> import pandas as pd
-    >>> source_full = SerialTitleISSN("00368075", view="CITESCORE")
+    >>> source_full = SerialTitleISSN("03781119", view="CITESCORE")
     >>> info = pd.DataFrame(source_full.citescoreyearinfolist)
     >>> print(info)
 
@@ -113,16 +115,36 @@ The `citescoreyearinfolist` property provides detailed information for all avail
     <tbody>
         <tr>
         <th>0</th>
-        <td>2024</td>
-        <td>5.1</td>
+        <td>2026</td>
+        <td>5.0</td>
         <td>In-Progress</td>
-        <td>2616</td>
-        <td>13257</td>
-        <td>79</td>
-        <td>[(1311, 153, 56)]</td>
+        <td>2323</td>
+        <td>11671</td>
+        <td>82</td>
+        <td>[(1311, 129, 64)]</td>
         </tr>
         <tr>
         <th>1</th>
+        <td>2025</td>
+        <td>5.3</td>
+        <td>Complete</td>
+        <td>2724</td>
+        <td>14486</td>
+        <td>83</td>
+        <td>[(1311, 144, 59)]</td>
+        </tr>
+        <tr>
+        <th>2</th>
+        <td>2024</td>
+        <td>5.1</td>
+        <td>Complete</td>
+        <td>2616</td>
+        <td>13293</td>
+        <td>79</td>
+        <td>[(1311, 152, 56)]</td>
+        </tr>
+        <tr>
+        <th>3</th>
         <td>2023</td>
         <td>6.1</td>
         <td>Complete</td>
@@ -132,7 +154,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         <td>[(1311, 129, 62)]</td>
         </tr>
         <tr>
-        <th>2</th>
+        <th>4</th>
         <td>2022</td>
         <td>7.0</td>
         <td>Complete</td>
@@ -142,7 +164,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         <td>[(1311, 96, 70)]</td>
         </tr>
         <tr>
-        <th>3</th>
+        <th>5</th>
         <td>2021</td>
         <td>7.0</td>
         <td>Complete</td>
@@ -152,7 +174,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         <td>[(1311, 88, 73)]</td>
         </tr>
         <tr>
-        <th>4</th>
+        <th>6</th>
         <td>2020</td>
         <td>5.6</td>
         <td>Complete</td>
@@ -162,7 +184,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         <td>[(1311, 110, 66)]</td>
         </tr>
         <tr>
-        <th>5</th>
+        <th>7</th>
         <td>2019</td>
         <td>4.8</td>
         <td>Complete</td>
@@ -172,7 +194,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         <td>[(1311, 128, 60)]</td>
         </tr>
         <tr>
-        <th>6</th>
+        <th>8</th>
         <td>2018</td>
         <td>4.4</td>
         <td>Complete</td>
@@ -182,7 +204,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         <td>[(1311, 141, 56)]</td>
         </tr>
         <tr>
-        <th>7</th>
+        <th>9</th>
         <td>2017</td>
         <td>5.0</td>
         <td>Complete</td>
@@ -192,7 +214,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         <td>[(1311, 119, 62)]</td>
         </tr>
         <tr>
-        <th>8</th>
+        <th>10</th>
         <td>2016</td>
         <td>4.8</td>
         <td>Complete</td>
@@ -202,7 +224,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         <td>[(1311, 113, 63)]</td>
         </tr>
         <tr>
-        <th>9</th>
+        <th>11</th>
         <td>2015</td>
         <td>4.3</td>
         <td>Complete</td>
@@ -212,7 +234,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         <td>[(2700, 1074, 67), (1311, 134, 55)]</td>
         </tr>
         <tr>
-        <th>10</th>
+        <th>12</th>
         <td>2014</td>
         <td>3.1</td>
         <td>Complete</td>
@@ -222,7 +244,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         <td>[(2700, 1412, 56), (1311, 186, 37)]</td>
         </tr>
         <tr>
-        <th>11</th>
+        <th>13</th>
         <td>2013</td>
         <td>2.2</td>
         <td>Complete</td>
@@ -232,7 +254,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         <td>[(2700, 1706, 47), (1311, 209, 28)]</td>
         </tr>
         <tr>
-        <th>12</th>
+        <th>14</th>
         <td>2012</td>
         <td>2.6</td>
         <td>Complete</td>
@@ -242,7 +264,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         <td>[(2700, 1494, 53), (1311, 189, 34)]</td>
         </tr>
         <tr>
-        <th>13</th>
+        <th>15</th>
         <td>2011</td>
         <td>4.4</td>
         <td>Complete</td>
@@ -253,7 +275,7 @@ The `citescoreyearinfolist` property provides detailed information for all avail
         </tr>
     </tbody>
     </table>
-    <p>14 rows × 7 columns</p>
+    <p>16 rows × 7 columns</p>
     </div>
 
 
@@ -263,7 +285,9 @@ The `yearly_data` time series includes the number of documents published in a gi
 .. code-block:: python
 
     >>> source.yearly_data[-1]
-	Yearlydata(year=2025, publicationcount=403, revpercent=14.14, zerocitessce=335, zerocitespercentsce=83.12655086848635, citecountsce=9307)
+    Yearlydata(year=2026, publicationcount=286, revpercent=18.53,
+               zerocitessce=211, zerocitespercentsce=73.77622377622377,
+               citecountsce=21570)
     >>> yearly_data = pd.DataFrame(source.yearly_data)
     >>> yearly_data.head()
 
@@ -287,64 +311,64 @@ The `yearly_data` time series includes the number of documents published in a gi
         }
     </style>
     <table border="1" class="dataframe">
-    <thead>
+      <thead>
         <tr style="text-align: right;">
-        <th></th>
-        <th>year</th>
-        <th>publicationcount</th>
-        <th>revpercent</th>
-        <th>zerocitessce</th>
-        <th>zerocitespercentsce</th>
-        <th>citecountsce</th>
+          <th></th>
+          <th>year</th>
+          <th>publicationcount</th>
+          <th>revpercent</th>
+          <th>zerocitessce</th>
+          <th>zerocitespercentsce</th>
+          <th>citecountsce</th>
         </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
         <tr>
-        <th>0</th>
-        <td>1996</td>
-        <td>762</td>
-        <td>0.00</td>
-        <td>18</td>
-        <td>2.362205</td>
-        <td>21298</td>
-        </tr>
-        <tr>
-        <th>1</th>
-        <td>1997</td>
-        <td>853</td>
-        <td>0.23</td>
-        <td>21</td>
-        <td>2.461899</td>
-        <td>20631</td>
+          <th>0</th>
+          <td>1996</td>
+          <td>762</td>
+          <td>0.00</td>
+          <td>17</td>
+          <td>2.230971</td>
+          <td>21312</td>
         </tr>
         <tr>
-        <th>2</th>
-        <td>1998</td>
-        <td>631</td>
-        <td>0.16</td>
-        <td>28</td>
-        <td>4.437401</td>
-        <td>21748</td>
+          <th>1</th>
+          <td>1997</td>
+          <td>853</td>
+          <td>0.23</td>
+          <td>21</td>
+          <td>2.461899</td>
+          <td>20645</td>
         </tr>
         <tr>
-        <th>3</th>
-        <td>1999</td>
-        <td>505</td>
-        <td>3.37</td>
-        <td>5</td>
-        <td>0.990099</td>
-        <td>22319</td>
+          <th>2</th>
+          <td>1998</td>
+          <td>631</td>
+          <td>0.16</td>
+          <td>27</td>
+          <td>4.278922</td>
+          <td>21760</td>
         </tr>
         <tr>
-        <th>4</th>
-        <td>2000</td>
-        <td>617</td>
-        <td>4.38</td>
-        <td>4</td>
-        <td>0.648298</td>
-        <td>22038</td>
+          <th>3</th>
+          <td>1999</td>
+          <td>505</td>
+          <td>3.37</td>
+          <td>5</td>
+          <td>0.990099</td>
+          <td>22318</td>
         </tr>
-    </tbody>
+        <tr>
+          <th>4</th>
+          <td>2000</td>
+          <td>617</td>
+          <td>4.38</td>
+          <td>4</td>
+          <td>0.648298</td>
+          <td>22049</td>
+        </tr>
+      </tbody>
     </table>
     <p>5 rows × 6 columns</p>
     </div>
@@ -356,12 +380,14 @@ By default, `SerialTitleISSN()` retrieves only the most recent metrics, although
 
     >>> source_y = SerialTitleISSN("2352-7110", years="2017-2019")
     >>> source_y.citescoreyearinfolist
-    [Citescoreinfolist(year=2023, citescore=5.5),
-     Citescoreinfolist(year=2024, citescore=4.2)]
+    [Citescoreinfolist(year=2025, citescore=3.9, status=None, documentcount=None,
+                       citationcount=None, percentcited=None, rank=None),
+     Citescoreinfolist(year=2026, citescore=3.0, status=None, documentcount=None,
+                       citationcount=None, percentcited=None, rank=None)]
     >>> source_y.sjrlist
     [(2017, 3.724), (2018, 4.539), (2019, 0.445)]
     >>> source_y.sniplist
-    [(2017, 5.287), (2018, 5.153), (2019, 1.025)]
+    [(2017, 5.256), (2018, 5.15), (2019, 1.019)]
 
 
 Fields associated with the source are stored as a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:

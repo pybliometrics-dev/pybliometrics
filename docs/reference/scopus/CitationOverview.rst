@@ -35,9 +35,8 @@ You can obtain basic information just by printing the object:
 .. code-block:: python
 
     >>> print(co)
-    2 document(s) has/have the following total citation count
-    as of 2024-07-27:
-        115; 21
+    2 document(s) has/have the following total citation count as of 2026-10-02:
+        198; 24
 
 
 The key attribute is `cc`, which provides a list of tuples storing year-wise citations to the article.  Each list corresponds to one document, in the order specified when initating the class:
@@ -45,8 +44,8 @@ The key attribute is `cc`, which provides a list of tuples storing year-wise cit
 .. code-block:: python
 
     >>> co.cc
-    [[(2019, 0), (2020, 6), (2021, 25)],
-	 [(2019, 2), (2020, 2), (2021, 2)]]
+    [[(2019, 0), (2020, 6), (2021, 26)],
+     [(2019, 2), (2020, 2), (2021, 2)]]
 
 
 The attributes `pcc`, `rangeCount`, `lcc` and `rowTotal` provide citation summaries for each document.  `pcc` is the count of citations before the specified year, `rangeCount` the count of citations for the specified years, and `lcc` the count of citations after the specified year.  For the sum (i.e., the total number of citations by document) use `rowTotal`
@@ -54,13 +53,13 @@ The attributes `pcc`, `rangeCount`, `lcc` and `rowTotal` provide citation summar
 .. code-block:: python
 
     >>> co.pcc
-    [0, 6]
+    [0, 9]
     >>> co.rangeCount
-    [31, 6]
+    [32, 6]
     >>> co.lcc
-    [84, 6]
+    [166, 9]
     >>> co.rowTotal
-    [115, 21]
+    [198, 24]
 
 
 The `columnTotal` attribute represents the total number of yearly citations for all documents combined, which `rangeColumnTotal` summarizes.  Finally `grandTotal` is the total number of citations for all documents combined.
@@ -68,11 +67,11 @@ The `columnTotal` attribute represents the total number of yearly citations for 
 .. code-block:: python
 
     >>> co.columnTotal
-    [2, 8, 27]
+    [2, 8, 28]
     >>> co.rangeColumnTotal
-    37
+    38
     >>> co.grandTotal
-    136
+    222
 
 
 With the `citation` parameter, you can exclude self-citations or citations from books:
@@ -83,14 +82,14 @@ With the `citation` parameter, you can exclude self-citations or citations from 
                                    citation="exclude-self")
     >>> print(co_self)
     2 document(s) has/have the following total citation count
-    excluding self-citations as of 2024-07-27:
-        110; 19
+    excluding self-citations as of 2026-10-02:
+        190; 20
     >>> co_books = CitationOverview(identifier, date="2019-2021",
                                     citation="exclude-books")
     >>> print(co_books)
     2 document(s) has/have the following total citation count
-    excluding citations from books as of 2024-07-27:
-        115; 21
+    excluding citations from books as of 2026-10-02:
+        197; 24
 
 
 Author information is also stored as lists of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_:
@@ -98,12 +97,12 @@ Author information is also stored as lists of `namedtuples <https://docs.python.
 .. code-block:: python
 
     >>> co.authors[0]
-    [Author(name='Rose M.E.', surname='Rose', initials='M.E.', id='57209617104',
+    [Author(name='M.E., Rose, Michael E.', surname='Rose', initials='M.E.', id='57209617104',
             url='https://api.elsevier.com/content/author/author_id/57209617104'),
-     Author(name='Kitchin J.R.', surname='Kitchin', initials='J.R.', id='7004212771',
+     Author(name='J.R., Kitchin, John R.', surname='Kitchin', initials='J.R.', id='7004212771',
             url='https://api.elsevier.com/content/author/author_id/7004212771')]
     >>> co.authors[1]
-    [Author(name='Kitchin J.R.', surname='Kitchin', initials='J.R.', id='7004212771',
+    [Author(name='J.R., Kitchin, John R.', surname='Kitchin', initials='J.R.', id='7004212771',
             url='https://api.elsevier.com/content/author/author_id/7004212771')]
 
 
@@ -123,7 +122,7 @@ Finally, there are bibliographic information, too:
     >>> co.issueIdentifier
     [None, '6']
     >>> co.citationType_long
-    ['Article', 'Review']
+    ['ARTICLE', 'REVIEW']
 
 
 Using `pandas <https://pandas.pydata.org/>`_, you can convert the citation counts into a DataFrame as follows:
@@ -135,7 +134,7 @@ Using `pandas <https://pandas.pydata.org/>`_, you can convert the citation count
     >>> df.index = co.scopus_id
     >>> print(df)
                  2019  2020  2021
-    85068268027     0     6    25
+    85068268027     0     6    26
     84930616647     2     2     2
 
 

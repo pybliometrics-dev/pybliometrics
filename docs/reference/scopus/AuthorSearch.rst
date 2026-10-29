@@ -32,8 +32,9 @@ You can obtain a search summary just by printing the object:
 .. code-block:: python
 
     >>> print(s)
-    Search 'AUTHLAST(Selten) and AUTHFIRST(Reinhard)' yielded 1 author as of 2025-06-13:
-        Selten, Reinhard; AUTHOR_ID:6602907525 (76 document(s))
+    Search 'AUTHLAST(Selten) and AUTHFIRST(Reinhard)' yielded 2 authors as of 2026-10-02:
+        Selten, Reinhard; AUTHOR_ID:6602907525 (75 document(s))
+        Selten, Reinhard; AUTHOR_ID:60323663100 (1 document(s))
 
 
 To determine the the number of results use the `.get_results_size()` method, even before you download the results:
@@ -42,7 +43,7 @@ To determine the the number of results use the `.get_results_size()` method, eve
 
     >>> other = AuthorSearch("AUTHLAST(Selten)", download=False)
     >>> other.get_results_size()
-    30
+    34
 
 
 Primarily, the class provides a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ storing author EIDs, which you can use for the :doc:`AuthorRetrieval <AuthorRetrieval>` class, and corresponding information:
@@ -50,10 +51,10 @@ Primarily, the class provides a list of `namedtuples <https://docs.python.org/3/
 .. code-block:: python
 
     >>> s.authors[0]
-    [Author(eid='9-s2.0-6602907525', orcid=None, surname='Selten', initials='R.',
-     givenname='Reinhard', affiliation='Universitat Bonn', documents=74,
-     affiliation_id='60007493', city='Bonn', country='Germany',
-     areas='ECON (72); BUSI (8)')]
+    Author(eid='9-s2.0-6602907525', orcid=None, surname='Selten', initials='R.',
+           givenname='Reinhard', affiliation='Universität Bonn', documents=75,
+           affiliation_id='60007493', city='Bonn', country='Germany',
+           areas='ECON (72); BUSI (8)')
 
 
 Please note that Scopus sometimes returns duplicate `areas`, which are then aggregated (e.g. 'ECON (51); ECON (21)' → 'ECON (72)').
@@ -65,11 +66,17 @@ Working with namedtuples is straightforward: Using `pandas <https://pandas.pydat
     >>> import pandas as pd
     >>> pd.set_option('display.max_columns', None)
     >>> print(pd.DataFrame(s.authors))
-                 eid orcid surname initials givenname       affiliation  \
-    0  9-s2.0-6602907525  None  Selten       R.  Reinhard  Universität Bonn   
+                      eid orcid surname initials givenname  \
+    0   9-s2.0-6602907525  None  Selten       R.  Reinhard
+    1  9-s2.0-60323663100  None  Selten       R.  Reinhard
 
-    documents affiliation_id  city  country                areas  
-    0         76       60007493  Bonn  Germany  ECON (72); BUSI (8)
+                         affiliation  documents affiliation_id     city  country  \
+    0               Universität Bonn         75       60007493     Bonn  Germany
+    1  Southwest Jiaotong University          1       60010421  Chengdu    China
+
+                     areas
+    0  ECON (72); BUSI (8)
+    1             COMP (3)
 
 
 Downloaded results are cached to expedite subsequent analyses.  This information may become outdated.  To refresh the cached results if they exist, set `refresh=True`, or provide an integer that will be interpreted as maximum allowed number of days since the last modification date.  For example, if you want to refresh all cached results older than 100 days, set `refresh=100`.  Use `ab.get_cache_file_mdate()` to obtain the date of last modification, and `ab.get_cache_file_age()` to determine the number of days since the last modification.

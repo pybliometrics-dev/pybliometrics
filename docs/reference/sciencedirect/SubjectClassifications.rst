@@ -48,8 +48,9 @@ The `results` can be cast into a pandas DataFrame:
     >>> df = pd.DataFrame(sc.results)
     >>> # Display available fields
     >>> df.columns
-    Index(['code', 'description', 'detail', 'abbrev'], dtype='object')
+    Index(['code', 'description', 'detail', 'abbrev'], dtype='str')
     >>> # Get shape of the DataFrame (rows x columns)
+    >>> df.shape
     (16, 4)
     >>> # Display the first 5 rows
     >>> df.head(5)
@@ -73,3 +74,54 @@ The `results` can be cast into a pandas DataFrame:
             font-size: 12px;
         }
     </style>
+    <table border="1" class="dataframe">
+    <thead>
+        <tr style="text-align: right;">
+        <th></th>
+        <th>code</th>
+        <th>description</th>
+        <th>detail</th>
+        <th>abbrev</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        <th>0</th>
+        <td>18</td>
+        <td>Biochemistry, Genetics and Molecular Biology</td>
+        <td>Biochemistry, Genetics and Molecular Biology</td>
+        <td>biochemgenmolbiol</td>
+        </tr>
+        <tr>
+        <th>1</th>
+        <td>399</td>
+        <td>Biochemistry</td>
+        <td>Biochemistry, Genetics and Molecular Biology::...</td>
+        <td>biochem</td>
+        </tr>
+        <tr>
+        <th>2</th>
+        <td>400</td>
+        <td>Biochemistry, Genetics and Molecular Biology (...</td>
+        <td>Biochemistry, Genetics and Molecular Biology::...</td>
+        <td>biogen</td>
+        </tr>
+        <tr>
+        <th>3</th>
+        <td>405</td>
+        <td>Clinical Biochemistry</td>
+        <td>Biochemistry, Genetics and Molecular Biology::...</td>
+        <td>clinicalbio</td>
+        </tr>
+        <tr>
+        <th>4</th>
+        <td>416</td>
+        <td>Colloid and Surface Chemistry</td>
+        <td>Chemical Engineering::Colloid and Surface Chem...</td>
+        <td>colloid</td>
+        </tr>
+    </tbody>
+    </table>
+    <p>5 rows × 4 columns</p>
+    </div>
+

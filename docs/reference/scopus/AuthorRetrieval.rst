@@ -35,8 +35,8 @@ You can obtain basic information just by printing the object:
 
     >>> print(au)
     Kitchin J. from Carnegie Mellon University in United States,
-	published 126 document(s) since 1995 
-	which were cited by 20,897 author(s) in 25,490 document(s) as of 2024-05-11
+    published 164 document(s) since 1995
+    which were cited by 30,538 author(s) in 36,900 document(s) as of 2026-10-02
 
 
 This object provides access to various data about an author, including the number of papers, h-index, current affiliation, etc.  When a list of `namedtuples <https://docs.python.org/3/library/collections.html#collections.namedtuple>`_ is returned, it can neatly be turned into a `pandas <https://pandas.pydata.org/>`_ DataFrame.
@@ -55,9 +55,9 @@ Information regarding the author's names includes:
     'J.R.'
     >>> au.name_variants
     [Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin',
-     given_name='John R.', doc_count=104),
+     given_name='John R.', doc_count=141),
      Variant(indexed_name='Kitchin J.', initials='J.', surname='Kitchin',
-     given_name='John', doc_count=13),
+     given_name='John', doc_count=15),
      Variant(indexed_name='Kitchin J.', initials='J.R.', surname='Kitchin',
      given_name='J. R.', doc_count=8)]
     >>> au.eid
@@ -69,41 +69,41 @@ Bibliometric information includes:
 .. code-block:: python
 
     >>> au.citation_count
-    25490
+    36900
     >>> au.document_count
-    126
+    164
     >>> au.h_index
-    40
+    44
     >>> au.orcid
     '0000-0003-2625-9232'
     >>> au.publication_range
-    (1995, 2021)
+    (1995, 2026)
     >>> import pandas as pd
     >>> areas = pd.DataFrame(au.subject_areas)
     >>> areas.shape
-    (55, 3)
+    (69, 3)
     >>> areas.head()
-        area abbreviation  code
-	0              Analytical Chemistry         CHEM  1602
-	1                   Safety Research         SOCI  3311
-	2  Process Chemistry and Technology         CENG  1508
-	3           Materials Science (all)         MATE  2500
-	4           Modeling and Simulation         MATH  2611
+                                   area abbreviation  code
+    0  Process Chemistry and Technology         CENG  1508
+    1     Computer Science Applications         COMP  1706
+    2              Analytical Chemistry         CHEM  1602
+    3                   Safety Research         SOCI  3311
+    4        Chemical Engineering (all)         CENG  1500
     >>> au.classificationgroup
-    [(1602, 1), (3311, 4), (1508, 6),  (2500, 13),
-	 (2611, 6), (1505, 1), (1605, 7), (1303, 2),
-	 (1501, 2), (1706, 4), (2504, 13), (1500, 42),
-	 (1503, 33), (2105, 1), (3100, 13), (2209, 11),
-     (1712, 3), (1709, 2), (1504, 2), (1702, 2),
-	 (3309, 3), (2310, 3), (1507, 2), (2508, 17),
-	 (2300, 2), (3107, 3), (2102, 6), (3110, 9),
-	 (1000, 1), (1600, 40), (1601, 3), (2213, 7),
-	 (2505, 6), (1906, 1), (1305, 8), (2700, 6),
-	 (2304, 2), (1604, 3), (1909, 1), (2207, 2),
-	 (2200, 2), (1607, 1), (1606, 36), (2308, 3),
-	 (3104, 23), (2103, 6), (1311, 1), (1603, 3),
-	 (2503, 1), (2305, 7), (2208, 1), (2100, 16),
-	 (1502, 2), (1710, 6), (2104, 2)]
+    [(1508, 8), (1706, 9), (1602, 1), (3311, 4), (1500, 49),
+     (1300, 1), (2611, 6), (1505, 3), (2500, 15), (3304, 1),
+     (2605, 2), (1501, 2), (1605, 8), (1303, 6), (2504, 18),
+     (1601, 7), (3100, 15), (1712, 6), (2209, 12), (2105, 2),
+     (1503, 41), (1702, 5), (1504, 2), (1600, 49), (3309, 4),
+     (1709, 4), (2310, 3), (1705, 2), (1507, 2), (2300, 2),
+     (3107, 4), (2508, 21), (3110, 9), (2102, 8), (2213, 7),
+     (1000, 4), (2505, 7), (1906, 1), (1606, 44), (3104, 24),
+     (2606, 1), (2613, 1), (1305, 9), (2304, 2), (1604, 3),
+     (2700, 14), (1909, 1), (2200, 2), (2207, 3), (3101, 1),
+     (1607, 1), (2308, 3), (1711, 1), (2103, 8), (1502, 4),
+     (1707, 1), (1311, 1), (1603, 3), (2211, 1), (2503, 1),
+     (1203, 1), (2604, 1), (2208, 1), (2305, 8), (3310, 1),
+     (1710, 7), (1700, 1), (2104, 2), (2100, 21)]
 
 
 If you request data of a merged author profile, Scopus provides information corresponding to the new, merged profile.  The cache file's name uses the provided, i.e., old, ID.  With property `.identifer` you can verify the validity of the provided Author ID.  When the provided ID belongs to a profile that has been merged, pybliometrics will throw a UserWarning (upon accessing the property `.identifer`) pointing to the ID of the new main profile.
@@ -113,14 +113,14 @@ Detailed information on current and former affiliations is also provided in the 
 .. code-block:: python
 
     >>> au.affiliation_current
-    [Affiliation(id=110785688, parent=60027950, type='dept', relationship='author',
-     afdispname=None, preferred_name='Department of Chemical Engineering',
-     parent_preferred_name='Carnegie Mellon University', country_code='usa',
+    [Affiliation(id=60027950, parent=None, type='parent', relationship='author',
+     afdispname=None, preferred_name='Carnegie Mellon University',
+     parent_preferred_name=None, country_code='usa',
      country='United States', address_part='5000 Forbes Avenue', city='Pittsburgh',
      state='PA', postal_code='15213-3890', org_domain='cmu.edu', org_URL='https://www.cmu.edu/')]
     >>> len(au.affiliation_history)
     16
-    >>> au.affiliation_history[6]
+    >>> au.affiliation_history[7]
     Affiliation(id=60008644, parent=None, type='parent', relationship='author',
     afdispname=None, preferred_name='Fritz Haber Institute of the Max Planck Society',
     parent_preferred_name=None, country_code='deu', country='Germany',
@@ -142,7 +142,7 @@ Several getter methods are available for convenience.  For example, you can obta
     >>> coauthors.columns
     Index(['surname', 'given_name', 'id', 'areas', 'affiliation_id',
            'name', 'city', 'country'],
-          dtype='object')
+          dtype='str')
 
 
 The `get_documents()` method is another convenient option for searching the author's publications via :doc:`ScopusSearch <ScopusSearch>` (information will be cached):
@@ -151,7 +151,7 @@ The `get_documents()` method is another convenient option for searching the auth
 
     >>> docs = pd.DataFrame(au.get_documents(refresh=10))
     >>> docs.shape
-    (126, 36)
+    (164, 36)
     >>> docs.columns
     Index(['eid', 'doi', 'pii', 'pubmed_id', 'title', 'subtype',
            'subtypeDescription', 'creator', 'afid', 'affilname',
@@ -160,22 +160,23 @@ The `get_documents()` method is another convenient option for searching the auth
            'coverDisplayDate', 'publicationName', 'issn', 'source_id', 'eIssn',
            'aggregationType', 'volume', 'issueIdentifier', 'article_number',
            'pageRange', 'description', 'authkeywords', 'citedby_count',
-           'openaccess', 'fund_acr', 'fund_no', 'fund_sponsor'],
-          dtype='object')
+           'openaccess', 'freetoread', 'freetoreadLabel', 'fund_acr', 'fund_no',
+           'fund_sponsor'],
+          dtype='str')
 
 
-WWith a few additional code lines, you can determine the number of journal articles where the author is listed first:
+With a few additional code lines, you can determine the number of journal articles where the author is listed first:
 
 .. code-block:: python
 
     >>> articles = docs[docs['aggregationType'] == 'Journal']
     >>> first = articles[articles['author_ids'].str.startswith('7004212771')]
     >>> first["eid"].tolist()
-    ['2-s2.0-85048443766', '2-s2.0-85019169906', '2-s2.0-84971324241',
-     '2-s2.0-84930349644', '2-s2.0-84930616647', '2-s2.0-84866142469',
-     '2-s2.0-67449106405', '2-s2.0-40949100780', '2-s2.0-20544467859',
-     '2-s2.0-13444307808', '2-s2.0-2942640180', '2-s2.0-0141924604',
-     '2-s2.0-0037368024']
+    ['2-s2.0-105008916860', '2-s2.0-85048443766', '2-s2.0-85019169906',
+     '2-s2.0-84971324241', '2-s2.0-84930349644', '2-s2.0-84930616647',
+     '2-s2.0-84866142469', '2-s2.0-67449106405', '2-s2.0-40949100780',
+     '2-s2.0-20544467859', '2-s2.0-13444307808', '2-s2.0-2942640180',
+     '2-s2.0-0141924604', '2-s2.0-0037368024']
 
 
 or you might be interested in the yearly number of publications:
@@ -184,31 +185,34 @@ or you might be interested in the yearly number of publications:
 
     >>> docs['year'] = docs['coverDate'].str[:4]
     >>> docs['year'].value_counts().sort_index()
-    1995     1
-	2002     1
-	2003     3
-	2004     4
-	2005     3
-	2006     1
-	2007     2
-	2008     7
-	2009    10
-	2010     6
-	2011     8
-	2012     8
-	2013     4
-	2014    10
-	2015    12
-	2016     7
-	2017     8
-	2018     4
-	2019     2
-	2020     2
-	2021     3
-	2022     9
-	2023     8
-	2024     3
-    Name: year, dtype: int64
+    year
+    1995    1
+    2002    1
+    2003    3
+    2004    4
+    2005    3
+    2006    1
+    2007    2
+    2008    7
+    2009   10
+    2010    6
+    2011    8
+    2012    8
+    2013    4
+    2014   10
+    2015   12
+    2016    7
+    2017    8
+    2018    4
+    2019    2
+    2020    2
+    2021    3
+    2022    9
+    2023    9
+    2024   16
+    2025   16
+    2026    8
+    Name: count, dtype: int64
 
 
 If you're just interested in the EIDs of the documents, use `au.get_document_eids()`.  This method makes use of the same data available for/through `au.get_documents()`.

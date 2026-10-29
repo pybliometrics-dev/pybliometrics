@@ -28,17 +28,17 @@ The class is initialized with a search query. To see the download progress, set 
     >>> # Retrieve documents based on the search query  
     >>> sds = ScienceDirectSearch('"neural radiance fields" AND "3D" AND YEAR(2024)', verbose=True)
     Downloading results for query ""neural radiance fields" AND "3D" AND YEAR(2024)":
-    100%|██████████| 8/8 [00:05<00:00,  1.39it/s]
+    100%|██████████| 6/6 [00:04<00:00,  1.04it/s]
 
 To access the results, use the attribute `results` which contains a list of `Document` namedtuples.
 
 .. code-block:: python
 
     >>> # Access the results
-    >>> results = sds.results
-    [Document(authors='Dong He;Wenhua Qian;Jinde Cao', first_author='Dong He', doi='10.1016/j.cag.2025.104181', title='GEAST-RF: Geometry Enhanced 3D Arbitrary Style Transfer Via Neural Radiance Fields', link='https://www.sciencedirect.com/science/article/pii/S0097849325000202?dgcid=api_sd_search-api-endpoint', load_date='2025-02-16T00:00:00.000Z', openaccess_status=False, pii='S0097849325000202', coverDate='2025-02-16', endingPage=None, publicationName='Computers & Graphics', startingPage='104181', api_link='https://api.elsevier.com/content/article/pii/S0097849325000202', volume=None),
-     Document(authors='Qicheng Xu;Min Hu;Xitao Zhang', first_author='Qicheng Xu', doi='10.1016/j.asr.2025.01.065', title='A neural radiance fields method for 3D reconstruction of space target', link='https://www.sciencedirect.com/science/article/pii/S0273117725000973?dgcid=api_sd_search-api-endpoint', load_date='2025-02-01T00:00:00.000Z', openaccess_status=False, pii='S0273117725000973', coverDate='2025-02-01', endingPage=None, publicationName='Advances in Space Research', startingPage=None, api_link='https://api.elsevier.com/content/article/pii/S0273117725000973', volume=None),
-     Document(authors='Jian Liu;Zhen Yu', first_author='Jian Liu', doi='10.1016/j.neucom.2025.129420', title='SA3D-L: A lightweight model for 3D object segmentation using neural radiance fields', link='https://www.sciencedirect.com/science/article/pii/S092523122500092X?dgcid=api_sd_search-api-endpoint', load_date='2025-01-14T00:00:00.000Z', openaccess_status=False, pii='S092523122500092X', coverDate='2025-03-28', endingPage=None, publicationName='Neurocomputing', startingPage='129420', api_link='https://api.elsevier.com/content/article/pii/S092523122500092X', volume='623'),
+    >>> sds.results
+    [Document(authors='Lizhi Jiang;Peng W. Chee;Longsheng Fu', first_author='Lizhi Jiang', doi='10.1016/j.compag.2026.112063', title='Robot-assisted Neural Radiance fields for plot-level cotton crop 3D reconstruction and yield estimation', link='https://www.sciencedirect.com/science/article/pii/S0168169926006587?dgcid=api_sd_search-api-endpoint', load_date='2026-06-22T00:00:00.000Z', openaccess_status=False, pii='S0168169926006587', coverDate='2026-09-15', endingPage=None, publicationName='Computers and Electronics in Agriculture', startingPage='112063', api_link='https://api.elsevier.com/content/article/pii/S0168169926006587', volume='252'),
+     Document(authors='Zhi Wang;Shuaipeng Fei;Yuntao Ma', first_author='Zhi Wang', doi='10.1016/j.compag.2026.111790', title='Beetroot type classification based on 3D structure constructed with neural radiance fields', link='https://www.sciencedirect.com/science/article/pii/S0168169926003856?dgcid=api_sd_search-api-endpoint', load_date='2026-04-20T00:00:00.000Z', openaccess_status=False, pii='S0168169926003856', coverDate='2026-07-01', endingPage=None, publicationName='Computers and Electronics in Agriculture', startingPage='111790', api_link='https://api.elsevier.com/content/article/pii/S0168169926003856', volume='248'),
+     Document(authors='Wei Zhou;Wenbo Chu;Keqiang Li', first_author='Wei Zhou', doi='10.1016/j.cjme.2025.100093', title='Autonomous driving scenario generation based on neural radiance fields or 3D Gaussian splatting: State-of-the-art investigations, reviews, and perspectives', link='https://www.sciencedirect.com/science/article/pii/S1000934525000975?dgcid=api_sd_search-api-endpoint', load_date='2025-09-30T00:00:00.000Z', openaccess_status=True, pii='S1000934525000975', coverDate='2026-01-31', endingPage=None, publicationName='Chinese Journal of Mechanical Engineering', startingPage='100093', api_link='https://api.elsevier.com/content/article/pii/S1000934525000975', volume='39'),
      ...]
 
 The list of results can be cast into a Pandas DataFrame.
@@ -50,11 +50,13 @@ The list of results can be cast into a Pandas DataFrame.
     >>> df = pd.DataFrame(sds.results)
     >>> # Display available fields
     >>> df.columns
-    Index(['eid', 'filename', 'height', 'mimetype', 'ref', 'size', 'type', 'url',
-       'width'],
-      dtype='object')
+    Index(['authors', 'first_author', 'doi', 'title', 'link', 'load_date',
+           'openaccess_status', 'pii', 'coverDate', 'endingPage',
+           'publicationName', 'startingPage', 'api_link', 'volume'],
+          dtype='str')
     >>> # Get shape of the DataFrame (rows x columns)
-    (200, 14)
+    >>> df.shape
+    (506, 14)
     >>> # Display the first 3 rows
     >>> df.head(3)
 
@@ -100,54 +102,54 @@ The list of results can be cast into a Pandas DataFrame.
     <tbody>
         <tr>
         <th>0</th>
-        <td>Dong He;Wenhua Qian;Jinde Cao</td>
-        <td>Dong He</td>
-        <td>10.1016/j.cag.2025.104181</td>
-        <td>GEAST-RF: Geometry Enhanced 3D Arbitrary Style...</td>
+        <td>Lizhi Jiang;Peng W. Chee;Longsheng Fu</td>
+        <td>Lizhi Jiang</td>
+        <td>10.1016/j.compag.2026.112063</td>
+        <td>Robot-assisted Neural Radiance fields for plot...</td>
         <td>https://www.sciencedirect.com/science/article/...</td>
-        <td>2025-02-16T00:00:00.000Z</td>
+        <td>2026-06-22T00:00:00.000Z</td>
         <td>False</td>
-        <td>S0097849325000202</td>
-        <td>2025-02-16</td>
-        <td>None</td>
-        <td>Computers &amp; Graphics</td>
-        <td>104181</td>
+        <td>S0168169926006587</td>
+        <td>2026-09-15</td>
+        <td>NaN</td>
+        <td>Computers and Electronics in Agriculture</td>
+        <td>112063</td>
         <td>https://api.elsevier.com/content/article/pii/S...</td>
-        <td>None</td>
+        <td>252</td>
         </tr>
         <tr>
         <th>1</th>
-        <td>Qicheng Xu;Min Hu;Xitao Zhang</td>
-        <td>Qicheng Xu</td>
-        <td>10.1016/j.asr.2025.01.065</td>
-        <td>A neural radiance fields method for 3D reconst...</td>
+        <td>Zhi Wang;Shuaipeng Fei;Yuntao Ma</td>
+        <td>Zhi Wang</td>
+        <td>10.1016/j.compag.2026.111790</td>
+        <td>Beetroot type classification based on 3D struc...</td>
         <td>https://www.sciencedirect.com/science/article/...</td>
-        <td>2025-02-01T00:00:00.000Z</td>
+        <td>2026-04-20T00:00:00.000Z</td>
         <td>False</td>
-        <td>S0273117725000973</td>
-        <td>2025-02-01</td>
-        <td>None</td>
-        <td>Advances in Space Research</td>
-        <td>None</td>
+        <td>S0168169926003856</td>
+        <td>2026-07-01</td>
+        <td>NaN</td>
+        <td>Computers and Electronics in Agriculture</td>
+        <td>111790</td>
         <td>https://api.elsevier.com/content/article/pii/S...</td>
-        <td>None</td>
+        <td>248</td>
         </tr>
         <tr>
         <th>2</th>
-        <td>Jian Liu;Zhen Yu</td>
-        <td>Jian Liu</td>
-        <td>10.1016/j.neucom.2025.129420</td>
-        <td>SA3D-L: A lightweight model for 3D object segm...</td>
+        <td>Wei Zhou;Wenbo Chu;Keqiang Li</td>
+        <td>Wei Zhou</td>
+        <td>10.1016/j.cjme.2025.100093</td>
+        <td>Autonomous driving scenario generation based o...</td>
         <td>https://www.sciencedirect.com/science/article/...</td>
-        <td>2025-01-14T00:00:00.000Z</td>
-        <td>False</td>
-        <td>S092523122500092X</td>
-        <td>2025-03-28</td>
-        <td>None</td>
-        <td>Neurocomputing</td>
-        <td>129420</td>
+        <td>2025-09-30T00:00:00.000Z</td>
+        <td>True</td>
+        <td>S1000934525000975</td>
+        <td>2026-01-31</td>
+        <td>NaN</td>
+        <td>Chinese Journal of Mechanical Engineering</td>
+        <td>100093</td>
         <td>https://api.elsevier.com/content/article/pii/S...</td>
-        <td>623</td>
+        <td>39</td>
         </tr>
     </tbody>
     </table>
