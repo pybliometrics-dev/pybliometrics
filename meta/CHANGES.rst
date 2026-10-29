@@ -4,6 +4,18 @@ Change Log
 
 .. toctree::
 
+4.5
+~~~
+
+2026-10-29
+
+* Drop support for python 3.10.
+* Add support for python 3.14 and 3.15.
+* Implement pagination in `scopus.SerialTitleSearch()` to retrieve all results.
+* Fix bug related to missing conference information in `scopus.AbstractRetrieval()`.
+* Fix bug related to single ISBNs in `scopus.AbstractRetrieval().isbn`.
+* Fix bug related to empty author keywords in `scopus.AbstractRetrieval().authkeywords`.
+
 4.4.1
 ~~~~~
 
