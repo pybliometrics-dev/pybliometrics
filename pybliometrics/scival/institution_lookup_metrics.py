@@ -135,7 +135,7 @@ class InstitutionLookupMetrics(Retrieval):
         """Interaction with the SciVal's `metrics` endpoint of the `InstitutionLookup API`.
 
         :param institution_ids: SciVal Institution ID(s). Can be a single ID or comma-separated 
-                               string of IDs, or a list of IDs (e.g. `[309054, 309086]`).
+                                string of IDs, or a list of IDs (e.g. `[309054, 309086]`).
         :param metric_types: Metric type(s) to retrieve. Can be a single metric 
                              or comma-separated string, or a list. Available metrics are:
                              AcademicCorporateCollaboration, AcademicCorporateCollaborationImpact,

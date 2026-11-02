@@ -175,8 +175,8 @@ class ScopusSearch(Search):
         """Interaction with the Scopus Search API.
 
         :param query: A string of the query as used in the Advanced Search
-                     on scopus.com.  All fields except "INDEXTERMS()" and
-                     "LIMIT-TO()" work.
+                      on scopus.com.  All fields except "INDEXTERMS()" and
+                      "LIMIT-TO()" work.
         :param refresh: Whether to refresh the cached file if it exists or not.
                         If int is passed, cached file will be refreshed if the
                         number of days since last modification exceeds that value.

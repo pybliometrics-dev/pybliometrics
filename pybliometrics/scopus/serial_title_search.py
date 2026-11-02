@@ -55,7 +55,7 @@ class SerialTitleSearch(Search):
                  ) -> None:
         """Interaction with the base endpoint of the `Serial Title API`.
 
-        :param query:  Query parameters and corresponding fields. Allowed keys
+        :param query: Query parameters and corresponding fields. Allowed keys
                       'title', 'issn', 'pub', 'subj', 'subjCode', 'content',
                       'oa'.  For examples on possible values, please refer to
                       https://dev.elsevier.com/documentation/SerialTitleAPI.wadl#d1e22.

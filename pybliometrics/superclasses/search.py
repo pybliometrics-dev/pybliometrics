@@ -19,9 +19,9 @@ class Search(Base):
 
         :param query : A string of the query.
         :param cursor: Whether to use the cursor in order to iterate over all
-                      search results without limit on the number of the results.
-                      In contrast to `start` parameter, the `cursor` parameter
-                      does not allow users to obtain partial results.
+                       search results without limit on the number of the results.
+                       In contrast to `start` parameter, the `cursor` parameter
+                       does not allow users to obtain partial results.
         :param download: Whether to download results (if they have not been
                          cached) or not.
         :param verbose: Whether to print a download progress bar.

@@ -132,11 +132,11 @@ class PublicationLookup(Retrieval):
 
         :param identifier: The Scopus ID of the publication.
         :param refresh: Whether to refresh the cached file if it exists or not.
-            If int is passed, cached file will be refreshed if the
-            number of days since last modification exceeds that value.
+                        If int is passed, cached file will be refreshed if the
+                        number of days since last modification exceeds that value.
         :param kwds: Keywords passed on as query parameters.  Must contain
-            fields and values mentioned in the API specification at
-            https://dev.elsevier.com/documentation/SciValPublicationAPI.wadl.
+                     fields and values mentioned in the API specification at
+                     https://dev.elsevier.com/documentation/SciValPublicationAPI.wadl.
         """
         self._view = ''
         self._refresh = refresh
