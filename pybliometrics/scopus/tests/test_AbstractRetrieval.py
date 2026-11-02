@@ -273,6 +273,10 @@ def test_funding_text():
         'Leeds and the Wellcome Trust (108466/Z/15/Z).'
     assert ab6.funding_text == e
     assert ab8.funding_text is None
+    # Multiple funding texts are joined
+    received12 = ab12.funding_text
+    assert isinstance(received12, str)
+    assert len(received12.split('\n')) == 2
 
 
 def test_get_bibtex():

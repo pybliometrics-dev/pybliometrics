@@ -434,9 +434,15 @@ class AbstractRetrieval(Retrieval):
 
     @property
     def funding_text(self) -> str | None:
-        """The raw text from which Scopus derives funding information."""
+        """The raw text from which Scopus derives funding information.
+        In the rare case Scopus provides multiple funding texts, they are
+        joined by a newline.
+        """
         path = ['item', 'xocs:meta', 'xocs:funding-list', 'xocs:funding-text']
-        return chained_get(self._json, path)
+        texts = listify(chained_get(self._json, path, []))
+        texts = [t.get('$') if isinstance(t, dict) else t for t in texts]
+        texts = [t for t in texts if t]
+        return "\n".join(texts) or None
 
     @property
     def isbn(self) -> tuple[str, ...] | None:
