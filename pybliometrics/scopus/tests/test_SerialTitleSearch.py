@@ -13,6 +13,7 @@ ser2 = SerialTitleSearch({'issn': '1468-0262'}, refresh=30)
 ser3 = SerialTitleSearch({'pub': 'Stellenbosch'}, refresh=30)
 # Search by subject area code
 ser4 = SerialTitleSearch(query={'subjCode': '2708', 'content': 'journal'}, refresh=30)
+ser4_1page = SerialTitleSearch(query={'subjCode': '2708', 'content': 'journal'}, max_pages=1, refresh=30)
 
 def test_deprecated_class():
     from pytest import deprecated_call
@@ -44,3 +45,8 @@ def test_results_subjcode():
     ser4_subj_codes = set(i['subject_area_codes'] for i in ser4.results)
     assert False not in ['2708' in i for i in ser4_subj_codes]
     assert ser4.get_results_size() >= 260
+
+
+def test_max_pages():
+    assert len(ser4_1page.results) == 200
+    assert ser4_1page.get_results_size() == 200

@@ -19,6 +19,7 @@ class Base:
                  url: str,
                  download: bool = True,
                  verbose: bool = False,
+                 max_pages: int | None = None,
                  **kwds: str
                  ) -> None:
         """Class intended as base class for superclasses.
@@ -28,6 +29,7 @@ class Base:
         :param download: Whether to download the query or not.  Has no effect
                          for retrieval requests.
         :param verbose: Whether to print a download progress bar.
+        :param max_pages: Maximum number of result pages to download.
         :param kwds: Keywords passed on `get_content()`
 
         Raises
@@ -81,7 +83,8 @@ class Base:
                 self._json = data
                 data = [data]
             elif serial_search:
-                entries = _get_all_serial_results(url, params, verbose, resp, **kwds)
+                entries = _get_all_serial_results(url, params, verbose, resp,
+                                                  max_pages=max_pages, **kwds)
                 self._json = {'serial-metadata-response': {'entry': entries}}
                 self._n = len(entries)
                 data = [self._json]
@@ -92,7 +95,9 @@ class Base:
                 self._n = n
                 # Results size check
                 cursor_exists = "cursor" in params
-                if not cursor_exists and n > SEARCH_MAX_ENTRIES:
+                if not cursor_exists and n > SEARCH_MAX_ENTRIES and (
+                    max_pages is None or max_pages * params['count'] > SEARCH_MAX_ENTRIES
+                ):
                     # Stop if there are too many results
                     text = f'Found {n:,} matches.  The query fails to return '\
                            f'more than {SEARCH_MAX_ENTRIES} entries.  Change '\
@@ -110,6 +115,8 @@ class Base:
                     if verbose:
                         print(f'Downloading results for query "{params["query"]}":')
                     n_chunks = ceil(n/params['count'])
+                    if max_pages is not None and n_chunks:
+                        n_chunks = min(n_chunks, max_pages)
                     for i in tqdm(range(1, n_chunks), disable=not verbose,
                                   initial=1, total=n_chunks):
                         if cursor_exists:
@@ -123,6 +130,8 @@ class Base:
                         data.extend(res.get('search-results', {}).get('entry', []))
                     header = resp.headers  # Use header of final call
                     self._json = data
+                    if max_pages is not None:
+                        self._n = len(data)
                 else:
                     data = None
             elif obj_retrieval:
@@ -224,7 +233,8 @@ def _get_all_refs(url: str, params: dict, verbose: bool, resp: dict, **kwds) -> 
     return data
 
 
-def _get_all_serial_results(url: str, params: dict, verbose: bool, resp, **kwds) -> list:
+def _get_all_serial_results(url: str, params: dict, verbose: bool, resp,
+                            max_pages: int | None = None, **kwds) -> list:
     """Get all results for `SerialTitleSearch` with pagination."""
     res = resp.json()
     data = res.get('serial-metadata-response', {}).get('entry', [])
@@ -244,6 +254,8 @@ def _get_all_serial_results(url: str, params: dict, verbose: bool, resp, **kwds)
     count = int(parsed.get('count', [params['count']])[0])
     n_total = last_start + count
     n_chunks = ceil(n_total / count)
+    if max_pages is not None:
+        n_chunks = min(n_chunks, max_pages)
     
     for i in tqdm(range(1, n_chunks), disable=not verbose, initial=1, total=n_chunks):
         params['start'] = i * count

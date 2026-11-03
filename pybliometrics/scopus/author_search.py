@@ -75,6 +75,7 @@ class AuthorSearch(Search):
                  download: bool = True,
                  integrity_fields: list[str] | tuple[str, ...] | None = None,
                  integrity_action: str = "raise",
+                 max_pages: int | None = None,
                  **kwds: str
                  ) -> None:
         """Interaction with the Author Search API.
@@ -98,6 +99,7 @@ class AuthorSearch(Search):
                                  cannot be verified.  Possible actions:
                                  - `"raise"`: Raise an `AttributeError`
                                  - `"warn"`: Raise a `UserWarning`
+        :param max_pages: Maximum number of result pages to download.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/AuthorSearchAPI.wadl.
@@ -110,8 +112,8 @@ class AuthorSearch(Search):
             download attempt and avoids making use of your API key.
 
         ValueError
-            If any of the parameters `integrity_action` or `refresh` is not
-            one of the allowed values.
+            If any of the parameters `integrity_action`, `refresh` or
+            `max_pages` is not one of the allowed values.
 
         Notes
         -----
@@ -129,7 +131,8 @@ class AuthorSearch(Search):
         self._query = query
         self._refresh = refresh
         self._view = "STANDARD"
-        Search.__init__(self, query=query, download=download, verbose=verbose, **kwds)
+        Search.__init__(self, query=query, download=download, verbose=verbose,
+                        max_pages=max_pages, **kwds)
 
     def __str__(self):
         """Print a summary string."""

@@ -51,6 +51,7 @@ class SerialTitleSearch(Search):
                  query: dict,
                  refresh: bool | int = False,
                  view: str = 'ENHANCED',
+                 max_pages: int | None = None,
                  **kwds: str
                  ) -> None:
         """Interaction with the base endpoint of the `Serial Title API`.
@@ -65,6 +66,7 @@ class SerialTitleSearch(Search):
         :param view: The view of the file that should be downloaded.  Allowed
                      values: `STANDARD`, `ENHANCED`, `CITESCORE`.  For details see
                      https://dev.elsevier.com/sc_serial_title_views.html.
+        :param max_pages: Maximum number of result pages to download.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values listed in the API specification at
                      https://dev.elsevier.com/documentation/SerialTitleAPI.wadl.
@@ -76,7 +78,7 @@ class SerialTitleSearch(Search):
             non-subscribers the number of search results exceeds 5000.
 
         ValueError
-            If any of the parameters `refresh` or `view` is not
+            If any of the parameters `refresh`, `view` or `max_pages` is not
             one of the allowed values.
 
         Notes
@@ -98,7 +100,7 @@ class SerialTitleSearch(Search):
         self._query = str(query)
         self._refresh = refresh
         self._view = view
-        Search.__init__(self, query=query, **kwds)
+        Search.__init__(self, query=query, max_pages=max_pages, **kwds)
         self._n = len(self._json['serial-metadata-response'].get('entry', []))
 
     def __str__(self):

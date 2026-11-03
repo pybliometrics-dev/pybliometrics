@@ -13,6 +13,7 @@ class Search(Base):
                  cursor: bool = False,
                  download: bool = True,
                  verbose: bool = False,
+                 max_pages: int | None = None,
                  **kwds: str
                  ) -> None:
         """Class intended as superclass to perform a search query.
@@ -25,14 +26,20 @@ class Search(Base):
         :param download: Whether to download results (if they have not been
                          cached) or not.
         :param verbose: Whether to print a download progress bar.
+        :param max_pages: Maximum number of result pages to download.
         :param kwds: Keywords passed on to requests header.  Must contain
                      fields and values specified in the respective API specification.
 
         Raises
         ------
         ValueError
-            If the api parameter is an invalid entry.
+            If the api parameter is an invalid entry or `max_pages` is not a
+            positive integer.
         """
+        if max_pages is not None:
+            if isinstance(max_pages, bool) or not isinstance(max_pages, int) or max_pages < 1:
+                raise ValueError("Parameter 'max_pages' must be a positive integer.")
+
         api = self.__class__.__name__
         # Construct query parameters
         count = COUNTS[api][self._view]
@@ -43,6 +50,8 @@ class Search(Base):
         else:
             params['query'] = query
             name = query
+        if max_pages is not None:
+            name = f"{name}&max_pages={max_pages}"
         if cursor:
             params.update({'cursor': '*'})
         else:
@@ -57,7 +66,8 @@ class Search(Base):
         self._cache_file_path = parent/self._view/stem
 
         # Init
-        Base.__init__(self, params=params, url=URLS[api], download=download, verbose=verbose)
+        Base.__init__(self, params=params, url=URLS[api], download=download,
+                      verbose=verbose, max_pages=max_pages)
 
     def get_results_size(self) -> int:
         """Return the number of results (works even if download=False)."""
