@@ -111,4 +111,4 @@ def test_invalid_max_pages():
     with pytest.raises(ValueError):
         ScopusSearch('AU-ID(24320488600)', max_pages=0)
     with pytest.raises(ValueError):
-        ScopusSearch('AU-ID(24320488600)', max_pages=True)
+        ScopusSearch('AU-ID(24320488600)', max_pages=1.5)

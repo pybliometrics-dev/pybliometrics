@@ -96,7 +96,7 @@ class Base:
                 # Results size check
                 cursor_exists = "cursor" in params
                 if not cursor_exists and n > SEARCH_MAX_ENTRIES and (
-                    max_pages is None or max_pages * params['count'] > SEARCH_MAX_ENTRIES
+                    max_pages is None or params["start"] + max_pages * params['count'] > SEARCH_MAX_ENTRIES
                 ):
                     # Stop if there are too many results
                     text = f'Found {n:,} matches.  The query fails to return '\

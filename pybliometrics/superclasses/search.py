@@ -1,6 +1,7 @@
 """Superclass to access all Scopus search APIs and dump the results."""
 
 from hashlib import md5
+from operator import index
 from pathlib import Path
 
 from pybliometrics.superclasses import Base
@@ -37,7 +38,11 @@ class Search(Base):
             positive integer.
         """
         if max_pages is not None:
-            if isinstance(max_pages, bool) or not isinstance(max_pages, int) or max_pages < 1:
+            try:
+                max_pages = index(max_pages)
+            except TypeError:
+                raise ValueError("Parameter 'max_pages' must be a positive integer.")
+            if max_pages < 1:
                 raise ValueError("Parameter 'max_pages' must be a positive integer.")
 
         api = self.__class__.__name__
@@ -51,7 +56,7 @@ class Search(Base):
             params['query'] = query
             name = query
         if max_pages is not None:
-            name = f"{name}&max_pages={max_pages}"
+            name = f"{name}&max_pages={max_pages}&count={params['count']}"
         if cursor:
             params.update({'cursor': '*'})
         else:
@@ -70,5 +75,8 @@ class Search(Base):
                       verbose=verbose, max_pages=max_pages)
 
     def get_results_size(self) -> int:
-        """Return the number of results (works even if download=False)."""
+        """Return the number of results (works even if download=False).
+        If `max_pages` is set and `download=True`, returns the number of
+        downloaded results rather than the total number of matches.
+        """
         return self._n
