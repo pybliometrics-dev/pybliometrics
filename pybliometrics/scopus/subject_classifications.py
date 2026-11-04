@@ -66,7 +66,7 @@ class SubjectClassifications(Search):
         The directory for cached results is `{path}/{fname}`,
         where `path` is specified in your configuration file, and `fname` is
         the md5-hashed version of `query` dict turned into string in format
-        of `'key=value'` delimited by `'&'`.
+        of `'key=value'` delimited by `'&'`, extended by `kwds` if given.
         """
         # Checks
         allowed_query_keys = ('code', 'description', 'detail', 'abbrev')

@@ -41,7 +41,7 @@ class SubjectClassifications(scopus.SubjectClassifications):
         The directory for cached results is `{path}/{fname}`,
         where `path` is specified in your configuration file, and `fname` is
         the md5-hashed version of `query` dict turned into string in format
-        of `'key=value'` delimited by `'&'`.
+        of `'key=value'` delimited by `'&'`, extended by `kwds` if given.
         """
         self.__class__.__name__ = 'ScDirSubjectClassifications'
         super().__init__(query=query, refresh=refresh, fields=fields, **kwds)

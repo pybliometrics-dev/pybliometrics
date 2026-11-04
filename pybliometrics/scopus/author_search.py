@@ -119,7 +119,8 @@ class AuthorSearch(Search):
         -----
         The directory for cached results is `{path}/STANDARD/{fname}`,
         where  `path` is specified in your configuration file, and `fname` is
-        the md5-hashed version of `query`.
+        the md5-hashed version of `query`, extended by `max_pages` and `kwds`
+        if given.
         """
         # Checks
         allowed = ("warn", "raise")

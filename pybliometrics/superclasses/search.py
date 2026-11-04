@@ -55,8 +55,12 @@ class Search(Base):
         else:
             params['query'] = query
             name = query
+        # Cache key must reflect all user-supplied parameters affecting results
+        extra = {**kwds}
         if max_pages is not None:
-            name = f"{name}&max_pages={max_pages}&count={params['count']}"
+            extra['max_pages'] = max_pages
+        if extra:
+            name += "&" + "&".join(f"{k}={v}" for k, v in sorted(extra.items()))
         if cursor:
             params.update({'cursor': '*'})
         else:

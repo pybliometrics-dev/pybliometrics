@@ -1,5 +1,7 @@
 """Tests for `scopus.ScopusSearch` module."""
 
+from hashlib import md5
+
 import pytest
 
 from pybliometrics.scopus import ScopusSearch, init
@@ -11,6 +13,8 @@ init()
 s_au = ScopusSearch('AU-ID(24320488600)', unescape=False, refresh=30)
 s_j = ScopusSearch('SOURCE-ID(22900) AND PUBYEAR IS 2010', unescape=True, refresh=30)
 s_j_1page = ScopusSearch('SOURCE-ID(22900) AND PUBYEAR IS 2010', max_pages=1, unescape=True, refresh=30)
+s_j_1page_sorted = ScopusSearch('SOURCE-ID(22900) AND PUBYEAR IS 2010', max_pages=1,
+                                sort='-citedby-count', unescape=True, refresh=30)
 s_d = ScopusSearch("DOI(10.1038/s41556-022-01034-3)", unescape=False, refresh=30)
 q_empty = 'SOURCE-ID(19700188323) AND PUBYEAR IS 1900'
 s_empty = ScopusSearch(q_empty, unescape=False, refresh=30)
@@ -112,3 +116,14 @@ def test_invalid_max_pages():
         ScopusSearch('AU-ID(24320488600)', max_pages=0)
     with pytest.raises(ValueError):
         ScopusSearch('AU-ID(24320488600)', max_pages=1.5)
+
+
+def test_cache_key():
+    # Plain queries keep their cache file name
+    query = 'SOURCE-ID(22900) AND PUBYEAR IS 2010'
+    assert s_j._cache_file_path.name == md5(query.encode('utf8')).hexdigest()
+    # Keyword arguments and max_pages lead to separate cache files
+    paths = {s._cache_file_path for s in (s_j, s_j_1page, s_j_1page_sorted)}
+    assert len(paths) == 3
+    citations = [int(d.citedby_count) for d in s_j_1page_sorted.results]
+    assert citations == sorted(citations, reverse=True)
