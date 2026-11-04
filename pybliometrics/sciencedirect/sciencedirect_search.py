@@ -95,6 +95,7 @@ class ScienceDirectSearch(Search):
                  integrity_fields: list[str] | tuple[str, ...] | None = None,
                  integrity_action: str = "raise",
                  subscriber: bool = True,
+                 max_pages: int | None = None,
                  **kwds: str
                  ) -> None:
         """Interaction with the ScienceDirect Search API. This represents a search against the
@@ -126,6 +127,7 @@ class ScienceDirectSearch(Search):
                            used.  Sets the number of entries in each query
                            iteration to the maximum number allowed by the
                            corresponding view.
+        :param max_pages: Maximum number of result pages to download.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the `API specification <https://dev.elsevier.com/documentation/ArticleMetadataAPI.wadl>`__.
 
@@ -135,8 +137,8 @@ class ScienceDirectSearch(Search):
             For non-subscribers, if the number of search results exceeds 5000.
 
         ValueError
-            If any of the parameters `integrity_action`, `refresh` or `view`
-            is not one of the allowed values.
+            If any of the parameters `integrity_action`, `refresh`, `view` or
+            `max_pages` is not one of the allowed values.
 
         Notes
         -----
@@ -162,7 +164,8 @@ class ScienceDirectSearch(Search):
         self._refresh = refresh
         self._query = query
         self._view = view
-        Search.__init__(self, query=query, download=download, verbose=verbose, **kwds)
+        Search.__init__(self, query=query, download=download, verbose=verbose,
+                        max_pages=max_pages, **kwds)
 
     def __str__(self):
         """Print a summary string."""

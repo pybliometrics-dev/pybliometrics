@@ -170,6 +170,7 @@ class ScopusSearch(Search):
                  integrity_action: str = "raise",
                  subscriber: bool = True,
                  unescape: bool = True,
+                 max_pages: int | None = None,
                  **kwds: str
                  ) -> None:
         """Interaction with the Scopus Search API.
@@ -206,6 +207,7 @@ class ScopusSearch(Search):
                            corresponding view.
         :param unescape: Convert named and numeric characters in the `results` to
                          their corresponding Unicode characters.
+        :param max_pages: Maximum number of result pages to download.
         :param kwds: Keywords passed on as query parameters.  Must contain
                      fields and values mentioned in the API specification at
                      https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl.
@@ -216,8 +218,8 @@ class ScopusSearch(Search):
             For non-subscribers, if the number of search results exceeds 5000.
 
         ValueError
-            If any of the parameters `integrity_action`, `refresh` or `view`
-            is not one of the allowed values.
+            If any of the parameters `integrity_action`, `refresh`, `view` or
+            `max_pages` is not one of the allowed values.
 
         Notes
         -----
@@ -249,7 +251,7 @@ class ScopusSearch(Search):
         self._view = view
         Search.__init__(self, query=query,
                         cursor=subscriber, download=download,
-                        verbose=verbose, **kwds)
+                        verbose=verbose, max_pages=max_pages, **kwds)
         self.unescape = unescape
 
     def __str__(self):

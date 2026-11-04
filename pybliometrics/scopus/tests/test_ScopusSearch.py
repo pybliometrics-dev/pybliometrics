@@ -1,5 +1,7 @@
 """Tests for `scopus.ScopusSearch` module."""
 
+import pytest
+
 from pybliometrics.scopus import ScopusSearch, init
 from pybliometrics.scopus.scopus_search import Document
 
@@ -8,6 +10,7 @@ init()
 # Set to refresh=False because of citation count
 s_au = ScopusSearch('AU-ID(24320488600)', unescape=False, refresh=30)
 s_j = ScopusSearch('SOURCE-ID(22900) AND PUBYEAR IS 2010', unescape=True, refresh=30)
+s_j_1page = ScopusSearch('SOURCE-ID(22900) AND PUBYEAR IS 2010', max_pages=1, unescape=True, refresh=30)
 s_d = ScopusSearch("DOI(10.1038/s41556-022-01034-3)", unescape=False, refresh=30)
 q_empty = 'SOURCE-ID(19700188323) AND PUBYEAR IS 1900'
 s_empty = ScopusSearch(q_empty, unescape=False, refresh=30)
@@ -97,3 +100,15 @@ def test_results_empty():
 def test_results_unescape():
     assert s_d.results[0].afid.count(";") == 14
     assert '&' in s_d.results[0].affilname
+
+
+def test_max_pages():
+    assert len(s_j_1page.results) == 25
+    assert s_j_1page.get_results_size() == 25
+
+
+def test_invalid_max_pages():
+    with pytest.raises(ValueError):
+        ScopusSearch('AU-ID(24320488600)', max_pages=0)
+    with pytest.raises(ValueError):
+        ScopusSearch('AU-ID(24320488600)', max_pages=1.5)
