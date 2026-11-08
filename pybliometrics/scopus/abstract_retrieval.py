@@ -999,22 +999,24 @@ class AbstractRetrieval(Retrieval):
 
     def get_ris(self) -> str:
         """Bibliographic entry in RIS (Research Information System Format)
-        format for journal articles.
+        format.
 
-        Raises
-        ------
-        ValueError
-            If the item's aggregationType is not Journal.
+        The RIS type is derived from the item's aggregationType and subtype:
+        journal articles (`JOUR`), books (`BOOK`), book chapters (`CHAP`),
+        conference papers (`CPAPER`) and reports (`RPRT`).  All other items
+        are exported as generic entries (`GEN`).
         """
-        if self.aggregationType != 'Journal':
-            raise ValueError('Only Journal articles supported.')
+        ris_type = _get_ris_type(self.aggregationType, self.subtype)
         # Basic information
-        ris = (
-            f"TY  - JOUR\nTI  - {self.title}\nJO  - {self.publicationName}"
-            f"\nDA  - {self.coverDate}\nPY  - {self.coverDate[0:4]}\n"
-        )
+        ris = f"TY  - {ris_type}\nTI  - {self.title}\n"
+        if ris_type == 'JOUR':
+            ris += f"JO  - {self.publicationName}\n"
+        elif self.publicationName and self.publicationName != self.title:
+            ris += f"T2  - {self.publicationName}\n"
+        if self.coverDate:
+            ris += f"DA  - {self.coverDate}\nPY  - {self.coverDate[0:4]}\n"
         # Authors
-        for au in self.authors:
+        for au in self.authors or []:
             ris += f'AU  - {au.indexed_name}\n'
         # DOI
         if self.doi:
@@ -1028,6 +1030,12 @@ class AbstractRetrieval(Retrieval):
         # Pages
         if self.pageRange:
             ris += f"SP  - {self.pageRange}\n"
+        # ISBN and publisher for non-journal items
+        if ris_type != 'JOUR':
+            for isbn in self.isbn or []:
+                ris += f"SN  - {isbn}\n"
+            if self.publisher:
+                ris += f"PB  - {self.publisher}\n"
         ris += "ER  - \n\n"
         return ris
 
@@ -1046,6 +1054,23 @@ def _get_org(aff):
     except KeyError:  # Author group w/o affiliation
         org = None
     return org
+
+
+def _get_ris_type(aggregation_type, subtype):
+    """Auxiliary function to determine the RIS type of an item based on its
+    aggregationType and subtype.
+    """
+    if aggregation_type in ('Journal', 'Trade Journal'):
+        return 'JOUR'
+    if aggregation_type == 'Report':
+        return 'RPRT'
+    if subtype == 'cp' or aggregation_type == 'Conference Proceeding':
+        return 'CPAPER'
+    if subtype == 'bk':
+        return 'BOOK'
+    if subtype == 'ch' or aggregation_type in ('Book', 'Book Series'):
+        return 'CHAP'
+    return 'GEN'
 
 
 def _list_authors(lst):
