@@ -45,6 +45,42 @@ def test_get_ris_journal():
     assert ab.get_ris() == expected
 
 
+def test_get_ris_trade_journal():
+    ab = _make_abstract({
+        'prism:aggregationType': 'Trade Journal',
+        'subtype': 'ar',
+        'dc:title': 'News from the trade',
+        'prism:publicationName': 'Trade Weekly',
+        'prism:coverDate': '2012-03-15',
+        'prism:volume': '7',
+        'prism:pageRange': '20-22',
+    }, authors=AUTHORS)
+    expected = (
+        "TY  - JOUR\nTI  - News from the trade\nJO  - Trade Weekly\n"
+        "DA  - 2012-03-15\nPY  - 2012\nAU  - Kitchin J.R.\nVL  - 7\n"
+        "SP  - 20-22\nER  - \n\n"
+    )
+    assert ab.get_ris() == expected
+
+
+def test_get_ris_report():
+    ab = _make_abstract({
+        'prism:aggregationType': 'Report',
+        'subtype': 're',
+        'dc:title': 'Annual report on things',
+        'prism:publicationName': 'Technical Report Series',
+        'prism:coverDate': '2018-09-01',
+    }, authors=AUTHORS, head={'source': {
+        'publisher': {'publishername': 'Institute of Things'},
+    }})
+    expected = (
+        "TY  - RPRT\nTI  - Annual report on things\n"
+        "T2  - Technical Report Series\nDA  - 2018-09-01\nPY  - 2018\n"
+        "AU  - Kitchin J.R.\nPB  - Institute of Things\nER  - \n\n"
+    )
+    assert ab.get_ris() == expected
+
+
 def test_get_ris_book():
     ab = _make_abstract({
         'prism:aggregationType': 'Book',
