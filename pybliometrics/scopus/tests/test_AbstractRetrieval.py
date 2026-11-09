@@ -308,6 +308,22 @@ def test_get_ris():
         "IS  - 6\nSP  - 3894-3899\nER  - \n\n"
     )
     assert ab1.get_ris() == e
+    # Journal article with volume, issue and pages
+    received3 = ab3.get_ris()
+    assert received3.startswith(
+        "TY  - JOUR\nTI  - Fairness in consumer pricing\n"
+        "JO  - Journal of Consumer Policy\n")
+    assert "PY  - 1991\n" in received3
+    assert "DO  - 10.1007/BF00381915\n" in received3
+    assert "VL  - 14\nIS  - 2\nSP  - 117-140\n" in received3
+    assert received3.endswith("ER  - \n\n")
+    # Conference paper
+    assert ab2.get_ris().startswith("TY  - CPAPER\n")
+    # Book with ISBNs
+    received5 = ab5.get_ris()
+    assert received5.startswith("TY  - BOOK\n")
+    assert "SN  - 0203881486\nSN  - 9780203881484\n" in received5
+    assert "JO  - " not in received5
 
 
 def test_get_html():
