@@ -1,9 +1,12 @@
 """Tests for `scopus.AbstractRetrieval` module."""
 
+import pytest
+
 from pybliometrics.scopus import AbstractRetrieval, init
 from pybliometrics.scopus.abstract_retrieval import (
     Affiliation, AuthorGroup, Author, Chemical, Contributor, 
-    Correspondence, Funding, ISSN, Reference, Sequencebank, Area
+    Correspondence, Funding, ISSN, Reference, Sequencebank, Area,
+    _get_ris_type
 )
 
 init()
@@ -308,6 +311,47 @@ def test_get_ris():
         "IS  - 6\nSP  - 3894-3899\nER  - \n\n"
     )
     assert ab1.get_ris() == e
+    # Journal article with volume, issue and pages
+    received3 = ab3.get_ris()
+    assert received3.startswith(
+        "TY  - JOUR\nTI  - Fairness in consumer pricing\n"
+        "JO  - Journal of Consumer Policy\n")
+    assert "PY  - 1991\n" in received3
+    assert "DO  - 10.1007/BF00381915\n" in received3
+    assert "VL  - 14\nIS  - 2\nSP  - 117-140\n" in received3
+    assert received3.endswith("ER  - \n\n")
+    # Conference paper
+    assert ab2.get_ris().startswith("TY  - CPAPER\n")
+    # Book with ISBNs
+    received5 = ab5.get_ris()
+    assert received5.startswith("TY  - BOOK\n")
+    assert "SN  - 0203881486\nSN  - 9780203881484\n" in received5
+    assert "JO  - " not in received5
+
+
+@pytest.mark.parametrize(
+    "aggregation_type, subtype, expected",
+    [
+        ("Journal", "ar", "JOUR"),
+        ("Journal", "re", "JOUR"),
+        ("Trade Journal", "ar", "JOUR"),
+        ("Report", None, "RPRT"),
+        ("Conference Proceeding", "cp", "CPAPER"),
+        ("Conference Proceeding", None, "CPAPER"),
+        ("Book", "bk", "BOOK"),
+        ("Book", "ch", "CHAP"),
+        ("Book", None, "CHAP"),
+        ("Book Series", "ch", "CHAP"),
+        ("Book Series", None, "CHAP"),
+        (None, "cp", "CPAPER"),
+        (None, "bk", "BOOK"),
+        (None, "ch", "CHAP"),
+        ("Other", "xx", "GEN"),
+        (None, None, "GEN"),
+    ],
+)
+def test_get_ris_type(aggregation_type, subtype, expected):
+    assert _get_ris_type(aggregation_type, subtype) == expected
 
 
 def test_get_html():
