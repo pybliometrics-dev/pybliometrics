@@ -311,22 +311,62 @@ def test_get_ris():
         "IS  - 6\nSP  - 3894-3899\nER  - \n\n"
     )
     assert ab1.get_ris() == e
-    # Journal article with volume, issue and pages
-    received3 = ab3.get_ris()
-    assert received3.startswith(
-        "TY  - JOUR\nTI  - Fairness in consumer pricing\n"
-        "JO  - Journal of Consumer Policy\n")
-    assert "PY  - 1991\n" in received3
-    assert "DO  - 10.1007/BF00381915\n" in received3
-    assert "VL  - 14\nIS  - 2\nSP  - 117-140\n" in received3
-    assert received3.endswith("ER  - \n\n")
-    # Conference paper
-    assert ab2.get_ris().startswith("TY  - CPAPER\n")
+    # Journal article with multiple authors
+    e = (
+        "TY  - JOUR\n"
+        "TI  - Fairness in consumer pricing\n"
+        "JO  - Journal of Consumer Policy\n"
+        "DA  - 1991-06-01\n"
+        "PY  - 1991\n"
+        "AU  - Kaufmann P.J.\n"
+        "AU  - Ortmeyer G.\n"
+        "AU  - Smith N.C.\n"
+        "DO  - 10.1007/BF00381915\n"
+        "UR  - https://doi.org/10.1007/BF00381915\n"
+        "VL  - 14\n"
+        "IS  - 2\n"
+        "SP  - 117-140\n"
+        "ER  - \n\n"
+    )
+    assert ab3.get_ris() == e
+    # Conference paper with publisher, without DOI
+    e = (
+        "TY  - CPAPER\n"
+        "TI  - Stochastic manufacturing systems under unknown demand and "
+        "robust control criteria\n"
+        "T2  - Proceedings of the IEEE Conference on Decision and Control\n"
+        "DA  - 1995-12-01\n"
+        "PY  - 1995\n"
+        "AU  - Boukas E.K.\n"
+        "AU  - Zhang Q.\n"
+        "AU  - Yin G.\n"
+        "VL  - 4\n"
+        "SP  - 4198-4199\n"
+        "PB  - IEEE\n"
+        "ER  - \n\n"
+    )
+    assert ab2.get_ris() == e
     # Book with ISBNs
-    received5 = ab5.get_ris()
-    assert received5.startswith("TY  - BOOK\n")
-    assert "SN  - 0203881486\nSN  - 9780203881484\n" in received5
-    assert "JO  - " not in received5
+    e = (
+        "TY  - BOOK\n"
+        "TI  - Regional inequality in China: Trends, explanations and "
+        "policy responses\n"
+        "T2  - Regional Inequality in China: Trends, Explanations and "
+        "Policy Responses\n"
+        "DA  - 2009-03-26\n"
+        "PY  - 2009\n"
+        "AU  - Fan S.\n"
+        "AU  - Kanbur R.\n"
+        "AU  - Zhang X.\n"
+        "DO  - 10.4324/9780203881484\n"
+        "UR  - https://doi.org/10.4324/9780203881484\n"
+        "SP  - 1-258\n"
+        "SN  - 0203881486\n"
+        "SN  - 9780203881484\n"
+        "PB  - Routledge Taylor & Francis Group\n"
+        "ER  - \n\n"
+    )
+    assert ab5.get_ris() == e
 
 
 @pytest.mark.parametrize(
@@ -348,6 +388,11 @@ def test_get_ris():
         (None, "ch", "CHAP"),
         ("Other", "xx", "GEN"),
         (None, None, "GEN"),
+        # Precedence: aggregationType Journal beats subtype cp,
+        # subtypes cp and bk beat aggregationType Book Series
+        ("Journal", "cp", "JOUR"),
+        ("Book Series", "cp", "CPAPER"),
+        ("Book Series", "bk", "BOOK"),
     ],
 )
 def test_get_ris_type(aggregation_type, subtype, expected):
