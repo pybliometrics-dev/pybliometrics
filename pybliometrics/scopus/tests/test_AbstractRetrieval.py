@@ -305,7 +305,7 @@ def test_get_latex():
 def test_get_ris():
     e = (
         "TY  - JOUR\nTI  - Examples of effective data sharing in scientific "
-        "publishing\nJO  - ACS Catalysis\nDA  - 2015-06-05\nPY  - "
+        "publishing\nT2  - ACS Catalysis\nJ2  - ACS Catal.\nDA  - 2015-06-05\nPY  - "
         "2015\nAU  - Kitchin J.R.\nDO  - 10.1021/acscatal.5b00538\n"
         "UR  - https://doi.org/10.1021/acscatal.5b00538\nVL  - 5\n"
         "IS  - 6\nSP  - 3894-3899\nER  - \n\n"
@@ -315,7 +315,8 @@ def test_get_ris():
     e = (
         "TY  - JOUR\n"
         "TI  - Fairness in consumer pricing\n"
-        "JO  - Journal of Consumer Policy\n"
+        "T2  - Journal of Consumer Policy\n"
+        "J2  - J Consum Policy\n"
         "DA  - 1991-06-01\n"
         "PY  - 1991\n"
         "AU  - Kaufmann P.J.\n"
@@ -334,7 +335,9 @@ def test_get_ris():
         "TY  - CPAPER\n"
         "TI  - Stochastic manufacturing systems under unknown demand and "
         "robust control criteria\n"
-        "T2  - Proceedings of the IEEE Conference on Decision and Control\n"
+        "T2  - Proceedings of the 1995 34th IEEE Conference on Decision and "
+        "Control. Part 1 (of 4)\n"
+        "C3  - Proceedings of the IEEE Conference on Decision and Control\n"
         "DA  - 1995-12-01\n"
         "PY  - 1995\n"
         "AU  - Boukas E.K.\n"
@@ -346,13 +349,11 @@ def test_get_ris():
         "ER  - \n\n"
     )
     assert ab2.get_ris() == e
-    # Book with ISBNs
+    # Book with ISBNs, whose source differs from its title only in case
     e = (
         "TY  - BOOK\n"
         "TI  - Regional inequality in China: Trends, explanations and "
         "policy responses\n"
-        "T2  - Regional Inequality in China: Trends, Explanations and "
-        "Policy Responses\n"
         "DA  - 2009-03-26\n"
         "PY  - 2009\n"
         "AU  - Fan S.\n"

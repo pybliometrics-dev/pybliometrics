@@ -1005,14 +1005,30 @@ class AbstractRetrieval(Retrieval):
         journal articles (`JOUR`), books (`BOOK`), book chapters (`CHAP`),
         conference papers (`CPAPER`) and reports (`RPRT`).  All other items
         are exported as generic entries (`GEN`).
+
+        The source goes into `T2`, whose meaning depends on the RIS type:
+        the journal name for journal articles (with the abbreviation in
+        `J2`), the conference name for conference papers (with the
+        proceedings title in `C3`), the book title for book chapters,
+        and the series for books and reports.
         """
         ris_type = _get_ris_type(self.aggregationType, self.subtype)
+        source = self.publicationName
         # Basic information
         ris = f"TY  - {ris_type}\nTI  - {self.title}\n"
         if ris_type == 'JOUR':
-            ris += f"JO  - {self.publicationName}\n"
-        elif self.publicationName and self.publicationName != self.title:
-            ris += f"T2  - {self.publicationName}\n"
+            if source:
+                ris += f"T2  - {source}\n"
+            if self.sourcetitle_abbreviation:
+                ris += f"J2  - {self.sourcetitle_abbreviation}\n"
+        elif ris_type == 'CPAPER':
+            if self.confname:
+                ris += f"T2  - {self.confname}\n"
+            if source:
+                ris += f"C3  - {source}\n"
+        elif source and source.casefold() != (self.title or '').casefold():
+            # For books, the source is the book itself unless it's a series
+            ris += f"T2  - {source}\n"
         if self.coverDate:
             ris += f"DA  - {self.coverDate}\nPY  - {self.coverDate[0:4]}\n"
         # Authors

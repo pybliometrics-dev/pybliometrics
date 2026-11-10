@@ -249,7 +249,8 @@ You can print the abstract in a variety of formats, including LaTeX, bibtex, HTM
     >>> print(ab.get_ris())
     TY  - JOUR
     TI  - pybliometrics: Scriptable bibliometrics using a Python interface to Scopus
-    JO  - SoftwareX
+    T2  - SoftwareX
+    J2  - SoftwareX
     DA  - 2019-07-01
     PY  - 2019
     AU  - Rose M.E.
