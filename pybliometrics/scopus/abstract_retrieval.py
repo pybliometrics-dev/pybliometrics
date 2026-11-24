@@ -912,38 +912,64 @@ class AbstractRetrieval(Retrieval):
     def get_bibtex(self) -> str:
         """Bibliographic entry in BibTeX format.
 
-        Raises
-        ------
-        ValueError
-            If the item's aggregationType is not Journal.
+        The entry type is derived from the item's aggregationType and subtype
+        (see `get_ris()`): journal articles (`@article`), conference papers
+        (`@inproceedings`), books (`@book`), book chapters (`@incollection`)
+        and reports (`@techreport`).  All other items are exported as
+        `@misc`.  Fields without a value are omitted.
         """
-        if self.aggregationType != 'Journal':
-            raise ValueError('Only Journal articles supported.')
+        bib_type = _BIBTEX_TYPES[_get_ris_type(self.aggregationType,
+                                               self.subtype)]
+        title = self.title or ''
+        source = self.publicationName
+        year = (self.coverDate or '')[0:4]
         # Item key
-        year = self.coverDate[0:4]
-        first = self.title.split()[0].title()
-        last = self.title.split()[-1].title()
-        key = ''.join([self.authors[0].surname, year, first, last])
-        # Authors
-        authors = ' and '.join([f"{a.given_name} {a.surname}"
-                                for a in self.authors])
-        # Pages
+        words = title.split() or ['']
+        surname = self.authors[0].surname if self.authors else ''
+        key = ''.join([surname or '', year, words[0].title(),
+                       words[-1].title()]) or self.eid
+        # Fields in output order
+        fields = []
+        if self.authors:
+            authors = ' and '.join([' '.join(filter(None, [a.given_name,
+                                                           a.surname]))
+                                    for a in self.authors])
+            fields.append(('author', authors))
+        if title:
+            fields.append(('title', f'{{{title}}}'))
+        if bib_type == 'article':
+            fields.append(('journal', source))
+        elif bib_type in ('inproceedings', 'incollection'):
+            fields.append(('booktitle', source))
+        elif bib_type == 'misc':
+            fields.append(('howpublished', source))
+        elif source and source.casefold() != title.casefold():
+            # For books and reports, the source is the series
+            fields.append(('series', source))
+        fields.append(('year', year))
+        fields.append(('volume', self.volume))
+        fields.append(('number', self.issueIdentifier))
         if self.pageRange:
             pages = self.pageRange
         elif self.startingPage:
-            pages = f'{self.startingPage}-{self.endingPage}'
+            pages = '-'.join(filter(None, [self.startingPage,
+                                           self.endingPage]))
         else:
-            pages = '-'
+            pages = None
+        fields.append(('pages', pages))
+        if bib_type == 'techreport':
+            fields.append(('institution', self.publisher))
+        elif bib_type != 'article':
+            fields.append(('publisher', self.publisher))
+            if bib_type in ('book', 'incollection') and self.isbn:
+                fields.append(('isbn', ', '.join(self.isbn)))
+        fields.append(('doi', self.doi))
         # All information
-        bib = f"@article{{{key},\n  author = {{{authors}}},\n  title = "\
-              f"{{{{{self.title}}}}},\n  journal = {{{self.publicationName}}},"\
-              f"\n  year = {{{year}}},\n  volume = {{{self.volume}}},\n  "\
-              f"number = {{{self.issueIdentifier}}},\n  pages = {{{pages}}}"
-        # DOI
-        if self.doi:
-            bib += f",\n  doi = {{{self.doi}}}"
-        bib += "}"
-        return bib
+        body = ',\n  '.join([f'{name} = {{{value}}}'
+                              for name, value in fields if value])
+        if not body:
+            return f'@{bib_type}{{{key}}}'
+        return f'@{bib_type}{{{key},\n  {body}}}'
 
     def get_html(self) -> str:
         """Bibliographic entry in html format."""
@@ -1070,6 +1096,11 @@ def _get_org(aff):
     except KeyError:  # Author group w/o affiliation
         org = None
     return org
+
+
+_BIBTEX_TYPES = {'JOUR': 'article', 'CPAPER': 'inproceedings',
+                 'BOOK': 'book', 'CHAP': 'incollection', 'RPRT': 'techreport',
+                 'GEN': 'misc'}
 
 
 def _get_ris_type(aggregation_type, subtype):
