@@ -289,6 +289,21 @@ def test_get_bibtex():
         'Policy},\n  year = {1991},\n  volume = {14},\n  number = {2},\n  '\
         'pages = {117-140},\n  doi = {10.1007/BF00381915}}'
     assert ab3.get_bibtex() == e
+    # Conference paper: proceedings title as booktitle, no empty fields
+    received = ab2.get_bibtex()
+    assert received.startswith('@inproceedings{Boukas1995StochasticCriteria,')
+    assert 'booktitle = {Proceedings of the IEEE Conference on Decision '\
+           'and Control}' in received
+    assert 'publisher = {IEEE}' in received
+    assert 'None' not in received
+    assert 'doi' not in received
+    # Book: ISBNs and publisher, no series since source equals title
+    received = ab5.get_bibtex()
+    assert received.startswith('@book{Fan2009RegionalResponses,')
+    assert 'isbn = {0203881486, 9780203881484}' in received
+    assert 'publisher = {Routledge Taylor & Francis Group}' in received
+    assert 'series' not in received
+    assert 'None' not in received
 
 
 def test_get_latex():
